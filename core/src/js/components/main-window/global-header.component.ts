@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'global-header',
@@ -35,7 +36,7 @@ import { cdLog } from '../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GlobalHeaderComponent implements AfterViewInit {
+export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	text$: Observable<string>;
 	image$: Observable<string>;
 	backArrow$: Observable<boolean>;
@@ -44,9 +45,11 @@ export class GlobalHeaderComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.text$ = this.store
 			.listen$(([main, nav]) => nav.text)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([text]) => !!text),
 				map(([text]) => text),
 				distinctUntilChanged(),
@@ -55,6 +58,7 @@ export class GlobalHeaderComponent implements AfterViewInit {
 		this.image$ = this.store
 			.listen$(([main, nav]) => nav.image)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([image]) => !!image),
 				map(([image]) => image),
 				distinctUntilChanged(),
@@ -63,6 +67,7 @@ export class GlobalHeaderComponent implements AfterViewInit {
 		this.backArrow$ = this.store
 			.listen$(([main, nav]) => nav.backArrowEnabled)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([backArrowEnabled]) => backArrowEnabled),
 				distinctUntilChanged(),
 				tap((backArrowEnabled) =>
@@ -72,6 +77,7 @@ export class GlobalHeaderComponent implements AfterViewInit {
 		this.nextArrow$ = this.store
 			.listen$(([main, nav]) => nav.nextArrowEnabled)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([nextArrowEnabled]) => nextArrowEnabled),
 				distinctUntilChanged(),
 				tap((nextArrowEnabled) =>

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { HeroStat } from './hero-stat';
 
 @Component({
@@ -26,13 +27,15 @@ import { HeroStat } from './hero-stat';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsHeroesRecordsBrokenComponent {
+export class BattlegroundsHeroesRecordsBrokenComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly HeroStat[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.stats$ = this.store
 			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([bestBgsUserStats]) => !!bestBgsUserStats?.length),
 				map(([bestBgsUserStats]) => {
 					const groupingByHero = groupByFunction((stat: BgsBestStat) => stat.heroCardId);

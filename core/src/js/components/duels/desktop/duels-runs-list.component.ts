@@ -8,12 +8,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-runs-list',
@@ -45,7 +46,7 @@ import { groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsRunsListComponent implements OnDestroy {
+export class DuelsRunsListComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	// https://stackoverflow.com/a/52436938/548701
 	@Input() set deckstring(value: string) {
 		this.deckstring$.next(value);
@@ -67,9 +68,11 @@ export class DuelsRunsListComponent implements OnDestroy {
 	private runsIterator: IterableIterator<void>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([expandedRunIds]) => expandedRunIds),
 				tap((expandedRunIds) => cdLog('emitting expandedRunIds in ', this.constructor.name, expandedRunIds)),
 			);
@@ -84,6 +87,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 					// TODO: MMR filter
 				)
 				.pipe(
+					takeUntil(this.destroyed$),
 					filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
 					map(([runs, timeFilter, classFilter, gameMode, patch]) =>
 						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
@@ -92,6 +96,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 			this.deckstring$.asObservable(),
 		)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([runs, deckstring]) =>
 					!deckstring?.length ? runs : runs.filter((run) => run.initialDeckList === deckstring),
 				),
@@ -110,6 +115,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
 

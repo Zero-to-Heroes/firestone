@@ -5,7 +5,7 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	computeXpFromLevel,
@@ -15,6 +15,7 @@ import {
 	xpSeason3,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'stats-xp-graph',
@@ -33,16 +34,18 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsXpGraphComponent {
+export class StatsXpGraphComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([stats, seasonFilter]) =>
 						[stats.filter((stat) => stat.levelAfterMatch), seasonFilter] as [

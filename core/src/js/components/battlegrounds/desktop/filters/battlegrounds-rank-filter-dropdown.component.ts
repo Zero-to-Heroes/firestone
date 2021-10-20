@@ -2,13 +2,14 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-rank-filter-dropdown',
@@ -30,7 +31,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
+export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -41,9 +42,11 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles
@@ -69,6 +72,7 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
 			map(([options, [filter, categoryId, currentView]]) => ({
 				filter: '' + filter,

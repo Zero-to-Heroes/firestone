@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-desktop',
@@ -64,7 +65,7 @@ import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesDesktopComponent implements AfterViewInit {
+export class MercenariesDesktopComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly MercenariesCategoryId[]>;
@@ -73,9 +74,11 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.loading)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
@@ -84,6 +87,7 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.menuDisplayType)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
@@ -91,6 +95,7 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				filter((selectedCategoryId) => !!selectedCategoryId),
 				distinctUntilChanged(),
@@ -99,6 +104,7 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),

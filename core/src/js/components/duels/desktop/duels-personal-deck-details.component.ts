@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { SetCard } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-personal-deck-details',
@@ -84,7 +85,7 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsPersonalDeckDetailsComponent {
+export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionComponent {
 	deck$: Observable<DeckInfo>;
 	collection$: Observable<readonly SetCard[]>;
 	decklist$: Observable<string>;
@@ -95,13 +96,18 @@ export class DuelsPersonalDeckDetailsComponent {
 	currentRunIndex = new BehaviorSubject<number>(0);
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
-			.pipe(map(([runIds]) => runIds));
+			.pipe(
+				takeUntil(this.destroyed$),
+				map(([runIds]) => runIds),
+			);
 		this.collection$ = combineLatest(
 			this.currentDeck.asObservable(),
 			this.store.listen$(([main, nav]) => main.binder.allSets),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(([currentDeck, [allSets]]) =>
 				currentDeck === 'final'
 					? null
@@ -122,6 +128,7 @@ export class DuelsPersonalDeckDetailsComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
@@ -148,6 +155,7 @@ export class DuelsPersonalDeckDetailsComponent {
 			this.currentDeck$,
 			this.currentRunIndex.asObservable(),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(([deck, expandedRunIds, currentDeck, currentRunIndex]) => {
 				const result =
 					currentDeck === 'initial'

@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -29,6 +29,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-overlay-root',
@@ -101,7 +102,7 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
 	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
 	@Input() opacityExtractor: (prefs: Preferences) => number;
@@ -180,9 +181,11 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private init_DebugService: DebugService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
+				takeUntil(this.destroyed$),
 				debounceTime(50),
 				filter(([gameState]) => !!gameState),
 				map(([gameState]) => this.deckExtractor(gameState)),
@@ -198,6 +201,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 				([main, nav, prefs]) => main.decktracker.patch,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
 			map(
 				([[gameState], [gameStats, timeFilter, patch]]) =>
@@ -236,6 +240,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 				([main, nav, prefs]) => main.decktracker.patch,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
 			map(
 				([[gameState], [gameStats, timeFilter, patch]]) =>
@@ -302,6 +307,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.showTooltipSubscription?.unsubscribe();
 		this.hideTooltipSubscription?.unsubscribe();

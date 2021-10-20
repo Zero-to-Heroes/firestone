@@ -11,7 +11,7 @@ import {
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable, Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
@@ -19,6 +19,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
@@ -77,7 +78,9 @@ import { groupByFunction } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit, OnDestroy {
+export class BattlegroundsMinionsTiersOverlayComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy {
 	private static readonly WINDOW_WIDTH = 1300;
 
 	tiers$: Observable<readonly Tier[]>;
@@ -105,9 +108,11 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
@@ -116,6 +121,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([tribes]) => tribes),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -123,6 +129,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([tribes]) => tribes),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -130,6 +137,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([currentTurn]) => currentTurn),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -137,6 +145,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.showTribesHighlight$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([info]) => info),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -144,12 +153,14 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.showMinionsList$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([info]) => info),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			);
 		this.prefSubscription = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(([info]) => (this.enableMouseOver = info));
 	}
 
@@ -169,6 +180,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.prefSubscription?.unsubscribe();
 	}

@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { BgsMmrGroupFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-rank-group-dropdown',
@@ -28,7 +29,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
+export class BattlegroundsRankGroupDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options: readonly MmrGroupFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -40,6 +41,7 @@ export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options = [
 			{
 				value: 'per-match',
@@ -57,6 +59,7 @@ export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,

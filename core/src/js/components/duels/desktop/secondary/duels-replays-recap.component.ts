@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-replays-recap',
@@ -23,13 +24,15 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsReplaysRecapComponent {
+export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.replays$ = this.store
 			.listen$(([main, nav]) => main.duels.personalDeckStats)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([decks]) => !!decks?.length),
 				map(([decks]) =>
 					decks

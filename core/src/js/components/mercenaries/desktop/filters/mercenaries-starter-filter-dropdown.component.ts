@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesStarterFilterType } from '../../../../models/mercenaries/mercenaries-starter-filter.type';
 import { MercenariesStarterFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-starter-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-starter-filter-dropdown',
@@ -26,12 +27,13 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesStarterFilterDropdownComponent {
+export class MercenariesStarterFilterDropdownComponent extends AbstractSubscriptionComponent {
 	options: readonly StarterFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.options = [
 			{
 				value: 'all',
@@ -53,6 +55,7 @@ export class MercenariesStarterFilterDropdownComponent {
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([globalStats, filter, selectedCategoryId]) => ({
 					filter: filter,

@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-format-filter-dropdown',
@@ -27,18 +28,20 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerFormatFilterDropdownComponent implements AfterViewInit {
+export class DecktrackerFormatFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.gameFormat,
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, currentView]) => !!filter && !!currentView),
 				map(([filter, currentView]) => {
 					const options = [

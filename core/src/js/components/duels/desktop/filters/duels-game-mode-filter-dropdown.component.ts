@@ -1,13 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
 import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-game-mode-filter-dropdown',
@@ -29,7 +30,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
+export class DuelsGameModeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options: readonly GameModeFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -41,6 +42,7 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options = [
 			{
 				value: 'all',
@@ -64,6 +66,7 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,

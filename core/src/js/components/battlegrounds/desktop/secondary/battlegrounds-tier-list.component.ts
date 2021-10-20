@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
@@ -37,7 +38,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent {
+export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
 	constructor(
@@ -45,6 +46,7 @@ export class BattlegroundsTierListComponent {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.stats$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(
@@ -55,6 +57,7 @@ export class BattlegroundsTierListComponent {
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats),
 			map(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,

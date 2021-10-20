@@ -1,6 +1,6 @@
 import { AfterViewInit, Directive, ElementRef, HostListener, Input, OnDestroy, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import {
@@ -9,12 +9,13 @@ import {
 } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Directive({
 	selector: '[mercenariesHighlight]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
+export class MercenariesHighlightDirective extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input('mercenariesHighlight') cardId = undefined;
 
 	private highlightElement;
@@ -29,11 +30,13 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 	) {
+		super();
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
 
 		this.subscription$$ = this.store
 			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([[selector, prefs]]) => !!selector && !!prefs),
 				map(
 					([[selector, prefs]]) =>
@@ -52,6 +55,7 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.subscription$$?.unsubscribe();
 	}
 

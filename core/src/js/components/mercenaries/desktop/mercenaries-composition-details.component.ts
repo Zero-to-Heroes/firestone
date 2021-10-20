@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
@@ -18,6 +18,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -83,7 +84,7 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesComposiionDetailsComponent {
+export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionComponent {
 	compositionStat$: Observable<CompositionStat>;
 
 	constructor(
@@ -92,6 +93,7 @@ export class MercenariesComposiionDetailsComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.compositionStat$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,
@@ -103,6 +105,7 @@ export class MercenariesComposiionDetailsComponent {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([globalStats, gameStats, heroId, modeFilter, difficultyFilter, mmrFilter, levelFilter]) =>
 						!!globalStats && !!heroId,

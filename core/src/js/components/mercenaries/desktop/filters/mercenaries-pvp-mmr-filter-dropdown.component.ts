@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesPvpMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
 import { MmrPercentile } from '../../../../services/mercenaries/mercenaries-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-pvp-mmr-filter-dropdown',
@@ -27,15 +28,17 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPvpMmrFilterDropdownComponent {
+export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscriptionComponent {
 	options$: Observable<readonly FilterOption[]>;
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.globalStats?.pvp?.mmrPercentiles)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles.map(
@@ -59,6 +62,7 @@ export class MercenariesPvpMmrFilterDropdownComponent {
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(
 				([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
 					!!options?.length && !!filter && !!selectedCategoryId,

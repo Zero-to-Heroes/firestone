@@ -2,12 +2,13 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-mmr-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-mmr-filter-dropdown',
@@ -29,7 +30,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
+export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -40,9 +41,11 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles.map(
@@ -64,6 +67,7 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([options, [filter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
 			map(([options, [filter, selectedCategoryId]]) => {
 				return {

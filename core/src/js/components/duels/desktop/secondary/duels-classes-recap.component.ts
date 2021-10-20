@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../../../../services/hs-utils';
@@ -9,6 +9,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 @Component({
 	selector: 'duels-classes-recap',
 	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-classes-recap.component.scss`],
@@ -77,7 +78,7 @@ import { groupByFunction } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsClassesRecapComponent {
+export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent {
 	stat$: Observable<Stat>;
 
 	constructor(
@@ -85,6 +86,7 @@ export class DuelsClassesRecapComponent {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.stat$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.runs,
@@ -94,6 +96,7 @@ export class DuelsClassesRecapComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
 				map(([runs, timeFilter, classFilter, gameMode, patch]) =>
 					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),

@@ -3,10 +3,11 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
 import { ChangeDeckSortEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-deck-sort-dropdown',
@@ -27,12 +28,13 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckSortDropdownComponent implements AfterViewInit {
+export class DecktrackerDeckSortDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.sort,
@@ -40,6 +42,7 @@ export class DecktrackerDeckSortDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
 				map(([filter, patch, currentView]) => {
 					const options = [

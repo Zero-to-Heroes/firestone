@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
@@ -19,6 +19,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -169,7 +170,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroDetailsComponent {
+export class MercenariesHeroDetailsComponent extends AbstractSubscriptionComponent {
 	heroStats$: Observable<MercenaryInfo>;
 
 	constructor(
@@ -178,6 +179,7 @@ export class MercenariesHeroDetailsComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.heroStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,
@@ -191,6 +193,7 @@ export class MercenariesHeroDetailsComponent {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([
 						globalStats,

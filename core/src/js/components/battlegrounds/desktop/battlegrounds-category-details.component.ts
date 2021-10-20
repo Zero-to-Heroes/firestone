@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-category-details',
@@ -36,13 +37,15 @@ import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsCategoryDetailsComponent {
+export class BattlegroundsCategoryDetailsComponent extends AbstractSubscriptionComponent {
 	selectedCategoryId$: Observable<string>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				distinctUntilChanged(),

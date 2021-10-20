@@ -1,13 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.type';
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-time-filter-dropdown',
@@ -29,7 +30,7 @@ import { formatPatch } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
+export class DuelsTimeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; options: readonly IOption[]; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -39,6 +40,7 @@ export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -46,6 +48,7 @@ export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId, patch]) => !!filter && !!selectedCategoryId && !!patch),
 				map(([filter, selectedCategoryId, patch]) => {
 					const options = [

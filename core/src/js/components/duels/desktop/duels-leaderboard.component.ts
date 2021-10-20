@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-leaderboard',
@@ -33,16 +34,18 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsLeaderboardComponent {
+export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.values$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.leaderboard,
 				([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([stats, filter]) => !!stats && !!filter),
 				map(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesPveDifficultyFilterType } from '../../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
 import { MercenariesPveDifficultyFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-pve-difficulty-filter-dropdown',
@@ -26,12 +27,13 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPveDifficultyFilterDropdownComponent {
+export class MercenariesPveDifficultyFilterDropdownComponent extends AbstractSubscriptionComponent {
 	options: readonly FilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.options = [
 			{
 				value: 'all',
@@ -58,6 +60,7 @@ export class MercenariesPveDifficultyFilterDropdownComponent {
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([globalStats, filter, modeFilter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([globalStats, filter, modeFilter, selectedCategoryId]) => ({
 					filter: filter,

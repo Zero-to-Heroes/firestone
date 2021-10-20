@@ -1088,14 +1088,14 @@ export class GameEvents {
 			case 'ENTITY_UPDATE':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent, {
-						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
-						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
-						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
-						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
-						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
-						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
-						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
-						zone: gameEvent.Value.AdditionalProps.Zone,
+						mercenariesExperience: gameEvent.Value.AdditionalProps?.MercenariesExperience,
+						mercenariesEquipmentId: gameEvent.Value.AdditionalProps?.MercenariesEquipmentId,
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps?.AbilityOwnerEntityId,
+						abilityCooldownConfig: gameEvent.Value.AdditionalProps?.AbilityCooldownConfig,
+						abilityCurrentCooldown: gameEvent.Value.AdditionalProps?.AbilityCurrentCooldown,
+						abilitySpeed: gameEvent.Value.AdditionalProps?.AbilitySpeed,
+						zonePosition: gameEvent.Value.AdditionalProps?.ZonePosition,
+						zone: gameEvent.Value.AdditionalProps?.Zone,
 					}),
 				);
 				break;

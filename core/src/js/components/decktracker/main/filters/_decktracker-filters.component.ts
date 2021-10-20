@@ -3,9 +3,10 @@ import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/de
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-filters',
@@ -42,18 +43,20 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerFiltersComponent implements AfterViewInit {
+export class DecktrackerFiltersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	showHiddenDecksLink$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.currentView,
 				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
 				map(([currentView, hiddenDeckCodes]) => currentView !== 'deck-details' && hiddenDeckCodes.length > 0),
 				tap((info) => cdLog('emitting hidden deck codes in ', this.constructor.name, info)),

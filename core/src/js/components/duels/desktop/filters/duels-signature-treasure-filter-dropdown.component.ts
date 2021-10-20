@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
@@ -10,6 +10,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-signature-treasure-filter-dropdown',
@@ -31,7 +32,9 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsSignatureTreasureFilterDropdownComponent implements AfterViewInit {
+export class DuelsSignatureTreasureFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit {
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -43,9 +46,11 @@ export class DuelsSignatureTreasureFilterDropdownComponent implements AfterViewI
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		super();
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([stats]) => !!stats?.length),
 				map(([stats]) => [...new Set(stats.map((stat) => stat.signatureTreasureCardId))]),
 				map((signatureTreasureCardIds) => [
@@ -108,6 +113,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent implements AfterViewI
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			filter(([options, [filter, statTypeFilter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
 			map(([options, [filter, statTypeFilter, selectedCategoryId]]) => {
 				return {

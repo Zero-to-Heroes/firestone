@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -18,6 +18,7 @@ import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/e
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
@@ -75,7 +76,7 @@ import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
+export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
 	_game: BgsGame;
 	tabs: readonly BgsStatsFilterId[];
@@ -115,7 +116,9 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
+			takeUntil(this.destroyed$),
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
 			map(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
 			tap((filter) => cdLog('emitting heroStat in ', this.constructor.name, filter)),

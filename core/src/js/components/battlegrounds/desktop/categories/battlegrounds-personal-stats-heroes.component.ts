@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -8,6 +8,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { areDeepEqual } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-heroes',
@@ -26,7 +27,7 @@ import { areDeepEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit {
+export class BattlegroundsPersonalStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	stats$: Observable<readonly BgsHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -36,7 +37,9 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.stats$ = this.store.bgHeroStats$().pipe(
+			takeUntil(this.destroyed$),
 			filter((stats) => !!stats?.length),
 			map((stats) => stats.filter((stat) => stat.id !== 'average')),
 			// FIXME

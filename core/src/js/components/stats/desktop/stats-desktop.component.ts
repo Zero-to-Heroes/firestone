@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
 import { StatsCategoryType } from '../../../models/mainwindow/stats/stats-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'stats-desktop',
@@ -39,16 +40,18 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsDesktopComponent {
+export class StatsDesktopComponent extends AbstractSubscriptionComponent {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StatsCategory>;
 	categories$: Observable<readonly StatsCategory[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.stats.loading)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
@@ -57,6 +60,7 @@ export class StatsDesktopComponent {
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationStats.menuDisplayType)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
@@ -67,6 +71,7 @@ export class StatsDesktopComponent {
 				([main, nav]) => nav.navigationStats.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
@@ -75,6 +80,7 @@ export class StatsDesktopComponent {
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.stats.categories)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),

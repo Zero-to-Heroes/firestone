@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-filters',
@@ -55,7 +56,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsFiltersComponent implements AfterViewInit {
+export class DuelsFiltersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	threshold = DuelsStateBuilderService.STATS_THRESHOLD;
 
 	showHiddenDecksLink$: Observable<boolean>;
@@ -64,12 +65,14 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,
 				([main, nav, prefs]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([hiddenCodes, selectedCategoryId]) => !!hiddenCodes && !!selectedCategoryId),
 				map(
 					([hiddenCodes, selectedCategoryId]) =>
@@ -81,6 +84,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.showHideBelowThresholdLink$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => ['duels-stats', 'duels-treasures'].includes(selectedCategoryId)),
 				distinctUntilChanged(),

@@ -15,13 +15,14 @@ import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-s
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-battles',
@@ -95,7 +96,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
+export class BgsBattlesComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 
@@ -123,12 +124,14 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.faceOff$ = this.store
 			.listenBattlegrounds$(
 				([state]) => state.currentGame?.faceOffs,
 				([state]) => state.panels,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([faceOffs, panels]) =>
 						[
@@ -163,6 +166,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				([state]) => state.panels,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([faceOffs, panels]) =>
 						[
@@ -180,6 +184,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 		this.battleResultHistory$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([faceOffs]) => faceOffs),
 				filter((faceOffs) => !!faceOffs?.length),
 				distinctUntilChanged(),
@@ -214,6 +219,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this._game = null;
 		this._panel = null;
 	}

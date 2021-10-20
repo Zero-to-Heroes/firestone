@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'arena-desktop',
@@ -41,16 +42,18 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaDesktopComponent {
+export class ArenaDesktopComponent extends AbstractSubscriptionComponent {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	category$: Observable<ArenaCategory>;
 	categories$: Observable<readonly ArenaCategory[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.arena.loading)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
@@ -59,6 +62,7 @@ export class ArenaDesktopComponent {
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationArena.menuDisplayType)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
@@ -69,6 +73,7 @@ export class ArenaDesktopComponent {
 				([main, nav]) => nav.navigationArena.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([arena, selectedCategoryId]) => arena.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
@@ -77,6 +82,7 @@ export class ArenaDesktopComponent {
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.arena.categories)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),

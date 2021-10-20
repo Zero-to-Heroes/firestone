@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'stats-xp-season-filter-dropdown',
@@ -27,15 +28,17 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsXpSeasonFilterDropdownComponent implements AfterViewInit {
+export class StatsXpSeasonFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.filter$ = this.store
 			.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => {
 					const options = [

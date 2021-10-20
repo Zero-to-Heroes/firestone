@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -10,6 +10,7 @@ import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-hero-selection-overview',
@@ -35,7 +36,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionOverviewComponent {
+export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionComponent {
 	tiers$: Observable<readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[]>;
 	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
 
@@ -47,7 +48,9 @@ export class BgsHeroSelectionOverviewComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.tiers$ = this.store.bgHeroStats$().pipe(
+			takeUntil(this.destroyed$),
 			filter((stats) => !!stats),
 			map((stats) => this.buildTiers(stats)),
 		);
@@ -59,6 +62,7 @@ export class BgsHeroSelectionOverviewComponent {
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			// tap((info) => console.debug('info in hero selection', info)),
 			map(
 				([stats, [achievements], [panels, showAchievements]]) =>

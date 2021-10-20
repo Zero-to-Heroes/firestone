@@ -3,13 +3,14 @@ import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-tribes-filter-dropdown',
@@ -31,7 +32,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTribesFilterDropdownComponent implements AfterViewInit {
+export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
@@ -42,9 +43,11 @@ export class BattlegroundsTribesFilterDropdownComponent implements AfterViewInit
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
+				takeUntil(this.destroyed$),
 				tap((info) => console.debug('global stats', info)),
 				filter(([allTribes]) => !!allTribes?.length),
 				map(([allTribes]) =>
@@ -71,6 +74,7 @@ export class BattlegroundsTribesFilterDropdownComponent implements AfterViewInit
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			tap((info) => console.debug('update', info)),
 			filter(
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>

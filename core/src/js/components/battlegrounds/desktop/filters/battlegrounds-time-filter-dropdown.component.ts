@@ -1,13 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-time-filter-dropdown',
@@ -29,7 +30,7 @@ import { formatPatch } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
+export class BattlegroundsTimeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -39,6 +40,7 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
@@ -47,6 +49,7 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([filter, patch, selectedCategoryId, currentView]) =>
 						!!filter && !!patch && !!selectedCategoryId && !!currentView,

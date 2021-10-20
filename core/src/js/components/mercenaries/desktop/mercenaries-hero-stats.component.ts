@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { TagRole } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
@@ -26,6 +26,7 @@ import {
 	isValidMercSearchItem,
 } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -44,7 +45,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroStatsComponent implements AfterViewInit {
+export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	stats$: Observable<readonly MercenaryInfo[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -55,6 +56,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		super();
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,
@@ -69,6 +71,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([
 						globalStats,

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
@@ -10,6 +10,7 @@ import { PatchInfo } from '../../../models/patches';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-helper';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -31,7 +32,7 @@ import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-hel
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTopDecksComponent implements OnDestroy {
+export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	isLoading: boolean;
 	allDecks: readonly DuelsGroupedDecks[];
 	displayedGroupedDecks: readonly DuelsGroupedDecks[];
@@ -40,6 +41,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 	private iterator: IterableIterator<void>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.topDecks,
@@ -53,6 +55,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([
 						topDecks,
@@ -110,6 +113,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
 

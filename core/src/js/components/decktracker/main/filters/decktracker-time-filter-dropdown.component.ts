@@ -6,8 +6,9 @@ import { OverwolfService } from '@services/overwolf.service';
 import { formatPatch } from '@services/utils';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-time-filter-dropdown',
@@ -28,12 +29,13 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerTimeFilterDropdownComponent implements AfterViewInit {
+export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.time,
@@ -41,6 +43,7 @@ export class DecktrackerTimeFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
 				map(([filter, patch, currentView]) => {
 					const options = [

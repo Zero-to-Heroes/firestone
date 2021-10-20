@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -8,6 +8,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-desktop',
@@ -63,7 +64,7 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsDesktopComponent implements AfterViewInit {
+export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	currentView$: Observable<string>;
@@ -73,9 +74,11 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.loading)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
@@ -84,6 +87,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
@@ -94,6 +98,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
@@ -102,6 +107,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 		this.currentView$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([currentView]) => currentView),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting currentView in ', this.constructor.name, info)),
@@ -109,6 +115,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.categories)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),

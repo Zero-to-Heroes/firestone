@@ -3,9 +3,10 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { BgsSimulatorMinionTierFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-sim-minion-tier-filter',
@@ -27,7 +28,9 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsSimulatorMinionTierFilterDropdownComponent implements AfterViewInit {
+export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit {
 	options: readonly IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -36,6 +39,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent implements 
 	private collator = new Intl.Collator('en-US');
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		const tiers = [1, 2, 3, 4, 5, 6];
 		this.options = [
 			{
@@ -50,6 +54,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent implements 
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => ({
 					filter: filter,

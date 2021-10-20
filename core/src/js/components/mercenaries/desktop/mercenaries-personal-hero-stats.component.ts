@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { RarityTYpe, TaskStatus } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
@@ -13,6 +13,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { areDeepEqual, sumOnArray } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-personal-hero-stats',
@@ -69,7 +70,7 @@ import { areDeepEqual, sumOnArray } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPersonalHeroStatsComponent {
+export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly PersonalHeroStat[]>;
 	sortCriteria$: Observable<MercenariesPersonalHeroesSortCriteria>;
 
@@ -81,9 +82,11 @@ export class MercenariesPersonalHeroStatsComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		super();
 		this.sortCriteria$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([sortCriteria]) => sortCriteria[0]),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
@@ -94,6 +97,7 @@ export class MercenariesPersonalHeroStatsComponent {
 				([main, nav]) => main.mercenaries.collectionInfo,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// tap((info) => console.debug('hop', info)),
@@ -128,8 +132,10 @@ export class MercenariesPersonalHeroStatsComponent {
 								(a) =>
 									normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(abilityCard.id),
 							);
-							const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
 							const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
+
+							const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
+
 							const currentUnlockedTier = memAbility?.Tier ?? 0;
 							const coinsToCraft = refAbility.tiers
 								.filter((a) => a.tier > currentUnlockedTier)
@@ -145,9 +151,11 @@ export class MercenariesPersonalHeroStatsComponent {
 							};
 						});
 						const equipments = refMerc.equipments.map((info) => {
-							const equipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
 							const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
 							const refEquip = refMerc.equipments.find((a) => a.equipmentId === info.equipmentId);
+
+							const equipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+
 							const currentUnlockedTier = memEquip?.Tier ?? 0;
 							const coinsToCraft = refEquip.tiers
 								.filter((a) => a.tier > currentUnlockedTier)
@@ -204,6 +212,7 @@ export class MercenariesPersonalHeroStatsComponent {
 			this.unsortedStats$,
 			this.store.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(([stats, [sortCriteria]]) => this.sortPersonalHeroStats(stats, sortCriteria)),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),

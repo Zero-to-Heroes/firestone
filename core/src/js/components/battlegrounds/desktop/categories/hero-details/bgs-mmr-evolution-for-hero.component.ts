@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs/internal/Observable';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-mmr-evolution-for-hero',
@@ -27,10 +28,11 @@ import { arraysEqual } from '../../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsMmrEvolutionForHeroComponent {
+export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds,
@@ -38,6 +40,7 @@ export class BgsMmrEvolutionForHeroComponent {
 				([main, nav]) => main.stats.gameStats.stats,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([battlegrounds, selectedCategoryId, stats]) =>
 						[

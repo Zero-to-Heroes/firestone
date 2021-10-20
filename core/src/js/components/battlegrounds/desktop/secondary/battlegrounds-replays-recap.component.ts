@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -9,6 +9,7 @@ import { normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-util
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-replays-recap',
@@ -28,10 +29,11 @@ import { arraysEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsReplaysRecapComponent {
+export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComponent {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly allCards: CardsFacadeService) {
+		super();
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,
@@ -39,6 +41,7 @@ export class BattlegroundsReplaysRecapComponent {
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([replays, battlegrounds, selectedCategoryId]) =>
 						[replays, battlegrounds.findCategory(selectedCategoryId)] as [

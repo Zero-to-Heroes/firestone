@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui-helper';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-deck-stats',
@@ -50,10 +51,11 @@ import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckStatsComponent {
+export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent {
 	deckInfo$: Observable<DeckInfo>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.deckInfo$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.personalDeckStats,
@@ -67,6 +69,7 @@ export class DuelsDeckStatsComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),

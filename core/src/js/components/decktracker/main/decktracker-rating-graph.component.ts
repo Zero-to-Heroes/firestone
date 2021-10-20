@@ -5,7 +5,7 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -14,6 +14,7 @@ import { PatchInfo } from '../../../models/patches';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-rating-graph',
@@ -35,10 +36,11 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerRatingGraphComponent {
+export class DecktrackerRatingGraphComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
@@ -49,6 +51,7 @@ export class DecktrackerRatingGraphComponent {
 				([main, nav]) => main.decktracker.patch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([stats, gameFormat, time, rankingGroup, rankingCategory, patch]) =>
 						[

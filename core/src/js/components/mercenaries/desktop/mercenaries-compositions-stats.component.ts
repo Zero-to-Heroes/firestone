@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
 import { MercenariesPveDifficultyFilterType } from '../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
@@ -15,6 +15,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -47,7 +48,7 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesCompositionsStatsComponent implements AfterViewInit {
+export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	stats$: Observable<readonly MercenaryCompositionInfo[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -57,6 +58,7 @@ export class MercenariesCompositionsStatsComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,
@@ -66,6 +68,7 @@ export class MercenariesCompositionsStatsComponent implements AfterViewInit {
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
 						!!globalStats && !!gameStats?.stats,

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesModeFilterType } from '../../../../models/mercenaries/mercenaries-mode-filter.type';
 import { MercenariesModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-mode-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-mode-filter-dropdown',
@@ -26,12 +27,13 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesModeFilterDropdownComponent {
+export class MercenariesModeFilterDropdownComponent extends AbstractSubscriptionComponent {
 	options: readonly ModeFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.options = [
 			{
 				value: 'pve',
@@ -49,6 +51,7 @@ export class MercenariesModeFilterDropdownComponent {
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([globalStats, filter, selectedCategoryId]) => ({
 					filter: filter,

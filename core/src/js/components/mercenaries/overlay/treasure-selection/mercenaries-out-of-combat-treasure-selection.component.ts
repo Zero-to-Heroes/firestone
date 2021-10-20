@@ -8,12 +8,13 @@ import {
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesSynergiesHighlightService } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-out-of-combat-treasure-selection',
@@ -34,7 +35,9 @@ import { arraysEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOutOfCombatTreasureSelectionComponent implements AfterViewInit, OnDestroy {
+export class MercenariesOutOfCombatTreasureSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy {
 	treasures$: Observable<readonly ReferenceCard[]>;
 
 	private windowId: string;
@@ -46,7 +49,9 @@ export class MercenariesOutOfCombatTreasureSelectionComponent implements AfterVi
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
+			takeUntil(this.destroyed$),
 			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),
 			map(([[state]]) => state.treasureSelection.treasures),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -70,6 +75,7 @@ export class MercenariesOutOfCombatTreasureSelectionComponent implements AfterVi
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 

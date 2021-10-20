@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroSortFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-hero-sort-dropdown',
@@ -28,7 +29,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
+export class BattlegroundsHeroSortDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	options: readonly HeroSortFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -40,6 +41,7 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.options = [
 			{
 				value: 'average-position',
@@ -65,6 +67,7 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
 				// tap(([filter, categoryId, currentView]) =>
 				// 	console.debug('changing hero sort filter?', filter, categoryId, currentView),

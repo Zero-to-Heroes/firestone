@@ -3,12 +3,13 @@ import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parse
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
 @Component({
@@ -71,18 +72,21 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLastWarbandsComponent {
+export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
 	boards$: Observable<readonly KnownBoard[]>;
+
 	loading = true;
 	visible = false;
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.boards$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
 				([main, nav]) => main.stats.gameStats,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([postMatch, gameStats]) => !!postMatch && !!gameStats),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(

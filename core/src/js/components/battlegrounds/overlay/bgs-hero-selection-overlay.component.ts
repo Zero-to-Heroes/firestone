@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -20,6 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
@@ -43,7 +44,9 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestroy {
+export class BgsHeroSelectionOverlayComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy {
 	heroOverviews$: Observable<InternalBgsHeroStat[]>;
 	heroTooltipActive$: Observable<boolean>;
 	windowId: string;
@@ -57,9 +60,11 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		private readonly store: AppUiStoreFacadeService,
 		private readonly init_DebugService: DebugService,
 	) {
+		super();
 		this.heroTooltipActive$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([pref]) => pref),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -73,6 +78,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(
 				([stats, [achievements], [panels, showAchievements]]) =>
 					[
@@ -148,6 +154,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 

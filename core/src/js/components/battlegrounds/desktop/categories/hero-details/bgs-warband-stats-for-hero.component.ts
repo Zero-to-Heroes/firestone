@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-warband-stats-for-hero',
@@ -26,10 +27,11 @@ import { arraysEqual } from '../../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsWarbandStatsForHeroComponent {
+export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionComponent {
 	values$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
 		this.values$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(
@@ -38,6 +40,7 @@ export class BgsWarbandStatsForHeroComponent {
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(
 				([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) =>
 					[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [

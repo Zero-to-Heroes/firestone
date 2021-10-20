@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -11,6 +11,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'arena-classes-recap',
@@ -84,10 +85,11 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassesRecapComponent {
+export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<StatInfo>;
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
@@ -96,6 +98,7 @@ export class ArenaClassesRecapComponent {
 				([main, nav]) => main.arena.currentArenaMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([stats, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				map(([stats, timeFilter, heroFilter, patch]) => {

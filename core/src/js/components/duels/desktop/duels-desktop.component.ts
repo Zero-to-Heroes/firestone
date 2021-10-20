@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
 import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
@@ -9,6 +9,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-desktop',
@@ -77,7 +78,7 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDesktopComponent implements AfterViewInit {
+export class DuelsDesktopComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly DuelsCategory[]>;
@@ -86,9 +87,11 @@ export class DuelsDesktopComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.duels.loading)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
@@ -97,6 +100,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.menuDisplayType)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
@@ -104,6 +108,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.duels.categories)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				// Subcategories are not displayed in the menu
 				map((categories) => categories.filter((cat) => !!cat.name)),
@@ -116,6 +121,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([duels, selectedCategoryId]) => duels.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),

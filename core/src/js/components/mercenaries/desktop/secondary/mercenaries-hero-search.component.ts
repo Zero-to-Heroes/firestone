@@ -1,11 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesHeroSearchEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-search-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-hero-search',
@@ -29,7 +30,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroSearchComponent implements AfterViewInit, OnDestroy {
+export class MercenariesHeroSearchComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	searchString: string;
 	searchForm = new FormControl();
 
@@ -37,9 +38,13 @@ export class MercenariesHeroSearchComponent implements AfterViewInit, OnDestroy 
 	private searchStringSub$$: Subscription;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.heroSearchString)
-			.pipe(tap((stat) => cdLog('emitting in ', this.constructor.name, stat)))
+			.pipe(
+				takeUntil(this.destroyed$),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			)
 			.subscribe(([heroSearchString]) => {
 				// TODO: force change detectiopn here?
 				this.searchString = heroSearchString;
@@ -57,6 +62,7 @@ export class MercenariesHeroSearchComponent implements AfterViewInit, OnDestroy 
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.searchFormSub$$?.unsubscribe();
 		this.searchStringSub$$?.unsubscribe();
 	}

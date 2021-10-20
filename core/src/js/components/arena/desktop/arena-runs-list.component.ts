@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -10,6 +10,7 @@ import { PatchInfo } from '../../../models/patches';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'arena-runs-list',
@@ -30,7 +31,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunsListComponent implements OnDestroy {
+export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	isLoading: boolean;
 	allReplays: readonly ArenaRun[];
 	displayedGroupedReplays: readonly GroupedRun[] = [];
@@ -40,6 +41,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 	private gamesIterator: IterableIterator<void>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
+		super();
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
 		this.sub$$ = this.store
@@ -51,6 +53,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 				([main, nav]) => main.arena.currentArenaMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				map(([stats, rewards, timeFilter, heroFilter, patch]) => {
@@ -80,6 +83,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
 

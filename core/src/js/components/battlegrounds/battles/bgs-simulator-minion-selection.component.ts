@@ -1,14 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, sortByProperties } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-simulator-minion-selection',
@@ -162,7 +171,7 @@ import { arraysEqual, sortByProperties } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
+export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;
@@ -203,6 +212,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.allMinions$ = combineLatest(
 			this.searchString.asObservable(),
 			this.store.listen$(
@@ -210,6 +220,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			debounceTime(200),
 			map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -248,14 +259,16 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			// tap((heroes) => console.debug('minions', heroes)),
 		);
 		this.subscription = this.searchForm.valueChanges
-			.pipe(debounceTime(200))
+			.pipe(takeUntil(this.destroyed$), debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
 				this.searchString.next(data);
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.subscription.unsubscribe();
 	}
 

@@ -1,13 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 /** This approach seems to be the cleanest way to properly narrow down the values needed from
  * the state. The other approaches are cool and data-driven, but as of now they seem more
@@ -33,12 +34,13 @@ import { formatPatch } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaTimeFilterDropdownComponent implements AfterViewInit {
+export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.arena.activeTimeFilter,
@@ -46,6 +48,7 @@ export class ArenaTimeFilterDropdownComponent implements AfterViewInit {
 				([main, nav]) => nav.navigationArena.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter, patch, selectedCategoryId]) => !!filter && !!patch && !!selectedCategoryId),
 				map(([filter, patch, selectedCategoryId]) => {
 					const options: readonly TimeFilterOption[] = [

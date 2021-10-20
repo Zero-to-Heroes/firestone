@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
@@ -10,6 +10,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-hero-details',
@@ -45,7 +46,9 @@ import { cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterViewInit {
+export class BattlegroundsPersonalStatsHeroDetailsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit {
 	tabs$: Observable<readonly BgsHeroStatsFilterId[]>;
 	selectedTab$: Observable<BgsHeroStatsFilterId>;
 	player$: Observable<BgsPlayer>;
@@ -57,12 +60,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.tabs$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				map((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
@@ -72,6 +77,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([tab]) => !!tab),
 				map(([tab]) => tab),
 				distinctUntilChanged(),
@@ -84,6 +90,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
 		).pipe(
+			takeUntil(this.destroyed$),
 			map(
 				([heroStats, [battlegrounds, selectedCategoryId]]) =>
 					[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],

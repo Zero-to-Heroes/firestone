@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
@@ -9,6 +9,7 @@ import { DuelsStateBuilderService } from '../../../../services/duels/duels-state
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
@@ -25,7 +26,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroTierListComponent {
+export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(
@@ -33,6 +34,7 @@ export class DuelsHeroTierListComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		super();
 		this.tiers$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
@@ -46,6 +48,7 @@ export class DuelsHeroTierListComponent {
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([
 						duelsStats,

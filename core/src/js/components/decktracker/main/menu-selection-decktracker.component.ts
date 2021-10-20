@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
@@ -8,6 +8,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'menu-selection-decktracker',
@@ -34,7 +35,7 @@ import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionDecktrackerComponent implements AfterViewInit {
+export class MenuSelectionDecktrackerComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	enableGraph = FeatureFlags.ENABLE_CONSTRUCTED_RANKING_GRAPH;
 
 	selectedTab$: Observable<string>;
@@ -42,9 +43,11 @@ export class MenuSelectionDecktrackerComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([tab]) => !!tab),
 				map(([tab]) => tab),
 				distinctUntilChanged(),

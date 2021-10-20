@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-perfect-games',
@@ -27,7 +28,7 @@ import { arraysEqual, groupByFunction } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPerfectGamesComponent implements OnDestroy {
+export class BattlegroundsPerfectGamesComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	isLoading: boolean;
 	allReplays: readonly GameStat[];
 	displayedGroupedReplays: readonly GroupedReplays[] = [];
@@ -37,6 +38,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 	private gamesIterator: IterableIterator<void>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,
@@ -45,6 +47,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => !!perfectGames?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
@@ -62,7 +65,9 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
 

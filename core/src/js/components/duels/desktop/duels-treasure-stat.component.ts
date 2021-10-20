@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
@@ -15,6 +15,7 @@ import {
 	filterDuelsTreasureStats,
 } from '../../../services/ui-store/duels-ui-helper';
 import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-treasure-stats',
@@ -32,7 +33,7 @@ import { arraysEqual } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureStatsComponent {
+export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
 
 	constructor(
@@ -40,6 +41,7 @@ export class DuelsTreasureStatsComponent {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
+		super();
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.duels?.globalStats?.treasures,
@@ -58,6 +60,7 @@ export class DuelsTreasureStatsComponent {
 				([main, nav, prefs]) => main.duels?.currentDuelsMetaPatch,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(
 					([
 						duelStats,

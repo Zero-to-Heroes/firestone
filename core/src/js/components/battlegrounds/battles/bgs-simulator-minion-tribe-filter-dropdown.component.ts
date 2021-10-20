@@ -4,10 +4,11 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { BgsSimulatorMinionTribeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-sim-minion-tribe-filter',
@@ -29,7 +30,9 @@ import { capitalizeFirstLetter } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent implements AfterViewInit {
+export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit {
 	options: readonly IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -42,6 +45,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent implements
 		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		const battlegroundsCards = this.allCards.getCards().filter((card) => !!card.techLevel);
 		const uniqueTribes = [...new Set(battlegroundsCards.map((card) => card.race?.toLowerCase()))].filter(
 			(race) => !!race && race !== 'all',
@@ -68,6 +72,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent implements
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => ({
 					filter: filter,

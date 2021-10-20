@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -10,6 +10,7 @@ import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-st
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
@@ -29,10 +30,11 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsRatingComponent {
+export class BattlegroundsPersonalStatsRatingComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
@@ -43,6 +45,7 @@ export class BattlegroundsPersonalStatsRatingComponent {
 				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch?.number,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(
 					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
 						!!stats && !!currentBattlegroundsMetaPatch,

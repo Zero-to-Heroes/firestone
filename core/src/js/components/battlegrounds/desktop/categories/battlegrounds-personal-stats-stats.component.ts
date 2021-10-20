@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-stats',
@@ -143,13 +144,15 @@ import { arraysEqual } from '../../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsStatsComponent {
+export class BattlegroundsPersonalStatsStatsComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
 	constructor(private readonly store: AppUiStoreFacadeService) {
+		super();
 		this.value$ = this.store
 			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([stats]) => !!stats?.length),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([stats]) => this.buildValue(stats)),
