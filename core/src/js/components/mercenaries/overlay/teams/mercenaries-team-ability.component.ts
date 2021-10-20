@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 
 @Component({
@@ -32,6 +33,18 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
 				/>
 			</div>
+			<div
+				class="item ability-speed"
+				[ngClass]="{ 'buff': speed < baseSpeed, 'debuff': speed > baseSpeed }"
+				*ngIf="speed != null"
+				[helpTooltip]="speedModifierTooltip"
+			>
+				<div class="value">{{ speed }}</div>
+				<img
+					class="speed-icon"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png?v=2"
+				/>
+			</div>
 			<div class="name">
 				<span>{{ name }}</span>
 			</div>
@@ -61,26 +74,47 @@ export class MercenariesTeamAbilityComponent {
 	@Input() tooltipPosition: boolean;
 
 	@Input() set ability(value: Ability) {
+		console.debug('set ability', this.allCards.getCard(value.cardId).name, value);
+		const abilityCard = this.allCards.getCard(value.cardId);
 		this.type = value.type;
 		this.cardId = value.cardId;
 		this.cardImage = value.cardImage;
-		this.name = this.allCards.getCard(value.cardId).name;
-		this.speed = value.speed;
+		this.name = abilityCard.name;
 		this.cooldown = value.cooldown;
 		this.cooldownLeft = value.cooldownLeft;
 		this.isTreasure = value.isTreasure;
 		this.totalUsed = value.totalUsed;
+		this.speedModifier =
+			!!value.speedModifier || !!value.heroSpeedModifier
+				? {
+						value: (value.speedModifier?.value ?? 0) + (value.heroSpeedModifier?.value ?? 0),
+						influences: [
+							...(value.speedModifier?.influences ?? []),
+							...(value.heroSpeedModifier?.influences ?? []),
+						],
+				  }
+				: null;
+		this.speed = value.speed; // value.speed == null ? null : value.speed + (this.speedModifier?.value ?? 0);
+		this.baseSpeed = abilityCard.cost;
+		this.speedModifierTooltip = !!this.speedModifier?.value
+			? this.speed > this.baseSpeed
+				? `This ability will be ${this.speed - this.baseSpeed} slower next turn`
+				: `This ability will be ${-(this.speed - this.baseSpeed)} faster next turn`
+			: null;
 	}
 
 	type: 'ability' | 'equipment';
 	cardId: string;
 	cardImage: string;
 	name: string;
+	baseSpeed: number;
 	speed: number;
 	cooldown: number;
 	cooldownLeft: number;
 	isTreasure: boolean;
 	totalUsed: number;
+	speedModifier: BattleSpeedModifier;
+	speedModifierTooltip: string;
 
 	constructor(private readonly allCards: CardsFacadeService) {}
 
@@ -99,4 +133,6 @@ export interface Ability {
 	readonly cooldownLeft: number;
 	readonly isTreasure: boolean;
 	readonly totalUsed: number;
+	readonly speedModifier: BattleSpeedModifier;
+	readonly heroSpeedModifier: BattleSpeedModifier;
 }

@@ -3,7 +3,6 @@ import { GameStateEvent } from './decktracker/game-state-event';
 import { Rank } from './player-info';
 
 export class GameEvent implements GameStateEvent {
-	/** @deprecated Use SCENE_CHANGED_MINDVISION instead */
 	public static readonly SCENE_CHANGED_MINDVISION = 'SCENE_CHANGED_MINDVISION'; // Not strictly a game event, but needed for requirements procesing
 	public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly GLOBAL_STATS_UPDATED = 'GLOBAL_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
@@ -196,6 +195,7 @@ export interface PlayerGameState {
 	readonly Hero: EntityGameState;
 	readonly Hand: readonly EntityGameState[];
 	readonly Board: readonly EntityGameState[];
+	readonly LettuceAbilities: readonly EntityGameState[];
 }
 
 export interface EntityGameState {
@@ -203,4 +203,12 @@ export interface EntityGameState {
 	readonly cardId: string;
 	readonly attack: number;
 	readonly health: number;
+	readonly tags: readonly { Name: number; Value: number }[];
+	readonly enchantments: readonly EnchantmentGameState[];
+}
+
+export interface EnchantmentGameState {
+	readonly entityId: number;
+	readonly cardId: string;
+	readonly tags: readonly { Name: number; Value: number }[];
 }

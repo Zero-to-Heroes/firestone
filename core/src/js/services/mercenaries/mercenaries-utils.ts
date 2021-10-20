@@ -86,4 +86,26 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 	);
 };
 
-export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [CardIds.EarthStompLettuceEnchantment];
+export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
+	CardIds.AmuletOfSwiftnessLettuceEnchantment,
+	CardIds.HeatingUpLettuceEnchantment,
+	CardIds.ManaBlinkLettuceEnchantment,
+	CardIds.EnduranceAuraLettuceEnchantment2, // 1 is the taunt
+	CardIds.EnduranceAuraLettuceEnchantment3,
+	CardIds.CenarionSurgeLettuceEnchantment,
+	CardIds.ElunesGraceLettuceEnchantment,
+	CardIds.HammerOfJusticeLettuceEnchantment,
+	CardIds.HeroicLeapLettuceEnchantment,
+	CardIds.RingOfHasteLettuceEnchantment,
+];
+
+export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
+	CardIds.MuddyFootingLettuceEnchantment,
+	CardIds.EarthStompLettuceEnchantment,
+	CardIds.DoomedLettuceEnchantment,
+	CardIds.StaggeredLettuceEnchantment,
+	CardIds.EmeraldRootsLettuceEnchantment,
+	CardIds.FrostbiteLettuceEnchantment,
+	CardIds.FlurryLettuceEnchantment,
+	CardIds.ShadowShockLettuceEnchantment,
+];

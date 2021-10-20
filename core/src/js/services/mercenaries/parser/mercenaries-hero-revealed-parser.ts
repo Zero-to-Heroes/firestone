@@ -62,7 +62,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			? this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId)
 			: null;
 		const mercFromMemory = isPlayer
-			? battleState.mercenariesFromMemory.Map?.PlayerTeam?.find((merc) => merc.Id === refMerc?.id)
+			? battleState.mercenariesFromMemory?.Map?.PlayerTeam?.find((merc) => merc.Id === refMerc?.id)
 			: null;
 		const abilityCardIdsFromMemory = (mercFromMemory?.Abilities ?? []).map((ability) => ability.CardId);
 		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);
