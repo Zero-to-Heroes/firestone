@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
@@ -8,6 +8,7 @@ import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { Task } from './mercenaries-team-root..component';
 
 @Component({
@@ -27,7 +28,7 @@ import { Task } from './mercenaries-team-root..component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOpponentTeamComponent {
+export class MercenariesOpponentTeamComponent extends AbstractSubscriptionComponent {
 	teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamOpponentPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesOpponentTeamOverlayPosition;
@@ -45,18 +46,21 @@ export class MercenariesOpponentTeamComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		super();
 		this.tasks$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.referenceData,
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
+				takeUntil(this.destroyed$),
 				filter(([referenceData, visitors]) => !!visitors?.length),
 				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
 			);
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
+				takeUntil(this.destroyed$),
 				debounceTime(50),
 				filter(([battleState]) => !!battleState),
 				map(([battleState]) => battleState.opponentTeam),

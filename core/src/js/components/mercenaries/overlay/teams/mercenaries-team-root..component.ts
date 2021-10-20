@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
@@ -18,6 +18,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'mercenaries-team-root',
@@ -104,7 +105,7 @@ import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
+export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	// @Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -149,9 +150,11 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(
+				takeUntil(this.destroyed$),
 				map(([pref]) => pref),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -161,6 +164,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
 			this.store.listenPrefs$((prefs) => this.showTasksExtractor(prefs)),
 		).pipe(
+			takeUntil(this.destroyed$),
 			tap((info) => console.debug('info', info)),
 			// Because when out of combat
 			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
@@ -169,6 +173,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 			tap((filter) => cdLog('emitting showTasks in ', this.constructor.name, filter)),
 		);
 		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(
+			takeUntil(this.destroyed$),
 			map((info) => info),
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
@@ -187,7 +192,9 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		await this.updateTooltipPosition();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 
