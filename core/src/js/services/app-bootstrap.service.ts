@@ -104,10 +104,12 @@ export class AppBootstrapService {
 
 	public async init() {
 		console.log('[bootstrap] in init');
-
 		await sleep(1);
 		this.init_AppUiStoreService.start();
+		this.doInit();
+	}
 
+	private async doInit() {
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
@@ -123,13 +125,13 @@ export class AppBootstrapService {
 		// Wait until DB has properly been upgraded when needed
 		if (!this.collectionDb.dbInit) {
 			setTimeout(() => {
-				this.init();
+				this.doInit();
 			}, 200);
 			return;
 		}
 		if (!this.achievementsDb.dbInit) {
 			setTimeout(() => {
-				this.init();
+				this.doInit();
 			}, 200);
 			return;
 		}
