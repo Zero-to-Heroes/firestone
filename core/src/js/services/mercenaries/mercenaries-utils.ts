@@ -1,4 +1,4 @@
-import { GameType, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, GameType, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../cards-facade.service';
 import { MercenariesReferenceData } from './mercenaries-state-builder.service';
 
@@ -10,9 +10,9 @@ export const normalizeMercenariesCardId = (
 	if (!cardId?.length) {
 		return null;
 	}
-	const skinMatch = cardId.match(/.*_(\d\d)$/);
+	const skinMatch = cardId.match(/.*_(\d\d)([ab]?)$/);
 	if (skinMatch) {
-		return cardId.replace(/(.*)(_\d\d)$/, '$1_01');
+		return cardId.replace(/(.*)(_\d\d)([ab]?)$/, '$1_01$3');
 	}
 	return cardId;
 };
@@ -85,3 +85,5 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 		gameType === 'mercenaries-pve-coop'
 	);
 };
+
+export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [CardIds.EarthStompLettuceEnchantment];
