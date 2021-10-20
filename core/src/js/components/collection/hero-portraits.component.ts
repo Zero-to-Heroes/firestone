@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -116,6 +117,7 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription?.unsubscribe();
 	}

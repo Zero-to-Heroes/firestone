@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
@@ -78,6 +78,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.sub$$?.unsubscribe();
 	}

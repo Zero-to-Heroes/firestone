@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -90,6 +91,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 		await this.handleDisplayPreferences();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription?.unsubscribe();
 	}

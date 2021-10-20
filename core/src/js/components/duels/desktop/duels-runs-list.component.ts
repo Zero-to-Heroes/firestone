@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
@@ -100,6 +108,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.sub$$?.unsubscribe();
 	}

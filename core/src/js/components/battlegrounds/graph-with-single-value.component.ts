@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewChild,
@@ -89,6 +90,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.colors$$?.unsubscribe();
 	}

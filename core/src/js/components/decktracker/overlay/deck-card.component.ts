@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -202,6 +203,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.cardsHighlightService.unregister(this._uniqueId);
 	}

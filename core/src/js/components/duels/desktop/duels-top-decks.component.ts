@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
@@ -108,6 +108,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.sub$$?.unsubscribe();
 	}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Events } from '../../../services/events.service';
@@ -137,6 +137,7 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 		);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeVideoCaptureSettingsChangedListener(this.videoCaptureSettingsChangedListener);
 		this.formControlSubscription.unsubscribe();

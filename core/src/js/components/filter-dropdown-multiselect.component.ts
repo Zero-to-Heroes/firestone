@@ -148,6 +148,7 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 		);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.sub$$?.unsubscribe();
 	}
