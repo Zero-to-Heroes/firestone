@@ -137,7 +137,7 @@ export class DevService {
 			timeBetweenEvents?: number,
 		) => {
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${fileName}.json`;
-			let logContents = await this.ow.getFileContents(logsLocation);
+			let logContents = await this.ow.readTextFile(logsLocation);
 			let events = JSON.parse(logContents);
 			await this.loadEvents(events, awaitEvents, deckstring, timeBetweenEvents);
 			logContents = null;
@@ -149,7 +149,7 @@ export class DevService {
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			console.debug = console.debug = (args) => {};
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
-			const logContents = await this.ow.getFileContents(logsLocation);
+			const logContents = await this.ow.readTextFile(logsLocation);
 			const events = JSON.parse(logContents);
 			while (repeats > 0) {
 				console.warn('starting iteration', repeats);

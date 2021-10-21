@@ -14,7 +14,7 @@ export class SimpleIOService {
 		const fileContents: { fileName: string; contents: string }[] = await Promise.all(
 			files.map((file) => ({
 				fileName: file,
-				contents: this.ow.getFileContents(path + '/' + file),
+				contents: this.ow.readTextFile(path + '/' + file),
 			})),
 		);
 

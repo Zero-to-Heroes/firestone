@@ -25,7 +25,7 @@ export class LogsUploaderService {
 			}
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
 
-			const logLines = await this.ow.getFileContents(logsLocation);
+			const logLines = await this.ow.readTextFile(logsLocation);
 
 			const jszip = new JSZip.default();
 			jszip.file('power.log', logLines);

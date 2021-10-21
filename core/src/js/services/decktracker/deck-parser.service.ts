@@ -193,12 +193,6 @@ export class DeckParserService {
 						? this.currentNonGamePlayScene
 						: changes.CurrentScene;
 				this.currentScene = changes.CurrentScene;
-
-				// 	'[deck-parser] new scene',
-				// 	changes.CurrentScene,
-				// 	this.currentNonGamePlayScene,
-				// 	this.currentScene,
-				// );
 			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
@@ -294,7 +288,7 @@ export class DeckParserService {
 			return;
 		}
 		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
-		const logsContents = await this.ow.getFileContents(logsLocation);
+		const logsContents = await this.ow.readTextFile(logsLocation);
 		if (!logsContents) {
 			return;
 		}
