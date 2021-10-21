@@ -25,11 +25,11 @@ export class AchievementsNotificationService {
 			achievement.numberOfCompletions,
 		);
 		const prefs = await this.prefs.getPreferences();
-		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
+		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications2) {
 			console.log(
 				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
-				prefs.achievementsDisplayNotifications,
+				prefs.achievementsDisplayNotifications2,
 			);
 			return;
 		}

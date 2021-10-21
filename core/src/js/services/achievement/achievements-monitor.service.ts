@@ -69,7 +69,7 @@ export class AchievementsMonitor {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 			const prefs = await this.prefs.getPreferences();
 			const changes: MemoryUpdate = event.data[0];
-			if (changes.DisplayingAchievementToast && prefs.achievementsDisplayNotifications) {
+			if (changes.DisplayingAchievementToast && prefs.achievementsDisplayNotifications2) {
 				setTimeout(() => {
 					this.detectNewAchievementFromMemory();
 				}, 500);
@@ -232,7 +232,7 @@ export class AchievementsMonitor {
 
 	private async handleEvent(gameEvent: GameEvent) {
 		const prefs = await this.prefs.getPreferences();
-		if (this.spectating || !prefs.achievementsEnabled) {
+		if (this.spectating || !prefs.achievementsEnabled2) {
 			return;
 		}
 
@@ -389,6 +389,11 @@ export class AchievementsMonitor {
 		setInterval(async () => {
 			const inGame = await this.ow.inGame();
 			if (!inGame) {
+				return;
+			}
+
+			const prefs = await this.prefs.getPreferences();
+			if (!prefs.achievementsEnabled2 || !prefs.achievementsLiveTracking2) {
 				return;
 			}
 

@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<h2 class="title">Live achievements tracking</h2>
 			<section class="toggle-label">
 				<preference-toggle
-					field="achievementsLiveTracking"
+					field="achievementsLiveTracking2"
 					label="Enable live tracker (alpha)"
 					tooltip="(ALPHA) Shows a new window (ideally for second screens) where you can see the progress towards each of the HS native achievements during a match. It's still a very early alpha build, and any feedback is welcome :)"
 				></preference-toggle>

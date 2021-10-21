@@ -19,7 +19,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					tooltip="Enable Firestone-exclusive achievements tracking."
 				></preference-toggle>
 				<preference-toggle
-					field="achievementsDisplayNotifications"
+					field="achievementsDisplayNotifications2"
 					label="Show notifications"
 					tooltip="Display a notification whenever you unlock an achievement. Turning this off also turns Hearthstone's own in-game achievements tracking."
 				></preference-toggle>

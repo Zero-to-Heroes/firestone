@@ -46,10 +46,11 @@ export class Preferences {
 
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
-	readonly achievementsEnabled = false;
-	readonly achievementsLiveTracking: boolean = false;
-	readonly achievementsDisplayNotifications = false;
+	readonly achievementsEnabled2 = false;
+	readonly achievementsLiveTracking2: boolean = false;
+	readonly achievementsDisplayNotifications2 = false;
 	readonly resetAchievementsOnAppStart = false;
+
 	// TODO: both should be removed
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;

@@ -18,7 +18,7 @@ export class ConstructedWindowHandler extends AbstractOverlayHandler {
 			OverwolfService.CONSTRUCTED_WINDOW,
 			(prefs) =>
 				FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW &&
-				(prefs.achievementsLiveTracking || prefs.guessOpponentArchetype),
+				(prefs.achievementsLiveTracking2 || prefs.guessOpponentArchetype),
 			(state) =>
 				!this.closedByUser &&
 				state &&
