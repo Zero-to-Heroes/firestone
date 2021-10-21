@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
-import { BehaviorSubject, from, Observable, Subscription } from 'rxjs';
+import { from, Observable, Subscription } from 'rxjs';
 import { concatMap, delayWhen, filter, map, pluck, tap, withLatestFrom } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
@@ -59,7 +59,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private windowId: string;
 	private windowId$: Observable<string>;
 	private activeNotifications: ActiveNotification[] = [];
-	private notificationsEmitterBus: BehaviorSubject<Message>;
 	private notifications$: Observable<Message>;
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;

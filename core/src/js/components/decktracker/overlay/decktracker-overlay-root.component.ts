@@ -154,13 +154,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
-	// showTracker: boolean;
-
-	// private gameFormat$$: BehaviorSubject<GameFormatString> = new BehaviorSubject(null);
-	// private currentDeckstring$$: BehaviorSubject<string> = new BehaviorSubject(null);
-	// private opponentClass$$: BehaviorSubject<string> = new BehaviorSubject(null);
-
-	// private hasBeenMovedByUser: boolean;
 	private showTooltips = true;
 
 	private scale;
@@ -169,7 +162,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 	private hideTooltipSubscription: Subscription;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
-	// private displaySubscription: Subscription;
 
 	constructor(
 		private prefs: PreferencesService,
