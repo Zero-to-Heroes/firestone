@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
+import { LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS } from '../local-storage';
 import { HsAchievementsInfo } from './achievements-info';
 
+declare let amplitude;
+
 @Injectable()
-export class AchievementsLocalDbService {
+export class AchievementsStorageService {
 	public dbInit: boolean;
 
 	private db: AngularIndexedDB;
@@ -17,37 +20,23 @@ export class AchievementsLocalDbService {
 	}
 
 	public async saveInGameAchievements(info: HsAchievementsInfo): Promise<HsAchievementsInfo> {
-		await this.waitForDbInit();
-		const dbInfo = {
-			id: 1,
-			info: info,
-		};
-		return new Promise<HsAchievementsInfo>((resolve) => {
-			this.saveInGameAchievementsInternal(dbInfo, (result) => resolve(result));
-		});
-	}
-
-	private async saveInGameAchievementsInternal(dbInfo, callback, retriesLeft = 10) {
-		if (retriesLeft <= 0) {
-			console.error('[achievements] [storage] could not update achievements-from-game');
-			callback(dbInfo.info);
-			return;
-		}
-		try {
-			await this.db.update('achievements-from-game', dbInfo);
-			callback(dbInfo.info);
-			return;
-		} catch (e) {
-			console.warn('[achievements] [storage] could not update achievements-from-game', e.message, e.name, e);
-			setTimeout(() => this.saveInGameAchievementsInternal(dbInfo, callback, retriesLeft - 1));
-		}
+		localStorage.setItem(LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS, JSON.stringify(info));
+		return info;
 	}
 
 	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo> {
+		const fromStorage = localStorage.getItem(LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS);
+		if (!!fromStorage) {
+			return JSON.parse(fromStorage);
+		}
+
+		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
 		await this.waitForDbInit();
 		try {
 			const info = await this.db.getAll('achievements-from-game', null);
-			return info[0] ? info[0].info : [];
+			const result = info[0] ? info[0].info : [];
+			await this.saveInGameAchievements(info);
+			return result;
 		} catch (e) {
 			console.error('[achievements] [storage] could not get achievements-from-game', e.message, e.name, e);
 		}
@@ -77,14 +66,21 @@ export class AchievementsLocalDbService {
 		return achievement;
 	}
 
-	public getAll(): CompletedAchievement[] {
+	public getAll(): readonly CompletedAchievement[] {
 		return Object.values(this.achievementsCache);
 	}
 
-	public async loadAllHistory(): Promise<AchievementHistory[]> {
+	public async loadAllHistory(): Promise<readonly AchievementHistory[]> {
+		const fromStorage = localStorage.getItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		if (!!fromStorage) {
+			return JSON.parse(fromStorage);
+		}
+
+		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
 		await this.waitForDbInit();
 		try {
 			const history = await this.db.getAll('achievement-history', null);
+			this.saveAllHistory(history);
 			return history;
 		} catch (e) {
 			console.error('[achievements] [storage] error while loading all history', e.message, e.name, e);
@@ -92,13 +88,15 @@ export class AchievementsLocalDbService {
 		}
 	}
 
+	public async saveAllHistory(history: readonly AchievementHistory[]) {
+		localStorage.setItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, JSON.stringify(history));
+	}
+
 	public async saveHistory(history: AchievementHistory) {
-		await this.waitForDbInit();
-		try {
-			const saved = await this.db.update('achievement-history', history);
-		} catch (e) {
-			console.error('[achievements] [storage] error while saving history', e.message, e.name, history, e);
-		}
+		const fromStorage = localStorage.getItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		const historyList: readonly AchievementHistory[] = !!fromStorage ? JSON.parse(fromStorage) : [];
+		const newHistory = [history, ...historyList];
+		this.saveAllHistory(newHistory);
 	}
 
 	private init() {

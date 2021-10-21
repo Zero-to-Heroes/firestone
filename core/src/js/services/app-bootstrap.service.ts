@@ -2,8 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
+import { AchievementsStorageService as AchievementsDb } from './achievement/achievements-storage.service';
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
-import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
 import { AdService } from './ad.service';
 import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
@@ -12,7 +12,7 @@ import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-s
 import { RealTimeStatsService } from './battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
 import { CollectionManager } from './collection/collection-manager.service';
-import { IndexedDbService } from './collection/indexed-db.service';
+import { CollectionStorageService } from './collection/collection-storage.service';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
@@ -67,7 +67,7 @@ export class AppBootstrapService {
 		private init_OutOfCardsAuth: OutOfCardsService,
 		private debugService: DebugService,
 		private dev: DevService,
-		private collectionDb: IndexedDbService,
+		private collectionDb: CollectionStorageService,
 		private achievementsDb: AchievementsDb,
 		private achievementsLoader: AchievementsLoaderService,
 		private packMonitor: PackMonitor,

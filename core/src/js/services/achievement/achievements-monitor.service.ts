@@ -18,9 +18,9 @@ import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
 import { AchievementsManager } from './achievements-manager.service';
+import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
-import { AchievementsLocalDbService } from './indexed-db.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
 @Injectable()
@@ -44,7 +44,7 @@ export class AchievementsMonitor {
 		private readonly events: Events,
 		private readonly store: MainWindowStoreService,
 		private readonly remoteAchievements: RemoteAchievementsService,
-		private readonly achievementsStorage: AchievementsLocalDbService,
+		private readonly achievementsStorage: AchievementsStorageService,
 		private readonly achievementsManager: AchievementsManager,
 		private readonly memory: MemoryInspectionService,
 		private readonly ow: OverwolfService,

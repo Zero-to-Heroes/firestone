@@ -104,7 +104,7 @@ export class CardHistoryComponent implements AfterViewInit {
 	}
 
 	trackById(index, history: CardHistory) {
-		return history.id;
+		return history.creationTimestamp;
 	}
 
 	private updateInfos() {

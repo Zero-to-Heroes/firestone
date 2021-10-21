@@ -79,7 +79,7 @@ export class PackHistoryComponent implements AfterViewInit {
 	}
 
 	trackById(index, history: CardHistory) {
-		return history.id;
+		return history.creationTimestamp;
 	}
 
 	private updateInfos() {

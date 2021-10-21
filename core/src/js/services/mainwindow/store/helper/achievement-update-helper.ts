@@ -25,9 +25,10 @@ export class AchievementUpdateHelper {
 					if (!matchingAchievement) {
 						return null;
 					}
-					return Object.assign(new AchievementHistory(), history, {
+					return {
+						...history,
 						displayName: achievements.find((ach) => ach.id === history.achievementId).displayName,
-					} as AchievementHistory);
+					} as AchievementHistory;
 				})
 				.filter((history) => history)
 				// We want to have the most recent at the top

@@ -30,7 +30,7 @@ import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/per
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { ApiRunner } from './api-runner';
-import { GenericIndexedDbService } from './generic-indexed-db.service';
+import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { OverwolfService } from './overwolf.service';
 import { areDeepEqual, capitalizeFirstLetter } from './utils';
@@ -50,7 +50,7 @@ export class PreferencesService {
 	private preferencesEventBus = new BehaviorSubject<Preferences>(new Preferences());
 
 	constructor(
-		private readonly indexedDb: GenericIndexedDbService,
+		private readonly storage: GenericStorageService,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 	) {
@@ -64,7 +64,7 @@ export class PreferencesService {
 	}
 
 	public getPreferences(): Promise<Preferences> {
-		return this.indexedDb.getUserPreferences();
+		return this.storage.getUserPreferences();
 	}
 
 	public async reset() {
@@ -551,7 +551,7 @@ export class PreferencesService {
 			...userPrefs,
 			lastUpdateDate: new Date(),
 		};
-		await this.indexedDb.saveUserPreferences(finalPrefs);
+		await this.storage.saveUserPreferences(finalPrefs);
 
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		eventBus.next({

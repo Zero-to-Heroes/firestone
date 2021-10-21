@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Events } from '../events.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { HsAchievementInfo } from './achievements-info';
-import { AchievementsLocalDbService } from './indexed-db.service';
+import { AchievementsStorageService } from './achievements-storage.service';
 
 @Injectable()
 export class AchievementsManager {
 	// TODO: update the achievements if the player goes into the game
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
-		private readonly db: AchievementsLocalDbService,
+		private readonly db: AchievementsStorageService,
 		private readonly events: Events,
 	) {}
 

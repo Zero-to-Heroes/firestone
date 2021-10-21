@@ -12,7 +12,7 @@ import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.serv
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
-import { IndexedDbService } from '../../collection/indexed-db.service';
+import { CollectionStorageService } from '../../collection/collection-storage.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
@@ -295,7 +295,7 @@ export class MainWindowStoreService {
 		private achievementHistoryStorage: AchievementHistoryStorageService,
 		private achievementsLoader: AchievementsLoaderService,
 		private remoteAchievements: RemoteAchievementsService,
-		private collectionDb: IndexedDbService,
+		private collectionDb: CollectionStorageService,
 		private gameStatsUpdater: GameStatsUpdaterService,
 		private gameStatsLoader: GameStatsLoaderService,
 		private ow: OverwolfService,

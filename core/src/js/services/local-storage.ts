@@ -1,0 +1,9 @@
+export const LOCAL_STORAGE_USER_PREFERENCES = 'user-preferences';
+export const LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS = 'in-game-achievements';
+export const LOCAL_STORAGE_ACHIEVEMENTS_HISTORY = 'achievements-history';
+export const LOCAL_STORAGE_COLLECTION = 'collection';
+export const LOCAL_STORAGE_CARD_BACKS = 'card-backs';
+export const LOCAL_STORAGE_PACK_INFOS = 'pack-infos';
+export const LOCAL_STORAGE_COINS = 'coins';
+export const LOCAL_STORAGE_CARDS_HISTORY = 'cards-history';
+export const LOCAL_STORAGE_MERCENARIES_COLLECTION = 'mercenariesMemoryCollectionInfo';

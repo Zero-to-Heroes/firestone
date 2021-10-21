@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { Preferences } from '../models/preferences';
+import { LOCAL_STORAGE_USER_PREFERENCES } from './local-storage';
+
+declare let amplitude;
 
 @Injectable()
-export class GenericIndexedDbService {
+export class GenericStorageService {
 	private dbInit: boolean;
 	private db: AngularIndexedDB;
 
@@ -12,25 +15,29 @@ export class GenericIndexedDbService {
 	}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
-		await this.waitForDbInit();
-		return new Promise<Preferences>((resolve) => {
-			try {
-				this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
-					resolve(preferences);
-				});
-			} catch (e) {
-				console.error('[generic-storage] could not update user prefs', e.message, e.name, e);
-				resolve(preferences);
-			}
-		});
+		localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES, JSON.stringify(preferences));
+		return preferences;
 	}
 
 	public async getUserPreferences(): Promise<Preferences> {
+		const fromStorage = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES);
+		if (!!fromStorage) {
+			const result = Object.assign(new Preferences(), JSON.parse(fromStorage));
+			const resultWithDate: Preferences = {
+				...result,
+				lastUpdateDate: result.lastUpdateDate ? new Date(result.lastUpdateDate) : null,
+			};
+			return resultWithDate;
+		}
+
+		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
 		await this.waitForDbInit();
 		return new Promise<Preferences>((resolve) => {
 			try {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
-					resolve(Object.assign(new Preferences(), preferences[0] || {}));
+					const result = Object.assign(new Preferences(), preferences[0] || {});
+					this.saveUserPreferences(result);
+					resolve(result);
 				});
 			} catch (e) {
 				console.error('[generic-storage] could not get user prefs', e.message, e.name, e);

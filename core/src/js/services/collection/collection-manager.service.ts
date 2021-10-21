@@ -13,7 +13,7 @@ import { boosterIdToSetId } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
-import { IndexedDbService } from './indexed-db.service';
+import { CollectionStorageService } from './collection-storage.service';
 import { PackStatsService } from './pack-stats.service';
 import { SetsService } from './sets-service.service';
 
@@ -28,7 +28,7 @@ export class CollectionManager {
 
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
-		private readonly db: IndexedDbService,
+		private readonly db: CollectionStorageService,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
@@ -38,7 +38,7 @@ export class CollectionManager {
 		this.init();
 	}
 
-	public async getCollection(skipMemoryReading = false): Promise<Card[]> {
+	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
 		console.log('[collection-manager] getting collection', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
 		console.debug('[collection-manager] got collection', collection);

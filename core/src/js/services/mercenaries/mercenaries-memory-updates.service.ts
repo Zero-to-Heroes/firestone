@@ -3,6 +3,7 @@ import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
+import { LOCAL_STORAGE_MERCENARIES_COLLECTION } from '../local-storage';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from '../mainwindow/store/events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { OverwolfService } from '../overwolf.service';
@@ -71,16 +72,12 @@ export class MercenariesMemoryUpdateService {
 		if (!newMercenariesInfo?.Mercenaries?.length) {
 			return;
 		}
-		localStorage.setItem('mercenariesMemoryCollectionInfo', JSON.stringify(newMercenariesInfo));
-		console.debug(
-			'saved mercenariesMemoryCollectionInfo in localStorage',
-			JSON.parse(localStorage.getItem('mercenariesMemoryCollectionInfo')),
-		);
+		localStorage.setItem(LOCAL_STORAGE_MERCENARIES_COLLECTION, JSON.stringify(newMercenariesInfo));
 		return;
 	}
 
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
-		const result = JSON.parse(localStorage.getItem('mercenariesMemoryCollectionInfo'));
+		const result = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MERCENARIES_COLLECTION));
 		console.debug('retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
 		return result;
 	}

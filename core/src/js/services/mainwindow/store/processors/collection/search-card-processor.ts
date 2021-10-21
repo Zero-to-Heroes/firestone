@@ -52,7 +52,7 @@ export class SearchCardProcessor implements Processor {
 		];
 	}
 
-	private findCollectionCard(collection: Card[], card: SetCard): Card {
+	private findCollectionCard(collection: readonly Card[], card: SetCard): Card {
 		for (let i = 0; i < collection.length; i++) {
 			const collectionCard = collection[i];
 			if (collectionCard.id === card.id) {

@@ -5,7 +5,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { IndexedDbService } from '../../../../collection/indexed-db.service';
+import { CollectionStorageService } from '../../../../collection/collection-storage.service';
 import { NewCardEvent } from '../../events/collection/new-card-event';
 import { Processor } from '../processor';
 
@@ -13,7 +13,7 @@ import { Processor } from '../processor';
 // which is highly unefficient. Maybe we should do things a little be smarter
 export class NewCardProcessor implements Processor {
 	constructor(
-		private indexedDb: IndexedDbService,
+		private collectionStorage: CollectionStorageService,
 		private collectionManager: CollectionManager,
 		private cardHistoryStorage: CardHistoryStorageService,
 	) {}
@@ -27,11 +27,15 @@ export class NewCardProcessor implements Processor {
 		console.debug('receiving new card history', event);
 		const collection: readonly Card[] = await this.collectionManager.getCollection();
 		if (collection && collection.length > 0) {
-			await this.indexedDb.saveCollection(collection);
+			await this.collectionStorage.saveCollection(collection);
 		}
-		const history = event.isDust
-			? new CardHistory(event.cardId, event.type === 'GOLDEN', false, -1)
-			: new CardHistory(event.cardId, event.type === 'GOLDEN', true, event.newCount);
+		const history: CardHistory = {
+			creationTimestamp: Date.now(),
+			cardId: event.cardId,
+			isPremium: event.type === 'GOLDEN',
+			isNewCard: !event.isDust,
+			relevantCount: event.isDust ? -1 : event.newCount,
+		};
 		this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
 		const sets = await this.collectionManager.buildSets(collection, currentState.binder.packStats);

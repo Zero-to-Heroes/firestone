@@ -3,19 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
+import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
-import { AchievementsLocalDbService as AchievementsDb } from '../../services/achievement/indexed-db.service';
 import { ApiRunner } from '../../services/api-runner';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { IndexedDbService } from '../../services/collection/indexed-db.service';
+import { CollectionStorageService } from '../../services/collection/collection-storage.service';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { DebugService } from '../../services/debug.service';
 import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
-import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { GenericStorageService } from '../../services/generic-storage.service';
 import { HotkeyService } from '../../services/hotkey.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OwNotificationsService } from '../../services/notifications.service';
@@ -41,7 +41,7 @@ export class SharedServicesModule {
 				SetsService,
 				DebugService,
 				Events,
-				GenericIndexedDbService,
+				GenericStorageService,
 				LogsUploaderService,
 				MemoryInspectionService,
 				OverwolfService,
@@ -60,7 +60,7 @@ export class SharedServicesModule {
 				DeckHandlerService,
 				CardHistoryStorageService,
 				CollectionManager,
-				IndexedDbService,
+				CollectionStorageService,
 				MindVisionService,
 				OwUtilsService,
 				HotkeyService,

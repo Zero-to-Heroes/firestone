@@ -28,6 +28,7 @@ import { PreferencesService } from '../../preferences.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { StatsStateBuilderService } from '../../stats/stats-state-builder.service';
 import { UserService } from '../../user.service';
+import { sleep } from '../../utils';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { StoreInitEvent } from './events/store-init-event';
@@ -61,12 +62,21 @@ export class StoreBootstrapService {
 		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryUpdateService,
 	) {
+		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+			console.log('[store-boostrap] retrieved state updater');
 		});
 	}
 
+	private async ready() {
+		while (!this.stateUpdater) {
+			await sleep(100);
+		}
+	}
+
 	public async initStore() {
+		await this.ready();
 		// First load for the FTUE
 		const prefs = await this.prefs.getPreferences();
 		const showFtue = !prefs.ftue.hasSeenGlobalFtue;

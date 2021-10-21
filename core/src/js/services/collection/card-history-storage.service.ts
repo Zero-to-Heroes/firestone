@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
-import { IndexedDbService } from './indexed-db.service';
+import { CollectionStorageService } from './collection-storage.service';
 
 @Injectable()
 export class CardHistoryStorageService {
-	constructor(private indexedDb: IndexedDbService) {}
+	constructor(private storage: CollectionStorageService) {}
 
 	public async loadAll(limit: number): Promise<readonly CardHistory[]> {
-		return this.indexedDb.getAll(limit);
+		return this.storage.getAllCardHistory(limit);
 	}
 
 	public async countHistory(): Promise<number> {
-		return this.indexedDb.countHistory();
+		return this.storage.countCardHistory();
 	}
 
 	public async newHistory(history: CardHistory) {
-		const result = await this.indexedDb.save(history);
+		const result = await this.storage.saveCardHistory(history);
 	}
 }

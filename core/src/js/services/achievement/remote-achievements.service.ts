@@ -8,7 +8,7 @@ import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { UserService } from '../user.service';
 import { AchievementsManager } from './achievements-manager.service';
-import { AchievementsLocalDbService } from './indexed-db.service';
+import { AchievementsStorageService } from './achievements-storage.service';
 
 const ACHIEVEMENTS_UPDATE_URL = 'https://api.firestoneapp.com/achievements/save/achievements/{proxy+}';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://api.firestoneapp.com/achievements/get/achievements/{proxy+}';
@@ -21,7 +21,7 @@ export class RemoteAchievementsService {
 
 	constructor(
 		private api: ApiRunner,
-		private indexedDb: AchievementsLocalDbService,
+		private storage: AchievementsStorageService,
 		private ow: OverwolfService,
 		private manager: AchievementsManager,
 		private userService: UserService,
@@ -33,7 +33,7 @@ export class RemoteAchievementsService {
 		const prefs = this.prefs.getPreferences();
 		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
 			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
-			this.indexedDb.setAll([]);
+			this.storage.setAll([]);
 			return [];
 		}
 		const currentUser = await this.userService.getCurrentUser();
@@ -63,8 +63,8 @@ export class RemoteAchievementsService {
 			} as CompletedAchievement),
 		);
 		const achievements = [...completedAchievementsFromRemote, ...completedAchievementsFromMemory];
-		this.indexedDb.setAll(achievements);
-		console.log('[remote-achievements] updated local cache', achievements?.length, this.indexedDb.getAll()?.length);
+		this.storage.setAll(achievements);
+		console.log('[remote-achievements] updated local cache', achievements?.length, this.storage.getAll()?.length);
 		return achievements;
 	}
 
@@ -72,11 +72,11 @@ export class RemoteAchievementsService {
 		const prefs = this.prefs.getPreferences();
 		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
 			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
-			this.indexedDb.setAll([]);
+			this.storage.setAll([]);
 			return [];
 		}
 
-		const existingAchievements = this.indexedDb.getAll();
+		const existingAchievements = this.storage.getAll();
 		const achievementsFromMemory = await this.manager.getAchievements();
 		const completedAchievementsFromMemory = achievementsFromMemory.map((ach) =>
 			CompletedAchievement.create({
@@ -114,9 +114,9 @@ export class RemoteAchievementsService {
 		console.log('[remote-achievements] unique Ids', uniqueIds?.length);
 		const refreshedAchievements = uniqueIds.map((id) => {
 			const newFromMemory = completedAchievementsFromMemory.find((a) => a.id === id);
-			return newFromMemory ?? this.indexedDb.getAchievement(id);
+			return newFromMemory ?? this.storage.getAchievement(id);
 		});
-		this.indexedDb.setAll(refreshedAchievements);
+		this.storage.setAll(refreshedAchievements);
 		console.log(
 			'[remote-achievements] re-updated local cache',
 			refreshedAchievements?.length,
