@@ -71,7 +71,7 @@ export class MindVisionService {
 			console.log('[mind-vision] adding updates listener');
 			this.memoryUpdateListener = async (changes: string | 'reset') => {
 				console.log('[mind-vision] memory update', changes);
-				const changesToBroadcast = JSON.parse(changes);
+				const changesToBroadcast: MemoryUpdate | 'reset' = JSON.parse(changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changesToBroadcast === 'reset') {
 					console.log('[mind-vision] resetting memory update?', this.retriesLeft);
@@ -401,7 +401,7 @@ export class MindVisionService {
 		});
 	}
 
-	public async get() {
+	private async get() {
 		await this.waitForInit();
 		return this.mindVisionPlugin.get();
 	}
