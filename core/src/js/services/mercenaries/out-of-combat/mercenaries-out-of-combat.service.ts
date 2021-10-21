@@ -61,9 +61,8 @@ export class MercenariesOutOfCombatService {
 					concatMap(async ([prefs, newState]) => await this.emitState(newState, prefs)),
 				)
 				.subscribe();
-
-			window['mercenariesOutOfCombatStore'] = this.store$;
 		});
+		window['mercenariesOutOfCombatStore'] = this.store$;
 	}
 
 	private async processEvent(event: BroadcastEvent, mainWindowState: MainWindowState): Promise<void> {

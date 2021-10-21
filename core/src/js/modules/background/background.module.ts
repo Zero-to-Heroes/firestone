@@ -371,6 +371,7 @@ import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { MercenariesSynergiesHighlightService } from '../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
+import { MercenariesMemoryCacheService } from '../../services/mercenaries/mercenaries-memory-cache.service';
 import { MercenariesMemoryUpdateService } from '../../services/mercenaries/mercenaries-memory-updates.service';
 import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-store.service';
@@ -840,6 +841,7 @@ const components = [
 		BgsCustomSimulationService,
 
 		MercenariesMemoryUpdateService,
+		MercenariesMemoryCacheService,
 		MercenariesStoreService,
 		MercenariesOutOfCombatService,
 

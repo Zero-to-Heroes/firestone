@@ -20,7 +20,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
-import { MercenariesMemoryUpdateService } from '../../mercenaries/mercenaries-memory-updates.service';
+import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
@@ -60,7 +60,7 @@ export class StoreBootstrapService {
 		private readonly arenaService: ArenaRunParserService,
 		private readonly stats: StatsStateBuilderService,
 		private readonly mercenariesService: MercenariesStateBuilderService,
-		private readonly mercenariesMemory: MercenariesMemoryUpdateService,
+		private readonly mercenariesMemory: MercenariesMemoryCacheService,
 	) {
 		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
