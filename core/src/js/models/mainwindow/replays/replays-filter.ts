@@ -2,6 +2,7 @@ import { IOption } from 'ng-select';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
 import { GameStat } from '../stats/game-stat';
 import { StatGameFormatType } from '../stats/stat-game-format.type';
+import { StatGameModeType } from '../stats/stat-game-mode.type';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
 
 export class ReplaysFilter {
@@ -23,28 +24,28 @@ export class ReplaysFilter {
 	}
 
 	allows(stat: GameStat): boolean {
-		if (!this.selectedOption) {
-			return true;
-		}
-
 		switch (this.type) {
 			case 'gameMode':
 				return this.allowsGameMode(stat.gameMode, stat.gameFormat, this.selectedOption);
 			case 'deckstring':
-				return stat.gameMode !== 'ranked' || stat.playerDecklist === this.selectedOption;
+				return (
+					!this.selectedOption || stat.gameMode !== 'ranked' || stat.playerDecklist === this.selectedOption
+				);
 			case 'bg-hero':
-				return stat.playerCardId === this.selectedOption;
+				return !this.selectedOption || stat.playerCardId === this.selectedOption;
 			case 'player-class':
-				return stat.playerClass === this.selectedOption;
+				return !this.selectedOption || stat.playerClass === this.selectedOption;
 			case 'opponent-class':
-				return stat.opponentClass === this.selectedOption;
+				return !this.selectedOption || stat.opponentClass === this.selectedOption;
 			default:
 				return true;
 		}
 	}
 
-	allowsGameMode(gameMode: string, format: StatGameFormatType, selectedOption: string): boolean {
+	allowsGameMode(gameMode: StatGameModeType, format: StatGameFormatType, selectedOption: string): boolean {
 		switch (selectedOption) {
+			case null:
+				return !isMercenariesPvE(gameMode);
 			case 'both-duels':
 				return gameMode === 'duels' || gameMode === 'paid-duels';
 			case 'ranked-standard':
