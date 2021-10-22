@@ -72,9 +72,9 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([expandedRunIds]) => expandedRunIds),
 				tap((expandedRunIds) => cdLog('emitting expandedRunIds in ', this.constructor.name, expandedRunIds)),
+				takeUntil(this.destroyed$),
 			);
 		this.sub$$ = combineLatest(
 			this.store
@@ -87,20 +87,20 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 					// TODO: MMR filter
 				)
 				.pipe(
-					takeUntil(this.destroyed$),
 					filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
 					map(([runs, timeFilter, classFilter, gameMode, patch]) =>
 						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
 					),
+					takeUntil(this.destroyed$),
 				),
 			this.deckstring$.asObservable(),
 		)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([runs, deckstring]) =>
 					!deckstring?.length ? runs : runs.filter((run) => run.initialDeckList === deckstring),
 				),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe((runs) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call

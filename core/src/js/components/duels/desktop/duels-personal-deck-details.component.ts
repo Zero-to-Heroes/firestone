@@ -100,20 +100,20 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([runIds]) => runIds),
+				takeUntil(this.destroyed$),
 			);
 		this.collection$ = combineLatest(
 			this.currentDeck.asObservable(),
 			this.store.listen$(([main, nav]) => main.binder.allSets),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(([currentDeck, [allSets]]) =>
 				currentDeck === 'final'
 					? null
 					: (allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[]),
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			takeUntil(this.destroyed$),
 		);
 		this.deck$ = this.store
 			.listen$(
@@ -128,7 +128,6 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
@@ -148,6 +147,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 					),
 				),
 				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.decklist$ = combineLatest(
 			this.deck$,
@@ -155,7 +155,6 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 			this.currentDeck$,
 			this.currentRunIndex.asObservable(),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(([deck, expandedRunIds, currentDeck, currentRunIndex]) => {
 				const result =
 					currentDeck === 'initial'
@@ -168,6 +167,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 			}),
 			distinctUntilChanged(),
 			tap((info) => cdLog('emitting decklist in ', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

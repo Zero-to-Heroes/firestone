@@ -98,7 +98,6 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent {
 				([main, nav]) => main.arena.currentArenaMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				map(([stats, timeFilter, heroFilter, patch]) => {
@@ -126,6 +125,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent {
 				}),
 				filter((result) => !!result),
 				tap((info) => cdLog('emitting arena classes recap in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

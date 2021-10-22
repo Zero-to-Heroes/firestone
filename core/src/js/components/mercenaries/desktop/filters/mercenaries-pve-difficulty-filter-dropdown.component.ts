@@ -60,7 +60,6 @@ export class MercenariesPveDifficultyFilterDropdownComponent extends AbstractSub
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([globalStats, filter, modeFilter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([globalStats, filter, modeFilter, selectedCategoryId]) => ({
 					filter: filter,
@@ -77,6 +76,7 @@ export class MercenariesPveDifficultyFilterDropdownComponent extends AbstractSub
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

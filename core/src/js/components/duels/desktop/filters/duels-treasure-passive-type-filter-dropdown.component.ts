@@ -76,7 +76,6 @@ export class DuelsTreasurePassiveTypeFilterDropdownComponent
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
@@ -86,6 +85,7 @@ export class DuelsTreasurePassiveTypeFilterDropdownComponent
 				// Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

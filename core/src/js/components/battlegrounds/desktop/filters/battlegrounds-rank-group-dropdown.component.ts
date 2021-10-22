@@ -59,7 +59,6 @@ export class BattlegroundsRankGroupDropdownComponent extends AbstractSubscriptio
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
@@ -69,6 +68,7 @@ export class BattlegroundsRankGroupDropdownComponent extends AbstractSubscriptio
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

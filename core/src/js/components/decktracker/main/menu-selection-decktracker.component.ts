@@ -47,11 +47,11 @@ export class MenuSelectionDecktrackerComponent extends AbstractSubscriptionCompo
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([tab]) => !!tab),
 				map(([tab]) => tab),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting tab in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

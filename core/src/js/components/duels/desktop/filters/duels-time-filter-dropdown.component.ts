@@ -48,7 +48,6 @@ export class DuelsTimeFilterDropdownComponent extends AbstractSubscriptionCompon
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId, patch]) => !!filter && !!selectedCategoryId && !!patch),
 				map(([filter, selectedCategoryId, patch]) => {
 					const options = [
@@ -87,6 +86,7 @@ export class DuelsTimeFilterDropdownComponent extends AbstractSubscriptionCompon
 				// Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

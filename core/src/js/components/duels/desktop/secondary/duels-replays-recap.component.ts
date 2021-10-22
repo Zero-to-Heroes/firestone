@@ -32,7 +32,6 @@ export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent {
 		this.replays$ = this.store
 			.listen$(([main, nav]) => main.duels.personalDeckStats)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([decks]) => !!decks?.length),
 				map(([decks]) =>
 					decks
@@ -51,6 +50,7 @@ export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent {
 						.slice(0, 20),
 				),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 }

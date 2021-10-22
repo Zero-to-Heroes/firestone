@@ -91,29 +91,29 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.duels.loading)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.menuDisplayType)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.duels.categories)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				// Subcategories are not displayed in the menu
 				map((categories) => categories.filter((cat) => !!cat.name)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.category$ = this.store
 			.listen$(
@@ -121,11 +121,11 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([duels, selectedCategoryId]) => duels.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

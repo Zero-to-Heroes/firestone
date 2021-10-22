@@ -177,13 +177,13 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
-				takeUntil(this.destroyed$),
 				debounceTime(50),
 				filter(([gameState]) => !!gameState),
 				map(([gameState]) => this.deckExtractor(gameState)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting deck in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.matchupStatsRecap$ = combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
@@ -193,7 +193,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 				([main, nav, prefs]) => main.decktracker.patch,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
 			map(
 				([[gameState], [gameStats, timeFilter, patch]]) =>
@@ -223,6 +222,7 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting matchupStatsRecap in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 		this.deckStatsRecap$ = combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
@@ -232,7 +232,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 				([main, nav, prefs]) => main.decktracker.patch,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
 			map(
 				([[gameState], [gameStats, timeFilter, patch]]) =>
@@ -256,6 +255,7 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting deckStatsRecap in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

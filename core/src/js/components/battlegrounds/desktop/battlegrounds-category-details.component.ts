@@ -45,13 +45,13 @@ export class BattlegroundsCategoryDetailsComponent extends AbstractSubscriptionC
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				distinctUntilChanged(),
 				tap((selectedCategoryId) =>
 					cdLog('emitting selectedCategoryId in ', this.constructor.name, selectedCategoryId),
 				),
+				takeUntil(this.destroyed$),
 			);
 	}
 }

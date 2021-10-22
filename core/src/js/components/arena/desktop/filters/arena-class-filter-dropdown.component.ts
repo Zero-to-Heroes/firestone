@@ -44,7 +44,6 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionCompo
 		this.filter$ = this.store
 			.listen$(([main, nav]) => main.arena.activeHeroFilter)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => {
 					const options = ['all', ...(classes as ArenaClassFilterType[])].map(
@@ -62,6 +61,7 @@ export class ArenaClassFilterDropdownComponent extends AbstractSubscriptionCompo
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

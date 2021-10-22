@@ -45,7 +45,6 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionCompone
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles.map(
@@ -59,6 +58,7 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionCompone
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -67,7 +67,6 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionCompone
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([options, [filter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
 			map(([options, [filter, selectedCategoryId]]) => {
 				return {
@@ -79,6 +78,7 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionCompone
 			// Don't know why this is necessary, but without it, the filter doesn't update
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting mmr filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

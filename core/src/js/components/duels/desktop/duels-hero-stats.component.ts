@@ -61,7 +61,6 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([
 						duelStats,
@@ -128,6 +127,7 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent {
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

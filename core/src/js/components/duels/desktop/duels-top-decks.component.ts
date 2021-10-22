@@ -55,7 +55,6 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([
 						topDecks,
@@ -97,6 +96,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 							.filter((group) => group.decks.length > 0),
 				),
 				tap((stat) => cdLog('emitting top decks in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe((topDecks) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call

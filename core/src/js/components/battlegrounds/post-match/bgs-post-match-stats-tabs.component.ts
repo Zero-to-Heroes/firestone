@@ -118,10 +118,10 @@ export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponen
 	) {
 		super();
 		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
-			takeUntil(this.destroyed$),
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
 			map(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
 			tap((filter) => cdLog('emitting heroStat in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

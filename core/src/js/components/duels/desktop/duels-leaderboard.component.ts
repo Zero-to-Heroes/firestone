@@ -45,13 +45,13 @@ export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats, filter]) => !!stats && !!filter),
 				map(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting leaderboard in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

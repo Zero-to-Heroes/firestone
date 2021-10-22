@@ -49,40 +49,40 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 		this.text$ = this.store
 			.listen$(([main, nav]) => nav.text)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([text]) => !!text),
 				map(([text]) => text),
 				distinctUntilChanged(),
 				tap((text) => cdLog('emitting text in ', this.constructor.name, text)),
+				takeUntil(this.destroyed$),
 			);
 		this.image$ = this.store
 			.listen$(([main, nav]) => nav.image)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([image]) => !!image),
 				map(([image]) => image),
 				distinctUntilChanged(),
 				tap((image) => cdLog('emitting image in ', this.constructor.name, image)),
+				takeUntil(this.destroyed$),
 			);
 		this.backArrow$ = this.store
 			.listen$(([main, nav]) => nav.backArrowEnabled)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([backArrowEnabled]) => backArrowEnabled),
 				distinctUntilChanged(),
 				tap((backArrowEnabled) =>
 					cdLog('emitting backArrowEnabled in ', this.constructor.name, backArrowEnabled),
 				),
+				takeUntil(this.destroyed$),
 			);
 		this.nextArrow$ = this.store
 			.listen$(([main, nav]) => nav.nextArrowEnabled)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([nextArrowEnabled]) => nextArrowEnabled),
 				distinctUntilChanged(),
 				tap((nextArrowEnabled) =>
 					cdLog('emitting nextArrowEnabled in ', this.constructor.name, nextArrowEnabled),
 				),
+				takeUntil(this.destroyed$),
 			);
 	}
 

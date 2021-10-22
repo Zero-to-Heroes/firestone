@@ -56,10 +56,10 @@ export class DecktrackerFiltersComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
 				map(([currentView, hiddenDeckCodes]) => currentView !== 'deck-details' && hiddenDeckCodes.length > 0),
 				tap((info) => cdLog('emitting hidden deck codes in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -112,51 +112,51 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
 				}),
+				takeUntil(this.destroyed$),
 			);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([tribes]) => tribes),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([tribes]) => tribes),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([currentTurn]) => currentTurn),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
 		this.showTribesHighlight$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([info]) => info),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
 		this.showMinionsList$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([info]) => info),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
 		this.prefSubscription = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)

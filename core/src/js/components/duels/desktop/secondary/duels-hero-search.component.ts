@@ -51,8 +51,8 @@ export class DuelsHeroSearchComponent extends AbstractSubscriptionComponent impl
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
 			.pipe(
-				takeUntil(this.destroyed$),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe(([heroSearchString]) => {
 				// TODO: force change detectiopn here?

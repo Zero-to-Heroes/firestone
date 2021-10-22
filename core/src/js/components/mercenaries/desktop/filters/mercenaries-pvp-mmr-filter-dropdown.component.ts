@@ -38,7 +38,6 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.globalStats?.pvp?.mmrPercentiles)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles.map(
@@ -52,6 +51,7 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -62,7 +62,6 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(
 				([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
 					!!options?.length && !!filter && !!selectedCategoryId,
@@ -82,6 +81,7 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

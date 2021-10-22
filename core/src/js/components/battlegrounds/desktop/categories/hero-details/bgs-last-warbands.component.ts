@@ -86,7 +86,6 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
 				([main, nav]) => main.stats.gameStats,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([postMatch, gameStats]) => !!postMatch && !!gameStats),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(
@@ -101,6 +100,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
 					stats.map((stat) => this.buildLastKnownBoard(stat, gameStats)).filter((board) => board),
 				),
 				tap((boards) => console.debug('[cd] emitting boards in ', this.constructor.name, boards)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

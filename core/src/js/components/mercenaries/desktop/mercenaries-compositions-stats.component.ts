@@ -68,7 +68,6 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
 						!!globalStats && !!gameStats?.stats,
@@ -147,6 +146,7 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 				map((stats) => (!stats?.length ? null : stats)),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

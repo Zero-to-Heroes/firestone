@@ -67,7 +67,6 @@ export class BattlegroundsHeroSortDropdownComponent extends AbstractSubscription
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
 				// tap(([filter, categoryId, currentView]) =>
 				// 	console.debug('changing hero sort filter?', filter, categoryId, currentView),
@@ -82,6 +81,7 @@ export class BattlegroundsHeroSortDropdownComponent extends AbstractSubscription
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

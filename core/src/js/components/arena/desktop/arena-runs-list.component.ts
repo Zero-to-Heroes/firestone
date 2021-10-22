@@ -53,7 +53,6 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 				([main, nav]) => main.arena.currentArenaMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				map(([stats, rewards, timeFilter, heroFilter, patch]) => {
@@ -68,6 +67,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 					];
 				}),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe(([arenaRuns, timeFilter, heroFilter, patch]) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call

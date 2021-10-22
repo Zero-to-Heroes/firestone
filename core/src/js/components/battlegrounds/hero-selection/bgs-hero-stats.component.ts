@@ -74,7 +74,6 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 			this.playerPlacementDistribution$.asObservable(),
 			this.store.bgHeroStats$(),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(
 				([global, player, globalStats]) =>
 					[
@@ -118,6 +117,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 				};
 				return [globalChartData, playerChartData];
 			}),
+			takeUntil(this.destroyed$),
 		);
 	}
 

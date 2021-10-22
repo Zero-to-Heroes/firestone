@@ -48,7 +48,6 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionCompon
 				([main, nav]) => nav.navigationArena.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, patch, selectedCategoryId]) => !!filter && !!patch && !!selectedCategoryId),
 				map(([filter, patch, selectedCategoryId]) => {
 					const options: readonly TimeFilterOption[] = [
@@ -78,6 +77,7 @@ export class ArenaTimeFilterDropdownComponent extends AbstractSubscriptionCompon
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

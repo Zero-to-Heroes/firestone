@@ -35,7 +35,6 @@ export class BattlegroundsHeroesRecordsBrokenComponent extends AbstractSubscript
 		this.stats$ = this.store
 			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([bestBgsUserStats]) => !!bestBgsUserStats?.length),
 				map(([bestBgsUserStats]) => {
 					const groupingByHero = groupByFunction((stat: BgsBestStat) => stat.heroCardId);
@@ -54,6 +53,7 @@ export class BattlegroundsHeroesRecordsBrokenComponent extends AbstractSubscript
 				}),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting record broken heroes in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

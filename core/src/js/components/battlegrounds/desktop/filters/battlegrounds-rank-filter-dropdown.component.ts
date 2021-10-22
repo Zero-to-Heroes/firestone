@@ -46,7 +46,6 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles
@@ -63,6 +62,7 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -72,7 +72,6 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
 			map(([options, [filter, categoryId, currentView]]) => ({
 				filter: '' + filter,
@@ -84,6 +83,7 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

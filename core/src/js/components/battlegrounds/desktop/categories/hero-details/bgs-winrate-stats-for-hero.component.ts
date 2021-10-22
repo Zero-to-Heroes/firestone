@@ -41,7 +41,6 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionCompone
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(
 				([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) =>
 					[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [
@@ -57,6 +56,7 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionCompone
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

@@ -48,7 +48,6 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([
 						duelsStats,
@@ -133,6 +132,7 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent {
 				// FIXME: see filters
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

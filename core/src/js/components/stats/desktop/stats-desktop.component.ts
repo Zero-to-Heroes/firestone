@@ -51,19 +51,19 @@ export class StatsDesktopComponent extends AbstractSubscriptionComponent {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.stats.loading)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationStats.menuDisplayType)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.category$ = this.store
 			.listen$(
@@ -71,19 +71,19 @@ export class StatsDesktopComponent extends AbstractSubscriptionComponent {
 				([main, nav]) => nav.navigationStats.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.stats.categories)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -49,7 +49,6 @@ export class BattlegroundsTimeFilterDropdownComponent extends AbstractSubscripti
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([filter, patch, selectedCategoryId, currentView]) =>
 						!!filter && !!patch && !!selectedCategoryId && !!currentView,
@@ -90,6 +89,7 @@ export class BattlegroundsTimeFilterDropdownComponent extends AbstractSubscripti
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

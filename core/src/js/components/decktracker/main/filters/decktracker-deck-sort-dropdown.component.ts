@@ -42,7 +42,6 @@ export class DecktrackerDeckSortDropdownComponent extends AbstractSubscriptionCo
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
 				map(([filter, patch, currentView]) => {
 					const options = [
@@ -67,6 +66,7 @@ export class DecktrackerDeckSortDropdownComponent extends AbstractSubscriptionCo
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

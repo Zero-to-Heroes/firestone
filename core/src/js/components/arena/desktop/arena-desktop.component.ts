@@ -53,19 +53,19 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.arena.loading)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationArena.menuDisplayType)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.category$ = this.store
 			.listen$(
@@ -73,19 +73,19 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent {
 				([main, nav]) => nav.navigationArena.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([arena, selectedCategoryId]) => arena.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.arena.categories)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -41,7 +41,6 @@ export class DecktrackerRankGroupDropdownComponent extends AbstractSubscriptionC
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, currentView]) => !!filter && !!currentView),
 				map(([filter, currentView]) => {
 					const options = [
@@ -63,6 +62,7 @@ export class DecktrackerRankGroupDropdownComponent extends AbstractSubscriptionC
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

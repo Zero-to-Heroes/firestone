@@ -47,10 +47,10 @@ export class BattlegroundsPerfectGamesComponent extends AbstractSubscriptionComp
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => !!perfectGames?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe(([gameStats, mmrPercentiles, rankFilter, heroFilter]) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call

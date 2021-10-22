@@ -43,7 +43,6 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
 				map(([filter, patch, currentView]) => {
 					const options = [
@@ -81,6 +80,7 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

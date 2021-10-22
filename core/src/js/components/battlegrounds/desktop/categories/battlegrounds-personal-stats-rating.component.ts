@@ -45,7 +45,6 @@ export class BattlegroundsPersonalStatsRatingComponent extends AbstractSubscript
 				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch?.number,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
 						!!stats && !!currentBattlegroundsMetaPatch,
@@ -65,6 +64,7 @@ export class BattlegroundsPersonalStatsRatingComponent extends AbstractSubscript
 					this.buildValue(stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch),
 				),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

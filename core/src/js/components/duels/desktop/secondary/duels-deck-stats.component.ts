@@ -69,7 +69,6 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
@@ -90,6 +89,7 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent {
 				),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 }

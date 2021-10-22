@@ -50,9 +50,9 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 	) {
 		super();
 		this.tiers$ = this.store.bgHeroStats$().pipe(
-			takeUntil(this.destroyed$),
 			filter((stats) => !!stats),
 			map((stats) => this.buildTiers(stats)),
+			takeUntil(this.destroyed$),
 		);
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
@@ -62,7 +62,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			// tap((info) => console.debug('info in hero selection', info)),
 			map(
 				([stats, [achievements], [panels, showAchievements]]) =>
@@ -115,6 +114,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((info) => console.debug('[cd] emitting stats in ', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
 		);
 
 		this.init();

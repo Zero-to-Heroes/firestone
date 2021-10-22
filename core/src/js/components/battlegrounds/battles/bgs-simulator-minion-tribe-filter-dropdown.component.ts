@@ -72,7 +72,6 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => ({
 					filter: filter,
@@ -80,6 +79,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 					visible: true,
 				})),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

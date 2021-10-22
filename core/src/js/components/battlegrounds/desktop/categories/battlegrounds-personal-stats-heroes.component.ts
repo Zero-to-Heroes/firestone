@@ -39,7 +39,6 @@ export class BattlegroundsPersonalStatsHeroesComponent extends AbstractSubscript
 	) {
 		super();
 		this.stats$ = this.store.bgHeroStats$().pipe(
-			takeUntil(this.destroyed$),
 			filter((stats) => !!stats?.length),
 			map((stats) => stats.filter((stat) => stat.id !== 'average')),
 			// FIXME
@@ -49,6 +48,7 @@ export class BattlegroundsPersonalStatsHeroesComponent extends AbstractSubscript
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((stats) => cdLog('emitting stats in ', this.constructor.name, stats)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

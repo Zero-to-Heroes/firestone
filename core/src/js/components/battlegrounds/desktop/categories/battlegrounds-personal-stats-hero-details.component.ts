@@ -67,21 +67,21 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				map((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				distinctUntilChanged(),
 				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([tab]) => !!tab),
 				map(([tab]) => tab),
 				distinctUntilChanged(),
 				tap((stat) => cdLog('emitting selected tab in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 		this.player$ = combineLatest(
 			this.store.bgHeroStats$(),
@@ -90,7 +90,6 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(
 				([heroStats, [battlegrounds, selectedCategoryId]]) =>
 					[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],
@@ -108,6 +107,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((stat) => cdLog('emitting player in ', this.constructor.name, stat)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

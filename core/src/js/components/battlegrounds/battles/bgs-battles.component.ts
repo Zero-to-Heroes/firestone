@@ -131,7 +131,6 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				([state]) => state.panels,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([faceOffs, panels]) =>
 						[
@@ -159,6 +158,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((faceOff) => console.debug('[cd] emitting face off in ', this.constructor.name, faceOff)),
+				takeUntil(this.destroyed$),
 			);
 		this.actualBattle$ = this.store
 			.listenBattlegrounds$(
@@ -166,7 +166,6 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				([state]) => state.panels,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([faceOffs, panels]) =>
 						[
@@ -180,11 +179,11 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((faceOff) => console.debug('[cd] emitting actual battle in ', this.constructor.name, faceOff)),
+				takeUntil(this.destroyed$),
 			);
 		this.battleResultHistory$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([faceOffs]) => faceOffs),
 				filter((faceOffs) => !!faceOffs?.length),
 				distinctUntilChanged(),
@@ -203,6 +202,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((faceOff) => console.debug('[cd] emitting stats in ', this.constructor.name, faceOff)),
+				takeUntil(this.destroyed$),
 			);
 
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {

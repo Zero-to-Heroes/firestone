@@ -96,7 +96,6 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
 				map(([runs, timeFilter, classFilter, gameMode, patch]) =>
 					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
@@ -120,6 +119,7 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent {
 				// FIXME (same as all filters)
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

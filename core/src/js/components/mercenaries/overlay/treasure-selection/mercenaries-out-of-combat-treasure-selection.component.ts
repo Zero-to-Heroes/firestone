@@ -51,13 +51,13 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 	) {
 		super();
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
-			takeUntil(this.destroyed$),
 			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),
 			map(([[state]]) => state.treasureSelection.treasures),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting treasures in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

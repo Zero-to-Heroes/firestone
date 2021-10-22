@@ -102,7 +102,6 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(
 				([bgsStats, [battlegrounds, selectedCategoryId]]) =>
 					[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, readonly BgsHeroStat[]],
@@ -113,6 +112,7 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

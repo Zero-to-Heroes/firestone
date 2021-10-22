@@ -41,7 +41,6 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([replays, battlegrounds, selectedCategoryId]) =>
 						[replays, battlegrounds.findCategory(selectedCategoryId)] as [
@@ -68,6 +67,7 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 				}),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting replays in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

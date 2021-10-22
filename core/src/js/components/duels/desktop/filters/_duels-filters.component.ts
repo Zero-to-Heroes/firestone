@@ -72,7 +72,6 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 				([main, nav, prefs]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([hiddenCodes, selectedCategoryId]) => !!hiddenCodes && !!selectedCategoryId),
 				map(
 					([hiddenCodes, selectedCategoryId]) =>
@@ -80,15 +79,16 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 				),
 				distinctUntilChanged(),
 				tap((filter) => cdLog('emitting showHiddenDecksLink in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.showHideBelowThresholdLink$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => ['duels-stats', 'duels-treasures'].includes(selectedCategoryId)),
 				distinctUntilChanged(),
 				tap((filter) => cdLog('emitting showHideBelowThresholdLink in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

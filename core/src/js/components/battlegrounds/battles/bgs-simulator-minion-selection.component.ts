@@ -220,7 +220,6 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			debounceTime(200),
 			map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -257,10 +256,10 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			// tap((heroes) => console.debug('minions', heroes)),
+			takeUntil(this.destroyed$),
 		);
 		this.subscription = this.searchForm.valueChanges
-			.pipe(takeUntil(this.destroyed$), debounceTime(200))
-			.pipe(distinctUntilChanged())
+			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
 			.subscribe((data) => {
 				this.searchString.next(data);
 			});

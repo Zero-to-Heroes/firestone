@@ -54,7 +54,6 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => ({
 					filter: filter,
@@ -62,6 +61,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 					visible: true,
 				})),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

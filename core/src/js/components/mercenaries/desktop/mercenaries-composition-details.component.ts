@@ -105,7 +105,6 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(
 					([globalStats, gameStats, heroId, modeFilter, difficultyFilter, mmrFilter, levelFilter]) =>
 						!!globalStats && !!heroId,
@@ -190,6 +189,7 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

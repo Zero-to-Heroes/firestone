@@ -47,7 +47,6 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
-				takeUntil(this.destroyed$),
 				tap((info) => console.debug('global stats', info)),
 				filter(([allTribes]) => !!allTribes?.length),
 				map(([allTribes]) =>
@@ -64,6 +63,7 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting tribe options in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -74,7 +74,6 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			tap((info) => console.debug('update', info)),
 			filter(
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
@@ -92,6 +91,7 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

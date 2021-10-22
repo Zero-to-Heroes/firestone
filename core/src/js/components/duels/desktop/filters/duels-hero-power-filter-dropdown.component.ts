@@ -48,7 +48,6 @@ export class DuelsHeroPowerFilterDropdownComponent extends AbstractSubscriptionC
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats]) => !!stats?.length),
 				map(([stats]) => [...new Set(stats.map((stat) => stat.heroPowerCardId))]),
 				map((heroPowerCardIds) => [
@@ -102,6 +101,7 @@ export class DuelsHeroPowerFilterDropdownComponent extends AbstractSubscriptionC
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting hero power options in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -111,7 +111,6 @@ export class DuelsHeroPowerFilterDropdownComponent extends AbstractSubscriptionC
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([options, [filter, statTypeFilter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
 			map(([options, [filter, statTypeFilter, selectedCategoryId]]) => {
 				return {
@@ -123,6 +122,7 @@ export class DuelsHeroPowerFilterDropdownComponent extends AbstractSubscriptionC
 			// Don't know why this is necessary, but without it, the filter doesn't update
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting hero power filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

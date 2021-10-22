@@ -78,19 +78,19 @@ export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.loading)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.category$ = this.store
 			.listen$(
@@ -98,27 +98,27 @@ export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.currentView$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([currentView]) => currentView),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting currentView in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.categories)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

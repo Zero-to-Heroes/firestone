@@ -50,7 +50,6 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([treasures, statType]) => !!treasures?.length),
 				map(
 					([
@@ -120,6 +119,7 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

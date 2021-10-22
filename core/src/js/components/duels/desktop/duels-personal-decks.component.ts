@@ -42,7 +42,6 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent {
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([decks, timeFilter, classFilter, gameMode, deckNames, patch]) => !!decks?.length),
 				map(([decks, timeFilter, classFilter, gameMode, deckNames, patch]) =>
 					decks
@@ -59,6 +58,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent {
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting personal decks in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

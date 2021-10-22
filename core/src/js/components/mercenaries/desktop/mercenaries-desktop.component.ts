@@ -78,36 +78,36 @@ export class MercenariesDesktopComponent extends AbstractSubscriptionComponent i
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.loading)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([loading]) => loading),
 				distinctUntilChanged(),
 				startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.menuDisplayType)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([menuDisplayType]) => menuDisplayType),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				filter((selectedCategoryId) => !!selectedCategoryId),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting selectedCategoryId in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([categories]) => categories ?? []),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

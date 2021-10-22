@@ -51,8 +51,8 @@ export class DuelsTreasureSearchComponent extends AbstractSubscriptionComponent 
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.treasureSearchString)
 			.pipe(
-				takeUntil(this.destroyed$),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe(([searchString]) => {
 				// TODO: force change detectiopn here?

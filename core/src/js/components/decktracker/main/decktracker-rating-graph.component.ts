@@ -51,7 +51,6 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 				([main, nav]) => main.decktracker.patch,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([stats, gameFormat, time, rankingGroup, rankingCategory, patch]) =>
 						[
@@ -79,6 +78,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 					this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
 				),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

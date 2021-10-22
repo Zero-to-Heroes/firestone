@@ -152,11 +152,11 @@ export class BattlegroundsPersonalStatsStatsComponent extends AbstractSubscripti
 		this.value$ = this.store
 			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats]) => !!stats?.length),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([stats]) => this.buildValue(stats)),
 				tap((stat) => cdLog('emitting stat in ', this.constructor.name, stat)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

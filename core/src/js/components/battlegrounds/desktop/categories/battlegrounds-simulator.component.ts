@@ -42,11 +42,11 @@ export class BattlegroundsSimulatorComponent extends AbstractSubscriptionCompone
 		this.faceOff$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([state]) => !!state),
 				map(([state]) => state.faceOff),
 				distinctUntilChanged(),
 				tap((faceOff) => console.debug('[cd] emitting in ', this.constructor.name, faceOff)),
+				takeUntil(this.destroyed$),
 			);
 
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {

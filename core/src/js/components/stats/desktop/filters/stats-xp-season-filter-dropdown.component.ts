@@ -38,7 +38,6 @@ export class StatsXpSeasonFilterDropdownComponent extends AbstractSubscriptionCo
 		this.filter$ = this.store
 			.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter]) => !!filter),
 				map(([filter]) => {
 					const options = [
@@ -70,6 +69,7 @@ export class StatsXpSeasonFilterDropdownComponent extends AbstractSubscriptionCo
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

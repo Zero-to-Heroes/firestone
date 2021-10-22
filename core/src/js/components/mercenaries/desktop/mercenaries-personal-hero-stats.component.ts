@@ -86,10 +86,10 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		this.sortCriteria$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([sortCriteria]) => sortCriteria[0]),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.unsortedStats$ = this.store
 			.listen$(
@@ -97,7 +97,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([main, nav]) => main.mercenaries.collectionInfo,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// tap((info) => console.debug('hop', info)),
@@ -207,15 +206,16 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
+				takeUntil(this.destroyed$),
 			);
 		this.stats$ = combineLatest(
 			this.unsortedStats$,
 			this.store.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(([stats, [sortCriteria]]) => this.sortPersonalHeroStats(stats, sortCriteria)),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

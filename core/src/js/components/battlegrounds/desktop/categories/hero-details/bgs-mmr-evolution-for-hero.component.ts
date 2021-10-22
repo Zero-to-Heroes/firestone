@@ -40,7 +40,6 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionCompone
 				([main, nav]) => main.stats.gameStats.stats,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([battlegrounds, selectedCategoryId, stats]) =>
 						[
@@ -52,6 +51,7 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionCompone
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([heroStats, heroId]) => this.buildValue(heroStats, heroId)),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

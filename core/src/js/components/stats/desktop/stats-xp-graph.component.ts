@@ -45,7 +45,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent {
 				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([stats, seasonFilter]) =>
 						[stats.filter((stat) => stat.levelAfterMatch), seasonFilter] as [
@@ -57,6 +56,7 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent {
 				distinctUntilChanged((a, b) => this.compare(a, b)),
 				map(([stats, seasonFilter]) => this.buildValue(stats, seasonFilter)),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

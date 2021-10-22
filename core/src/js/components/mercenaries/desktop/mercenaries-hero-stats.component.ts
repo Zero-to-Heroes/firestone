@@ -71,7 +71,6 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(
 					([
 						globalStats,
@@ -254,6 +253,7 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

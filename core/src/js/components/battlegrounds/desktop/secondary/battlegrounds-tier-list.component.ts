@@ -57,7 +57,6 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats),
 			map(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,
@@ -124,6 +123,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

@@ -62,7 +62,6 @@ export class MercenariesHeroLevelFilterDropdownComponent extends AbstractSubscri
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([globalStats, filter, selectedCategoryId]) => ({
 					filter: '' + filter,
@@ -77,6 +76,7 @@ export class MercenariesHeroLevelFilterDropdownComponent extends AbstractSubscri
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 

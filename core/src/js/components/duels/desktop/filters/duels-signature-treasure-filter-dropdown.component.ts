@@ -50,7 +50,6 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([stats]) => !!stats?.length),
 				map(([stats]) => [...new Set(stats.map((stat) => stat.signatureTreasureCardId))]),
 				map((signatureTreasureCardIds) => [
@@ -104,6 +103,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting signature treasure options in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -113,7 +113,6 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			filter(([options, [filter, statTypeFilter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
 			map(([options, [filter, statTypeFilter, selectedCategoryId]]) => {
 				return {
@@ -125,6 +124,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 			// Don't know why this is necessary, but without it, the filter doesn't update
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting signature treasure filter in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

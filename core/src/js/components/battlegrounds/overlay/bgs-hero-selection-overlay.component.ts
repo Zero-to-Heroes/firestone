@@ -64,11 +64,11 @@ export class BgsHeroSelectionOverlayComponent
 		this.heroTooltipActive$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([pref]) => pref),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting heroTooltipActive in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
 			);
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
@@ -78,7 +78,6 @@ export class BgsHeroSelectionOverlayComponent
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
-			takeUntil(this.destroyed$),
 			map(
 				([stats, [achievements], [panels, showAchievements]]) =>
 					[
@@ -134,6 +133,7 @@ export class BgsHeroSelectionOverlayComponent
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((info) => cdLog('update hero selection overlay', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

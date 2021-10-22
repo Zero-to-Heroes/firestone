@@ -58,7 +58,6 @@ export class MercenariesRoleFilterDropdownComponent extends AbstractSubscription
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
@@ -69,6 +68,7 @@ export class MercenariesRoleFilterDropdownComponent extends AbstractSubscription
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 
