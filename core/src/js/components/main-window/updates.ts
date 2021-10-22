@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.22',
+		version: '8.0.23',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -60,6 +60,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Show ability speeds and speed modifiers in the battle team widget.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a memory leak that would cause the app to take way too much RAM.`,
 							},
 						],
 					},
