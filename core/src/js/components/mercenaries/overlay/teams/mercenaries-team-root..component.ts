@@ -154,29 +154,29 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(
-				takeUntil(this.destroyed$),
 				map(([pref]) => pref),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting showColorChart in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.showTasks$ = combineLatest(
 			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
 			this.store.listenPrefs$((prefs) => this.showTasksExtractor(prefs)),
 		).pipe(
-			takeUntil(this.destroyed$),
 			tap((info) => console.debug('info', info)),
 			// Because when out of combat
 			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting showTasks in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(
-			takeUntil(this.destroyed$),
 			map((info) => info),
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 

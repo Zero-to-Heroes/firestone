@@ -1,5 +1,6 @@
 import { CardIds, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../../cards-facade.service';
+import { normalizeMercenariesCardId } from '../mercenaries-utils';
 import { HighlightSelector } from './mercenaries-synergies-highlight.service';
 
 export const buildSelector = (cardId: string, allCards: CardsFacadeService): HighlightSelector => {
@@ -68,6 +69,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.EnchantedRaven2Lettuce:
 		case CardIds.EnchantedRaven3Lettuce:
 			return arcane;
+		case CardIds.FamilyJusticeLettuce:
+			return (card: ReferenceCard) =>
+				[CardIds.CarielRoameLettuce1, CardIds.CorneliusRoameLettuce1].includes(
+					normalizeMercenariesCardId(card.id) as CardIds,
+				);
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
@@ -80,6 +86,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FlameBuffet4Lettuce:
 		case CardIds.FlameBuffet5Lettuce:
 			return dragon;
+		case CardIds.FireStaff1Lettuce:
+		case CardIds.FireStaff2Lettuce:
+		case CardIds.FireStaff3Lettuce:
+		case CardIds.FireStaff4Lettuce:
+		case CardIds.FireStaff5Lettuce:
+			return fire;
 		case CardIds.FishyBarrage1Lettuce:
 		case CardIds.FishyBarrage2Lettuce:
 		case CardIds.FishyBarrage3Lettuce:

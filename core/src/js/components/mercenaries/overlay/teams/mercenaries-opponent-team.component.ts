@@ -53,14 +53,13 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([referenceData, visitors]) => !!visitors?.length),
 				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
+				takeUntil(this.destroyed$),
 			);
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
-				takeUntil(this.destroyed$),
 				debounceTime(50),
 				filter(([battleState]) => !!battleState),
 				map(([battleState]) => battleState.opponentTeam),
@@ -74,6 +73,7 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 	}
 }

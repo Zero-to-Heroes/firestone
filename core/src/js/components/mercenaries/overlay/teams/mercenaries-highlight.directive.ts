@@ -32,17 +32,19 @@ export class MercenariesHighlightDirective extends AbstractSubscriptionComponent
 	) {
 		super();
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
-
 		this.subscription$$ = this.store
-			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
+			.listenMercenariesHighlights$(
+				([selector, prefs]) =>
+					[selector, prefs] as [HighlightSelector, { name: string; preferences: Preferences }],
+			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([[selector, prefs]]) => !!selector && !!prefs),
 				map(
 					([[selector, prefs]]) =>
-						prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
+						prefs.preferences.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
 				),
 				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe((highlighted) => this.highlight(highlighted));
 	}

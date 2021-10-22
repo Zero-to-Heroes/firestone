@@ -58,17 +58,16 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
-				takeUntil(this.destroyed$),
 				filter(([referenceData, visitors]) => !!visitors?.length),
 				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting tasks in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
 			);
 		this.team$ = combineLatest(
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(([main, nav, prefs]) => main.mercenaries?.referenceData),
 		).pipe(
-			takeUntil(this.destroyed$),
 			debounceTime(50),
 			filter(
 				([[state], [referenceData]]) =>
@@ -127,6 +126,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 }
