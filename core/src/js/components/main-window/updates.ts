@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.18',
+		version: '8.0.22',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,15 +46,29 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'misc',
+								text: `Achievements tracking (all options) has been disabled by default to make sure they don't negatively impact the performance for users who don't care about them. If you want to track your Firestone achievements or have live notifications for Hearthstone ones, please reenable them in the options.`,
+							},
+						],
+					},
+					{
 						category: 'mercenaries',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a tab with a recap of all your mercenaries. It includes their level, XP, coins, current task progression, abilities, etc. and is fully sortable.`,
+								text: `Show ability speeds and speed modifiers in the battle team widget.`,
 							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
 							{
 								type: 'feature',
-								text: `Add a recap of all active tasks at the bottom of the team widgets.`,
+								text: `Mercenaries PvE matches are now filtered out of the "All" filter for replays. To see the PvE encounters, you must now select either "Mercenaries (All)" or "Mercenaries (PvE)".`,
 							},
 						],
 					},
@@ -68,12 +82,12 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'bug',
-								text: `Properly show the remaining ability cooldowns when an enemy hero is summoned from the bench after a teammate dies. Previously, the cooldown was always set to its base value.`,
+								type: 'feature',
+								text: `Add more synergies highlights.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the opponent's and player's equipments would sometimes not be shown during a PvP battle.`,
+								text: `Fix Natalie's Anathema ability not being properly accounted for in total missing cost for her full upgrade.`,
 							},
 						],
 					},
