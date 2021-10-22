@@ -95,13 +95,11 @@ export class LogListenerService {
 	async listenOnFileUpdate(logsLocation: string) {
 		const fileIdentifier = this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] preparing to listen on file update', logsLocation);
-		let lastLineIsNew = true;
 
 		try {
 			let hasFileBeenInitiallyRead = false;
 
 			const existingLines: string[] = [];
-
 			const skipToEnd = true; // this.fileInitiallyPresent && !this.existingLineHandler;
 			const options = {
 				skipToEnd: skipToEnd,
@@ -125,34 +123,10 @@ export class LogListenerService {
 					this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
 					return;
 				}
-				const info: {
-					readonly index: number;
-					readonly isNew: boolean;
-					readonly position: number;
-					readonly oef: boolean;
-				} = lineInfo.info ? JSON.parse(lineInfo.info) : null;
-
-				if (info && !info.isNew) {
-					lastLineIsNew = false;
-					if (this.existingLineHandler) {
-						this.existingLineHandler(lineInfo.content);
-					}
+				if (!hasFileBeenInitiallyRead) {
+					existingLines.push(lineInfo.content);
 				} else {
-					if (!lastLineIsNew && this.existingLineHandler) {
-						lastLineIsNew = true;
-						console.log(
-							'[log-listener] [' + this.logFile + '] finished catching up with existing data',
-							info,
-							lineInfo,
-							lastLineIsNew,
-						);
-						this.existingLineHandler('end_of_existing_data');
-					}
-					if (!hasFileBeenInitiallyRead) {
-						existingLines.push(lineInfo.content);
-					} else {
-						this.callback(lineInfo.content);
-					}
+					this.callback(lineInfo.content);
 				}
 			};
 
@@ -161,34 +135,18 @@ export class LogListenerService {
 
 			// Load the existing file in memory
 			const existingFileContents = await this.ow.readTextFile(logsLocation);
-			const lines = existingFileContents?.split('\n') ?? [];
+			const lines = existingFileContents.split('\n') ?? [];
 			console.log('[log-listener] [' + this.logFile + '] catching up existing', lines?.length);
 			if (!!lines?.length && !!this.existingLineHandler) {
+				if (!!existingLines?.length) {
+					lines.push(...existingLines);
+				}
 				for (const line of lines) {
 					this.existingLineHandler(line);
 				}
 				this.existingLineHandler('end_of_existing_data');
 			}
 			hasFileBeenInitiallyRead = true;
-
-			// const plugin = await this.io.get();
-			// plugin.onFileListenerChanged.addListener(handler);
-
-			// plugin.listenOnFile(
-			// 	fileIdentifier,
-			// 	logsLocation,
-			// 	skipToEnd,
-			// 	(id: string, status: boolean, initData: any) => {
-			// 		if (id === fileIdentifier) {
-			// 			if (status) {
-			// 				console.log('[' + id + '] now streaming...', this.fileInitiallyPresent, initData);
-			// 				this.subject.next(Events.STREAMING_LOG_FILE);
-			// 			} else {
-			// 				console.error('[log-listener] [' + this.logFile + '] something bad happened with: ', id);
-			// 			}
-			// 		}
-			// 	},
-			// );
 		} catch (e) {
 			console.error('Exception while listener on logs', fileIdentifier, e);
 		}

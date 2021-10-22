@@ -15,6 +15,7 @@ import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
+import { freeRegexp } from './utils';
 
 declare let amplitude;
 
@@ -127,14 +128,10 @@ export class GameEvents {
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
-		if (this.shouldTriggerCatchUp) {
-			await this.triggerCatchUp();
-		}
 		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
 		await this.processLogs(eventQueue);
-		this.shouldTriggerCatchUp = false;
 		return [];
 	}
 
@@ -1249,11 +1246,10 @@ export class GameEvents {
 	}
 
 	private existingLogLines: string[] = [];
-	// private triggerTimeout;
-	private shouldTriggerCatchUp: boolean;
+	private catchingUp: boolean;
 
 	public isCatchingUpLogLines(): boolean {
-		return this.shouldTriggerCatchUp;
+		return this.catchingUp;
 	}
 
 	// Handles reading a log file mid-game, i.e. this data is already
@@ -1271,6 +1267,7 @@ export class GameEvents {
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
 			console.log('[game-events] [existing] end_of_existing_data');
+			this.triggerCatchUp();
 			return;
 		}
 
@@ -1287,10 +1284,10 @@ export class GameEvents {
 			this.existingLogLines = [];
 		}
 		this.existingLogLines.push(existingLine);
-		this.shouldTriggerCatchUp = true;
 	}
 
 	private async triggerCatchUp() {
+		this.catchingUp = true;
 		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
 		console.log(
 			'[game-events] [existing] last line timestamp',
@@ -1309,6 +1306,7 @@ export class GameEvents {
 				'[game-events] [existing] last line is too old, not doing anything',
 				this.existingLogLines[this.existingLogLines.length - 1],
 			);
+			this.catchingUp = false;
 			this.existingLogLines = [];
 			return;
 		}
@@ -1318,6 +1316,7 @@ export class GameEvents {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 		}
 		this.existingLogLines = [];
+		this.catchingUp = false;
 	}
 
 	private extractLastTimestamp(lines: string[]): number | undefined {
@@ -1345,7 +1344,9 @@ export class GameEvents {
 				parseInt(match[2]),
 				parseInt(match[3]),
 			);
+			freeRegexp();
 			return dateWithMillis.getTime();
 		}
+		freeRegexp();
 	}
 }
