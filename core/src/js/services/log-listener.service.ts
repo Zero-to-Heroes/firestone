@@ -135,7 +135,7 @@ export class LogListenerService {
 
 			// Load the existing file in memory
 			const existingFileContents = await this.ow.readTextFile(logsLocation);
-			const lines = existingFileContents.split('\n') ?? [];
+			const lines = existingFileContents?.split('\n') ?? [];
 			console.log('[log-listener] [' + this.logFile + '] catching up existing', lines?.length);
 			if (!!lines?.length && !!this.existingLineHandler) {
 				if (!!existingLines?.length) {
