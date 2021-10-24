@@ -62,25 +62,29 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			),
 		).pipe(
+			tap((info) => console.debug(' info', info)),
 			filter(
 				([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
 					!!options?.length && !!filter && !!selectedCategoryId,
+			),
+			tap(([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
+				console.debug('isVisible?', selectedCategoryId),
 			),
 			map(([options, [globalStats, filter, modeFilter, selectedCategoryId]]) => ({
 				filter: '' + filter,
 				placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 				visible:
-					modeFilter === 'pvp' &&
-					!!globalStats?.pve?.heroStats?.length &&
-					(selectedCategoryId === 'mercenaries-hero-stats' ||
-						selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-						selectedCategoryId === 'mercenaries-hero-details' ||
-						selectedCategoryId === 'mercenaries-compositions-stats' ||
-						selectedCategoryId === 'mercenaries-composition-details'),
+					selectedCategoryId === 'mercenaries-my-teams' ||
+					(modeFilter === 'pvp' &&
+						(selectedCategoryId === 'mercenaries-hero-stats' ||
+							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
+							selectedCategoryId === 'mercenaries-hero-details' ||
+							selectedCategoryId === 'mercenaries-compositions-stats' ||
+							selectedCategoryId === 'mercenaries-composition-details')),
 			})),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
 	}

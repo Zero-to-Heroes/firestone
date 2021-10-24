@@ -37,6 +37,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 							>
 							</mercenaries-personal-hero-stats>
+							<mercenaries-my-teams *ngxCacheIf="selectedCategoryId === 'mercenaries-my-teams'">
+							</mercenaries-my-teams>
 							<!-- <mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
 							</mercenaries-hero-stats> -->
 							<mercenaries-hero-details *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-details'">
@@ -119,6 +121,8 @@ export class MercenariesDesktopComponent extends AbstractSubscriptionComponent i
 		switch (categoryId) {
 			case 'mercenaries-personal-hero-stats':
 				return 'Progression';
+			case 'mercenaries-my-teams':
+				return 'My PvP Teams';
 			case 'mercenaries-hero-stats':
 				return 'Stats';
 			case 'mercenaries-compositions-stats':

@@ -237,11 +237,13 @@ import { MercenariesEmptyStateComponent } from '../../components/mercenaries/des
 import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-details.component';
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
+import { MercenariesMyTeamsComponent } from '../../components/mercenaries/desktop/mercenaries-my-teams.component';
 import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
 	MercenariesPersonalHeroStatsComponent,
 	SortableLabelComponent,
 } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
+import { MercenariesPersonalTeamSummaryComponent } from '../../components/mercenaries/desktop/mercenaries-personal-team-summary.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesHighlightDirective } from '../../components/mercenaries/overlay/teams/mercenaries-highlight.directive';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
@@ -695,6 +697,8 @@ const components = [
 		MercenariesHeroStatComponent,
 		MercenariesPersonalHeroStatsComponent,
 		MercenariesPersonalHeroStatComponent,
+		MercenariesMyTeamsComponent,
+		MercenariesPersonalTeamSummaryComponent,
 		MercenariesHeroDetailsComponent,
 		MercenariesCompositionsStatsComponent,
 		MercenariesCompositionStatComponent,

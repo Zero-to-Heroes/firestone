@@ -1,0 +1,28 @@
+:host {
+	height: 100%;
+	display: flex;
+}
+
+.mercenaries-my-teams {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		overflow-y: scroll;
+
+		mercenaries-personal-team-summary {
+			width: 155px;
+			height: 230px;
+			margin-right: 13px;
+			margin-bottom: 13px;
+		}
+	}
+}

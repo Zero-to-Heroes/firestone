@@ -1,3 +1,5 @@
+import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+
 export interface MercenaryInfo {
 	readonly id: string;
 	readonly name: string;
@@ -66,4 +68,10 @@ export interface MercenaryCompositionInfoBench {
 	readonly globalPopularity: number;
 	readonly playerTotalMatches: number;
 	readonly playerWinrate: number;
+}
+
+export interface MercenaryPersonalTeamInfo {
+	readonly id: string;
+	readonly mercenariesCardIds: readonly string[];
+	readonly games: readonly GameStat[];
 }
