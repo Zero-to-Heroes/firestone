@@ -3,7 +3,14 @@ import { MemoryMercenary } from './memory-mercenaries-info';
 
 export interface MemoryMercenariesCollectionInfo {
 	readonly Mercenaries: readonly MemoryMercenary[];
+	readonly Teams: readonly MemoryTeam[];
 	readonly Visitors: readonly MemoryVisitor[];
+}
+
+export interface MemoryTeam {
+	readonly Id: number;
+	readonly Name: string;
+	readonly Mercenaries: readonly MemoryMercenary[];
 }
 
 export interface MemoryVisitor {

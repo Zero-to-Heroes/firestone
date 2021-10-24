@@ -2,16 +2,25 @@ import { Injectable } from '@angular/core';
 import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
+import { MemoryMercenariesCollectionInfo, MemoryTeam } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
+import { CardsFacadeService } from '../cards-facade.service';
 import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { LogsUploaderService } from '../logs-uploader.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { isMercenaries } from '../mercenaries/mercenaries-utils';
+import { MercenariesReferenceData } from '../mercenaries/mercenaries-state-builder.service';
+import {
+	isMercenaries,
+	isMercenariesPvE,
+	isMercenariesPvP,
+	normalizeMercenariesCardId,
+} from '../mercenaries/mercenaries-utils';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
+import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
 import { sleep } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
@@ -40,6 +49,7 @@ export class EndGameUploaderService {
 		private logService: LogsUploaderService,
 		private rewards: RewardMonitorService,
 		private mainWindowStore: MainWindowStoreService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	public async upload(
@@ -100,6 +110,7 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
 		const [
 			battlegroundsInfo,
+			mercenariesCollectionInfo,
 			mercenariesInfo,
 			duelsInfo,
 			arenaInfo,
@@ -108,6 +119,7 @@ export class EndGameUploaderService {
 			xpForGame,
 		] = await Promise.all([
 			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
+			isMercenaries(game.gameMode) ? this.getMercenariesCollectionInfo(currentReviewId) : null,
 			isMercenaries(game.gameMode) ? this.getMercenariesInfo(currentReviewId) : null,
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
 			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
@@ -132,18 +144,43 @@ export class EndGameUploaderService {
 			game.hasBgsPrizes = bgsOptions.hasPrizes;
 		} else if (isMercenaries(game.gameMode)) {
 			// Looks like we can assume the mapId is unique for a given player
-			game.runId =
-				mercenariesInfo?.Map?.PlayerTeamName +
-				'-' +
-				mercenariesInfo?.Map?.MapId +
-				'-' +
-				mercenariesInfo?.Map?.Seed;
-			game.mercsBountyId =
-				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
-					? mercenariesInfo?.Map?.BountyId
-					: null;
-			game.deckName = mercenariesInfo?.Map?.PlayerTeamName;
-			game.deckstring = mercenariesInfo?.Map?.PlayerTeamMercIds.join(',');
+			game.runId = isMercenariesPvE(game.gameMode)
+				? mercenariesInfo?.Map?.PlayerTeamName +
+				  '-' +
+				  mercenariesInfo?.Map?.MapId +
+				  '-' +
+				  mercenariesInfo?.Map?.Seed
+				: null;
+			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? mercenariesInfo?.Map?.BountyId : null;
+
+			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+			const [mercHeroTimings] = await extractHeroTimings(
+				{ gameMode: game.gameMode },
+				replay,
+				game.uncompressedXmlReplay,
+				referenceData,
+				this.allCards.getService(),
+			);
+
+			// These don't work in PvP
+			if (!!mercHeroTimings?.length) {
+				if (isMercenariesPvE(game.gameMode)) {
+					game.deckName = mercenariesInfo?.Map?.PlayerTeamName;
+					game.deckstring = [...(mercenariesInfo?.Map?.PlayerTeamMercIds ?? [])].sort().join(',');
+				} else if (isMercenariesPvP(game.gameMode)) {
+					const allPlayerHeroes = mercHeroTimings
+						.map((timing) => timing.cardId)
+						.map((c) => normalizeMercenariesCardId(c))
+						.sort();
+					const team: MemoryTeam = this.findMercTeam(
+						mercenariesCollectionInfo.Teams,
+						allPlayerHeroes,
+						referenceData,
+					);
+					game.deckName = team?.Name;
+					game.deckstring = [...(team?.Mercenaries?.map((merc) => merc.Id) ?? [])].sort().join(',');
+				}
+			}
 			playerRank =
 				game.gameMode === 'mercenaries-pvp'
 					? mercenariesInfo?.PvpRating
@@ -335,6 +372,31 @@ export class EndGameUploaderService {
 		return game;
 	}
 
+	private findMercTeam(
+		Teams: readonly MemoryTeam[],
+		allPlayerHeroes: string[],
+		referenceData: MercenariesReferenceData,
+	): MemoryTeam {
+		if (!Teams?.length) {
+			return null;
+		}
+
+		for (const team of Teams) {
+			const mercIds = team.Mercenaries.map((merc) => merc.Id);
+			const mercCardIds = mercIds
+				.map((mercId) => referenceData.mercenaries.find((m) => m.id === mercId))
+				.filter((m) => !!m)
+				.map((m) => this.allCards.getCardFromDbfId(m.cardDbfId))
+				.map((card) => normalizeMercenariesCardId(card.id))
+				.sort();
+			if (allPlayerHeroes.join(',') === mercCardIds.join(',')) {
+				return team;
+			}
+		}
+
+		return null;
+	}
+
 	private buildOpponentName(mercenariesInfo: MemoryMercenariesInfo): string {
 		const bountyId = mercenariesInfo?.Map?.BountyId;
 		if (bountyId == null) {
@@ -373,6 +435,12 @@ export class EndGameUploaderService {
 	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
 		const result = await this.memoryInspection.getBattlegroundsEndGame();
 		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
+		return result;
+	}
+
+	private async getMercenariesCollectionInfo(currentReviewId: string): Promise<MemoryMercenariesCollectionInfo> {
+		const result = await this.memoryInspection.getMercenariesCollectionInfo();
+		console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesCollectionInfo', result);
 		return result;
 	}
 
