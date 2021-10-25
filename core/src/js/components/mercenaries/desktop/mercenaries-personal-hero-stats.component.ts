@@ -104,7 +104,13 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 					return collectionInfo.Mercenaries.map((memMerc) => {
 						const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
 						const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
-						const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === refMerc.id);
+						const taskChain = referenceData.taskChains
+							.filter((chain) => chain.mercenaryId === refMerc.id)
+							.map((chain) => ({
+								...chain,
+								// The last 2 tasks are present in the ref data, but not activated in-game
+								tasks: chain.tasks.slice(0, 18),
+							}))[0];
 						console.debug('taskChain', refMerc.name, taskChain);
 						// Can have only one task per mercenary at the same time
 						const visitorInfo = collectionInfo.Visitors.find(
