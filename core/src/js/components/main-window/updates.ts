@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.23',
+		version: '8.0.25',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,57 +46,31 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'misc',
-								text: `Achievements tracking (all options) has been disabled by default to make sure they don't negatively impact the performance for users who don't care about them. If you want to track your Firestone achievements or have live notifications for Hearthstone ones, please reenable them in the options.`,
-							},
-						],
-					},
-					{
 						category: 'mercenaries',
 						details: [
 							{
 								type: 'feature',
-								text: `Show ability speeds and speed modifiers in the battle team widget.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a memory leak that would cause the app to take way too much RAM.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `Mercenaries PvE matches are now filtered out of the "All" filter for replays. To see the PvE encounters, you must now select either "Mercenaries (All)" or "Mercenaries (PvE)".`,
+								text: `Add a recap of your teams' performance in PvP (matches vs bots are excluded). More details are coming soon, so let me know if you have suggestions as to what to show there.`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add more synergies highlights.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix Natalie's Anathema ability not being properly accounted for in total missing cost for her full upgrade.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'mercenaries',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `Add more synergies highlights.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
