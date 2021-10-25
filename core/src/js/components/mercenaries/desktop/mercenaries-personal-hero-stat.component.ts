@@ -52,7 +52,11 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				<div class="amount">{{ totalCoinsForFullUpgrade }}</div>
 			</div>
 
-			<div class="current-task" [helpTooltip]="currentTaskTooltip">
+			<div
+				class="current-task"
+				[helpTooltip]="currentTaskTooltip"
+				helpTooltipClasses="mercenaries-personal-hero-stat-task-tooltip"
+			>
 				{{ currentTaskLabel }}
 			</div>
 

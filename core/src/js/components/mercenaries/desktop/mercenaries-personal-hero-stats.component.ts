@@ -124,10 +124,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 							: currentTaskStep;
 
-						const currentTaskDescription =
-							currentStep != null
-								? [...taskChain.tasks].sort((a, b) => a.id - b.id)[currentStep].description
-								: null;
+						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 						const lastLevel = [...referenceData.mercenaryLevels].pop();
 						const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 
@@ -234,6 +231,45 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
 			takeUntil(this.destroyed$),
 		);
+	}
+
+	private buildTaskDescription(
+		taskChain: {
+			// The last 2 tasks are present in the ref data, but not activated in-game
+			tasks: { readonly id: number; readonly title: string; readonly description: string }[];
+			id: number;
+			mercenaryId: number;
+			mercenaryVisitorId: number;
+		},
+		currentStep: number,
+	): string {
+		if (currentStep == null) {
+			return null;
+		}
+		const sortedTasks = [...taskChain.tasks].sort((a, b) => a.id - b.id);
+		const currentTask = sortedTasks[currentStep];
+		const nextTask = currentStep + 1 < sortedTasks.length ? sortedTasks[currentStep + 1] : null;
+		const currentTaskDescription = `
+				<div class="current-task">
+					<div class="title">Task ${currentStep + 1}: ${currentTask.title}</div>
+					<div class="description">${currentTask.description}</div>
+				</div>
+		`;
+		const nextTaskDescription = !!nextTask
+			? `
+				<div class="next-task">
+					<div class="title">Next Task: ${nextTask.title}</div>
+					<div class="description">${nextTask.description}</div>
+				</div>
+		`
+			: '';
+		const taskDescription = `
+			<div class="container">
+				${currentTaskDescription}
+				${nextTaskDescription}
+			</div>
+		`;
+		return taskDescription;
 	}
 
 	trackByFn(index: number, item: PersonalHeroStat) {

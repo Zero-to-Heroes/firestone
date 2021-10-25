@@ -51,3 +51,44 @@
 		}
 	}
 }
+
+.help-tooltip.bgs-heroes-tier-list-tooltip {
+	.text {
+		max-width: 350px;
+
+		::ng-deep .content {
+			text-align: left;
+
+			li {
+				margin-left: 30px;
+			}
+		}
+	}
+}
+
+.help-tooltip.mercenaries-personal-hero-stat-task-tooltip {
+	::ng-deep .text {
+		.container {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.current-task,
+		.next-task {
+			display: flex;
+			flex-direction: column;
+
+			.title {
+				font-size: 14px;
+				font-weight: bold;
+			}
+			.description {
+				font-size: 12px;
+			}
+		}
+
+		.next-task {
+			margin-top: 15px;
+		}
+	}
+}
