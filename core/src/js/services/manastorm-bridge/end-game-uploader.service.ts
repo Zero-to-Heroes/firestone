@@ -173,7 +173,7 @@ export class EndGameUploaderService {
 						.map((c) => normalizeMercenariesCardId(c))
 						.sort();
 					const team: MemoryTeam = this.findMercTeam(
-						mercenariesCollectionInfo.Teams,
+						mercenariesCollectionInfo?.Teams,
 						allPlayerHeroes,
 						referenceData,
 					);

@@ -31,11 +31,11 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			return battleState;
 		}
 
-		const playerBoard = gameState.Player.Board;
-		const playerAbilities = gameState.Player.LettuceAbilities;
+		const playerBoard = gameState.Player?.Board;
+		const playerAbilities = gameState.Player?.LettuceAbilities;
 
-		const opponentBoard = gameState.Opponent.Board;
-		const opponentAbilities = gameState.Opponent.LettuceAbilities;
+		const opponentBoard = gameState.Opponent?.Board;
+		const opponentAbilities = gameState.Opponent?.LettuceAbilities;
 
 		const playerTeam = this.updateTeam(battleState.playerTeam, playerBoard, playerAbilities);
 		const opponentTeam = this.updateTeam(battleState.opponentTeam, opponentBoard, opponentAbilities);
@@ -52,7 +52,11 @@ export class MercenariesBuffsParser implements MercenariesParser {
 		playerBoard: readonly EntityGameState[],
 		playerAbilities: readonly EntityGameState[],
 	) {
-		for (const mercenary of playerTeam.mercenaries) {
+		if (!playerBoard || !playerTeam || !playerAbilities) {
+			return playerTeam;
+		}
+
+		for (const mercenary of playerTeam.mercenaries ?? []) {
 			const playerEntity =
 				playerBoard.find((a) => a.entityId === mercenary.entityId) ??
 				playerBoard.find((a) => normalizeHeroCardId(a.cardId) === normalizeMercenariesCardId(mercenary.cardId));
@@ -76,7 +80,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 					);
 				// Typically can happen for opposing mercs unrevealed abilities
 				if (!playerAbility) {
-					console.warn('could not find player ability', ability, playerAbilities);
+					console.debug('could not find player ability', ability, playerAbilities);
 					return ability;
 				}
 				return ability.update({

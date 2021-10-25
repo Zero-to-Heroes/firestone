@@ -37,7 +37,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		}
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
-		const refMerc = mainWindowState.mercenaries.referenceData.mercenaries.find(
+		const refMerc = mainWindowState?.mercenaries?.referenceData?.mercenaries?.find(
 			(merc) =>
 				normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) === normalizedCardId,
 		);
@@ -46,7 +46,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		}
 
 		const refMercCard = this.allCards.getCard(normalizedCardId);
-		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId);
+		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData?.mercenariesEquipmentId);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);

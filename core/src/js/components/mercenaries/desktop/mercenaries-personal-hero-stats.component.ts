@@ -263,15 +263,20 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		if (currentStep == null) {
 			return null;
 		}
+
 		const sortedTasks = [...taskChain.tasks].sort((a, b) => a.id - b.id);
 		const currentTask = sortedTasks[currentStep];
-		const nextTask = currentStep + 1 < sortedTasks.length ? sortedTasks[currentStep + 1] : null;
+		if (!currentTask) {
+			return null;
+		}
+
 		const currentTaskDescription = `
 				<div class="current-task">
 					<div class="title">Task ${currentStep + 1}: ${currentTask.title}</div>
 					<div class="description">${currentTask.description}</div>
 				</div>
 		`;
+		const nextTask = currentStep + 1 < sortedTasks.length ? sortedTasks[currentStep + 1] : null;
 		const nextTaskDescription = !!nextTask
 			? `
 				<div class="next-task">

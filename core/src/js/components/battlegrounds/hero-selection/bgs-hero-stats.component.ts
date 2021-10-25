@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, sumOnArray } from '../../../services/utils';
@@ -74,6 +74,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 			this.playerPlacementDistribution$.asObservable(),
 			this.store.bgHeroStats$(),
 		).pipe(
+			filter(([global, player, globalStats]) => !!global && !!player && !!globalStats),
 			map(
 				([global, player, globalStats]) =>
 					[
