@@ -164,7 +164,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
 			this.store.listenPrefs$((prefs) => this.showTasksExtractor(prefs)),
 		).pipe(
-			tap((info) => console.debug('info', info)),
 			// Because when out of combat
 			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
 			// FIXME

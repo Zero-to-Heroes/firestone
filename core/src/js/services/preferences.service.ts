@@ -397,6 +397,19 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateMercenariesShowHiddenTeams(value: boolean): Promise<Preferences> {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesShowHiddenTeams: value };
+		this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+	public async updateMercenariesHiddenTeamIds(value: string[]): Promise<Preferences> {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesHiddenTeamIds: value };
+		this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };

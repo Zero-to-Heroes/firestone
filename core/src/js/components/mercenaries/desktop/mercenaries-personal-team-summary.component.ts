@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { MercenariesHideTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hide-team-summary-event';
+import { MercenariesRestoreTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-restore-team-summary-event';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
@@ -14,7 +17,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-team-summary.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-personal-team-summary">
+		<div class="mercenaries-personal-team-summary" [ngClass]="{ 'hidden': hidden }">
 			<div class="team-name" [helpTooltip]="teamNameTooltip">{{ teamName }}</div>
 			<div class="team-image">
 				<div class="heroes-container bench">
@@ -56,6 +59,8 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 })
 export class MercenariesPersonalTeamSummaryComponent {
 	@Input() set team(value: MercenaryPersonalTeamInfo) {
+		this.teamId = value.id;
+		this.hidden = value.hidden;
 		const gamesForTeam = value.games;
 		this.teamName = gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName || 'Unnamed Team';
 		this.teamNameTooltip = `${this.teamName}`;
@@ -91,6 +96,8 @@ export class MercenariesPersonalTeamSummaryComponent {
 		}));
 	}
 
+	teamId: string;
+	hidden: boolean;
 	starterHeroes: readonly Hero[];
 	benchHeroes: readonly Hero[];
 	teamName: string;
@@ -98,18 +105,17 @@ export class MercenariesPersonalTeamSummaryComponent {
 	totalGames: number;
 	winRatePercentage: string;
 	lastUsed: string;
-	hidden: boolean;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {}
 
-	hideDeck(event: MouseEvent) {
-		// this.stateUpdater.next(new HideDeckSummaryEvent(this._deck.deckstring));
+	hideTeam(event: MouseEvent) {
+		this.store.send(new MercenariesHideTeamSummaryEvent(this.teamId));
 		event.stopPropagation();
 		event.preventDefault();
 	}
 
-	restoreDeck(event: MouseEvent) {
-		// this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
+	restoreTeam(event: MouseEvent) {
+		this.store.send(new MercenariesRestoreTeamSummaryEvent(this.teamId));
 		event.stopPropagation();
 		event.preventDefault();
 	}

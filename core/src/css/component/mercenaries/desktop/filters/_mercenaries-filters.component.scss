@@ -7,11 +7,34 @@
 	display: flex;
 	width: 100%;
 	flex-wrap: wrap;
+	position: relative;
+	align-items: center;
 
 	::ng-deep filter-dropdown ng-select {
 		margin-right: 15px;
 		width: 155px;
 		height: 30px;
 		margin-bottom: 15px;
+	}
+
+	.show-hidden-teams-link {
+		opacity: 0.8;
+		height: 30px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		margin-right: 15px;
+		margin-left: auto;
+		margin-bottom: 15px;
+
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle .settings-p {
+			color: var(--secondary-text-color);
+			width: auto;
+			margin-right: 10px;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }

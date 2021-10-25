@@ -73,5 +73,6 @@ export interface MercenaryCompositionInfoBench {
 export interface MercenaryPersonalTeamInfo {
 	readonly id: string;
 	readonly mercenariesCardIds: readonly string[];
+	readonly hidden: boolean;
 	readonly games: readonly GameStat[];
 }

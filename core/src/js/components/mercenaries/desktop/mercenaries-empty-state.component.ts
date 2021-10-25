@@ -17,5 +17,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class MercenariesEmptyStateComponent {
 	@Input() title = 'Nothing here yet';
-	@Input() subtitle = 'Stats will appear soon after the mode is officially released';
+	@Input() subtitle = 'Play some mercenaries matches to get started! Also, check your filters above :)';
 }
