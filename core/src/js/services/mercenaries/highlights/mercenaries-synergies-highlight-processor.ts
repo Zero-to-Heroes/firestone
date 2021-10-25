@@ -70,6 +70,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.EnchantedRaven3Lettuce:
 			return arcane;
 		case CardIds.FamilyJusticeLettuce:
+		case CardIds.FamilyDefenseLettuce:
 			return (card: ReferenceCard) =>
 				[CardIds.CarielRoameLettuce1, CardIds.CorneliusRoameLettuce1].includes(
 					normalizeMercenariesCardId(card.id) as CardIds,
