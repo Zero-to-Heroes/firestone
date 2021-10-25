@@ -51,6 +51,8 @@ export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'prote
 			return 'protector';
 		case TagRole[TagRole.NEUTRAL]:
 		case TagRole[TagRole.INVALID]:
+		case undefined:
+		case null:
 			return null;
 		default:
 			console.error('Invalid role passed', roleFromEnum);

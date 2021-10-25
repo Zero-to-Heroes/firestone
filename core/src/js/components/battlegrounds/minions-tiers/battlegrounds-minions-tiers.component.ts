@@ -110,7 +110,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	) {
 		super();
 		this.tiers$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
+			.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces)
 			.pipe(
 				map(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);

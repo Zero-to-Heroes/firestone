@@ -63,12 +63,12 @@ export class MercenariesHighlightDirective extends AbstractSubscriptionComponent
 
 	@HostListener('mouseenter')
 	mouseEnterAbility() {
-		this.highlightService.selectCardId(this.cardId);
+		this.highlightService?.selectCardId(this.cardId);
 	}
 
 	@HostListener('mouseleave')
 	mouseLeaveAbility() {
-		this.highlightService.unselectCardId();
+		this.highlightService?.unselectCardId();
 	}
 
 	private highlight(shouldHighlight: boolean) {

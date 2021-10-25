@@ -53,7 +53,7 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
-				filter(([referenceData, visitors]) => !!visitors?.length),
+				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
 				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
 				takeUntil(this.destroyed$),
 			);

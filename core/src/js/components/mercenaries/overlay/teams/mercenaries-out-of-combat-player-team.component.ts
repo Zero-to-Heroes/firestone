@@ -58,7 +58,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
-				filter(([referenceData, visitors]) => !!visitors?.length),
+				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
 				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting tasks in ', this.constructor.name, filter)),

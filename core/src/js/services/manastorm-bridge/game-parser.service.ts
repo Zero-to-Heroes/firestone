@@ -100,7 +100,7 @@ export class GameParserService {
 		};
 
 		game.title =
-			game.player && game.opponent
+			!!game.player?.name && !!game.opponent?.name
 				? game.player.name.replace('"', '') + ' vs ' + game.opponent.name.replace('"', '')
 				: 'Unknown matchup';
 

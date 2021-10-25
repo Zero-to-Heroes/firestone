@@ -97,7 +97,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			this.inGame = newState && newState.inGame && !newState.currentGame?.gameEnded;
-			this.bgsPlayers = [...newState.currentGame.players].sort(
+			this.bgsPlayers = [...(newState.currentGame?.players ?? [])].sort(
 				(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 			);
 			this.currentTurn = newState.currentGame.currentTurn;

@@ -26,6 +26,11 @@ export class MercenariesBuffsParser implements MercenariesParser {
 	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
 		console.debug('processing turn start', event, battleState);
 		const gameState = event.gameState;
+		if (!gameState) {
+			console.warn('missing game state on turn start event', event);
+			return battleState;
+		}
+
 		const playerBoard = gameState.Player.Board;
 		const playerAbilities = gameState.Player.LettuceAbilities;
 

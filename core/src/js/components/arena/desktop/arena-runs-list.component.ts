@@ -178,8 +178,12 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 		arenaMatches: readonly GameStat[],
 		rewards: readonly ArenaRewardInfo[],
 	): readonly ArenaRun[] {
-		const matchesGroupedByRun = groupByFunction((match: GameStat) => match.runId)(arenaMatches);
-		const rewardsGroupedByRun = groupByFunction((reward: ArenaRewardInfo) => reward.runId)(rewards);
+		const matchesGroupedByRun = !!arenaMatches?.length
+			? groupByFunction((match: GameStat) => match.runId)(arenaMatches)
+			: {};
+		const rewardsGroupedByRun = !!rewards?.length
+			? groupByFunction((reward: ArenaRewardInfo) => reward.runId)(rewards)
+			: {};
 		return Object.keys(matchesGroupedByRun).map((runId: string) => {
 			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
 			const rewards = rewardsGroupedByRun[runId];

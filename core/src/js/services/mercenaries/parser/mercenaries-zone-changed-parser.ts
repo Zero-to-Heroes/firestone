@@ -17,7 +17,7 @@ export class MercenariesZoneChangedParser implements MercenariesParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 		// console.debug('[merc-zone] zone event', event, cardId, controllerId, entityId);
-		if (!team.mercenaries.map((merc) => merc.entityId).includes(entityId)) {
+		if (!team.mercenaries?.map((merc) => merc.entityId)?.includes(entityId)) {
 			// console.debug('[merc-zone] not about a merc, returning', event);
 			return battleState;
 		}

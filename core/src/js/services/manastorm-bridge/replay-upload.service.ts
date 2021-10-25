@@ -69,7 +69,7 @@ export class ReplayUploadService {
 				'game-format': game.gameFormat,
 				'build-number': game.buildNumber ? '' + game.buildNumber : '',
 				'deckstring': game.deckstring,
-				'deck-name': game.deckName,
+				'deck-name': game.deckName ? encodeURIComponent(game.deckName) : null,
 				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 				'should-zip': 'true',
 				'app-version': '' + process.env.APP_VERSION,

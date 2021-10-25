@@ -37,7 +37,7 @@ export class MercenariesTreasureSelectionParser implements MercenariesOutOfComba
 		} else if (changes.IsMercenariesSelectingTreasure == false) {
 			return state.update({ treasureSelection: null });
 		}
-		console.error('invalid case', changes);
+		console.warn('invalid case', changes);
 		return state;
 	}
 }
