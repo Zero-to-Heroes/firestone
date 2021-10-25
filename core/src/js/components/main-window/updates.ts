@@ -56,21 +56,29 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'mercenaries',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Add more synergies highlights.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Show zones that reward specific mercenaries coins when mousing over their missing coins in the Progression tab.`,
+							},
+							{
+								type: 'feature',
+								text: `Also show the next task for each mercenaries when mousing over the task progress in the Progression tab.`,
+							},
+							{
+								type: 'feature',
+								text: `Show each merc's ability's and equipment's current level in the Progression tab.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
