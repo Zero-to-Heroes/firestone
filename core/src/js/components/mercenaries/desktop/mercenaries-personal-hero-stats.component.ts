@@ -181,6 +181,22 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 								isEquipped: !!memEquip ? memEquip.Equipped : false,
 							};
 						});
+
+						const bountiesForMerc: BountyForMerc[] = referenceData.bountySets
+							.map((bountySet) =>
+								bountySet.bounties
+									.map((bounty) => {
+										if (bounty.rewardMercenaryIds.includes(refMerc.id)) {
+											return {
+												bountySetName: bountySet.name,
+												bountyName: bounty.name,
+											};
+										}
+										return null;
+									})
+									.filter((info) => !!info),
+							)
+							.reduce((a, b) => [...a, ...b], []);
 						return {
 							mercenaryId: refMerc.id,
 							owned: memMerc.Owned,
@@ -215,6 +231,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							totalTasks: taskChain.tasks.length,
 							currentTask: currentStep != null ? currentStep + 1 : null,
 							currentTaskDescription: currentTaskDescription,
+							bountiesWithRewards: bountiesForMerc,
 						} as PersonalHeroStat;
 					});
 				}),
@@ -423,6 +440,7 @@ export interface PersonalHeroStat {
 	readonly totalTasks: number;
 	readonly currentTask: number;
 	readonly currentTaskDescription: string;
+	readonly bountiesWithRewards: BountyForMerc[];
 }
 
 export interface PersonalHeroStatAbility {
@@ -438,4 +456,9 @@ export interface PersonalHeroStatEquipment {
 	readonly owned: boolean;
 	readonly tier: number;
 	readonly isEquipped: boolean;
+}
+
+export interface BountyForMerc {
+	readonly bountySetName: string;
+	readonly bountyName: string;
 }

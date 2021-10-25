@@ -92,3 +92,37 @@
 		}
 	}
 }
+.help-tooltip.mercenaries-personal-hero-stat-coins-needed-tooltip {
+	::ng-deep .text {
+		max-width: 350px;
+		width: 350px;
+
+		& > div {
+			max-width: 100%;
+			width: 100%;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			max-width: 100%;
+			width: 100%;
+
+			.header {
+				margin-bottom: 15px;
+			}
+
+			.bounty {
+				display: flex;
+				margin-bottom: 5px;
+
+				.bounty-zone {
+					&:after {
+						content: ':';
+						margin-right: 5px;
+					}
+				}
+			}
+		}
+	}
+}

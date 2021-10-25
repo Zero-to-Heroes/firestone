@@ -43,7 +43,11 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				<div class="amount">{{ totalCoinsLeft }}</div>
 			</div>
 
-			<div class="coins needed">
+			<div
+				class="coins needed"
+				[helpTooltip]="coinsNeededTooltip"
+				helpTooltipClasses="mercenaries-personal-hero-stat-coins-needed-tooltip"
+			>
 				<img class="icon" [src]="portraitUrl" />
 				<img
 					class="frame"
@@ -155,6 +159,8 @@ export class MercenariesPersonalHeroStatComponent {
 				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
 			};
 		});
+
+		this.coinsNeededTooltip = this.buildCoinsNeededTooltip(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}
@@ -179,6 +185,8 @@ export class MercenariesPersonalHeroStatComponent {
 	currentTaskLabel: string;
 	currentTaskTooltip: string;
 
+	coinsNeededTooltip: string;
+
 	abilities: readonly VisualAbility[];
 	equipments: readonly VisualEquipment[];
 
@@ -201,6 +209,27 @@ export class MercenariesPersonalHeroStatComponent {
 			case 0:
 				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`;
 		}
+	}
+
+	private buildCoinsNeededTooltip(value: PersonalHeroStat): string {
+		if (!value.bountiesWithRewards?.length) {
+			return '';
+		}
+
+		const bounties: readonly string[] = value.bountiesWithRewards.map(
+			(bounty) => `
+				<div class="bounty">
+					<div class="bounty-zone">${bounty.bountySetName}</div>
+					<div class="bounty-name">${bounty.bountyName}</div>
+				</div>
+			`,
+		);
+		return `
+			<div class="container">
+				<div class="header">Where to farm coins</div>
+				${bounties.join('')}
+			</div>
+		`;
 	}
 }
 
