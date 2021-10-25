@@ -105,7 +105,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
 						const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 						const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === refMerc.id);
-						// console.debug('taskChain', refMerc.name, taskChain);
+						console.debug('taskChain', refMerc.name, taskChain);
 						// Can have only one task per mercenary at the same time
 						const visitorInfo = collectionInfo.Visitors.find(
 							(v) => v.VisitorId === taskChain.mercenaryVisitorId,
@@ -126,10 +126,11 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 
 						const abilities = refMerc.abilities.map((info) => {
-							const abilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+							const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
 							const memAbility = memMerc.Abilities.find(
 								(a) =>
-									normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(abilityCard.id),
+									normalizeMercenariesCardId(a.CardId) ===
+									normalizeMercenariesCardId(baseAbilityCard.id),
 							);
 							const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
 
@@ -140,29 +141,39 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 								.filter((a) => a.tier > currentUnlockedTier)
 								.map((tier) => tier.coinCraftCost)
 								.reduce((a, b) => a + b, 0);
+							const cardDbfId = refAbility.tiers.find((tier) => tier.tier === currentUnlockedTier)
+								?.cardDbfId;
+							const abilityCard = this.allCards.getCardFromDbfId(cardDbfId);
 							return {
-								cardId: memAbilityCard.id ?? abilityCard.id,
+								cardId: abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
+								tier: currentUnlockedTier,
 								coinsToCraft: coinsToCraft,
 								owned: !!memAbility,
-								speed: memAbilityCard.cost ?? abilityCard.cost,
+								speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
 								cooldown:
-									memAbilityCard.mercenaryAbilityCooldown ?? abilityCard.mercenaryAbilityCooldown,
+									abilityCard.mercenaryAbilityCooldown ??
+									memAbilityCard.mercenaryAbilityCooldown ??
+									baseAbilityCard.mercenaryAbilityCooldown,
 							};
 						});
 						const equipments = refMerc.equipments.map((info) => {
 							const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
 							const refEquip = refMerc.equipments.find((a) => a.equipmentId === info.equipmentId);
 
-							const equipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+							const baseEquipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
 
 							const currentUnlockedTier = memEquip?.Tier ?? 0;
 							const coinsToCraft = refEquip.tiers
 								.filter((a) => a.tier > currentUnlockedTier)
 								.map((tier) => tier.coinCraftCost)
 								.reduce((a, b) => a + b, 0);
+							const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)
+								?.cardDbfId;
+							const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
 							return {
-								cardId: equipmentCard.id,
+								cardId: equipmentCard.id ?? baseEquipmentCard.id,
 								coinsToCraft: coinsToCraft,
+								tier: currentUnlockedTier,
 								owned: !!memEquip?.Owned,
 								isEquipped: !!memEquip ? memEquip.Equipped : false,
 							};
@@ -375,6 +386,7 @@ export interface PersonalHeroStat {
 export interface PersonalHeroStatAbility {
 	readonly cardId: string;
 	readonly owned: boolean;
+	readonly tier: number;
 	readonly speed: number;
 	readonly cooldown: number;
 }
@@ -382,5 +394,6 @@ export interface PersonalHeroStatAbility {
 export interface PersonalHeroStatEquipment {
 	readonly cardId: string;
 	readonly owned: boolean;
+	readonly tier: number;
 	readonly isEquipped: boolean;
 }

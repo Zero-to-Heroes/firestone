@@ -75,6 +75,9 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 							<div class="value">{{ ability.cooldown }}</div>
 						</div>
 					</div>
+					<div class="tier" *ngIf="ability.tier">
+						<div class="value">{{ ability.tier }}</div>
+					</div>
 				</div>
 			</div>
 
@@ -90,6 +93,9 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 							class="frame"
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=5"
 						/>
+					</div>
+					<div class="tier" *ngIf="equipment.tier">
+						<div class="value">{{ equipment.tier }}</div>
 					</div>
 				</div>
 			</div>
@@ -122,7 +128,7 @@ export class MercenariesPersonalHeroStatComponent {
 		this.currentTaskTooltip =
 			'The task can only be updated once a visitor for this mercenary visits your village while the app is running.';
 		if (value.currentTask) {
-			this.currentTaskLabel = '' + value.currentTask;
+			this.currentTaskLabel = `${value.currentTask}/${value.totalTasks}`;
 			this.currentTaskTooltip = value.currentTaskDescription;
 		}
 
@@ -132,6 +138,7 @@ export class MercenariesPersonalHeroStatComponent {
 				owned: info.owned,
 				speed: info.speed,
 				cooldown: info.cooldown,
+				tier: info.tier,
 				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
 			};
 		});
@@ -140,6 +147,7 @@ export class MercenariesPersonalHeroStatComponent {
 				cardId: info.cardId,
 				owned: info.owned,
 				equipped: info.isEquipped,
+				tier: info.tier,
 				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
 			};
 		});
@@ -198,6 +206,7 @@ interface VisualAbility {
 	readonly speed: number;
 	readonly cooldown: number;
 	readonly artUrl: string;
+	readonly tier: number;
 }
 
 interface VisualEquipment {
@@ -205,4 +214,5 @@ interface VisualEquipment {
 	readonly owned: boolean;
 	readonly equipped: boolean;
 	readonly artUrl: string;
+	readonly tier: number;
 }
