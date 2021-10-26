@@ -8,10 +8,12 @@ import {
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
+import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { applySearchStringFilter } from '../../../services/ui-store/mercenaries-ui-helper';
 import { areDeepEqual, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -241,9 +243,15 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			);
 		this.stats$ = combineLatest(
 			this.unsortedStats$,
-			this.store.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria),
+			this.store.listen$(
+				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria,
+				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
+			),
 		).pipe(
-			map(([stats, [sortCriteria]]) => this.sortPersonalHeroStats(stats, sortCriteria)),
+			map(([stats, [referenceData, sortCriteria, heroSearchString]]) =>
+				this.sortPersonalHeroStats(stats, heroSearchString, sortCriteria, referenceData),
+			),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
 			takeUntil(this.destroyed$),
@@ -300,9 +308,13 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 	private sortPersonalHeroStats(
 		stats: readonly PersonalHeroStat[],
+		heroSearchString: string,
 		sortCriteria: readonly MercenariesPersonalHeroesSortCriteria[],
+		referenceData: MercenariesReferenceData,
 	): readonly PersonalHeroStat[] {
-		let currentSorted = stats;
+		let currentSorted = stats.filter((stat) =>
+			applySearchStringFilter(stat.cardId, heroSearchString, this.allCards, referenceData),
+		);
 		// Most important criteria is first in the list, to applied last
 		const reversedCriteria = [...sortCriteria].reverse();
 		for (const criteria of reversedCriteria) {
