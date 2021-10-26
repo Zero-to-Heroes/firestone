@@ -57,9 +57,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			</section>
 			<section class="secondary">
 				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
-					<mercenaries-hero-search
+					<!-- <mercenaries-hero-search
 						*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
-					></mercenaries-hero-search>
+					></mercenaries-hero-search> -->
 					<secondary-default></secondary-default>
 				</ng-container>
 			</section>
