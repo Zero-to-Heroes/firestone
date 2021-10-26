@@ -197,7 +197,10 @@
 	// Because the hero portraits do this already
 	padding-left: 0;
 	z-index: 1;
-	display: none;
+	// Because we need the size to compute where to position it
+	// If we display: none, the size isn't available until it becomes visible
+	opacity: 0;
+	pointer-events: none;
 
 	&.right {
 		right: auto;
@@ -205,7 +208,8 @@
 	}
 
 	&.visible {
-		display: flex;
+		opacity: 1;
+		pointer-events: all;
 	}
 
 	.task {
