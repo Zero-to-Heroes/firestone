@@ -21,7 +21,8 @@
 		transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
 	}
 
-	&.player {
+	&.player,
+	&.out-of-combat-player {
 		.scalable {
 			transform-origin: right top;
 		}

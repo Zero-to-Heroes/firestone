@@ -3,13 +3,15 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostListener,
 	Input,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
@@ -29,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-root.component.scss',
 	],
 	template: `
-		<div class="root overlay-container-parent" [activeTheme]="'decktracker'">
+		<div class="root overlay-container-parent {{ side }}" [activeTheme]="'decktracker'">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="team-container">
@@ -112,7 +114,9 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
+
 	@Input() showTasksExtractor: (prefs: Preferences) => boolean;
+	@Input() scaleExtractor: (prefs: Preferences) => number;
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		// console.debug('set team in root', value);
@@ -123,6 +127,9 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	}
 
 	@Input() set tasks(value: readonly Task[]) {
+		if (!value) {
+			return;
+		}
 		// console.debug('set team in root', value);
 		this._tasks = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -142,6 +149,8 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
+
+	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
@@ -149,8 +158,14 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super();
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(
@@ -160,9 +175,31 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 				tap((filter) => cdLog('emitting showColorChart in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
+		this.scale = this.store
+			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				console.debug('updating scale', scale);
+				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+				this.el.nativeElement.style.setProperty(
+					'--decktracker-max-height',
+					this.side === 'player' ? '90vh' : '70vh',
+				);
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 		this.showTasks$ = combineLatest(
 			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
-			this.store.listenPrefs$((prefs) => this.showTasksExtractor(prefs)),
+			this.store.listenPrefs$((prefs) => (this.showTasksExtractor ? this.showTasksExtractor(prefs) : null)),
 		).pipe(
 			// Because when out of combat
 			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
@@ -177,10 +214,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
-	}
-
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
@@ -195,6 +228,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
+		this.scale?.unsubscribe();
 	}
 
 	showTasks() {
@@ -225,7 +259,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	}
 
 	private async changeWindowSize(): Promise<void> {
-		const width = 252 * 3.5; // Max scale + room for the tasks list
+		const width = 252 * 4.5; // Max scale + room for the tasks list
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;

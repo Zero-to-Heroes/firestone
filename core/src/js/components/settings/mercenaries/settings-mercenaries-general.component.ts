@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-mercenaries-general',
@@ -42,9 +43,50 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					[label]="'Highlight synergies'"
 					helpTooltip="When mousing over an ability or equipment (in the team widget) or a treasure (in the treasure selection screen), highlights all cards in the team widget that have synergies with it."
 				></preference-toggle>
+
+				<div class="title">Team widget's size</div>
+				<div class="settings-group">
+					<div class="subtitle">Your team</div>
+					<preference-slider
+						class="first-slider"
+						[field]="'mercenariesPlayerTeamOverlayScale'"
+						[enabled]="true"
+						[min]="75"
+						[max]="125"
+						[snapSensitivity]="5"
+						[knobs]="sizeKnobs"
+					>
+					</preference-slider>
+					<div class="subtitle">Opponent's team</div>
+					<preference-slider
+						class="first-slider"
+						[field]="'mercenariesOpponentTeamOverlayScale'"
+						[enabled]="true"
+						[min]="75"
+						[max]="125"
+						[snapSensitivity]="5"
+						[knobs]="sizeKnobs"
+					>
+					</preference-slider>
+				</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsMercenariesGeneralComponent {}
+export class SettingsMercenariesGeneralComponent {
+	sizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 75,
+			label: 'Small',
+		},
+		{
+			absoluteValue: 100,
+			label: 'Medium',
+		},
+		{
+			absoluteValue: 125,
+			label: 'Large',
+		},
+	];
+}
