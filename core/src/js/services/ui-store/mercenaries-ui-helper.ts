@@ -129,7 +129,13 @@ export const buildMercenariesTasksList = (
 			if (!taskChain) {
 				return null;
 			}
+
 			const task = [...taskChain.tasks].sort((a, b) => a.id - b.id)[visitor.TaskChainProgress];
+			if (!task) {
+				console.warn('empty task', visitor, taskChain);
+				return null;
+			}
+
 			const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
 			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
 			const mercenaryCardId = mercenaryCard.id;
@@ -144,7 +150,7 @@ export const buildMercenariesTasksList = (
 				)}.png?v=5`,
 			} as Task;
 		})
-		.filter((task) => task);
+		.filter((task) => !!task);
 };
 
 const applyStarterFilter = (stat: MercenariesHeroStat, starterFilter: MercenariesStarterFilterType): boolean => {
