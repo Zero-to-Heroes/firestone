@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.25',
+		version: '8.0.29',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -50,7 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a recap of your teams' performance in PvP (matches vs bots are excluded). More details are coming soon, so let me know if you have suggestions as to what to show there.`,
+								text: `Add the possibility to manually move forward / backward in the "Current task" report of the Progression tab, using Ctrl + click or Alt + click.`,
 							},
 						],
 					},
@@ -65,15 +65,45 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Show zones that reward specific mercenaries coins when mousing over their missing coins in the Progression tab.`,
+								text: `Mousing over the current speed in the team widget will now show you which abilities cause the speed buff / debuff.`,
 							},
 							{
 								type: 'feature',
-								text: `Also show the next task for each mercenaries when mousing over the task progress in the Progression tab.`,
+								text: `Add settings to resize the team widgets.`,
 							},
 							{
 								type: 'feature',
-								text: `Show each merc's ability's and equipment's current level in the Progression tab.`,
+								text: `Add a search bar in the progression tab. You can search for any hero/ability/equipment name or text.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the task list would get truncated when the team widget was too small.`,
+							},
+							{
+								type: 'ui',
+								text: `Make the mercs on the bench even dimmer, as they were too easily mistaken with the active heroes.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where Tony Two-Tusks would not grant additional stats to the transformed minion.`,
+							},
+							{
+								type: 'ui',
+								text: `Hide heroes tier if it is empty (like the tier S currently).`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Replays against human opponents should now show their real name instead of UNKNOWN HUMAN OPPONENT.`,
 							},
 						],
 					},
