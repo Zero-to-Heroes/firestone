@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -7,7 +7,7 @@ import { Events } from '../events.service';
 import { LOCAL_STORAGE_MERCENARIES_COLLECTION } from '../local-storage';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { sleep } from '../utils';
+import { groupByFunction, sleep } from '../utils';
 import { SCENE_WITH_RELEVANT_MERC_INFO } from './out-of-combat/parser/mercenaries-memory-information-parser';
 
 @Injectable()
@@ -44,8 +44,8 @@ export class MercenariesMemoryCacheService {
 		if (!newMercenariesInfo) {
 			return null;
 		}
-
 		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
+
 		console.debug('[merc-memory] new merc info', newMercenariesInfo);
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
@@ -55,12 +55,25 @@ export class MercenariesMemoryCacheService {
 			savedVisitorsInfo,
 		);
 		console.debug('[merc-memory] newVisitorsInformation', newVisitorsInformation);
-		return {
+		const newCollection = {
 			...newMercenariesInfo,
 			Visitors: newVisitorsInformation,
 		};
+		console.debug('[merc-memory] newCollection', newCollection);
+		return newCollection;
 	}
 
+	public cleanVisitors(visitors: readonly MemoryVisitor[]): readonly MemoryVisitor[] {
+		// Looks like some dupes can arise, clean things up
+		const grouped = groupByFunction((visitor: MemoryVisitor) => visitor.VisitorId)(visitors);
+		return Object.values(grouped).map((visitorGroup) => {
+			const highestProgress = Math.max(...visitorGroup.map((v) => v.TaskProgress));
+			const highestVisitor = visitorGroup.find((v) => v.TaskProgress === highestProgress);
+			return highestVisitor;
+		});
+	}
+
+	// Only save the contents of the memory, the prefs (with the override) are saved separately
 	private async saveLocalMercenariesCollectionInfo(newMercenariesInfo: MemoryMercenariesCollectionInfo) {
 		if (!newMercenariesInfo?.Mercenaries?.length) {
 			return;
@@ -82,21 +95,25 @@ export class MercenariesMemoryCacheService {
 		fromMemory = fromMemory ?? [];
 		savedVisitorsInfo = savedVisitorsInfo ?? [];
 		// Use the memory as the base, as it's the latest info we have
-		const result = [...fromMemory];
-		for (const visitorInfo of savedVisitorsInfo) {
-			if (!result.map((v) => v.TaskId).includes(visitorInfo.TaskId)) {
-				// If it's not in memory anymore, this means that the task has been either abandoned or claimed
-				if (visitorInfo.Status === TaskStatus.COMPLETE || visitorInfo.Status === TaskStatus.CLAIMED) {
-					result.push({
-						...visitorInfo,
-						Status: TaskStatus.CLAIMED,
-					});
-				}
-				// If it was not in a "COMPLETE" state last time we checked the board, and is not
-				// there anymore, this means that it got abandoned, and we remove it
-			}
-		}
-		this.prefs.updateMercenariesVisitorsProgress(result);
-		return result;
+		const cleanedVisitors = this.cleanVisitors([...fromMemory, ...savedVisitorsInfo]);
+
+		// const result = [...cleanedVisitors];
+
+		// for (const visitorInfo of savedVisitorsInfo) {
+		// 	if (!result.map((v) => v.TaskId).includes(visitorInfo.TaskId)) {
+		// 		// If it's not in memory anymore, this means that the task has been either abandoned or claimed
+		// 		if (visitorInfo.Status === TaskStatus.COMPLETE || visitorInfo.Status === TaskStatus.CLAIMED) {
+		// 			result.push({
+		// 				...visitorInfo,
+		// 				Status: TaskStatus.CLAIMED,
+		// 			});
+		// 		}
+		// 		// If it was not in a "COMPLETE" state last time we checked the board, and is not
+		// 		// there anymore, this means that it got abandoned, and we remove it
+		// 	}
+		// }
+		this.prefs.updateMercenariesVisitorsProgress(cleanedVisitors);
+		return cleanedVisitors;
+		// return this.cleanVisitors(result);
 	}
 }

@@ -1,7 +1,7 @@
 import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 
-export const groupByFunction = <T>(keyExtractor: (obj: T) => string) => (
+export const groupByFunction = <T>(keyExtractor: (obj: T) => string | number) => (
 	array: readonly T[],
 ): { [key: string]: readonly T[] } => {
 	return array.reduce((objectsByKeyValue, obj) => {
