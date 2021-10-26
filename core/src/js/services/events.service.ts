@@ -33,8 +33,8 @@ export class Events {
 	public static readonly GLOBAL_STATS_UPDATED = 'global-stats-updated';
 
 	// An intermediate layer for decktracker, so that we have better control on the display
-	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
-	public static readonly DECK_HIDE_TOOLTIP = 'deck-hide-tooltip';
+	// public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
+	// public static readonly DECK_HIDE_TOOLTIP = 'deck-hide-tooltip';
 
 	public static readonly SETTINGS_DISPLAY_MODAL = 'settings-display-modal';
 

@@ -96,7 +96,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 
 	onScroll(event) {
 		// Force immediate clean of the tooltip
-		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
+		// this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
 	}
 
 	refresh() {
