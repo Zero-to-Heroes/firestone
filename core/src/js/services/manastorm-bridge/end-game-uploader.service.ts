@@ -114,8 +114,7 @@ export class EndGameUploaderService {
 			mercenariesInfo,
 			duelsInfo,
 			arenaInfo,
-			playerInfo,
-			opponentInfo,
+			matchInfo,
 			xpForGame,
 		] = await Promise.all([
 			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
@@ -123,11 +122,15 @@ export class EndGameUploaderService {
 			isMercenaries(game.gameMode) ? this.getMercenariesInfo(currentReviewId) : null,
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
 			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
-			this.playersInfo.getPlayerInfo(),
-			this.playersInfo.getOpponentInfo(),
+			isMercenaries(game.gameMode) || game.gameMode === 'battlegrounds'
+				? null
+				: this.memoryInspection.getMatchInfo(),
 			this.rewards.getXpForGameInfo(),
 		]);
 		console.log('[manastorm-bridge]', currentReviewId, 'read memory info');
+
+		const playerInfo = matchInfo?.localPlayer;
+		const opponentInfo = matchInfo?.opponent;
 
 		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
