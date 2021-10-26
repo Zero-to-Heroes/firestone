@@ -30,6 +30,7 @@ import { Task } from './mercenaries-team-root..component';
 		[trackerPositionUpdater]="trackerPositionUpdater"
 		[trackerPositionExtractor]="trackerPositionExtractor"
 		[showTasksExtractor]="showTasksExtractor"
+		[scaleExtractor]="scaleExtractor"
 		[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
 		[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 	></mercenaries-team-root>`,
@@ -39,6 +40,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
+	scaleExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayScale;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 
