@@ -102,7 +102,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 							...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? []),
 						].sort((a, b) => a.averagePosition - b.averagePosition),
 					},
-				].filter((tier) => tier.heroes);
+				].filter((tier) => !!tier.heroes?.length);
 				return {
 					tiers: tiers,
 					totalMatches: totalMatches,
