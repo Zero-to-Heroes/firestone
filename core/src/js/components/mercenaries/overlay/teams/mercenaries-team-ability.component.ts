@@ -94,12 +94,16 @@ export class MercenariesTeamAbilityComponent {
 						],
 				  }
 				: null;
-		this.speed = value.speed; // value.speed == null ? null : value.speed + (this.speedModifier?.value ?? 0);
+		this.speed = value.speed == null ? null : value.speed + (this.speedModifier?.value ?? 0);
 		this.baseSpeed = abilityCard.cost;
+		const influences = (this.speedModifier?.influences ?? [])
+			.map((influence) => `${this.allCards.getCard(influence.cardId).name}: ${influence.value}`)
+			.join('<br/> ');
+		const influenceText = influences.length > 0 ? `<br />Base Speed: ${this.baseSpeed}<br />${influences}` : '';
 		this.speedModifierTooltip = !!this.speedModifier?.value
 			? this.speed > this.baseSpeed
-				? `This ability will be ${this.speed - this.baseSpeed} slower next turn`
-				: `This ability will be ${-(this.speed - this.baseSpeed)} faster next turn`
+				? `This ability will be ${this.speed - this.baseSpeed} slower next turn. ${influenceText}`
+				: `This ability will be ${-(this.speed - this.baseSpeed)} faster next turn. ${influenceText}`
 			: null;
 	}
 
