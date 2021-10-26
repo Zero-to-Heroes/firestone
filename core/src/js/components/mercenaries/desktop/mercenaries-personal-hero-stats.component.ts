@@ -49,7 +49,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[name]="'Task progress'"
 					[sort]="sort"
 					[criteria]="'task-progress'"
-					helpTooltip="The current task. Task 18 is the final one for all mercs"
+					helpTooltip="The current task. Ctrl + click on the current task to manually go to the next task. Alt + click to go back one step."
 				>
 				</sortable-label>
 				<sortable-label class="abilities" [name]="'Abilities'" [isSortable]="false"> </sortable-label>

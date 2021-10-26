@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
+import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -60,6 +62,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				class="current-task"
 				[helpTooltip]="currentTaskTooltip"
 				helpTooltipClasses="mercenaries-personal-hero-stat-task-tooltip"
+				(click)="onTaskClick($event)"
 			>
 				{{ currentTaskLabel }}
 			</div>
@@ -115,6 +118,7 @@ export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
 		console.debug('setting value', value);
 		this.cardId = value.cardId;
+		this.mercenaryId = value.mercenaryId;
 		this.owned = value.owned;
 
 		this.rarityImg = `assets/images/rarity/rarity-${CardRarity[value.rarity]?.toLowerCase()}.png`;
@@ -190,7 +194,9 @@ export class MercenariesPersonalHeroStatComponent {
 	abilities: readonly VisualAbility[];
 	equipments: readonly VisualEquipment[];
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	private mercenaryId: number;
+
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
 
 	buildPercents(value: number): string {
 		return value == null ? '-' : value.toFixed(1) + '%';
@@ -208,6 +214,13 @@ export class MercenariesPersonalHeroStatComponent {
 				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png?v=5`;
 			case 0:
 				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`;
+		}
+	}
+
+	onTaskClick(event: MouseEvent) {
+		const operation = event.ctrlKey ? 'add' : event.altKey ? 'remove' : null;
+		if (operation) {
+			this.store.send(new MercenariesTaskUpdateCurrentStepEvent(this.mercenaryId, operation));
 		}
 	}
 

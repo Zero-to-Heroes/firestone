@@ -19,6 +19,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
+import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
@@ -126,6 +127,7 @@ import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercena
 import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
 import { MercenariesSelectCompositionEvent } from './events/mercenaries/mercenaries-select-composition-event';
 import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
+import { MercenariesTaskUpdateCurrentStepEvent } from './events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
@@ -245,6 +247,7 @@ import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries
 import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
 import { MercenariesSelectCompositionProcessor } from './processors/mercenaries/mercenaries-select-composition-processor';
 import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
+import { MercenariesTaskUpdateCurrentStepProcessor } from './processors/mercenaries/mercenaries-task-update-current-step-processor';
 import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
@@ -317,6 +320,7 @@ export class MainWindowStoreService {
 		private readonly decksStateBuilder: DecksStateBuilderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
+		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -756,6 +760,9 @@ export class MainWindowStoreService {
 
 			MercenariesToggleShowHiddenTeamsEvent.eventName(),
 			new MercenariesToggleShowHiddenTeamsProcessor(this.prefs),
+
+			MercenariesTaskUpdateCurrentStepEvent.eventName(),
+			new MercenariesTaskUpdateCurrentStepProcessor(this.mercenariesMemoryCache, this.prefs),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),
