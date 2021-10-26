@@ -81,12 +81,12 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 
 	@HostListener('mouseenter')
 	onMouseEnter(cardId: string) {
-		this.highlightService.selectCardId(cardId);
+		this.highlightService?.selectCardId(cardId);
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave(cardId: string) {
-		this.highlightService.unselectCardId();
+		this.highlightService?.unselectCardId();
 	}
 
 	private async changeWindowSize(): Promise<void> {
