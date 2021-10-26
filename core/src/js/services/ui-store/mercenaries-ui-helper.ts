@@ -39,21 +39,28 @@ export const filterMercenariesHeroStats = (
 			.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
 			.filter((stat) => applyStarterFilter(stat, starterFilter))
 			.filter((stat) => applyHeroLevelFilter(stat, heroLevelFilter))
-			.filter((stat) => {
-				const referenceHero = referenceData.mercenaries.find(
-					(merc) => allCards.getCardFromDbfId(merc.cardDbfId).id === stat.heroCardId,
-				);
-				const result =
-					isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.id), searchString) ||
-					referenceHero.abilities.map((ability) =>
-						isValidMercSearchItem(allCards.getCardFromDbfId(ability.cardDbfId), searchString),
-					) ||
-					referenceHero.equipments.map((equipment) =>
-						isValidMercSearchItem(allCards.getCardFromDbfId(equipment.cardDbfId), searchString),
-					);
-				return result;
-			})
+			.filter((stat) => applySearchStringFilter(stat.heroCardId, searchString, allCards, referenceData))
 	);
+};
+
+export const applySearchStringFilter = (
+	heroCardId: string,
+	searchString: string,
+	allCards: CardsFacadeService,
+	referenceData: MercenariesReferenceData,
+): boolean => {
+	const referenceHero = referenceData.mercenaries.find(
+		(merc) => allCards.getCardFromDbfId(merc.cardDbfId).id === heroCardId,
+	);
+	const result =
+		isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.id), searchString) ||
+		referenceHero.abilities.some((ability) =>
+			isValidMercSearchItem(allCards.getCardFromDbfId(ability.cardDbfId), searchString),
+		) ||
+		referenceHero.equipments.some((equipment) =>
+			isValidMercSearchItem(allCards.getCardFromDbfId(equipment.cardDbfId), searchString),
+		);
+	return result;
 };
 
 export const isValidMercSearchItem = (card: ReferenceCard, searchString: string): boolean => {
