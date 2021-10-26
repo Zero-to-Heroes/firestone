@@ -79,7 +79,7 @@ export class MercenariesPersonalTeamSummaryComponent {
 		this.lastUsed = lastUsed ? this.buildLastUsedDate(lastUsed) : 'N/A';
 
 		let mostFrequentStarterTeam = this.getMostFrequentStarterTeam(gamesForTeam);
-		let bench = value.mercenariesCardIds
+		const bench = value.mercenariesCardIds
 			.map((cardId) => normalizeMercenariesCardId(cardId))
 			.filter((cardId) => !mostFrequentStarterTeam.includes(cardId));
 		// console.debug('starters', mostFrequentStarterTeam, 'bench', bench, value);
