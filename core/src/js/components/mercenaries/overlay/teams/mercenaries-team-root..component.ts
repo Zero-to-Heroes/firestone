@@ -59,6 +59,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div
 									class="task-list {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showTaskList$ | async }"
+									[style.bottom.px]="taskListBottomPx"
 								>
 									<div class="task" *ngFor="let task of _tasks">
 										<div
@@ -121,6 +122,9 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	@Input() set team(value: MercenariesBattleTeam) {
 		// console.debug('set team in root', value);
 		this._team = value;
+		setTimeout(() => {
+			this.updateTaskListBottomPx();
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -147,6 +151,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	windowId: string;
 	overlayWidthInPx = 225;
 	tooltipPosition: CardTooltipPositionType = 'left';
+	taskListBottomPx = 0;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 
@@ -224,6 +229,30 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		await this.updateTooltipPosition();
 	}
 
+	private async updateTaskListBottomPx() {
+		const taskListEl = this.el.nativeElement.querySelector('.task-list');
+		console.debug('taskListEl', taskListEl);
+		if (!taskListEl) {
+			return;
+		}
+
+		const rect = taskListEl.getBoundingClientRect();
+		console.debug('rect', rect);
+		const taskListHeight = rect.height;
+		console.debug('taskListHeight', taskListHeight);
+		const widgetEl = this.el.nativeElement.querySelector('.team-container');
+		console.debug('widgetEl', widgetEl);
+		const widgetRect = widgetEl.getBoundingClientRect();
+		console.debug('widgetRect', widgetRect);
+		const widgetHeight = widgetRect.height;
+		console.debug('widgetHeight', widgetHeight);
+		this.taskListBottomPx = widgetHeight > taskListHeight ? 0 : widgetHeight - taskListHeight;
+		console.debug('taskListBottomPx', this.taskListBottomPx);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
@@ -268,6 +297,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
 		await this.restoreWindowPosition();
 		await this.updateTooltipPosition();
+		await this.updateTaskListBottomPx();
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
