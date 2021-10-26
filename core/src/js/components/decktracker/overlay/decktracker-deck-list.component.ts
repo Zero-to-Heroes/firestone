@@ -26,7 +26,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)" [ngClass]="{ 'active': isScroll }">
+		<perfect-scrollbar class="deck-list" [ngClass]="{ 'active': isScroll }">
 			<ng-container [ngSwitch]="displayMode">
 				<div class="list-background"></div>
 				<deck-list-by-zone
@@ -124,11 +124,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
-	}
-
-	onScroll(event) {
-		// Force immediate clean of the tooltip
-		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
 	}
 
 	refresh() {
