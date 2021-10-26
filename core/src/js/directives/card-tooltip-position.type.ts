@@ -6,5 +6,6 @@ export type CardTooltipPositionType =
 	| 'bottom'
 	| 'top'
 	| 'top-right'
+	| 'top-left'
 	| 'bottom-right'
 	| undefined;
