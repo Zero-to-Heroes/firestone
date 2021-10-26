@@ -9,6 +9,7 @@ import { BroadcastEvent, Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
+import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';
 import { MercenariesOutOfCombatTeamOverlayHandler } from './overlay/mercenaries-out-of-combat-team-overlay-handler';
 import { MercenariesOutOfCombatTreasureSelectionOverlayHandler } from './overlay/mercenaries-out-of-combat-treasure-selection-handler';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
@@ -35,6 +36,7 @@ export class MercenariesOutOfCombatService {
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly memoryService: MemoryInspectionService,
+		private readonly memoryCache: MercenariesMemoryCacheService,
 		private readonly ow: OverwolfService,
 	) {
 		this.init();
@@ -113,7 +115,7 @@ export class MercenariesOutOfCombatService {
 
 	private registerParser() {
 		const parsers: readonly MercenariesOutOfCombatParser[] = [
-			new MercenariesMemoryInformationParser(this.memoryService),
+			new MercenariesMemoryInformationParser(this.memoryService, this.memoryCache),
 			new MercenariesTreasureSelectionParser(this.allCards),
 		];
 		this.parsers = {};
