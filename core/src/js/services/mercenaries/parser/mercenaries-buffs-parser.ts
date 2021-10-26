@@ -83,15 +83,15 @@ export class MercenariesBuffsParser implements MercenariesParser {
 					console.debug('could not find player ability', ability, playerAbilities);
 					return ability;
 				}
-				const speedDiff =
-					playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ??
-					ability.speed - ability.speed;
+				// const speedDiff =
+				// 	playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ??
+				// 	ability.speed - ability.speed;
 				const speedModifier = this.buildSpeedModifier(playerAbility);
-				if ((speedModifier?.value ?? 0) !== (speedDiff ?? 0)) {
-					console.warn('incompatible computations', speedModifier, speedDiff, playerAbility, ability);
-				}
+				// if ((speedModifier?.value ?? 0) !== (speedDiff ?? 0)) {
+				// 	console.warn('incompatible computations', speedModifier, speedDiff, playerAbility, ability);
+				// }
 				return ability.update({
-					speed: playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ?? ability.speed,
+					// speed: playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ?? ability.speed,
 					speedModifier: speedModifier,
 				});
 			});
