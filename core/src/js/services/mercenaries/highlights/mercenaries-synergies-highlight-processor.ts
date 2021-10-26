@@ -262,5 +262,5 @@ const nature = (card: ReferenceCard) => spellSchool(card, SpellSchool.NATURE);
 const frost = (card: ReferenceCard) => spellSchool(card, SpellSchool.FROST);
 const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
 
-const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.match(text);
-const dealsDamage = (card: ReferenceCard) => hasText(card, /deal \d+ damage/);
+const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
+const dealsDamage = (card: ReferenceCard) => hasText(card, /deal \$?\d+ damage/);
