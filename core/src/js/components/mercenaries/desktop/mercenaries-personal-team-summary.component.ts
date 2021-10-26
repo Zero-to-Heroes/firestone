@@ -78,25 +78,35 @@ export class MercenariesPersonalTeamSummaryComponent {
 		const lastUsed = gamesForTeam.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp;
 		this.lastUsed = lastUsed ? this.buildLastUsedDate(lastUsed) : 'N/A';
 
-		const mostFrequentStarterTeam = this.getMostFrequentStarterTeam(gamesForTeam);
-		const bench = value.mercenariesCardIds
+		let mostFrequentStarterTeam = this.getMostFrequentStarterTeam(gamesForTeam);
+		let bench = value.mercenariesCardIds
 			.map((cardId) => normalizeMercenariesCardId(cardId))
 			.filter((cardId) => !mostFrequentStarterTeam.includes(cardId));
 		// console.debug('starters', mostFrequentStarterTeam, 'bench', bench, value);
-		this.starterHeroes = mostFrequentStarterTeam.map((cardId) => ({
-			cardId: cardId,
-			portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
-			frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
-				this.allCards.getCard(cardId).mercenaryRole,
-			)}.png?v=2`,
-		}));
-		this.benchHeroes = bench.map((cardId) => ({
-			cardId: cardId,
-			portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
-			frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
-				this.allCards.getCard(cardId).mercenaryRole,
-			)}.png?v=2`,
-		}));
+		if (bench.length > 3 && mostFrequentStarterTeam.length < 3) {
+			mostFrequentStarterTeam = [
+				...mostFrequentStarterTeam,
+				...bench.splice(0, 3 - mostFrequentStarterTeam.length),
+			];
+		}
+		this.starterHeroes = mostFrequentStarterTeam
+			.filter((cardId) => !!cardId)
+			.map((cardId) => ({
+				cardId: cardId,
+				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
+				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
+					this.allCards.getCard(cardId).mercenaryRole,
+				)}.png?v=2`,
+			}));
+		this.benchHeroes = bench
+			.filter((cardId) => !!cardId)
+			.map((cardId) => ({
+				cardId: cardId,
+				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
+				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
+					this.allCards.getCard(cardId).mercenaryRole,
+				)}.png?v=2`,
+			}));
 	}
 
 	teamId: string;
@@ -146,10 +156,13 @@ export class MercenariesPersonalTeamSummaryComponent {
 			const numberOfGamesWithStarter = groupedByStarter[starter].length;
 			if (numberOfGamesWithStarter > currentBiggest) {
 				currentBiggest = numberOfGamesWithStarter;
-				result = starter.split(',').map((cardId) => normalizeMercenariesCardId(cardId));
+				result = starter
+					.split(',')
+					.map((cardId) => normalizeMercenariesCardId(cardId))
+					.filter((cardId) => !!cardId);
 			}
 		}
-		return result;
+		return result.filter((cardId) => !!cardId);
 	}
 }
 
