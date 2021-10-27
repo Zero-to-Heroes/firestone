@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MemoryMercenariesMap } from '../../../../models/memory/memory-mercenaries-info';
@@ -77,51 +78,54 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 			),
 			map(
 				([[state], [referenceData]]) =>
-					[state.mercenariesMemoryInfo.Map, referenceData] as [
-						MemoryMercenariesMap,
-						MercenariesReferenceData,
-					],
+					[
+						state.currentScene === SceneMode.LETTUCE_MAP ? state.mercenariesMemoryInfo.Map : null,
+						referenceData,
+					] as [MemoryMercenariesMap, MercenariesReferenceData],
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([mapInfo, referenceData]) =>
 				MercenariesBattleTeam.create({
-					mercenaries: mapInfo?.PlayerTeam.map((playerTeamInfo) => {
-						const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
-						if (!refMerc) {
-							console.warn('could not find reference merc', playerTeamInfo.Id);
-							return null;
-						}
-						const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
-						return BattleMercenary.create({
-							cardId: mercCard.id,
-							role: getHeroRole(mercCard.mercenaryRole),
-							level: playerTeamInfo.Level,
-							isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
-							abilities: [
-								...playerTeamInfo.Abilities.map((ability) => {
-									return BattleAbility.create({
-										cardId: ability.CardId,
-									});
-								}),
-								...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
-									return BattleAbility.create({
-										cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
-										isTreasure: true,
-									});
-								}),
-							],
-							equipment: (playerTeamInfo.Equipments ?? [])
-								.filter((equip) => equip.Equipped)
-								.map((equip) => {
-									const refEquipment = refMerc.equipments?.find((e) => e.equipmentId === equip.Id);
-									return BattleEquipment.create({
-										cardId: this.allCards.getCardFromDbfId(refEquipment?.cardDbfId)?.id,
-										level: equip.Tier,
-									});
-								})
-								.pop(),
-						});
-					}),
+					mercenaries:
+						mapInfo?.PlayerTeam?.map((playerTeamInfo) => {
+							const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
+							if (!refMerc) {
+								console.warn('could not find reference merc', playerTeamInfo.Id);
+								return null;
+							}
+							const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
+							return BattleMercenary.create({
+								cardId: mercCard.id,
+								role: getHeroRole(mercCard.mercenaryRole),
+								level: playerTeamInfo.Level,
+								isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
+								abilities: [
+									...playerTeamInfo.Abilities.map((ability) => {
+										return BattleAbility.create({
+											cardId: ability.CardId,
+										});
+									}),
+									...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
+										return BattleAbility.create({
+											cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
+											isTreasure: true,
+										});
+									}),
+								],
+								equipment: (playerTeamInfo.Equipments ?? [])
+									.filter((equip) => equip.Equipped)
+									.map((equip) => {
+										const refEquipment = refMerc.equipments?.find(
+											(e) => e.equipmentId === equip.Id,
+										);
+										return BattleEquipment.create({
+											cardId: this.allCards.getCardFromDbfId(refEquipment?.cardDbfId)?.id,
+											level: equip.Tier,
+										});
+									})
+									.pop(),
+							});
+						}) ?? [],
 				}),
 			),
 			filter((team) => !!team),

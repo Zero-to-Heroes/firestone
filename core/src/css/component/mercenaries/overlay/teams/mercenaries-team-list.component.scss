@@ -94,4 +94,17 @@
 			z-index: 2;
 		}
 	}
+
+	.empty-team {
+		z-index: 1;
+		color: var(--color-2);
+		font-size: 13px;
+		padding: 10px;
+		padding-top: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: 'Open Sans', sans-serif;
+		text-align: center;
+	}
 }

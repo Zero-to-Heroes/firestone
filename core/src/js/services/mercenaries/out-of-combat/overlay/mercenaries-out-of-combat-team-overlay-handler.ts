@@ -5,8 +5,6 @@ import { OverwolfService } from '../../../overwolf.service';
 import { isWindowClosed } from '../../../utils';
 import { MercenariesOutOfCombatOverlayHandler } from './_mercenaries-out-of-combat-overlay-handler';
 
-const SCENE_IN_WHICH_TO_SHOW_OVERLAY = [SceneMode.LETTUCE_MAP];
-
 export class MercenariesOutOfCombatTeamOverlayHandler implements MercenariesOutOfCombatOverlayHandler {
 	constructor(private readonly ow: OverwolfService) {}
 
@@ -14,12 +12,15 @@ export class MercenariesOutOfCombatTeamOverlayHandler implements MercenariesOutO
 		// const prefs = await this.prefs.getPreferences();
 		const windowId = OverwolfService.MERCENARIES_OUT_OF_COMBAT_PLAYER_TEAM_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
-		const shouldShow =
-			!!state &&
-			SCENE_IN_WHICH_TO_SHOW_OVERLAY.includes(state.currentScene) &&
-			// !state.outOfCombatPlearTeamWindowClosedManually &&
-			preferences?.mercenariesEnableOutOfCombatPlayerTeamWidget &&
-			!!state.mercenariesMemoryInfo?.Map?.PlayerTeam;
+		const scenes = [];
+		if (preferences?.mercenariesEnableOutOfCombatPlayerTeamWidget) {
+			scenes.push(SceneMode.LETTUCE_MAP);
+		}
+		if (preferences?.mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage) {
+			scenes.push(SceneMode.LETTUCE_BOUNTY_TEAM_SELECT, SceneMode.LETTUCE_COLLECTION);
+		}
+		const shouldShow = !!state && scenes.includes(state.currentScene);
+		console.debug('should show?', state, state?.currentScene, scenes, preferences);
 		if (shouldShow && isWindowClosed(theWindow.window_state_ex)) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);

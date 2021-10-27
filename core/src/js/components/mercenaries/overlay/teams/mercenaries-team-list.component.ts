@@ -31,6 +31,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				[mercenary]="mercenary"
 				[tooltipPosition]="tooltipPosition"
 			></mercenaries-team-mercenary>
+			<div class="empty-team">Head into a bounty or PvP battle to see your team</div>
 		</perfect-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +40,7 @@ export class MercenariesTeamListComponent extends AbstractSubscriptionComponent 
 	@Input() tooltipPosition: boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
-		this.mercenaries = [...value.mercenaries].sort((a, b) => {
+		this.mercenaries = [...(value.mercenaries ?? [])].sort((a, b) => {
 			if (a.zone === Zone.PLAY && b.zone !== Zone.PLAY) {
 				return -1;
 			} else if (a.zone !== Zone.PLAY && b.zone === Zone.PLAY) {

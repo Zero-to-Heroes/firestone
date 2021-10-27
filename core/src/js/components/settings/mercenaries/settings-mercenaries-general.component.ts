@@ -25,8 +25,13 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableOutOfCombatPlayerTeamWidget'"
-					[label]="'Out of combat team widget'"
+					[label]="'Team widget: Map'"
 					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the bounty map. Useful for easily inspecting your team when choosing a path or picking a treasure. "
+				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage'"
+					[label]="'Team widget: Village'"
+					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the collection and team select screens. "
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesShowColorChartButton'"

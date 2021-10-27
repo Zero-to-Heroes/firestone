@@ -357,6 +357,7 @@ export class Preferences {
 	readonly mercenariesOpponentTeamOverlayPosition: { left: number; top: number };
 
 	readonly mercenariesEnableOutOfCombatPlayerTeamWidget = true;
+	readonly mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage = true;
 	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
 	// readonly mercenariesOutOfCombatPlayerTeamOverlayScale: number = 100;
 	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
