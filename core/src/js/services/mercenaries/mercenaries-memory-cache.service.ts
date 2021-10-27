@@ -67,9 +67,11 @@ export class MercenariesMemoryCacheService {
 
 	public shouldFetchMercenariesMemoryInfo(newScene: SceneMode): boolean {
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
+			console.debug('[merc-memory] non relevant scene', newScene);
 			return false;
 		}
 		if (newScene === SceneMode.GAMEPLAY && !MERCENARIES_SCENES.includes(this.previousScene)) {
+			console.debug('[merc-memory] not coming from lettuce scene', newScene, this.previousScene);
 			return false;
 		}
 		return true;
@@ -82,12 +84,12 @@ export class MercenariesMemoryCacheService {
 		if (!newMercenariesInfo) {
 			return null;
 		}
-		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
 
-		console.debug('[merc-memory] new merc info', newMercenariesInfo);
+		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
+		console.debug('[merc-memory] new merc info', newMercenariesInfo.Visitors);
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
-		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo, newMercenariesInfo.Visitors);
+		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo);
 		const newVisitorsInformation: readonly MemoryVisitor[] = this.mergeVisitors(
 			newMercenariesInfo.Visitors,
 			savedVisitorsInfo,
@@ -105,8 +107,9 @@ export class MercenariesMemoryCacheService {
 		// Looks like some dupes can arise, clean things up
 		const grouped = groupByFunction((visitor: MemoryVisitor) => visitor.VisitorId)(visitors);
 		return Object.values(grouped).map((visitorGroup) => {
-			const highestProgress = Math.max(...visitorGroup.map((v) => v.TaskProgress));
-			const highestVisitor = visitorGroup.find((v) => v.TaskProgress === highestProgress);
+			console.debug('[merc-memory] grouping visitors for', visitorGroup);
+			const highestProgress = Math.max(...visitorGroup.map((v) => v.TaskChainProgress));
+			const highestVisitor = visitorGroup.find((v) => v.TaskChainProgress === highestProgress);
 			return highestVisitor;
 		});
 	}
