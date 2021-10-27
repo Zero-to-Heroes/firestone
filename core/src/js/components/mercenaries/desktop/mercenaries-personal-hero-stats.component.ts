@@ -249,6 +249,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
 			),
 		).pipe(
+			filter(([stats, [referenceData, sortCriteria, heroSearchString]]) => !!stats?.length && !!referenceData),
 			map(([stats, [referenceData, sortCriteria, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, sortCriteria, referenceData),
 			),
