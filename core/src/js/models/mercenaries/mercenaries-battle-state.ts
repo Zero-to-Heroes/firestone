@@ -49,7 +49,7 @@ export class MercenariesBattleTeam {
 		const newMercenaries: readonly BattleMercenary[] = isPresent
 			? (this.mercenaries ?? []).map((merc) => (merc.entityId === entityId ? merc.update(base) : merc))
 			: updateFirstElementWithoutProp<BattleMercenary>(
-					this.mercenaries,
+					this.mercenaries ?? [],
 					(merc: BattleMercenary) => merc.entityId,
 					base,
 			  );

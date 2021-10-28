@@ -146,6 +146,9 @@ export const updateFirstElementWithoutProp = <T>(
 	propSelector: (entity: T) => any,
 	base: T | Partial<T> | NonFunctionProperties<T> | Partial<NonFunctionProperties<T>>,
 ): readonly T[] => {
+	if (!array?.length) {
+		return [];
+	}
 	const withoutPropertyElements = array.filter((e) => !propSelector(e));
 	if (!withoutPropertyElements.length) {
 		console.warn('could not find any element without property', propSelector, array);

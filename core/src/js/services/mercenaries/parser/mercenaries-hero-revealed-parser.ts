@@ -50,7 +50,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
 		const refMerc = normalizedCardId
-			? mainWindowState.mercenaries.referenceData.mercenaries.find(
+			? mainWindowState?.mercenaries?.referenceData?.mercenaries?.find(
 					(merc) =>
 						normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) ===
 						normalizedCardId,
