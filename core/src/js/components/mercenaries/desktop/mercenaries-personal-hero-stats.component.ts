@@ -113,7 +113,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 								// The last 2 tasks are present in the ref data, but not activated in-game
 								tasks: chain.tasks.slice(0, 18),
 							}))[0];
-						console.debug('taskChain', refMerc.name, taskChain);
+						// console.debug('taskChain', refMerc.name, taskChain);
 						// Can have only one task per mercenary at the same time
 						const visitorInfo = collectionInfo.Visitors.find(
 							(v) => v.VisitorId === taskChain.mercenaryVisitorId,
@@ -125,6 +125,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							: visitorInfo.Status === TaskStatus.CLAIMED
 							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 							: currentTaskStep;
+						// console.debug('currentTaskStep', currentTaskStep, currentStep);
 
 						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 						const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -231,6 +232,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 								sumOnArray(equipments, (e) => e.coinsToCraft),
 							totalCoinsLeft: memMerc.CurrencyAmount,
 							totalTasks: taskChain.tasks.length,
+							// Because human-readable starts at 1
 							currentTask: currentStep != null ? currentStep + 1 : null,
 							currentTaskDescription: currentTaskDescription,
 							bountiesWithRewards: bountiesForMerc,

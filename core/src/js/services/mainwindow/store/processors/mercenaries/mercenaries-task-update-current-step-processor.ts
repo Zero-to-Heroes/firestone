@@ -36,7 +36,6 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 			...currentState.mercenaries.collectionInfo,
 			Visitors: newVisitors,
 		};
-		// this.cache.saveLocalMercenariesCollectionInfo(newCollection);
 		return [
 			currentState.update({
 				mercenaries: currentState.mercenaries.update({
@@ -53,18 +52,68 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		operation: 'add' | 'remove',
 	): MemoryVisitor {
 		const taskChainLength = Math.min(18, taskChain.tasks.length);
-		const newTaskProgress =
-			operation === 'add'
-				? Math.min(taskChainLength - 1, (currentVisitor?.TaskChainProgress ?? -1) + 1)
-				: Math.max(0, (currentVisitor.TaskChainProgress ?? 1) - 1);
-		const taskId = taskChain.tasks[newTaskProgress].id;
-		const newVisitor: MemoryVisitor = {
-			TaskId: taskId,
-			VisitorId: taskChain.mercenaryVisitorId,
-			Status: newTaskProgress === taskChainLength ? TaskStatus.CLAIMED : TaskStatus.ACTIVE,
-			TaskProgress: 0,
-			TaskChainProgress: newTaskProgress,
-		};
-		return newVisitor;
+		// The ??? case
+		if (!currentVisitor) {
+			const firstTask = taskChain.tasks[0];
+			return {
+				TaskId: firstTask.id,
+				VisitorId: taskChain.mercenaryVisitorId,
+				Status: TaskStatus.ACTIVE,
+				TaskProgress: 0,
+				TaskChainProgress: 0,
+			};
+		}
+
+		// When add:
+		// - If the current task is active, flag it as CLAIMED
+		// - If the current task is claimed, increment 1
+		// When remove:
+		// - If the current task is claimed, decrement 1
+		// - If the current task is active, decrement 2? That's in fact a weird use case
+		// We never want to set a status to ACTIVE manually, because it will create issues with the
+		// cleaning operation that flips tasks to CLAIMED if they are not present in memory
+		if (operation === 'add') {
+			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
+				const newTaskProgress = Math.min(taskChainLength - 1, currentVisitor.TaskChainProgress + 1);
+				const newTask = taskChain.tasks[newTaskProgress];
+				return {
+					TaskId: newTask.id,
+					VisitorId: taskChain.mercenaryVisitorId,
+					Status: TaskStatus.CLAIMED,
+					TaskProgress: 0,
+					TaskChainProgress: newTaskProgress,
+				};
+			} else {
+				return {
+					TaskId: currentVisitor.TaskId,
+					VisitorId: taskChain.mercenaryVisitorId,
+					Status: TaskStatus.CLAIMED,
+					TaskProgress: 0,
+					TaskChainProgress: currentVisitor.TaskChainProgress,
+				};
+			}
+		} else if (operation === 'remove') {
+			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
+				const newTaskProgress = Math.max(0, currentVisitor.TaskChainProgress - 1);
+				const newTask = taskChain.tasks[newTaskProgress];
+				return {
+					TaskId: newTask.id,
+					VisitorId: taskChain.mercenaryVisitorId,
+					Status: currentVisitor.TaskChainProgress === 0 ? TaskStatus.ACTIVE : TaskStatus.CLAIMED,
+					TaskProgress: 0,
+					TaskChainProgress: newTaskProgress,
+				};
+			} else {
+				const newTaskProgress = Math.max(0, currentVisitor.TaskChainProgress - 2);
+				const newTask = taskChain.tasks[newTaskProgress];
+				return {
+					TaskId: newTask.id,
+					VisitorId: taskChain.mercenaryVisitorId,
+					Status: currentVisitor.TaskChainProgress === 0 ? TaskStatus.ACTIVE : TaskStatus.CLAIMED,
+					TaskProgress: 0,
+					TaskChainProgress: newTaskProgress,
+				};
+			}
+		}
 	}
 }

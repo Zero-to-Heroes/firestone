@@ -116,7 +116,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 })
 export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
-		console.debug('setting value', value);
+		// console.debug('setting value', value);
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;
 		this.owned = value.owned;
@@ -140,8 +140,13 @@ export class MercenariesPersonalHeroStatComponent {
 		this.currentTaskTooltip =
 			'The task can only be updated once a visitor for this mercenary visits your village while the app is running.';
 		if (value.currentTask) {
-			this.currentTaskLabel = `${value.currentTask}/${value.totalTasks}`;
-			this.currentTaskTooltip = value.currentTaskDescription;
+			if (value.currentTask > value.totalTasks) {
+				this.currentTaskLabel = `Maxxed!`;
+				this.currentTaskTooltip = null;
+			} else {
+				this.currentTaskLabel = `${value.currentTask}/${value.totalTasks}`;
+				this.currentTaskTooltip = value.currentTaskDescription;
+			}
 		}
 
 		this.abilities = value.abilities.map((info) => {
