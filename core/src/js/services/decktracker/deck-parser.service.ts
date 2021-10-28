@@ -243,7 +243,7 @@ export class DeckParserService {
 				: [7],
 		};
 		console.log('[deck-parser] built deck definition', deckDefinition);
-		const deckString = encode(deckDefinition);
+		const deckString = deckDefinition.cards.some((pair) => pair[0] == null) ? null : encode(deckDefinition);
 		console.log('[deck-parser] built deckstring', deckString);
 		const currentDeck: DeckInfo = {
 			deck: deckDefinition,
