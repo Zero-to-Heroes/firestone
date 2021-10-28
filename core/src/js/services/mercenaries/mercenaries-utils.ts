@@ -99,6 +99,9 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.HammerOfJusticeLettuceEnchantment,
 	CardIds.HeroicLeapLettuceEnchantment,
 	CardIds.RingOfHasteLettuceEnchantment,
+	CardIds.ProtectorHasteLettuceEnchantment,
+	CardIds.FighterHasteLettuceEnchantment,
+	CardIds.CasterHasteLettuceEnchantment,
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
