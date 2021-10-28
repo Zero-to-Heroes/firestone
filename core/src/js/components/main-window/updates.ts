@@ -69,6 +69,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Team widget can now be displayed on the team building and bounty selection screens (useful to see the current tasks).`,
+							},
+							{
+								type: 'feature',
 								text: `Add settings to resize the team widgets.`,
 							},
 							{
