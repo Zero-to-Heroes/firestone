@@ -1,33 +1,26 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
-import { TagRole } from '@firestone-hs/reference-data';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from '../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
 import { MercenariesRoleFilterType } from '../../../models/mercenaries/mercenaries-role-filter.type';
 import { MercenariesStarterFilterType } from '../../../models/mercenaries/mercenaries-starter-filter.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import {
 	MercenariesGlobalStats,
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import {
-	filterMercenariesHeroStats,
-	filterMercenariesRuns,
-	isValidMercSearchItem,
-} from '../../../services/ui-store/mercenaries-ui-helper';
+import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
-import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
+import { MercenaryInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-hero-stats',
@@ -45,10 +38,8 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly MercenaryInfo[]>;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -57,29 +48,39 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 		private readonly allCards: CardsFacadeService,
 	) {
 		super();
+		// TODO: split into 2 obs: one where the actual data updates, and one that just
+		// shows/hide data (like role of search string)
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,
 				([main, nav]) => main.mercenaries.referenceData,
 				([main, nav]) => main.stats.gameStats,
 				([main, nav]) => nav.navigationMercenaries.heroSearchString,
-				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
-				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
+				filter(
+					([
+						globalStats,
+						referenceData,
+						gameStats,
+						heroSearchString,
+						roleFilter,
+						mmrFilter,
+						starterFilter,
+						levelFilter,
+					]) => !!globalStats?.pvp?.heroStats?.length,
+				),
 				map(
 					([
 						globalStats,
 						referenceData,
 						gameStats,
 						heroSearchString,
-						modeFilter,
 						roleFilter,
-						difficultyFilter,
 						mmrFilter,
 						starterFilter,
 						levelFilter,
@@ -87,13 +88,9 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 						[
 							globalStats,
 							referenceData,
-							modeFilter === 'pve'
-								? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
-								: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
+							gameStats.stats.filter((stat) => stat.scenarioId === ScenarioId.LETTUCE_PVP),
 							heroSearchString,
-							modeFilter,
 							roleFilter,
-							difficultyFilter,
 							mmrFilter,
 							starterFilter,
 							levelFilter,
@@ -102,9 +99,7 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 							MercenariesReferenceData,
 							readonly GameStat[],
 							string,
-							MercenariesModeFilterType,
 							MercenariesRoleFilterType,
-							MercenariesPveDifficultyFilterType,
 							MercenariesPvpMmrFilterType,
 							MercenariesStarterFilterType,
 							MercenariesHeroLevelFilterType,
@@ -117,20 +112,17 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 						referenceData,
 						gameStats,
 						heroSearchString,
-						modeFilter,
 						roleFilter,
-						difficultyFilter,
 						mmrFilter,
 						starterFilter,
 						levelFilter,
 					]) => {
-						const infos = modeFilter === 'pve' ? globalStats?.pve : globalStats?.pvp;
 						return [
 							filterMercenariesHeroStats(
-								infos?.heroStats,
-								modeFilter,
+								globalStats.pvp.heroStats,
+								'pvp',
 								roleFilter,
-								difficultyFilter,
+								null,
 								mmrFilter,
 								starterFilter,
 								levelFilter,
@@ -140,9 +132,9 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 							),
 							filterMercenariesRuns(
 								gameStats,
-								modeFilter,
+								'pvp',
 								roleFilter,
-								difficultyFilter,
+								null,
 								mmrFilter,
 								starterFilter,
 								levelFilter,
@@ -160,105 +152,42 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 					},
 				),
 				map(([heroStats, gameStats, roleFilter, heroSearchString, referenceData]) => {
-					if (!!heroStats.length) {
-						console.debug('heroStats', heroStats);
-						const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(
-							heroStats,
-						);
-						const gameStatsByHero = groupByFunction((stat: GameStat) =>
-							normalizeMercenariesCardId(stat.playerCardId),
-						)(gameStats);
-						const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
-						return Object.keys(heroStatsByHero)
-							.map((heroCardId) => {
-								const heroStats = heroStatsByHero[heroCardId];
-								// The hero card id is already normalized in the global stats
-								const gameStats = gameStatsByHero[heroCardId];
-								const refHeroStat = heroStats[0];
-								const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
-								return {
-									id: heroCardId,
-									name: this.allCards.getCard(heroCardId)?.name ?? heroCardId,
-									role: refHeroStat.heroRole,
-									globalTotalMatches: globalTotalMatches,
-									globalWinrate:
-										globalTotalMatches === 0
-											? null
-											: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) /
-											  globalTotalMatches,
-									globalPopularity: (100 * globalTotalMatches) / totalMatches,
-									playerTotalMatches: gameStats?.length ?? 0,
-									playerWinrate: !gameStats?.length
+					console.debug('heroStats', heroStats);
+					const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(heroStats);
+					const gameStatsByHero = groupByFunction((stat: GameStat) =>
+						normalizeMercenariesCardId(stat.playerCardId),
+					)(gameStats);
+					const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
+					return Object.keys(heroStatsByHero)
+						.map((heroCardId) => {
+							const heroStats = heroStatsByHero[heroCardId];
+							// The hero card id is already normalized in the global stats
+							const gameStats = gameStatsByHero[heroCardId];
+							const refHeroStat = heroStats[0];
+							const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
+							return {
+								id: heroCardId,
+								name: this.allCards.getCard(heroCardId)?.name ?? heroCardId,
+								role: refHeroStat.heroRole,
+								globalTotalMatches: globalTotalMatches,
+								globalWinrate:
+									globalTotalMatches === 0
 										? null
-										: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
-										  gameStats.length,
-								} as MercenaryInfo;
-							})
-							.sort((a, b) => b.globalWinrate - a.globalWinrate);
-					} else {
-						console.debug('search', heroSearchString, referenceData.mercenaries);
-						return referenceData.mercenaries
-							.map((mercenary) => {
-								const mercenaryCard = this.allCards.getCardFromDbfId(mercenary.cardDbfId);
-								if (
-									!mercenaryCard.mercenaryRole ||
-									mercenaryCard.mercenaryRole === TagRole[TagRole.NEUTRAL] ||
-									mercenary.equipments.length !== 3 ||
-									mercenary.abilities.length !== 3
-								) {
-									return null;
-								}
-
-								if (roleFilter !== 'all' && roleFilter !== getHeroRole(mercenaryCard.mercenaryRole)) {
-									return null;
-								}
-
-								return {
-									id: mercenaryCard.id,
-									name: mercenaryCard?.name,
-									role: getHeroRole(mercenaryCard.mercenaryRole),
-									globalTotalMatches: 0,
-									globalWinrate: null,
-									globalPopularity: null,
-									playerTotalMatches: 0,
-									playerWinrate: null,
-									abilities: mercenary.abilities.map(
-										(ability) =>
-											({
-												cardId: this.allCards.getCardFromDbfId(ability.cardDbfId).id,
-											} as MercenaryAbility),
-									),
-									equipment: mercenary.equipments.map(
-										(equipment) =>
-											({
-												cardId: this.allCards.getCardFromDbfId(equipment.cardDbfId).id,
-											} as MercenaryEquipment),
-									),
-								} as MercenaryInfo;
-							})
-							.filter((info) => !!info)
-							.filter((info) => {
-								const result =
-									isValidMercSearchItem(allCards.getCard(info.id), heroSearchString) ||
-									info.abilities.some((ability) =>
-										isValidMercSearchItem(allCards.getCard(ability.cardId), heroSearchString),
-									) ||
-									info.equipment.some((equipment) =>
-										isValidMercSearchItem(allCards.getCard(equipment.cardId), heroSearchString),
-									);
-								return result;
-							})
-							.sort((a, b) => (a.name < b.name ? -1 : 1));
-					}
+										: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
+								globalPopularity: (100 * globalTotalMatches) / totalMatches,
+								playerTotalMatches: gameStats?.length ?? 0,
+								playerWinrate: !gameStats?.length
+									? null
+									: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
+									  gameStats.length,
+							} as MercenaryInfo;
+						})
+						.sort((a, b) => b.globalWinrate - a.globalWinrate);
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-	}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	trackByFn(index: number, item: MercenaryInfo) {
