@@ -26,12 +26,16 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	template: `
 		<perfect-scrollbar class="team-list" [ngClass]="{ 'active': isScroll }">
 			<div class="list-background"></div>
-			<mercenaries-team-mercenary
-				*ngFor="let mercenary of mercenaries"
-				[mercenary]="mercenary"
-				[tooltipPosition]="tooltipPosition"
-			></mercenaries-team-mercenary>
-			<div class="empty-team">Head into a bounty or PvP battle to see your team</div>
+			<ng-container *ngIf="!!mercenaries?.length; else emptyState">
+				<mercenaries-team-mercenary
+					*ngFor="let mercenary of mercenaries"
+					[mercenary]="mercenary"
+					[tooltipPosition]="tooltipPosition"
+				></mercenaries-team-mercenary>
+			</ng-container>
+			<ng-template #emptyState>
+				<div class="empty-team">Head into a bounty or PvP battle to see your team</div>
+			</ng-template>
 		</perfect-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
