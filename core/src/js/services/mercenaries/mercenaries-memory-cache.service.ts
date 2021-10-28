@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -60,7 +60,7 @@ export class MercenariesMemoryCacheService {
 			console.debug('[merc-memory] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
 			await sleep(2000);
 			console.debug('[merc-memory] done waiting');
-			const newMercenariesInfo = await this.getMercenariesCollectionInfo();
+			const newMercenariesInfo = await this.getMercenariesMergedCollectionInfo();
 			this.memoryCollectionInfo$.next(newMercenariesInfo);
 		});
 	}
@@ -77,7 +77,7 @@ export class MercenariesMemoryCacheService {
 		return true;
 	}
 
-	public async getMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
+	public async getMercenariesMergedCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
 		const newMercenariesInfo: MemoryMercenariesCollectionInfo =
 			(await this.memoryService.getMercenariesCollectionInfo()) ??
 			(await this.loadLocalMercenariesCollectionInfo());
@@ -91,8 +91,8 @@ export class MercenariesMemoryCacheService {
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
 		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo);
 		const newVisitorsInformation: readonly MemoryVisitor[] = this.mergeVisitors(
-			newMercenariesInfo.Visitors,
-			savedVisitorsInfo,
+			newMercenariesInfo.Visitors ?? [],
+			savedVisitorsInfo ?? [],
 		);
 		console.debug('[merc-memory] newVisitorsInformation', newVisitorsInformation);
 		const newCollection = {
@@ -101,17 +101,6 @@ export class MercenariesMemoryCacheService {
 		};
 		console.debug('[merc-memory] newCollection', newCollection);
 		return newCollection;
-	}
-
-	public cleanVisitors(visitors: readonly MemoryVisitor[]): readonly MemoryVisitor[] {
-		// Looks like some dupes can arise, clean things up
-		const grouped = groupByFunction((visitor: MemoryVisitor) => visitor.VisitorId)(visitors);
-		return Object.values(grouped).map((visitorGroup) => {
-			console.debug('[merc-memory] grouping visitors for', visitorGroup);
-			const highestProgress = Math.max(...visitorGroup.map((v) => v.TaskChainProgress));
-			const highestVisitor = visitorGroup.find((v) => v.TaskChainProgress === highestProgress);
-			return highestVisitor;
-		});
 	}
 
 	// Only save the contents of the memory, the prefs (with the override) are saved separately
@@ -125,7 +114,7 @@ export class MercenariesMemoryCacheService {
 
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
 		const result = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MERCENARIES_COLLECTION));
-		console.debug('retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
+		console.debug('[merc-memory] retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
 		return result;
 	}
 
@@ -133,28 +122,32 @@ export class MercenariesMemoryCacheService {
 		fromMemory: readonly MemoryVisitor[],
 		savedVisitorsInfo: readonly MemoryVisitor[],
 	): readonly MemoryVisitor[] {
-		fromMemory = fromMemory ?? [];
-		savedVisitorsInfo = savedVisitorsInfo ?? [];
-		// Use the memory as the base, as it's the latest info we have
-		const cleanedVisitors = this.cleanVisitors([...fromMemory, ...savedVisitorsInfo]);
+		const updatedSavedVisitorsInfo = savedVisitorsInfo.map((visitor) => {
+			const memoryVisitor = fromMemory.find(
+				(v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId,
+			);
+			return !memoryVisitor
+				? // If there are tasks in the saved preferences that don't appear in the memory, it means
+				  // that they have been either completed or abandoned
+				  { ...visitor, Status: TaskStatus.CLAIMED }
+				: // And if a task in memory is also in the prefs, make sure they have the same status
+				  { ...visitor, Status: memoryVisitor.Status };
+		});
 
-		// const result = [...cleanedVisitors];
-
-		// for (const visitorInfo of savedVisitorsInfo) {
-		// 	if (!result.map((v) => v.TaskId).includes(visitorInfo.TaskId)) {
-		// 		// If it's not in memory anymore, this means that the task has been either abandoned or claimed
-		// 		if (visitorInfo.Status === TaskStatus.COMPLETE || visitorInfo.Status === TaskStatus.CLAIMED) {
-		// 			result.push({
-		// 				...visitorInfo,
-		// 				Status: TaskStatus.CLAIMED,
-		// 			});
-		// 		}
-		// 		// If it was not in a "COMPLETE" state last time we checked the board, and is not
-		// 		// there anymore, this means that it got abandoned, and we remove it
-		// 	}
-		// }
+		const cleanedVisitors = this.cleanVisitors([...fromMemory, ...updatedSavedVisitorsInfo]);
 		this.prefs.updateMercenariesVisitorsProgress(cleanedVisitors);
 		return cleanedVisitors;
-		// return this.cleanVisitors(result);
+	}
+
+	private cleanVisitors(visitors: readonly MemoryVisitor[]): readonly MemoryVisitor[] {
+		console.debug('[merc-memory] cleaning visitors', visitors);
+		// Looks like some dupes can arise, clean things up
+		const grouped = groupByFunction((visitor: MemoryVisitor) => visitor.VisitorId)(visitors);
+		return Object.values(grouped).map((visitorGroup) => {
+			// console.debug('[merc-memory] grouping visitors for', visitorGroup[0].VisitorId, visitorGroup);
+			const highestProgress = Math.max(...visitorGroup.map((v) => v.TaskChainProgress));
+			const highestVisitor = visitorGroup.find((v) => v.TaskChainProgress === highestProgress);
+			return highestVisitor;
+		});
 	}
 }

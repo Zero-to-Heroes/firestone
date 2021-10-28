@@ -134,8 +134,10 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		if (!value) {
 			return;
 		}
-		// console.debug('set team in root', value);
 		this._tasks = value;
+		setTimeout(() => {
+			this.updateTaskListBottomPx();
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

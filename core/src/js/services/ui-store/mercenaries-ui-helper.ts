@@ -146,7 +146,8 @@ export const buildMercenariesTasksList = (
 			const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
 			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
 			const mercenaryCardId = mercenaryCard.id;
-			return {
+			const result = {
+				...visitor, // For debugging purpose
 				mercenaryCardId: mercenaryCardId,
 				title: task.title,
 				description: task.description,
@@ -156,6 +157,7 @@ export const buildMercenariesTasksList = (
 					mercenaryCard.mercenaryRole,
 				)}.png?v=5`,
 			} as Task;
+			return result;
 		})
 		.filter((task) => !!task);
 };

@@ -123,7 +123,7 @@ export class StoreBootstrapService {
 			Promise.all([
 				this.mercenariesService.loadGlobalStats(),
 				this.mercenariesService.loadReferenceData(),
-				this.mercenariesMemory.getMercenariesCollectionInfo(),
+				this.mercenariesMemory.getMercenariesMergedCollectionInfo(),
 			]),
 		]);
 		console.log('loaded info');
