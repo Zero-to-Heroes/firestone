@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.29',
+		version: '8.1.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -50,69 +50,27 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add the possibility to manually move forward / backward in the "Current task" report of the Progression tab, using Ctrl + click or Alt + click.`,
+								text: `Add meta PvP Hero stats.`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Mousing over the current speed in the team widget will now show you which abilities cause the speed buff / debuff.`,
-							},
-							{
-								type: 'feature',
-								text: `Team widget can now be displayed on the team building and bounty selection screens (useful to see the current tasks).`,
-							},
-							{
-								type: 'feature',
-								text: `Add settings to resize the team widgets.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a search bar in the progression tab. You can search for any hero/ability/equipment name or text.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the task list would get truncated when the team widget was too small.`,
-							},
-							{
-								type: 'ui',
-								text: `Make the mercs on the bench even dimmer, as they were too easily mistaken with the active heroes.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where Tony Two-Tusks would not grant additional stats to the transformed minion.`,
-							},
-							{
-								type: 'ui',
-								text: `Hide heroes tier if it is empty (like the tier S currently).`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `Replays against human opponents should now show their real name instead of UNKNOWN HUMAN OPPONENT.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'mercenaries',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `Mousing over the current speed in the team widget will now show you which abilities cause the speed buff / debuff.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
