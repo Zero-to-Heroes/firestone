@@ -68,7 +68,6 @@ import { Preferences } from '../../models/preferences';
 })
 export class DecktrackerComponent {
 	@Input() set state(value: DecktrackerState) {
-		console.debug('updated state in decktracker');
 		if (this._state === value) {
 			return;
 		}

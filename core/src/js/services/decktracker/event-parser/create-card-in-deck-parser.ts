@@ -71,7 +71,6 @@ export class CreateCardInDeckParser implements EventParser {
 }
 
 const buildBonusDamage = (card: DeckCard): number => {
-	console.debug('building bonus damage', card?.cardId, card);
 	if (card?.cardId === CardIds.Ignite) {
 		return 1 + (card.bonusDamage ?? 0);
 	}

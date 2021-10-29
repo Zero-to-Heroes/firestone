@@ -77,7 +77,7 @@ export class MercenariesOutOfCombatService {
 			let state = this.internalStore$.value;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
-				console.debug('[merc-ooc-store] updated state', state);
+				// console.debug('[merc-ooc-store] updated state', state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {

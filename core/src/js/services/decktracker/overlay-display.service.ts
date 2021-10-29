@@ -51,7 +51,7 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameEvent.OPPONENT:
 			case GameEvent.GAME_RUNNING:
 			case GameEvent.FIRST_PLAYER:
-				console.debug('[overlay-display] received key event from game-state', event.name);
+			// console.debug('[overlay-display] received key event from game-state', event.name);
 			// Fall-through
 			default:
 				this.handleDisplayPreferences(this.gameState);
