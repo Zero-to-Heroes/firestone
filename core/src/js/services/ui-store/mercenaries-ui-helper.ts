@@ -28,19 +28,17 @@ export const filterMercenariesHeroStats = (
 	referenceData: MercenariesReferenceData,
 	searchString: string = null,
 ): readonly MercenariesHeroStat[] => {
-	return (
-		(heroStats ?? [])
-			// .filter((stat) => stat.date === timeFilter)
-			.filter((stat) =>
-				modeFilter === 'pvp'
-					? stat.mmrPercentile === mmrFilter
-					: difficultyFilter === 'all' || stat.mmrPercentile === difficultyFilter,
-			)
-			.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
-			.filter((stat) => applyStarterFilter(stat, starterFilter))
-			.filter((stat) => applyHeroLevelFilter(stat, heroLevelFilter))
-			.filter((stat) => applySearchStringFilter(stat.heroCardId, searchString, allCards, referenceData))
-	);
+	return (heroStats ?? [])
+		.filter((stat) => stat.date === 'past-seven')
+		.filter((stat) =>
+			modeFilter === 'pvp'
+				? stat.mmrPercentile === mmrFilter
+				: difficultyFilter === 'all' || stat.mmrPercentile === difficultyFilter,
+		)
+		.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
+		.filter((stat) => applyStarterFilter(stat, starterFilter))
+		.filter((stat) => applyHeroLevelFilter(stat, 30))
+		.filter((stat) => applySearchStringFilter(stat.heroCardId, searchString, allCards, referenceData));
 };
 
 export const applySearchStringFilter = (
@@ -128,8 +126,6 @@ export const filterMercenariesRuns = (
 	);
 };
 
-//  TODO: starter / bench stats look incorrect (Vol'jin only benched 3 times?)
-// TODO: check games vs AI
 export const buildMercenariesTasksList = (
 	referenceData: MercenariesReferenceData,
 	visitors: readonly MemoryVisitor[],

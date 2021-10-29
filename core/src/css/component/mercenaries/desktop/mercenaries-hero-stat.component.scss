@@ -10,9 +10,9 @@
 	padding: 10px;
 	position: relative;
 
-	&:hover {
-		background: rgba(255, 255, 255, 0.12);
-	}
+	// &:hover {
+	// 	background: rgba(255, 255, 255, 0.12);
+	// }
 
 	.name-container {
 		font-size: 14px;
@@ -54,7 +54,7 @@
 		width: 160px;
 		position: relative;
 		top: 0;
-		left: 0;
+		left: 5px;
 		z-index: 9;
 		margin-top: 0;
 		margin-bottom: 0;
@@ -62,9 +62,9 @@
 		.icon {
 			position: absolute;
 			top: 11%;
-			left: 13%;
+			left: 11%;
 			width: 76%;
-			clip-path: ellipse(40% 44% at 50% 50%);
+			clip-path: ellipse(33% 44% at 50% 50%);
 		}
 
 		.frame {

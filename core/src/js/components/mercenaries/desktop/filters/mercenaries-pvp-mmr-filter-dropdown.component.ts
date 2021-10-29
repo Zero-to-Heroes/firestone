@@ -75,9 +75,9 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 				placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 				visible:
 					selectedCategoryId === 'mercenaries-my-teams' ||
+					selectedCategoryId === 'mercenaries-hero-stats' ||
 					(modeFilter === 'pvp' &&
-						(selectedCategoryId === 'mercenaries-hero-stats' ||
-							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
+						(selectedCategoryId === 'mercenaries-personal-hero-stats' ||
 							selectedCategoryId === 'mercenaries-hero-details' ||
 							selectedCategoryId === 'mercenaries-compositions-stats' ||
 							selectedCategoryId === 'mercenaries-composition-details')),

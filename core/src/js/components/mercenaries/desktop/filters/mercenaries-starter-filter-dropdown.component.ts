@@ -60,9 +60,8 @@ export class MercenariesStarterFilterDropdownComponent extends AbstractSubscript
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
-						!!globalStats?.pve?.heroStats?.length &&
-						(selectedCategoryId === 'mercenaries-hero-stats' ||
-							selectedCategoryId === 'mercenaries-hero-details'),
+						selectedCategoryId === 'mercenaries-hero-stats' ||
+						selectedCategoryId === 'mercenaries-hero-details',
 				})),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

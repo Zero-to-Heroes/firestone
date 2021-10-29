@@ -190,7 +190,7 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
-				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
+				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
 			)
 			.pipe(
 				map(

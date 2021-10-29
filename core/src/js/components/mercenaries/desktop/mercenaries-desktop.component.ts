@@ -39,8 +39,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</mercenaries-personal-hero-stats>
 							<mercenaries-my-teams *ngxCacheIf="selectedCategoryId === 'mercenaries-my-teams'">
 							</mercenaries-my-teams>
-							<!-- <mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
-							</mercenaries-hero-stats> -->
+							<mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
+							</mercenaries-hero-stats>
 							<mercenaries-hero-details *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-details'">
 							</mercenaries-hero-details>
 							<!-- <mercenaries-compositions-stats

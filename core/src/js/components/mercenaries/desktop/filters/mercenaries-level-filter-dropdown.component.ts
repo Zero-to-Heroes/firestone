@@ -58,7 +58,7 @@ export class MercenariesHeroLevelFilterDropdownComponent extends AbstractSubscri
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.globalStats,
-				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
+				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
@@ -67,11 +67,10 @@ export class MercenariesHeroLevelFilterDropdownComponent extends AbstractSubscri
 					filter: '' + filter,
 					placeholder:
 						this.options.find((option) => option.value === '' + filter)?.label ?? this.options[0].label,
-					visible:
-						!!globalStats?.pve?.heroStats?.length &&
-						(selectedCategoryId === 'mercenaries-hero-stats' ||
-							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-							selectedCategoryId === 'mercenaries-hero-details'),
+					visible: false,
+					// selectedCategoryId === 'mercenaries-hero-stats' ||
+					// selectedCategoryId === 'mercenaries-personal-hero-stats' ||
+					// selectedCategoryId === 'mercenaries-hero-details',
 				})),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

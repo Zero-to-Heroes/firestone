@@ -13,11 +13,10 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
+import { filterMercenariesHeroStats } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryInfo } from './mercenary-info';
@@ -59,7 +58,7 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
-				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
+				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
 			)
 			.pipe(
 				filter(
@@ -106,6 +105,7 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 						],
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				tap((info) => console.debug('filtering', info)),
 				map(
 					([
 						globalStats,
@@ -130,39 +130,39 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 								referenceData,
 								heroSearchString,
 							),
-							filterMercenariesRuns(
-								gameStats,
-								'pvp',
-								roleFilter,
-								null,
-								mmrFilter,
-								starterFilter,
-								levelFilter,
-							),
+							// filterMercenariesRuns(
+							// 	gameStats,
+							// 	'pvp',
+							// 	roleFilter,
+							// 	null,
+							// 	mmrFilter,
+							// 	starterFilter,
+							// 	levelFilter,
+							// ),
 							roleFilter,
 							heroSearchString,
 							referenceData,
 						] as [
 							readonly MercenariesHeroStat[],
-							readonly GameStat[],
+							// readonly GameStat[],
 							MercenariesRoleFilterType,
 							string,
 							MercenariesReferenceData,
 						];
 					},
 				),
-				map(([heroStats, gameStats, roleFilter, heroSearchString, referenceData]) => {
+				map(([heroStats, roleFilter, heroSearchString, referenceData]) => {
 					console.debug('heroStats', heroStats);
 					const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(heroStats);
-					const gameStatsByHero = groupByFunction((stat: GameStat) =>
-						normalizeMercenariesCardId(stat.playerCardId),
-					)(gameStats);
+					// const gameStatsByHero = groupByFunction((stat: GameStat) =>
+					// 	normalizeMercenariesCardId(stat.playerCardId),
+					// )(gameStats);
 					const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
 					return Object.keys(heroStatsByHero)
 						.map((heroCardId) => {
 							const heroStats = heroStatsByHero[heroCardId];
 							// The hero card id is already normalized in the global stats
-							const gameStats = gameStatsByHero[heroCardId];
+							// const gameStats = gameStatsByHero[heroCardId];
 							const refHeroStat = heroStats[0];
 							const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
 							return {
@@ -175,11 +175,11 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 										? null
 										: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
 								globalPopularity: (100 * globalTotalMatches) / totalMatches,
-								playerTotalMatches: gameStats?.length ?? 0,
-								playerWinrate: !gameStats?.length
-									? null
-									: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
-									  gameStats.length,
+								// playerTotalMatches: gameStats?.length ?? 0,
+								// playerWinrate: !gameStats?.length
+								// 	? null
+								// 	: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
+								// 	  gameStats.length,
 							} as MercenaryInfo;
 						})
 						.sort((a, b) => b.globalWinrate - a.globalWinrate);

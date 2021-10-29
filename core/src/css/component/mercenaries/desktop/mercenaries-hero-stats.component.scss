@@ -3,7 +3,7 @@
 	min-height: 1px;
 }
 
-.mercenaries-pve-stats {
+.mercenaries-stats {
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
@@ -13,7 +13,7 @@
 
 	mercenaries-hero-stat {
 		width: 170px;
-		height: 270px;
+		height: 225px;
 		margin-right: 15px;
 		margin-bottom: 15px;
 	}

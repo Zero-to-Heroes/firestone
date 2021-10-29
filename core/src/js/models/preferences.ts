@@ -324,7 +324,7 @@ export class Preferences {
 	readonly mercenariesActivePveDifficultyFilter: MercenariesPveDifficultyFilterType = 'all';
 	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
-	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
+	readonly mercenariesActiveHeroLevelFilter2: MercenariesHeroLevelFilterType = 30;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;
 	// For now only for PvE

@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenariesHeroSelectedEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-selected-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
 import { MercenaryInfo } from './mercenary-info';
@@ -36,7 +35,7 @@ import { MercenaryInfo } from './mercenary-info';
 						<div class="value player">{{ buildPercents(globalWinrate) }}</div>
 					</div>
 				</div>
-				<div class="item winrate">
+				<!-- <div class="item winrate">
 					<div class="label">Your winrate</div>
 					<div class="values">
 						<div class="value player">
@@ -51,7 +50,7 @@ import { MercenaryInfo } from './mercenary-info';
 							<div class="value player">{{ buildValue(playerGamesPlayed, 0) }}</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	`,
@@ -59,6 +58,7 @@ import { MercenaryInfo } from './mercenary-info';
 })
 export class MercenariesHeroStatComponent {
 	@Input() set stat(value: MercenaryInfo) {
+		console.debug('set value', value.name, value);
 		this.cardId = value.id;
 		this.role = capitalizeFirstLetter(value.role);
 		this.name = value.name;
@@ -70,6 +70,9 @@ export class MercenariesHeroStatComponent {
 		this.globalWinrate = value.globalWinrate;
 		this.playerWinrate = value.playerWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
 	}
 
 	cardId: string;
@@ -82,9 +85,10 @@ export class MercenariesHeroStatComponent {
 	playerWinrate: number;
 	playerGamesPlayed: number;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
 
 	select() {
+		return;
 		this.store.send(new MercenariesHeroSelectedEvent(this.cardId));
 	}
 

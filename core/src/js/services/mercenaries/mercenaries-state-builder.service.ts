@@ -9,7 +9,7 @@ import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
 const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=6';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.temp.gz.json?v=7';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.temp.gz.json?v=8';
 
 @Injectable()
 export class MercenariesStateBuilderService {
@@ -43,7 +43,7 @@ export class MercenariesStateBuilderService {
 		const categoryIds: readonly MercenariesCategoryId[] = [
 			'mercenaries-personal-hero-stats',
 			'mercenaries-my-teams',
-			// 'mercenaries-hero-stats',
+			'mercenaries-hero-stats',
 			// 'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({

@@ -357,7 +357,7 @@ export class PreferencesService {
 
 	public async updateMercenariesHeroLevelFilter(value: MercenariesHeroLevelFilterType) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, mercenariesActiveHeroLevelFilter: value };
+		const newPrefs: Preferences = { ...prefs, mercenariesActiveHeroLevelFilter2: value };
 		await this.savePreferences(newPrefs);
 	}
 
