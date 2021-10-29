@@ -70,7 +70,7 @@ export class EndGameUploaderService {
 			deckstring,
 			deckName,
 			buildNumber,
-			scenarioId,
+			// scenarioId,
 			bgsOptions,
 		);
 		await this.replayUploadService.uploadGame(game);
@@ -82,7 +82,7 @@ export class EndGameUploaderService {
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
-		scenarioId: number,
+		// scenarioId: number,
 		bgsOptions?: {
 			hasPrizes: boolean;
 		},
@@ -310,7 +310,8 @@ export class EndGameUploaderService {
 
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
-		game.scenarioId = scenarioId;
+		// So that we can have overwrites, eg for LETTUCE_PVP_VS_AI
+		game.scenarioId = gameResult.ScenarioID; // scenarioId;
 		game.xpForGame = xpForGame;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			console.log('[manastorm-bridge]', currentReviewId, 'adding deckstring', deckstring, game.gameMode);

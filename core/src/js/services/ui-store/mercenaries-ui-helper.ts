@@ -1,4 +1,4 @@
-import { ReferenceCard, TaskStatus } from '@firestone-hs/reference-data';
+import { ReferenceCard, ScenarioId, TaskStatus } from '@firestone-hs/reference-data';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
@@ -14,7 +14,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../mercenaries/mercenaries-state-builder.service';
-import { getHeroRole } from '../mercenaries/mercenaries-utils';
+import { getHeroRole, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],
@@ -50,8 +50,11 @@ export const applySearchStringFilter = (
 	referenceData: MercenariesReferenceData,
 ): boolean => {
 	const referenceHero = referenceData.mercenaries.find(
-		(merc) => allCards.getCardFromDbfId(merc.cardDbfId).id === heroCardId,
+		(merc) =>
+			normalizeMercenariesCardId(allCards.getCardFromDbfId(merc.cardDbfId).id) ===
+			normalizeMercenariesCardId(heroCardId),
 	);
+	// console.debug('referenceHero', referenceHero, heroCardId, referenceData);
 	const result =
 		isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.id), searchString) ||
 		referenceHero.abilities.some((ability) =>
@@ -120,9 +123,13 @@ export const filterMercenariesRuns = (
 	starterFilter: MercenariesStarterFilterType,
 	heroLevelFilter: MercenariesHeroLevelFilterType,
 ): readonly GameStat[] => {
-	return games;
+	return games.filter((stat) =>
+		modeFilter === 'pve' ? isMercenariesPvE(stat.gameMode) : stat.scenarioId === ScenarioId.LETTUCE_PVP,
+	);
 };
 
+//  TODO: starter / bench stats look incorrect (Vol'jin only benched 3 times?)
+// TODO: check games vs AI
 export const buildMercenariesTasksList = (
 	referenceData: MercenariesReferenceData,
 	visitors: readonly MemoryVisitor[],

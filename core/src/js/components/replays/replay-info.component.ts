@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { ReferenceCard, ScenarioId } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
@@ -188,6 +188,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		if (!this.replayInfo) {
 			return;
 		}
+		console.debug('updating info', this.replayInfo);
 
 		this.gameMode = this.replayInfo.gameMode;
 		this.isMercenariesGame = isMercenaries(this.gameMode);
@@ -210,7 +211,11 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 		const isBg = this.replayInfo.gameMode === 'battlegrounds';
 		this.hasMatchStats = isBg;
-		this.opponentName = isBg ? null : this.sanitizeName(this.replayInfo.opponentName);
+		this.opponentName = isBg
+			? null
+			: this.isMercenariesGame && this.replayInfo.scenarioId === ScenarioId.LETTUCE_PVP_VS_AI
+			? 'The Innkeeper (AI Bot)'
+			: this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = isBg
 			? this.replayInfo.bgsPerfectGame || parseInt(this.replayInfo.additionalResult) <= 4
 				? 'won'
