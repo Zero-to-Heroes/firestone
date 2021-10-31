@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -122,19 +122,22 @@ export class MercenariesMemoryCacheService {
 		fromMemory: readonly MemoryVisitor[],
 		savedVisitorsInfo: readonly MemoryVisitor[],
 	): readonly MemoryVisitor[] {
-		const updatedSavedVisitorsInfo = savedVisitorsInfo.map((visitor) => {
-			const memoryVisitor = fromMemory.find(
-				(v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId,
-			);
-			return !memoryVisitor
-				? // If there are tasks in the saved preferences that don't appear in the memory, it means
-				  // that they have been either completed or abandoned
-				  visitor.TaskChainProgress === 0
-					? visitor
-					: { ...visitor, Status: TaskStatus.CLAIMED }
-				: // And if a task in memory is also in the prefs, make sure they have the same status
-				  { ...visitor, Status: memoryVisitor.Status };
-		});
+		const updatedSavedVisitorsInfo = savedVisitorsInfo
+			.map((visitor) => {
+				const memoryVisitor = fromMemory.find(
+					(v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId,
+				);
+				return !memoryVisitor
+					? // If there are tasks in the saved preferences that don't appear in the memory, it means
+					  // that they have been either completed or abandoned
+					  visitor.TaskChainProgress === 0
+						? visitor
+						: // Default to it being abandoned, and the user can manually flag the progress if they want to
+						  null
+					: // And if a task in memory is also in the prefs, make sure they have the same status
+					  { ...visitor, Status: memoryVisitor.Status };
+			})
+			.filter((visitor) => visitor);
 
 		const cleanedVisitors = this.cleanVisitors([...fromMemory, ...updatedSavedVisitorsInfo]);
 		this.prefs.updateMercenariesVisitorsProgress(cleanedVisitors);
