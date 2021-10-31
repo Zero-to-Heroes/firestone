@@ -1,29 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
-import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../overwolf.service';
-import { PreferencesService } from '../preferences.service';
 
 const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=6';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.temp.gz.json?v=8';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.temp.gz.json?v=13';
 
 @Injectable()
 export class MercenariesStateBuilderService {
-	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private readonly api: ApiRunner,
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-	) {
-		setTimeout(() => {
-			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		});
-	}
+	constructor(private readonly api: ApiRunner) {}
 
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(MERCENARIES_DATA);
@@ -32,6 +19,16 @@ export class MercenariesStateBuilderService {
 
 	public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
+		console.debug(
+			'merc global',
+			globalStats,
+			globalStats.pvp.compositions
+				// .filter((stat) => stat.mmrPercentile === 100)
+				.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
+				.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
+				.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
+				.sort((a, b) => b.totalMatches - a.totalMatches),
+		);
 		return globalStats;
 	}
 
@@ -44,7 +41,7 @@ export class MercenariesStateBuilderService {
 			'mercenaries-personal-hero-stats',
 			'mercenaries-my-teams',
 			'mercenaries-hero-stats',
-			// 'mercenaries-compositions-stats',
+			'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
 			globalStats: globalStats,

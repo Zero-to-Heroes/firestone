@@ -43,11 +43,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</mercenaries-hero-stats>
 							<mercenaries-hero-details *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-details'">
 							</mercenaries-hero-details>
-							<!-- <mercenaries-compositions-stats
+							<mercenaries-compositions-stats
 								*ngxCacheIf="selectedCategoryId === 'mercenaries-compositions-stats'"
 							>
 							</mercenaries-compositions-stats>
-							<mercenaries-composition-details
+							<!-- <mercenaries-composition-details
 								*ngxCacheIf="selectedCategoryId === 'mercenaries-composition-details'"
 							>
 							</mercenaries-composition-details> -->
@@ -126,7 +126,7 @@ export class MercenariesDesktopComponent extends AbstractSubscriptionComponent i
 			case 'mercenaries-hero-stats':
 				return 'PvP Heroes';
 			case 'mercenaries-compositions-stats':
-				return 'Compositions';
+				return 'PvP Teams';
 			default:
 				console.error('Missing category id <-> name mapping', categoryId);
 				return null;

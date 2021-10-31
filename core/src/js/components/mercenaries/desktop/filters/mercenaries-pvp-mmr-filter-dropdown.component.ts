@@ -76,10 +76,10 @@ export class MercenariesPvpMmrFilterDropdownComponent extends AbstractSubscripti
 				visible:
 					selectedCategoryId === 'mercenaries-my-teams' ||
 					selectedCategoryId === 'mercenaries-hero-stats' ||
+					selectedCategoryId === 'mercenaries-compositions-stats' ||
 					(modeFilter === 'pvp' &&
 						(selectedCategoryId === 'mercenaries-personal-hero-stats' ||
 							selectedCategoryId === 'mercenaries-hero-details' ||
-							selectedCategoryId === 'mercenaries-compositions-stats' ||
 							selectedCategoryId === 'mercenaries-composition-details')),
 			})),
 			// FIXME

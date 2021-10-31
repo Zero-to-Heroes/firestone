@@ -58,7 +58,7 @@ import { MercenaryInfo } from './mercenary-info';
 })
 export class MercenariesHeroStatComponent {
 	@Input() set stat(value: MercenaryInfo) {
-		console.debug('set value', value.name, value);
+		// console.debug('set value', value.name, value);
 		this.cardId = value.id;
 		this.role = capitalizeFirstLetter(value.role);
 		this.name = value.name;

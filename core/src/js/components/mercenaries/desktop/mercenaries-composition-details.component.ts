@@ -134,12 +134,10 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([globalStats, gameStats, compositionId, modeFilter, difficultyFilter, mmrFilter, levelFilter]) => {
-					const infos = modeFilter === 'pve' ? globalStats.pve : globalStats.pvp;
+					const infos = globalStats.pvp;
 					return [
 						filterMercenariesCompositions(
 							infos.compositions.filter((c) => c.stringifiedHeroes === compositionId),
-							modeFilter,
-							difficultyFilter,
 							mmrFilter,
 						),
 					] as [readonly MercenariesComposition[]];

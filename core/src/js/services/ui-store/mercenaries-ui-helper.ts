@@ -97,19 +97,11 @@ export const isValidMercSearchItem = (card: ReferenceCard, searchString: string)
 
 export const filterMercenariesCompositions = (
 	stats: readonly MercenariesComposition[],
-	modeFilter: MercenariesModeFilterType,
-	difficultyFilter: MercenariesPveDifficultyFilterType,
+	// modeFilter: MercenariesModeFilterType,
+	// difficultyFilter: MercenariesPveDifficultyFilterType,
 	mmrFilter: MercenariesPvpMmrFilterType,
 ): readonly MercenariesComposition[] => {
-	return (
-		stats
-			// .filter((stat) => stat.date === timeFilter)
-			.filter((stat) =>
-				modeFilter === 'pvp'
-					? stat.mmrPercentile === mmrFilter
-					: difficultyFilter === 'all' || stat.mmrPercentile === difficultyFilter,
-			)
-	);
+	return stats.filter((stat) => stat.date === 'past-seven').filter((stat) => stat.mmrPercentile === mmrFilter);
 };
 
 export const filterMercenariesRuns = (

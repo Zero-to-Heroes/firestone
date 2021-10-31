@@ -1,14 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from '../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import {
 	MercenariesComposition,
-	MercenariesGlobalStats,
+	MercenariesGlobalStatsPvp,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -48,10 +44,8 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly MercenaryCompositionInfo[]>;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -70,36 +64,31 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 			.pipe(
 				filter(
 					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
-						!!globalStats && !!gameStats?.stats,
+						!!globalStats?.pvp?.compositions?.length,
 				),
 				map(
 					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
 						[
-							globalStats,
-							modeFilter === 'pve'
-								? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
-								: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
-							modeFilter,
-							difficultyFilter,
+							globalStats.pvp,
+							// modeFilter === 'pve'
+							// 	? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
+							// 	: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
+							// modeFilter,
+							// difficultyFilter,
 							mmrFilter,
 						] as [
-							MercenariesGlobalStats,
-							readonly GameStat[],
-							MercenariesModeFilterType,
-							MercenariesPveDifficultyFilterType,
+							MercenariesGlobalStatsPvp,
+							// readonly GameStat[],
+							// MercenariesModeFilterType,
+							// MercenariesPveDifficultyFilterType,
 							MercenariesPvpMmrFilterType,
 						],
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) => {
-					const infos = modeFilter === 'pve' ? globalStats.pve : globalStats.pvp;
-					return [
-						filterMercenariesCompositions(infos.compositions, modeFilter, difficultyFilter, mmrFilter),
-					] as [readonly MercenariesComposition[]];
-				}),
-				map(([compositionStats]) => {
+				map(([pvpStats, mmrFilter]) => filterMercenariesCompositions(pvpStats.compositions, mmrFilter)),
+				map((compositionStats) => {
 					const statsByStarterTrio = groupByFunction((stat: MercenariesComposition) =>
-						stat.heroCardIds.join(','),
+						[...stat.heroCardIds].sort().join(','),
 					)(compositionStats);
 					const totalMatches = sumOnArray(compositionStats, (stat) => stat.totalMatches);
 					return Object.keys(statsByStarterTrio)
@@ -140,6 +129,7 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 								benches: benches,
 							} as MercenaryCompositionInfo;
 						})
+						.filter((stat) => stat.globalTotalMatches >= 150)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.slice(0, 15);
 				}),
@@ -148,10 +138,6 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-	}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	trackByFn(index: number, item: MercenaryInfo) {
