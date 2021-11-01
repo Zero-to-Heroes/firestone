@@ -40,8 +40,8 @@ export class MercenariesStateBuilderService {
 		const categoryIds: readonly MercenariesCategoryId[] = [
 			'mercenaries-personal-hero-stats',
 			'mercenaries-my-teams',
-			'mercenaries-hero-stats',
-			'mercenaries-compositions-stats',
+			// 'mercenaries-hero-stats',
+			// 'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
 			globalStats: globalStats,
