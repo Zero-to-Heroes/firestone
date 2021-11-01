@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesSelectCompositionEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-composition-event';
-import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './mercenary-info';
@@ -15,10 +15,11 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './merce
 	],
 	template: `
 		<div class="mercenaries-composition-stat" (click)="select()">
-			<div class="heroes-container " [ngClass]="{ 'starter': !!benchHeroes?.length }">
+			<div class="heroes-container " [ngClass]="{ 'starter': !!starterHeroes?.length }">
 				<div class="portrait" *ngFor="let hero of starterHeroes" [cardTooltip]="hero.cardId">
 					<img class="icon" [src]="hero.portraitUrl" />
 					<img class="frame" [src]="hero.frameUrl" />
+					<div class="name">{{ hero.name }}</div>
 				</div>
 			</div>
 			<div class="heroes-container bench" *ngIf="!!benchHeroes?.length">
@@ -52,6 +53,7 @@ export class MercenariesCompositionStatComponent {
 		this.id = value.id;
 		this.starterHeroes = value.heroCardIds.map((cardId) => ({
 			cardId: cardId,
+			name: getShortMercHeroName(cardId, this.cards),
 			portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
 			frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
 				this.cards.getCard(cardId).mercenaryRole,

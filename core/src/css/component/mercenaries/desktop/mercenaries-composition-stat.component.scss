@@ -48,6 +48,23 @@
 				width: 100%;
 				z-index: 1;
 			}
+
+			.name {
+				font-family: Open Sans;
+				font-style: normal;
+				font-weight: normal;
+				color: var(--default-title-color);
+				font-size: 12px;
+				text-align: center;
+				position: relative;
+				margin: auto;
+				flex-grow: 0;
+				flex-shrink: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				width: 100%;
+			}
 		}
 	}
 
