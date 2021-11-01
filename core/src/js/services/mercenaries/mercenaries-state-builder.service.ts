@@ -6,7 +6,7 @@ import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-catego
 import { ApiRunner } from '../api-runner';
 
 const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=6';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.temp.gz.json?v=13';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=13';
 
 @Injectable()
 export class MercenariesStateBuilderService {
@@ -40,8 +40,8 @@ export class MercenariesStateBuilderService {
 		const categoryIds: readonly MercenariesCategoryId[] = [
 			'mercenaries-personal-hero-stats',
 			'mercenaries-my-teams',
-			// 'mercenaries-hero-stats',
-			// 'mercenaries-compositions-stats',
+			'mercenaries-hero-stats',
+			'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
 			globalStats: globalStats,

@@ -12,7 +12,7 @@ import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
-import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
+import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-compositions-stats',
@@ -88,7 +88,7 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 				map(([pvpStats, mmrFilter]) => filterMercenariesCompositions(pvpStats.compositions, mmrFilter)),
 				map((compositionStats) => {
 					const statsByStarterTrio = groupByFunction((stat: MercenariesComposition) =>
-						[...stat.heroCardIds].sort().join(','),
+						stat.heroCardIds.join(','),
 					)(compositionStats);
 					const totalMatches = sumOnArray(compositionStats, (stat) => stat.totalMatches);
 					return Object.keys(statsByStarterTrio)
@@ -96,24 +96,24 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 							const compositions: readonly MercenariesComposition[] = statsByStarterTrio[compositionKey];
 							const ref = compositions[0];
 							const globalTotalMatches = sumOnArray(compositions, (stat) => stat.totalMatches);
-							const benches: readonly MercenaryCompositionInfoBench[] = compositions
-								.map((comp) => comp.benches)
-								.map((benches) => {
-									const ref = benches[0];
-									const globalTotalMatchesForBench = sumOnArray(benches, (stat) => stat.totalMatches);
-									return {
-										id: 'bench-' + ref.heroCardIds.join(','),
-										heroCardIds: ref.heroCardIds,
-										globalTotalMatches: globalTotalMatchesForBench,
-										globalWinrate:
-											sumOnArray(benches, (stat) => stat.totalWins) / globalTotalMatchesForBench,
-										globalPopularity: globalTotalMatchesForBench / globalTotalMatches,
-										playerTotalMatches: null,
-										playerWinrate: null,
-									};
-								})
-								.sort((a, b) => b.globalWinrate - a.globalWinrate)
-								.slice(0, 15);
+							// const benches: readonly MercenaryCompositionInfoBench[] = compositions
+							// 	.map((comp) => comp.benches)
+							// 	.map((benches) => {
+							// 		const ref = benches[0];
+							// 		const globalTotalMatchesForBench = sumOnArray(benches, (stat) => stat.totalMatches);
+							// 		return {
+							// 			id: 'bench-' + ref.heroCardIds.join(','),
+							// 			heroCardIds: ref.heroCardIds,
+							// 			globalTotalMatches: globalTotalMatchesForBench,
+							// 			globalWinrate:
+							// 				sumOnArray(benches, (stat) => stat.totalWins) / globalTotalMatchesForBench,
+							// 			globalPopularity: globalTotalMatchesForBench / globalTotalMatches,
+							// 			playerTotalMatches: null,
+							// 			playerWinrate: null,
+							// 		};
+							// 	})
+							// 	.sort((a, b) => b.globalWinrate - a.globalWinrate)
+							// 	.slice(0, 15);
 							return {
 								id: compositionKey,
 								heroCardIds: ref.heroCardIds,
@@ -126,10 +126,10 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 								globalPopularity: (100 * globalTotalMatches) / totalMatches,
 								playerTotalMatches: 0,
 								playerWinrate: null,
-								benches: benches,
+								// benches: benches,
 							} as MercenaryCompositionInfo;
 						})
-						.filter((stat) => stat.globalTotalMatches >= 150)
+						.filter((stat) => stat.globalTotalMatches >= 100)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.slice(0, 15);
 				}),
