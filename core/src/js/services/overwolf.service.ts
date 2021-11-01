@@ -944,7 +944,7 @@ export class OverwolfService {
 	}
 
 	public listenOnFile(id: string, path: string, options: any, callback: (lineInfo: ListenObject) => any) {
-		overwolf.io.listenOnFile(id, path, options, callback);
+		overwolf.io.listenOnFile(id, path, !!options ? { ...options, encoding: 'UTF8' } : null, callback);
 	}
 
 	public checkForExtensionUpdate(): Promise<boolean> {
