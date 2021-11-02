@@ -2,18 +2,17 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
+	HostListener, OnDestroy
 } from '@angular/core';
-import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { combineLatest, from, Observable } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-next-opponent-overview',
@@ -23,149 +22,170 @@ import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
 	],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
-			<div class="content empty-state" *ngIf="!opponents || !opponents[0]">
-				<i>
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
-					</svg>
-				</i>
-				<span class="title">Nothing here yet</span>
-				<span class="subtitle">Pick a hero and wait for your opponents!</span>
-			</div>
-			<div class="content" *ngIf="opponents && opponents[0]">
-				<bgs-opponent-overview-big
-					[opponent]="opponents[0]"
-					[currentTurn]="currentTurn"
-					[enableSimulation]="enableSimulation"
-					[nextBattle]="nextBattle"
-				></bgs-opponent-overview-big>
-				<div class="other-opponents">
-					<div class="subtitle">Other opponents</div>
-					<div class="opponents" scrollable>
-						<bgs-opponent-overview
-							*ngFor="let opponent of otherOpponents; trackBy: trackByOpponentInfoFn"
-							[opponent]="opponent"
-							[currentTurn]="currentTurn"
-							[showLastOpponentIcon]="isLastOpponent(opponent)"
-						></bgs-opponent-overview>
+		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
+			<div class="content" *ngIf="opponents$ | async as opponents; else emptyState">
+				<ng-container
+					*ngIf="{
+						currentTurn: currentTurn$ | async,
+						lastOpponentCardId: lastOpponentCardId$ | async
+					} as value"
+				>
+					<bgs-opponent-overview-big
+						[opponent]="opponents[0]"
+						[currentTurn]="value.currentTurn"
+						[enableSimulation]="enableSimulation$ | async"
+						[nextBattle]="nextBattle$ | async"
+					></bgs-opponent-overview-big>
+					<div class="other-opponents">
+						<div class="subtitle">Other opponents</div>
+						<div class="opponents" scrollable>
+							<bgs-opponent-overview
+								*ngFor="let opponent of otherOpponents$ | async; trackBy: trackByOpponentInfoFn"
+								[opponent]="opponent"
+								[currentTurn]="value.currentTurn"
+								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId)"
+							></bgs-opponent-overview>
+						</div>
 					</div>
-				</div>
+				</ng-container>
 			</div>
+			<ng-template #emptyState>
+				<div class="content empty-state">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
+						</svg>
+					</i>
+					<span class="title">Nothing here yet</span>
+					<span class="subtitle">Pick a hero and wait for your opponents!</span>
+				</div></ng-template
+			>
 			<div class="left">
 				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
 					Score Board
 				</div>
-				<bgs-hero-face-offs
-					[faceOffs]="faceOffs"
-					[players]="players"
-					[nextOpponentCardId]="nextOpponentCardId"
-				></bgs-hero-face-offs>
+				<bgs-hero-face-offs></bgs-hero-face-offs>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsNextOpponentOverviewComponent implements OnDestroy {
-	players: readonly BgsPlayer[];
-	opponents: readonly BgsPlayer[];
-	otherOpponents: readonly BgsPlayer[];
-	faceOffs: readonly BgsFaceOff[];
-	currentTurn: number;
-	nextBattle: BgsFaceOffWithSimulation;
-	nextOpponentCardId: string;
-	mmr: number;
-	lastOpponentCardId: string;
-	showAds = true;
+export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements OnDestroy {
+	enableSimulation$: Observable<boolean>;
+	showAds$: Observable<boolean>;
+	nextOpponentCardId$: Observable<string>;
+	opponents$: Observable<readonly BgsPlayer[]>;
+	otherOpponents$: Observable<readonly BgsPlayer[]>;
+	currentTurn$: Observable<number>;
+	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+	lastOpponentCardId$: Observable<string>;
 
-	@Input() enableSimulation: boolean;
-
-	private _panel: BgsNextOpponentOverviewPanel;
-	private _game: BgsGame;
-
-	@Input() set panel(value: BgsNextOpponentOverviewPanel) {
-		if (value && !value.opponentOverview) {
-			return;
-		}
-		if (value === this._panel) {
-			return;
-		}
-		this._panel = value;
-		this.updateInfo();
-	}
-
-	@Input() set game(value: BgsGame) {
-		this._game = value;
-		this.mmr = value ? value.mmrAtStart : undefined;
-		this.updateInfo();
-	}
-
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ads: AdService) {
-		this.init();
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+		private readonly store: AppUiStoreFacadeService,
+	) {
+		super();
+		this.enableSimulation$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
+			.pipe(
+				map(([pref]) => pref),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
+			.listenBattlegrounds$(
+				([state]) => state.panels,
+				([state]) => state.currentPanelId,
+			)
+			.pipe(
+				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
+				map(
+					([panels, currentPanelId]) =>
+						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
+				),
+				filter((panel) => !!panel?.opponentOverview),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.nextOpponentCardId$ = currentPanel$.pipe(
+			map((panel) => panel.opponentOverview.cardId),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		this.lastOpponentCardId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame.lastOpponentCardId)
+			.pipe(
+				map(([lastOpponentCardId]) => lastOpponentCardId),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.nextBattle$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				filter(([game]) => !!game),
+				map(([game]) => game.lastFaceOff()),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.opponents$ = combineLatest(
+			this.nextOpponentCardId$,
+			this.store.listenBattlegrounds$(([state]) => state.currentGame),
+		).pipe(
+			filter(([nextOpponentCardId, [game]]) => !!game),
+			map(([nextOpponentCardId, [game]]) =>
+				game.players
+					.filter((player) => !player.isMainPlayer)
+					.sort((a, b) => {
+						if (a.leaderboardPlace < b.leaderboardPlace) {
+							return -1;
+						}
+						if (b.leaderboardPlace < a.leaderboardPlace) {
+							return 1;
+						}
+						if (a.damageTaken < b.damageTaken) {
+							return -1;
+						}
+						if (b.damageTaken < a.damageTaken) {
+							return 1;
+						}
+						return 0;
+					})
+					.sort((a, b) => (a.cardId === nextOpponentCardId ? -1 : b.cardId === nextOpponentCardId ? 1 : 0)),
+			),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		this.otherOpponents$ = this.opponents$.pipe(
+			map((opponents) => opponents.slice(1)),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this._game = null;
-		this._panel = null;
+		super.ngOnDestroy();
 	}
 
 	trackByOpponentInfoFn(index, item: BgsPlayer) {
 		return item.cardId;
 	}
 
-	isLastOpponent(opponent: BgsPlayer): boolean {
-		const result = normalizeHeroCardId(opponent.cardId) === this.lastOpponentCardId;
+	isLastOpponent(opponent: BgsPlayer, lastOpponentCardId: string): boolean {
+		const result = normalizeHeroCardId(opponent.cardId) === lastOpponentCardId;
 		return result;
-	}
-
-	private updateInfo() {
-		if (!this._panel || !this._game || !this._panel.opponentOverview) {
-			return;
-		}
-		this.currentTurn = this._game.currentTurn;
-		const nextOpponent = this._game.players.find((player) => player.cardId === this._panel.opponentOverview.cardId);
-		if (!nextOpponent) {
-			// 	'no next opponent yet',
-			// 	this._game.players.map(player => player.cardId),
-			// 	this._panel.opponentOverview.cardId,
-			// );
-			return;
-		}
-		this.players = this._game.players;
-		this.nextOpponentCardId = this._panel.opponentOverview.cardId;
-		this.nextBattle = this._game.lastFaceOff();
-		this.faceOffs = this._game.faceOffs;
-		this.lastOpponentCardId = this._game.lastOpponentCardId;
-		this.opponents = this._game.players
-			.filter((player) => !player.isMainPlayer)
-			.sort((a, b) => {
-				if (a.leaderboardPlace < b.leaderboardPlace) {
-					return -1;
-				}
-				if (b.leaderboardPlace < a.leaderboardPlace) {
-					return 1;
-				}
-				if (a.damageTaken < b.damageTaken) {
-					return -1;
-				}
-				if (b.damageTaken < a.damageTaken) {
-					return 1;
-				}
-				return 0;
-			})
-			.sort((a, b) => (a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0));
-		this.otherOpponents = this.opponents.slice(1);
-		this._game = null;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private async init() {
-		this.showAds = await this.ads.shouldDisplayAds();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

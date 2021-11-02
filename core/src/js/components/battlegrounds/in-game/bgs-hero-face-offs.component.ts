@@ -1,7 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { Observable } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-hero-face-offs',
@@ -18,51 +23,90 @@ import { groupByFunction } from '../../../services/utils';
 				<div class="lost">Lost</div>
 				<div class="tied">Tied</div>
 			</div>
-			<bgs-hero-face-off
-				*ngFor="let opponent of opponents || []; trackBy: trackByFn"
-				[opponent]="opponent"
-				[isNextOpponent]="nextOpponentCardId === opponent.cardId"
-				[faceOffs]="faceOffsByOpponent[opponent.cardId]"
-			></bgs-hero-face-off>
+			<ng-container
+				*ngIf="{
+					nextOpponentCardId: nextOpponentCardId$ | async,
+					opponents: opponents$ | async,
+					faceOffs: faceOffsByOpponent$ | async
+				} as value"
+			>
+				<bgs-hero-face-off
+					*ngFor="let opponent of value.opponents || []; trackBy: trackByFn"
+					[opponent]="opponent"
+					[isNextOpponent]="value.nextOpponentCardId === opponent.cardId"
+					[faceOffs]="value.faceOffs[opponent.cardId]"
+				></bgs-hero-face-off>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroFaceOffsComponent {
-	opponents: readonly BgsPlayer[];
-	faceOffsByOpponent = {};
+export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent {
+	nextOpponentCardId$: Observable<string>;
+	opponents$: Observable<readonly BgsPlayer[]>;
+	faceOffsByOpponent$: Observable<{ [opponentHeroCardId: string]: readonly BgsFaceOff[] }>;
 
-	@Input() nextOpponentCardId: string;
-
-	@Input() set faceOffs(value: readonly BgsFaceOff[]) {
-		this.faceOffsByOpponent = groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(value);
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
+		super();
+		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
+			.listenBattlegrounds$(
+				([state]) => state.panels,
+				([state]) => state.currentPanelId,
+			)
+			.pipe(
+				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
+				map(
+					([panels, currentPanelId]) =>
+						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
+				),
+				filter((panel) => !!panel?.opponentOverview),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.nextOpponentCardId$ = currentPanel$.pipe(
+			map((panel) => panel.opponentOverview.cardId),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		this.faceOffsByOpponent$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
+			.pipe(
+				filter(([faceOffs]) => !!faceOffs?.length),
+				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.opponents$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.players)
+			.pipe(
+				filter(([players]) => !!players?.length),
+				map(([players]) =>
+					players
+						.filter((player) => !player.isMainPlayer)
+						.sort((a, b) => {
+							if (a.leaderboardPlace < b.leaderboardPlace) {
+								return -1;
+							}
+							if (b.leaderboardPlace < a.leaderboardPlace) {
+								return 1;
+							}
+							if (a.damageTaken < b.damageTaken) {
+								return -1;
+							}
+							if (b.damageTaken < a.damageTaken) {
+								return 1;
+							}
+							return 0;
+						}),
+				),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
 	}
-
-	@Input() set players(value: readonly BgsPlayer[]) {
-		this.opponents = value
-			.filter((player) => !player.isMainPlayer)
-			.sort((a, b) => {
-				if (a.leaderboardPlace < b.leaderboardPlace) {
-					return -1;
-				}
-				if (b.leaderboardPlace < a.leaderboardPlace) {
-					return 1;
-				}
-				if (a.damageTaken < b.damageTaken) {
-					return -1;
-				}
-				if (b.damageTaken < a.damageTaken) {
-					return 1;
-				}
-				return 0;
-			});
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	trackByFn(index, item: BgsPlayer) {
 		return item.cardId;

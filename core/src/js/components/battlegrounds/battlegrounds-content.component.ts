@@ -3,20 +3,18 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
-	OnDestroy,
-	ViewRef
+	OnDestroy
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
-import { Preferences } from '../../models/preferences';
-import { BgsCloseWindowEvent } from '../../services/battlegrounds/store/events/bgs-close-window-event';
-import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-content',
@@ -55,17 +53,12 @@ import { PreferencesService } from '../../services/preferences.service';
 					></control-close>
 				</div>
 			</section>
-			<section class="content-container">
+			<section class="content-container" *ngIf="currentPanel$ | async as currentPanel">
 				<div class="title">{{ currentPanel?.name }}</div>
 				<ng-container>
 					<bgs-hero-selection-overview *ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
-					<bgs-next-opponent-overview
-						*ngxCacheIf="currentPanel?.id === 'bgs-next-opponent-overview'"
-						[panel]="currentPanel"
-						[game]="_state?.currentGame"
-						[enableSimulation]="enableSimulation"
-					>
+					<bgs-next-opponent-overview *ngxCacheIf="currentPanel?.id === 'bgs-next-opponent-overview'">
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
 						*ngxCacheIf="currentPanel?.id === 'bgs-post-match-stats'"
@@ -85,55 +78,42 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
+export class BattlegroundsContentComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	currentPanel$: Observable<BgsPanel>;
 	_state: BattlegroundsState;
-	currentPanel: BgsPanel;
-	enableSimulation: boolean;
 	windowId: string;
 
 	closeHandler: () => void;
 
 	@Input() set state(value: BattlegroundsState) {
 		this._state = value;
-		this.currentPanel = this._state?.panels?.find((panel) => panel.id === value.currentPanelId);
 	}
-
-	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
-	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-	) {}
+		private readonly store: AppUiStoreFacadeService,
+	) {
+		super();
+		this.currentPanel$ = this.store
+			.listenBattlegrounds$(
+				([state]) => state.panels,
+				([state]) => state.currentPanelId,
+			)
+			.pipe(
+				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
+				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
+				takeUntil(this.destroyed$),
+			);
+	}
 
 	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		this.closeHandler = () => this.battlegroundsUpdater.next(new BgsCloseWindowEvent());
-		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
 		this._state = null;
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-
-		this.enableSimulation = preferences.bgsEnableSimulation;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
