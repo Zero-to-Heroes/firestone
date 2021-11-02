@@ -8,15 +8,16 @@ import {
 	Input,
 	OnDestroy,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeIcon } from '../services/battlegrounds/bgs-utils';
 import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { areDeepEqual, removeFromReadonlyArray } from '../services/utils';
+import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
@@ -65,7 +66,7 @@ import { areDeepEqual, removeFromReadonlyArray } from '../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent implements OnDestroy {
+export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
@@ -103,6 +104,7 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 	private sub$$: Subscription;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
+		super();
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
 			filter(([options, selected]) => !!options?.length),
 			map(([options, selected]) => {
@@ -118,6 +120,7 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting textValue in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 		// Reset the info every time the input options change
 		this.sub$$ = this.options$
@@ -138,6 +141,7 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 			}),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting workingOptions in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 		this.validSelection$ = combineLatest(this.options$.asObservable(), this.workingOptions$).pipe(
 			filter(([options, workingOptions]) => !!options),
@@ -145,11 +149,13 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 			distinctUntilChanged(),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting validSelection in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
 		);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
 	}
 
