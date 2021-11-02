@@ -30,11 +30,12 @@
 			flex-shrink: 0;
 			display: flex;
 			flex-direction: column;
-			width: 55px;
+			width: 85px;
 			position: relative;
 			top: 0;
 			left: 0;
 			z-index: 9;
+			margin-right: -20px;
 
 			.icon {
 				position: absolute;
@@ -64,6 +65,7 @@
 				overflow: hidden;
 				text-overflow: ellipsis;
 				width: 100%;
+				display: none;
 			}
 		}
 	}
@@ -93,6 +95,24 @@
 				font-weight: bold;
 				// color: #ce73b4;
 				color: var(--default-title-color);
+			}
+		}
+	}
+
+	&.show-merc-names {
+		.heroes-container .portrait {
+			width: 55px;
+			margin-right: 10px;
+
+			.icon {
+				top: 11%;
+				left: 13%;
+				width: 76%;
+				clip-path: ellipse(40% 44% at 50% 50%);
+			}
+
+			.name {
+				display: block;
 			}
 		}
 	}

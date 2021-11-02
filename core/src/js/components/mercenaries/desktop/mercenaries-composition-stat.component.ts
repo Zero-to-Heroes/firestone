@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesSelectCompositionEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-composition-event';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './mercenary-info';
 
@@ -14,7 +13,11 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './merce
 		`../../../../css/component/mercenaries/desktop/mercenaries-composition-stat.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-composition-stat" (click)="select()">
+		<div
+			class="mercenaries-composition-stat"
+			[ngClass]="{ 'show-merc-names': _showMercNames }"
+			(click)="select()" 
+		>
 			<div class="heroes-container " [ngClass]="{ 'starter': !!starterHeroes?.length }">
 				<div class="portrait" *ngFor="let hero of starterHeroes" [cardTooltip]="hero.cardId">
 					<img class="icon" [src]="hero.portraitUrl" />
@@ -22,12 +25,12 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './merce
 					<div class="name">{{ hero.name }}</div>
 				</div>
 			</div>
-			<div class="heroes-container bench" *ngIf="!!benchHeroes?.length">
+			<!-- <div class="heroes-container bench" *ngIf="!!benchHeroes?.length">
 				<div class="portrait" *ngFor="let hero of benchHeroes" [cardTooltip]="hero.cardId">
 					<img class="icon" [src]="hero.portraitUrl" />
 					<img class="frame" [src]="hero.frameUrl" />
 				</div>
-			</div>
+			</div> -->
 			<div class="stats">
 				<div class="item winrate">
 					<div class="values">
@@ -45,6 +48,13 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './merce
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesCompositionStatComponent {
+	@Input() set showMercNames(value: boolean) {
+		this._showMercNames = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() set stat(value: MercenaryCompositionInfo | MercenaryCompositionInfoBench) {
 		if (!value) {
 			return;
@@ -72,6 +82,7 @@ export class MercenariesCompositionStatComponent {
 		this.globalTotalMatches = value.globalTotalMatches;
 	}
 
+	_showMercNames: boolean;
 	starterHeroes: readonly Hero[];
 	benchHeroes: readonly Hero[];
 	globalWinrate: number;
@@ -80,7 +91,7 @@ export class MercenariesCompositionStatComponent {
 	private id: string;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 	) {}

@@ -4,7 +4,7 @@ import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operator
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
 import {
 	MercenariesComposition,
-	MercenariesGlobalStatsPvp,
+	MercenariesGlobalStatsPvp
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -21,22 +21,23 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-compositions-stats.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-compositions-stats" scrollable>
+		<div
+			class="mercenaries-compositions-stats"
+			*ngIf="{ showMercNames: showMercNames$ | async } as value"
+			[ngClass]="{ 'show-merc-names': value.showMercNames }"
+			scrollable
+		>
 			<ng-container *ngIf="stats$ | async as stats; else emptyState">
 				<div class="header">
-					<div
-						class="starter"
-						helpTooltip="The 3 heroes that start the match. Compositions are grouped based on this starter trio"
-					>
-						Starters
-					</div>
-					<div class="bench" helpTooltip="An example of a possible bench for this composition">Bench</div>
+					<div class="starter">Team</div>
+					<!-- <div class="bench" helpTooltip="An example of a possible bench for this composition">Bench</div> -->
 					<div class="stat winrate">Global winrate</div>
 					<div class="stat matches">Total matches</div>
 				</div>
 				<mercenaries-composition-stat
 					*ngFor="let stat of stats; trackBy: trackByFn"
 					[stat]="stat"
+					[showMercNames]="value.showMercNames"
 				></mercenaries-composition-stat>
 			</ng-container>
 			<ng-template #emptyState> <mercenaries-empty-state></mercenaries-empty-state></ng-template>
@@ -46,6 +47,7 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 })
 export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly MercenaryCompositionInfo[]>;
+	showMercNames$: Observable<boolean>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -53,6 +55,14 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		super();
+		this.showMercNames$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.mercenariesShowMercNamesInTeams)
+			.pipe(
+				map(([pref]) => pref),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting showMercNames in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,

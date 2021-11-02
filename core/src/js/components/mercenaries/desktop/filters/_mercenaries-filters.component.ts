@@ -30,12 +30,19 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				label="Show archived"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
+			<preference-toggle
+				class="show-merc-names-in-teams-link"
+				*ngIf="showMercNamesInTeamsLink$ | async"
+				field="mercenariesShowMercNamesInTeams"
+				label="Show names"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesFiltersComponent extends AbstractSubscriptionComponent {
 	showHiddenTeamsLink$: Observable<boolean>;
+	showMercNamesInTeamsLink$: Observable<boolean>;
 
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		super();
@@ -52,6 +59,15 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent {
 				),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
+		this.showMercNamesInTeamsLink$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				map(([currentView]) => currentView === 'mercenaries-compositions-stats'),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				// tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 	}
