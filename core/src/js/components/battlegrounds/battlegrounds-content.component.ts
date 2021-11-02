@@ -7,7 +7,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -34,10 +34,7 @@ import { PreferencesService } from '../../services/preferences.service';
 								<use xlink:href="assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
-						<menu-selection-bgs
-							[selectedPanel]="currentPanel?.id"
-							[matchOver]="_state?.currentGame?.gameEnded"
-						></menu-selection-bgs>
+						<menu-selection-bgs></menu-selection-bgs>
 					</div>
 				</div>
 				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
