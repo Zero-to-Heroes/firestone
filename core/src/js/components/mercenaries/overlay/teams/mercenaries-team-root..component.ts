@@ -8,7 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -71,7 +71,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 											<img class="frame" [src]="task.frameUrl" />
 										</div>
 										<div class="task-content">
-											<div class="header">{{ task.title }}</div>
+											<div class="header">
+												Task {{ task.taskChainProgress + 1 }}: {{ task.title }}
+											</div>
 											<div class="description">{{ task.description }}</div>
 											<div class="progress">
 												<div
@@ -363,6 +365,7 @@ export interface Task {
 	readonly mercenaryCardId: string;
 	readonly title: string;
 	readonly description: string;
+	readonly taskChainProgress: number;
 	readonly progress: number;
 	readonly portraitUrl?: string;
 	readonly frameUrl?: string;

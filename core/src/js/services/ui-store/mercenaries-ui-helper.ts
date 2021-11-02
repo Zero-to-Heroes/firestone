@@ -12,7 +12,7 @@ import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,
-	MercenariesReferenceData,
+	MercenariesReferenceData
 } from '../mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
 
@@ -147,6 +147,7 @@ export const buildMercenariesTasksList = (
 				title: task.title,
 				description: task.description,
 				progress: visitor.TaskProgress,
+				taskChainProgress: visitor.TaskChainProgress,
 				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
 				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
 					mercenaryCard.mercenaryRole,
