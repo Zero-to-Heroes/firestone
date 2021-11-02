@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { CardPackResult, PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 
 @Component({
 	selector: 'pack-display',

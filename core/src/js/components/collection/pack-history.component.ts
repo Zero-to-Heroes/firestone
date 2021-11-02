@@ -5,9 +5,9 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { CardHistory } from '../../models/card-history';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';

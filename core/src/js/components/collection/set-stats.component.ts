@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
@@ -10,7 +10,7 @@ import {
 	dustForPremium,
 	dustToCraftFor,
 	dustToCraftForPremium,
-	getPackDustValue,
+	getPackDustValue
 } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';

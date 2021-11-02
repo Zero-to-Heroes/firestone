@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';

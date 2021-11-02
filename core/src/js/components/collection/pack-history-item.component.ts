@@ -4,9 +4,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input,
+	Input
 } from '@angular/core';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Events } from '../../services/events.service';
 import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../services/hs-utils';

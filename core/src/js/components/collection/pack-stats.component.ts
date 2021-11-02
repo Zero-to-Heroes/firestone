@@ -4,10 +4,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input,
+	Input
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';

@@ -1,4 +1,4 @@
-import { CardPackResult, PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';

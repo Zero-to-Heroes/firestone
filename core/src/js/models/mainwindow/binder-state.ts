@@ -1,4 +1,4 @@
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { Card } from '../card';
 import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';

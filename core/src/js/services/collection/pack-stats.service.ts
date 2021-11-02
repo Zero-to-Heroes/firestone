@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds } from '@firestone-hs/reference-data';
-import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { PackResult } from '@firestone-hs/user-packs';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
