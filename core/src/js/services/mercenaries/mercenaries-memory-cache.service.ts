@@ -130,10 +130,8 @@ export class MercenariesMemoryCacheService {
 				return !memoryVisitor
 					? // If there are tasks in the saved preferences that don't appear in the memory, it means
 					  // that they have been either completed or abandoned
-					  visitor.TaskChainProgress === 0
-						? visitor
-						: // Default to it being abandoned, and the user can manually flag the progress if they want to
-						  null
+					  // Default to it being abandoned, and the user can manually flag the progress if they want to
+					  null
 					: // And if a task in memory is also in the prefs, make sure they have the same status
 					  { ...visitor, Status: memoryVisitor.Status };
 			})
