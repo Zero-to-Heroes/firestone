@@ -86,6 +86,12 @@ export class StoreBootstrapService {
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue, false));
 
+		// First update the prefs, for local installs
+		const prefsFromRemote = await this.prefs.loadRemotePrefs();
+
+		console.debug('remote prefs', prefsFromRemote);
+		const mergedPrefs = await this.mergePrefs(prefs, prefsFromRemote);
+
 		// Load all the initial data
 		const [
 			[
@@ -95,7 +101,6 @@ export class StoreBootstrapService {
 				achievementHistory,
 				globalStats,
 				collectionState,
-				prefsFromRemote,
 			],
 			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
@@ -110,7 +115,6 @@ export class StoreBootstrapService {
 				this.achievementsHelper.buildAchievementHistory(),
 				this.globalStats.getGlobalStats(),
 				this.collectionBootstrap.initCollectionState(),
-				this.prefs.loadRemotePrefs(),
 			]),
 			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
 			Promise.all([
@@ -127,9 +131,6 @@ export class StoreBootstrapService {
 			]),
 		]);
 		console.log('loaded info');
-
-		console.debug('remote prefs', prefsFromRemote);
-		const mergedPrefs = this.mergePrefs(prefs, prefsFromRemote);
 
 		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(mergedPrefs.bgsActiveTribesFilter);
 
@@ -232,7 +233,7 @@ export class StoreBootstrapService {
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}
 
-	private mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Preferences {
+	private async mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Promise<Preferences> {
 		if (
 			prefs?.lastUpdateDate &&
 			(!prefsFromRemote?.lastUpdateDate ||
@@ -259,7 +260,8 @@ export class StoreBootstrapService {
 				merged[prop] = prefs[prop];
 			}
 		}
-		console.debug('merged', merged);
+		await this.prefs.savePreferences(merged);
+		console.debug('merged prefs', merged);
 		return merged;
 	}
 
