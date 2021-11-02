@@ -17,21 +17,21 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.debug('[task] event', event);
+		console.debug('[task] event', event);
 		const referenceData = currentState.mercenaries.referenceData;
 		const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === event.mercenaryId);
 		const collectionInfo = await this.cache.getMercenariesMergedCollectionInfo();
 		const visitors = collectionInfo.Visitors;
-		// console.debug('[task] cleaned visitors', visitors, currentState.mercenaries.collectionInfo.Visitors);
+		console.debug('[task] cleaned visitors', visitors, currentState.mercenaries.collectionInfo.Visitors);
 		const currentVisitor = visitors.find((visitor) => visitor.VisitorId === taskChain.mercenaryVisitorId);
-		// console.debug('[task] currentVisitor', currentVisitor);
+		console.debug('[task] currentVisitor', currentVisitor);
 		const newVisitor = this.buildNewVisitor(currentVisitor, taskChain, event.operation);
-		// console.debug('[task] newVisitor', newVisitor);
+		console.debug('[task] newVisitor', newVisitor);
 		const newVisitors = !!currentVisitor
 			? visitors.map((visitor) => (visitor.VisitorId === newVisitor.VisitorId ? newVisitor : visitor))
 			: [...visitors, newVisitor];
 		this.prefs.updateMercenariesVisitorsProgress(newVisitors);
-		// console.debug('[task] newVisitors', newVisitors);
+		console.debug('[task] newVisitors', newVisitors);
 		const newCollection = {
 			...currentState.mercenaries.collectionInfo,
 			Visitors: newVisitors,
@@ -58,7 +58,7 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 			return {
 				TaskId: firstTask.id,
 				VisitorId: taskChain.mercenaryVisitorId,
-				Status: TaskStatus.ACTIVE,
+				Status: TaskStatus.CLAIMED,
 				TaskProgress: 0,
 				TaskChainProgress: 0,
 			};
@@ -74,7 +74,7 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		// cleaning operation that flips tasks to CLAIMED if they are not present in memory
 		if (operation === 'add') {
 			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
-				const newTaskProgress = Math.min(taskChainLength - 1, currentVisitor.TaskChainProgress + 1);
+				const newTaskProgress = Math.min(taskChainLength, currentVisitor.TaskChainProgress + 1);
 				const newTask = taskChain.tasks[newTaskProgress];
 				return {
 					TaskId: newTask.id,

@@ -139,8 +139,8 @@ export class MercenariesPersonalHeroStatComponent {
 		this.currentTaskLabel = '???';
 		this.currentTaskTooltip =
 			'The task can only be updated once a visitor for this mercenary visits your village while the app is running.';
-		if (value.currentTask) {
-			if (value.currentTask > value.totalTasks) {
+		if (value.currentTask != null) {
+			if (value.currentTask >= value.totalTasks) {
 				this.currentTaskLabel = `Maxxed!`;
 				this.currentTaskTooltip = null;
 			} else {

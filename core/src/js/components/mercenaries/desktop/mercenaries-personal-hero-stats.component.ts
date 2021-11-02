@@ -4,7 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
 	MercenariesPersonalHeroesSortCriteria,
-	MercenariesPersonalHeroesSortCriteriaType,
+	MercenariesPersonalHeroesSortCriteriaType
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
@@ -48,10 +48,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</sortable-label>
 				<sortable-label
 					class="tasks"
-					[name]="'Task progress'"
+					[name]="'Completed tasks'"
 					[sort]="sort"
 					[criteria]="'task-progress'"
-					helpTooltip="The current task. Ctrl + click on the current task to manually go to the next task. Alt + click to go back one step."
+					helpTooltip="Tasks completed. Ctrl + click on the current task to manually go to the next task. Alt + click to go back one step."
 				>
 				</sortable-label>
 				<sortable-label class="abilities" [name]="'Abilities'" [isSortable]="false"> </sortable-label>
@@ -123,9 +123,9 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						const currentStep = !visitorInfo
 							? null
 							: visitorInfo.Status === TaskStatus.CLAIMED
-							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
-							: currentTaskStep;
-						// console.debug('currentTaskStep', currentTaskStep, currentStep);
+							? Math.min(taskChain.tasks.length, currentTaskStep)
+							: Math.max(0, currentTaskStep - 1);
+						// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep);
 
 						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 						const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -233,7 +233,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							totalCoinsLeft: memMerc.CurrencyAmount,
 							totalTasks: taskChain.tasks.length,
 							// Because human-readable starts at 1
-							currentTask: currentStep != null ? currentStep + 1 : null,
+							currentTask: currentStep,
 							currentTaskDescription: currentTaskDescription,
 							bountiesWithRewards: bountiesForMerc,
 						} as PersonalHeroStat;
@@ -281,24 +281,14 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			return null;
 		}
 
-		const currentTaskDescription = `
+		const nextTaskDescription = `
 				<div class="current-task">
-					<div class="title">Task ${currentStep + 1}: ${currentTask.title}</div>
+					<div class="title">Next Task: Task ${currentStep + 1}: ${currentTask.title}</div>
 					<div class="description">${currentTask.description}</div>
 				</div>
 		`;
-		const nextTask = currentStep + 1 < sortedTasks.length ? sortedTasks[currentStep + 1] : null;
-		const nextTaskDescription = !!nextTask
-			? `
-				<div class="next-task">
-					<div class="title">Next Task: ${nextTask.title}</div>
-					<div class="description">${nextTask.description}</div>
-				</div>
-		`
-			: '';
 		const taskDescription = `
 			<div class="container">
-				${currentTaskDescription}
 				${nextTaskDescription}
 			</div>
 		`;

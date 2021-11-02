@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -130,8 +130,10 @@ export class MercenariesMemoryCacheService {
 				return !memoryVisitor
 					? // If there are tasks in the saved preferences that don't appear in the memory, it means
 					  // that they have been either completed or abandoned
-					  // Default to it being abandoned, and the user can manually flag the progress if they want to
-					  null
+					  visitor.Status !== TaskStatus.CLAIMED
+						? // Default to it being abandoned, and the user can manually flag the progress if they want to
+						  null
+						: visitor
 					: // And if a task in memory is also in the prefs, make sure they have the same status
 					  { ...visitor, Status: memoryVisitor.Status };
 			})
