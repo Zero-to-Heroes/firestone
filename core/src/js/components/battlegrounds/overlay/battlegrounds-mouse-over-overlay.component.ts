@@ -5,19 +5,17 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
+	ViewEncapsulation
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { GameState } from '../../../models/decktracker/game-state';
-import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'battlegrounds-mouse-over-overlay',
@@ -28,32 +26,34 @@ import { PreferencesService } from '../../../services/preferences.service';
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-mouse-over-overlay overlay-container-parent battlegrounds-theme" *ngIf="inGame">
+		<div
+			class="battlegrounds-mouse-over-overlay overlay-container-parent battlegrounds-theme"
+			*ngIf="inGame$ | async"
+		>
 			<!-- So that we avoid showing other players infos before the start of the match -->
-			<ul class="bgs-leaderboard" *ngIf="bgsPlayers?.length === 8">
+			<ul class="bgs-leaderboard" *ngIf="bgsPlayers$ | async as bgsPlayers">
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"
 					[bgsPlayer]="bgsPlayer"
-					[currentTurn]="currentTurn"
-					[lastOpponentCardId]="lastOpponentCardId"
-					[showLastOpponentIcon]="showLastOpponentIcon"
+					[currentTurn]="currentTurn$ | async"
+					[lastOpponentCardId]="lastOpponentCardId$ | async"
+					[showLastOpponentIcon]="showLastOpponentIcon$ | async"
 					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>
 				<div class="mouse-leave-fix right"></div>
 			</ul>
-			<!-- TODO: add an element around the leaderboard to fix the mouseleave not triggering issue? -->
 			<div class="board-container top-board">
-				<ul class="board">
+				<ul class="board" *ngIf="minions$ | async as minions">
 					<bgs-tavern-minion
 						class="tavern-minion"
 						*ngFor="let minion of minions; let i = index; trackBy: trackByMinion"
 						[minion]="minion"
-						[showTribesHighlight]="showTribesHighlight"
-						[highlightedTribes]="highlightedTribes"
-						[highlightedMinions]="highlightedMinions"
+						[showTribesHighlight]="showTribesHighlight$ | async"
+						[highlightedTribes]="highlightedTribes$ | async"
+						[highlightedMinions]="highlightedMinions$ | async"
 					></bgs-tavern-minion>
 				</ul>
 			</div>
@@ -62,121 +62,142 @@ import { PreferencesService } from '../../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, OnDestroy {
+export class BattlegroundsMouseOverOverlayComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy {
+	inGame$: Observable<boolean>;
+	bgsPlayers$: Observable<readonly BgsPlayer[]>;
+	lastOpponentCardId$: Observable<string>;
+	currentTurn$: Observable<number>;
+	minions$: Observable<readonly DeckCard[]>;
+	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedMinions$: Observable<readonly string[]>;
+	showLastOpponentIcon$: Observable<boolean>;
+	showTribesHighlight$: Observable<boolean>;
+
 	windowId: string;
 
-	// state: BattlegroundsState;
-	inGame: boolean;
-	tavernBoard: readonly DeckCard[];
-	bgsPlayers: readonly BgsPlayer[];
-	lastOpponentCardId: string;
-	currentTurn: number;
-	phase: 'combat' | 'recruit';
-	minions: readonly DeckCard[];
-	highlightedTribes: readonly Race[];
-	highlightedMinions: readonly string[];
-	showLastOpponentIcon: boolean;
-	showTribesHighlight: boolean;
-
 	private gameInfoUpdatedListener: (message: any) => void;
-	private deckSubscription: Subscription;
-	private preferencesSubscription: Subscription;
-	private storeSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private init_DebugService: DebugService,
-	) {}
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly init_DebugService: DebugService,
+	) {
+		super();
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.ow.setWindowPassthrough(this.windowId);
 
-		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
-			this.inGame = newState && newState.inGame && !newState.currentGame?.gameEnded;
-			this.bgsPlayers = [...(newState.currentGame?.players ?? [])].sort(
-				(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
+		this.inGame$ = this.store
+			.listenBattlegrounds$(
+				([state]) => state.inGame,
+				([state]) => state.currentGame,
+			)
+			.pipe(
+				filter(([inGame, currentGame]) => !!currentGame),
+				map(([inGame, currentGame]) => inGame && !currentGame.gameEnded),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
 			);
-			this.currentTurn = newState.currentGame.currentTurn;
-			this.lastOpponentCardId = newState.currentGame.lastOpponentCardId;
-			this.phase = newState.currentGame.phase;
-			this.highlightedTribes = newState.highlightedTribes;
-			this.highlightedMinions = newState.highlightedMinions;
-			this.updateMinions();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			const state = event.state as GameState;
-			this.tavernBoard = state?.opponentDeck?.board;
-			this.updateMinions();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'bgs-mouse-over';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.setDisplayPreferences(event.preferences);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.bgsPlayers$ = this.store
+			.listenBattlegrounds$(([state]) => state)
+			.pipe(
+				filter(([state]) => !!state.currentGame),
+				map(([state]) =>
+					[...(state.currentGame.players ?? [])].sort(
+						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
+					),
+				),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.lastOpponentCardId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				filter(([currentGame]) => !!currentGame),
+				map(([currentGame]) => currentGame.lastOpponentCardId),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.currentTurn$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				filter(([currentGame]) => !!currentGame),
+				map(([currentGame]) => currentGame.currentTurn),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.minions$ = combineLatest(
+			this.store.listenBattlegrounds$(([state]) => state.currentGame),
+			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
+		).pipe(
+			filter(([[currentGame], opponentBoard]) => !!currentGame && !!opponentBoard),
+			map(([[currentGame], opponentBoard]) => (currentGame.phase === 'recruit' ? opponentBoard : [])),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		this.highlightedTribes$ = this.store
+			.listenBattlegrounds$(([state]) => state.highlightedTribes)
+			.pipe(
+				map(([highlightedTribes]) => highlightedTribes),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.highlightedMinions$ = this.store
+			.listenBattlegrounds$(([state]) => state.highlightedMinions)
+			.pipe(
+				map(([highlightedMinions]) => highlightedMinions),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.showLastOpponentIcon$ = this.store
+			.listen$(([state, nav, prefs]) => prefs.bgsShowLastOpponentIconInOverlay)
+			.pipe(
+				map(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.showTribesHighlight$ = this.store
+			.listen$(([state, nav, prefs]) => prefs.bgsShowTribesHighlight)
+			.pipe(
+				map(([bgsShowTribesHighlight]) => bgsShowTribesHighlight),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
 
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});
-		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private updateMinions() {
-		if (this.phase === 'recruit') {
-			this.minions = this.tavernBoard;
-		} else if (this.phase === 'combat') {
-			this.minions = [];
-		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.deckSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
-		this.storeSubscription?.unsubscribe();
 	}
 
-	trackByFunction(player: BgsPlayer) {
+	trackByFunction(index: number, player: BgsPlayer) {
 		return player.cardId;
 	}
 
-	trackByMinion(minion: DeckCard, index: number) {
+	trackByMinion(index: number, minion: DeckCard) {
 		return minion.entityId;
-	}
-
-	private setDisplayPreferences(preferences: Preferences) {
-		if (!preferences) {
-			return;
-		}
-
-		this.showLastOpponentIcon = preferences.bgsShowLastOpponentIconInOverlay;
-		this.showTribesHighlight = preferences.bgsShowTribesHighlight;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async changeWindowSize(): Promise<void> {

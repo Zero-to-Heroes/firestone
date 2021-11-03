@@ -3,16 +3,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
-	Input,
-	OnDestroy,
+	HostListener, OnDestroy
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
@@ -53,23 +50,26 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					></control-close>
 				</div>
 			</section>
-			<section class="content-container" *ngIf="currentPanel$ | async as currentPanel">
-				<div class="title">{{ currentPanel?.name }}</div>
+			<section
+				class="content-container"
+				*ngIf="{ currentPanel: currentPanel$ | async, currentGame: currentGame$ | async } as value"
+			>
+				<div class="title">{{ value.currentPanel?.name }}</div>
 				<ng-container>
-					<bgs-hero-selection-overview *ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'">
+					<bgs-hero-selection-overview *ngxCacheIf="value.currentPanel?.id === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
-					<bgs-next-opponent-overview *ngxCacheIf="currentPanel?.id === 'bgs-next-opponent-overview'">
+					<bgs-next-opponent-overview *ngxCacheIf="value.currentPanel?.id === 'bgs-next-opponent-overview'">
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						*ngxCacheIf="currentPanel?.id === 'bgs-post-match-stats'"
-						[panel]="currentPanel"
-						[game]="_state?.currentGame"
+						*ngxCacheIf="value.currentPanel?.id === 'bgs-post-match-stats'"
+						[panel]="value.currentPanel"
+						[game]="value.currentGame"
 					>
 					</bgs-post-match-stats>
 					<bgs-battles
-						*ngxCacheIf="currentPanel?.id === 'bgs-battles'"
-						[panel]="currentPanel"
-						[game]="_state?.currentGame"
+						*ngxCacheIf="value.currentPanel?.id === 'bgs-battles'"
+						[panel]="value.currentPanel"
+						[game]="value.currentGame"
 					>
 					</bgs-battles>
 				</ng-container>
@@ -80,19 +80,15 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class BattlegroundsContentComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	currentPanel$: Observable<BgsPanel>;
-	_state: BattlegroundsState;
+	currentGame$: Observable<BgsGame>;
+	
 	windowId: string;
 
 	closeHandler: () => void;
 
-	@Input() set state(value: BattlegroundsState) {
-		this._state = value;
-	}
-
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		super();
@@ -104,6 +100,16 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 			.pipe(
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
 				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.currentGame$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				map(([currentGame]) => currentGame),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				takeUntil(this.destroyed$),
 			);
 	}
@@ -114,6 +120,6 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this._state = null;
+		super.ngOnDestroy();
 	}
 }

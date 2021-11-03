@@ -19,9 +19,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<game-replay [replay]="selectedReplay" *ngIf="selectedView === 'replay'"></game-replay>
 			<bgs-post-match-stats
 				*ngIf="selectedView === 'match-stats'"
+				[panel]="panel"
 				[mainPlayerCardId]="playerCardId"
 				[inputMmr]="mmr"
-				[panel]="panel"
 				[selectedTabs]="selectedTabs"
 				[selectTabHandler]="selectTabHandler"
 				[changeTabsNumberHandler]="changeTabsNumberHandler"

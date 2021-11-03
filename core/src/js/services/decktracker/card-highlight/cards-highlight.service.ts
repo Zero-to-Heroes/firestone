@@ -37,7 +37,7 @@ import {
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
-	taunt,
+	taunt
 } from './selectors';
 
 @Injectable()
@@ -110,6 +110,8 @@ export class CardsHighlightService {
 				return and(or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.DoubleJump:
 				return and(inDeck, outcast);
+			case CardIds.EerieStoneTavernBrawl:
+				return and(spell, shadow);
 			case CardIds.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
 			case CardIds.FungalFortunes:

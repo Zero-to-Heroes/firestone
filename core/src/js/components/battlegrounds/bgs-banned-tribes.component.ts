@@ -4,18 +4,17 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
+	HostListener, Renderer2
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-banned-tribes',
@@ -28,9 +27,9 @@ import { PreferencesService } from '../../services/preferences.service';
 	template: `
 		<div class="root scalable overlay-container-parent" [activeTheme]="'battlegrounds'">
 			<div
-				*ngIf="bannedTribes"
-				class="banned-tribes {{ orientation }}"
-				[helpTooltip]="tooltip"
+				*ngIf="bannedTribes$ | async as bannedTribes"
+				class="banned-tribes {{ orientation$ | async }}"
+				[helpTooltip]="tooltip$ | async"
 				helpTooltipPosition="bottom"
 			>
 				<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
@@ -39,15 +38,13 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
-	bannedTribes: readonly Race[] = [];
-	orientation: 'row' | 'column' = 'row';
-	tooltip: string;
+export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	bannedTribes$: Observable<readonly Race[]>;
+	tooltip$: Observable<string>;
+	orientation$: Observable<'row' | 'column'>;
 
-	private scale: number;
-	private stateSubscription: Subscription;
+	// private stateSubscription: Subscription;
 	private windowId: string;
-	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -55,36 +52,63 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		private readonly prefs: PreferencesService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-	) {}
-
-	async ngAfterViewInit() {
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
-		this.stateSubscription = deckEventBus.subscribe(async (gameState: BattlegroundsState) => {
-			// if (gameState?.currentGame?.bannedRaces !== this.bannedTribes) {
-			this.buildBannedTribes(gameState);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			// }
-		});
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
-		await this.restoreWindowPosition();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		private readonly store: AppUiStoreFacadeService,
+	) {
+		super();
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		if (this.stateSubscription) {
-			this.stateSubscription.unsubscribe();
-		}
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		this.bannedTribes$ = this.store
+			.listenBattlegrounds$(([state]) => state)
+			.pipe(
+				filter(([state]) => !!state),
+				map(([state]) => state?.currentGame?.bannedRaces),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.tooltip$ = this.bannedTribes$.pipe(
+			map((bannedTribes) => {
+				const tribeNames = bannedTribes.map((tribe) => getTribeName(tribe)).join(', ');
+				const exceptionCards = bannedTribes
+					.map((tribe) => this.getExceptions(tribe))
+					.reduce((a, b) => a.concat(b), []);
+				const exceptions =
+					exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
+				const tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
+				return tooltip;
+			}),
+			distinctUntilChanged(),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			takeUntil(this.destroyed$),
+		);
+		this.orientation$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsBannedTribesShowVertically)
+			.pipe(
+				map(([pref]) => (pref ? 'column' : 'row') as 'row' | 'column'),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			);
+		this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsBannedTribeScale)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+			});
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		await this.restoreWindowPosition();
 	}
 
 	@HostListener('mousedown')
@@ -96,17 +120,6 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateBgsBannedTribedPosition(window.left, window.top);
 		});
-	}
-
-	private buildBannedTribes(gameState: BattlegroundsState) {
-		this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
-		const tribeNames = this.bannedTribes.map((tribe) => getTribeName(tribe)).join(', ');
-		const exceptionCards = this.bannedTribes
-			.map((tribe) => this.getExceptions(tribe))
-			.reduce((a, b) => a.concat(b), []);
-		const exceptions =
-			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
-		this.tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
 	}
 
 	private getExceptions(value: Race): string[] {
@@ -129,27 +142,6 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 				return [];
 		}
 		return [];
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.orientation = preferences.bgsBannedTribesShowVertically ? 'column' : 'row';
-		this.scale = preferences.bgsBannedTribeScale;
-		this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', this.scale / 100);
-		// this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
-		this.onResized();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private onResized() {
-		const newScale = this.scale / 100;
-		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
