@@ -132,10 +132,16 @@ export class MercenariesMemoryCacheService {
 					  // that they have been either completed or abandoned
 					  visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
 						? // Default to it being abandoned, and the user can manually flag the progress if they want to
-						  visitor
+						  { ...visitor, Status: TaskStatus.CLAIMED }
 						: null
 					: // And if a task in memory is also in the prefs, make sure they have the same status
-					  { ...visitor, Status: memoryVisitor.Status };
+					  {
+							...visitor,
+							Status:
+								visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
+									? TaskStatus.CLAIMED
+									: memoryVisitor.Status,
+					  };
 			})
 			.filter((visitor) => visitor);
 
