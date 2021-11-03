@@ -4,7 +4,8 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	HostListener, ViewEncapsulation
+	HostListener,
+	ViewEncapsulation,
 } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';

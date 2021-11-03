@@ -3,7 +3,8 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener, OnDestroy
+	HostListener,
+	OnDestroy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -81,7 +82,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 export class BattlegroundsContentComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	currentPanel$: Observable<BgsPanel>;
 	currentGame$: Observable<BgsGame>;
-	
+
 	windowId: string;
 
 	closeHandler: () => void;

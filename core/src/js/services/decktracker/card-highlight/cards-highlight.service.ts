@@ -37,7 +37,7 @@ import {
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
-	taunt
+	taunt,
 } from './selectors';
 
 @Injectable()

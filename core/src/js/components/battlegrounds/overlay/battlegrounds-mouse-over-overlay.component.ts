@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation
+	ViewEncapsulation,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
