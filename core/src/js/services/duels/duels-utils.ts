@@ -60,12 +60,12 @@ const SIGNATURE_TREASURES = [
 	CardIds.ScrapmetalDemolitionistTavernBrawl,
 	CardIds.SpikedArmsTavernBrawlToken,
 
-	CardIds.ApocalypseTavernBrawl,
-	CardIds.ClawsOfTerrorTaveernBrawl,
-	CardIds.FireStompTavernBrawl,
-	CardIds.HornsOfFlameTavernBrawl,
-	CardIds.SoulstoneTrapTavernBrawl,
-	CardIds.BlackSoulstoneTavernBrawl,
+	CardIds.ApocalypseTavernBrawlToken,
+	CardIds.ClawsOfTerrorTavernBrawlToken,
+	CardIds.FireStompTavernBrawlToken,
+	CardIds.HornsOfFlameTavernBrawlToken,
+	CardIds.SoulstoneTrapTavernBrawlToken,
+	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
 ];
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {

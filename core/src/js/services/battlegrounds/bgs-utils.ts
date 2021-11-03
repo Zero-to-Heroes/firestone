@@ -217,8 +217,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.MasterNguyen_PowerOfTheStorm;
 		case CardIds.CarielRoame2:
 			return CardIds.ConvictionRank1_BlessedEnchantment2;
-		case CardIds.DiabloBattlegrounds:
-			return CardIds.RealmOfTerrorBattlegrounds;
+		case CardIds.Diablo:
+			return CardIds.Diablo_RealmOfTerror;
 
 		case '':
 			return null; // new heroes

@@ -74,7 +74,7 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		// cleaning operation that flips tasks to CLAIMED if they are not present in memory
 		if (operation === 'add') {
 			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
-				const newTaskProgress = Math.min(taskChainLength, currentVisitor.TaskChainProgress + 1);
+				const newTaskProgress = Math.min(taskChainLength - 1, currentVisitor.TaskChainProgress + 1);
 				const newTask = taskChain.tasks[newTaskProgress];
 				return {
 					TaskId: newTask.id,

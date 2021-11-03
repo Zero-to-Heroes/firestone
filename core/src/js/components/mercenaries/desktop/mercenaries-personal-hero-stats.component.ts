@@ -123,9 +123,9 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						const currentStep = !visitorInfo
 							? null
 							: visitorInfo.Status === TaskStatus.CLAIMED
-							? Math.min(taskChain.tasks.length, currentTaskStep)
-							: Math.max(0, currentTaskStep - 1);
-						// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep);
+							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
+							: Math.max(0, currentTaskStep );
+						console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
 
 						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 						const lastLevel = [...referenceData.mercenaryLevels].pop();
