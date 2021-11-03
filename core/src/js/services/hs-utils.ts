@@ -201,6 +201,7 @@ export const publicCardCreators = [
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
 	CardIds.DeadRinger,
+	CardIds.DeepwaterEvoker,
 	CardIds.DivingGryphon,
 	CardIds.ElementalAllies,
 	CardIds.ElementaryReaction,
@@ -227,10 +228,12 @@ export const publicCardCreators = [
 	CardIds.Guidance1,
 	CardIds.HarborScamp,
 	CardIds.HowlingCommander,
+	CardIds.Hullbreaker,
 	CardIds.IceFishing,
 	CardIds.Insight_InsightToken,
 	CardIds.InvestmentOpportunity,
 	CardIds.JepettoJoybuzz,
+	CardIds.JerryRigCarpenter,
 	CardIds.JuicyPsychmelon,
 	CardIds.Kazakus1,
 	CardIds.KazakusGolemShaper,
@@ -239,11 +242,13 @@ export const publicCardCreators = [
 	CardIds.KronxDragonhoof,
 	CardIds.LunarVisions,
 	CardIds.Mankrik,
+	CardIds.MoonlitGuidance,
 	CardIds.MastersCall,
 	CardIds.MurlocTastyfin,
 	CardIds.NecriumApothecary,
 	CardIds.NorthwatchCommander,
 	CardIds.PackKodo,
+	CardIds.Parrrley,
 	CardIds.Peon1,
 	CardIds.PredatoryInstincts,
 	CardIds.PrimalDungeoneer,
@@ -497,6 +502,7 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'wailing_caverns':
 			return BoosterType.THE_BARRENS;
 		case 'stormwind':
+		case 'deadmines':
 			return BoosterType.STORMWIND;
 		default:
 			console.warn('no default booster type for set id', setId);

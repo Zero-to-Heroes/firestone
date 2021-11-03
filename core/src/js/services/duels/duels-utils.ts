@@ -59,6 +59,13 @@ const SIGNATURE_TREASURES = [
 	CardIds.CollectorsIreTavernBrawlToken,
 	CardIds.ScrapmetalDemolitionistTavernBrawl,
 	CardIds.SpikedArmsTavernBrawlToken,
+
+	CardIds.ApocalypseTavernBrawl,
+	CardIds.ClawsOfTerrorTaveernBrawl,
+	CardIds.FireStompTavernBrawl,
+	CardIds.HornsOfFlameTavernBrawl,
+	CardIds.SoulstoneTrapTavernBrawl,
+	CardIds.BlackSoulstoneTavernBrawl,
 ];
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
@@ -85,30 +92,32 @@ export const duelsTreasureRank = (cardId: string): number => {
 	switch (cardId) {
 		// Passives
 		case CardIds.AvengingArmamentsTavernBrawl:
-		case CardIds.AllTogetherNowTavernBrawl:
+		// case CardIds.AllTogetherNowTavernBrawl:
 		case CardIds.BattleTotem2:
-		case CardIds.BookOfWonders:
-		case CardIds.Caltrops:
-		case CardIds.CannibalismTavernBrawl:
+		// case CardIds.BookOfWonders:
+		// case CardIds.Caltrops:
+		// case CardIds.CannibalismTavernBrawl:
 		case CardIds.CorruptedFelstoneTavernBrawl:
 		case CardIds.DisksOfLegend:
 		case CardIds.DragonboneRitualTavernBrawl:
 		case CardIds.EerieStoneTavernBrawl:
+		case CardIds.ElixirOfVigor:
 		case CardIds.EmeraldGogglesTavernBrawl:
 		case CardIds.EnduranceTrainingTavernBrawl:
 		case CardIds.FlameWavesTavernBrawl:
-		case CardIds.FromTheSwampTavernBrawl:
+		// case CardIds.FromTheSwampTavernBrawl:
 		case CardIds.HagathasEmbrace:
 		case CardIds.KhadgarsScryingOrb:
 		case CardIds.LegendaryLootTavernBrawl:
 		case CardIds.MeekMasteryTavernBrawl:
 		case CardIds.MummyMagic:
+		case CardIds.OoopsAllSpellsTavernBrawl:
 		case CardIds.OrbOfRevelationTavernBrawl:
 		case CardIds.RallyTheTroopsTavernBrawl:
 		case CardIds.ScepterOfSummoning:
 		case CardIds.SpecialDeliveryTavernBrawl:
 		case CardIds.SpreadingSaplingsTavernBrawl:
-		case CardIds.StarvingTavernBrawl:
+		// case CardIds.StarvingTavernBrawl:
 		case CardIds.TotemOfTheDead2:
 		case CardIds.UnlockedPotential:
 			return 2;
@@ -117,13 +126,10 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.CapturedFlag:
 		case CardIds.DeathlyDeathTavernBrawl:
 		case CardIds.DoubleTime:
-		case CardIds.ElixirOfVigor:
 		case CardIds.GreedyGainsTavernBrawl:
 		case CardIds.ManastormTavernBrawl:
-		case CardIds.OoopsAllSpellsTavernBrawl:
 		case CardIds.OrbOfRevelationTavernBrawl:
 		case CardIds.PartyReplacementTavernBrawl:
-		case CardIds.RallyTheTroopsTavernBrawl:
 		case CardIds.RobeOfTheMagi:
 		case CardIds.Stargazing:
 			return 3;

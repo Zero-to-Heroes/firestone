@@ -36,7 +36,7 @@ import {
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
-	taunt,
+	taunt
 } from './selectors';
 
 @Injectable()
@@ -137,6 +137,8 @@ export class CardsHighlightService {
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(inDeck, beast);
+			case CardIds.ProvingGrounds:
+				return and(inDeck, minion);
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
 			case CardIds.Rally:

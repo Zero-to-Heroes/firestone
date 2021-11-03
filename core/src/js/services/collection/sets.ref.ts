@@ -9,9 +9,15 @@ export const standardSets: readonly string[] = [
 	'core',
 	'black_temple',
 	'stormwind',
+	'deadmines',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'deadmines',
+		name: 'Deadmines',
+		launchDate: new Date('2021-11-02'),
+	},
 	{
 		id: 'stormwind',
 		name: 'United in Stormwind',

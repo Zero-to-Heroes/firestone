@@ -212,6 +212,8 @@ export class SetsService {
 				return 'darkmoon_faire';
 			case 'wailing_caverns':
 				return 'the_barrens';
+			case 'deadmines':
+				return 'stormwind';
 		}
 		return setId;
 	}
