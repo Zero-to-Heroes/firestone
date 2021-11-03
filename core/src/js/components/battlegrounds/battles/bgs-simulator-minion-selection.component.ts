@@ -5,7 +5,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
@@ -135,6 +135,32 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							(valueChanged)="onSummonPlantsChanged($event)"
 							helpTooltip='Gives the minion "Deathrattle: summon two 1/1 plants"'
 						></checkbox>
+						<div class="input health">
+							<div
+								class="label"
+								helpTooltip="How many times has Sneed's Hero Power been used on this minion"
+							>
+								Sneed's DR
+							</div>
+							<input
+								type="number"
+								[ngModel]="sneeds"
+								(ngModelChange)="onSneedChanged($event)"
+								(mousedown)="preventDrag($event)"
+							/>
+							<div class="buttons">
+								<button
+									class="arrow up"
+									inlineSVG="assets/svg/arrow.svg"
+									(click)="incrementSneed()"
+								></button>
+								<button
+									class="arrow down"
+									inlineSVG="assets/svg/arrow.svg"
+									(click)="decrementSneed()"
+								></button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -200,6 +226,7 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 	megaWindfury: boolean;
 	summonMechs: boolean;
 	summonPlants: boolean;
+	sneeds: number = 0;
 
 	searchString = new BehaviorSubject<string>(null);
 
@@ -380,6 +407,19 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 		this.updateCard();
 	}
 
+	incrementSneed() {
+		this.sneeds++;
+		this.updateCard();
+	}
+
+	decrementSneed() {
+		if (this.sneeds <= 1) {
+			return;
+		}
+		this.sneeds--;
+		this.updateCard();
+	}
+
 	onAttackChanged(value: number) {
 		this.attack = value;
 		this.updateCard();
@@ -387,6 +427,11 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 
 	onHealthChanged(value: number) {
 		this.health = value;
+		this.updateCard();
+	}
+
+	onSneedChanged(value: number) {
+		this.sneeds = value;
 		this.updateCard();
 	}
 
@@ -427,6 +472,11 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 			enchantments: [
 				this.summonMechs ? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment } : null,
 				this.summonPlants ? { cardId: CardIds.LivingSpores_LivingSporesEnchantment } : null,
+				...(this.sneeds > 0
+					? [...Array(this.sneeds).keys()].map((i) => ({
+							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
+					  }))
+					: []),
 			].filter((e) => !!e),
 		} as BoardEntity);
 	}
@@ -460,6 +510,9 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 		this.summonPlants = this._entity.enchantments
 			.map((e) => e.cardId)
 			.includes(CardIds.LivingSpores_LivingSporesEnchantment);
+		this.sneeds = this._entity.enchantments
+			.map((e) => e.cardId)
+			.filter((cardId) => cardId === CardIds.LivingSpores_LivingSporesEnchantment).length;
 		this.updateCard();
 	}
 
