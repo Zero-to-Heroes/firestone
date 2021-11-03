@@ -105,7 +105,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			.subscribe((scale) => {
 				this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.restoreWindowPosition();
