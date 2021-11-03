@@ -7,7 +7,7 @@ import {
 	PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
-	SceneMode
+	SceneMode,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckDefinition, decode, encode } from 'deckstrings';

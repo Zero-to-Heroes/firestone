@@ -1,9 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener, OnDestroy
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { combineLatest, from, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';

@@ -87,6 +87,7 @@ export const secret = (handler: Handler): boolean => {
 export const spellSchool = (spellSchool: SpellSchool) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
 };
+export const shadow = spellSchool(SpellSchool.SHADOW);
 
 export const cardType = (type: CardType) => (handler: Handler): boolean => {
 	return (

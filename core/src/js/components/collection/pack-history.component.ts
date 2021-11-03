@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardHistory } from '../../models/card-history';

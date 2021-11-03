@@ -8,7 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';

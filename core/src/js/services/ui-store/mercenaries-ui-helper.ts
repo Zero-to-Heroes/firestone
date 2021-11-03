@@ -12,7 +12,7 @@ import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,
-	MercenariesReferenceData
+	MercenariesReferenceData,
 } from '../mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
 

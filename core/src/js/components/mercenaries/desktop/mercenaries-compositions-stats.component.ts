@@ -4,7 +4,7 @@ import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operator
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
 import {
 	MercenariesComposition,
-	MercenariesGlobalStatsPvp
+	MercenariesGlobalStatsPvp,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

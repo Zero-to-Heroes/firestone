@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input
+	Input,
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';

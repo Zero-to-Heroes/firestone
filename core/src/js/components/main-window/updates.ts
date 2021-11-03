@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.1.0',
+		version: '8.1.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,41 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'mercenaries',
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Update for patch 21.6.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Add meta PvP Hero stats.`,
+								text: `You can now add Sneed's deathrattle to any minion in the simulator.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							// {
+							// 	type: 'feature',
+							// 	text: `Add meta PvP Hero stats.`,
+							// },
+							{
+								type: 'feature',
+								text: `The task progress column in the mercenaries Progression tab now display completed tasks, instead of the task the merc is on. It shows the same thing, but in a less confusing way.`,
+							},
+							{
+								type: 'feature',
+								text: `Add the task number in the tasks list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue when detecting some tasks.`,
 							},
 						],
 					},

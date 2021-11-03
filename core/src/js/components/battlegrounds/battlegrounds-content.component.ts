@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	Input,
-	OnDestroy
+	OnDestroy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';

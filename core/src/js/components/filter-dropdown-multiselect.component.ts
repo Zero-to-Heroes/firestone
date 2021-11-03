@@ -8,7 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';

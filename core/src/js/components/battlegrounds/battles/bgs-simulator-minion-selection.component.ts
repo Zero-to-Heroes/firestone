@@ -5,7 +5,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
@@ -226,7 +226,7 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 	megaWindfury: boolean;
 	summonMechs: boolean;
 	summonPlants: boolean;
-	sneeds: number = 0;
+	sneeds = 0;
 
 	searchString = new BehaviorSubject<string>(null);
 

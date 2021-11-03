@@ -33,10 +33,11 @@ import {
 	race,
 	rush,
 	secret,
+	shadow,
 	spell,
 	spellPlayedThisMatch,
 	spellSchool,
-	taunt
+	taunt,
 } from './selectors';
 
 @Injectable()
@@ -151,6 +152,8 @@ export class CardsHighlightService {
 				return and(inDeck, beast);
 			case CardIds.SelectiveBreederCore:
 				return and(inDeck, beast);
+			case CardIds.StaffOfPainTavernBrawl:
+				return and(spell, shadow);
 			case CardIds.SwordOfTheFallen:
 				return and(inDeck, spell, secret);
 			case CardIds.Tuskpiercer:

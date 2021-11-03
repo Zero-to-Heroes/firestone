@@ -10,7 +10,7 @@ import {
 	dustForPremium,
 	dustToCraftFor,
 	dustToCraftForPremium,
-	getPackDustValue
+	getPackDustValue,
 } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';

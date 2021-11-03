@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input
+	Input,
 } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
