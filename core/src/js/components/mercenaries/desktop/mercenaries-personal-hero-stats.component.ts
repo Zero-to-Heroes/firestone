@@ -4,7 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
 	MercenariesPersonalHeroesSortCriteria,
-	MercenariesPersonalHeroesSortCriteriaType,
+	MercenariesPersonalHeroesSortCriteriaType
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
@@ -283,7 +283,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 		const nextTaskDescription = `
 				<div class="current-task">
-					<div class="title">Next Task: Task ${currentStep + 1}: ${currentTask.title}</div>
+					<div class="title">Next: Task ${currentStep + 1}: ${currentTask.title}</div>
 					<div class="description">${currentTask.description}</div>
 				</div>
 		`;
