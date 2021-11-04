@@ -78,15 +78,21 @@ export class MercenariesMemoryCacheService {
 	}
 
 	public async getMercenariesMergedCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
-		const newMercenariesInfo: MemoryMercenariesCollectionInfo =
-			(await this.memoryService.getMercenariesCollectionInfo()) ??
-			(await this.loadLocalMercenariesCollectionInfo());
+		let newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo();
+		if (!newMercenariesInfo?.Mercenaries?.length) {
+			newMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
+		}
 		if (!newMercenariesInfo) {
 			return null;
 		}
 
 		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
 		console.debug('[merc-memory] new merc info', newMercenariesInfo.Visitors);
+		console.debug(
+			'[merc-memory] ref infos',
+			await this.memoryService.getMercenariesCollectionInfo(),
+			await this.loadLocalMercenariesCollectionInfo(),
+		);
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
 		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo);
