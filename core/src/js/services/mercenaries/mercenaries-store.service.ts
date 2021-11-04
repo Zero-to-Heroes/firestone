@@ -25,6 +25,7 @@ import { MercenariesHeroDiedParser } from './parser/mercenaries-hero-died-parser
 import { MercenariesHeroRevealedParser } from './parser/mercenaries-hero-revealed-parser';
 import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-parser';
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
+import { MercenariesSpeedParser } from './parser/mercenaries-speed-parser';
 import { MercenariesTeamOpponentManualCloseParser } from './parser/mercenaries-team-opponent-manual-close-parser';
 import { MercenariesTeamPlayerManualCloseParser } from './parser/mercenaries-team-player-manual-close-parser';
 import { MercenariesTurnStartParser } from './parser/mercenaries-turn-start-parser';
@@ -154,6 +155,7 @@ export class MercenariesStoreService {
 			new MercenariesZoneChangedParser(),
 			new MercenariesZonePositionChangedParser(),
 			new MercenariesBuffsParser(this.allCards),
+			new MercenariesSpeedParser(this.allCards),
 
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),

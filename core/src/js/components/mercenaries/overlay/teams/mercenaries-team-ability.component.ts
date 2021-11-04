@@ -94,8 +94,16 @@ export class MercenariesTeamAbilityComponent {
 						],
 				  }
 				: null;
-		this.speed = value.speed == null ? null : value.speed + (this.speedModifier?.value ?? 0);
 		this.baseSpeed = abilityCard.cost;
+		this.speed =
+			value.speed == null
+				? null
+				: // The speed has been directly modified because of a COST tag change
+				value.speed !== this.baseSpeed
+				? value.speed
+				: // It can happen that the ability hasn't been modified by a COST tag change, but that
+				  // we know some modifiers apply to the hero. In this case, we show it
+				  value.speed + (this.speedModifier?.value ?? 0);
 		const influences = (this.speedModifier?.influences ?? [])
 			.map((influence) => `${this.allCards.getCard(influence.cardId).name}: ${influence.value}`)
 			.join('<br/> ');

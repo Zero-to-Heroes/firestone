@@ -1103,6 +1103,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'COST_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.COST_CHANGED, gameEvent, {
+						cost: gameEvent.Value.AdditionalProps.NewCost,
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+					}),
+				);
+				break;
 			case 'ZONE_POSITION_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
