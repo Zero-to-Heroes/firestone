@@ -47,6 +47,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BloodPact4Lettuce:
 		case CardIds.BloodPact5Lettuce:
 			return or(orc, demon);
+		case CardIds.CenarionSurge1Lettuce:
+		case CardIds.CenarionSurge2Lettuce:
+		case CardIds.CenarionSurge3Lettuce:
+		case CardIds.CenarionSurge4Lettuce:
+		case CardIds.CenarionSurge5Lettuce:
+			return nature;
 		case CardIds.DarkShamanCowl1Lettuce:
 		case CardIds.DarkShamanCowl2Lettuce:
 		case CardIds.DarkShamanCowl3Lettuce:
