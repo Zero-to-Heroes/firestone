@@ -13,7 +13,7 @@ import { AchievementsStorageService } from './achievements-storage.service';
 const ACHIEVEMENTS_UPDATE_URL = 'https://api.firestoneapp.com/achievements/save/achievements/{proxy+}';
 const ACHIEVEMENTS_RETRIEVE_URL = 'https://api.firestoneapp.com/achievements/get/achievements/{proxy+}';
 const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL =
-	'https://static.zerotoheroes.com/hearthstone/jsoncards/hs-achievements.json?v=2';
+	'https://static.zerotoheroes.com/hearthstone/jsoncards/hs-achievements.json?v=3';
 
 @Injectable()
 export class RemoteAchievementsService {
