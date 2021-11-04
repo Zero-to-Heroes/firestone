@@ -197,7 +197,7 @@ const handleHemet = (deckState: DeckState, allCards: CardsFacadeService): DeckSt
 	return updateCardInDeck(
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
-		(card, refCard) => refCard.cost <= 3,
+		(card, refCard) => refCard?.cost <= 3,
 		(card) => null,
 		deckState,
 		allCards,
@@ -206,7 +206,7 @@ const handleHemet = (deckState: DeckState, allCards: CardsFacadeService): DeckSt
 
 const handleOoopsAllSpells = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	const stateWithoutSpells = updateCardInDeck(
-		(card, refCard) => refCard.type === 'Minion',
+		(card, refCard) => refCard?.type === 'Minion',
 		(card) => null,
 		deckState,
 		allCards,

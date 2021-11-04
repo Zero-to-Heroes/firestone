@@ -117,7 +117,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			takeUntil(this.destroyed$),
 		);
 		this.lastOpponentCardId$ = this.store
-			.listenBattlegrounds$(([state]) => state.currentGame.lastOpponentCardId)
+			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
 			.pipe(
 				map(([lastOpponentCardId]) => lastOpponentCardId),
 				// FIXME
