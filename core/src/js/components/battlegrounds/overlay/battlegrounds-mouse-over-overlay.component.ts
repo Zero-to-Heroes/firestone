@@ -5,16 +5,17 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation,
+	ViewEncapsulation
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -31,29 +32,44 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			*ngIf="inGame$ | async"
 		>
 			<!-- So that we avoid showing other players infos before the start of the match -->
-			<ul class="bgs-leaderboard" *ngIf="bgsPlayers$ | async as bgsPlayers">
+			<ul
+				class="bgs-leaderboard"
+				*ngIf="{
+					bgsPlayers: bgsPlayers$ | async,
+					currentTurn: currentTurn$ | async,
+					lastOpponentCardId: lastOpponentCardId$ | async,
+					showLastOpponentIcon: showLastOpponentIcon$ | async
+				} as value"
+			>
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
-					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"
+					*ngFor="let bgsPlayer of value.bgsPlayers; let i = index; trackBy: trackByFunction"
 					[bgsPlayer]="bgsPlayer"
-					[currentTurn]="currentTurn$ | async"
-					[lastOpponentCardId]="lastOpponentCardId$ | async"
-					[showLastOpponentIcon]="showLastOpponentIcon$ | async"
+					[currentTurn]="value.currentTurn"
+					[lastOpponentCardId]="value.lastOpponentCardId"
+					[showLastOpponentIcon]="value.showLastOpponentIcon"
 					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>
 				<div class="mouse-leave-fix right"></div>
 			</ul>
-			<div class="board-container top-board">
-				<ul class="board" *ngIf="minions$ | async as minions">
+			<div
+				class="board-container top-board"
+				*ngIf="{
+					showTribesHighlight: showTribesHighlight$ | async,
+					highlightedTribes: highlightedTribes$ | async,
+					highlightedMinions: highlightedMinions$ |async
+				} as value"
+			>
+				<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">
 					<bgs-tavern-minion
 						class="tavern-minion"
-						*ngFor="let minion of minions; let i = index; trackBy: trackByMinion"
+						*ngFor="let minion of minionCardIds; trackBy: trackByMinion"
 						[minion]="minion"
-						[showTribesHighlight]="showTribesHighlight$ | async"
-						[highlightedTribes]="highlightedTribes$ | async"
-						[highlightedMinions]="highlightedMinions$ | async"
+						[showTribesHighlight]="value.showTribesHighlight"
+						[highlightedTribes]="value.highlightedTribes"
+						[highlightedMinions]="value.highlightedMinions"
 					></bgs-tavern-minion>
 				</ul>
 			</div>
@@ -69,7 +85,7 @@ export class BattlegroundsMouseOverOverlayComponent
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
 	lastOpponentCardId$: Observable<string>;
 	currentTurn$: Observable<number>;
-	minions$: Observable<readonly DeckCard[]>;
+	minionCardIds$: Observable<readonly string[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMinions$: Observable<readonly string[]>;
 	showLastOpponentIcon$: Observable<boolean>;
@@ -86,12 +102,6 @@ export class BattlegroundsMouseOverOverlayComponent
 		private readonly init_DebugService: DebugService,
 	) {
 		super();
-	}
-
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.ow.setWindowPassthrough(this.windowId);
-
 		this.inGame$ = this.store
 			.listenBattlegrounds$(
 				([state]) => state.inGame,
@@ -100,13 +110,16 @@ export class BattlegroundsMouseOverOverlayComponent
 			.pipe(
 				filter(([inGame, currentGame]) => !!currentGame),
 				map(([inGame, currentGame]) => inGame && !currentGame.gameEnded),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting inGame in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.bgsPlayers$ = this.store
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(
+				debounceTime(1000),
 				filter(([state]) => !!state.currentGame),
 				map(([state]) =>
 					[...(state.currentGame.players ?? [])].sort(
@@ -115,6 +128,7 @@ export class BattlegroundsMouseOverOverlayComponent
 				),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting bgsPlayers in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.lastOpponentCardId$ = this.store
@@ -122,8 +136,10 @@ export class BattlegroundsMouseOverOverlayComponent
 			.pipe(
 				filter(([currentGame]) => !!currentGame),
 				map(([currentGame]) => currentGame.lastOpponentCardId),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting lastOpponentCardId 2 in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.currentTurn$ = this.store
@@ -131,52 +147,71 @@ export class BattlegroundsMouseOverOverlayComponent
 			.pipe(
 				filter(([currentGame]) => !!currentGame),
 				map(([currentGame]) => currentGame.currentTurn),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentTurn in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.minions$ = combineLatest(
+		this.minionCardIds$ = combineLatest(
 			this.store.listenBattlegrounds$(([state]) => state.currentGame),
 			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
 		).pipe(
-			filter(([[currentGame], opponentBoard]) => !!currentGame && !!opponentBoard),
-			map(([[currentGame], opponentBoard]) => (currentGame.phase === 'recruit' ? opponentBoard : [])),
+			filter(([[currentGame], [opponentBoard]]) => !!currentGame && !!opponentBoard),
+			map(([[currentGame], [opponentBoard]]) =>
+				currentGame.phase === 'recruit' ? opponentBoard.map((minion) => minion.cardId) : [],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((info) => cdLog('emitting minions in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([state]) => state.highlightedTribes)
 			.pipe(
 				map(([highlightedTribes]) => highlightedTribes),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting highlightedTribes in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([state]) => state.highlightedMinions)
 			.pipe(
 				map(([highlightedMinions]) => highlightedMinions),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting highlightedMinions in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showLastOpponentIcon$ = this.store
 			.listen$(([state, nav, prefs]) => prefs.bgsShowLastOpponentIconInOverlay)
 			.pipe(
 				map(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting showLastOpponentIcon in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showTribesHighlight$ = this.store
 			.listen$(([state, nav, prefs]) => prefs.bgsShowTribesHighlight)
 			.pipe(
 				map(([bgsShowTribesHighlight]) => bgsShowTribesHighlight),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.ow.setWindowPassthrough(this.windowId);
 
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
@@ -196,8 +231,8 @@ export class BattlegroundsMouseOverOverlayComponent
 		return player.cardId;
 	}
 
-	trackByMinion(index: number, minion: DeckCard) {
-		return minion.entityId;
+	trackByMinion(index: number, minion: string) {
+		return index;
 	}
 
 	private async changeWindowSize(): Promise<void> {

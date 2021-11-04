@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
 	selector: 'bgs-tavern-minion',
@@ -36,8 +35,8 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 export class BgsTavernMinionComponent {
 	@Input() showTribesHighlight: boolean;
 
-	@Input() set minion(value: DeckCard) {
-		this._minion = value;
+	@Input() set minion(value: string) {
+		this._minionCardId = value;
 		this.updateValues();
 	}
 
@@ -51,7 +50,7 @@ export class BgsTavernMinionComponent {
 		this.updateValues();
 	}
 
-	_minion: DeckCard;
+	_minionCardId: string;
 	_highlightedTribes: readonly Race[] = [];
 	_highlightedMinions: readonly string[] = [];
 
@@ -69,13 +68,13 @@ export class BgsTavernMinionComponent {
 		this.highlightedFromMinion = false;
 		if (
 			!this.showTribesHighlight ||
-			!this._minion ||
+			!this._minionCardId ||
 			(!this._highlightedTribes?.length && !this._highlightedMinions?.length)
 		) {
 			return;
 		}
 
-		const card = this.allCards.getCard(this._minion.cardId);
+		const card = this.allCards.getCard(this._minionCardId);
 		const tribe: Race = card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
 		this.highlightedFromTribe =
 			this._highlightedTribes.includes(tribe) || (this._highlightedTribes.length > 0 && tribe === Race.ALL);
