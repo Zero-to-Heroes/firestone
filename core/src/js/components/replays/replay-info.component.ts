@@ -188,8 +188,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 		if (!this.replayInfo) {
 			return;
 		}
-		console.debug('updating info', this.replayInfo);
-
 		this.gameMode = this.replayInfo.gameMode;
 		this.isMercenariesGame = isMercenaries(this.gameMode);
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(
