@@ -305,15 +305,58 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		sortCriteria: readonly MercenariesPersonalHeroesSortCriteria[],
 		referenceData: MercenariesReferenceData,
 	): readonly PersonalHeroStat[] {
-		let currentSorted = stats.filter((stat) =>
-			applySearchStringFilter(stat.cardId, heroSearchString, this.allCards, referenceData),
-		);
-		// Most important criteria is first in the list, to applied last
-		const reversedCriteria = [...sortCriteria].reverse();
-		for (const criteria of reversedCriteria) {
-			currentSorted = [...currentSorted].sort(this.applySortCriteria(criteria));
-		}
+		const currentSorted = stats
+			.filter((stat) => applySearchStringFilter(stat.cardId, heroSearchString, this.allCards, referenceData))
+			// So that minions that you own are always displayed above the ones you don't have in case of ties
+			.sort((a, b) => {
+				if (a.owned && !b.owned) {
+					return -1;
+				}
+				if (!a.owned && b.owned) {
+					return 1;
+				}
+				return 0;
+			})
+			.sort(this.applySortCriteria(sortCriteria[0]));
+		// console.debug('currentSorted', currentSorted, sortCriteria);
+		// // Only apply the last criteria, because it doesn't really make sense to sort by multiple criteria,
+		// // especially since this is not visible in the UI
+		// const criteria = sortCriteria[0];
+
+
+		// // Most important criteria is first in the list, to applied last
+		// const reversedCriteria = [...sortCriteria].reverse();
+		// for (const criteria of reversedCriteria) {
+		// 	currentSorted = [...currentSorted].sort(this.applySortCriteria(criteria));
+		// }
 		return currentSorted;
+	}
+
+	private buildCompare(
+		direction: 'asc' | 'desc',
+		extractor: (a: PersonalHeroStat) => number | string,
+	): (a: PersonalHeroStat, b: PersonalHeroStat) => number {
+		if (direction === 'desc') {
+			return (a: PersonalHeroStat, b: PersonalHeroStat) => {
+				if (extractor(a) > extractor(b)) {
+					return -1;
+				} else if (extractor(a) < extractor(b)) {
+					return 1;
+				} else {
+					return 0;
+				}
+			};
+		} else {
+			return (a: PersonalHeroStat, b: PersonalHeroStat) => {
+				if (extractor(a) < extractor(b)) {
+					return -1;
+				} else if (extractor(a) > extractor(b)) {
+					return 1;
+				} else {
+					return 0;
+				}
+			};
+		}
 	}
 
 	private applySortCriteria(
@@ -321,36 +364,19 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 	): (a: PersonalHeroStat, b: PersonalHeroStat) => number {
 		switch (criteria.criteria) {
 			case 'level':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalXp > b.totalXp ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalXp < b.totalXp ? -1 : 1);
+				return this.buildCompare(criteria.direction, (a) => a.totalXp);
 			case 'role':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.role > b.role ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.role < b.role ? -1 : 1);
+				return this.buildCompare(criteria.direction, (a) => a.role);
 			case 'name':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.name > b.name ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.name < b.name ? -1 : 1);
+				return this.buildCompare(criteria.direction, (a) => a.name);
 			case 'xp-in-level':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (this.progressBar(a) > this.progressBar(b) ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) =>
-							this.progressBar(a) < this.progressBar(b) ? -1 : 1;
+				return this.buildCompare(criteria.direction, (a) => this.progressBar(a));
 			case 'coins-left':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalCoinsLeft > b.totalCoinsLeft ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalCoinsLeft < b.totalCoinsLeft ? -1 : 1);
+				return this.buildCompare(criteria.direction, (a) => a.totalCoinsLeft);
 			case 'coins-needed-to-max':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) =>
-							a.totalCoinsForFullUpgrade > b.totalCoinsForFullUpgrade ? -1 : 1
-					: (a: PersonalHeroStat, b: PersonalHeroStat) =>
-							a.totalCoinsForFullUpgrade < b.totalCoinsForFullUpgrade ? -1 : 1;
+				return this.buildCompare(criteria.direction, (a) => a.totalCoinsForFullUpgrade);
 			case 'task-progress':
-				return criteria.direction === 'desc'
-					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.currentTask > b.currentTask ? -1 : 1)
-					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.currentTask < b.currentTask ? -1 : 1);
+				return this.buildCompare(criteria.direction, (a) => a.currentTask);
 		}
 	}
 
