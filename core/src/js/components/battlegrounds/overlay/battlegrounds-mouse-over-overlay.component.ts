@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation
+	ViewEncapsulation,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
@@ -59,7 +59,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				*ngIf="{
 					showTribesHighlight: showTribesHighlight$ | async,
 					highlightedTribes: highlightedTribes$ | async,
-					highlightedMinions: highlightedMinions$ |async
+					highlightedMinions: highlightedMinions$ | async
 				} as value"
 			>
 				<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">

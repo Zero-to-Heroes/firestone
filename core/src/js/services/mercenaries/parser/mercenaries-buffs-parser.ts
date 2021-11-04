@@ -4,7 +4,7 @@ import {
 	BattleMercenary,
 	BattleSpeedModifier,
 	MercenariesBattleState,
-	MercenariesBattleTeam
+	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
 import { normalizeHeroCardId } from '../../battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../cards-facade.service';
@@ -12,7 +12,7 @@ import { sumOnArray } from '../../utils';
 import {
 	BUFF_SPEED_MODIFIER_ENCHANTMENTS,
 	DEBUFF_SPEED_MODIFIER_ENCHANTMENTS,
-	normalizeMercenariesCardId
+	normalizeMercenariesCardId,
 } from '../mercenaries-utils';
 import { MercenariesParser } from './_mercenaries-parser';
 

@@ -4,7 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
 	MercenariesPersonalHeroesSortCriteria,
-	MercenariesPersonalHeroesSortCriteriaType
+	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
@@ -322,7 +322,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		// // Only apply the last criteria, because it doesn't really make sense to sort by multiple criteria,
 		// // especially since this is not visible in the UI
 		// const criteria = sortCriteria[0];
-
 
 		// // Most important criteria is first in the list, to applied last
 		// const reversedCriteria = [...sortCriteria].reverse();
