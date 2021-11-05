@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS } from '../local-storage';
+import { LocalStorageService } from '../local-storage';
 import { HsAchievementsInfo } from './achievements-info';
 
 declare let amplitude;
@@ -14,20 +14,20 @@ export class AchievementsStorageService {
 	private db: AngularIndexedDB;
 	private achievementsCache: { [achievementId: string]: CompletedAchievement } = {};
 
-	constructor() {
+	constructor(private readonly localStorageService: LocalStorageService) {
 		// Necessary for history
 		this.init();
 	}
 
 	public async saveInGameAchievements(info: HsAchievementsInfo): Promise<HsAchievementsInfo> {
-		localStorage.setItem(LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS, JSON.stringify(info));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS, info);
 		return info;
 	}
 
 	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
@@ -71,9 +71,9 @@ export class AchievementsStorageService {
 	}
 
 	public async loadAllHistory(): Promise<readonly AchievementHistory[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
@@ -89,12 +89,12 @@ export class AchievementsStorageService {
 	}
 
 	public async saveAllHistory(history: readonly AchievementHistory[]) {
-		localStorage.setItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, JSON.stringify(history));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY, history);
 	}
 
 	public async saveHistory(history: AchievementHistory) {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
-		const historyList: readonly AchievementHistory[] = !!fromStorage ? JSON.parse(fromStorage) : [];
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		const historyList: readonly AchievementHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
 		this.saveAllHistory(newHistory);
 	}

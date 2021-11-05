@@ -5,13 +5,7 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import {
-	LOCAL_STORAGE_CARDS_HISTORY,
-	LOCAL_STORAGE_CARD_BACKS,
-	LOCAL_STORAGE_COINS,
-	LOCAL_STORAGE_COLLECTION,
-	LOCAL_STORAGE_PACK_INFOS,
-} from '../local-storage';
+import { LocalStorageService } from '../local-storage';
 
 declare let amplitude;
 
@@ -21,34 +15,34 @@ export class CollectionStorageService {
 
 	private db: AngularIndexedDB;
 
-	constructor() {
+	constructor(private readonly localStorageService: LocalStorageService) {
 		this.init();
 	}
 
 	public async saveCollection(collection: readonly Card[]): Promise<readonly Card[]> {
-		localStorage.setItem(LOCAL_STORAGE_COLLECTION, JSON.stringify(collection));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_COLLECTION, collection);
 		return collection;
 	}
 
 	public async saveCardBacks(cardBacks: readonly CardBack[]): Promise<readonly CardBack[]> {
-		localStorage.setItem(LOCAL_STORAGE_CARD_BACKS, JSON.stringify(cardBacks));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARD_BACKS, cardBacks);
 		return cardBacks;
 	}
 
 	public async savePackInfos(packInfos: readonly PackInfo[]): Promise<readonly PackInfo[]> {
-		localStorage.setItem(LOCAL_STORAGE_PACK_INFOS, JSON.stringify(packInfos));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_PACK_INFOS, packInfos);
 		return packInfos;
 	}
 
 	public async saveCoins(coins: readonly Coin[]): Promise<readonly Coin[]> {
-		localStorage.setItem(LOCAL_STORAGE_COINS, JSON.stringify(coins));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_COINS, coins);
 		return coins;
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_COLLECTION);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COLLECTION);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'collection' });
@@ -64,9 +58,9 @@ export class CollectionStorageService {
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_CARD_BACKS);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARD_BACKS);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'card-backs' });
@@ -82,9 +76,9 @@ export class CollectionStorageService {
 	}
 
 	public async getPackInfos(): Promise<readonly PackInfo[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_PACK_INFOS);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_PACK_INFOS);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'pack-infos' });
@@ -100,9 +94,9 @@ export class CollectionStorageService {
 	}
 
 	public async getCoins(): Promise<readonly Coin[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_COINS);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COINS);
 		if (!!fromStorage) {
-			return JSON.parse(fromStorage);
+			return fromStorage;
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'coins' });
@@ -118,15 +112,15 @@ export class CollectionStorageService {
 	}
 
 	public async saveCardHistory(history: CardHistory): Promise<CardHistory> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_CARDS_HISTORY);
-		const historyList: readonly CardHistory[] = !!fromStorage ? JSON.parse(fromStorage) : [];
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY);
+		const historyList: readonly CardHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
-		localStorage.setItem(LOCAL_STORAGE_CARDS_HISTORY, JSON.stringify(newHistory));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, newHistory);
 		return history;
 	}
 
 	public async saveFullCardHistory(history: readonly CardHistory[]): Promise<readonly CardHistory[]> {
-		localStorage.setItem(LOCAL_STORAGE_CARDS_HISTORY, JSON.stringify(history));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, history);
 		return history;
 	}
 
@@ -136,9 +130,9 @@ export class CollectionStorageService {
 	}
 
 	public async getAllCardHistory(limit: number): Promise<readonly CardHistory[]> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_CARDS_HISTORY);
+		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY);
 		if (!!fromStorage) {
-			const result: readonly CardHistory[] = JSON.parse(fromStorage);
+			const result: readonly CardHistory[] = fromStorage ?? [];
 			return result.slice(0, limit);
 		}
 

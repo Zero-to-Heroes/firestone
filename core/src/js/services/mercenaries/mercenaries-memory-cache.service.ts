@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
-import { LOCAL_STORAGE_MERCENARIES_COLLECTION } from '../local-storage';
+import { LocalStorageService } from '../local-storage';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction, sleep } from '../utils';
@@ -44,6 +44,7 @@ export class MercenariesMemoryCacheService {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
+		private readonly localStorageService: LocalStorageService,
 	) {
 		this.init();
 	}
@@ -114,12 +115,12 @@ export class MercenariesMemoryCacheService {
 		if (!newMercenariesInfo?.Mercenaries?.length) {
 			return;
 		}
-		localStorage.setItem(LOCAL_STORAGE_MERCENARIES_COLLECTION, JSON.stringify(newMercenariesInfo));
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION, newMercenariesInfo);
 		return;
 	}
 
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
-		const result = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MERCENARIES_COLLECTION));
+		const result = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION);
 		console.debug('[merc-memory] retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
 		return result;
 	}

@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	Injectable,
 	NgModule,
-	Type,
+	Type
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -73,7 +73,7 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent,
+	BgsHeroDetailedStatsComponent
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -170,7 +170,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent,
+	DuelsHeroStatVignetteComponent
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsLeaderboardComponent } from '../../components/duels/desktop/duels-leaderboard.component';
@@ -199,7 +199,7 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent,
+	DuelsStatCellComponent
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';
@@ -241,7 +241,7 @@ import { MercenariesMyTeamsComponent } from '../../components/mercenaries/deskto
 import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
 	MercenariesPersonalHeroStatsComponent,
-	SortableLabelComponent,
+	SortableLabelComponent
 } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesPersonalTeamSummaryComponent } from '../../components/mercenaries/desktop/mercenaries-personal-team-summary.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
@@ -358,6 +358,7 @@ import { GameEventsEmitterService } from '../../services/game-events-emitter.ser
 import { GameEvents } from '../../services/game-events.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
+import { LocalStorageService } from '../../services/local-storage';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
@@ -791,6 +792,7 @@ const components = [
 		CollaboratorsService,
 		UserService,
 		ApiRunner,
+		LocalStorageService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { Preferences } from '../models/preferences';
-import { LOCAL_STORAGE_USER_PREFERENCES } from './local-storage';
+import { LocalStorageService } from './local-storage';
 
 declare let amplitude;
 
@@ -10,17 +10,18 @@ export class GenericStorageService {
 	private dbInit: boolean;
 	private db: AngularIndexedDB;
 
-	constructor() {
+	constructor(private readonly localStorageService: LocalStorageService) {
 		this.init();
 	}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
-		localStorage.setItem(LOCAL_STORAGE_USER_PREFERENCES, JSON.stringify(preferences));
+		console.debug('saving user prefs', preferences);
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES, preferences);
 		return preferences;
 	}
 
 	public async getUserPreferences(): Promise<Preferences> {
-		const fromStorage = localStorage.getItem(LOCAL_STORAGE_USER_PREFERENCES);
+		const fromStorage = localStorage.getItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES);
 		if (!!fromStorage) {
 			const result = Object.assign(new Preferences(), JSON.parse(fromStorage));
 			const resultWithDate: Preferences = {
