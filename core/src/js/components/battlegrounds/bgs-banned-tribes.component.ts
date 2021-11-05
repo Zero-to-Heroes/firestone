@@ -5,7 +5,7 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
@@ -67,6 +67,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => console.log('bannedTribes', info)),
 				takeUntil(this.destroyed$),
 			);
 		this.tooltip$ = this.bannedTribes$.pipe(
@@ -147,14 +148,19 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 
 	private async restoreWindowPosition(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
+		console.log('gameInfo', gameInfo);
 		if (!gameInfo) {
 			return;
 		}
 		const gameWidth = gameInfo.logicalWidth;
+		console.log('gameWidth', gameWidth);
 		const prefs: Preferences = await this.prefs.getPreferences();
 		const trackerPosition = prefs.bgsBannedTribesWidgetPosition;
+		console.log('trackerPosition', trackerPosition);
 		const newLeft = (trackerPosition && trackerPosition.left) || gameWidth / 2 + 300;
+		console.log('newLeft', newLeft);
 		const newTop = (trackerPosition && trackerPosition.top) || 200;
+		console.log('newTop', newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }
