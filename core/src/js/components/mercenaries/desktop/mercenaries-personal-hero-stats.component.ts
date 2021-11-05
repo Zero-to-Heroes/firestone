@@ -4,7 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import {
 	MercenariesPersonalHeroesSortCriteria,
-	MercenariesPersonalHeroesSortCriteriaType,
+	MercenariesPersonalHeroesSortCriteriaType
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
@@ -89,6 +89,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
 			.pipe(
 				map(([sortCriteria]) => sortCriteria[0]),
+				filter((sortCriteria) => !!sortCriteria),
+				distinctUntilChanged((a, b) => a?.criteria == b?.criteria && a?.direction == b?.direction),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
@@ -125,7 +127,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
 							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 							: Math.max(0, currentTaskStep);
-						console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
+						// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
 
 						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 						const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -239,7 +241,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						} as PersonalHeroStat;
 					});
 				}),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				// tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
 				takeUntil(this.destroyed$),
 			);
@@ -252,6 +254,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			),
 		).pipe(
 			filter(([stats, [referenceData, sortCriteria, heroSearchString]]) => !!stats?.length && !!referenceData),
+			// tap((info) => cdLog('combining stats in ', this.constructor.name, info)),
+			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			map(([stats, [referenceData, sortCriteria, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, sortCriteria, referenceData),
 			),

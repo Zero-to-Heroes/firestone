@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { CardRarity } from '@firestone-hs/reference-data';
 import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { areDeepEqual } from '../../../services/utils';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -116,7 +117,10 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 })
 export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
-		// console.debug('setting value', value);
+		if (areDeepEqual(this._stat, value)) {
+			return;
+		}
+		this._stat = value;
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;
 		this.owned = value.owned;
@@ -200,6 +204,7 @@ export class MercenariesPersonalHeroStatComponent {
 	equipments: readonly VisualEquipment[];
 
 	private mercenaryId: number;
+	private _stat: PersonalHeroStat;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
 

@@ -12,7 +12,7 @@ import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,
-	MercenariesReferenceData,
+	MercenariesReferenceData
 } from '../mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
 
@@ -47,6 +47,9 @@ export const applySearchStringFilter = (
 	allCards: CardsFacadeService,
 	referenceData: MercenariesReferenceData,
 ): boolean => {
+	if (!searchString?.length) {
+		return true;
+	}
 	const referenceHero = referenceData.mercenaries.find(
 		(merc) =>
 			normalizeMercenariesCardId(allCards.getCardFromDbfId(merc.cardDbfId).id) ===
