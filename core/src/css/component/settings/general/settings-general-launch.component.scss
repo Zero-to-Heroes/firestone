@@ -12,6 +12,42 @@
 			width: 280px;
 		}
 	}
+
+	.title {
+		margin-top: 30px;
+	}
+
+	.first-slider {
+		width: 300px;
+		margin-bottom: 15px;
+		margin-left: 10px;
+	}
+
+	::ng-deep .first-slider .preference-slider {
+		margin-top: 15px;
+	}
+
+	::ng-deep preference-slider .preference-slider label {
+		width: 260px;
+		font-size: 13px;
+	}
+
+	::ng-deep preference-slider.disabled .preference-slider {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+
+	::ng-deep preference-slider .preference-slider {
+		width: 230px;
+		margin-left: 10px;
+
+		.progress::before {
+			right: -3px;
+		}
+	}
+	::ng-deep preference-slider:not(:last-child) .preference-slider {
+		margin-bottom: 40px;
+	}
 }
 
 .reset-container {

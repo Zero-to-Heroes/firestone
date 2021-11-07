@@ -41,6 +41,7 @@ export class Preferences {
 	readonly contactEmail: string;
 	readonly lastSeenReleaseNotes: string;
 	readonly dontShowNewVersionNotif: boolean = false;
+	readonly globalZoomLevel: number = 100;
 
 	readonly advancedModeToggledOn: boolean;
 

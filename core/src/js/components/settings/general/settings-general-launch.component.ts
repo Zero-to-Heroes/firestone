@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-general-launch',
@@ -49,6 +50,23 @@ import { PreferencesService } from '../../../services/preferences.service';
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
+
+				<div class="title">Accessibility</div>
+				<div class="settings-group">
+					<div class="subtitle" helpTooltip="A zoom level that will be applied to all windows">
+						Zoom level
+					</div>
+					<preference-slider
+						class="first-slider"
+						[field]="'globalZoomLevel'"
+						[enabled]="true"
+						[min]="100"
+						[max]="400"
+						[snapSensitivity]="5"
+						[knobs]="sizeKnobs"
+					>
+					</preference-slider>
+				</div>
 			</section>
 		</div>
 
@@ -71,6 +89,20 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 	resetText = 'Reset preferences';
 	confirmationShown = false;
 	showResetConfirmationText = false;
+	sizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 100,
+			label: 'Normal',
+		},
+		{
+			absoluteValue: 200,
+			label: '200%',
+		},
+		{
+			absoluteValue: 400,
+			label: '400%',
+		},
+	];
 
 	private reloadWindows;
 

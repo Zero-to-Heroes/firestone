@@ -403,8 +403,12 @@ export class OverwolfService {
 		overwolf.windows.dragMove(windowId, callback);
 	}
 
-	public dragResize(windowId: string, edge: string) {
-		overwolf.windows.dragResize(windowId, edge);
+	public async dragResize(windowId: string, edge: string) {
+		return new Promise<void>((resolve) => {
+			overwolf.windows.dragResize(windowId, edge, (result) => {
+				resolve(result);
+			});
+		});
 	}
 
 	public async inGame(): Promise<boolean> {
@@ -591,7 +595,9 @@ export class OverwolfService {
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
 		return new Promise<void>((resolve) => {
-			overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
+			const newWidth = Math.round(width);
+			const newHeight = Math.round(height);
+			overwolf.windows.changeSize(windowId, newWidth, newHeight);
 			resolve();
 		});
 	}
@@ -694,6 +700,10 @@ export class OverwolfService {
 				resolve();
 			});
 		});
+	}
+
+	public setZoom(zoomFactor: number) {
+		overwolf.windows.setZoom(zoomFactor);
 	}
 
 	public async getActiveSubscriptionPlans(): Promise<ActiveSubscriptionPlan> {

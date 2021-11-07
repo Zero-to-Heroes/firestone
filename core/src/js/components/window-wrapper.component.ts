@@ -8,10 +8,13 @@ import {
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
+import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 @Component({
 	selector: 'window-wrapper',
@@ -60,23 +63,59 @@ import { OverwolfService } from '../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
+export class WindowWrapperComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() allowResize = false;
+
 	maximized: boolean;
 	screenCaptureOn: boolean;
 
+	private EXCLUDED_WINDOW_IDS = ['Window_Extension_lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob_SettingsWindow'];
+
 	private stateChangedListener: (message: any) => void;
+	private windowId: string;
+
+	private zoom = 1;
+	private originalWidth = 0;
+	private originalHeight = 0;
 
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly events: Events,
-	) {}
+		private readonly store: AppUiStoreFacadeService,
+	) {
+		super();
+	}
 
 	async ngAfterViewInit() {
-		const window = await this.ow.getCurrentWindow();
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId = currentWindow.id;
 
-		this.stateChangedListener = this.ow.addStateChangedListener(window.name, (message) => {
+		this.store
+			.listen$(([main, nav, prefs]) => prefs.globalZoomLevel)
+			.pipe(
+				map(([zoom]) => zoom),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(async (zoom) => {
+				if (this.EXCLUDED_WINDOW_IDS.includes(this.windowId)) {
+					return;
+				}
+				const normalized = zoom / 100;
+				this.zoom = normalized <= 1 ? 0 : normalized;
+				if (!this.originalHeight || !this.originalWidth) {
+					const currentWindow = await this.ow.getCurrentWindow();
+					this.originalWidth = currentWindow.width / Math.max(1, this.zoom);
+					this.originalHeight = currentWindow.height / Math.max(1, this.zoom);
+				}
+				// 0 is the unzoomed value
+				// It behaves a bit strangely. When values are > 1, the zoom behaves as expected
+				// If values are between 0 and 1, it looks like
+				this.ow.setZoom(this.zoom);
+				this.changeWindowSize();
+			});
+
+		this.stateChangedListener = this.ow.addStateChangedListener(currentWindow.name, (message) => {
 			if (message.window_state_ex === 'maximized') {
 				this.maximized = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
@@ -102,6 +141,7 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 				}
 			}, 200);
 		});
+
 	}
 
 	async dragResize(event: MouseEvent, edge) {
@@ -111,12 +151,23 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 
 		event.preventDefault();
 		event.stopPropagation();
+		await this.ow.dragResize(this.windowId, edge);
 		const window = await this.ow.getCurrentWindow();
-		this.ow.dragResize(window.id, edge);
+		this.originalWidth = window.width;
+		this.originalHeight = window.height;
+	}
+
+	private async changeWindowSize(): Promise<void> {
+		await this.ow.changeWindowSize(
+			this.windowId,
+			Math.max(this.originalWidth, this.zoom * this.originalWidth),
+			Math.max(this.originalHeight, this.zoom * this.originalHeight),
+		);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 }
