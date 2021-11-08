@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<h2 class="title">Update when you see achievements notifications</h2>
 			<section class="toggle-label">
 				<preference-toggle
-					field="achievementsEnabled"
+					field="achievementsEnabled2"
 					label="Enable FS achievements"
 					tooltip="Enable Firestone-exclusive achievements tracking."
 				></preference-toggle>
