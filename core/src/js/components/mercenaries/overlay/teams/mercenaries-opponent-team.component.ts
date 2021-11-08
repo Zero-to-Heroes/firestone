@@ -68,7 +68,7 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 				map((team) =>
 					team.update({
 						...team,
-						mercenaries: team.mercenaries.filter((merc) => !merc.isDead || !merc.creatorCardId),
+						mercenaries: team.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ?? [],
 					}),
 				),
 				filter((team) => !!team),

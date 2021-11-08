@@ -187,7 +187,7 @@ export class AchievementsMonitor {
 		);
 		console.log(
 			'[achievement-monitor] built achievements, emitting events',
-			achievements?.map((a) => a.id),
+			achievements?.map((a) => a?.id),
 		);
 		await Promise.all(achievements.map((ach) => this.sendUnlockEventFromAchievement(ach)));
 		this.previousAchievements = existingAchievements;
