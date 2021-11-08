@@ -194,7 +194,7 @@ export class DecksStateBuilderService {
 		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(statsWithReset);
 		return Object.assign(new DeckSummary(), {
 			class: deckClass,
-			deckName: deckName,
+			deckName: decodeURIComponent(deckName),
 			deckArchetype: deckArchetype,
 			deckstring: deckstring,
 			lastUsedTimestamp: lastUsed,
