@@ -230,6 +230,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.WarchiefsBlessing4Lettuce:
 		case CardIds.WarchiefsBlessing5Lettuce:
 			return horde;
+		case CardIds.ZhardoomGreatstaffOfTheDevourerLettuce:
+			return or(and(shadow, dealsDamage), and(fel, dealsDamage));
 	}
 };
 
@@ -268,6 +270,7 @@ const holy = (card: ReferenceCard) => spellSchool(card, SpellSchool.HOLY);
 const nature = (card: ReferenceCard) => spellSchool(card, SpellSchool.NATURE);
 const frost = (card: ReferenceCard) => spellSchool(card, SpellSchool.FROST);
 const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
+const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
 const dealsDamage = (card: ReferenceCard) => hasText(card, /deal \$?\d+ damage/);
