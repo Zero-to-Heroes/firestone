@@ -9,6 +9,7 @@ import { VisualAchievementCategory } from '../../../models/visual-achievement-ca
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -52,6 +53,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		this.tiers$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats),
 			map((stats) => this.buildTiers(stats)),
+			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		this.heroOverviews$ = combineLatest(
@@ -113,7 +115,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			}),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((info) => console.debug('[cd] emitting stats in ', this.constructor.name, info)),
+			tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 

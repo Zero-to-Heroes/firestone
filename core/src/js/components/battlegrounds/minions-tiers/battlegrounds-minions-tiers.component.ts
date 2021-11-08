@@ -11,14 +11,15 @@ import {
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable, Subscription } from 'rxjs';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../../services/utils';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -112,55 +113,71 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces)
 			.pipe(
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
 				}),
+				tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
 			.pipe(
 				map(([tribes]) => tribes),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting highlightedTribes in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
 			.pipe(
 				map(([tribes]) => tribes),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting highlightedMinions in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
 			.pipe(
 				map(([currentTurn]) => currentTurn),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentTurn in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showTribesHighlight$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
 			.pipe(
 				map(([info]) => info),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showMinionsList$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
 			.pipe(
 				map(([info]) => info),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting showMinionsList in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.prefSubscription = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)
-			.pipe(takeUntil(this.destroyed$))
+			.pipe(
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting prefSubscription in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			)
 			.subscribe(([info]) => (this.enableMouseOver = info));
 	}
 

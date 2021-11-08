@@ -2,13 +2,14 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -47,6 +48,7 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
+				distinctUntilChanged(),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles
 						// Not enough data for the top 1% yet
@@ -73,6 +75,7 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 			),
 		).pipe(
 			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([options, [filter, categoryId, currentView]]) => ({
 				filter: '' + filter,
 				placeholder: options.find((option) => +option.value === filter)?.label ?? options[0].label,

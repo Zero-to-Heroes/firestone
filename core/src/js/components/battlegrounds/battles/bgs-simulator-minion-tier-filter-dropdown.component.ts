@@ -3,7 +3,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BgsSimulatorMinionTierFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -55,6 +55,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter)
 			.pipe(
 				filter(([filter]) => !!filter),
+				distinctUntilChanged(),
 				map(([filter]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,

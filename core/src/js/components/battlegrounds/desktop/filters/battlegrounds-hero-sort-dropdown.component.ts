@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroSortFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -68,9 +69,7 @@ export class BattlegroundsHeroSortDropdownComponent extends AbstractSubscription
 			)
 			.pipe(
 				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
-				// tap(([filter, categoryId, currentView]) =>
-				// 	console.debug('changing hero sort filter?', filter, categoryId, currentView),
-				// ),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([filter, categoryId, currentView]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,

@@ -10,6 +10,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -70,7 +71,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				map((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
-				distinctUntilChanged(),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
 				takeUntil(this.destroyed$),
 			);

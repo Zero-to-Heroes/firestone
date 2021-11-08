@@ -1,13 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { formatPatch } from '../../../../services/utils';
+import { arraysEqual, formatPatch } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -53,6 +53,7 @@ export class BattlegroundsTimeFilterDropdownComponent extends AbstractSubscripti
 					([filter, patch, selectedCategoryId, currentView]) =>
 						!!filter && !!patch && !!selectedCategoryId && !!currentView,
 				),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([filter, patch, selectedCategoryId, currentView]) => {
 					const options: readonly TimeFilterOption[] = [
 						{

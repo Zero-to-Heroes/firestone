@@ -12,6 +12,7 @@ import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -101,16 +102,20 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 			.pipe(
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
 				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
+				// distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.currentGame$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
+				// TODO: narrow down the model to avoid having too many refreshes
 				map(([currentGame]) => currentGame),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentGame in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 	}

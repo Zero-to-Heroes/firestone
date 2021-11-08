@@ -15,6 +15,8 @@ import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -64,10 +66,10 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			.pipe(
 				filter(([state]) => !!state),
 				map(([state]) => state?.currentGame?.bannedRaces),
-				distinctUntilChanged(),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => console.log('bannedTribes', info)),
+				tap((info) => cdLog('emitting showAds in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.tooltip$ = this.bannedTribes$.pipe(
@@ -84,6 +86,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			distinctUntilChanged(),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((info) => cdLog('emitting tooltip in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		this.orientation$ = this.store
@@ -93,6 +96,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting orientation in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.store
@@ -102,6 +106,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting bgsBannedTribeScale in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {

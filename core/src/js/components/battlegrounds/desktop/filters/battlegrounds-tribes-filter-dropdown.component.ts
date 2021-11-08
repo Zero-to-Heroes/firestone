@@ -3,13 +3,14 @@ import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -47,7 +48,7 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
-				tap((info) => console.debug('global stats', info)),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				filter(([allTribes]) => !!allTribes?.length),
 				map(([allTribes]) =>
 					allTribes
@@ -74,11 +75,11 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
-			tap((info) => console.debug('update', info)),
 			filter(
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
 					!!tribesFilter && allTribes?.length && !!categoryId && !!currentView,
 			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
 				selected: tribesFilter?.length
 					? tribesFilter.map((tribe) => '' + tribe)

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
@@ -118,6 +119,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 				};
 				return [globalChartData, playerChartData];
 			}),
+			tap((info) => cdLog('emitting placementChartData in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 	}

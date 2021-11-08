@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { combineLatest, from, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { areDeepEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -85,13 +87,17 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
 			.pipe(
 				map(([pref]) => pref),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting enableSimulation in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(
+			distinctUntilChanged(),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting showAds in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
@@ -106,22 +112,28 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
 				),
 				filter((panel) => !!panel?.opponentOverview),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.nextOpponentCardId$ = currentPanel$.pipe(
 			map((panel) => panel.opponentOverview.cardId),
+			distinctUntilChanged(),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting nextOpponentCardId in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		this.lastOpponentCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
 			.pipe(
 				map(([lastOpponentCardId]) => lastOpponentCardId),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting lastOpponentCardId in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.nextBattle$ = this.store
@@ -129,8 +141,10 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			.pipe(
 				filter(([game]) => !!game),
 				map(([game]) => game.lastFaceOff()),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting nextBattle in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.opponents$ = combineLatest(
@@ -158,14 +172,18 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 					})
 					.sort((a, b) => (a.cardId === nextOpponentCardId ? -1 : b.cardId === nextOpponentCardId ? 1 : 0)),
 			),
+			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 		this.otherOpponents$ = this.opponents$.pipe(
 			map((opponents) => opponents.slice(1)),
+			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting otherOpponents in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
 	}
