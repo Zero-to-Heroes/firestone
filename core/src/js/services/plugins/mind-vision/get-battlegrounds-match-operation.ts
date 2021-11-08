@@ -17,7 +17,8 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 				} as BattlegroundsInfo),
 			2,
 			1000,
-			(battlegroundsInfo) => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
+			// (battlegroundsInfo) => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
+			(battlegroundsInfo) => false, //!battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
 		);
 	}
 }
