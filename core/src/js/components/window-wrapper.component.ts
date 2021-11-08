@@ -8,7 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
@@ -141,7 +141,6 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 				}
 			}, 200);
 		});
-
 	}
 
 	async dragResize(event: MouseEvent, edge) {
