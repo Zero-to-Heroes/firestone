@@ -73,6 +73,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				takeUntil(this.destroyed$),
 			);
 		this.tooltip$ = this.bannedTribes$.pipe(
+			filter((bannedTribes) => !!bannedTribes?.length),
 			map((bannedTribes) => {
 				const tribeNames = bannedTribes.map((tribe) => getTribeName(tribe)).join(', ');
 				const exceptionCards = bannedTribes

@@ -76,7 +76,10 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 						showAchievements,
 					] as [BgsHeroSelectionOverviewPanel, VisualAchievementCategory, readonly BgsHeroStat[], boolean],
 			),
-			filter(([panel, heroesAchievementCategory, stats, showAchievements]) => !!panel && !!stats?.length),
+			filter(
+				([panel, heroesAchievementCategory, stats, showAchievements]) =>
+					!!panel && !!heroesAchievementCategory && !!stats?.length,
+			),
 			map(
 				([panel, heroesAchievementCategory, stats, showAchievements]) =>
 					[
@@ -85,6 +88,9 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 						stats,
 						showAchievements,
 					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
+			),
+			filter(
+				([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => !!selectionOptions?.length,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {

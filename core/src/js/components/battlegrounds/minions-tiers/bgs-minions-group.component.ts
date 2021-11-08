@@ -141,7 +141,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	}
 
 	private updateInfos() {
-		if (!this._group) {
+		if (!this._group?.minions?.length) {
 			return;
 		}
 

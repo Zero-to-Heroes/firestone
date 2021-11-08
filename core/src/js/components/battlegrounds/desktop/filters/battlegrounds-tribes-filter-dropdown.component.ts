@@ -77,11 +77,11 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 		).pipe(
 			filter(
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
-					!!tribesFilter && allTribes?.length && !!categoryId && !!currentView,
+					!!tribesFilter && !!allTribes?.length && !!categoryId && !!currentView,
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
-				selected: tribesFilter?.length
+				selected: !!tribesFilter?.length
 					? tribesFilter.map((tribe) => '' + tribe)
 					: allTribes.map((tribe) => '' + tribe),
 				placeholder: 'All tribes',
@@ -101,7 +101,7 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 	}
 
 	onSelected(values: readonly string[]) {
-		this.stateUpdater.next(new BgsTribesFilterSelectedEvent(values.map((value) => +value as Race)));
+		this.stateUpdater.next(new BgsTribesFilterSelectedEvent((values ?? []).map((value) => +value as Race)));
 	}
 }
 

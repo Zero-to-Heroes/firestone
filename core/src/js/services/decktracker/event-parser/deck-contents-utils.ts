@@ -142,7 +142,7 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: CardsFacadeServi
 const handleExploreUngoro = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	const refCard = allCards.getCard(CardIds.ExploreUngoro_ChooseYourPathToken);
 	return updateCardInDeck(
-		(card, refCard) => true,
+		(card, refCard) => !!refCard,
 		(card) =>
 			card.update({
 				cardId: refCard.id,

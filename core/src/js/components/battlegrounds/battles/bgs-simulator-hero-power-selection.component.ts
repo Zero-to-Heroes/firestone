@@ -121,12 +121,12 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 						(card) =>
 							!searchString?.length ||
 							card.name.toLowerCase().includes(searchString.toLowerCase()) ||
-							allCards
+							this.allCards
 								.getCard(getHeroPower(card.id))
 								.name.toLowerCase()
 								.includes(searchString.toLowerCase()),
 					)
-					.map((card) => allCards.getCard(getHeroPower(card.id)))
+					.map((card) => this.allCards.getCard(getHeroPower(card.id)))
 					.map((card) => ({
 						id: card.id,
 						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${card.id}.png`,

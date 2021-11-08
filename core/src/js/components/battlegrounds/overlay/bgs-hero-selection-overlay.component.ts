@@ -94,7 +94,10 @@ export class BgsHeroSelectionOverlayComponent
 						boolean,
 					],
 			),
-			filter(([stats, heroesAchievementCategory, panel, showAchievements]) => !!panel?.heroOptionCardIds?.length),
+			filter(
+				([stats, heroesAchievementCategory, panel, showAchievements]) =>
+					!!panel?.heroOptionCardIds?.length && !!heroesAchievementCategory,
+			),
 			map(
 				([stats, heroesAchievementCategory, panel, showAchievements]) =>
 					[
@@ -105,6 +108,9 @@ export class BgsHeroSelectionOverlayComponent
 					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			filter(
+				([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => !!selectionOptions?.length,
+			),
 			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
 				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
 				const heroOverviews = selectionOptions.map((cardId) => {
