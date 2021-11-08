@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.1.1',
+		version: '8.2.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,61 +46,84 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'mercenaries',
 						details: [
 							{
-								type: 'content',
-								text: `Update for patch 21.6.`,
+								type: 'feature',
+								text: `Add meta PvP Hero stats.`,
+							},
+							{
+								type: 'feature',
+								text: `Add meta PvP Composition stats.`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where toggling the achievements on (via the Enable Achievements in the settings) wouldn't work.`,
+							},
+						],
+					},
+					{
+						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `You can now add Sneed's deathrattle to any minion in the simulator.`,
+								text: `Add an option to change the global zoom level for all the "main" windows (ie not the widgets). This should make it more comfortable to use the app on 4k monitors.`,
+							},
+						],
+					},
+				],
+			},
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Try to fix some performance issues whil interacting with the minions list while in battle.`,
 							},
 						],
 					},
 					{
 						category: 'mercenaries',
 						details: [
-							// {
-							// 	type: 'feature',
-							// 	text: `Add meta PvP Hero stats.`,
-							// },
 							{
-								type: 'feature',
-								text: `The task progress column in the mercenaries Progression tab now display completed tasks, instead of the task the merc is on. It shows the same thing, but in a less confusing way.`,
+								type: 'misc',
+								text: `Improve the reactivity of the Progression tab when clicking on things (like when manually changing the task progress, or sorting the mercs by a different criteria).`,
 							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
 							{
-								type: 'feature',
-								text: `Add the task number in the tasks list.`,
+								type: 'bug',
+								text: `Fix Cast When Drawn spells (like Garrote's Bleed) not being removed from the cards in hand in the tracker.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue when detecting some tasks.`,
+								text: `Fix an issue where deck names would have some weird characters in them.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an error notification popup when the app fails to read the game's memory.`,
 							},
 						],
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'mercenaries',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Mousing over the current speed in the team widget will now show you which abilities cause the speed buff / debuff.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
