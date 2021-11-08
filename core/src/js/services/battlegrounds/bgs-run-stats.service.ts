@@ -128,6 +128,8 @@ export class BgsRunStatsService {
 		// archive the data. However, this is non-blocking
 		this.buildStatsRemotely(input);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
+		// Wait a bit, to be sure that the stats have been created
+		await sleep(1000);
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
 	}
 
