@@ -8,6 +8,7 @@ import { MemoryMercenariesInfo } from '../../../models/memory/memory-mercenaries
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 import { Events } from '../../events.service';
+import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
@@ -27,7 +28,11 @@ export class MindVisionService {
 	// initializedListener = false;
 	memoryUpdateListener;
 
-	constructor(private readonly events: Events, private readonly ow: OverwolfService) {
+	constructor(
+		private readonly events: Events,
+		private readonly ow: OverwolfService,
+		private readonly notifs: OwNotificationsService,
+	) {
 		this.init();
 	}
 
@@ -430,12 +435,44 @@ export class MindVisionService {
 			const plugin = await this.get();
 			plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[mind-vision] received global event', first, second);
+				if (first === 'mindvision-instantiate-error') {
+					this.notifyError(
+						'Memory reading error',
+						'Some features will be unavailable. Please run Firestone/Overwolf as admin or contact us on Discord',
+						first,
+					);
+				}
 			});
 		} catch (e) {
 			console.warn('[mind-vision]Could not load plugin, retrying', e);
 			this.initialized = false;
 			setTimeout(() => this.initialize(), 2000);
 		}
+	}
+
+	private notifyError(title: string, text: string, code: string) {
+		this.notifs.emitNewNotification({
+			content: `
+				<div class="general-message-container general-theme">
+					<div class="firestone-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+						</svg>
+					</div>
+					<div class="message">
+						<div class="title">
+							<span>${title}</span>
+						</div>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+			notificationId: `${code}`,
+		});
 	}
 
 	private waitForInit(): Promise<void> {
