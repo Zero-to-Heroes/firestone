@@ -195,10 +195,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			.subscribe((scale) => {
 				console.debug('updating scale', scale);
 				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
-				this.el.nativeElement.style.setProperty(
-					'--decktracker-max-height',
-					this.side === 'player' ? '90vh' : '70vh',
-				);
+				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
