@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
-import { combineLatest, from, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
@@ -77,6 +77,8 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	lastOpponentCardId$: Observable<string>;
 
+	opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
+
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ads: AdService,
@@ -147,40 +149,46 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				tap((info) => cdLog('emitting nextBattle in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.opponents$ = combineLatest(
+		combineLatest(
 			this.nextOpponentCardId$,
 			this.store.listenBattlegrounds$(([state]) => state.currentGame),
-		).pipe(
-			filter(([nextOpponentCardId, [game]]) => !!game),
-			map(([nextOpponentCardId, [game]]) =>
-				game.players
-					.filter((player) => !player.isMainPlayer)
-					.sort((a, b) => {
-						if (a.leaderboardPlace < b.leaderboardPlace) {
-							return -1;
-						}
-						if (b.leaderboardPlace < a.leaderboardPlace) {
-							return 1;
-						}
-						if (a.damageTaken < b.damageTaken) {
-							return -1;
-						}
-						if (b.damageTaken < a.damageTaken) {
-							return 1;
-						}
-						return 0;
-					})
-					.sort((a, b) => (a.cardId === nextOpponentCardId ? -1 : b.cardId === nextOpponentCardId ? 1 : 0)),
-			),
-			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-			tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
-		);
-		this.otherOpponents$ = this.opponents$.pipe(
+		)
+			.pipe(
+				debounceTime(1000),
+				filter(([nextOpponentCardId, [game]]) => !!game),
+				map(([nextOpponentCardId, [game]]) =>
+					game.players
+						.filter((player) => !player.isMainPlayer)
+						.sort((a, b) => {
+							if (a.leaderboardPlace < b.leaderboardPlace) {
+								return -1;
+							}
+							if (b.leaderboardPlace < a.leaderboardPlace) {
+								return 1;
+							}
+							if (a.damageTaken < b.damageTaken) {
+								return -1;
+							}
+							if (b.damageTaken < a.damageTaken) {
+								return 1;
+							}
+							return 0;
+						})
+						.sort((a, b) =>
+							a.cardId === nextOpponentCardId ? -1 : b.cardId === nextOpponentCardId ? 1 : 0,
+						),
+				),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((opponents) => this.opponentsSubject$$.next(opponents));
+		this.opponents$ = this.opponentsSubject$$.asObservable();
+		this.otherOpponents$ = this.opponentsSubject$$.asObservable().pipe(
 			map((opponents) => opponents.slice(1)),
-			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+			// distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 			tap((info) => cdLog('emitting otherOpponents in ', this.constructor.name, info)),

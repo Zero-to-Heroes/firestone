@@ -80,7 +80,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent {
 			.pipe(
 				// Prevent NPE
 				startWith([]),
-				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs)),
+				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs ?? [])),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

@@ -7,12 +7,13 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BgsGame } from '../../models/battlegrounds/bgs-game';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { areDeepEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -54,26 +55,24 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			</section>
 			<section
 				class="content-container"
-				*ngIf="{ currentPanel: currentPanel$ | async, currentGame: currentGame$ | async } as value"
+				*ngIf="{ currentPanelId: currentPanelId$ | async, currentPanel: currentPanel$ | async } as value"
 			>
 				<div class="title">{{ value.currentPanel?.name }}</div>
 				<ng-container>
-					<bgs-hero-selection-overview *ngxCacheIf="value.currentPanel?.id === 'bgs-hero-selection-overview'">
+					<bgs-hero-selection-overview *ngxCacheIf="value.currentPanelId === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
-					<bgs-next-opponent-overview *ngxCacheIf="value.currentPanel?.id === 'bgs-next-opponent-overview'">
+					<bgs-next-opponent-overview *ngxCacheIf="value.currentPanelId === 'bgs-next-opponent-overview'">
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						*ngxCacheIf="value.currentPanel?.id === 'bgs-post-match-stats'"
+						*ngxCacheIf="value.currentPanelId === 'bgs-post-match-stats'"
 						[panel]="value.currentPanel"
-						[game]="value.currentGame"
+						[reviewId]="reviewId$ | async"
+						[faceOffs]="faceOffs$ | async"
+						[mmr]="mmr$ | async"
+						[gameEnded]="gameEnded$ | async"
 					>
 					</bgs-post-match-stats>
-					<bgs-battles
-						*ngxCacheIf="value.currentPanel?.id === 'bgs-battles'"
-						[panel]="value.currentPanel"
-						[game]="value.currentGame"
-					>
-					</bgs-battles>
+					<bgs-battles *ngxCacheIf="value.currentPanelId === 'bgs-battles'"> </bgs-battles>
 				</ng-container>
 			</section>
 		</div>
@@ -81,8 +80,13 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsContentComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
-	currentGame$: Observable<BgsGame>;
+	reviewId$: Observable<string>;
+	mmr$: Observable<number>;
+	gameEnded$: Observable<boolean>;
+	faceOffs$: Observable<readonly BgsFaceOffWithSimulation[]>;
+	// currentGame$: Observable<BgsGame>;
 
 	windowId: string;
 
@@ -94,30 +98,85 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 		private readonly store: AppUiStoreFacadeService,
 	) {
 		super();
+		this.currentPanelId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentPanelId)
+			.pipe(
+				filter(([currentPanelId]) => !!currentPanelId),
+				map(([currentPanelId]) => currentPanelId),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting currentPanelId in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
 		this.currentPanel$ = this.store
 			.listenBattlegrounds$(
 				([state]) => state.panels,
 				([state]) => state.currentPanelId,
 			)
 			.pipe(
+				debounceTime(200),
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
 				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
-				// distinctUntilChanged(),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.currentGame$ = this.store
+		this.reviewId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
-				// TODO: narrow down the model to avoid having too many refreshes
-				map(([currentGame]) => currentGame),
+				map(([currentGame]) => currentGame.reviewId),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting currentGame in ', this.constructor.name, info)),
+				tap((info) => cdLog('emitting reviewId in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.mmr$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				map(([currentGame]) => currentGame.mmrAtStart),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting mmr in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
+		this.gameEnded$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(
+				map(([currentGame]) => currentGame.gameEnded),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting gameEnded in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
+		this.faceOffs$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
+			.pipe(
+				debounceTime(1000),
+				filter(([faceOffs]) => !!faceOffs?.length),
+				map(([faceOffs]) => faceOffs),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
+				takeUntil(this.destroyed$),
+			);
+		// this.currentGame$ = this.store
+		// 	.listenBattlegrounds$(([state]) => state.currentGame)
+		// 	.pipe(
+		// 		debounceTime(1000),
+		// 		// TODO: narrow down the model to avoid having too many refreshes
+		// 		map(([currentGame]) => currentGame),
+		// 		// FIXME
+		// 		tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+		// 		tap((info) => cdLog('emitting currentGame in ', this.constructor.name, info)),
+		// 		takeUntil(this.destroyed$),
+		// 	);
 	}
 
 	async ngAfterViewInit() {

@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -43,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					class="stat"
 					*ngxCacheIf="selectedTab === 'hp-by-turn'"
 					[stats]="_panel?.stats"
-					[mainPlayerCardId]="_game?.getMainPlayer()?.cardId || mainPlayerCardId"
+					[mainPlayerCardId]="mainPlayerCardId"
 					[visible]="selectedTab === 'hp-by-turn'"
 					[tooltipSuffix]="tabIndex"
 				>
@@ -78,7 +77,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
-	_game: BgsGame;
 	tabs: readonly BgsStatsFilterId[];
 
 	heroStat$: Observable<BgsHeroStat>;
@@ -87,15 +85,8 @@ export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponen
 
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
-	@Input() mainPlayerCardId?: string;
+	@Input() mainPlayerCardId: string;
 	@Input() tabIndex = 0;
-
-	@Input() set game(value: BgsGame) {
-		if (value === this._game) {
-			return;
-		}
-		this._game = value;
-	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
 		if (!value?.player || value === this._panel) {

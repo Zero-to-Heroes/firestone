@@ -69,6 +69,7 @@ export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestro
 		if (this._previousPlayer === value) {
 			return;
 		}
+		console.debug('updating bgsPlayer', value, this._previousPlayer);
 		this._previousPlayer = value;
 		this.updateInfo();
 	}

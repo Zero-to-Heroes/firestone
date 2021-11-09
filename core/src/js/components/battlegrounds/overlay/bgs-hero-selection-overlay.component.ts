@@ -65,6 +65,7 @@ export class BgsHeroSelectionOverlayComponent
 			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
 			.pipe(
 				map(([pref]) => pref),
+				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting heroTooltipActive in ', this.constructor.name, info)),

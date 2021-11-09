@@ -15,7 +15,7 @@ import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
+import { areDeepEqual, arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -126,6 +126,7 @@ export class BattlegroundsMouseOverOverlayComponent
 						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 					),
 				),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting bgsPlayers in ', this.constructor.name, info)),
@@ -154,12 +155,13 @@ export class BattlegroundsMouseOverOverlayComponent
 				takeUntil(this.destroyed$),
 			);
 		this.minionCardIds$ = combineLatest(
-			this.store.listenBattlegrounds$(([state]) => state.currentGame),
+			this.store.listenBattlegrounds$(([state]) => state.currentGame?.phase),
 			this.store.listenDeckState$((state) => state?.opponentDeck?.board),
 		).pipe(
-			filter(([[currentGame], [opponentBoard]]) => !!currentGame && !!opponentBoard),
-			map(([[currentGame], [opponentBoard]]) =>
-				currentGame.phase === 'recruit' ? opponentBoard.map((minion) => minion.cardId) : [],
+			debounceTime(500),
+			filter(([[phase], [opponentBoard]]) => !!phase && !!opponentBoard),
+			map(([[phase], [opponentBoard]]) =>
+				phase === 'recruit' ? opponentBoard.map((minion) => minion.cardId) : [],
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// FIXME

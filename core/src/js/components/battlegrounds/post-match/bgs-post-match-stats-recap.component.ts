@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
-import { BgsGame } from '../../../models/battlegrounds/bgs-game';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 
 @Component({
@@ -150,7 +150,8 @@ export class BgsPostMatchStatsRecapComponent {
 	luckFactor: number;
 
 	private _stats: BgsPostMatchStatsPanel;
-	private _game: BgsGame;
+	private _reviewId: string;
+	private _faceOffs: readonly BgsFaceOffWithSimulation[];
 
 	@Input() set stats(value: BgsPostMatchStatsPanel) {
 		if (value === this._stats) {
@@ -160,20 +161,22 @@ export class BgsPostMatchStatsRecapComponent {
 		this.updateStats();
 	}
 
-	@Input() set game(value: BgsGame) {
-		if (value === this._game) {
-			return;
-		}
-		this._game = value;
+	@Input() set reviewId(value: string) {
+		this._reviewId = value;
+		this.updateStats();
+	}
+
+	@Input() set faceOffs(value: readonly BgsFaceOffWithSimulation[]) {
+		this._faceOffs = value;
 		this.updateStats();
 	}
 
 	isNewRecord(statName: StatName): boolean {
 		const isNewRecord =
 			this?._stats?.newBestUserStats &&
-			this?._game?.reviewId &&
+			this?._reviewId &&
 			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName) != null &&
-			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName).reviewId === this._game.reviewId;
+			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName).reviewId === this._reviewId;
 
 		return isNewRecord;
 	}
@@ -184,9 +187,9 @@ export class BgsPostMatchStatsRecapComponent {
 			this.reset();
 			return;
 		}
-		this.wins = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'won')?.length || 0;
-		this.losses = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'lost')?.length || 0;
-		this.ties = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'tied')?.length || 0;
+		this.wins = this._faceOffs?.filter((faceOff) => faceOff.result === 'won')?.length || 0;
+		this.losses = this._faceOffs?.filter((faceOff) => faceOff.result === 'lost')?.length || 0;
+		this.ties = this._faceOffs?.filter((faceOff) => faceOff.result === 'tied')?.length || 0;
 
 		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)

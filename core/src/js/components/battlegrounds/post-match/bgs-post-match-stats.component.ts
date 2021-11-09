@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -46,7 +47,7 @@ import { normalizeCardId } from './card-utils';
 					class="social-shares"
 					[onSocialClick]="takeScreenshotFunction"
 				></social-shares>
-				<bgs-player-capsule [player]="_panel?.player" [rating]="mmr || inputMmr" class="opponent-overview">
+				<bgs-player-capsule [player]="_panel?.player" [rating]="mmr" class="opponent-overview">
 					<div class="main-info">
 						<bgs-board
 							*ngIf="boardMinions && boardMinions.length > 0"
@@ -63,7 +64,6 @@ import { normalizeCardId } from './card-utils';
 					<bgs-post-match-stats-tabs
 						*ngFor="let selectedTab of selectedTabs; let i = index"
 						class="tab tab-{{ i + 1 }}"
-						[game]="_game"
 						[panel]="_panel"
 						[mainPlayerCardId]="mainPlayerCardId"
 						[selectedTab]="selectedTab"
@@ -94,7 +94,11 @@ import { normalizeCardId } from './card-utils';
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
 				<div class="title">Last Match Stats</div>
-				<bgs-post-match-stats-recap [stats]="_panel" [game]="_game"></bgs-post-match-stats-recap>
+				<bgs-post-match-stats-recap
+					[stats]="_panel"
+					[reviewId]="reviewId"
+					[faceOffs]="faceOffs"
+				></bgs-post-match-stats-recap>
 			</div>
 		</div>
 	`,
@@ -113,8 +117,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() emptyTitle = 'Nothing here yet';
 	@Input() emptySubtitle = 'Finish the run to get some stats!';
 	@Input() parentWindow = `Firestone - Battlegrounds`;
-	@Input() mainPlayerCardId?: string;
-	@Input() inputMmr?: number;
+	@Input() mainPlayerCardId: string;
 
 	@Input() selectedTabs: readonly BgsStatsFilterId[] = [];
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
@@ -122,14 +125,21 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.battlegroundsUpdater.next(new BgsChangePostMatchStatsTabsNumberEvent(numberOfTabs));
 	};
 
-	@Input() set game(value: BgsGame) {
-		if (value === this._game) {
-			return;
-		}
-		this._game = value;
-		this.mmr = value ? value.mmrAtStart : undefined;
-		this.boardTitle = this._game?.gameEnded ? 'Your final board' : 'Your current board';
+	@Input() reviewId?: string;
+	@Input() faceOffs: readonly BgsFaceOffWithSimulation[];
+	@Input() mmr: number;
+	@Input() set gameEnded(value: boolean) {
+		this.boardTitle = value ? 'Your final board' : 'Your current board';
 	}
+
+	// @Input() set game(value: BgsGame) {
+	// 	if (value === this._game) {
+	// 		return;
+	// 	}
+	// 	this._game = value;
+	// 	this.mmr = value ? value.mmrAtStart : undefined;
+	// 	this.boardTitle = this._game?.gameEnded ? 'Your final board' : 'Your current board';
+	// }
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
 		if (!value?.player || value === this._panel) {
@@ -172,7 +182,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tavernTier: number;
 	boardMinions: readonly Entity[] = [];
 	minionStats: readonly MinionStat[];
-	mmr: number;
+	// mmr: number;
 	showAds = true;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();

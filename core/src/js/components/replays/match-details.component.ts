@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				*ngIf="selectedView === 'match-stats'"
 				[panel]="panel"
 				[mainPlayerCardId]="playerCardId"
-				[inputMmr]="mmr"
+				[mmr]="mmr"
 				[selectedTabs]="selectedTabs"
 				[selectTabHandler]="selectTabHandler"
 				[changeTabsNumberHandler]="changeTabsNumberHandler"
