@@ -123,6 +123,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.HeroicLeap4Lettuce:
 		case CardIds.HeroicLeap5Lettuce:
 			return human;
+		case CardIds.HolyStaff1Lettuce:
+		case CardIds.HolyStaff2Lettuce:
+		case CardIds.HolyStaff3Lettuce:
+		case CardIds.HolyStaff4Lettuce:
+		case CardIds.HolyStaff5Lettuce:
+			return holy;
 		case CardIds.HolyWordSalvation1Lettuce:
 		case CardIds.HolyWordSalvation2Lettuce:
 		case CardIds.HolyWordSalvation3Lettuce:
