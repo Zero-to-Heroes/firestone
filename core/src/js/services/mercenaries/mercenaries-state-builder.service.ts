@@ -22,6 +22,7 @@ export class MercenariesStateBuilderService {
 		console.debug(
 			'merc global',
 			globalStats,
+			globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
 			globalStats.pvp.compositions
 				// .filter((stat) => stat.mmrPercentile === 100)
 				.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
@@ -40,8 +41,8 @@ export class MercenariesStateBuilderService {
 		const categoryIds: readonly MercenariesCategoryId[] = [
 			'mercenaries-personal-hero-stats',
 			'mercenaries-my-teams',
-			// 'mercenaries-hero-stats',
-			// 'mercenaries-compositions-stats',
+			'mercenaries-hero-stats',
+			'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
 			globalStats: globalStats,
