@@ -147,7 +147,7 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 		this.gameEnded$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
-				map(([currentGame]) => currentGame.gameEnded),
+				map(([currentGame]) => currentGame?.gameEnded),
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
