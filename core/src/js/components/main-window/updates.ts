@@ -95,6 +95,14 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
+								type: 'feature',
+								text: `Add some more synergy highlights (Holy Staff, Zhardoom, Greatstaff Of The Devourer).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Sneed's progress was not tracked properly.`,
+							},
+							{
 								type: 'misc',
 								text: `Improve the reactivity of the Progression tab when clicking on things (like when manually changing the task progress, or sorting the mercs by a different criteria).`,
 							},
