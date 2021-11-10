@@ -200,6 +200,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.StormwindTabard4Lettuce:
 		case CardIds.StormwindTabard5Lettuce:
 			return human;
+		case CardIds.StrengthOfTheElements1Lettuce:
+		case CardIds.StrengthOfTheElements2Lettuce:
+		case CardIds.StrengthOfTheElements3Lettuce:
+		case CardIds.StrengthOfTheElements4Lettuce:
+		case CardIds.StrengthOfTheElements5Lettuce:
+			return elemental;
 		case CardIds.StrengthOfWrynn1Lettuce:
 		case CardIds.StrengthOfWrynn2Lettuce:
 		case CardIds.StrengthOfWrynn3Lettuce:
