@@ -306,7 +306,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		await this.updateTooltipPosition();
 	}
 
-	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
+	private async restoreWindowPosition(): Promise<void> {
 		const width = BattlegroundsMinionsTiersOverlayComponent.WINDOW_WIDTH;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -316,20 +316,16 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const windowPosition = prefs.bgsMinionsListPosition;
-		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft =
-			windowPosition && windowPosition.left < gameWidth && windowPosition.left > -width && !forceTrackerReposition
+			windowPosition && windowPosition.left < gameWidth && windowPosition.left > -width
 				? windowPosition.left || 0
 				: gameWidth - width * dpi;
 		const newTop =
-			windowPosition &&
-			windowPosition.top < gameInfo.logicalHeight &&
-			windowPosition.top > -300 &&
-			!forceTrackerReposition
+			windowPosition && windowPosition.top < gameInfo.logicalHeight && windowPosition.top > -300
 				? windowPosition.top || 0
 				: 0;
+		console.log('changing window position', newLeft, newTop, windowPosition, gameWidth, width);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-
 		await this.updateTooltipPosition();
 	}
 
