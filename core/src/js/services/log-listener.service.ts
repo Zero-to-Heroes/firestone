@@ -119,8 +119,10 @@ export class LogListenerService {
 							this.logFile +
 							'] truncated log file - HS probably just overwrote the file. Restarting listening',
 					);
+					this.ow.stopFileListener(fileIdentifier);
 					this.callback('truncated');
-					this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
+					this.listenOnFileUpdate(logsLocation);
+					// this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
 					return;
 				}
 				if (!hasFileBeenInitiallyRead) {

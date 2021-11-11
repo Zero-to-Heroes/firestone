@@ -963,6 +963,11 @@ export class OverwolfService {
 		overwolf.io.listenOnFile(id, path, !!options ? { ...options, encoding: 'UTF8' } : null, callback);
 	}
 
+	public stopFileListener(id: string) {
+		console.log('[ow-service] stopping file listener', id);
+		overwolf.io.stopFileListener(id);
+	}
+
 	public checkForExtensionUpdate(): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.checkForExtensionUpdate((res: CheckForUpdateResult) => {
