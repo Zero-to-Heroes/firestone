@@ -164,6 +164,12 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					(a, b) => a.averagePosition - b.averagePosition,
 				),
 			},
+			{
+				tier: 'E' as BgsHeroTier,
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'E')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
+			},
 		].filter((tier) => tier.heroes);
 	}
 

@@ -188,7 +188,7 @@ const convertToBgsHeroStat = (
 	} as BgsHeroStat;
 };
 
-const buildBgsHeroTier = (averagePosition: number): BgsHeroTier => {
+const buildBgsHeroTier = (averagePosition: number): BgsHeroTier | 'E' => {
 	if (averagePosition < 3.7) {
 		return 'S';
 	} else if (averagePosition < 4.1) {
@@ -197,8 +197,10 @@ const buildBgsHeroTier = (averagePosition: number): BgsHeroTier => {
 		return 'B';
 	} else if (averagePosition < 4.7) {
 		return 'C';
+	} else if (averagePosition < 5) {
+		return 'D';
 	}
-	return 'D';
+	return 'E';
 };
 
 const mergeHeroStats = (stats: readonly BgsGlobalHeroStat2[]): BgsGlobalHeroStat2 => {

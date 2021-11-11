@@ -37,4 +37,4 @@ export class BgsHeroStat {
 	}
 }
 
-export type BgsHeroTier = 'S' | 'A' | 'B' | 'C' | 'D';
+export type BgsHeroTier = 'S' | 'A' | 'B' | 'C' | 'D' | 'E';
