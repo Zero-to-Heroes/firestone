@@ -405,7 +405,7 @@ export class OverwolfService {
 
 	public async dragResize(windowId: string, edge: string) {
 		return new Promise<void>((resolve) => {
-			overwolf.windows.dragResize(windowId, edge, (result) => {
+			overwolf.windows.dragResize(windowId, edge, null, (result) => {
 				resolve(result);
 			});
 		});

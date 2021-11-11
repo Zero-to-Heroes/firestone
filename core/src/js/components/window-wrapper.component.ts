@@ -101,12 +101,13 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 				if (this.EXCLUDED_WINDOW_IDS.includes(this.windowId)) {
 					return;
 				}
-				const normalized = zoom / 100;
+				const normalized = (zoom ?? 0) / 100;
 				this.zoom = normalized <= 1 ? 0 : normalized;
 				if (!this.originalHeight || !this.originalWidth) {
 					const currentWindow = await this.ow.getCurrentWindow();
 					this.originalWidth = currentWindow.width / Math.max(1, this.zoom);
 					this.originalHeight = currentWindow.height / Math.max(1, this.zoom);
+					console.log('setting originalWidth', this.originalWidth, 'originalHeight', this.originalHeight);
 				}
 				// 0 is the unzoomed value
 				// It behaves a bit strangely. When values are > 1, the zoom behaves as expected
@@ -154,9 +155,17 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 		const window = await this.ow.getCurrentWindow();
 		this.originalWidth = window.width;
 		this.originalHeight = window.height;
+		if (!this.originalHeight || !this.originalWidth || isNaN(this.originalHeight) || isNaN(this.originalWidth)) {
+			console.error('missing dimensions info', this.originalWidth, this.originalHeight, window);
+			return;
+		}
 	}
 
 	private async changeWindowSize(): Promise<void> {
+		if (!this.originalHeight || !this.originalWidth || isNaN(this.originalHeight) || isNaN(this.originalWidth)) {
+			console.error('missing dimension info', this.originalWidth, this.originalHeight);
+			return;
+		}
 		await this.ow.changeWindowSize(
 			this.windowId,
 			Math.max(this.originalWidth, this.zoom * this.originalWidth),
