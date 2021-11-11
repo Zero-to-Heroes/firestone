@@ -127,7 +127,7 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 		this.reviewId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
-				map(([currentGame]) => currentGame.reviewId),
+				map(([currentGame]) => currentGame?.reviewId),
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -137,7 +137,7 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 		this.mmr$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
-				map(([currentGame]) => currentGame.mmrAtStart),
+				map(([currentGame]) => currentGame?.mmrAtStart),
 				distinctUntilChanged(),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),

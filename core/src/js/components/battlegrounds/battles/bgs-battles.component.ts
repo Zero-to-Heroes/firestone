@@ -122,14 +122,14 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 			this.faceOffs$,
 			this.store.listenBattlegrounds$(([state]) => state.panels),
 		).pipe(
-			filter(([faceOffs, [panel]]) => !!panel),
 			map(
 				([faceOffs, [panels]]) =>
-					[faceOffs, panels.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel] as readonly [
+					[faceOffs, panels?.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel] as readonly [
 						readonly BgsFaceOffWithSimulation[],
 						BgsBattlesPanel,
 					],
 			),
+			filter(([faceOffs, panel]) => !!panel),
 			map(([faceOffs, panel]) => {
 				// If the user closed it at least once, we don't force-show it anymore
 				if (!panel.selectedFaceOffId) {

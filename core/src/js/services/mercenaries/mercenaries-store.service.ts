@@ -54,6 +54,8 @@ export class MercenariesStoreService {
 		private readonly ow: OverwolfService,
 		private readonly memoryService: MemoryInspectionService,
 	) {
+		window['battleStateUpdater'] = this.internalEventSubject$;
+		window['mercenariesStore'] = this.store$;
 		this.init();
 
 		// So that we're sure that all services have been initialized
@@ -77,9 +79,6 @@ export class MercenariesStoreService {
 					concatMap(async ([prefs, newState]) => await this.emitState(newState, prefs)),
 				)
 				.subscribe();
-
-			window['battleStateUpdater'] = this.internalEventSubject$;
-			window['mercenariesStore'] = this.store$;
 		});
 	}
 

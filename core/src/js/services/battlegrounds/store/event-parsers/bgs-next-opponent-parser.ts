@@ -59,7 +59,7 @@ export class BgsNextOpponentParser implements EventParser {
 			(p: BgsPanel) => p.id === 'bgs-battles',
 		) as BgsBattlesPanel;
 		const newBattlesPanel =
-			!!battlesPanel.selectedFaceOffId || battlesPanel.closedManually
+			!!battlesPanel?.selectedFaceOffId || battlesPanel.closedManually
 				? battlesPanel
 				: // Show the simulator by default when going into the Simulator tab, if it's the first time
 				  battlesPanel.update({

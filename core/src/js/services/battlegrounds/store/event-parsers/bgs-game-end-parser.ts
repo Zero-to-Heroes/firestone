@@ -23,10 +23,10 @@ export class BgsGameEndParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
-		if (event.reviewId !== currentState.currentGame.reviewId) {
+		if (event.reviewId !== currentState.currentGame?.reviewId) {
 			console.log(
 				'[bgs-game-end] a new game already started, doing nothing here',
-				currentState.currentGame.reviewId,
+				currentState.currentGame?.reviewId,
 				event.reviewId,
 			);
 			return currentState;
