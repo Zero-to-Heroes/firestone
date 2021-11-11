@@ -4,6 +4,7 @@ import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { MemoryMercenariesCollectionInfo, MemoryTeam } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
+import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { CardsFacadeService } from '../cards-facade.service';
 import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
@@ -49,6 +50,7 @@ export class EndGameUploaderService {
 		private logService: LogsUploaderService,
 		private rewards: RewardMonitorService,
 		private mainWindowStore: MainWindowStoreService,
+		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
@@ -135,11 +137,11 @@ export class EndGameUploaderService {
 		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
 			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
-			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
-			newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
+			playerRank = battlegroundsInfo?.rating ?? this.bgsStore?.state?.currentGame?.mmrAtStart;
+			newPlayerRank = battlegroundsInfo?.newRating;
 			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				battlegroundsInfo?.game?.AvailableRaces,
-			);
+			) ?? [this.bgsStore?.state?.currentGame?.availableRaces, this.bgsStore?.state?.currentGame?.bannedRaces];
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
