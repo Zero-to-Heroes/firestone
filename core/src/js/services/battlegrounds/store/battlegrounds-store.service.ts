@@ -20,6 +20,7 @@ import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
+import { sleep } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -97,8 +98,9 @@ import { RealTimeStatsService } from './real-time-stats/real-time-stats.service'
 
 @Injectable()
 export class BattlegroundsStoreService {
+	public state: BattlegroundsState = new BattlegroundsState();
+
 	private mainWindowState: MainWindowState;
-	private state: BattlegroundsState = new BattlegroundsState();
 	private deckState: GameState;
 	private eventParsers: readonly EventParser[] = [];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
@@ -198,6 +200,7 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId, gameEvent.additionalData));
+				this.startMemoryReading();
 			} else if (gameEvent.type === GameEvent.GAME_START) {
 				this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState, null, true));
 			} else if (gameEvent.type === GameEvent.GAME_SETTINGS) {
@@ -211,36 +214,6 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(
 						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating, false),
 					);
-					if (this.memoryInterval) {
-						clearInterval(this.memoryInterval);
-						this.memoryInterval = null;
-					}
-					this.memoryInterval = setInterval(async () => {
-						if (this.state?.currentGame?.players?.length < 8) {
-							console.debug(
-								'[bgs-store] not triggering memory reading info for players yet',
-								this.state?.currentGame?.players?.map((p) => p.cardId),
-							);
-							return;
-						}
-						// Here we want to get the players info, mostly
-						let info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-						if (info?.game?.Players && info.game.Players.length > 0) {
-							info = {
-								...info,
-								game: {
-									...info.game,
-									Players: info.game.Players.map((player) => ({
-										...player,
-										// We set the damage to null because? Most likely this is to avoid info
-										// leaks
-										Damage: this.state?.currentGame?.phase === 'recruit' ? player.Damage : null,
-									})),
-								},
-							};
-						}
-						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-					}, 3000);
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
@@ -251,9 +224,9 @@ export class BattlegroundsStoreService {
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
 					GameEvent.TURN_START,
 				);
-				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-				//console.debug('[bgs-store] info updated', info);
-				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
+				// const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
+				// console.debug('[bgs-store] info updated', info);
+				// this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(
 					new BgsOpponentRevealedEvent(
@@ -266,6 +239,9 @@ export class BattlegroundsStoreService {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				//console.debug('TURN_START sending event', gameEvent);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
+				const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
+				console.debug('[bgs-store] info updated', info);
+				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_RECRUIT_PHASE) {
@@ -366,6 +342,46 @@ export class BattlegroundsStoreService {
 				);
 			}
 		});
+	}
+
+	private async startMemoryReading(forceReset = false) {
+		if (this.memoryInterval) {
+			clearInterval(this.memoryInterval);
+			this.memoryInterval = null;
+		}
+		const firstInfo = await this.memory.getBattlegroundsMatchWithPlayers(1, forceReset);
+		if (!firstInfo?.game?.Players?.length) {
+			console.log('[bgs-init] No players returned, will call with reset');
+			await sleep(3000);
+			this.startMemoryReading(true);
+			return;
+		}
+		this.memoryInterval = setInterval(async () => {
+			if (this.state?.currentGame?.players?.length < 8) {
+				console.debug(
+					'[bgs-store] not triggering memory reading info for players yet',
+					this.state?.currentGame?.players?.map((p) => p.cardId),
+				);
+				return;
+			}
+			// Here we want to get the players info, mostly
+			let info = await this.memory.getBattlegroundsMatchWithPlayers(1);
+			if (info?.game?.Players && info.game.Players.length > 0) {
+				info = {
+					...info,
+					game: {
+						...info.game,
+						Players: info.game.Players.map((player) => ({
+							...player,
+							// We set the damage to null because? Most likely this is to avoid info
+							// leaks
+							Damage: this.state?.currentGame?.phase === 'recruit' ? player.Damage : null,
+						})),
+					},
+				};
+			}
+			this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+		}, 3000);
 	}
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {

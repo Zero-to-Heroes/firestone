@@ -121,8 +121,11 @@ export class MemoryInspectionService {
 		return this.getBattlegroundsEndGameOperation.call(numberOfRetries);
 	}
 
-	public async getBattlegroundsMatchWithPlayers(numberOfRetries?: number): Promise<BattlegroundsInfo> {
-		return this.getBattlegroundsMatchOperation.call(numberOfRetries);
+	public async getBattlegroundsMatchWithPlayers(
+		numberOfRetries?: number,
+		forceReset = false,
+	): Promise<BattlegroundsInfo> {
+		return this.getBattlegroundsMatchOperation.call(numberOfRetries, forceReset);
 	}
 
 	public async getActiveDeck(selectedDeckId: number, numberOfRetries: number): Promise<DeckInfoFromMemory> {
