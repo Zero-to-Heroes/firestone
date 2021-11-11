@@ -89,7 +89,7 @@ export class StoreBootstrapService {
 		// First update the prefs, for local installs
 		const prefsFromRemote = await this.prefs.loadRemotePrefs();
 
-		console.debug('remote prefs', prefsFromRemote);
+		console.debug('remote prefs', prefsFromRemote, prefs);
 		const mergedPrefs = await this.mergePrefs(prefs, prefsFromRemote);
 
 		// Load all the initial data

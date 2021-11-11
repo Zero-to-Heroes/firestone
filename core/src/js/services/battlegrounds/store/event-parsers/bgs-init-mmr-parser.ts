@@ -15,6 +15,7 @@ export class BgsInitMmrParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsInitMmrEvent): Promise<BattlegroundsState> {
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const mmr = bgsInfo?.rating;
+		console.log('[bgs-mmr] mmrAtStart', mmr);
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				mmrAtStart: mmr,
