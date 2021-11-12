@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { RarityTYpe, TaskStatus } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
+import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
 import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
@@ -104,143 +106,11 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// tap((info) => console.debug('hop', info)),
-				map(([referenceData, collectionInfo]) => {
-					return collectionInfo.Mercenaries.map((memMerc) => {
-						const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
-						const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
-						const taskChain = referenceData.taskChains
-							.filter((chain) => chain.mercenaryId === refMerc.id)
-							.map((chain) => ({
-								...chain,
-								// The last 2 tasks are present in the ref data, but not activated in-game
-								tasks: chain.tasks.slice(0, 18),
-							}))[0];
-						// console.debug('taskChain', refMerc.name, taskChain);
-						// Can have only one task per mercenary at the same time
-						const visitorInfo = collectionInfo.Visitors.find(
-							(v) => v.VisitorId === taskChain.mercenaryVisitorId,
-						);
-						// console.debug('visitorInfo', visitorInfo);
-						const currentTaskStep = visitorInfo?.TaskChainProgress;
-						const currentStep = !visitorInfo
-							? null
-							: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
-							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
-							: Math.max(0, currentTaskStep);
-						// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
-
-						const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
-						const lastLevel = [...referenceData.mercenaryLevels].pop();
-						const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
-
-						const abilities = refMerc.abilities.map((info) => {
-							const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-							const memAbility = memMerc.Abilities.find(
-								(a) =>
-									normalizeMercenariesCardId(a.CardId) ===
-									normalizeMercenariesCardId(baseAbilityCard.id),
-							);
-							const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
-
-							const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
-
-							const currentUnlockedTier = memAbility?.Tier ?? 0;
-							const coinsToCraft = refAbility.tiers
-								.filter((a) => a.tier > currentUnlockedTier)
-								.map((tier) => tier.coinCraftCost)
-								.reduce((a, b) => a + b, 0);
-							const cardDbfId = refAbility.tiers.find((tier) => tier.tier === currentUnlockedTier)
-								?.cardDbfId;
-							const abilityCard = this.allCards.getCardFromDbfId(cardDbfId);
-							return {
-								cardId: abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
-								tier: currentUnlockedTier,
-								coinsToCraft: coinsToCraft,
-								owned: !!memAbility,
-								speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
-								cooldown:
-									abilityCard.mercenaryAbilityCooldown ??
-									memAbilityCard.mercenaryAbilityCooldown ??
-									baseAbilityCard.mercenaryAbilityCooldown,
-							};
-						});
-						const equipments = refMerc.equipments.map((info) => {
-							const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
-							const refEquip = refMerc.equipments.find((a) => a.equipmentId === info.equipmentId);
-
-							const baseEquipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-
-							const currentUnlockedTier = memEquip?.Tier ?? 0;
-							const coinsToCraft = refEquip.tiers
-								.filter((a) => a.tier > currentUnlockedTier)
-								.map((tier) => tier.coinCraftCost)
-								.reduce((a, b) => a + b, 0);
-							const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)
-								?.cardDbfId;
-							const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
-							return {
-								cardId: equipmentCard.id ?? baseEquipmentCard.id,
-								coinsToCraft: coinsToCraft,
-								tier: currentUnlockedTier,
-								owned: !!memEquip?.Owned,
-								isEquipped: !!memEquip ? memEquip.Equipped : false,
-							};
-						});
-
-						const bountiesForMerc: BountyForMerc[] = referenceData.bountySets
-							.map((bountySet) =>
-								bountySet.bounties
-									.map((bounty) => {
-										if (bounty.rewardMercenaryIds.includes(refMerc.id)) {
-											return {
-												bountySetName: bountySet.name,
-												bountyName: bounty.name,
-											};
-										}
-										return null;
-									})
-									.filter((info) => !!info),
-							)
-							.reduce((a, b) => [...a, ...b], []);
-						return {
-							mercenaryId: refMerc.id,
-							owned: memMerc.Owned,
-							cardId: mercenaryCard.id,
-							premium: memMerc.Premium,
-							rarity: memMerc.Rarity,
-							name: mercenaryCard.name,
-							role: getHeroRole(mercenaryCard.mercenaryRole),
-							currentLevel: memMerc.Level,
-							totalXp: memMerc.Experience,
-							isMaxLevel: isMaxLevel,
-							xpNeededForLevel: isMaxLevel
-								? 0
-								: memMerc.Level === 30
-								? null
-								: referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level + 1)
-										?.xpToNext - memMerc.Experience,
-							xpInCurrentLevel: isMaxLevel
-								? lastLevel.xpToNext
-								: memMerc.Level <= 1
-								? memMerc.Experience
-								: memMerc.Experience -
-								  referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)
-										?.xpToNext,
-							abilities: abilities,
-							equipments: equipments,
-							minCostOfNextUpgrade: null,
-							totalCoinsForFullUpgrade:
-								sumOnArray(abilities, (a) => a.coinsToCraft) +
-								sumOnArray(equipments, (e) => e.coinsToCraft),
-							totalCoinsLeft: memMerc.CurrencyAmount,
-							totalTasks: taskChain.tasks.length,
-							// Because human-readable starts at 1
-							currentTask: currentStep,
-							currentTaskDescription: currentTaskDescription,
-							bountiesWithRewards: bountiesForMerc,
-						} as PersonalHeroStat;
-					});
-				}),
+				map(([referenceData, collectionInfo]) =>
+					collectionInfo.Mercenaries.map((memMerc) =>
+						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
+					),
+				),
 				// tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
 				takeUntil(this.destroyed$),
@@ -263,6 +133,157 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
 			takeUntil(this.destroyed$),
 		);
+	}
+
+	private buildMercenaryStat(
+		memMerc: MemoryMercenary,
+		referenceData: MercenariesReferenceData,
+		visitors: readonly MemoryVisitor[],
+	): PersonalHeroStat {
+		const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
+		const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
+		const taskChain = referenceData.taskChains
+			.filter((chain) => chain.mercenaryId === refMerc.id)
+			.map((chain) => ({
+				...chain,
+				// The last 2 tasks are present in the ref data, but not activated in-game
+				tasks: chain.tasks.slice(0, 18),
+			}))[0];
+		// console.debug('taskChain', refMerc.name, taskChain);
+		// Can have only one task per mercenary at the same time
+		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain.mercenaryVisitorId);
+		// console.debug('visitorInfo', visitorInfo);
+		const currentTaskStep = visitorInfo?.TaskChainProgress;
+		const currentStep = !visitorInfo
+			? null
+			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
+			? Math.min(taskChain.tasks.length, currentTaskStep + 1)
+			: Math.max(0, currentTaskStep);
+		// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
+
+		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
+		const lastLevel = [...referenceData.mercenaryLevels].pop();
+		const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
+		const abilities = this.buildAbilities(refMerc, memMerc);
+		const equipments = this.buildEquipments(refMerc, memMerc);
+		const bountiesForMerc: readonly BountyForMerc[] = this.buildBounties(refMerc, referenceData.bountySets);
+		return {
+			mercenaryId: refMerc.id,
+			owned: memMerc.Owned,
+			cardId: mercenaryCard.id,
+			premium: memMerc.Premium,
+			rarity: memMerc.Rarity,
+			name: mercenaryCard.name,
+			role: getHeroRole(mercenaryCard.mercenaryRole),
+			currentLevel: memMerc.Level,
+			totalXp: memMerc.Experience,
+			isMaxLevel: isMaxLevel,
+			xpNeededForLevel: isMaxLevel
+				? 0
+				: memMerc.Level === 30
+				? null
+				: referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level + 1)?.xpToNext -
+				  memMerc.Experience,
+			xpInCurrentLevel: isMaxLevel
+				? lastLevel.xpToNext
+				: memMerc.Level <= 1
+				? memMerc.Experience
+				: memMerc.Experience -
+				  referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)?.xpToNext,
+			abilities: abilities,
+			equipments: equipments,
+			minCostOfNextUpgrade: null,
+			totalCoinsForFullUpgrade:
+				sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft),
+			totalCoinsLeft: memMerc.CurrencyAmount,
+			totalTasks: taskChain.tasks.length,
+			// Because human-readable starts at 1
+			currentTask: currentStep,
+			currentTaskDescription: currentTaskDescription,
+			bountiesWithRewards: bountiesForMerc,
+		} as PersonalHeroStat;
+	}
+
+	private buildBounties(
+		refMerc: MercenariesReferenceData['mercenaries'][0],
+		bountySets: MercenariesReferenceData['bountySets'],
+	): readonly BountyForMerc[] {
+		return bountySets
+			.map((bountySet) =>
+				bountySet.bounties
+					.map((bounty) => {
+						if (bounty.rewardMercenaryIds.includes(refMerc.id)) {
+							return {
+								bountySetName: bountySet.name,
+								bountyName: bounty.name,
+							};
+						}
+						return null;
+					})
+					.filter((info) => !!info),
+			)
+			.reduce((a, b) => [...a, ...b], []);
+	}
+
+	private buildEquipments(
+		refMerc: MercenariesReferenceData['mercenaries'][0],
+		memMerc: MemoryMercenary,
+	): readonly PersonalHeroStatEquipment[] {
+		return refMerc.equipments.map((info) => {
+			const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
+			const refEquip = refMerc.equipments.find((a) => a.equipmentId === info.equipmentId);
+
+			const baseEquipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+
+			const currentUnlockedTier = memEquip?.Tier ?? 0;
+			const coinsToCraft = refEquip.tiers
+				.filter((a) => a.tier > currentUnlockedTier)
+				.map((tier) => tier.coinCraftCost)
+				.reduce((a, b) => a + b, 0);
+			const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
+			const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
+			return {
+				cardId: equipmentCard.id ?? baseEquipmentCard.id,
+				coinsToCraft: coinsToCraft,
+				tier: currentUnlockedTier,
+				owned: !!memEquip?.Owned,
+				isEquipped: !!memEquip ? memEquip.Equipped : false,
+			};
+		});
+	}
+
+	private buildAbilities(
+		refMerc: MercenariesReferenceData['mercenaries'][0],
+		memMerc: MemoryMercenary,
+	): readonly PersonalHeroStatAbility[] {
+		return refMerc.abilities.map((info) => {
+			const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+			const memAbility = memMerc.Abilities.find(
+				(a) => normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(baseAbilityCard.id),
+			);
+			const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
+
+			const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
+
+			const currentUnlockedTier = memAbility?.Tier ?? 0;
+			const coinsToCraft = refAbility.tiers
+				.filter((a) => a.tier > currentUnlockedTier)
+				.map((tier) => tier.coinCraftCost)
+				.reduce((a, b) => a + b, 0);
+			const cardDbfId = refAbility.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
+			const abilityCard = this.allCards.getCardFromDbfId(cardDbfId);
+			return {
+				cardId: abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
+				tier: currentUnlockedTier,
+				coinsToCraft: coinsToCraft,
+				owned: !!memAbility,
+				speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
+				cooldown:
+					abilityCard.mercenaryAbilityCooldown ??
+					memAbilityCard.mercenaryAbilityCooldown ??
+					baseAbilityCard.mercenaryAbilityCooldown,
+			};
+		});
 	}
 
 	private buildTaskDescription(
@@ -488,6 +509,7 @@ export interface PersonalHeroStatAbility {
 	readonly tier: number;
 	readonly speed: number;
 	readonly cooldown: number;
+	readonly coinsToCraft: number;
 }
 
 export interface PersonalHeroStatEquipment {
@@ -495,6 +517,7 @@ export interface PersonalHeroStatEquipment {
 	readonly owned: boolean;
 	readonly tier: number;
 	readonly isEquipped: boolean;
+	readonly coinsToCraft: number;
 }
 
 export interface BountyForMerc {
