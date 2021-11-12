@@ -37,7 +37,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			}[];
 		},
 	): Promise<GameState> {
-		console.debug('[secrets-parser] considering event', gameEvent, additionalInfo);
+		// console.debug('[secrets-parser] considering event', gameEvent, additionalInfo);
 		const [, , localPlayer] = gameEvent.parse();
 		//const sourceControllerId = gameEvent.additionalData.sourceControllerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
@@ -52,19 +52,19 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 
 		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerActive ? currentState.opponentDeck : currentState.playerDeck;
-		console.debug('[secrets-parser] deckWithSecretToCheck', deckWithSecretToCheck, isPlayerActive);
+		// console.debug('[secrets-parser] deckWithSecretToCheck', deckWithSecretToCheck, isPlayerActive);
 
 		const secretsWeCantRuleOut = [];
 
 		const isEnemyDealing = isPlayerActive
 			? gameEvent.additionalData.sourceControllerId === localPlayer.PlayerId
 			: gameEvent.additionalData.sourceControllerId !== localPlayer.PlayerId;
-		console.debug('[secrets-parser] is enemy dealing?', isEnemyDealing, isPlayerActive, gameEvent);
+		// console.debug('[secrets-parser] is enemy dealing?', isEnemyDealing, isPlayerActive, gameEvent);
 		if (!isEnemyDealing) {
 			secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 		} else {
 			const sourceCard = this.allCards.getCard(gameEvent.additionalData.sourceCardId);
-			console.debug('[secrets-parser] enmy is dealing from source', sourceCard);
+			// console.debug('[secrets-parser] enmy is dealing from source', sourceCard);
 
 			if (sourceCard?.type !== 'Minion') {
 				secretsWeCantRuleOut.push(CardIds.ReckoningCore);
@@ -77,7 +77,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 				const maxDamage = Math.max(
 					...Object.values(gameEvent.additionalData.targets).map((target) => target.Damage),
 				);
-				console.debug('[secrets-parser] source is minion with damage', maxDamage);
+				// console.debug('[secrets-parser] source is minion with damage', maxDamage);
 				if (maxDamage < 3) {
 					secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 				}

@@ -36,7 +36,7 @@ export class QuestCreatedInGameParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, card);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		console.debug('should consider?', cardId);
+		// console.debug('should consider?', cardId);
 		if (globalEffectQuestlinesTriggers.includes(cardId as CardIds)) {
 			const globalEffectCard = this.cards.getCard(
 				globalEffectQuestlines.find((q) => q.questStepCreated === cardId).stepReward,

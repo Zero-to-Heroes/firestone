@@ -402,7 +402,7 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
-		console.log('loaded tracker position', trackerPosition);
+		console.log('loaded tracker position', prefs);
 
 		const minAcceptableLeft = -windowWidth / 2;
 		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;

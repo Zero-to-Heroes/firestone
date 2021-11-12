@@ -47,7 +47,7 @@ export class MindVisionService {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
 				if (this.memoryUpdateListener) {
-					console.log('[mind-vision] leaving game, stopping memory poll');
+					console.log('[mind-vision] leaving game, stopping memory poll', res);
 					const plugin = await this.get();
 					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 					this.memoryUpdateListener = null;

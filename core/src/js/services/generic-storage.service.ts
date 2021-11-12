@@ -15,7 +15,7 @@ export class GenericStorageService {
 	}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
-		console.debug('saving user prefs', preferences);
+		console.debug('saving user prefs', preferences, preferences?.opponentOverlayPosition, new Error().stack);
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES, preferences);
 		return preferences;
 	}
@@ -32,6 +32,7 @@ export class GenericStorageService {
 		}
 
 		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
+		console.debug('could not load prefs from local storage', fromStorage, localStorage);
 		await this.waitForDbInit();
 		return new Promise<Preferences>((resolve) => {
 			try {
