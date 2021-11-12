@@ -239,9 +239,11 @@ export class BattlegroundsStoreService {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				//console.debug('TURN_START sending event', gameEvent);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
-				const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
-				console.debug('[bgs-store] info updated', info);
-				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
+				if (this.state.currentGame && !this.state.currentGame.gameEnded) {
+					const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
+					console.debug('[bgs-store] info updated', info);
+					this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_RECRUIT_PHASE) {
