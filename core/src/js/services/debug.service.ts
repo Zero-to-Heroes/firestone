@@ -10,6 +10,11 @@ export class DebugService {
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
 		console.error = this.overrideError(console.error, console.warn, debugMode);
+		if (debugMode) {
+			console.debug = (message?: any, ...optionalParams: any[]) => {
+				// Do nothing
+			};
+		}
 	}
 
 	private override(oldConsoleLogFunc: any, debugMode: boolean) {
