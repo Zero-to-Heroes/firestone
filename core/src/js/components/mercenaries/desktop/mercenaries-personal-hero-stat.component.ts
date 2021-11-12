@@ -13,7 +13,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stat.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-personal-hero-stat" [ngClass]="{ 'missing': !owned }">
+		<div class="mercenaries-personal-hero-stat" [ngClass]="{ 'missing': !owned, 'fully-upgraded': fullyUpgraded }">
 			<div class="rarity-level">
 				<img class="rarity" [src]="rarityImg" />
 				<div class="level">
@@ -124,6 +124,7 @@ export class MercenariesPersonalHeroStatComponent {
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;
 		this.owned = value.owned;
+		this.fullyUpgraded = value.isFullyUpgraded;
 
 		this.rarityImg = `assets/images/rarity/rarity-${CardRarity[value.rarity]?.toLowerCase()}.png`;
 		this.level = value.currentLevel;
@@ -181,6 +182,7 @@ export class MercenariesPersonalHeroStatComponent {
 
 	cardId: string;
 	owned: boolean;
+	fullyUpgraded: boolean;
 	name: string;
 	role: string;
 	level: number;

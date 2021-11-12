@@ -10,11 +10,14 @@
 
 	background: rgba(255, 255, 255, 0.08);
 	border: 1px solid;
-	border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), #ffb948) 1;
 	border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), var(--color-1)) 1;
 
 	&.missing {
 		opacity: 0.5;
+	}
+
+	&.fully-upgraded {
+		border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), #ffb948) 1;
 	}
 
 	// &:hover {

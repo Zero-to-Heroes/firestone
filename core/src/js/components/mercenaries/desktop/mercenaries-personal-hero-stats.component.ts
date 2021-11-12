@@ -178,6 +178,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			currentLevel: memMerc.Level,
 			totalXp: memMerc.Experience,
 			isMaxLevel: isMaxLevel,
+			isFullyUpgraded: memMerc.IsFullyUpgraded,
 			xpNeededForLevel: isMaxLevel
 				? 0
 				: memMerc.Level === 30
@@ -489,6 +490,7 @@ export interface PersonalHeroStat {
 	readonly role: string;
 	readonly currentLevel: number;
 	readonly isMaxLevel: boolean;
+	readonly isFullyUpgraded: boolean;
 	readonly totalXp: number;
 	readonly xpNeededForLevel: number;
 	readonly xpInCurrentLevel: number;
