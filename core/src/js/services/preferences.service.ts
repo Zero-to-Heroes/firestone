@@ -20,12 +20,14 @@ import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
 import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import { MemoryVisitor } from '../models/memory/memory-mercenaries-collection-info';
-import { MercenariesHeroLevelFilterType } from '../models/mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesModeFilterType } from '../models/mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from '../models/mercenaries/mercenaries-pve-difficulty-filter.type';
-import { MercenariesPvpMmrFilterType } from '../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MercenariesRoleFilterType } from '../models/mercenaries/mercenaries-role-filter.type';
-import { MercenariesStarterFilterType } from '../models/mercenaries/mercenaries-starter-filter.type';
+import {
+	MercenariesHeroLevelFilterType,
+	MercenariesModeFilterType,
+	MercenariesPveDifficultyFilterType,
+	MercenariesPvpMmrFilterType,
+	MercenariesRoleFilterType,
+	MercenariesStarterFilterType,
+} from '../models/mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/personal-heroes-sort-criteria.type';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';

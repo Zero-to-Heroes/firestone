@@ -22,6 +22,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<mercenaries-role-filter-dropdown class="role"></mercenaries-role-filter-dropdown>
 			<mercenaries-hero-level-filter-dropdown class="level"></mercenaries-hero-level-filter-dropdown>
 			<mercenaries-starter-filter-dropdown class="starter"></mercenaries-starter-filter-dropdown>
+			<mercenaries-fully-upgraded-filter-dropdown
+				class="fully-upgraded"
+			></mercenaries-fully-upgraded-filter-dropdown>
 
 			<preference-toggle
 				class="show-hidden-teams-link"

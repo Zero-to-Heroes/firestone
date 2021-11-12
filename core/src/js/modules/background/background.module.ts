@@ -222,6 +222,7 @@ import { OpponentCardInfosComponent } from '../../components/matchoverlay/oppone
 import { OpponentCardTurnNumberComponent } from '../../components/matchoverlay/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/matchoverlay/opponenthand/opponent-hand-overlay.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
+import { MercenariesFullyUpgradedFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
 import { MercenariesHeroLevelFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
 import { MercenariesModeFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-mode-filter-dropdown.component';
 import { MercenariesPveDifficultyFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-pve-difficulty-filter-dropdown.component';
@@ -716,6 +717,7 @@ const components = [
 		MercenariesPvpMmrFilterDropdownComponent,
 		MercenariesStarterFilterDropdownComponent,
 		MercenariesHeroLevelFilterDropdownComponent,
+		MercenariesFullyUpgradedFilterDropdownComponent,
 
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
