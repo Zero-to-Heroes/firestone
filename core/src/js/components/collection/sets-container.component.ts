@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Set } from '../../models/set';
 
 @Component({
 	selector: 'sets-container',
 	styleUrls: [
-		`../../../css/component/collection/sets-container.component.scss`,
 		`../../../css/global/scrollbar.scss`,
+		`../../../css/component/collection/sets-container.component.scss`,
 	],
 	template: `
-		<div *ngIf="category" class="sets-container">
-			<div class="category-container {{ category.toLowerCase() }}">
+		<div *ngIf="_sets?.length" class="sets-container" scrollable>
+			<div class="category-container">
 				<ol>
 					<li *ngFor="let set of _sets; trackBy: trackById">
 						<set-view [cardSet]="set"></set-view>
@@ -21,27 +21,18 @@ import { Set } from '../../models/set';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetsContainerComponent {
-	@Input() _sets: Set[];
-	@Input() category: string;
-
-	constructor(private elRef: ElementRef) {}
+	_sets: Set[];
 
 	@Input() set sets(sets: Set[]) {
 		this._sets = sets;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	trackById(index, set: Set) {
 		return set.id;
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.elRef.nativeElement.querySelector('.sets-container').getBoundingClientRect();
-		const scrollbarWidth = 5;
-
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
 	}
 }

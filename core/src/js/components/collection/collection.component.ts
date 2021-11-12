@@ -31,13 +31,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 							[selectedTab]="_navigation.navigationCollection.currentView"
 						>
 						</collection-menu-selection>
-						<sets
-							[standardSets]="standardSets"
-							[wildSets]="wildSets"
-							[selectedFormat]="_navigation.navigationCollection.selectedFormat"
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'sets'"
-						>
-						</sets>
+						<sets *ngxCacheIf="_navigation.navigationCollection.currentView === 'sets'"> </sets>
 						<cards
 							[cardList]="_navigation.navigationCollection.cardList"
 							[set]="selectedSet"
@@ -112,9 +106,6 @@ export class CollectionComponent {
 	dataState: BinderState;
 	_navigation: NavigationState;
 
-	standardSets: Set[];
-	wildSets: Set[];
-
 	selectedSet: Set;
 	selectedCard: SetCard | ReferenceCard;
 	selectedCardBack: CardBack;
@@ -124,9 +115,6 @@ export class CollectionComponent {
 
 	@Input() set state(state: BinderState) {
 		this.dataState = state;
-		this.standardSets = state.allSets.filter((set) => set.standard);
-		this.wildSets = state.allSets.filter((set) => !set.standard);
-
 		this.updateValues();
 	}
 

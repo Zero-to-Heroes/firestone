@@ -15,7 +15,6 @@ export class CollectionSelectCurrentTabProcessor implements Processor {
 			currentView: event.tab,
 			menuDisplayType: 'menu',
 			selectedSetId: undefined,
-			// selectedFormat: undefined,
 			searchString: undefined,
 			selectedCardId: undefined,
 			searchResults: [] as readonly string[],

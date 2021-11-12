@@ -1,9 +1,16 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
+import { combineLatest, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
+import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
-import { CollectionSetsFilterEvent } from '../../services/mainwindow/store/events/collection/collection-sets-filter-event';
+import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'sets',
@@ -12,78 +19,76 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 		<div class="sets">
 			<filter
 				[filterOptions]="filterOptions"
-				[activeFilter]="activeFilter"
-				[placeholder]="placeholder"
+				[activeFilter]="activeFilter$ | async"
 				[filterChangeFunction]="filterChangeFunction"
 			></filter>
-			<sets-container [sets]="sets" [category]="category"></sets-container>
+			<sets-container [sets]="sets$ | async"></sets-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetsComponent {
-	@Input() set standardSets(value: Set[]) {
-		this._standardSets = value;
-		this.update();
-	}
+export class SetsComponent extends AbstractSubscriptionComponent {
+	activeFilter$: Observable<string>;
+	sets$: Observable<readonly Set[]>;
 
-	@Input() set wildSets(value: Set[]) {
-		this._wildSets = value;
-		this.update();
-	}
+	filterOptions: readonly IOption[] = [
+		{
+			label: 'Standard',
+			value: 'standard',
+		} as IOption,
+		{
+			label: 'Wild',
+			value: 'wild',
+		} as IOption,
+		{
+			label: 'All',
+			value: 'all',
+		} as IOption,
+	];
+	filterChangeFunction: (option: IOption) => MainWindowStoreEvent = (option: IOption) =>
+		new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
+			...prefs,
+			collectionSelectedFormat: option.value as StatGameFormatType,
+		}));
 
-	category: string;
-	sets: Set[];
-	_standardSets: Set[];
-	_wildSets: Set[];
+	private allSets$: Observable<readonly Set[]>;
 
-	filterOptions: readonly IOption[];
-	activeFilter: string;
-	placeholder: string;
-	filterChangeFunction: (option: IOption) => MainWindowStoreEvent;
-
-	constructor() {
-		this.filterOptions = [
-			{
-				label: 'Standard',
-				value: 'standard',
-			} as IOption,
-			{
-				label: 'Wild',
-				value: 'wild',
-			} as IOption,
-			{
-				label: 'All',
-				value: 'all',
-			} as IOption,
-		];
-		this.filterChangeFunction = (option: IOption) =>
-			new CollectionSetsFilterEvent(option.value as StatGameFormatType);
-	}
-
-	@Input('selectedFormat') set selectedFormat(format: StatGameFormatType) {
-		this.activeFilter = format;
-		this.update();
-	}
-
-	private update() {
-		if (!this._standardSets || !this._wildSets) {
-			return;
-		}
-		switch (this.activeFilter) {
-			case 'standard':
-				this.sets = this._standardSets.sort(this.sortSets());
-				this.category = 'Standard';
-				break;
-			case 'wild':
-				this.sets = this._wildSets.sort(this.sortSets());
-				this.category = 'Wild';
-				break;
-			case 'all':
-			default:
-				this.sets = [...this._wildSets, ...this._standardSets].sort(this.sortSets());
-				this.category = 'All';
-		}
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
+		super();
+		this.activeFilter$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting activeFilter in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
+		this.allSets$ = this.store
+			// TOOD: the allSets are fully recomputed whenever a new card is received, so this might cause a bit too many refreshes
+			.listen$(([main, nav, prefs]) => main.binder.allSets)
+			.pipe(
+				debounceTime(1000),
+				map(([pref]) => pref),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting allSets in ', this.constructor.name, info)),
+				takeUntil(this.destroyed$),
+			);
+		this.sets$ = combineLatest(this.activeFilter$, this.allSets$).pipe(
+			map(([activeFilter, allSets]) => {
+				const sets =
+					activeFilter === 'all'
+						? allSets
+						: activeFilter === 'standard'
+						? allSets.filter((set) => set.standard)
+						: allSets.filter((set) => !set.standard);
+				return [...sets].sort(this.sortSets());
+			}),
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting sets in ', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	private sortSets(): (a: Set, b: Set) => number {

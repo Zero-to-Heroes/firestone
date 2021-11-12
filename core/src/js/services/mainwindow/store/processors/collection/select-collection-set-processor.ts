@@ -17,11 +17,6 @@ export class SelectCollectionSetProcessor implements Processor {
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
 			selectedSetId: event.setId,
-			selectedFormat: selectedSet
-				? selectedSet.standard
-					? 'standard'
-					: 'wild'
-				: navigationState.navigationCollection.selectedFormat,
 			cardList: selectedSet.allCards,
 			searchString: undefined,
 			selectedCardId: undefined,

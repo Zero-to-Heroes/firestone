@@ -17,6 +17,7 @@ import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.ty
 import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
+import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
 import { MemoryVisitor } from './memory/memory-mercenaries-collection-info';
 import { MercenariesHeroLevelFilterType } from './mercenaries/mercenaries-hero-level-filter.type';
@@ -59,7 +60,7 @@ export class Preferences {
 	readonly showXpRecapAtGameEnd: boolean = false;
 
 	readonly collectionUseOverlay: boolean;
-
+	readonly collectionSelectedFormat: StatGameFormatType = 'all';
 	readonly collectionEnableNotifications: boolean = true;
 	readonly showDust: boolean = true;
 	readonly showCommon: boolean = true;

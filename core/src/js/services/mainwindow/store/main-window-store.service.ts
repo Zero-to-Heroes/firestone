@@ -60,12 +60,10 @@ import { ChangeVisibleApplicationEvent } from './events/change-visible-applicati
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
-import { CollectionSetsFilterEvent } from './events/collection/collection-sets-filter-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
 import { SearchCardsEvent } from './events/collection/search-cards-event';
-import { SelectCollectionFormatEvent } from './events/collection/select-collection-format-event';
 import { SelectCollectionSetEvent } from './events/collection/select-collection-set-event';
 import { ShowCardBackDetailsEvent } from './events/collection/show-card-back-details-event';
 import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
@@ -112,6 +110,7 @@ import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-up
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
+import { GenericPreferencesUpdateEvent } from './events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
@@ -181,12 +180,10 @@ import { ChangeVisibleApplicationProcessor } from './processors/change-visible-a
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
 import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
-import { CollectionSetsFilterProcessor } from './processors/collection/collection-sets-filter-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
 import { NewPackProcessor } from './processors/collection/new-pack-processor';
 import { SearchCardProcessor } from './processors/collection/search-card-processor';
-import { SelectCollectionFormatProcessor } from './processors/collection/select-collection-format-processor';
 import { SelectCollectionSetProcessor } from './processors/collection/select-collection-set-processor';
 import { ShowCardBackDetailsProcessor } from './processors/collection/show-card-back-details-processor';
 import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
@@ -233,6 +230,7 @@ import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
+import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
 import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
@@ -497,6 +495,9 @@ export class MainWindowStoreService {
 			ShowAdsEvent.eventName(),
 			new ShowAdsProcessor(),
 
+			GenericPreferencesUpdateEvent.eventName(),
+			new GenericPreferencesUpdateProcessor(this.prefs),
+
 			// Collection
 			CollectionInitEvent.eventName(),
 			new CollectionInitProcessor(),
@@ -504,17 +505,11 @@ export class MainWindowStoreService {
 			CollectionSelectCurrentTabEvent.eventName(),
 			new CollectionSelectCurrentTabProcessor(),
 
-			CollectionSetsFilterEvent.eventName(),
-			new CollectionSetsFilterProcessor(),
-
 			SearchCardsEvent.eventName(),
 			new SearchCardProcessor(this.collectionManager, this.sets),
 
 			LoadMoreCardHistoryEvent.eventName(),
 			new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
-
-			SelectCollectionFormatEvent.eventName(),
-			new SelectCollectionFormatProcessor(),
 
 			SelectCollectionSetEvent.eventName(),
 			new SelectCollectionSetProcessor(),
