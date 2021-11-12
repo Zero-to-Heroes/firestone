@@ -105,12 +105,16 @@ export class LogListenerService {
 				skipToEnd: skipToEnd,
 			};
 			const handler = (lineInfo: ListenObject) => {
+				// From what I've seen, the only cases where this happens is when the file is deleted after leaving the game
 				if (!lineInfo.success) {
 					console.warn(
 						'[log-listener] [' + this.logFile + '] received an error on file: ',
 						fileIdentifier,
 						lineInfo.error,
 					);
+					this.ow.stopFileListener(fileIdentifier);
+					this.callback('truncated');
+					this.listenOnFileCreation(logsLocation);
 					return;
 				}
 				if (lineInfo.state === 'truncated') {
@@ -121,7 +125,7 @@ export class LogListenerService {
 					);
 					this.ow.stopFileListener(fileIdentifier);
 					this.callback('truncated');
-					this.listenOnFileUpdate(logsLocation);
+					this.listenOnFileCreation(logsLocation);
 					// this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
 					return;
 				}
