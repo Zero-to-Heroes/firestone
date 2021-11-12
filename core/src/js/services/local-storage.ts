@@ -21,7 +21,7 @@ export class LocalStorageService {
 		this.internalSubject
 			.asObservable()
 			.pipe(
-				tap((info) => console.debug('local info', info)),
+				// tap((info) => console.debug('local info', info)),
 				debounceTime(2000),
 				tap((info) => console.debug('after debounce', info)),
 				filter((info) => !!info),
