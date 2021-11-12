@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from '../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
-import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MercenariesStarterFilterType } from '../../../models/mercenaries/mercenaries-starter-filter.type';
+import {
+	MercenariesHeroLevelFilterType,
+	MercenariesModeFilterType,
+	MercenariesPveDifficultyFilterType,
+	MercenariesPvpMmrFilterType,
+	MercenariesStarterFilterType,
+} from '../../../models/mercenaries/mercenaries-filter-types';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import {
 	MercenariesGlobalStats,

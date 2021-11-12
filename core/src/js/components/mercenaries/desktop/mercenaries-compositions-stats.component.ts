@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
+import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-filter-types';
 import {
 	MercenariesComposition,
 	MercenariesGlobalStatsPvp,

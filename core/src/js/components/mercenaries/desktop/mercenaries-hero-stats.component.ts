@@ -3,10 +3,12 @@ import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MercenariesRoleFilterType } from '../../../models/mercenaries/mercenaries-role-filter.type';
-import { MercenariesStarterFilterType } from '../../../models/mercenaries/mercenaries-starter-filter.type';
+import {
+	MercenariesHeroLevelFilterType,
+	MercenariesPvpMmrFilterType,
+	MercenariesRoleFilterType,
+	MercenariesStarterFilterType,
+} from '../../../models/mercenaries/mercenaries-filter-types';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import {
 	MercenariesGlobalStats,

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { MercenariesModeFilterType } from '../../../../models/mercenaries/mercenaries-mode-filter.type';
+import { MercenariesModeFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
 import { MercenariesModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-mode-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';

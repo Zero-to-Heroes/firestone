@@ -20,12 +20,15 @@ import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
 import { MemoryVisitor } from './memory/memory-mercenaries-collection-info';
-import { MercenariesHeroLevelFilterType } from './mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesModeFilterType } from './mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from './mercenaries/mercenaries-pve-difficulty-filter.type';
-import { MercenariesPvpMmrFilterType } from './mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MercenariesRoleFilterType } from './mercenaries/mercenaries-role-filter.type';
-import { MercenariesStarterFilterType } from './mercenaries/mercenaries-starter-filter.type';
+import {
+	MercenariesFullyUpgradedFilterType,
+	MercenariesHeroLevelFilterType,
+	MercenariesModeFilterType,
+	MercenariesPveDifficultyFilterType,
+	MercenariesPvpMmrFilterType,
+	MercenariesRoleFilterType,
+	MercenariesStarterFilterType,
+} from './mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';
 
@@ -326,6 +329,7 @@ export class Preferences {
 	readonly mercenariesActivePveDifficultyFilter: MercenariesPveDifficultyFilterType = 'all';
 	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
+	readonly mercenariesActiveFullyUpgradedFilter: MercenariesFullyUpgradedFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter2: MercenariesHeroLevelFilterType = 30;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;

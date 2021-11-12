@@ -2,12 +2,14 @@ import { ReferenceCard, ScenarioId, TaskStatus } from '@firestone-hs/reference-d
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
-import { MercenariesHeroLevelFilterType } from '../../models/mercenaries/mercenaries-hero-level-filter.type';
-import { MercenariesModeFilterType } from '../../models/mercenaries/mercenaries-mode-filter.type';
-import { MercenariesPveDifficultyFilterType } from '../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
-import { MercenariesPvpMmrFilterType } from '../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { MercenariesRoleFilterType } from '../../models/mercenaries/mercenaries-role-filter.type';
-import { MercenariesStarterFilterType } from '../../models/mercenaries/mercenaries-starter-filter.type';
+import {
+	MercenariesHeroLevelFilterType,
+	MercenariesModeFilterType,
+	MercenariesPveDifficultyFilterType,
+	MercenariesPvpMmrFilterType,
+	MercenariesRoleFilterType,
+	MercenariesStarterFilterType,
+} from '../../models/mercenaries/mercenaries-filter-types';
 import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,

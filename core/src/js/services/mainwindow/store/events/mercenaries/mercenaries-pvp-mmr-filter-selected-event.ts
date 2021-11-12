@@ -1,4 +1,4 @@
-import { MercenariesPvpMmrFilterType } from '../../../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
+import { MercenariesPvpMmrFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesPvpMmrFilterSelectedEvent implements MainWindowStoreEvent {

@@ -1,4 +1,4 @@
-import { MercenariesStarterFilterType } from '../../../../../models/mercenaries/mercenaries-starter-filter.type';
+import { MercenariesStarterFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesStarterFilterSelectedEvent implements MainWindowStoreEvent {

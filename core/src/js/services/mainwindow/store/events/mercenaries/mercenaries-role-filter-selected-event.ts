@@ -1,4 +1,4 @@
-import { MercenariesRoleFilterType } from '../../../../../models/mercenaries/mercenaries-role-filter.type';
+import { MercenariesRoleFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesRoleFilterSelectedEvent implements MainWindowStoreEvent {

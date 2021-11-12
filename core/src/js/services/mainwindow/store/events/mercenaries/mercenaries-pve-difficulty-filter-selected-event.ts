@@ -1,4 +1,4 @@
-import { MercenariesPveDifficultyFilterType } from '../../../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
+import { MercenariesPveDifficultyFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesPveDifficultyFilterSelectedEvent implements MainWindowStoreEvent {

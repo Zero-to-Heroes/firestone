@@ -1,4 +1,4 @@
-import { MercenariesModeFilterType } from '../../../../../models/mercenaries/mercenaries-mode-filter.type';
+import { MercenariesModeFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesModeFilterSelectedEvent implements MainWindowStoreEvent {

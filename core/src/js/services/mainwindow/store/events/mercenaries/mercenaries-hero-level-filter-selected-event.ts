@@ -1,4 +1,4 @@
-import { MercenariesHeroLevelFilterType } from '../../../../../models/mercenaries/mercenaries-hero-level-filter.type';
+import { MercenariesHeroLevelFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesHeroLevelFilterSelectedEvent implements MainWindowStoreEvent {
