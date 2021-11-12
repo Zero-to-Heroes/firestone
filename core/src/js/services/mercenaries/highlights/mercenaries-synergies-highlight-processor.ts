@@ -11,11 +11,25 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.AllianceWarBanner4Lettuce:
 		case CardIds.AllianceWarBanner5Lettuce:
 			return alliance;
+		case CardIds.Aluneth:
+			return arcane;
+		case CardIds.ArcaneBlast1Lettuce:
+		case CardIds.ArcaneBlast2Lettuce:
+		case CardIds.ArcaneBlast3Lettuce:
+		case CardIds.ArcaneBlast4Lettuce:
+		case CardIds.ArcaneBlast5Lettuce:
+			return arcane;
 		case CardIds.ArcaneBolt1Lettuce1:
 		case CardIds.ArcaneBolt2Lettuce1:
 		case CardIds.ArcaneBolt3Lettuce1:
 		case CardIds.ArcaneBolt4Lettuce1:
 		case CardIds.ArcaneBolt5Lettuce1:
+			return arcane;
+		case CardIds.ArcaneLance1Lettuce:
+		case CardIds.ArcaneLance2Lettuce:
+		case CardIds.ArcaneLance3Lettuce:
+		case CardIds.ArcaneLance4Lettuce:
+		case CardIds.ArcaneLance5Lettuce:
 			return arcane;
 		case CardIds.ArcaneStaff1Lettuce:
 		case CardIds.ArcaneStaff2Lettuce:
@@ -23,6 +37,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ArcaneStaff4Lettuce:
 		case CardIds.ArcaneStaff5Lettuce:
 			return arcane;
+		case CardIds.Atiesh:
+			return or(and(fire, dealsDamage), and(frost, dealsDamage));
 		case CardIds.BannerOfTheHorde1Lettuce:
 		case CardIds.BannerOfTheHorde2Lettuce:
 		case CardIds.BannerOfTheHorde3Lettuce:
@@ -40,25 +56,39 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BlessingOfTheMoon3Lettuce:
 		case CardIds.BlessingOfTheMoon4Lettuce:
 		case CardIds.BlessingOfTheMoon5Lettuce:
-			return or(nightelf, tauren, troll);
+			return or(nightelf, tauren, troll, and(nature, dealsDamage));
 		case CardIds.BloodPact1Lettuce:
 		case CardIds.BloodPact2Lettuce:
 		case CardIds.BloodPact3Lettuce:
 		case CardIds.BloodPact4Lettuce:
 		case CardIds.BloodPact5Lettuce:
 			return or(orc, demon);
+		case CardIds.BurningLegionTabard1Lettuce:
+		case CardIds.BurningLegionTabard2Lettuce:
+		case CardIds.BurningLegionTabard3Lettuce:
+		case CardIds.BurningLegionTabard4Lettuce:
+		case CardIds.BurningLegionTabard5Lettuce:
+			return demon;
 		case CardIds.CenarionSurge1Lettuce:
 		case CardIds.CenarionSurge2Lettuce:
 		case CardIds.CenarionSurge3Lettuce:
 		case CardIds.CenarionSurge4Lettuce:
 		case CardIds.CenarionSurge5Lettuce:
 			return nature;
+		case CardIds.CondemnLettuce:
+			return holy;
 		case CardIds.DarkShamanCowl1Lettuce:
 		case CardIds.DarkShamanCowl2Lettuce:
 		case CardIds.DarkShamanCowl3Lettuce:
 		case CardIds.DarkShamanCowl4Lettuce:
 		case CardIds.DarkShamanCowl5Lettuce:
 			return horde;
+		case CardIds.Demonfire1Lettuce:
+		case CardIds.Demonfire2Lettuce:
+		case CardIds.Demonfire3Lettuce:
+		case CardIds.Demonfire4Lettuce:
+		case CardIds.Demonfire5Lettuce:
+			return demon;
 		case CardIds.ElementaryStudies1Lettuce:
 		case CardIds.ElementaryStudies2Lettuce:
 		case CardIds.ElementaryStudies3Lettuce:
@@ -81,12 +111,24 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 				[CardIds.CarielRoameLettuce1, CardIds.CorneliusRoameLettuce1].includes(
 					normalizeMercenariesCardId(card.id) as CardIds,
 				);
+		case CardIds.FelBlast1Lettuce:
+		case CardIds.FelBlast2Lettuce:
+		case CardIds.FelBlast3Lettuce:
+		case CardIds.FelBlast4Lettuce:
+		case CardIds.FelBlast5Lettuce:
+			return fel;
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 			return fel;
+		case CardIds.FireLance1Lettuce:
+		case CardIds.FireLance2Lettuce:
+		case CardIds.FireLance3Lettuce:
+		case CardIds.FireLance4Lettuce:
+		case CardIds.FireLance5Lettuce:
+			return fire;
 		case CardIds.FlameBuffet1Lettuce:
 		case CardIds.FlameBuffet2Lettuce:
 		case CardIds.FlameBuffet3Lettuce:
@@ -98,7 +140,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FireStaff3Lettuce:
 		case CardIds.FireStaff4Lettuce:
 		case CardIds.FireStaff5Lettuce:
-			return fire;
+			return and(fire, dealsDamage);
 		case CardIds.FishyBarrage1Lettuce:
 		case CardIds.FishyBarrage2Lettuce:
 		case CardIds.FishyBarrage3Lettuce:
@@ -111,24 +153,42 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ForTheFin4Lettuce:
 		case CardIds.ForTheFin5Lettuce:
 			return murloc;
+		case CardIds.FrostBlast1Lettuce:
+		case CardIds.FrostBlast2Lettuce:
+		case CardIds.FrostBlast3Lettuce:
+		case CardIds.FrostBlast4Lettuce:
+		case CardIds.FrostBlast5Lettuce:
+			return frost;
 		case CardIds.FrostStaff1Lettuce:
 		case CardIds.FrostStaff2Lettuce:
 		case CardIds.FrostStaff3Lettuce:
 		case CardIds.FrostStaff4Lettuce:
 		case CardIds.FrostStaff5Lettuce:
-			return frost;
+			return and(frost, dealsDamage);
 		case CardIds.HeroicLeap1Lettuce:
 		case CardIds.HeroicLeap2Lettuce:
 		case CardIds.HeroicLeap3Lettuce:
 		case CardIds.HeroicLeap4Lettuce:
 		case CardIds.HeroicLeap5Lettuce:
 			return human;
+		case CardIds.HeatingUp1Lettuce:
+		case CardIds.HeatingUp2Lettuce:
+		case CardIds.HeatingUp3Lettuce:
+		case CardIds.HeatingUp4Lettuce:
+		case CardIds.HeatingUp5Lettuce:
+			return fire;
+		case CardIds.HolyShock1Lettuce:
+		case CardIds.HolyShock2Lettuce:
+		case CardIds.HolyShock3Lettuce:
+		case CardIds.HolyShock4Lettuce:
+		case CardIds.HolyShock5Lettuce:
+			return holy;
 		case CardIds.HolyStaff1Lettuce:
 		case CardIds.HolyStaff2Lettuce:
 		case CardIds.HolyStaff3Lettuce:
 		case CardIds.HolyStaff4Lettuce:
 		case CardIds.HolyStaff5Lettuce:
-			return holy;
+			return and(holy, dealsDamage);
 		case CardIds.HolyWordSalvation1Lettuce:
 		case CardIds.HolyWordSalvation2Lettuce:
 		case CardIds.HolyWordSalvation3Lettuce:
@@ -153,6 +213,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.Inferno4Lettuce:
 		case CardIds.Inferno5Lettuce:
 			return fire;
+		case CardIds.LifebindersLocket1Lettuce:
+		case CardIds.LifebindersLocket2Lettuce:
+		case CardIds.LifebindersLocket3Lettuce:
+		case CardIds.LifebindersLocket4Lettuce:
+		case CardIds.LifebindersLocket5Lettuce:
+			return and(fire, dealsDamage);
 		case CardIds.LightningBolt1Lettuce1:
 		case CardIds.LightningBolt2Lettuce1:
 		case CardIds.LightningBolt3Lettuce1:
@@ -164,7 +230,37 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.Manastorm3Lettuce:
 		case CardIds.Manastorm4Lettuce:
 		case CardIds.Manastorm5Lettuce:
-			return arcane;
+			return and(arcane, dealsDamage);
+		case CardIds.MarkOfTheViper1Lettuce:
+		case CardIds.MarkOfTheViper2Lettuce:
+		case CardIds.MarkOfTheViper3Lettuce:
+		case CardIds.MarkOfTheViper4Lettuce:
+		case CardIds.MarkOfTheViper5Lettuce:
+			return or(nightelf, beast);
+		case CardIds.MurkysLuckyFish1Lettuce:
+		case CardIds.MurkysLuckyFish2Lettuce:
+		case CardIds.MurkysLuckyFish3Lettuce:
+		case CardIds.MurkysLuckyFish4Lettuce:
+		case CardIds.MurkysLuckyFish5Lettuce:
+			return murloc;
+		case CardIds.MurlocInfestation1Lettuce:
+		case CardIds.MurlocInfestation2Lettuce:
+		case CardIds.MurlocInfestation3Lettuce:
+		case CardIds.MurlocInfestation4Lettuce:
+		case CardIds.MurlocInfestation5Lettuce:
+			return murloc;
+		case CardIds.NatureBlast1Lettuce:
+		case CardIds.NatureBlast2Lettuce:
+		case CardIds.NatureBlast3Lettuce:
+		case CardIds.NatureBlast4Lettuce:
+		case CardIds.NatureBlast5Lettuce:
+			return and(nature, dealsDamage);
+		case CardIds.NatureStaff1Lettuce:
+		case CardIds.NatureStaff2Lettuce:
+		case CardIds.NatureStaff3Lettuce:
+		case CardIds.NatureStaff4Lettuce:
+		case CardIds.NatureStaff5Lettuce:
+			return and(nature, dealsDamage);
 		case CardIds.OrcOnslaught1Lettuce:
 		case CardIds.OrcOnslaught2Lettuce:
 		case CardIds.OrcOnslaught3Lettuce:
@@ -177,17 +273,38 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.OrgrimmarTabard4Lettuce:
 		case CardIds.OrgrimmarTabard5Lettuce:
 			return orc;
-		// Removed in 21.6?
-		// case CardIds.Scalelord1Lettuce:
-		// case CardIds.Scalelord2Lettuce:
-		// case CardIds.Scalelord3Lettuce:
-		// 	return murloc;
+		case CardIds.RodOfTheArchmageLettuce:
+			return and(fire, dealsDamage);
+		case CardIds.Scorch1Lettuce:
+		case CardIds.Scorch2Lettuce:
+		case CardIds.Scorch3Lettuce:
+		case CardIds.Scorch4Lettuce:
+		case CardIds.Scorch5Lettuce:
+			return elemental;
 		case CardIds.SearingStrike1Lettuce:
 		case CardIds.SearingStrike2Lettuce:
 		case CardIds.SearingStrike3Lettuce:
 		case CardIds.SearingStrike4Lettuce:
 		case CardIds.SearingStrike5Lettuce:
 			return fire;
+		case CardIds.ShadowLance1Lettuce:
+		case CardIds.ShadowLance2Lettuce:
+		case CardIds.ShadowLance3Lettuce:
+		case CardIds.ShadowLance4Lettuce:
+		case CardIds.ShadowLance5Lettuce:
+			return shadow;
+		case CardIds.ShadowStaff1Lettuce:
+		case CardIds.ShadowStaff2Lettuce:
+		case CardIds.ShadowStaff3Lettuce:
+		case CardIds.ShadowStaff4Lettuce:
+		case CardIds.ShadowStaff5Lettuce:
+			return and(shadow, dealsDamage);
+		case CardIds.SnapFreeze1Lettuce:
+		case CardIds.SnapFreeze2Lettuce:
+		case CardIds.SnapFreeze3Lettuce:
+		case CardIds.SnapFreeze4Lettuce:
+		case CardIds.SnapFreeze5Lettuce:
+			return freeze;
 		case CardIds.SplittingStrike1Lettuce:
 		case CardIds.SplittingStrike2Lettuce:
 		case CardIds.SplittingStrike3Lettuce:
@@ -211,7 +328,13 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.StrengthOfWrynn3Lettuce:
 		case CardIds.StrengthOfWrynn4Lettuce:
 		case CardIds.StrengthOfWrynn5Lettuce:
-			return human;
+			return or(human, and(holy, dealsDamage));
+		case CardIds.SurvivalTraining1Lettuce:
+		case CardIds.SurvivalTraining2Lettuce:
+		case CardIds.SurvivalTraining3Lettuce:
+		case CardIds.SurvivalTraining4Lettuce:
+		case CardIds.SurvivalTraining5Lettuce:
+			return beast;
 		case CardIds.TempestsFury1Lettuce:
 		case CardIds.TempestsFury2Lettuce:
 		case CardIds.TempestsFury3Lettuce:
@@ -224,6 +347,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.TheBeastWithin4Lettuce:
 		case CardIds.TheBeastWithin5Lettuce:
 			return beast;
+		case CardIds.TreasureChest1Lettuce:
+		case CardIds.TreasureChest2Lettuce:
+		case CardIds.TreasureChest3Lettuce:
+		case CardIds.TreasureChest4Lettuce:
+		case CardIds.TreasureChest5Lettuce:
+			return pirate;
 		case CardIds.TribalWarfare1Lettuce:
 		case CardIds.TribalWarfare2Lettuce:
 		case CardIds.TribalWarfare3Lettuce:
@@ -273,6 +402,7 @@ const murloc = (card: ReferenceCard) => race(card, Race.MURLOC);
 const elemental = (card: ReferenceCard) => race(card, Race.ELEMENTAL);
 const beast = (card: ReferenceCard) => race(card, Race.BEAST);
 const demon = (card: ReferenceCard) => race(card, Race.DEMON);
+const pirate = (card: ReferenceCard) => race(card, Race.PIRATE);
 
 const spellSchool = (card: ReferenceCard, spellSchool: SpellSchool) =>
 	SpellSchool[spellSchool] === card.spellSchool?.toUpperCase();
@@ -285,4 +415,6 @@ const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
 const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
-const dealsDamage = (card: ReferenceCard) => hasText(card, /deal \$?\d+ damage/);
+const dealsDamage = (card: ReferenceCard) =>
+	hasText(card, /deal \$?\#?\d+ damage/) || hasText(card, /restore \$?\#?\d+ health/);
+const freeze = (card: ReferenceCard) => hasText(card, /freeze/);
