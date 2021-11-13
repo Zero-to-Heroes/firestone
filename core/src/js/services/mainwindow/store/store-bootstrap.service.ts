@@ -250,14 +250,16 @@ export class StoreBootstrapService {
 		}
 
 		const merged: Preferences = {
-			...(prefsFromRemote ?? prefs),
+			// Use local prefs first, so that by default we have all the positions and non-synched
+			// properties with the right values. We then just update with the saved remote values
+			...(prefs ?? prefsFromRemote),
 		} as Preferences;
 
 		const obj = new Preferences();
 		for (const prop in merged) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, obj, prop);
 			if (meta && obj.hasOwnProperty(prop)) {
-				merged[prop] = prefs[prop];
+				merged[prop] = prefsFromRemote[prop];
 			}
 		}
 		await this.prefs.savePreferences(merged);
