@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.2.0',
+		version: '8.2.9',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,33 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add meta PvP Hero stats.`,
-							},
-							{
-								type: 'feature',
-								text: `Add meta PvP Composition stats.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where toggling the achievements on (via the Enable Achievements in the settings) wouldn't work.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to change the global zoom level for all the "main" windows (ie not the widgets). This should make it more comfortable to use the app on 4k monitors.`,
+								text: `Fix an issue where the tracker would sometimes reposition itself randomly (also affects all other widgets that can be moved around)`,
 							},
 						],
 					},
@@ -83,50 +61,32 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Try to fix some performance issues whil interacting with the minions list while in battle.`,
-							},
-						],
-					},
-					{
 						category: 'mercenaries',
 						details: [
 							{
 								type: 'feature',
-								text: `Add some more synergy highlights (Holy Staff, Zhardoom, Greatstaff Of The Devourer).`,
+								text: `Add a filter to hide non-fully maxxed mercs in the Progression tab.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where Sneed's progress was not tracked properly.`,
+								type: 'feature',
+								text: `Add missing synergy highlights.`,
 							},
 							{
-								type: 'misc',
-								text: `Improve the reactivity of the Progression tab when clicking on things (like when manually changing the task progress, or sorting the mercs by a different criteria).`,
+								type: 'ui',
+								text: `Increase the size of the weakness triangle image.`,
+							},
+							{
+								type: 'ui',
+								text: `Add a golden border to the fully maxxed mercs.`,
 							},
 						],
 					},
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix Cast When Drawn spells (like Garrote's Bleed) not being removed from the cards in hand in the tracker.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where deck names would have some weird characters in them.`,
-							},
-						],
-					},
-					{
-						category: 'general',
+						category: 'collection',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an error notification popup when the app fails to read the game's memory.`,
+								text: `Remember the last value of the Wild/Standard sets filter.`,
 							},
 						],
 					},
