@@ -274,3 +274,14 @@
 		}
 	}
 }
+
+::ng-deep .cdk-overlay-container {
+	.card-tooltip.mercenaries-weakness-triangle.mercenaries-weakness-triangle.mercenaries-weakness-triangle {
+		width: 500px;
+
+		img {
+			width: 100%;
+			filter: none;
+		}
+	}
+}

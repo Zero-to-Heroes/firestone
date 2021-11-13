@@ -93,6 +93,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								class="mouseover-button show-roles-matchup-button"
 								[cardTooltip]="'merceanries_weakness_triangle'"
 								[cardTooltipPosition]="tooltipPosition"
+								[cardTooltipClass]="'mercenaries-weakness-triangle'"
 								*ngIf="showColorChart$ | async"
 							>
 								<div class="background-second-part"></div>
