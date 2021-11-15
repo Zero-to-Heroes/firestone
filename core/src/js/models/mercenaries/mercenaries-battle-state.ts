@@ -12,6 +12,7 @@ export class MercenariesBattleState {
 
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
+	readonly actionQueue: readonly MercenariesAction[] = [];
 
 	readonly mercenariesFromMemory: MemoryMercenariesInfo;
 	readonly playerClosedManually: boolean;
@@ -161,4 +162,12 @@ export interface BattleSpeedModifier {
 		cardId: string;
 		value: number;
 	}[];
+}
+
+export interface MercenariesAction {
+	readonly side: 'player' | 'opponent';
+	readonly ownerCardId: string;
+	readonly ownerEntityId: number;
+	readonly abilityCardId: string;
+	readonly speed: number;
 }

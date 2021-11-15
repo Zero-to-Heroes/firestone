@@ -49,39 +49,25 @@ export class GameEvents {
 		if (this.plugin) {
 			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
-				// if (
-				// 	!this.hasSentToS3 &&
-				// 	(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
-				// ) {
-				// 	console.info('sending logs to S3', first, second);
-				// 	// Avoid race conditions
-				// 	setTimeout(() => this.uploadLogsAndSendException(first, second), Math.random() * 10000);
-				// }
 			});
 			this.plugin.onGameEvent.addListener((gameEvent) => {
-				const events: any | readonly any[] = JSON.parse(gameEvent);
-				if (!!(events as readonly any[]).length) {
-					for (const event of events as readonly any[]) {
-						this.dispatchGameEvent(event);
+				try {
+					const events: any | readonly any[] = JSON.parse(gameEvent);
+					if (!!(events as readonly any[]).length) {
+						for (const event of events as readonly any[]) {
+							this.dispatchGameEvent(event);
+						}
+					} else {
+						this.dispatchGameEvent(events);
 					}
-				} else {
-					this.dispatchGameEvent(events);
+				} catch (e) {
+					console.error('Error while parsing game event', gameEvent, e);
 				}
 			});
 			this.plugin.initRealtimeLogConversion(() => {
 				console.log('[game-events] real-time log processing ready to go');
 			});
 		}
-		// TODO: progressively deprecate this, as the GEP doesn't fire events as well as
-		// mind vision
-		// this.events.on(Events.SCENE_CHANGED).subscribe((event) =>
-		// 	this.gameEventsEmitter.allEvents.next(
-		// 		Object.assign(new GameEvent(), {
-		// 			type: GameEvent.SCENE_CHANGED,
-		// 			additionalData: { scene: event.data[0] },
-		// 		} as GameEvent),
-		// 	),
-		// );
 		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CurrentScene) {
@@ -1212,6 +1198,20 @@ export class GameEvents {
 						newCooldown: gameEvent.Value.AdditionalProps.NewCooldown,
 						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
 					}),
+				);
+				break;
+			case 'MERCENARIES_ABILITY_QUEUED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_ABILITY_QUEUED, gameEvent, {
+						abillityEntityId: gameEvent.Value.AdditionalProps.AbillityEntityId,
+						abilityCardId: gameEvent.Value.AdditionalProps.AbilityCardId,
+						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+					}),
+				);
+				break;
+			case 'MERCENARIES_ABILITY_UNQUEUED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_ABILITY_UNQUEUED, gameEvent),
 				);
 				break;
 			default:

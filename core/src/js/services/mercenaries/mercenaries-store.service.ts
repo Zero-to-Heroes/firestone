@@ -14,7 +14,9 @@ import { MercenariesOpponentBattleTeamOverlayHandler } from './overlay-handler/m
 import { MercenariesPlayerBattleTeamOverlayHandler } from './overlay-handler/mercenaries-player-battle-team-overlay-handler';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
+import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
 import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-revealed-parser';
+import { MercenariesAbilityUnqueuedParser } from './parser/mercenaries-ability-unqueued-parser';
 import { MercenariesAbilityUpdatedParser } from './parser/mercenaries-ability-updated-parser';
 import { MercenariesBuffsParser } from './parser/mercenaries-buffs-parser';
 import { MercenariesCooldownUpdatedParser } from './parser/mercenaries-cooldown-updated-parser';
@@ -99,7 +101,7 @@ export class MercenariesStoreService {
 			let state = battleState;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
-				// console.debug('[merc-store] updated state', event.type, event, state);
+				console.debug('[merc-store] updated state', event.type, event, state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {
@@ -158,6 +160,9 @@ export class MercenariesStoreService {
 
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),
+
+			new MercenariesAbilityQueuedParser(),
+			new MercenariesAbilityUnqueuedParser(),
 		];
 		this.parsers = {};
 		for (const parser of parsers) {
