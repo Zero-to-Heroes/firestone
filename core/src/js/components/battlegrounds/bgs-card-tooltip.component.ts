@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'bgs-card-tooltip',
@@ -30,11 +31,10 @@ export class BgsCardTooltipComponent {
 		this.cardId = value.cardID;
 		this.attack = this._entity.getTag(GameTag.ATK);
 		this.health = this._entity.getTag(GameTag.HEALTH);
-		if (this._entity.getTag(GameTag.PREMIUM) === 1) {
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs_premium.png?v=5`;
-		} else {
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs.png?v=5`;
-		}
+		this.image = this.i18n.getCardImage(this._entity.cardID, {
+			isBgs: true,
+			isPremium: this._entity.getTag(GameTag.PREMIUM) === 1,
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -52,5 +52,5 @@ export class BgsCardTooltipComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 }

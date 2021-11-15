@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { HeroStat } from './hero-stat';
 
 @Component({
@@ -27,7 +28,9 @@ export class BattlegroundsHeroRecordsBrokenComponent {
 	numberOfRecords: number;
 
 	@Input() set stat(value: HeroStat) {
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroId}.png?v=3`;
+		this.icon = this.i18n.getCardImage(value.heroId, { isBgs: true });
 		this.numberOfRecords = value.numberOfRecords;
 	}
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

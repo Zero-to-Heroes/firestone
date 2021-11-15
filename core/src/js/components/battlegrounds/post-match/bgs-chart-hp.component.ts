@@ -15,6 +15,7 @@ import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.
 import { Color } from 'ng2-charts';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { thisAsThat } from '../../../services/utils';
 import { areEqualDataSets } from './chart-utils';
 
@@ -304,6 +305,7 @@ export class BgsChartHpComponent {
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	togglePlayer(playerCardId: string) {
@@ -384,7 +386,7 @@ export class BgsChartHpComponent {
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${player.cardId}.png?v=3`,
+			icon: this.i18n.getCardImage(player.cardId, { isBgs: true }),
 			position: player.position,
 			isPlayer: player.isPlayer,
 			shown: true,

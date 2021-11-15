@@ -93,7 +93,6 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 			return;
 		}
 		this.heroCardId = value.getDisplayCardId();
-		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId();

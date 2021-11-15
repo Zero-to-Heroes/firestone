@@ -19,6 +19,7 @@ import { AdService } from '../../../services/ad.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../../services/feature-flags';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
@@ -146,7 +147,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			return;
 		}
 		this._panel = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.getDisplayCardId()}.png?v=3`;
+		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
 		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId();
@@ -196,6 +197,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly allCards: CardsFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly ads: AdService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.init();
 	}

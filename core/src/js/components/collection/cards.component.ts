@@ -169,7 +169,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		{ label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL },
 	];
 
-	readonly DEFAULT_CARD_WIDTH = 155;
+	readonly DEFAULT_CARD_WIDTH = 170;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 
 	_searchString: string;

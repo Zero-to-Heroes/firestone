@@ -66,7 +66,6 @@ export class BattlegroundsStatsHeroVignetteComponent {
 		}
 		this._stat = value;
 		this.heroName = value.name;
-		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=4`;
 		this.heroCardId = value.id;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
 		this.averagePosition = value.playerAveragePosition;

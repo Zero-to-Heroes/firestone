@@ -14,6 +14,7 @@ import { CardTooltipPositionType } from '../../../directives/card-tooltip-positi
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { uuid } from '../../../services/utils';
 
 @Component({
@@ -190,6 +191,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly cardsHighlightService: CardsHighlightService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	ngAfterViewInit() {
@@ -264,7 +266,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		}
 		// Preload
 		if (this.cardId) {
-			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=3`;
+			const imageUrl = this.i18n.getCardImage(this.cardId);
 			const image = new Image();
 			image.src = imageUrl;
 			this._referenceCard = this.cards.getCard(this.cardId);

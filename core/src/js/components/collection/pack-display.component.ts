@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'pack-display',
@@ -19,13 +20,9 @@ import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 				[cardTooltipType]="card.cardType"
 				[cardTooltipText]="''"
 			>
-				<img
-					*ngIf="card.cardType === 'NORMAL'"
-					[src]="
-						'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' + card.cardId + '.png?v=3'
-					"
-				/>
-				<video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
+				<img *ngIf="card.cardType === 'NORMAL'" [src]="getCardImage(card.cardId, false)" />
+				<img *ngIf="card.cardType === 'GOLDEN'" [src]="getCardImage(card.cardId, true)" />
+				<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
 					<source
 						src="{{
 							'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
@@ -34,7 +31,7 @@ import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 						}}"
 						type="video/webm"
 					/>
-				</video>
+				</video> -->
 			</div>
 		</div>
 	`,
@@ -43,14 +40,11 @@ import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 export class PackDisplayComponent {
 	@Input() set pack(value: PackResult) {
 		this.cards = value.cards;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 
 	cards: readonly CardPackResult[];
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	getLeft(i: number): number {
 		const offset = 0;
@@ -60,5 +54,9 @@ export class PackDisplayComponent {
 
 	trackByFn(item: CardPackResult, index: number) {
 		return item.cardId + '' + index;
+	}
+
+	getCardImage(cardId: string, isPremium: boolean): string {
+		return this.i18n.getCardImage(cardId, { isPremium: isPremium });
 	}
 }

@@ -41,6 +41,5 @@ export class BgsHeroMiniComponent {
 		this._hero = value;
 		this.heroCardId = value.id;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
-		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 	}
 }

@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -24,13 +25,9 @@ declare let amplitude: any;
 			<div class="filler"></div>
 			<div class="hero">
 				<img
-					*ngIf="heroCardId"
-					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroCardId)"
-					[src]="
-						'https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/' +
-						heroCardId +
-						'.png?v=3'
-					"
+					*ngIf="_heroCardId"
+					[helpTooltip]="'Best stat unlocked with ' + getCardName(_heroCardId)"
+					[src]="heroImage"
 					class="portrait"
 				/>
 				<img
@@ -62,13 +59,24 @@ export class StatCellComponent implements AfterViewInit {
 	@Input() value: number;
 	@Input() isNewRecord: boolean;
 	@Input() tooltipText: string;
-	@Input() heroCardId: string;
 	@Input() heroIcon: string;
 	@Input() reviewId: string;
 
+	@Input() set heroCardId(value: string) {
+		this._heroCardId = value;
+		this.heroImage = this.i18n.getCardImage(this._heroCardId, { isBgs: true });
+	}
+
+	_heroCardId: string;
+	heroImage: string;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cards: CardsFacadeService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

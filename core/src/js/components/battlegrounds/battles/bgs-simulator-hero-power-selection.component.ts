@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({
@@ -84,7 +85,7 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 	@Input() set currentHero(heroPowerCardId: string) {
 		this.currentHeroId = heroPowerCardId;
 		if (!!heroPowerCardId) {
-			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${heroPowerCardId}.png`;
+			this.heroIcon = this.i18n.getCardImage(heroPowerCardId);
 			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
 		} else {
@@ -109,7 +110,11 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		this.allHeroes$ = this.searchString.asObservable().pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
@@ -129,7 +134,7 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 					.map((card) => this.allCards.getCard(getHeroPower(card.id)))
 					.map((card) => ({
 						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${card.id}.png`,
+						icon: this.i18n.getCardImage(card.id),
 						name: card.name,
 						text: card.text,
 					}))

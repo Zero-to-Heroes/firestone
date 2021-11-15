@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SetCard } from '../../models/set';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -114,7 +115,11 @@ export class CardComponent implements AfterViewInit {
 	private _imageLoaded: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -141,15 +146,11 @@ export class CardComponent implements AfterViewInit {
 		if (!this._imageLoaded) {
 			this.showPlaceholder = true;
 		}
-		const imagePath = this._highRes ? '512' : 'compressed';
-		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=6`;
-		if (this._bgs) {
-			if (this._premium) {
-				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs_premium.png?v=6`;
-			} else {
-				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs.png?v=6`;
-			}
-		}
+		this.image = this.i18n.getCardImage(this._card.id, {
+			isBgs: this._bgs,
+			isPremium: this._premium,
+			isHighRes: this._highRes,
+		});
 		this.secondaryClass = this._highRes ? 'high-res' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

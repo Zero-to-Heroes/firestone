@@ -360,6 +360,8 @@ import { GameEvents } from '../../services/game-events.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LocalStorageService } from '../../services/local-storage';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { LocalizationService } from '../../services/localization.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
@@ -798,6 +800,8 @@ const components = [
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,
+		LocalizationService,
+		LocalizationFacadeService,
 		CardsInitService,
 		CardsFacadeService,
 		RefCards,

@@ -15,6 +15,7 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -236,6 +237,7 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
@@ -273,7 +275,7 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 					)
 					.map((card) => ({
 						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png?v=5`,
+						icon: this.i18n.getCardImage(card.id, { isBgs: true }),
 						name: card.name,
 						tier: card.techLevel ?? 0,
 					}))

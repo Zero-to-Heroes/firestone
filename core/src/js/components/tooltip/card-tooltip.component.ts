@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
-import { Preferences } from '../../models/preferences';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { groupByFunction } from '../../services/utils';
 
@@ -10,20 +10,15 @@ import { groupByFunction } from '../../services/utils';
 	template: `
 		<div class="card-tooltip {{ card.additionalClass }}" *ngFor="let card of cards">
 			<div *ngIf="card.createdBy" class="created-by">Created by</div>
-			<img
-				*ngIf="card.image && card.cardType === 'NORMAL'"
-				[src]="card.image"
-				(onload)="refresh()"
-				class="tooltip-image"
-			/>
-			<video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
+			<img *ngIf="card.image" [src]="card.image" (onload)="refresh()" class="tooltip-image" />
+			<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
 				<source
 					src="{{
 						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + card.cardId + '.webm?v=2'
 					}}"
 					type="video/webm"
 				/>
-			</video>
+			</video> -->
 			<!-- <div *ngIf="card.text" class="text">{{ card.text }}</div> -->
 			<div class="buffs" *ngIf="card.buffs && _displayBuffs" [ngClass]="{ 'only-buffs': !card.image }">
 				<div class="background">
@@ -105,7 +100,11 @@ export class CardTooltipComponent {
 		// }
 	}
 
-	constructor(private cdr: ChangeDetectorRef, @Optional() private prefs: PreferencesService) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		@Optional() private prefs: PreferencesService,
+	) {}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -114,24 +113,16 @@ export class CardTooltipComponent {
 	}
 
 	private async updateInfos() {
-		const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
 		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
 		this.cards = this._cardIds
 			// Empty card IDs are necessary when showing buff only
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
-				const highRes = prefs?.collectionUseHighResImages;
-				let image = null;
-				if (cardId) {
-					const imagePath = highRes ? '512' : 'compressed';
-					const withBgs = this.isBgs
-						? cardId.includes('premium')
-							? `compressed/battlegrounds/${cardId}.png`
-							: `compressed/battlegrounds/${cardId}_bgs.png`
-						: `${imagePath}/${cardId}.png`;
-					image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
-				}
+				const image = this.i18n.getCardImage(cardId, {
+					isBgs: this.isBgs,
+					isPremium: cardId.includes('premium'),
+				});
 				return {
 					cardId: cardId,
 					image: image,

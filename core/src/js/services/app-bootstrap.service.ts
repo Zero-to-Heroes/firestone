@@ -23,6 +23,7 @@ import { GameStateService } from './decktracker/game-state.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
+import { LocalizationService } from './localization.service';
 import { LogRegisterService } from './log-register.service';
 import { OutOfCardsService } from './mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
@@ -100,12 +101,14 @@ export class AppBootstrapService {
 		private init_MercenariesSynergiesHighlightService: MercenariesSynergiesHighlightService,
 		private init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
 		private init_AppUiStoreService: AppUiStoreService,
+		private init_LocalizationService: LocalizationService,
 	) {}
 
 	public async init() {
 		console.log('[bootstrap] in init');
 		await sleep(1);
 		this.init_AppUiStoreService.start();
+		this.init_LocalizationService.start();
 		this.doInit();
 	}
 

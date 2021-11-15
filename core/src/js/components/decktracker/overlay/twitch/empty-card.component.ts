@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	selector: 'empty-card',
@@ -29,10 +30,12 @@ export class EmptyCardComponent {
 
 	@Input('cardId') set cardId(value: string) {
 		this._cardId = value;
-		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=3`;
+		const imageUrl = this.i18n.getCardImage(this.cardId);
 		// Preload
 		const image = new Image();
 		image.onload = () => console.debug('[image-preloader] preloaded image', imageUrl);
 		image.src = imageUrl;
 	}
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }
