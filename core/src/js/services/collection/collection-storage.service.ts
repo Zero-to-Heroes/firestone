@@ -45,11 +45,13 @@ export class CollectionStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'collection' });
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
 			const result = collection?.length > 0 ? collection.find((info) => info.id === 1)?.cards ?? [] : [];
+			if (!!result?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'collection' });
+			}
 			this.saveCollection(result);
 			return result;
 		} catch (e) {
@@ -63,11 +65,13 @@ export class CollectionStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'card-backs' });
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
 			const result = collection?.length > 0 ? collection.find((info) => info.id === 2)?.cardBacks ?? [] : [];
+			if (!!result?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'card-backs' });
+			}
 			this.saveCardBacks(result);
 			return result;
 		} catch (e) {
@@ -81,11 +85,13 @@ export class CollectionStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'pack-infos' });
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
 			const result = collection?.length > 0 ? collection.find((info) => info.id === 3)?.packInfos ?? [] : [];
+			if (!!result?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'pack-infos' });
+			}
 			this.savePackInfos(result);
 			return result;
 		} catch (e) {
@@ -99,11 +105,13 @@ export class CollectionStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'coins' });
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
 			const result = collection?.length > 0 ? collection.find((info) => info.id === 4)?.coins ?? [] : [];
+			if (!!result?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'coins' });
+			}
 			this.saveCoins(result);
 			return result;
 		} catch (e) {
@@ -136,13 +144,15 @@ export class CollectionStorageService {
 			return result.slice(0, limit);
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'cards-history' });
 		await this.waitForDbInit();
 		try {
 			const histories = await this.db.getAll('card-history', null, {
 				indexName: 'creationTimestamp',
 				order: 'desc',
 			});
+			if (!!histories?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'cards-history' });
+			}
 			this.saveFullCardHistory(histories);
 			return limit === 0 ? histories : histories.slice(0, limit);
 		} catch (e) {

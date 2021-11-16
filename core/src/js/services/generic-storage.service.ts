@@ -31,12 +31,14 @@ export class GenericStorageService {
 			return resultWithDate;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
 		console.debug('could not load prefs from local storage', fromStorage, localStorage);
 		await this.waitForDbInit();
 		return new Promise<Preferences>((resolve) => {
 			try {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
+					if (!!preferences) {
+						amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
+					}
 					const result = Object.assign(new Preferences(), preferences[0] || {});
 					this.saveUserPreferences(result);
 					resolve(result);

@@ -30,11 +30,13 @@ export class AchievementsStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
 		await this.waitForDbInit();
 		try {
 			const info = await this.db.getAll('achievements-from-game', null);
 			const result = info[0] ? info[0].info : [];
+			if (!!result?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
+			}
 			await this.saveInGameAchievements(info);
 			return result;
 		} catch (e) {
@@ -76,10 +78,12 @@ export class AchievementsStorageService {
 			return fromStorage;
 		}
 
-		amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'in-game-achievements' });
 		await this.waitForDbInit();
 		try {
 			const history = await this.db.getAll('achievement-history', null);
+			if (!!history?.length) {
+				amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'achievements-history' });
+			}
 			this.saveAllHistory(history);
 			return history;
 		} catch (e) {
