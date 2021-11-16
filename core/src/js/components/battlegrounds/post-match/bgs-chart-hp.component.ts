@@ -29,7 +29,8 @@ import { areEqualDataSets } from './chart-utils';
 	template: `
 		<div class="legend">
 			<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="item">
-				<img [src]="player.icon" class="portrait" />
+				<bgs-hero-portrait class="portrait" [heroCardId]="player.cardId"></bgs-hero-portrait>
+				<!-- <img [src]="player.icon" class="portrait" /> -->
 				<div
 					class="position"
 					[ngClass]="{ 'player': player.isPlayer }"
