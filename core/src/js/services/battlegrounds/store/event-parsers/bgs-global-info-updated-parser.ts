@@ -102,7 +102,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 	public static buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {
 		if (!availableRaces || availableRaces.length === 0) {
 			console.warn('[bgs-info-updater] no tribe info read from memory');
-			return null;
+			return [null, null];
 		}
 		const allRaces = [
 			Race.BEAST,

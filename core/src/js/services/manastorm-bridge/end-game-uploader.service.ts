@@ -139,9 +139,11 @@ export class EndGameUploaderService {
 			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo?.rating ?? this.bgsStore?.state?.currentGame?.mmrAtStart;
 			newPlayerRank = battlegroundsInfo?.newRating;
-			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
+			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				battlegroundsInfo?.game?.AvailableRaces,
-			) ?? [this.bgsStore?.state?.currentGame?.availableRaces, this.bgsStore?.state?.currentGame?.bannedRaces];
+			);
+			availableRaces = availableRaces ?? this.bgsStore?.state?.currentGame?.availableRaces;
+			bannedRaces = bannedRaces ?? this.bgsStore?.state?.currentGame?.bannedRaces;
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;

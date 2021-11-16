@@ -84,7 +84,7 @@ export class MercenariesActionsQueueComponent
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.actions$ = this.store
-			.listenMercenaries$(([state]) => state.actionQueue)
+			.listenMercenaries$(([state]) => state?.actionQueue)
 			.pipe(
 				filter(([actionQueue]) => !!actionQueue?.length),
 				map(([actionQueue]) => actionQueue),
