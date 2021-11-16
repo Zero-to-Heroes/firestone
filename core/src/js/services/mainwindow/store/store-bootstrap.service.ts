@@ -234,6 +234,11 @@ export class StoreBootstrapService {
 	}
 
 	private async mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Promise<Preferences> {
+		if (!prefsFromRemote) {
+			console.log('no remote prefs, using local prefs');
+			return prefs;
+		}
+
 		if (
 			prefs?.lastUpdateDate &&
 			(!prefsFromRemote?.lastUpdateDate ||
@@ -256,7 +261,7 @@ export class StoreBootstrapService {
 		} as Preferences;
 
 		const obj = new Preferences();
-		for (const prop in merged) {
+		for (const prop in obj) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, obj, prop);
 			if (meta && obj.hasOwnProperty(prop)) {
 				merged[prop] = prefsFromRemote[prop];
@@ -264,6 +269,9 @@ export class StoreBootstrapService {
 		}
 		await this.prefs.savePreferences(merged);
 		console.debug('merged prefs', merged);
+		if (!merged?.opponentOverlayPosition) {
+			console.warn('no-format', 'pref missing overlay position', merged, new Error().stack);
+		}
 		return merged;
 	}
 
