@@ -36,7 +36,8 @@ export class MercenariesAbilityQueuedParser implements MercenariesParser {
 			speed: abilitySpeed,
 		};
 		const actionQueue: readonly MercenariesAction[] = sortBy(
-			[...battleState.actionQueue, action],
+			// No "unqueue" event is emitted when we simply change the chosen action
+			[...battleState.actionQueue.filter((a) => a.ownerEntityId !== action.ownerEntityId), action],
 			(action: MercenariesAction) => action.speed,
 		);
 		return battleState.update({
