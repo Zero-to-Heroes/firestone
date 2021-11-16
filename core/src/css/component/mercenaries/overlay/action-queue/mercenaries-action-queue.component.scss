@@ -1,0 +1,77 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.root {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// height: 100%;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+
+	.scalable {
+		transform: scale(1);
+		transform-origin: right top;
+		top: 30px;
+		position: relative;
+		opacity: 1;
+		transition-property: transform, opacity;
+		transition-duration: 0.3s;
+		transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+	}
+
+	.container {
+		position: relative;
+		width: 100%;
+		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.actions {
+		position: relative;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+
+		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
+		// appearing on mouse over) while not showing a background
+		// .background {
+		// 	position: absolute;
+		// 	top: 0;
+		// 	left: 0;
+		// 	right: 0;
+		// 	bottom: 28px;
+		// 	background: #07081f;
+		// }
+
+		.actions-list {
+			overflow: hidden;
+			width: 100%;
+			width: calc(100% + 60px);
+			min-width: calc(100% + 60px);
+			position: relative;
+			left: -30px;
+			max-height: calc(var(--decktracker-max-height) / var(--decktracker-scale) - 30px);
+			display: flex;
+			flex-direction: column;
+			padding-left: 45px;
+			padding-right: 45px;
+
+			.action {
+				position: relative;
+				margin-bottom: 3px;
+
+				&.opponent {
+					left: -10px;
+				}
+
+				&.player {
+					left: 10px;
+				}
+			}
+		}
+	}
+}

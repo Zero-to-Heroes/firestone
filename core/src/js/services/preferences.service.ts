@@ -375,11 +375,11 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	// public async updateMercenariesOutOfCombatTeamPlayerPosition(left: number, top: number) {
-	// 	const prefs = await this.getPreferences();
-	// 	const newPrefs: Preferences = { ...prefs, mercenariesOutOfCombatPlayerTeamOverlayPosition: { left, top } };
-	// 	await this.savePreferences(newPrefs);
-	// }
+	public async updateMercenariesActionsQueueOverlayPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActionsQueueOverlayPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
 
 	public async updateMercenariesTeamOpponentPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();

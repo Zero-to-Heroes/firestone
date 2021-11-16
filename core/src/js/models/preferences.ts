@@ -365,6 +365,13 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesOpponentTeamOverlayPosition: { left: number; top: number };
 
+	readonly mercenariesEnableActionsQueueWidgetPvE = true;
+	readonly mercenariesEnableActionsQueueWidgetPvP = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly mercenariesActionsQueueOverlayScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly mercenariesActionsQueueOverlayPosition: { left: number; top: number };
+
 	readonly mercenariesEnableOutOfCombatPlayerTeamWidget = true;
 	readonly mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage = true;
 	// @Reflect.metadata(FORCE_LOCAL_PROP, true)

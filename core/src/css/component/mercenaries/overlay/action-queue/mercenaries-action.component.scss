@@ -1,0 +1,94 @@
+.item {
+	padding-left: 0px;
+	overflow: visible;
+
+	.action-order {
+		position: absolute;
+		left: -20px;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		color: white;
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+	}
+
+	.background-image {
+		background-repeat: no-repeat;
+	}
+
+	.gradiant {
+		opacity: 1;
+		// 0.2 at the end to make the name mode legible?
+		// background: linear-gradient(89.48deg, black 0%, #090a0d 36.89%, rgba(9, 10, 13, 0.2) 99.92%);
+		// For mouse over
+		pointer-events: none;
+	}
+
+	.name {
+		// For mouse over
+		pointer-events: none;
+	}
+
+	.portrait {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 26px;
+		height: 26px;
+		position: relative;
+		top: 0;
+		left: 0;
+		z-index: 9;
+		margin-top: 0;
+		margin-bottom: 0;
+		/* overflow: hidden; */
+		margin-right: 7px;
+
+		.icon {
+			/* position: absolute; */
+			/* top: 11%; */
+			/* left: 13%; */
+			/* width: 76%; */
+			clip-path: ellipse(40% 44% at 50% 50%);
+			/* height: 100%; */
+			width: 140%;
+			/* zoom: 1.2; */
+			left: -5px;
+			position: relative;
+			top: -5px;
+		}
+
+		// .frame {
+		// 	width: 100%;
+		// 	z-index: 1;
+		// }
+	}
+
+	&.player {
+		flex-direction: row-reverse;
+		padding-left: 5px;
+		padding-right: 0px;
+
+		.action-order {
+			left: auto;
+			right: -20px;
+		}
+
+		.background-image,
+		.gradiant {
+			transform: scaleX(-1);
+		}
+		.name {
+			justify-content: flex-end;
+			padding-right: 10px;
+		}
+		.portrait {
+			margin-left: 7px;
+			margin-right: 0;
+		}
+		.speed {
+			margin-left: 5px;
+		}
+	}
+}

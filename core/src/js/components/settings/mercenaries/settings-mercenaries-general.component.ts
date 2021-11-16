@@ -34,6 +34,16 @@ import { Knob } from '../preference-slider.component';
 					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the collection and team select screens. "
 				></preference-toggle>
 				<preference-toggle
+					[field]="'mercenariesEnableActionsQueueWidgetPvE'"
+					[label]="'Actions queue widget (PvE)'"
+					helpTooltip="When active, shows an ordered list of all queued actions in PvE encounters. "
+				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesEnableActionsQueueWidgetPvP'"
+					[label]="'Actions queue widget (PvP)'"
+					helpTooltip="When active, shows an ordered list of all queued actions in PvP encounters. Because the opponent's actions are hidden until they resolve, this will only show you your own mercenaries' actions."
+				></preference-toggle>
+				<preference-toggle
 					[field]="'mercenariesShowColorChartButton'"
 					[label]="'Show role chart'"
 					helpTooltip="When active, adds a small button below the team widget over which you can mouse over to display a recap of the roles bonus damage triangle"
@@ -48,32 +58,43 @@ import { Knob } from '../preference-slider.component';
 					[label]="'Highlight synergies'"
 					helpTooltip="When mousing over an ability or equipment (in the team widget) or a treasure (in the treasure selection screen), highlights all cards in the team widget that have synergies with it."
 				></preference-toggle>
+			</div>
 
-				<div class="title">Team widget's size</div>
-				<div class="settings-group">
-					<div class="subtitle">Your team</div>
-					<preference-slider
-						class="first-slider"
-						[field]="'mercenariesPlayerTeamOverlayScale'"
-						[enabled]="true"
-						[min]="75"
-						[max]="125"
-						[snapSensitivity]="5"
-						[knobs]="sizeKnobs"
-					>
-					</preference-slider>
-					<div class="subtitle">Opponent's team</div>
-					<preference-slider
-						class="first-slider"
-						[field]="'mercenariesOpponentTeamOverlayScale'"
-						[enabled]="true"
-						[min]="75"
-						[max]="125"
-						[snapSensitivity]="5"
-						[knobs]="sizeKnobs"
-					>
-					</preference-slider>
-				</div>
+			<div class="title">Widgets size</div>
+			<div class="settings-group">
+				<div class="subtitle">Your team</div>
+				<preference-slider
+					class="first-slider"
+					[field]="'mercenariesPlayerTeamOverlayScale'"
+					[enabled]="true"
+					[min]="75"
+					[max]="125"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+				<div class="subtitle">Opponent's team</div>
+				<preference-slider
+					class="first-slider"
+					[field]="'mercenariesOpponentTeamOverlayScale'"
+					[enabled]="true"
+					[min]="75"
+					[max]="125"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+				<div class="subtitle">Action queue</div>
+				<preference-slider
+					class="first-slider"
+					[field]="'mercenariesActionsQueueOverlayScale'"
+					[enabled]="true"
+					[min]="75"
+					[max]="125"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
