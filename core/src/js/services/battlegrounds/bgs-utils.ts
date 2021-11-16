@@ -219,10 +219,12 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.ConvictionRank1_BlessedEnchantment2;
 		case CardIds.Diablo:
 			return CardIds.Diablo_RealmOfTerror;
-		case CardIds.Sneed:
+		case CardIds.Sneed1:
 			return CardIds.Sneed_SneedsReplicator;
 		case CardIds.CookieTheCook2:
 			return CardIds.CookieTheCook_StirThePot;
+		case CardIds.TamsinRoame2:
+			return CardIds.TamsinRoame_FragrantPhylactery;
 
 		case '':
 			return null; // new heroes

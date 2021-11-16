@@ -10,9 +10,15 @@ export const standardSets: readonly string[] = [
 	'black_temple',
 	'stormwind',
 	'deadmines',
+	'alterac_valley',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'alterac_valley',
+		name: 'Alterac Valley',
+		launchDate: new Date('2021-12-07'),
+	},
 	{
 		id: 'deadmines',
 		name: 'Deadmines',

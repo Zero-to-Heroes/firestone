@@ -36,7 +36,7 @@ export const modifyDeckForSpecialCards = (
 			return handleFrizzKindleroost(deckState, allCards);
 		case CardIds.HemetJungleHunter:
 			return handleHemet(deckState, allCards);
-		case CardIds.LadyPrestor:
+		case CardIds.LadyPrestor1:
 			return handleLadyPrestor(deckState, allCards);
 		case CardIds.OoopsAllSpellsTavernBrawl:
 			return handleOoopsAllSpells(deckState, allCards);
@@ -182,7 +182,7 @@ const handleLadyPrestor = (deckState: DeckState, allCards: CardsFacadeService): 
 			card.update({
 				cardId: undefined,
 				cardName: `Unknown Dragon`,
-				creatorCardId: CardIds.LadyPrestor,
+				creatorCardId: CardIds.LadyPrestor1,
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
 				cardType: 'Minion',

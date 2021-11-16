@@ -225,7 +225,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		this.cardsHighlightService.onMouseEnter(this.cardId, this.side);
+		this.cardsHighlightService.onMouseEnter(this.cardId, this.side, this._card);
 	}
 
 	onMouseLeave(event: MouseEvent) {

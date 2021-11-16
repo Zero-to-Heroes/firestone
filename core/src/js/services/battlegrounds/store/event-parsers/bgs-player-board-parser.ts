@@ -120,8 +120,9 @@ export class BgsPlayerBoardParser implements EventParser {
 		}
 
 		const health =
-			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value ??
-			defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId);
+			(playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value ??
+				defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId)) +
+			(playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value ?? 0);
 		const damage = playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0;
 		console.debug('set hp left for', playerBoard.hero.CardId, health - damage, health, damage, playerBoard);
 		const hpLeft = health - damage;

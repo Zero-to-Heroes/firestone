@@ -234,6 +234,9 @@ export class StoreBootstrapService {
 	}
 
 	private async mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Promise<Preferences> {
+		console.warn('not merging prefs for now, first needs to fix a bug');
+		return prefs;
+
 		if (!prefsFromRemote) {
 			console.log('no remote prefs, using local prefs');
 			return prefs;

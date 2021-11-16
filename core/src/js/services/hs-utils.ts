@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '124497-4';
+export const CARDS_VERSION = '126299';
 
 export const classes = [
 	'demonhunter',
@@ -84,7 +84,7 @@ export const globalEffectCards = [
 	CardIds.InfiniteArcaneTavernBrawlToken,
 	CardIds.InvigoratingSermon,
 	CardIds.LadyInWhite,
-	CardIds.LadyPrestor,
+	CardIds.LadyPrestor1,
 	CardIds.LordaeronAttendantToken,
 	CardIds.LorekeeperPolkelt,
 	CardIds.LothraxionTheRedeemed,

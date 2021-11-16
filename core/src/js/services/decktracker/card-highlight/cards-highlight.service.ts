@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { filter, map } from 'rxjs/operators';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -64,7 +65,7 @@ export class CardsHighlightService {
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent') {
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent', card?: DeckCard) {
 		// Happens when using the deck-list component outside of a game
 		if (!this.gameState) {
 			return;
@@ -79,7 +80,7 @@ export class CardsHighlightService {
 			console.warn('no side provided', cardId, side);
 		}
 
-		const selector: (handler: Handler, deckState?: DeckState) => boolean = this.buildSelector(cardId);
+		const selector: (handler: Handler, deckState?: DeckState) => boolean = this.buildSelector(cardId, card);
 		if (selector) {
 			Object.values(this.handlers)
 				.filter((handler) =>
@@ -93,7 +94,7 @@ export class CardsHighlightService {
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private buildSelector(cardId: string): (handler: Handler, deckState?: DeckState) => boolean {
+	private buildSelector(cardId: string, card: DeckCard): (handler: Handler, deckState?: DeckState) => boolean {
 		switch (cardId) {
 			case CardIds.ArcaneLuminary:
 				return and(inDeck, notInInitialDeck);
@@ -166,6 +167,12 @@ export class CardsHighlightService {
 				return and(inDeck, deathrattle);
 			case CardIds.WarsongWrangler:
 				return and(inDeck, beast);
+			case CardIds.Drekthar1:
+				// Flag minions that have a cost the same or higher
+				return and(inDeck, effectiveCostMore(card.getEffectiveManaCost() - 1));
+			case CardIds.VanndarStormpike:
+				// Flag minions that have a cost the same or lower
+				return and(inDeck, effectiveCostLess(card.getEffectiveManaCost() + 1));
 
 			// Duels
 			case CardIds.PrincessTavernBrawl:
