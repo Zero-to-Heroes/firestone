@@ -10,6 +10,7 @@ export interface MemoryUpdate {
 	readonly IsOpeningPack: boolean;
 	// true means the treasure selection has started, null means nothing changed, and false means it has ended
 	readonly IsMercenariesSelectingTreasure: boolean;
+	readonly IsMercenariesTasksUpdated: boolean;
 	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
 
 	// These are not populated by the regular info updates, as they are costly to compute

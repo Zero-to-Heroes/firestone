@@ -53,14 +53,20 @@ export class MercenariesMemoryCacheService {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
 			const changes: MemoryUpdate = event.data[0];
 			const newScene = changes.CurrentScene;
-			if (!this.shouldFetchMercenariesMemoryInfo(newScene)) {
+			if (newScene) {
+				if (!this.shouldFetchMercenariesMemoryInfo(newScene)) {
+					this.previousScene = newScene;
+					return;
+				}
 				this.previousScene = newScene;
+				console.debug('[merc-memory] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
+				await sleep(2000);
+				console.debug('[merc-memory] done waiting');
+			} else if (changes.IsMercenariesTasksUpdated) {
+				console.debug('[merc-memory] updating tasks', changes);
+			} else {
 				return;
 			}
-			this.previousScene = newScene;
-			console.debug('[merc-memory] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
-			await sleep(2000);
-			console.debug('[merc-memory] done waiting');
 			const newMercenariesInfo = await this.getMercenariesMergedCollectionInfo();
 			this.memoryCollectionInfo$.next(newMercenariesInfo);
 		});
