@@ -33,6 +33,6 @@ export class LocalizationService {
 			this.useHighResImages || options?.isHighRes ? '512' : '256'
 		}`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
-		return `${base}/${suffix}`;
+		return `${base}/${suffix}?v=2`;
 	}
 }
