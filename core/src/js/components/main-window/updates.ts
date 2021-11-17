@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.2.9',
+		version: '8.2.13',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the tracker would sometimes reposition itself randomly (also affects all other widgets that can be moved around)`,
+								type: 'content',
+								text: `Update for patch 21.8. There are still a few missing things that should be fixed in the coming days (updated card images, Tasmin's hero power in custom BG simulator, Diablo special battles in simulator, missing hero emotes in collection)`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Shows the current ability queue (the order in which all queued abilities will trigger), mostly for PvE (since in PvP the opponent's actions are hidden, this is far less useful)`,
 							},
 						],
 					},
@@ -65,28 +74,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a filter to hide non-fully maxxed mercs in the Progression tab.`,
-							},
-							{
-								type: 'feature',
-								text: `Add missing synergy highlights.`,
-							},
-							{
-								type: 'ui',
-								text: `Increase the size of the weakness triangle image.`,
-							},
-							{
-								type: 'ui',
-								text: `Add a golden border to the fully maxxed mercs.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `Remember the last value of the Wild/Standard sets filter.`,
+								text: `Tasks are now refreshed right after picking a Mysterious Stranger node (instead of having to go into battle for that).`,
 							},
 						],
 					},
