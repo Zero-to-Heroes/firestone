@@ -27,6 +27,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input() cardTooltipClass = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
+	@Input() cardTooltipLocalized = true;
 
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		if (value !== this._position) {
@@ -185,18 +186,20 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Pass content to tooltip component instance
 
+		tooltipRef.instance.additionalClass = this.cardTooltipClass;
 		if (this.cardTooltipCard) {
-			tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
 			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
+			tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
 		} else {
 			tooltipRef.instance.cardTooltipCard = undefined;
 			tooltipRef.instance.displayBuffs = undefined;
-			tooltipRef.instance.cardId = this.cardId;
 			tooltipRef.instance.cardType = this.cardTooltipType;
 			tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
+			tooltipRef.instance.localized = this.cardTooltipLocalized;
 			tooltipRef.instance.text = this.cardTooltipText;
+			// Keep last so that we only call the updateInfos() method once
+			tooltipRef.instance.cardId = this.cardId;
 		}
-		tooltipRef.instance.additionalClass = this.cardTooltipClass;
 
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {

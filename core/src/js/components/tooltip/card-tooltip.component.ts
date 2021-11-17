@@ -46,6 +46,7 @@ export class CardTooltipComponent {
 	private buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
 	private _cardType: 'NORMAL' | 'GOLDEN' = 'NORMAL';
 
+	// Call last in directive
 	@Input() set cardId(value: string) {
 		this._cardIds = value?.length ? value.split(',') : [];
 		this.updateInfos();
@@ -53,13 +54,15 @@ export class CardTooltipComponent {
 
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
 		this._cardType = value;
-		this.updateInfos();
+		// this.updateInfos();
 	}
 
 	@Input() set cardTooltipBgs(value: boolean) {
 		this.isBgs = value;
-		this.updateInfos();
+		// this.updateInfos();
 	}
+
+	@Input() localized = true;
 
 	@Input() set cardTooltipCard(value: DeckCard) {
 		if (!value) {
@@ -84,9 +87,9 @@ export class CardTooltipComponent {
 
 	@Input() set additionalClass(value: string) {
 		this._additionalClass = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	@Input() set displayBuffs(value: boolean) {
@@ -113,16 +116,21 @@ export class CardTooltipComponent {
 	}
 
 	private async updateInfos() {
+		if (!this._cardIds?.length) {
+			return;
+		}
 		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
 		this.cards = this._cardIds
 			// Empty card IDs are necessary when showing buff only
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
-				const image = this.i18n.getCardImage(cardId, {
-					isBgs: this.isBgs,
-					isPremium: cardId.includes('premium'),
-				});
+				const image = this.localized
+					? this.i18n.getCardImage(cardId, {
+							isBgs: this.isBgs,
+							isPremium: cardId.includes('premium'),
+					  })
+					: this.i18n.getNonLocalizedCardImage(cardId);
 				return {
 					cardId: cardId,
 					image: image,

@@ -94,6 +94,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								[cardTooltip]="'merceanries_weakness_triangle'"
 								[cardTooltipPosition]="tooltipPosition"
 								[cardTooltipClass]="'mercenaries-weakness-triangle'"
+								[cardTooltipLocalized]="false"
 								*ngIf="showColorChart$ | async"
 							>
 								<div class="background-second-part"></div>

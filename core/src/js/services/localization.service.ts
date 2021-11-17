@@ -35,4 +35,13 @@ export class LocalizationService {
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}?v=2`;
 	}
+
+	public getNonLocalizedCardImage(
+		cardId: string,
+		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
+	): string {
+		const base = `https://static.firestoneapp.com/cards`;
+		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
+		return `${base}/${suffix}?v=2`;
+	}
 }

@@ -16,4 +16,11 @@ export class LocalizationFacadeService {
 	): string {
 		return this.service.getCardImage(cardId, options);
 	}
+
+	public getNonLocalizedCardImage(
+		cardId: string,
+		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
+	): string {
+		return this.service.getNonLocalizedCardImage(cardId, options);
+	}
 }
