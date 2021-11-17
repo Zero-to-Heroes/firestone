@@ -168,11 +168,9 @@ export class CardsHighlightService {
 			case CardIds.WarsongWrangler:
 				return and(inDeck, beast);
 			case CardIds.Drekthar1:
-				// Flag minions that have a cost the same or higher
-				return and(inDeck, effectiveCostMore(card.getEffectiveManaCost() - 1));
+				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.VanndarStormpike:
-				// Flag minions that have a cost the same or lower
-				return and(inDeck, effectiveCostLess(card.getEffectiveManaCost() + 1));
+				return and(inDeck, minion, effectiveCostMore(card.getEffectiveManaCost()));
 
 			// Duels
 			case CardIds.PrincessTavernBrawl:
