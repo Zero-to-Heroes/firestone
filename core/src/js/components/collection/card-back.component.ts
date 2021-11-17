@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/core';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -13,8 +13,8 @@ import { InternalCardBack } from './internal-card-back';
 			rotateOnMouseOver
 		>
 			<div class="perspective-wrapper" rotateOnMouseOver>
-				<img [src]="_cardBack.image + '?v=3'" *ngIf="!animated" />
-				<video
+				<img [src]="_cardBack.image + '?v=3'" />
+				<!-- <video
 					#videoPlayer
 					loop="loop"
 					[autoplay]="alwaysOn"
@@ -23,22 +23,22 @@ import { InternalCardBack } from './internal-card-back';
 					*ngIf="animated && _cardBack.animatedImage"
 				>
 					<source src="{{ _cardBack.animatedImage }}" type="video/webm" />
-				</video>
+				</video> -->
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardBackComponent {
-	@ViewChild('videoPlayer', { static: false }) set videoPlayer(videoPlayer: ElementRef) {
-		if (videoPlayer) {
-			this.videoPlayerElement = videoPlayer;
-			if (this._cardBack) {
-				this.videoPlayerElement.nativeElement.src = this._cardBack.animatedImage;
-				this.videoPlayerElement.nativeElement.load();
-			}
-		}
-	}
+	// @ViewChild('videoPlayer', { static: false }) set videoPlayer(videoPlayer: ElementRef) {
+	// 	if (videoPlayer) {
+	// 		this.videoPlayerElement = videoPlayer;
+	// 		if (this._cardBack) {
+	// 			this.videoPlayerElement.nativeElement.src = this._cardBack.animatedImage;
+	// 			this.videoPlayerElement.nativeElement.load();
+	// 		}
+	// 	}
+	// }
 
 	@Input() set cardBack(value: InternalCardBack) {
 		this._cardBack = value;

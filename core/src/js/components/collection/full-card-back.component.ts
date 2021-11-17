@@ -35,7 +35,7 @@ export class FullCardBackComponent {
 		}
 		this._cardBack = {
 			...value,
-			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${value.id}.png`,
+			image: `https://static.firestoneapp.com/cardbacks/512/${value.id}.png?v=2`,
 			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {

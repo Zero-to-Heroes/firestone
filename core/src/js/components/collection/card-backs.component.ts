@@ -129,7 +129,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 
 		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map((cardBack) => ({
 			...cardBack,
-			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${cardBack.id}.png`,
+			image: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.png?v=2`,
 			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
 		}));
 		if (!(this.cdr as ViewRef)?.destroyed) {

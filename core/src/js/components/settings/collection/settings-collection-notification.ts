@@ -31,11 +31,11 @@ import { Knob } from '../preference-slider.component';
 					field="collectionEnableNotifications"
 					label="Enable notifications"
 				></preference-toggle>
-				<preference-toggle
+				<!-- <preference-toggle
 					field="collectionUseAnimatedCardBacks"
 					label="Animated card backs"
 					tooltip="Show animated card backs instead of static images. The animation will play when mousing over the card back only to reduce resource usage."
-				></preference-toggle>
+				></preference-toggle> -->
 				<div class="text card-size-label">Card size in collection</div>
 				<preference-slider
 					class="first-slider"
