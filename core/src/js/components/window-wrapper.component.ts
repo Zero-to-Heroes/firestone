@@ -69,7 +69,10 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 	maximized: boolean;
 	screenCaptureOn: boolean;
 
-	private EXCLUDED_WINDOW_IDS = ['Window_Extension_lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob_SettingsWindow'];
+	private EXCLUDED_WINDOW_IDS = [
+		'Window_Extension_lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob_SettingsWindow',
+		'Window_Extension_lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob_SettingsOverlayWindow',
+	];
 
 	private stateChangedListener: (message: any) => void;
 	private windowId: string;
@@ -90,6 +93,7 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 	async ngAfterViewInit() {
 		const currentWindow = await this.ow.getCurrentWindow();
 		this.windowId = currentWindow.id;
+		console.log('windowId', this.windowId);
 
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.globalZoomLevel)
@@ -98,11 +102,11 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(async (zoom) => {
-				if (this.EXCLUDED_WINDOW_IDS.includes(this.windowId)) {
-					return;
-				}
 				const normalized = (zoom ?? 0) / 100;
 				this.zoom = normalized <= 1 ? 0 : normalized;
+				if (this.EXCLUDED_WINDOW_IDS.includes(this.windowId)) {
+					this.zoom = 0;
+				}
 				if (!this.originalHeight || !this.originalWidth) {
 					const currentWindow = await this.ow.getCurrentWindow();
 					this.originalWidth = currentWindow.width / Math.max(1, this.zoom);
