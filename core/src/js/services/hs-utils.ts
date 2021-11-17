@@ -103,6 +103,7 @@ export const globalEffectCards = [
 	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.UpgradedPackMule,
+	CardIds.VanndarStormpike,
 	CardIds.Wildfire,
 	CardIds.WyrmrestPurifier,
 ];

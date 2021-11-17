@@ -44,6 +44,8 @@ export const modifyDeckForSpecialCards = (
 			return handleScepterOfSummoning(deckState, allCards);
 		case CardIds.SkulkingGeist:
 			return handleSkulkingGeist(deckState, allCards);
+		case CardIds.VanndarStormpike:
+			return handleVanndarStormpike(deckState, allCards);
 		case CardIds.WyrmrestPurifier:
 			return handleWyrmrestPurifier(deckState, allCards);
 		default:
@@ -88,6 +90,15 @@ const handleIncantersFlow = (deckState: DeckState, allCards: CardsFacadeService)
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
 		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
+		deckState,
+		allCards,
+	);
+};
+
+const handleVanndarStormpike = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
+	return updateCostInDeck(
+		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
+		(card) => Math.max(0, card.getEffectiveManaCost() - 3),
 		deckState,
 		allCards,
 	);
