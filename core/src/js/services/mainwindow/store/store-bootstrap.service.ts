@@ -267,7 +267,7 @@ export class StoreBootstrapService {
 		for (const prop in obj) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, obj, prop);
 			if (meta && obj.hasOwnProperty(prop)) {
-				merged[prop] = prefsFromRemote[prop];
+				merged[prop] = prefsFromRemote[prop] ?? prefs[prop];
 			}
 		}
 		await this.prefs.savePreferences(merged);
