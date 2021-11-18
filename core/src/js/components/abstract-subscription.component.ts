@@ -17,14 +17,14 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 		this.destroyed$.complete();
 	}
 
-	protected listenForBasicPref$<T>(selector: (prefs: Preferences) => T) {
+	protected listenForBasicPref$<T>(selector: (prefs: Preferences) => T, ...logArgs: any[]) {
 		return this.store
 			.listenPrefs$((prefs) => selector(prefs))
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter, logArgs)),
 				takeUntil(this.destroyed$),
 			);
 	}

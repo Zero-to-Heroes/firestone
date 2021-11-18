@@ -6,8 +6,6 @@ import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/op
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
-import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -26,15 +24,17 @@ import { InternalCardBack } from './internal-card-back';
 				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
 			</div>
 			<ul class="cards-list" *ngIf="shownCardBacks?.length" scrollable>
-				<card-back
-					class="card-back"
-					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
-					[cardBack]="cardBack"
-					[animated]="animated$ | async"
-					[style.width.px]="cardWidth"
-					(click)="showFullCardBack(cardBack)"
-				>
-				</card-back>
+				<ng-container *ngIf="{ animated: animated$ | async } as value">
+					<card-back
+						class="card-back"
+						*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
+						[cardBack]="cardBack"
+						[animated]="value.animated"
+						[style.width.px]="cardWidth"
+						(click)="showFullCardBack(cardBack)"
+					>
+					</card-back>
+				</ng-container>
 			</ul>
 			<collection-empty-state *ngIf="!shownCardBacks?.length"> </collection-empty-state>
 		</div>
@@ -65,12 +65,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 	unlocked: number;
 	total: number;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-	) {
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
@@ -122,7 +117,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
 		}));
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr?.detectChanges();
 		}
 	}
 
