@@ -1,19 +1,8 @@
 import { ComponentType } from '@angular/cdk/portal';
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -44,10 +33,8 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestroy {
+export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
-
-	@Input() position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -76,6 +63,8 @@ export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestro
 
 	@Input() showLastOpponentIcon: boolean;
 
+	position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';
+
 	componentClass: string;
 	_bgsPlayer: {
 		player: BgsPlayer;
@@ -89,38 +78,16 @@ export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestro
 	_lastOpponentCardId: string;
 	isLastOpponent: boolean;
 
-	private preferencesSubscription: Subscription;
-
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
+		this.listenForBasicPref$((prefs) => prefs.bgsOpponentOverlayAtTop).subscribe((value) => {
+			this.position = value ? 'global-top-left' : 'global-bottom-left';
+			this.componentClass = value ? null : 'bottom';
+			this.updateInfo();
 		});
-		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.position = preferences.bgsOpponentOverlayAtTop ? 'global-top-left' : 'global-bottom-left';
-		this.componentClass = preferences.bgsOpponentOverlayAtTop ? null : 'bottom';
-		this.updateInfo();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private updateInfo() {
@@ -146,5 +113,8 @@ export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestro
 			isLastOpponent: this.isLastOpponent,
 			additionalClasses: this.componentClass,
 		};
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

@@ -1,63 +1,34 @@
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	Directive,
-	ElementRef,
-	HostListener,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
+import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
+import {} from 'lodash';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Directive({
 	selector: '[advancedSetting]',
 })
-// See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class AdvancedSettingDirective implements AfterViewInit, OnDestroy {
-	private preferencesSubscription: Subscription;
-
+export class AdvancedSettingDirective extends AbstractSubscriptionComponent implements AfterViewInit {
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.loadDefaultValues();
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event?.preferences;
-			if (!preferences) {
-				return;
-			}
-
-			this.updateVisibility(preferences.advancedModeToggledOn);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs) {
-			return;
-		}
-		this.updateVisibility(prefs.advancedModeToggledOn);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.store
+			.listenPrefs$((prefs) => prefs.advancedModeToggledOn)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => this.updateVisibility(value));
 	}
 
 	private updateVisibility(advancedModeToggledOn: boolean) {

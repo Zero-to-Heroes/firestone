@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ScenarioId } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
@@ -7,14 +7,13 @@ import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
-import { Preferences } from '../../models/preferences';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../services/battlegrounds/bgs-utils';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { getHeroRole, isMercenaries } from '../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { normalizeCardId } from '../battlegrounds/post-match/card-utils';
 
 declare let amplitude;
@@ -164,25 +163,88 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent implements AfterViewInit {
+export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
 	@Input() displayCoin = true;
-
-	@Input() set prefs(value: Preferences) {
-		if (!value || value === this.prefs) {
-			return;
-		}
-		this._prefs = value;
-		this.updateInfo();
-	}
-
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}
+	@Input() set displayLoot(value: boolean) {
+		this._displayLoot = value;
+	}
+	@Input() set displayShortLoot(value: boolean) {
+		this._displayShortLoot = value;
+	}
 
 	finalWarband: KnownBoard;
+
+	replayInfo: GameStat;
+	replaysShowClassIcon: boolean;
+
+	_displayLoot: boolean;
+	_displayShortLoot: boolean;
+
+	visualResult: string;
+	gameMode: StatGameModeType;
+	isMercenariesGame: boolean;
+	// deckName: string;
+	playerClassImage: string;
+	playerClassTooltip: string;
+	opponentClassImage: string;
+	opponentClassTooltip: string;
+
+	playerStartingTeam: readonly MercenaryHero[];
+	opponentStartingTeam: readonly MercenaryHero[];
+
+	opponentName: string;
+	// matchResultIconSvg: SafeHtml;
+	result: string;
+	playCoinIconSvg: SafeHtml;
+	playCoinTooltip: SafeHtml;
+	reviewId: string;
+	hasMatchStats: boolean;
+	deltaMmr: number;
+
+	availableTribes: readonly InternalTribe[];
+	tribesTooltip: string;
+
+	treasure: InternalLoot;
+	loots: InternalLoot[];
+
+	private bgsPerfectGame: boolean;
+
+	constructor(
+		private readonly sanitizer: DomSanitizer,
+		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterViewInit() {
+		this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe((replaysShowClassIcon) => {
+			this.replaysShowClassIcon = replaysShowClassIcon;
+			this.updateInfo();
+		});
+	}
+
+	showReplay() {
+		if (this.bgsPerfectGame) {
+			amplitude.getInstance().logEvent('load-bgs-perfect-game');
+		}
+		this.store.send(new ShowReplayEvent(this.reviewId));
+	}
+
+	showStats() {
+		this.store.send(new TriggerShowMatchStatsEvent(this.reviewId));
+	}
+
+	capitalize(input: string): string {
+		return capitalizeEachWord(input);
+	}
 
 	private updateInfo() {
 		if (!this.replayInfo) {
@@ -193,15 +255,15 @@ export class ReplayInfoComponent implements AfterViewInit {
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(
 			this.replayInfo,
 			true,
-			this._prefs,
+			this.replaysShowClassIcon,
 		);
 		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(
 			this.replayInfo,
 			false,
-			this._prefs,
+			this.replaysShowClassIcon,
 		);
-		this.playerStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, true, this._prefs);
-		this.opponentStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, false, this._prefs);
+		this.playerStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, true);
+		this.opponentStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, false);
 
 		this.result = this.buildMatchResultText(this.replayInfo);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
@@ -260,76 +322,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	@Input() set displayLoot(value: boolean) {
-		this._displayLoot = value;
-	}
-
-	@Input() set displayShortLoot(value: boolean) {
-		this._displayShortLoot = value;
-	}
-
-	replayInfo: GameStat;
-	_prefs: Preferences;
-
-	_displayLoot: boolean;
-	_displayShortLoot: boolean;
-
-	visualResult: string;
-	gameMode: StatGameModeType;
-	isMercenariesGame: boolean;
-	// deckName: string;
-	playerClassImage: string;
-	playerClassTooltip: string;
-	opponentClassImage: string;
-	opponentClassTooltip: string;
-
-	playerStartingTeam: readonly MercenaryHero[];
-	opponentStartingTeam: readonly MercenaryHero[];
-
-	opponentName: string;
-	// matchResultIconSvg: SafeHtml;
-	result: string;
-	playCoinIconSvg: SafeHtml;
-	playCoinTooltip: SafeHtml;
-	reviewId: string;
-	hasMatchStats: boolean;
-	deltaMmr: number;
-
-	availableTribes: readonly InternalTribe[];
-	tribesTooltip: string;
-
-	treasure: InternalLoot;
-	loots: InternalLoot[];
-
-	private bgsPerfectGame: boolean;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly sanitizer: DomSanitizer,
-		private readonly allCards: CardsFacadeService,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	showReplay() {
-		if (this.bgsPerfectGame) {
-			amplitude.getInstance().logEvent('load-bgs-perfect-game');
-		}
-		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
-	}
-
-	showStats() {
-		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));
-	}
-
-	capitalize(input: string): string {
-		return capitalizeEachWord(input);
-	}
-
-	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, prefs: Preferences): [string, string] {
+	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {
 		if (info.gameMode === 'battlegrounds') {
 			if (!isPlayer) {
 				return [null, null];
@@ -347,7 +340,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const name = heroCard.name;
 		const deckName = info.playerDeckName ? ` with ${info.playerDeckName}` : '';
 		const tooltip = isPlayer ? name + deckName : null;
-		if (prefs?.replaysShowClassIcon) {
+		if (replaysShowClassIcon) {
 			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
 			return [image, tooltip];
 		} else {
@@ -356,7 +349,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	private buildPlayerStartingTeam(info: GameStat, isPlayer: boolean, prefs: Preferences): readonly MercenaryHero[] {
+	private buildPlayerStartingTeam(info: GameStat, isPlayer: boolean): readonly MercenaryHero[] {
 		if (!info.gameMode || !info.gameMode.startsWith('mercenaries')) {
 			return [];
 		}

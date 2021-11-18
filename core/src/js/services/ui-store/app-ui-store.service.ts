@@ -52,6 +52,8 @@ export class AppUiStoreService {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
+	private initialized = false;
+
 	constructor(private readonly ow: OverwolfService, private allCards: CardsFacadeService) {
 		window['appStore'] = this;
 	}
@@ -81,6 +83,20 @@ export class AppUiStoreService {
 		}
 
 		this.init();
+	}
+
+	public async initComplete(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.initialized) {
+					resolve();
+				} else {
+					console.warn('wait for store init');
+					setTimeout(() => dbWait(), 500);
+				}
+			};
+			dbWait();
+		});
 	}
 
 	// Selectors here should do minimal work - just select the data from the state, and not
@@ -210,6 +226,7 @@ export class AppUiStoreService {
 				tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
+		this.initialized = true;
 	}
 }
 

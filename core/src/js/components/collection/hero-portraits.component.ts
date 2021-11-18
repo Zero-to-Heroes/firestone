@@ -3,8 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
-	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -13,15 +11,16 @@ import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
-import { Preferences } from '../../models/preferences';
 import { formatClass } from '../../services/hs-utils';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { groupByFunction } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -69,7 +68,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
+export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 174;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
@@ -86,16 +85,6 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		this.updateInfo();
 	}
 
-	@Input() set prefs(value: Preferences) {
-		if (!value) {
-			return;
-		}
-
-		this.showUncollectiblePortraits = value.collectionShowUncollectiblePortraits;
-		this.handleDisplayPreferences(value);
-		this.updateInfo();
-	}
-
 	showUncollectiblePortraits: boolean;
 	_heroPortraits: readonly CollectionReferenceCard[];
 	shownHeroPortraits: readonly PortraitGroup[];
@@ -104,22 +93,38 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 	total: number;
 
 	private allPortraits: readonly ReferenceCard[];
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-	) {}
-
-	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		this.listenForBasicPref$((prefs) => prefs.collectionShowUncollectiblePortraits).subscribe((value) => {
+			this.showUncollectiblePortraits = value;
+			this.updateInfo();
+		});
+		this.store
+			.listenPrefs$((prefs) => prefs.collectionCardScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting scale in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				const cardScale = value / 100;
+				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
@@ -128,20 +133,11 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	showFullHeroPortrait(heroPortrait: CollectionReferenceCard) {
-		this.stateUpdater.next(new ShowCardDetailsEvent(heroPortrait.id));
+		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
 
 	trackByCardId(card: CardBack, index: number) {
 		return card.id;
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences) {
-		preferences = preferences;
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private updateInfo() {

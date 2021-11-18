@@ -1,18 +1,12 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'settings-broadcast',
@@ -24,7 +18,13 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/decktracker/settings-broadcast.component.scss`,
 	],
 	template: `
-		<div class="decktracker-broadcast" scrollable>
+		<div
+			class="decktracker-broadcast"
+			*ngIf="{
+				twitchUserName: twitchUserName$ | async
+			} as value"
+			scrollable
+		>
 			<h2>Broadcast on Twitch</h2>
 			<p class="text">
 				Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch player, as
@@ -71,12 +71,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 				<div class="user-name">
 					Logged in as:
 					<a
-						href="https://www.twitch.tv/{{ twitchUserName }}"
+						href="https://www.twitch.tv/{{ value.twitchUserName }}"
 						target="_blank"
 						(mousedown)="preventMiddleClick($event)"
 						(click)="preventMiddleClick($event)"
 						(auxclick)="preventMiddleClick($event)"
-						>{{ twitchUserName }}</a
+						>{{ value.twitchUserName }}</a
 					>
 				</div>
 				<button (mousedown)="disconnect()" class="text">
@@ -92,36 +92,38 @@ import { PreferencesService } from '../../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
+export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	twitchUserName$: Observable<string>;
+
 	twitchedLoggedIn: boolean;
 	twitchLoginUrl: string;
-	twitchUserName: string;
-
-	private preferencesSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private twitch: TwitchAuthService,
-		private ow: OverwolfService,
-		private el: ElementRef,
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		private readonly twitch: TwitchAuthService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		this.loadDefaultValues();
+		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
-			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				await this.loadDefaultValues();
-			}
-		});
-		this.cdr.detach();
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		this.twitchUserName$ = this.listenForBasicPref$((prefs) => prefs.twitchUserName);
+		this.store
+			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting twitchAccessToken in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(async (token) => {
+				this.twitchedLoggedIn = await this.twitch.isLoggedIn();
+				this.twitchLoginUrl = this.twitch.buildLoginUrl();
+				this.cdr?.detectChanges();
+			});
 	}
 
 	connect() {
@@ -138,16 +140,6 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 			event.stopPropagation();
 			event.preventDefault();
 			return false;
-		}
-	}
-
-	private async loadDefaultValues() {
-		this.twitchedLoggedIn = await this.twitch.isLoggedIn();
-		this.twitchUserName = (await this.prefs.getPreferences()).twitchUserName;
-		this.twitchLoginUrl = this.twitch.buildLoginUrl();
-		console.log('twitch login url', this.twitchLoginUrl);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
 		}
 	}
 }

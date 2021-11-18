@@ -1,19 +1,10 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
 import { BinderState } from '../../models/mainwindow/binder-state';
-import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'card-history',
@@ -64,18 +55,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryComponent implements AfterViewInit {
+export class CardHistoryComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
 	@Input() set state(value: BinderState) {
 		this._state = value;
 		this.cardHistory = value.cardHistory;
 		this.totalHistoryLength = value.totalHistoryLength;
-		this.updateInfos();
-	}
-
-	@Input() set prefs(value: Preferences) {
-		this._showOnlyNewCards = value?.collectionHistoryShowOnlyNewCards;
 		this.updateInfos();
 	}
 
@@ -91,16 +77,19 @@ export class CardHistoryComponent implements AfterViewInit {
 	_selectedCard: SetCard;
 	_showOnlyNewCards: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards).subscribe((value) => {
+			this._showOnlyNewCards = value;
+			this.updateInfos();
+		});
 	}
 
 	loadMore() {
-		this.stateUpdater.next(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
+		this.store.send(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
 	}
 
 	trackById(index, history: CardHistory) {

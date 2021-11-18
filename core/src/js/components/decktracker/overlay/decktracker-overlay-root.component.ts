@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div
 			class="root overlay-container-parent {{ player }}"
 			[activeTheme]="'decktracker'"
-			[style.opacity]="opacity"
+			[style.opacity]="opacity$ | async"
 			[ngClass]="{ 'active': active }"
 		>
 			<decktracker-widget-icon
@@ -59,7 +59,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							class="decktracker"
 							*ngIf="!!value.deck"
 							[style.width.px]="overlayWidthInPx"
-							[ngClass]="{ 'hide-control-bar': !showControlBar }"
+							[ngClass]="{ 'hide-control-bar': !(showControlBar$ | async) }"
 						>
 							<div class="background"></div>
 							<decktracker-control-bar
@@ -70,26 +70,26 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							></decktracker-control-bar>
 							<decktracker-title-bar
 								[deck]="value.deck"
-								[showTitleBar]="showTitleBar"
-								[showDeckWinrate]="showDeckWinrate"
-								[showMatchupWinrate]="showMatchupWinrate"
+								[showTitleBar]="showTitleBar$ | async"
+								[showDeckWinrate]="showDeckWinrate$ | async"
+								[showMatchupWinrate]="showMatchupWinrate$ | async"
 								[deckWinrate]="deckStatsRecap$ | async"
 								[matchupWinrate]="matchupStatsRecap$ | async"
 								[tooltipPosition]="tooltipPosition"
 							></decktracker-title-bar>
 							<decktracker-deck-list
 								[deckState]="value.deck"
-								[displayMode]="displayMode"
-								[colorManaCost]="colorManaCost"
-								[showUpdatedCost]="showUpdatedCost"
-								[showGlobalEffectsZone]="showGlobalEffectsZone"
-								[showGiftsSeparately]="showGiftsSeparately"
-								[showStatsChange]="showStatsChange"
-								[cardsGoToBottom]="cardsGoToBottom"
+								[displayMode]="displayMode$ | async"
+								[colorManaCost]="colorManaCost$ | async"
+								[showUpdatedCost]="showUpdatedCost$ | async"
+								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
+								[showGiftsSeparately]="showGiftsSeparately$ | async"
+								[showStatsChange]="showStatsChange$ | async"
+								[cardsGoToBottom]="cardsGoToBottom$ | async"
 								[tooltipPosition]="tooltipPosition"
-								[darkenUsedCards]="darkenUsedCards"
-								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
-								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
+								[darkenUsedCards]="darkenUsedCards$ | async"
+								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone$ | async"
+								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone$ | async"
 								[side]="player"
 							>
 							</decktracker-deck-list>
@@ -122,46 +122,38 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
 
-	// deck: DeckState;
 	deck$: Observable<DeckState>;
 	matchupStatsRecap$: Observable<StatsRecap>;
 	deckStatsRecap$: Observable<StatsRecap>;
 
-	// gameState: GameState;
+	displayMode$: Observable<string>;
+	showTitleBar$: Observable<boolean>;
+	showControlBar$: Observable<boolean>;
+	opacity$: Observable<number>;
+	colorManaCost$: Observable<boolean>;
+	showUpdatedCost$: Observable<boolean>;
+	showGiftsSeparately$: Observable<boolean>;
+	showStatsChange$: Observable<boolean>;
+	cardsGoToBottom$: Observable<boolean>;
+	showGlobalEffectsZone$: Observable<boolean>;
+	showDeckWinrate$: Observable<boolean>;
+	showMatchupWinrate$: Observable<boolean>;
+	darkenUsedCards$: Observable<boolean>;
+	hideGeneratedCardsInOtherZone$: Observable<boolean>;
+	sortCardsByManaCostInOtherZone$: Observable<boolean>;
 	active = true;
 	windowId: string;
 	activeTooltip: string;
-	// overlayDisplayed: boolean;
-	displayMode: string;
-	showTitleBar: boolean;
-	showControlBar: boolean;
-	overlayWidthInPx: number;
-	opacity: number;
-	// showTracker: boolean;
-	// highlightCardsInHand: boolean;
-	colorManaCost: boolean;
-	showUpdatedCost: boolean;
-	showGiftsSeparately: boolean;
-	showStatsChange: boolean;
-	cardsGoToBottom: boolean;
-	showGlobalEffectsZone: boolean;
-	darkenUsedCards: boolean;
-	hideGeneratedCardsInOtherZone: boolean;
-	sortCardsByManaCostInOtherZone: boolean;
-	showDeckWinrate: boolean;
-	showMatchupWinrate: boolean;
+
+	overlayWidthInPx = 227;
 
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
+	private showTooltipsFromPrefs = true;
 	private showTooltips = true;
 
-	private scale;
 	private gameInfoUpdatedListener: (message: any) => void;
-	private showTooltipSubscription: Subscription;
-	private hideTooltipSubscription: Subscription;
-	private deckSubscription: Subscription;
-	private preferencesSubscription: Subscription;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -174,6 +166,11 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
@@ -257,15 +254,67 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 			tap((filter) => cdLog('emitting deckStatsRecap in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
-	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.displayMode$ = this.listenForBasicPref$((preferences) => this.overlayDisplayModeExtractor(preferences));
+		this.showTitleBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowTitleBar);
+		this.showControlBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowControlBar);
+		this.opacity$ = this.listenForBasicPref$((preferences) => this.opacityExtractor(preferences) / 100);
+		this.colorManaCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowRarityColors);
+		this.showUpdatedCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowCostReduction);
+		this.showGiftsSeparately$ = this.listenForBasicPref$(
+			(preferences) => preferences.overlayShowGiftedCardsInSeparateLine,
+		);
+		this.showStatsChange$ = this.listenForBasicPref$((preferences) => preferences.overlayShowStatsChange);
+		this.cardsGoToBottom$ = this.listenForBasicPref$((preferences) => this.cardsGoToBottomExtractor(preferences));
+		this.showGlobalEffectsZone$ = this.listenForBasicPref$((preferences) =>
+			this.showGlobalEffectsExtractor(preferences),
+		);
+		this.showDeckWinrate$ = this.listenForBasicPref$((preferences) => this.showDeckWinrateExtractor(preferences));
+		this.showMatchupWinrate$ = this.listenForBasicPref$((preferences) =>
+			this.showMatchupWinrateExtractor(preferences),
+		);
+		this.darkenUsedCards$ = this.listenForBasicPref$((preferences) => this.darkenUsedCardsExtractor(preferences));
+		this.hideGeneratedCardsInOtherZone$ = this.listenForBasicPref$((preferences) =>
+			this.hideGeneratedCardsInOtherZoneExtractor(preferences),
+		);
+		this.sortCardsByManaCostInOtherZone$ = this.listenForBasicPref$((preferences) =>
+			this.sortCardsByManaCostInOtherZoneExtractor(preferences),
+		);
+		this.store
+			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				this.showTooltipsFromPrefs = value;
+				this.cdr?.detectChanges();
+			});
+		this.store
+			.listenPrefs$((prefs) => this.scaleExtractor(prefs))
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				console.debug('updating scale', scale);
+				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
+				this.el.nativeElement.style.setProperty(
+					'--decktracker-max-height',
+					this.player === 'player' ? '90vh' : '70vh',
+				);
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				this.updateTooltipPosition();
+			});
 
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
@@ -285,26 +334,14 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 			}
 		});
 
-		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
 		await this.ow.bringToFront(this.windowId);
-		// amplitude.getInstance().logEvent('match-start', {
-		// 	'display-mode': this.displayMode,
-		// 	'player': this.player,
-		// });
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.showTooltipSubscription?.unsubscribe();
-		this.hideTooltipSubscription?.unsubscribe();
-		this.deckSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
 	}
 
 	onMinimize() {
@@ -314,7 +351,7 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 	async onDecktrackerToggle(toggled: boolean) {
 		this.active = toggled;
 		// Avoid artifacts when minimizing
-		this.showTooltips = this.active;
+		this.showTooltips = this.active && this.showTooltipsFromPrefs;
 		await this.updateTooltipPosition();
 	}
 
@@ -346,46 +383,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 
 			this.trackerPositionUpdater(window.left, window.top);
 		});
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-
-		this.displayMode = this.overlayDisplayModeExtractor(preferences);
-		this.showTitleBar = preferences.overlayShowTitleBar;
-		this.showControlBar = preferences.overlayShowControlBar;
-		this.overlayWidthInPx = 227; // this.overlayWidthExtractor(preferences);
-		this.opacity = this.opacityExtractor(preferences) / 100;
-		this.scale = this.scaleExtractor(preferences);
-		this.el.nativeElement.style.setProperty('--decktracker-scale', this.scale / 100);
-		this.el.nativeElement.style.setProperty('--decktracker-max-height', this.player === 'player' ? '90vh' : '70vh');
-		this.colorManaCost = preferences.overlayShowRarityColors;
-		this.showUpdatedCost = preferences.overlayShowCostReduction;
-		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
-		this.showStatsChange = preferences.overlayShowStatsChange;
-		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
-		this.showGlobalEffectsZone = this.showGlobalEffectsExtractor(preferences);
-		this.showDeckWinrate = this.showDeckWinrateExtractor(preferences);
-		this.showMatchupWinrate = this.showMatchupWinrateExtractor(preferences);
-		this.darkenUsedCards = this.darkenUsedCardsExtractor(preferences);
-		this.hideGeneratedCardsInOtherZone = this.hideGeneratedCardsInOtherZoneExtractor(preferences);
-		this.sortCardsByManaCostInOtherZone = this.sortCardsByManaCostInOtherZoneExtractor(preferences);
-		this.showTooltips = preferences.overlayShowTooltipsOnHover;
-		await this.updateTooltipPosition();
-
-		this.onResized();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private onResized() {
-		const newScale = this.scale / 100;
-		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {

@@ -1,23 +1,14 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
-import { Preferences } from '../../models/preferences';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -48,24 +39,23 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TheCoinsComponent implements AfterViewInit, OnDestroy {
+export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	readonly DEFAULT_CARD_WIDTH = 155;
 	readonly DEFAULT_CARD_HEIGHT = 240;
-
-	cardWidth = this.DEFAULT_CARD_WIDTH;
-	cardHeight = this.DEFAULT_CARD_HEIGHT;
-
-	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
 	@Input() set coins(value: readonly CollectionReferenceCard[]) {
 		this._cards = sortBy(value, 'dbfId');
 		this.updateInfo();
 	}
-
 	@Input() set navigation(value: NavigationCollection) {
 		this._navigation = value;
 		this.updateInfo();
 	}
+
+	cardWidth = this.DEFAULT_CARD_WIDTH;
+	cardHeight = this.DEFAULT_CARD_HEIGHT;
+
+	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
 	_cards: readonly CollectionReferenceCard[];
 	shownCards: readonly CollectionReferenceCard[];
@@ -73,27 +63,34 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 	unlocked: number;
 	total: number;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private preferencesSubscription: Subscription;
-
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		this.store
+			.listenPrefs$((prefs) => prefs.collectionCardScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				const cardScale = value / 100;
+				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+				this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
@@ -101,22 +98,8 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 		this.updateInfo();
 	}
 
-	// showFullHeroPortrait(heroPortrait: CollectionReferenceCard) {
-	// 	this.stateUpdater.next(new ShowCardDetailsEvent(heroPortrait.id));
-	// }
-
 	trackByCardId(card: CardBack, index: number) {
 		return card.id;
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private updateInfo() {
@@ -126,7 +109,6 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 
 		this.total = this._cards.length;
 		this.unlocked = this._cards.filter((item) => item.numberOwned > 0).length;
-
 		this.shownCards = this._cards.filter(this.filterCardsOwned());
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

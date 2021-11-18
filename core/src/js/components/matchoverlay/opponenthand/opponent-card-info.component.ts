@@ -1,20 +1,9 @@
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'opponent-card-info',
@@ -34,7 +23,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		</div>
 	`,
 })
-export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
+export class OpponentCardInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
@@ -43,52 +32,40 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 	// the play area are cropped
 	@Input() leftVwOffset: number;
 	@Input() topVwOffset: number;
-	_card: DeckCard;
-
 	@Input() set card(value: DeckCard) {
 		this._card = value;
 	}
 
-	private scale;
-	private preferencesSubscription: Subscription;
+	_card: DeckCard;
 
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly init_DebugService: DebugService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.scale = preferences.decktrackerOpponentHandScale;
-		this.onResized();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private onResized() {
-		const newScale = this.scale / 100;
-		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.store
+			.listenPrefs$((prefs) => prefs.decktrackerOpponentHandScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				console.debug('updating scale', scale);
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 }

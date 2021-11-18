@@ -1,12 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { Preferences } from '../../../models/preferences';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-deck-details',
@@ -30,7 +28,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckDetailsComponent implements AfterViewInit {
+export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() set state(value: DecktrackerState) {
 		this._state = value;
 		this.updateValues();
@@ -41,11 +39,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	@Input() set prefs(value: Preferences) {
-		this.showMatchupAsPercentages = value?.desktopDeckShowMatchupAsPercentages ?? true;
-		this.updateValues();
-	}
-
 	showMatchupAsPercentages = true;
 	deck: DeckSummary;
 	replays: readonly GameStat[];
@@ -53,12 +46,15 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 	private _state: DecktrackerState;
 	private _navigation: NavigationState;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly owUtils: OwUtilsService) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages).subscribe((value) => {
+			this.showMatchupAsPercentages = value;
+			this.updateValues();
+		});
 	}
 
 	private updateValues() {

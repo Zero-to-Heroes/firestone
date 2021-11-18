@@ -1,17 +1,7 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -24,7 +14,11 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/component/settings/decktracker/settings-decktracker-your-deck.component.scss`,
 	],
 	template: `
-		<div class="decktracker-appearance">
+		<div
+			class="decktracker-appearance"
+			*ngIf="{ overlayGroupByZone: overlayGroupByZone$ | async } as value"
+			scrollable
+		>
 			<div class="title">Activate / Deactivate features</div>
 			<div class="settings-group">
 				<div class="subtitle">Your deck</div>
@@ -35,14 +29,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': overlayGroupByZone }"
+						[ngClass]="{ 'disabled': value.overlayGroupByZone }"
 						class="indented"
 						field="overlayCardsGoToBottom"
 						label="Used cards go to bottom"
 						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
 						class="indented"
 						field="overlayShowGlobalEffects"
 						label="Show global effects"
@@ -55,14 +49,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the cards that have been used are darkened."
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
 						class="indented"
 						field="overlaySortByManaInOtherZone"
 						label="Sort cards by mana cost"
 						tooltip="When active, the cards will be sorted by mana cost in the Other zone. Otherwise, the zone will first show the cards on the board, then the graveyard, then the others."
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
 						class="indented"
 						field="overlayHideGeneratedCardsInOtherZone"
 						label="Hide generated cards in Other zone"
@@ -173,8 +167,8 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDestroy {
-	overlayGroupByZone: boolean;
+export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	overlayGroupByZone$: Observable<boolean>;
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
@@ -190,52 +184,11 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 		},
 	];
 
-	private preferencesSubscription: Subscription;
-
-	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private el: ElementRef,
-		private ow: OverwolfService,
-	) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.loadDefaultValues();
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event?.preferences;
-			if (!preferences) {
-				return;
-			}
-
-			this.overlayGroupByZone = preferences.overlayGroupByZone;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.el.nativeElement.querySelector('.decktracker-appearance').getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		this.overlayGroupByZone = prefs.overlayGroupByZone;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.overlayGroupByZone$ = this.listenForBasicPref$((prefs) => prefs.overlayGroupByZone);
 	}
 }

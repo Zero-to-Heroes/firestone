@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
-import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import {
 	boosterIdToSetId,
@@ -12,8 +11,8 @@ import {
 	dustToCraftForPremium,
 	getPackDustValue,
 } from '../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
@@ -65,14 +64,9 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsComponent implements AfterViewInit {
+export class SetStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() set set(value: Set) {
 		this._set = value;
-		this.updateInfos();
-	}
-
-	@Input() set prefs(value: Preferences) {
-		this._showGoldenStats = value?.collectionSetShowGoldenStats;
 		this.updateInfos();
 	}
 
@@ -95,12 +89,15 @@ export class SetStatsComponent implements AfterViewInit {
 	bestKnownPackDust: number;
 	bestKnownPack: PackResult;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.listenForBasicPref$((prefs) => prefs.collectionSetShowGoldenStats).subscribe((value) => {
+			this._showGoldenStats = value;
+			this.updateInfos();
+		});
 	}
 
 	private updateInfos() {

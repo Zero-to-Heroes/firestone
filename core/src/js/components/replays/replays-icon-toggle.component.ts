@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Preferences } from '../../models/preferences';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'replays-icon-toggle',
@@ -14,19 +13,4 @@ import { Preferences } from '../../models/preferences';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayIconToggleComponent {
-	showClassIcon: boolean;
-
-	@Input() set prefs(value: Preferences) {
-		if (!value) {
-			return;
-		}
-
-		this.showClassIcon = value.replaysShowClassIcon;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-	}
-
-	constructor(private readonly cdr: ChangeDetectorRef) {}
-}
+export class ReplayIconToggleComponent {}

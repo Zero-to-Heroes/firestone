@@ -1,17 +1,12 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {} from 'lodash';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { uuid } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'preference-toggle',
@@ -58,7 +53,7 @@ import { uuid } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent implements AfterViewInit, OnDestroy {
+export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
@@ -71,38 +66,34 @@ export class PreferenceToggleComponent implements AfterViewInit, OnDestroy {
 	toggled = false;
 	uniqueId: string;
 
-	private preferencesSubscription: Subscription;
-
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
+	constructor(
+		private prefs: PreferencesService,
+		private ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.loadDefaultValues();
 		this.uniqueId = uuid();
 	}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			if (!event?.preferences) {
-				return;
-			}
-
-			if (this.value === event.preferences[this.field]) {
-				return;
-			}
-
-			this.value = event.preferences[this.field];
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.preferencesSubscription?.unsubscribe();
+		this.store
+			.listenPrefs$((prefs) => prefs[this.field])
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				this.value = value;
+				this.cdr?.detectChanges();
+			});
 	}
 
 	async toggleValue() {
-		// this.value = !this.value;
 		this.toggled = true;
 		await this.prefs.setValue(this.field, !this.value);
 		if (this.toggleFunction) {

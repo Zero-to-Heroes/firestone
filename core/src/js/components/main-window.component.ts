@@ -13,7 +13,6 @@ import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/op
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../models/preferences';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { OverwolfService } from '../services/overwolf.service';
@@ -79,7 +78,6 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							class="main-section"
 							[state]="dataState"
 							[navigation]="navigationState"
-							[prefs]="prefs"
 							*ngIf="navigationState.currentApp === 'replays'"
 						></replays>
 						<achievements
@@ -96,7 +94,6 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							class="main-section"
 							[state]="dataState.binder"
 							[navigation]="navigationState"
-							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'collection'"
 						></collection>
 						<decktracker
@@ -105,7 +102,6 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							[showAds]="dataState?.showAds"
 							[loading]="dataState?.isLoading"
 							[navigation]="navigationState"
-							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'decktracker'"
 						>
 						</decktracker>
@@ -148,7 +144,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 	activeTheme: CurrentAppType | 'decktracker-desktop';
 	displayingNewVersionNotification: boolean;
 	forceShowReleaseNotes: boolean;
-	prefs: Preferences;
 	_showAds = true;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
@@ -160,8 +155,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 	private messageReceivedListener: (message: any) => void;
 	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
-	private preferencesSubscription: Subscription;
-	// private deckSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
 
@@ -200,7 +193,7 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 			}
 		});
 		const prefs = await this.preferencesService.getPreferences();
-		const windowName = await this.ow.getCollectionWindowName(prefs);
+		const windowName = this.ow.getCollectionWindowName(prefs);
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
 			// If hidden, restore window to as it was
 			if (message.window_state === 'maximized') {
@@ -250,13 +243,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 				}
 			});
 		});
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handlePreferences(event.preferences);
-		});
-
-		await this.handlePreferences();
 
 		this.hotkey = await this.ow.getHotKey('collection');
 		this.hotkeyText = await this.hotkeyService.getHotkeyCombination('collection');
@@ -313,7 +299,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.dataStoreSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
 		this.navigationStoreSubscription?.unsubscribe();
 	}
 
@@ -355,14 +340,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		return (copyToCliboard: boolean) => {
 			return this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 		};
-	}
-
-	private async handlePreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.preferencesService.getPreferences());
-		this.prefs = preferences;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {

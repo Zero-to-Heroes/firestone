@@ -48,6 +48,11 @@ export class CardsHighlightService {
 	private gameState: GameState;
 
 	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreFacadeService) {
+		this.init();
+	}
+
+	private async init() {
+		await this.store.initComplete();
 		this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(

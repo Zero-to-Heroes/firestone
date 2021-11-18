@@ -150,9 +150,10 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateAdvancedSettings(advancedSettings: boolean) {
+	public async toggleAdvancedSettings() {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: advancedSettings };
+		const advancedModeToggledOn = prefs.advancedModeToggledOn;
+		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: !advancedModeToggledOn };
 		await this.savePreferences(newPrefs);
 	}
 

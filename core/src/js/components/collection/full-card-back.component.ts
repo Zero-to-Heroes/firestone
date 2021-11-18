@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
-import { Preferences } from '../../models/preferences';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -12,7 +14,12 @@ import { InternalCardBack } from './internal-card-back';
 	],
 	template: `
 		<div class="card-back-details-container" *ngIf="_cardBack">
-			<card-back class="card-back" [cardBack]="_cardBack" [animated]="_animated" [alwaysOn]="true">/</card-back>
+			<card-back
+				class="card-back"
+				[cardBack]="_cardBack"
+				[animated]="animated$ | async"
+				[alwaysOn]="true"
+			></card-back>
 			<div class="details">
 				<h1>{{ _cardBack.name }}</h1>
 				<div class="card-back-details">
@@ -25,9 +32,9 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardBackComponent {
+export class FullCardBackComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	animated$: Observable<boolean>;
 	_cardBack: InternalCardBack;
-	_animated: boolean;
 
 	@Input() set cardBack(value: CardBack) {
 		if (!value) {
@@ -43,9 +50,11 @@ export class FullCardBackComponent {
 		}
 	}
 
-	@Input() set prefs(value: Preferences) {
-		this._animated = value?.collectionUseAnimatedCardBacks;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	ngAfterViewInit() {
+		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
+	}
 }

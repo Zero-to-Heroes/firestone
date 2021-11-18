@@ -4,7 +4,6 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
 import { CollectionReferenceCard } from './collection-reference-card';
 
@@ -53,14 +52,12 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						<full-card-back
 							class="full-card"
 							[cardBack]="selectedCardBack"
-							[prefs]="prefs"
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-back-details'"
 						>
 						</full-card-back>
 						<hero-portraits
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
 							[heroPortraits]="heroPortraits"
-							[prefs]="prefs"
 						>
 						</hero-portraits>
 						<the-coins
@@ -71,7 +68,6 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						<pack-stats
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
 							[state]="dataState"
-							[prefs]="prefs"
 						>
 						</pack-stats>
 					</div>
@@ -85,7 +81,6 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				></card-search>
 				<card-history
 					[selectedCard]="selectedCard"
-					[prefs]="prefs"
 					[state]="dataState"
 					*ngxCacheIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
 				>
@@ -95,8 +90,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
 				>
 				</pack-history>
-				<set-stats [set]="selectedSet" [state]="dataState" [prefs]="prefs" *ngxCacheIf="isSetDetails()">
-				</set-stats>
+				<set-stats [set]="selectedSet" [state]="dataState" *ngxCacheIf="isSetDetails()"> </set-stats>
 			</section>
 		</div>
 	`,
@@ -122,8 +116,6 @@ export class CollectionComponent {
 		this._navigation = value;
 		this.updateValues();
 	}
-
-	@Input() prefs: Preferences;
 
 	isSetDetails(): boolean {
 		return (

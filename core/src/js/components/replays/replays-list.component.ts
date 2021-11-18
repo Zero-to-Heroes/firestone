@@ -1,17 +1,6 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
-import { Preferences } from '../../models/preferences';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { arraysEqual } from '../../services/utils';
 
@@ -45,12 +34,11 @@ import { arraysEqual } from '../../services/utils';
 				<replays-icon-toggle
 					class="icon-toggle"
 					[ngClass]="{ 'absolute': !shouldHidePlayerClassFilter }"
-					[prefs]="_prefs"
 				></replays-icon-toggle>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">
-					<grouped-replays [groupedReplays]="replay" [prefs]="_prefs"></grouped-replays>
+					<grouped-replays [groupedReplays]="replay"></grouped-replays>
 				</li>
 				<div class="loading" *ngIf="isLoading">Loading more replays...</div>
 			</infinite-scroll>
@@ -69,7 +57,7 @@ import { arraysEqual } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysListComponent implements AfterViewInit {
+export class ReplaysListComponent {
 	@Input() set state(value: ReplaysState) {
 		if (value.isLoading) {
 			return;
@@ -109,17 +97,9 @@ export class ReplaysListComponent implements AfterViewInit {
 		this.handleProgressiveDisplay(this._replays);
 	}
 
-	@Input() set prefs(value: Preferences) {
-		if (!value || value === this.prefs) {
-			return;
-		}
-		this._prefs = value;
-	}
-
 	displayedReplays: readonly GroupedReplays[] = [];
 	_replays: readonly GroupedReplays[];
 	_state: ReplaysState;
-	_prefs: Preferences;
 	isLoading: boolean;
 
 	shouldHideDeckstringFilter: boolean;
@@ -128,17 +108,7 @@ export class ReplaysListComponent implements AfterViewInit {
 
 	private replaysIterator: IterableIterator<void>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	trackGroupedReplay(value: GroupedReplays, index: number) {
 		return (value && value.replays && value.replays.length > 0 && value.replays[0].reviewId) || index;

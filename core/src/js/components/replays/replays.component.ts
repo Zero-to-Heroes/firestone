@@ -19,7 +19,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<global-header *ngIf="navigation.text"> </global-header>
 						<replays-list
 							[state]="state.replays"
-							[prefs]="prefs"
 							*ngxCacheIf="navigation?.navigationReplays?.currentView === 'list'"
 						></replays-list>
 						<match-details

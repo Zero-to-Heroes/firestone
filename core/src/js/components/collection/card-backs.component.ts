@@ -1,24 +1,16 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { orderBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
-import { Preferences } from '../../models/preferences';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -38,7 +30,7 @@ import { InternalCardBack } from './internal-card-back';
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
 					[cardBack]="cardBack"
-					[animated]="animated"
+					[animated]="animated$ | async"
 					[style.width.px]="cardWidth"
 					(click)="showFullCardBack(cardBack)"
 				>
@@ -49,11 +41,11 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent implements AfterViewInit, OnDestroy {
+export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
+	animated$: Observable<boolean>;
 	cardWidth = this.DEFAULT_CARD_WIDTH;
-	animated = false;
 
 	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
@@ -73,27 +65,34 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 	unlocked: number;
 	total: number;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private preferencesSubscription: Subscription;
-
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
+		this.store
+			.listenPrefs$((prefs) => prefs.collectionCardScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				const cardScale = value / 100;
+				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
@@ -102,21 +101,11 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 	}
 
 	showFullCardBack(cardBack: CardBack) {
-		this.stateUpdater.next(new ShowCardBackDetailsEvent(cardBack.id));
+		this.store.send(new ShowCardBackDetailsEvent(cardBack.id));
 	}
 
 	trackByCardId(card: CardBack, index: number) {
 		return card.id;
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		this.animated = preferences.collectionUseAnimatedCardBacks;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private updateInfo() {

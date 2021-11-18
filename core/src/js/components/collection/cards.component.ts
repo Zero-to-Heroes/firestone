@@ -6,18 +6,18 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
-	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Card } from '../../models/card';
-import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
-import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'cards',
@@ -91,7 +91,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					[style.width.px]="cardWidth"
 					[style.height.px]="cardHeight"
 				>
-					<card-view [card]="card" [highRes]="false" [showCounts]="true">/</card-view>
+					<card-view [card]="card" [highRes]="highRes$ | async" [showCounts]="true">/</card-view>
 				</li>
 				<div class="loading" *ngIf="loading">Loading more cards...</div>
 			</infinite-scroll>
@@ -106,7 +106,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardsComponent implements AfterViewInit, OnDestroy {
+export class CardsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
 
 	readonly RARITY_FILTER_ALL = 'rarity-all';
@@ -172,6 +172,8 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 170;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 
+	highRes$: Observable<boolean>;
+
 	_searchString: string;
 	_cardList: SetCard[];
 	_activeCards: SetCard[] = [];
@@ -179,28 +181,42 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
-	highRes: boolean;
 	loading = false;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
 
-	// private imagesLoaded: string[] = [];
-	// private imagesToLoad: string[] = [];
-
-	private processingTimeout;
-	private preferencesSubscription: Subscription;
-
 	private iterator: IterableIterator<void>;
 
 	constructor(
 		private readonly elRef: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
-		private readonly ow: OverwolfService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
+		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
+		this.store
+			.listenPrefs$((prefs) => prefs.collectionCardScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((value) => {
+				const cardScale = value / 100;
+				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+				this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
 		// TODO: extract that to its own component
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach((singleEl) => {
@@ -211,24 +227,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-
-		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		if (this.processingTimeout) {
-			clearTimeout(this.processingTimeout);
-		}
-		this.preferencesSubscription?.unsubscribe();
 	}
 
 	@Input('set') set cardSet(set: Set) {
@@ -343,17 +341,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			this.cdr.detectChanges();
 		}
 		return;
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.highRes = preferences.collectionUseHighResImages;
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private filterRarity() {

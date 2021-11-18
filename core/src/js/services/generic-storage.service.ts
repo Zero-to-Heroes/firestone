@@ -15,7 +15,7 @@ export class GenericStorageService {
 	}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
-		console.debug('saving user prefs', preferences, preferences?.opponentOverlayPosition, new Error().stack);
+		// console.debug('saving user prefs', preferences, preferences?.opponentOverlayPosition, new Error().stack);
 		if (!preferences?.opponentOverlayPosition) {
 			console.warn('no-format', 'pref missing overlay position', preferences, new Error().stack);
 		}

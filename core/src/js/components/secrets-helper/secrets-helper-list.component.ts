@@ -4,20 +4,18 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	Input,
-	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { SecretOption } from '../../models/decktracker/secret-option';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
-import { Events } from '../../services/events.service';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'secrets-helper-list',
@@ -28,8 +26,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<perfect-scrollbar class="secrets-helper-list" (scroll)="onScroll($event)" [ngClass]="{ 'active': isScroll }">
-			<ul class="card-list">
+		<perfect-scrollbar class="secrets-helper-list" [ngClass]="{ 'active': isScroll }">
+			<ul class="card-list" scrollable>
 				<li *ngFor="let card of cards; trackBy: trackCard">
 					<deck-card
 						[card]="card"
@@ -43,66 +41,44 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
+export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		this._tooltipPosition = value;
+	}
+	@Input() set secrets(value: readonly BoardSecret[]) {
+		this._secrets = value;
+		this.updateCards();
+	}
 
 	_tooltipPosition: CardTooltipPositionType;
 	_secrets: readonly BoardSecret[];
 	cards: readonly DeckCard[];
 	isScroll: boolean;
 
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
-
-	@Input() set secrets(value: readonly BoardSecret[]) {
-		this._secrets = value;
-		this.updateCards();
-	}
-
-	private preferencesSubscription: Subscription;
-
 	constructor(
 		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-		private events: Events,
-		private ow: OverwolfService,
 		private allCards: CardsFacadeService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.refreshScroll();
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.el.nativeElement.querySelector('.card-list').getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
-	onScroll(event) {
-		// Force immediate clean of the tooltip
-		// this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
-	}
-
-	refresh() {
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.store
+			.listenPrefs$((prefs) => prefs.secretsHelperScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				this.refreshScroll();
+			});
 	}
 
 	trackCard(index, card: VisualDeckCard) {
@@ -172,8 +148,9 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 			const contentHeight = psContent.getBoundingClientRect().height;
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
-
-			this.refresh();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
 		}, 1000);
 	}
 

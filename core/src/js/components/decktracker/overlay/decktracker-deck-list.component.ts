@@ -4,18 +4,17 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	Input,
-	OnDestroy,
 	Optional,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
-import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-deck-list',
@@ -26,7 +25,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<perfect-scrollbar class="deck-list" [ngClass]="{ 'active': isScroll }">
+		<perfect-scrollbar class="deck-list" [ngClass]="{ 'active': isScroll }" scrollable>
 			<ng-container [ngSwitch]="displayMode">
 				<div class="list-background"></div>
 				<deck-list-by-zone
@@ -62,7 +61,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -75,61 +74,40 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() side: 'player' | 'opponent';
 	@Input() collection: readonly SetCard[];
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		this._tooltipPosition = value;
+	}
+	@Input() set deckState(deckState: DeckState) {
+		this._deckState = deckState;
+		this.refreshScroll();
+	}
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
 	isScroll: boolean;
 
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
-
-	@Input('deckState') set deckState(deckState: DeckState) {
-		this._deckState = deckState;
-		this.refreshScroll();
-	}
-
-	private preferencesSubscription: Subscription;
-
 	constructor(
 		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-		private events: Events,
 		@Optional() private ow: OverwolfService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		if (this.ow?.isOwEnabled()) {
-			const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-			this.preferencesSubscription =
-				preferencesEventBus &&
-				preferencesEventBus.subscribe((event) => {
-					this.refreshScroll();
-				});
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription && this.preferencesSubscription.unsubscribe();
-		this._deckState = null;
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.el.nativeElement.querySelector('.deck-list').getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
-	refresh() {
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.store
+			.listenPrefs$((prefs) => prefs.secretsHelperScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				this.refreshScroll();
+			});
 	}
 
 	private refreshScroll() {
@@ -142,8 +120,9 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 			const contentHeight = psContent.getBoundingClientRect().height;
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
-
-			this.refresh();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
 		}, 1000);
 	}
 }

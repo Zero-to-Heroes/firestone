@@ -153,9 +153,7 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+				this.updateTooltipPosition();
 			});
 		this.store
 			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)

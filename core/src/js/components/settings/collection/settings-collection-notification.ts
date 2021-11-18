@@ -1,16 +1,7 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -50,7 +41,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</section>
 			<!-- For now we group them all together to avoid needless clutter of the tabs -->
-			<section class="settings-group toggle-label" [ngClass]="{ 'disabled': !enableNotifications }">
+			<section class="settings-group toggle-label" [ngClass]="{ 'disabled': !(enableNotifications$ | async) }">
 				<h2 class="modes">You can selectively show some card notifications</h2>
 				<preference-toggle field="showDust" label="Dust recap"></preference-toggle>
 				<preference-toggle field="showCommon" label="Non-golden commons"></preference-toggle>
@@ -64,8 +55,9 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsCollectionNotificationComponent implements AfterViewInit, OnDestroy {
-	enableNotifications: boolean;
+export class SettingsCollectionNotificationComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	enableNotifications$: Observable<boolean>;
+
 	cardSizeKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 75,
@@ -81,32 +73,11 @@ export class SettingsCollectionNotificationComponent implements AfterViewInit, O
 		},
 	];
 
-	private preferencesSubscription: Subscription;
-
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.loadDefaultValues();
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event.preferences;
-			this.enableNotifications = preferences.collectionEnableNotifications;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		this.enableNotifications = prefs.collectionEnableNotifications;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.enableNotifications$ = this.listenForBasicPref$((prefs) => prefs.collectionEnableNotifications);
 	}
 }

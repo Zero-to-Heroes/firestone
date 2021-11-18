@@ -20,10 +20,20 @@ export class AppUiStoreFacadeService {
 	private store: AppUiStoreService;
 
 	constructor(private readonly ow: OverwolfService) {
+		this.init();
+	}
+
+	private async init() {
 		this.store = this.ow.getMainWindow()?.appStore;
 		if (!this.store) {
-			console.error('could not retrieve store from main window');
+			console.warn('could not retrieve store from main window');
+			setTimeout(() => this.init(), 10);
 		}
+	}
+
+	public async initComplete(): Promise<void> {
+		await this.waitForStoreInstance();
+		return this.store.initComplete();
 	}
 
 	public listen$<S extends Selector<any>[]>(
@@ -74,5 +84,18 @@ export class AppUiStoreFacadeService {
 
 	public send(event: MainWindowStoreEvent) {
 		return this.store.send(event);
+	}
+
+	private async waitForStoreInstance(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.store) {
+					resolve();
+				} else {
+					setTimeout(() => dbWait(), 10);
+				}
+			};
+			dbWait();
+		});
 	}
 }

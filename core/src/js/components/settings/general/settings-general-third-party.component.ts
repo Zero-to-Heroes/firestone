@@ -1,15 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'settings-general-third-party',
@@ -21,7 +17,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/general/settings-general-third-party.component.scss`,
 	],
 	template: `
-		<div class="general-third-party" scrollable>
+		<div class="general-third-party" *ngIf="{ oocLoggedIn: oocLoggedIn$ | async } as value" scrollable>
 			<div class="intro">
 				We believe that your data belongs to you, and that you should be able to synchronize it to other third
 				party websites and help them do whatever they do best with it. We don't get paid for this, but we do get
@@ -76,12 +72,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 					</p>
 				</div>
 				<div class="connect">
-					<div class="logged-out" *ngIf="oocLoginUrl && !oocLoggedIn">
+					<div class="logged-out" *ngIf="oocLoginUrl && !value.oocLoggedIn">
 						<button (mousedown)="oocConnect()">
 							<span>Connect</span>
 						</button>
 					</div>
-					<div class="logged-in" *ngIf="oocLoginUrl && oocLoggedIn">
+					<div class="logged-in" *ngIf="oocLoginUrl && value.oocLoggedIn">
 						<div class="user-name">You're logged in</div>
 						<button (mousedown)="oocDisconnect()">
 							<span>Disconnect</span>
@@ -89,7 +85,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					</div>
 				</div>
 				<preference-toggle
-					*ngIf="oocLoginUrl && oocLoggedIn"
+					*ngIf="oocLoginUrl && value.oocLoggedIn"
 					class="collection-sync-notif"
 					field="outOfCardsShowNotifOnSync"
 					label="Show notification when collection is synchronizeed"
@@ -131,27 +127,32 @@ import { PreferencesService } from '../../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralThirdPartyComponent implements AfterViewInit, OnDestroy {
-	oocLoggedIn: boolean;
+export class SettingsGeneralThirdPartyComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy {
+	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 
-	private preferencesSubscription: Subscription;
-
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
-		this.loadDefaultValues();
+	constructor(
+		private prefs: PreferencesService,
+		private ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
-			await this.loadDefaultValues();
-		});
-		this.cdr.detach();
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
+		this.oocLoggedIn$ = this.store
+			.listenPrefs$((prefs) => prefs.outOfCardsToken)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				map((token) => token?.access_token && token?.expires_timestamp > Date.now()),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting oocLoggedIn in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
 	}
 
 	async oocConnect() {
@@ -163,14 +164,5 @@ export class SettingsGeneralThirdPartyComponent implements AfterViewInit, OnDest
 	oocDisconnect() {
 		console.log('disconnecting out of cards');
 		this.prefs.udpateOutOfCardsToken(null);
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		const oocToken = prefs.outOfCardsToken;
-		this.oocLoggedIn = oocToken?.access_token && oocToken?.expires_timestamp > Date.now();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

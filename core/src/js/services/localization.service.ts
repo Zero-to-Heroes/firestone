@@ -9,7 +9,8 @@ export class LocalizationService {
 
 	constructor(private readonly store: AppUiStoreFacadeService) {}
 
-	public start() {
+	public async start() {
+		await this.store.initComplete();
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.locale)
 			.pipe(map(([pref]) => pref))

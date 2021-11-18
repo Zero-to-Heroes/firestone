@@ -1,19 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
-import { Preferences } from '../../models/preferences';
 import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'pack-stats',
@@ -75,7 +67,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionPackStatsComponent implements AfterViewInit {
+export class CollectionPackStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 
@@ -94,15 +86,6 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
-	@Input() set prefs(value: Preferences) {
-		if (!value || this.showOnlyBuyablePacks === value.collectionShowOnlyBuyablePacks) {
-			return;
-		}
-
-		this.showOnlyBuyablePacks = value.collectionShowOnlyBuyablePacks;
-		this.updateInfos();
-	}
-
 	_inputPacks: readonly PackInfo[];
 	_packs: readonly InternalPackInfo[] = [];
 	_packStats: readonly PackResult[];
@@ -112,12 +95,15 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 
 	showOnlyBuyablePacks: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks).subscribe((value) => {
+			this.showOnlyBuyablePacks = value;
+			this.updateInfos();
+		});
 	}
 
 	trackByPackFn(index: number, item: InternalPackInfo) {

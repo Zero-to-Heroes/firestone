@@ -5,17 +5,14 @@ import {
 	Component,
 	ElementRef,
 	HostBinding,
-	HostListener,
 	Input,
-	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-overlay-hero-overview',
@@ -40,7 +37,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsOverlayHeroOverviewComponent implements AfterViewInit, OnDestroy {
+export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() set config(value: {
 		player: BgsPlayer;
 		currentTurn: number;
@@ -65,49 +62,31 @@ export class BgsOverlayHeroOverviewComponent implements AfterViewInit, OnDestroy
 	currentTurn: number;
 	isLastOpponent: boolean;
 
-	private scale: number;
-	private preferencesSubscription: Subscription;
-
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.scale = preferences.bgsOpponentBoardScale;
-		this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', this.scale / 100);
-		this.onResized();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private onResized() {
-		const newScale = this.scale / 100;
-		const element = this.el.nativeElement;
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.store
+			.listenPrefs$((prefs) => prefs.bgsOpponentBoardScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				console.debug('updating scale', scale);
+				this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+			});
 	}
 }

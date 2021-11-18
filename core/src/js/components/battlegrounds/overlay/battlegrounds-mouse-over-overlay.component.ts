@@ -48,7 +48,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[currentTurn]="value.currentTurn"
 					[lastOpponentCardId]="value.lastOpponentCardId"
 					[showLastOpponentIcon]="value.showLastOpponentIcon"
-					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>

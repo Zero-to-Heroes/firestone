@@ -1,17 +1,7 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Preferences } from '../../../models/preferences';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -24,7 +14,7 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/component/settings/decktracker/settings-decktracker-global.component.scss`,
 	],
 	template: `
-		<div class="decktracker-appearance">
+		<div class="decktracker-appearance" scrollable>
 			<div class="title">Activate / Deactivate features</div>
 			<div class="settings-group">
 				<div class="subgroup">
@@ -103,16 +93,11 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDestroy {
+export class SettingsDecktrackerGlobalComponent extends AbstractSubscriptionComponent {
 	resetText = 'Reset positions';
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
-	showTitleBar: boolean;
-	overlayGroupByZone: boolean;
-	opponentOverlayGroupByZone: boolean;
-	opponentTracker: boolean;
-	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
@@ -128,44 +113,12 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		},
 	];
 
-	private preferencesSubscription: Subscription;
-
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private el: ElementRef,
-		private ow: OverwolfService,
-	) {}
-
-	ngAfterViewInit() {
-		this.loadDefaultValues();
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event.preferences;
-			this.overlayGroupByZone = preferences.overlayGroupByZone;
-			this.opponentTracker = preferences.opponentTracker;
-			this.secretsHelper = preferences.secretsHelper;
-			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.el.nativeElement.querySelector('.decktracker-appearance').getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
+		private readonly prefs: PreferencesService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
 	async reset() {
@@ -179,17 +132,5 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
 		await this.prefs.resetDecktrackerPositions();
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		this.overlayGroupByZone = prefs.overlayGroupByZone;
-		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
-		this.opponentTracker = prefs.opponentTracker;
-		this.secretsHelper = prefs.secretsHelper;
-		this.showTitleBar = prefs.overlayShowTitleBar;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

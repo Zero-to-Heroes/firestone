@@ -1,16 +1,8 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'settings-advanced-toggle',
@@ -22,55 +14,28 @@ import { PreferencesService } from '../../services/preferences.service';
 	template: `
 		<div class="container">
 			<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
-				{{ advancedModeToggledOn ? 'Hide advanced settings' : 'Show advanced settings' }}
+				{{ (advancedModeToggledOn$ | async) ? 'Hide advanced settings' : 'Show advanced settings' }}
 			</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy {
-	advancedModeToggledOn: boolean;
-
-	private preferencesSubscription: Subscription;
+export class SettingsAdvancedToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	advancedModeToggledOn$: Observable<boolean>;
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit() {
-		this.loadDefaultValues();
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event.preferences;
-			if (!preferences) {
-				return;
-			}
-			this.advancedModeToggledOn = preferences.advancedModeToggledOn;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.advancedModeToggledOn$ = this.listenForBasicPref$((prefs) => prefs.advancedModeToggledOn);
 	}
 
 	toggleAdvancedSettings() {
-		this.prefs.updateAdvancedSettings(!this.advancedModeToggledOn);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs) {
-			return;
-		}
-		this.advancedModeToggledOn = prefs.advancedModeToggledOn;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.prefs.toggleAdvancedSettings();
 	}
 }

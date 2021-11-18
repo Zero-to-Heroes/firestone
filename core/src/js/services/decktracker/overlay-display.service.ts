@@ -15,7 +15,8 @@ export class OverlayDisplayService {
 		this.init();
 	}
 
-	private init() {
+	private async init() {
+		await this.store.initComplete();
 		combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
 			this.store.listen$(([main, nav, prefs]) => prefs),
