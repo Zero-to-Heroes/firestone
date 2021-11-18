@@ -5,17 +5,18 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
-	OnDestroy,
-	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
-import { GameEvent } from '../../models/game-event';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
@@ -41,9 +42,14 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 		'../../../css/component/game-counters/game-counters.component.scss',
 	],
 	template: `
-		<div class="root overlay-container-parent" [ngClass]="{ 'isBgs': isBgs }" [activeTheme]="'decktracker'">
+		<div
+			class="root overlay-container-parent"
+			[ngClass]="{ 'isBgs': isBgs }"
+			[activeTheme]="'decktracker'"
+			*ngIf="definition$ | async as definition"
+		>
 			<generic-counter
-				*ngIf="definition && activeCounter === definition.type"
+				*ngIf="activeCounter === definition.type"
 				[image]="definition.image"
 				[helpTooltipText]="definition.tooltip"
 				[value]="definition.value"
@@ -54,35 +60,57 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCountersComponent implements AfterViewInit, OnDestroy {
+export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	activeCounter: CounterType;
 	side: 'player' | 'opponent';
 	isBgs: boolean;
 
-	definition: CounterDefinition;
+	definition$: Observable<CounterDefinition>;
 
 	private windowId: string;
-	private stateSubscription: Subscription;
-	private preferencesSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private el: ElementRef,
-		private init_DebugService: DebugService,
-		private allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly el: ElementRef,
+		private readonly init_DebugService: DebugService,
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
+		super();
 		const nativeElement = el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');
 		this.isBgs = this.activeCounter.includes('bgs');
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.stateSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
+	async ngAfterViewInit() {
+		if (!this.activeCounter.includes('bgs')) {
+			this.definition$ = this.store
+				.listenDeckState$((state) => state)
+				.pipe(
+					filter(([state]) => !!state),
+					map(([state]) => this.buildDefinition(state, this.activeCounter, this.side)),
+					distinctUntilChanged(),
+					tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+					tap((filter) => cdLog('emitting definition in ', this.constructor.name, filter)),
+					takeUntil(this.destroyed$),
+				);
+		} else {
+			this.definition$ = this.store
+				.listenBattlegrounds$(([state, prefs]) => state)
+				.pipe(
+					filter(([state]) => !!state),
+					map(([state]) => this.buildBgsDefinition(state, this.activeCounter, this.side)),
+					distinctUntilChanged(),
+					tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+					tap((filter) => cdLog('emitting definition in ', this.constructor.name, filter)),
+					takeUntil(this.destroyed$),
+				);
+		}
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		await this.restoreWindowPosition();
 	}
 
 	@HostListener('mousedown')
@@ -94,49 +122,6 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
 		});
-	}
-
-	async ngAfterViewInit() {
-		if (!this.activeCounter.includes('bgs')) {
-			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-			const subscriber = new Subscriber<any>(async (event) => {
-				// Ideally this should not be necessary, but it looks like that doing things in the beforeunload
-				// handler is not always enough
-				if (event.event.name === GameEvent.GAME_END) {
-					this.stateSubscription?.unsubscribe();
-					this.preferencesSubscription?.unsubscribe();
-					return;
-				}
-				if (!event?.state) {
-					return;
-				}
-				this.definition = this.buildDefinition(event?.state as GameState, this.activeCounter, this.side);
-
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
-			this.stateSubscription = deckEventBus.subscribe(subscriber);
-		} else {
-			const deckEventBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-			const subscriber = new Subscriber<any>(async (newState) => {
-				if (!newState) {
-					return;
-				}
-				this.definition = this.buildBgsDefinition(newState, this.activeCounter, this.side);
-
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
-			subscriber['identifier'] = 'game-counters-bgs';
-			this.stateSubscription = deckEventBus.subscribe(subscriber);
-		}
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		await this.restoreWindowPosition();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {

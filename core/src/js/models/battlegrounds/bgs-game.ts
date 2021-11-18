@@ -2,7 +2,6 @@ import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { Race } from '@firestone-hs/reference-data';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
-import { Preferences } from '../preferences';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';
 import { BgsPlayer } from './bgs-player';
 
@@ -149,15 +148,18 @@ export class BgsGame {
 		}));
 	}
 
-	public getRelevantFaceOff(prefs: Preferences): BgsFaceOffWithSimulation {
+	public getRelevantFaceOff(
+		bgsShowSimResultsOnlyOnRecruit: boolean,
+		bgsHideSimResultsOnRecruit: boolean,
+	): BgsFaceOffWithSimulation {
 		if (this.phase === 'combat') {
-			if (prefs?.bgsShowSimResultsOnlyOnRecruit) {
+			if (bgsShowSimResultsOnlyOnRecruit) {
 				return null;
 			}
 			return this.lastFaceOff();
 		}
 
-		if (prefs?.bgsHideSimResultsOnRecruit) {
+		if (bgsHideSimResultsOnRecruit) {
 			return null;
 		} else {
 			return this.lastNonEmptyFaceOff();

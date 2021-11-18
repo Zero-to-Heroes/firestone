@@ -1,19 +1,13 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	OnInit,
-	ViewRef,
-} from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-simulation-overlay',
@@ -24,73 +18,59 @@ import { PreferencesService } from '../../../services/preferences.service';
 		'../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
-		<!-- <div class="logo-container battlegrounds-theme">
-			<div class="background-main-part"></div>
-			<div class="background-second-part"></div>
-			<i class="gold-theme logo">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#logo" />
-				</svg>
-			</i>
-		</div> -->
 		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay">
-			<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="showSimulationSample"></bgs-battle-status>
+			<bgs-battle-status
+				[nextBattle]="nextBattle$ | async"
+				[showReplayLink]="showSimulationSample$ | async"
+			></bgs-battle-status>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
-	nextBattle: BgsFaceOffWithSimulation;
-	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
-	simulationMessage: BattleInfoMessage;
-	showSimulationSample: boolean;
+export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements OnInit {
+	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+	showSimulationSample$: Observable<boolean>;
 
 	private windowId: string;
-	private storeSubscription: Subscription;
-	private preferencesSubscription: Subscription;
-	private preferences: Preferences;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-	) {}
-
-	async ngOnInit() {
-		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
-			try {
-				this.nextBattle = newState?.currentGame?.getRelevantFaceOff(this.preferences);
-
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			} catch (e) {
-				// Not having this catch block causes the "Cannot read property 'destroyed' of null"
-				// exception to break the app
-				console.error('Exception while handling new state', e.message, e);
-			}
-		});
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		await this.handleDisplayPreferences();
-		await this.restoreWindowPosition();
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		private readonly store: AppUiStoreFacadeService,
+	) {
+		super();
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.storeSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
+	async ngOnInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.nextBattle$ = combineLatest(
+			this.store.listenBattlegrounds$(([state]) => state?.currentGame),
+			this.store.listen$(
+				([state, nav, prefs]) => prefs?.bgsShowSimResultsOnlyOnRecruit,
+				([state, nav, prefs]) => prefs?.bgsHideSimResultsOnRecruit,
+			),
+		).pipe(
+			filter(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) => !!currentGame),
+			map(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) =>
+				currentGame.getRelevantFaceOff(bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit),
+			),
+			distinctUntilChanged(),
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting nextBattle in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
+		);
+		this.showSimulationSample$ = this.store
+			.listen$(([state, nav, prefs]) => prefs?.bgsEnableSimulationSampleInOverlay)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting showSimulationSample in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+
+		await this.restoreWindowPosition();
 	}
 
 	@HostListener('mousedown')
@@ -102,15 +82,6 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 			}
 			this.prefs.updateBgsSimulationWidgetPosition(window.left, window.top);
 		});
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		this.preferences = preferences || (await this.prefs.getPreferences());
-
-		this.showSimulationSample = this.preferences.bgsEnableSimulationSampleInOverlay;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
