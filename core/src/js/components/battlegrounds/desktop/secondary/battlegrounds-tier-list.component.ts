@@ -4,7 +4,6 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
@@ -41,12 +40,8 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
-	) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.stats$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

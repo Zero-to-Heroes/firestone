@@ -48,10 +48,10 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly init_DebugService: DebugService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
 	}

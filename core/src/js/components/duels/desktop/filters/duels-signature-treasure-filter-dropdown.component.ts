@@ -3,7 +3,6 @@ import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
 import { DuelsSignatureTreasureFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-signature-treasure-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -42,11 +41,11 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(

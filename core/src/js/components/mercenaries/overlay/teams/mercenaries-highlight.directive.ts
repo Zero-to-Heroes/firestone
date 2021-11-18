@@ -1,4 +1,13 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, Input, OnDestroy, Renderer2 } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	Renderer2,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';
@@ -24,13 +33,14 @@ export class MercenariesHighlightDirective extends AbstractSubscriptionComponent
 	private subscription$$: Subscription;
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
 		this.subscription$$ = this.store
 			.listenMercenariesHighlights$(

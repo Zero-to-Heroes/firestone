@@ -31,8 +31,8 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionComponent {
 	values$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.values$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

@@ -53,8 +53,8 @@ export class SetsComponent extends AbstractSubscriptionComponent {
 
 	private allSets$: Observable<readonly Set[]>;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.activeFilter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
 			.pipe(

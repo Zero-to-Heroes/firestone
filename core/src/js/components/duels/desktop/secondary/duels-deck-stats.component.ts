@@ -54,8 +54,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent {
 	deckInfo$: Observable<DeckInfo>;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.deckInfo$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.personalDeckStats,

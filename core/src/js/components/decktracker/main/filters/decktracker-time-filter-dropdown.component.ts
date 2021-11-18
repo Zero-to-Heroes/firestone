@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { DeckTimeFilterType } from '@models/mainwindow/decktracker/deck-time-filter.type';
 import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
@@ -34,8 +34,12 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.time,

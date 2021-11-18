@@ -54,13 +54,13 @@ export class BgsHeroSelectionOverlayComponent
 	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly init_DebugService: DebugService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.heroTooltipActive$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
 			.pipe(

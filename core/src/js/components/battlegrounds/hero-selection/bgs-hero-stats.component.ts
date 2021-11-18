@@ -68,8 +68,8 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.placementChartData$ = combineLatest(
 			this.placementDistribution$.asObservable(),
 			this.playerPlacementDistribution$.asObservable(),

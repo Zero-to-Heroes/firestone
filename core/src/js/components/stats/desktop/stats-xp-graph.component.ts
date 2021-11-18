@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { cdLog } from '@services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
@@ -37,8 +37,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class StatsXpGraphComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

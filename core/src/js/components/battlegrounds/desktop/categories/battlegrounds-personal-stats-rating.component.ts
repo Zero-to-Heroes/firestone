@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
@@ -33,8 +33,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class BattlegroundsPersonalStatsRatingComponent extends AbstractSubscriptionComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

@@ -78,14 +78,14 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly init_DebugService: DebugService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 	}
 
 	async ngAfterViewInit() {

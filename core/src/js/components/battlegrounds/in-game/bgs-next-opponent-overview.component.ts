@@ -80,11 +80,11 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ads: AdService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.enableSimulation$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
 			.pipe(

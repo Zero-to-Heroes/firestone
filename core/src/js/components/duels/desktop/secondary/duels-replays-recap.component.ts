@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -27,8 +27,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.replays$ = this.store
 			.listen$(([main, nav]) => main.duels.personalDeckStats)
 			.pipe(

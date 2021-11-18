@@ -47,8 +47,8 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent {
 	opponents$: Observable<readonly BgsPlayer[]>;
 	faceOffsByOpponent$: Observable<{ [opponentHeroCardId: string]: readonly BgsFaceOff[] }>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
 			.listenBattlegrounds$(
 				([state]) => state.panels,

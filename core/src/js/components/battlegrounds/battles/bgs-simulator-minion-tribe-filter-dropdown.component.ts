@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
@@ -43,9 +43,10 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		const battlegroundsCards = this.allCards.getCards().filter((card) => !!card.techLevel);
 		const uniqueTribes = [...new Set(battlegroundsCards.map((card) => card.race?.toLowerCase()))].filter(
 			(race) => !!race && race !== 'all',

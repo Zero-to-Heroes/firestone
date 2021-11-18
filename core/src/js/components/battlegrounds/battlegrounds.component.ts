@@ -48,14 +48,14 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 	private hotkey;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.init();
 		this.adRefershToken$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)

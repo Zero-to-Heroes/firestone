@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
@@ -78,8 +78,12 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
 	loading = true;
 	visible = false;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.boards$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,

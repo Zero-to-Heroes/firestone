@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
@@ -46,8 +46,8 @@ export class StatsDesktopComponent extends AbstractSubscriptionComponent {
 	category$: Observable<StatsCategory>;
 	categories$: Observable<readonly StatsCategory[]>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.stats.loading)
 			.pipe(

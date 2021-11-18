@@ -91,11 +91,11 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.compositionStat$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,

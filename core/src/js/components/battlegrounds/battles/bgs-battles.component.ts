@@ -102,10 +102,10 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.faceOffs$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
@@ -48,8 +48,8 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent {
 	category$: Observable<ArenaCategory>;
 	categories$: Observable<readonly ArenaCategory[]>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.arena.loading)
 			.pipe(

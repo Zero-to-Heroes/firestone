@@ -34,12 +34,12 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 	private windowId: string;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 	}
 
 	async ngOnInit() {

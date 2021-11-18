@@ -30,11 +30,11 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.tiers$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,

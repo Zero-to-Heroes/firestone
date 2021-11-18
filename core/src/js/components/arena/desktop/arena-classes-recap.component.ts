@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -88,8 +88,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<StatInfo>;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

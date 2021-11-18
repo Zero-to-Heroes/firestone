@@ -44,12 +44,12 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 	showAds = true;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ads: AdService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.tiers$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats),
 			map((stats) => this.buildTiers(stats)),

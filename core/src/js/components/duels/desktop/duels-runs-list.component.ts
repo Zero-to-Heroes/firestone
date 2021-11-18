@@ -67,8 +67,8 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 	private displayedRuns: readonly DuelsRun[] = [];
 	private runsIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(

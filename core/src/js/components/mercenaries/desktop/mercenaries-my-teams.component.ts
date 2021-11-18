@@ -3,7 +3,6 @@ import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -37,12 +36,8 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent {
 	teams$: Observable<readonly MercenaryPersonalTeamInfo[]>;
 
-	constructor(
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
-	) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.teams$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.referenceData,

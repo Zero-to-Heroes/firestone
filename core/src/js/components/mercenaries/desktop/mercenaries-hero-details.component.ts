@@ -177,11 +177,11 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.heroStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,

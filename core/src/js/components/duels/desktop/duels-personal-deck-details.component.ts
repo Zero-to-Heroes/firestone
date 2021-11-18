@@ -95,8 +95,8 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 	currentDeck$: Observable<'initial' | 'final'> = this.currentDeck.asObservable();
 	currentRunIndex = new BehaviorSubject<number>(0);
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(

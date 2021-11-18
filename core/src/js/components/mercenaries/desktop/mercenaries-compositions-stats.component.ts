@@ -51,10 +51,10 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.showMercNames$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesShowMercNamesInTeams)
 			.pipe(

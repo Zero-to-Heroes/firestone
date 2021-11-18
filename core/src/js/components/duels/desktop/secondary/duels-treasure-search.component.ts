@@ -1,6 +1,7 @@
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
 	EventEmitter,
 	HostListener,
@@ -46,8 +47,12 @@ export class DuelsTreasureSearchComponent extends AbstractSubscriptionComponent 
 	private searchStringSub$$: Subscription;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.treasureSearchString)
 			.pipe(

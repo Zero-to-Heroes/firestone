@@ -44,11 +44,11 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.tasks$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.referenceData,

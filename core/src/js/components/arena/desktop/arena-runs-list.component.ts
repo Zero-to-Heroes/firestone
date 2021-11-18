@@ -40,8 +40,8 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	private displayedReplays: readonly ArenaRun[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
 		this.sub$$ = this.store

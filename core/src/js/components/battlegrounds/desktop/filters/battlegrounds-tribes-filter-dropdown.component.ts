@@ -41,10 +41,10 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(

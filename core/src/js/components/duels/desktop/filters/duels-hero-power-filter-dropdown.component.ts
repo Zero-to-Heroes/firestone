@@ -40,11 +40,11 @@ export class DuelsHeroPowerFilterDropdownComponent extends AbstractSubscriptionC
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(

@@ -83,11 +83,11 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly events: Events,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 	}
 
 	async ngAfterViewInit() {

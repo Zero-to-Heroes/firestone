@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
@@ -51,8 +51,12 @@ export class MenuSelectionBgsComponent extends AbstractSubscriptionComponent imp
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
-	constructor(private ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.selectedPanel$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(

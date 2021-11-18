@@ -46,10 +46,10 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
 			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),
 			map(([[state]]) => state.treasureSelection.treasures),

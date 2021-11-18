@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -40,8 +40,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class BattlegroundsCategoryDetailsComponent extends AbstractSubscriptionComponent {
 	selectedCategoryId$: Observable<string>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
 			.pipe(

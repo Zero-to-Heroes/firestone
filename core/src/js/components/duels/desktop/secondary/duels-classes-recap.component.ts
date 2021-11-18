@@ -83,10 +83,10 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.stat$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.runs,

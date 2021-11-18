@@ -15,6 +15,7 @@ import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeIcon } from '../services/battlegrounds/bgs-utils';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { areDeepEqual, removeFromReadonlyArray } from '../services/utils';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
@@ -103,8 +104,12 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	private sub$$: Subscription;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {
-		super();
+	constructor(
+		private readonly el: ElementRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
 			filter(([options, selected]) => !!options?.length),
 			map(([options, selected]) => {

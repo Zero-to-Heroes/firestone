@@ -71,14 +71,14 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		const nativeElement = el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');

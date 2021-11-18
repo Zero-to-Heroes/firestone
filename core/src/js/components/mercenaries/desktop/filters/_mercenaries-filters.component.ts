@@ -47,8 +47,8 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent {
 	showHiddenTeamsLink$: Observable<boolean>;
 	showMercNamesInTeamsLink$: Observable<boolean>;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.showHiddenTeamsLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId,

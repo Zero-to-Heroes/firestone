@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
@@ -38,8 +38,12 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private collator = new Intl.Collator('en-US');
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(
+		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 		const tiers = [1, 2, 3, 4, 5, 6];
 		this.options = [
 			{

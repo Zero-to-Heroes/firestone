@@ -15,7 +15,6 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -43,12 +42,11 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 	stats$: Observable<readonly MercenaryInfo[]>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		// TODO: split into 2 obs: one where the actual data updates, and one that just
 		// shows/hide data (like role of search string)
 		this.stats$ = this.store

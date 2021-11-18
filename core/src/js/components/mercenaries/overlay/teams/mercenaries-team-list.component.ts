@@ -81,11 +81,11 @@ export class MercenariesTeamListComponent extends AbstractSubscriptionComponent 
 	private scaleSub: Subscription;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.scaleSub = this.store
 			.listenPrefs$(
 				// So that we don't pass scale extractors around, and the overhead of doing the refresh multiple

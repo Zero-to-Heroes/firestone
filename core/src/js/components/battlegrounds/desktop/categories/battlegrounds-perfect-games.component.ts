@@ -37,8 +37,8 @@ export class BattlegroundsPerfectGamesComponent extends AbstractSubscriptionComp
 	private displayedReplays: readonly GameStat[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,

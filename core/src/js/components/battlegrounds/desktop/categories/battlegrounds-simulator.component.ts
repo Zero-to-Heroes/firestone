@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -37,8 +37,8 @@ export class BattlegroundsSimulatorComponent extends AbstractSubscriptionCompone
 
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.faceOff$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
 			.pipe(

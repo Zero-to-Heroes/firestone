@@ -40,8 +40,8 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 	private sub$$: Subscription;
 	private iterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.topDecks,

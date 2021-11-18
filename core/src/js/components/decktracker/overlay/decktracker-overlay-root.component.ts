@@ -165,15 +165,15 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 
 	constructor(
 		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
-		private readonly store: AppUiStoreFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super();
+		super(store, cdr);
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(

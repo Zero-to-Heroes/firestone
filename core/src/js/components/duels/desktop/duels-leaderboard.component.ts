@@ -37,8 +37,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
-		super();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 		this.values$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.leaderboard,
