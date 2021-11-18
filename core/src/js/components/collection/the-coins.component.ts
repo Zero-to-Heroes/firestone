@@ -40,7 +40,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
-	readonly DEFAULT_CARD_WIDTH = 155;
+	readonly DEFAULT_CARD_WIDTH = 185;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 
 	@Input() set coins(value: readonly CollectionReferenceCard[]) {
