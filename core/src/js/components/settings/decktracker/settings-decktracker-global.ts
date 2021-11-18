@@ -108,7 +108,6 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
-	sliderEnabled = false;
 	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
@@ -129,7 +128,6 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		},
 	];
 
-	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
 
 	constructor(
@@ -141,14 +139,6 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 
 	ngAfterViewInit() {
 		this.loadDefaultValues();
-		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe((shouldDisplay) => {
-			this.sliderEnabled = shouldDisplay;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
@@ -164,7 +154,6 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.displaySubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
 	}
 

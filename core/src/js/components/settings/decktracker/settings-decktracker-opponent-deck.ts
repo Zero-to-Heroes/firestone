@@ -250,7 +250,6 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		},
 	];
 
-	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
 
 	constructor(
@@ -262,12 +261,6 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 
 	ngAfterViewInit() {
 		this.loadDefaultValues();
-		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe((shouldDisplay) => {
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
@@ -292,7 +285,6 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.displaySubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
 	}
 

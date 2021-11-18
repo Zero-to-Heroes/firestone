@@ -1,69 +1,32 @@
-import { EventEmitter, HostListener, Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { GameState } from '../../models/decktracker/game-state';
-import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
-import { OverwolfService } from '../overwolf.service';
-import { PreferencesService } from '../preferences.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
-export class OverlayDisplayService implements OnDestroy {
+export class OverlayDisplayService {
 	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-	private gameState: GameState;
 
-	private preferencesSubscription: Subscription;
-	private deckSubscription: Subscription;
-
-	constructor(private prefs: PreferencesService, private ow: OverwolfService) {
-		this.init();
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.preferencesSubscription?.unsubscribe();
-		this.deckSubscription?.unsubscribe();
+		this.init();
 	}
 
 	private init() {
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.pipe(debounceTime(200)).subscribe((event) => {
-			this.handleDisplayPreferences(this.gameState, event?.preferences);
-		});
-		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			if (event) {
-				this.gameState = event.state;
-				await this.processEvent(event.event);
-			}
-		});
-		subscriber['identifier'] = 'overlay-display';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
-	}
-
-	private async processEvent(event) {
-		switch (event.name) {
-			// In case one event is missing or arrives too fast, we have fallback
-			case GameEvent.MATCH_METADATA:
-			case GameEvent.LOCAL_PLAYER:
-			case GameEvent.OPPONENT:
-			case GameEvent.GAME_RUNNING:
-			case GameEvent.FIRST_PLAYER:
-			// console.debug('[overlay-display] received key event from game-state', event.name);
-			// Fall-through
-			default:
-				this.handleDisplayPreferences(this.gameState);
-				break;
-		}
-	}
-
-	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
-		const prefs = preferences || (await this.prefs.getPreferences());
-		const shouldDisplay = this.shouldDisplay(gameState, prefs);
-
-		this.decktrackerDisplayEventBus.next(shouldDisplay);
+		combineLatest(
+			this.store.listenDeckState$((gameState) => gameState),
+			this.store.listen$(([main, nav, prefs]) => prefs),
+		)
+			.pipe(
+				debounceTime(200),
+				map(([[gameState], [prefs]]) => ({ gameState: gameState, prefs: prefs })),
+				map((info) => this.shouldDisplay(info.gameState, info.prefs)),
+				distinctUntilChanged(),
+			)
+			.subscribe((shouldDisplay) => this.decktrackerDisplayEventBus.next(shouldDisplay));
 	}
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {

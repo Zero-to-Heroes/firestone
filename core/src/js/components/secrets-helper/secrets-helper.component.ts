@@ -9,14 +9,17 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
-import { GameState } from '../../models/decktracker/game-state';
-import { Preferences } from '../../models/preferences';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'secrets-helper',
@@ -30,25 +33,25 @@ import { PreferencesService } from '../../services/preferences.service';
 		<div
 			class="root overlay-container-parent"
 			[activeTheme]="'decktracker'"
-			[style.opacity]="opacity"
-			[ngClass]="{ 'active': active }"
+			[style.opacity]="opacity$ | async"
+			*ngIf="{ active: active$ | async } as value"
+			[ngClass]="{ 'active': value.active }"
 		>
 			<div class="main-container">
-				<secrets-helper-widget-icon class="icon" [active]="active"></secrets-helper-widget-icon>
+				<secrets-helper-widget-icon class="icon" [active]="value.active"></secrets-helper-widget-icon>
 				<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 				<div class="scalable">
 					<div class="secrets-helper-container">
-						<div class="secrets-helper" *ngIf="shouldShow" [style.width.px]="widthInPx">
+						<div class="secrets-helper" [style.width.px]="widthInPx">
 							<div class="background"></div>
 							<secrets-helper-control-bar [windowId]="windowId"></secrets-helper-control-bar>
 							<secrets-helper-list
-								[secrets]="secrets"
-								[colorManaCost]="colorManaCost"
-								[cardsGoToBottom]="cardsGoToBottom"
+								[secrets]="secrets$ | async"
+								[colorManaCost]="colorManaCost$ | async"
+								[cardsGoToBottom]="cardsGoToBottom$ | async"
 								[tooltipPosition]="tooltipPosition"
 							>
 							</secrets-helper-list>
-							<div class="backdrop" *ngIf="showBackdrop"></div>
 						</div>
 					</div>
 				</div>
@@ -57,58 +60,115 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
-	secrets: readonly BoardSecret[];
-	active: boolean;
+export class SecretsHelperComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	opacity$: Observable<number>;
+	colorManaCost$: Observable<boolean>;
+	cardsGoToBottom$: Observable<boolean>;
+	active$: Observable<boolean>;
+	secrets$: Observable<readonly BoardSecret[]>;
 
-	// gameState: GameState;
-	shouldShow: boolean;
-	windowId: string;
-	widthInPx: number;
-	opacity: number;
-	colorManaCost: boolean;
-	cardsGoToBottom: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
-	showBackdrop: boolean;
+
+	windowId: string;
+	widthInPx = 227;
 
 	private showTooltips = true;
 
-	private scale;
 	private gameInfoUpdatedListener: (message: any) => void;
-	private showTooltipSubscription: Subscription;
-	private hideTooltipSubscription: Subscription;
-	private deckSubscription: Subscription;
-	private preferencesSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private el: ElementRef,
-		private renderer: Renderer2,
-		private init_DebugService: DebugService,
-	) {}
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly init_DebugService: DebugService,
+	) {
+		super();
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			this.shouldShow = event?.state != null;
-			// this.gameState = event ? event.state : undefined;
-			this.active = (event.state as GameState)?.opponentDeck?.secretHelperActive;
-			this.secrets = (event.state as GameState)?.opponentDeck?.secrets;
-			console.debug('is active', this.active);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'secrets-helper';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
+		this.active$ = this.store
+			.listenDeckState$((state) => state?.opponentDeck?.secretHelperActive)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting active in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.secrets$ = this.store
+			.listenDeckState$((state) => state?.opponentDeck?.secrets)
+			.pipe(
+				map(([secrets]) => secrets),
+				distinctUntilChanged(arraysEqual),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting secrets in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.opacity$ = this.store
+			.listenPrefs$((prefs) => prefs.secretsHelperOpacity)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				map((opacity) => opacity / 100),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting opacity in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.colorManaCost$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.overlayShowRarityColors)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting colorManaCost in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.cardsGoToBottom$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.secretsHelperCardsGoToBottom)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting cardsGoToBottom in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
 
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
+		this.store
+			.listenPrefs$((prefs) => prefs.secretsHelperScale)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				filter((scale) => !!scale),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((scale) => {
+				console.debug('updating scale', scale);
+				this.el.nativeElement.style.setProperty('--secrets-helper-scale', scale / 100);
+				this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
+				const newScale = scale / 100;
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		this.store
+			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
+			.pipe(
+				debounceTime(100),
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(async (overlayShowTooltipsOnHover) => {
+				this.showTooltips = overlayShowTooltipsOnHover;
+				await this.updateTooltipPosition();
+			});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
@@ -117,19 +177,12 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 
 		await this.changeWindowSize();
 		await this.restoreWindowPosition();
-		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.showTooltipSubscription?.unsubscribe();
-		this.hideTooltipSubscription?.unsubscribe();
-		this.deckSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -147,34 +200,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateSecretsHelperPosition(window.left, window.top);
 		});
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-
-		this.widthInPx = 227;
-		this.opacity = preferences.secretsHelperOpacity / 100;
-		this.scale = preferences.secretsHelperScale;
-		this.el.nativeElement.style.setProperty('--secrets-helper-scale', this.scale / 100);
-		this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
-		this.colorManaCost = preferences.overlayShowRarityColors;
-		this.cardsGoToBottom = preferences.secretsHelperCardsGoToBottom;
-		this.showTooltips = preferences.overlayShowTooltipsOnHover;
-		await this.updateTooltipPosition();
-
-		this.onResized();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private onResized() {
-		const newScale = this.scale / 100;
-		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async restoreWindowPosition(): Promise<void> {

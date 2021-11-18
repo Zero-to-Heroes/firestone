@@ -8,13 +8,15 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { GameState } from '../../../models/decktracker/game-state';
-import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -26,69 +28,54 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="opponent-hand-overlay overlay-container-parent">
 			<opponent-card-infos
-				*ngIf="shouldShow"
-				[cards]="hand"
-				[displayTurnNumber]="displayTurnNumber"
-				[displayGuess]="displayGuess"
-				[displayBuff]="displayBuff"
+				[cards]="hand$ | async"
+				[displayTurnNumber]="displayTurnNumber$ | async"
+				[displayGuess]="displayGuess$ | async"
+				[displayBuff]="displayBuff$ | async"
 			></opponent-card-infos>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
-	// gameState: GameState;
-	windowId: string;
-	shouldShow: boolean;
-	hand: readonly DeckCard[];
-	displayTurnNumber = true;
-	displayGuess = true;
-	displayBuff = true;
+export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	hand$: Observable<readonly DeckCard[]>;
+	displayTurnNumber$: Observable<boolean>;
+	displayGuess$: Observable<boolean>;
+	displayBuff$: Observable<boolean>;
 
+	private windowId: string;
 	private gameInfoUpdatedListener: (message: any) => void;
-	private deckSubscription: Subscription;
-	private preferencesSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private init_DebugService: DebugService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly init_DebugService: DebugService,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			// Can happen because we now have a BehaviorSubject
-			if (event == null) {
-				return;
-			}
-			this.shouldShow = event.state && (event.state as GameState).opponentDeck != null;
-			this.hand = (event.state as GameState).opponentDeck?.hand;
-			// this.gameState = event.state;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'opponent-hand-overlay';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.setDisplayPreferences(event.preferences);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.hand$ = this.store
+			.listenDeckState$((deckState) => deckState?.opponentDeck?.hand)
+			.pipe(
+				filter(([hand]) => !!hand?.length),
+				distinctUntilChanged(arraysEqual),
+				map(([hand]) => hand),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting hand in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
+		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
+		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});
-		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -97,22 +84,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.deckSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
-	}
-
-	private setDisplayPreferences(preferences: Preferences) {
-		if (!preferences) {
-			return;
-		}
-
-		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
-		this.displayGuess = preferences.dectrackerShowOpponentGuess;
-		this.displayBuff = preferences.dectrackerShowOpponentBuffInHand;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async changeWindowSize(): Promise<void> {
