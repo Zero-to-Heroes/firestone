@@ -4,14 +4,16 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
-	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { GameState } from '../../models/decktracker/game-state';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'constructed',
@@ -23,43 +25,39 @@ import { PreferencesService } from '../../services/preferences.service';
 	template: `
 		<window-wrapper [activeTheme]="'decktracker'" [allowResize]="true">
 			<ads [parentComponent]="'constructed'"></ads>
-			<constructed-content [state]="state"> </constructed-content>
+			<constructed-content [state]="state$ | async"> </constructed-content>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedComponent implements AfterViewInit, OnDestroy {
-	state: GameState;
+export class ConstructedComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	state$: Observable<GameState>;
 
 	windowId: string;
 
-	private deckSubscription: Subscription;
-
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			this.state = event.state as GameState;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'constructed';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
+		this.state$ = this.store
+			.listenDeckState$((state) => state)
+			.pipe(
+				map(([info]) => info),
+				debounceTime(100),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
 		await this.positionWindowOnSecondScreen();
 		this.ow.bringToFront(this.windowId);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.deckSubscription?.unsubscribe();
-		this.state = null;
 	}
 
 	@HostListener('mousedown')

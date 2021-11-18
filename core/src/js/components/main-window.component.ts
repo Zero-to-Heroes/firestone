@@ -8,8 +8,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
-import { GameState } from '../models/decktracker/game-state';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
@@ -19,6 +19,9 @@ import { HotkeyService } from '../services/hotkey.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 @Component({
 	selector: 'main-window',
@@ -126,7 +129,7 @@ import { PreferencesService } from '../services/preferences.service';
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
-			<ads [parentComponent]="'main-window'" [adRefershToken]="adRefershToken" *ngIf="_showAds"></ads>
+			<ads [parentComponent]="'main-window'" [adRefershToken]="adRefershToken$ | async" *ngIf="_showAds"></ads>
 			<new-version-notification
 				class="new-version"
 				[forceOpen]="forceShowReleaseNotes"
@@ -136,7 +139,9 @@ import { PreferencesService } from '../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainWindowComponent implements AfterViewInit, OnDestroy {
+export class MainWindowComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	adRefershToken$: Observable<boolean>;
+
 	dataState: MainWindowState;
 	navigationState: NavigationState;
 	windowId: string;
@@ -145,35 +150,47 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	forceShowReleaseNotes: boolean;
 	prefs: Preferences;
 	_showAds = true;
-	adRefershToken: boolean;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 	hotkeyText: string;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
-	private navigationStateChangedListener: (message: any) => void;
+	// private navigationStateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
 	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
 	private preferencesSubscription: Subscription;
-	private deckSubscription: Subscription;
+	// private deckSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly owUtils: OwUtilsService,
 		private readonly hotkeyService: HotkeyService,
 		private readonly preferencesService: PreferencesService,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
 		const currentWindow = await this.ow.getCurrentWindow();
 		this.windowId = currentWindow.id;
+		this.adRefershToken$ = this.store
+			.listenDeckState$((gameState) => gameState)
+			.pipe(
+				map(([gameState]) => gameState.gameStarted),
+				debounceTime(100),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting adRefershToken in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
@@ -234,20 +251,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			});
 		});
 
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			if (!(event?.state as GameState)) {
-				return;
-			}
-
-			this.adRefershToken = (event.state as GameState)?.gameStarted;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'decktracker-overlay-root';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
-
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handlePreferences(event.preferences);
@@ -306,12 +309,12 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.dataStoreSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
 		this.navigationStoreSubscription?.unsubscribe();
-		this.deckSubscription?.unsubscribe();
 	}
 
 	onHelp(event: MouseEvent) {
