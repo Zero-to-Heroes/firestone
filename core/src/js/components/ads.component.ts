@@ -73,7 +73,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, (message) => {

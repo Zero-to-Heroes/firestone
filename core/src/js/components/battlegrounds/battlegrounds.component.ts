@@ -82,7 +82,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 	}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
 		this.hotkey = await this.ow.getHotKey('battlegrounds');

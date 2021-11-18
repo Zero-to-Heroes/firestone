@@ -72,6 +72,6 @@ export class BgsHeroPortraitComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {
-		cdr.detach();
+		// cdr.detach();
 	}
 }

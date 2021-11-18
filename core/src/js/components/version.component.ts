@@ -49,7 +49,7 @@ export class VersionComponent implements AfterViewInit {
 	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

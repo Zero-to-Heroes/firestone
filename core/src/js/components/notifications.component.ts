@@ -105,7 +105,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
 			const messageObject: Message = JSON.parse(message.content);
 			this.processingQueue.enqueue(messageObject);

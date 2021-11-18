@@ -87,7 +87,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
 	async ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {

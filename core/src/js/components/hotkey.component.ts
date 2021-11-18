@@ -28,7 +28,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 		this.detectHotKey();
 		this.hotkeyChangedListener = this.ow.addHotkeyChangedListener(() => {
 			this.detectHotKey();
