@@ -17,22 +17,19 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			scrollable
 			*ngIf="selectedCategoryId$ | async as selectedCategoryId"
 		>
-			<battlegrounds-personal-stats-heroes *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-heroes'">
+			<battlegrounds-personal-stats-heroes *ngIf="selectedCategoryId === 'bgs-category-personal-heroes'">
 			</battlegrounds-personal-stats-heroes>
-			<battlegrounds-personal-stats-rating *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-rating'">
+			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>
-			<battlegrounds-personal-stats-stats *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-stats'">
+			<battlegrounds-personal-stats-stats *ngIf="selectedCategoryId === 'bgs-category-personal-stats'">
 			</battlegrounds-personal-stats-stats>
-			<battlegrounds-perfect-games *ngxCacheIf="selectedCategoryId === 'bgs-category-perfect-games'">
+			<battlegrounds-perfect-games *ngIf="selectedCategoryId === 'bgs-category-perfect-games'">
 			</battlegrounds-perfect-games>
 			<battlegrounds-personal-stats-hero-details
-				*ngxCacheIf="
-					selectedCategoryId && selectedCategoryId.indexOf('bgs-category-personal-hero-details') !== -1
-				"
+				*ngIf="selectedCategoryId && selectedCategoryId.indexOf('bgs-category-personal-hero-details') !== -1"
 			>
 			</battlegrounds-personal-stats-hero-details>
-			<battlegrounds-simulator *ngxCacheIf="selectedCategoryId === 'bgs-category-simulator'">
-			</battlegrounds-simulator>
+			<battlegrounds-simulator *ngIf="selectedCategoryId === 'bgs-category-simulator'"> </battlegrounds-simulator>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

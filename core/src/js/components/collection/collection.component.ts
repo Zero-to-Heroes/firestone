@@ -26,47 +26,44 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						</global-header>
 						<collection-menu-selection
 							class="menu-selection"
-							*ngxCacheIf="_navigation?.navigationCollection.menuDisplayType === 'menu'"
+							*ngIf="_navigation?.navigationCollection.menuDisplayType === 'menu'"
 							[selectedTab]="_navigation.navigationCollection.currentView"
 						>
 						</collection-menu-selection>
-						<sets *ngxCacheIf="_navigation.navigationCollection.currentView === 'sets'"> </sets>
+						<sets *ngIf="_navigation.navigationCollection.currentView === 'sets'"> </sets>
 						<cards
 							[cardList]="_navigation.navigationCollection.cardList"
 							[set]="selectedSet"
 							[searchString]="_navigation.navigationCollection.searchString"
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'cards'"
+							*ngIf="_navigation.navigationCollection.currentView === 'cards'"
 						>
 						</cards>
 						<full-card
 							class="full-card"
 							[selectedCard]="selectedCard"
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-details'"
+							*ngIf="_navigation.navigationCollection.currentView === 'card-details'"
 						>
 						</full-card>
 						<card-backs
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-backs'"
+							*ngIf="_navigation.navigationCollection.currentView === 'card-backs'"
 							[cardBacks]="dataState?.cardBacks"
 						>
 						</card-backs>
 						<full-card-back
 							class="full-card"
 							[cardBack]="selectedCardBack"
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-back-details'"
+							*ngIf="_navigation.navigationCollection.currentView === 'card-back-details'"
 						>
 						</full-card-back>
 						<hero-portraits
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
+							*ngIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
 							[heroPortraits]="heroPortraits"
 						>
 						</hero-portraits>
-						<the-coins
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'coins'"
-							[coins]="coins"
-						>
+						<the-coins *ngIf="_navigation.navigationCollection.currentView === 'coins'" [coins]="coins">
 						</the-coins>
 						<pack-stats
-							*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
+							*ngIf="_navigation.navigationCollection.currentView === 'packs'"
 							[state]="dataState"
 						>
 						</pack-stats>
@@ -77,20 +74,17 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				<card-search
 					[searchString]="_navigation.navigationCollection.searchString"
 					[searchResults]="searchResults"
-					*ngxCacheIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
+					*ngIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
 				></card-search>
 				<card-history
 					[selectedCard]="selectedCard"
 					[state]="dataState"
-					*ngxCacheIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
+					*ngIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
 				>
 				</card-history>
-				<pack-history
-					[state]="dataState"
-					*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
-				>
+				<pack-history [state]="dataState" *ngIf="_navigation.navigationCollection.currentView === 'packs'">
 				</pack-history>
-				<set-stats [set]="selectedSet" [state]="dataState" *ngxCacheIf="isSetDetails()"> </set-stats>
+				<set-stats [set]="selectedSet" [state]="dataState" *ngIf="isSetDetails()"> </set-stats>
 			</section>
 		</div>
 	`,

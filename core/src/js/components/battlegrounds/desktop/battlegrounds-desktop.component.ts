@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						</ul>
 						<battlegrounds-filters> </battlegrounds-filters>
 						<battlegrounds-category-details
-							*ngxCacheIf="(currentView$ | async) === 'list'"
+							*ngIf="(currentView$ | async) === 'list'"
 							[ngClass]="{
 								'top':
 									category.value?.id !== 'bgs-category-personal-heroes' &&
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						category.value?.id?.includes('bgs-category-personal-hero-details-')
 					"
 				></battlegrounds-replays-recap>
-				<secondary-default *ngxCacheIf="category.value?.id === 'bgs-category-simulator'"></secondary-default>
+				<secondary-default *ngIf="category.value?.id === 'bgs-category-simulator'"></secondary-default>
 			</section>
 		</div>
 	`,
@@ -84,7 +84,7 @@ export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent
 			.pipe(
 				map(([loading]) => loading),
 				distinctUntilChanged(),
-				startWith(true),
+				// startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

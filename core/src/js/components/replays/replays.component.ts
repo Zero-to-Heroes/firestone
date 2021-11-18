@@ -19,12 +19,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<global-header *ngIf="navigation.text"> </global-header>
 						<replays-list
 							[state]="state.replays"
-							*ngxCacheIf="navigation?.navigationReplays?.currentView === 'list'"
+							*ngIf="navigation?.navigationReplays?.currentView === 'list'"
 						></replays-list>
 						<match-details
 							[state]="state.replays"
 							[navigation]="navigation.navigationReplays"
-							*ngxCacheIf="navigation?.navigationReplays?.currentView === 'match-details'"
+							*ngIf="navigation?.navigationReplays?.currentView === 'match-details'"
 						></match-details>
 					</div>
 				</with-loading>
@@ -39,14 +39,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 						[stats]="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel"
 					></bgs-post-match-stats-recap>
 				</div>
-				<div class="replays-list" *ngxCacheIf="isShowingDuelsReplay()">
+				<div class="replays-list" *ngIf="isShowingDuelsReplay()">
 					<duels-replays-recap-for-run
 						[state]="state?.duels"
 						[navigation]="navigation?.navigationReplays"
 					></duels-replays-recap-for-run>
 				</div>
 				<secondary-default
-					*ngxCacheIf="
+					*ngIf="
 						navigation.navigationReplays?.currentView === 'list' ||
 						(navigation.navigationReplays?.currentView === 'match-details' &&
 							!navigation.navigationReplays.selectedReplay?.replayInfo?.isDuels() &&

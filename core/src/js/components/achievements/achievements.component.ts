@@ -21,12 +21,12 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						<global-header *ngIf="navigation.text"></global-header>
 
 						<achievements-categories
-							*ngxCacheIf="navigation.navigationAchievements.currentView === 'categories'"
+							*ngIf="navigation.navigationAchievements.currentView === 'categories'"
 							[categories]="getCategories()"
 						>
 						</achievements-categories>
 						<achievements-list
-							*ngxCacheIf="navigation.navigationAchievements.currentView === 'list'"
+							*ngIf="navigation.navigationAchievements.currentView === 'list'"
 							[socialShareUserInfo]="socialShareUserInfo"
 							[achievementsList]="getDisplayedAchievements()"
 							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"

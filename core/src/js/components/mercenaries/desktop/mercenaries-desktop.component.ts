@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
@@ -34,21 +34,21 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</ul>
 							<mercenaries-filters></mercenaries-filters>
 							<mercenaries-personal-hero-stats
-								*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
+								*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 							>
 							</mercenaries-personal-hero-stats>
-							<mercenaries-my-teams *ngxCacheIf="selectedCategoryId === 'mercenaries-my-teams'">
+							<mercenaries-my-teams *ngIf="selectedCategoryId === 'mercenaries-my-teams'">
 							</mercenaries-my-teams>
-							<mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
+							<mercenaries-hero-stats *ngIf="selectedCategoryId === 'mercenaries-hero-stats'">
 							</mercenaries-hero-stats>
-							<mercenaries-hero-details *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-details'">
+							<mercenaries-hero-details *ngIf="selectedCategoryId === 'mercenaries-hero-details'">
 							</mercenaries-hero-details>
 							<mercenaries-compositions-stats
-								*ngxCacheIf="selectedCategoryId === 'mercenaries-compositions-stats'"
+								*ngIf="selectedCategoryId === 'mercenaries-compositions-stats'"
 							>
 							</mercenaries-compositions-stats>
 							<!-- <mercenaries-composition-details
-								*ngxCacheIf="selectedCategoryId === 'mercenaries-composition-details'"
+								*ngIf="selectedCategoryId === 'mercenaries-composition-details'"
 							>
 							</mercenaries-composition-details> -->
 						</ng-container>
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<section class="secondary">
 				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
 					<mercenaries-hero-search
-						*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
+						*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 					></mercenaries-hero-search>
 					<secondary-default></secondary-default>
 				</ng-container>
@@ -86,7 +86,7 @@ export class MercenariesDesktopComponent extends AbstractSubscriptionComponent i
 			.pipe(
 				map(([loading]) => loading),
 				distinctUntilChanged(),
-				startWith(true),
+				// startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

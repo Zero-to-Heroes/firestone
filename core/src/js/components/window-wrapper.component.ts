@@ -10,6 +10,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { OverwolfService } from '../services/overwolf.service';
@@ -81,6 +82,8 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 	private originalWidth = 0;
 	private originalHeight = 0;
 
+	private sub$$: Subscription;
+
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly events: Events,
@@ -95,7 +98,7 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 		this.windowId = currentWindow.id;
 		console.log('windowId', this.windowId);
 
-		this.store
+		this.sub$$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.globalZoomLevel)
 			.pipe(
 				map(([zoom]) => zoom),
@@ -181,5 +184,6 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
+		this.sub$$?.unsubscribe();
 	}
 }

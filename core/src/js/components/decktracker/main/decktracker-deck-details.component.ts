@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -28,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() set state(value: DecktrackerState) {
 		this._state = value;
 		this.updateValues();
@@ -45,16 +54,25 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 
 	private _state: DecktrackerState;
 	private _navigation: NavigationState;
+	private sub$$: Subscription;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
 	ngAfterViewInit() {
-		this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages).subscribe((value) => {
-			this.showMatchupAsPercentages = value;
-			this.updateValues();
-		});
+		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages).subscribe(
+			(value) => {
+				this.showMatchupAsPercentages = value;
+				this.updateValues();
+			},
+		);
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$.unsubscribe();
 	}
 
 	private updateValues() {

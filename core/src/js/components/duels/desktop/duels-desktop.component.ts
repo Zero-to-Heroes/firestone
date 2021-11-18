@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
 import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
@@ -35,43 +35,39 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</li>
 						</ul>
 						<duels-filters> </duels-filters>
-						<duels-runs-list *ngxCacheIf="category.value?.id === 'duels-runs'"> </duels-runs-list>
-						<duels-hero-stats *ngxCacheIf="category.value?.id === 'duels-stats'"></duels-hero-stats>
-						<duels-treasure-stats
-							*ngxCacheIf="category.value?.id === 'duels-treasures'"
-						></duels-treasure-stats>
+						<duels-runs-list *ngIf="category.value?.id === 'duels-runs'"> </duels-runs-list>
+						<duels-hero-stats *ngIf="category.value?.id === 'duels-stats'"></duels-hero-stats>
+						<duels-treasure-stats *ngIf="category.value?.id === 'duels-treasures'"></duels-treasure-stats>
 						<duels-personal-decks
-							*ngxCacheIf="category.value?.id === 'duels-personal-decks'"
+							*ngIf="category.value?.id === 'duels-personal-decks'"
 						></duels-personal-decks>
 						<duels-personal-deck-details
-							*ngxCacheIf="
+							*ngIf="
 								category.value?.id === 'duels-personal-deck-details' ||
 								category.value?.id === 'duels-deck-details'
 							"
 						>
 						</duels-personal-deck-details>
-						<duels-top-decks *ngxCacheIf="category.value?.id === 'duels-top-decks'"> </duels-top-decks>
-						<duels-leaderboard *ngxCacheIf="category.value?.id === 'duels-leaderboard'"></duels-leaderboard>
+						<duels-top-decks *ngIf="category.value?.id === 'duels-top-decks'"> </duels-top-decks>
+						<duels-leaderboard *ngIf="category.value?.id === 'duels-leaderboard'"></duels-leaderboard>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
-				<duels-hero-search *ngxCacheIf="category.value?.id === 'duels-stats'"></duels-hero-search>
-				<duels-treasure-search *ngxCacheIf="category.value?.id === 'duels-treasures'"></duels-treasure-search>
-				<duels-classes-recap *ngxCacheIf="category.value?.id === 'duels-runs'"></duels-classes-recap>
-				<duels-replays-recap *ngxCacheIf="category.value?.id === 'duels-personal-decks'"></duels-replays-recap>
-				<duels-treasure-tier-list
-					*ngxCacheIf="category.value?.id === 'duels-treasures'"
-				></duels-treasure-tier-list>
-				<duels-hero-tier-list *ngxCacheIf="category.value?.id === 'duels-stats'"></duels-hero-tier-list>
+				<duels-hero-search *ngIf="category.value?.id === 'duels-stats'"></duels-hero-search>
+				<duels-treasure-search *ngIf="category.value?.id === 'duels-treasures'"></duels-treasure-search>
+				<duels-classes-recap *ngIf="category.value?.id === 'duels-runs'"></duels-classes-recap>
+				<duels-replays-recap *ngIf="category.value?.id === 'duels-personal-decks'"></duels-replays-recap>
+				<duels-treasure-tier-list *ngIf="category.value?.id === 'duels-treasures'"></duels-treasure-tier-list>
+				<duels-hero-tier-list *ngIf="category.value?.id === 'duels-stats'"></duels-hero-tier-list>
 				<duels-deck-stats
-					*ngxCacheIf="
+					*ngIf="
 						category.value?.id === 'duels-personal-deck-details' ||
 						category.value?.id === 'duels-deck-details'
 					"
 				></duels-deck-stats>
 				<secondary-default
-					*ngxCacheIf="category.value?.id === 'duels-top-decks' || category.value?.id === 'duels-leaderboard'"
+					*ngIf="category.value?.id === 'duels-top-decks' || category.value?.id === 'duels-leaderboard'"
 				></secondary-default>
 			</section>
 		</div>
@@ -97,7 +93,7 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 			.pipe(
 				map(([loading]) => loading),
 				distinctUntilChanged(),
-				startWith(true),
+				// startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

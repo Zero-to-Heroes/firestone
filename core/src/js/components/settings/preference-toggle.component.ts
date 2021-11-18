@@ -1,5 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import {} from 'lodash';
+import { Subscription } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -53,7 +63,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
@@ -65,6 +75,8 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	value: boolean;
 	toggled = false;
 	uniqueId: string;
+
+	private sub$$: Subscription;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -78,7 +90,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	}
 
 	ngAfterViewInit() {
-		this.store
+		this.sub$$ = this.store
 			.listenPrefs$((prefs) => prefs[this.field])
 			.pipe(
 				map(([pref]) => pref),
@@ -91,6 +103,12 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 				this.value = value;
 				this.cdr?.detectChanges();
 			});
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$?.unsubscribe();
 	}
 
 	async toggleValue() {

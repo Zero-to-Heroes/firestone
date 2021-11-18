@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { sortByProperties } from '../../../services/utils';
@@ -136,7 +136,7 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 					}))
 					.sort(sortByProperties((hero: Hero) => [hero.name])),
 			),
-			startWith([]),
+			// startWith([]),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((heroes) => console.debug('heroes', heroes)),

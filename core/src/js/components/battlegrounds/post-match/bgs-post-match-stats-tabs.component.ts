@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<ng-container *ngIf="{ heroStat: heroStat$ | async } as value">
 				<bgs-chart-hp
 					class="stat"
-					*ngxCacheIf="selectedTab === 'hp-by-turn'"
+					*ngIf="selectedTab === 'hp-by-turn'"
 					[stats]="_panel?.stats"
 					[mainPlayerCardId]="mainPlayerCardId"
 					[visible]="selectedTab === 'hp-by-turn'"
@@ -49,21 +49,21 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</bgs-chart-hp>
 				<bgs-winrate-chart
 					class="stat"
-					*ngxCacheIf="selectedTab === 'winrate-per-turn'"
+					*ngIf="selectedTab === 'winrate-per-turn'"
 					[heroStat]="value.heroStat"
 					[battleResultHistory]="_panel?.stats?.battleResultHistory"
 				>
 				</bgs-winrate-chart>
 				<bgs-chart-warband-stats
 					class="stat"
-					*ngxCacheIf="selectedTab === 'warband-total-stats-by-turn'"
+					*ngIf="selectedTab === 'warband-total-stats-by-turn'"
 					[heroStat]="value.heroStat"
 					[stats]="_panel?.stats"
 				>
 				</bgs-chart-warband-stats>
 				<bgs-chart-warband-composition
 					class="stat"
-					*ngxCacheIf="selectedTab === 'warband-composition-by-turn'"
+					*ngIf="selectedTab === 'warband-composition-by-turn'"
 					[stats]="_panel?.stats"
 					[availableTribes]="_panel?.availableTribes"
 					[visible]="selectedTab === 'warband-composition-by-turn'"

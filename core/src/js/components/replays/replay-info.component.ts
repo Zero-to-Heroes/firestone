@@ -1,8 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ScenarioId } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { Subscription } from 'rxjs';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -163,7 +172,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
 	@Input() displayCoin = true;
@@ -214,6 +223,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	loots: InternalLoot[];
 
 	private bgsPerfectGame: boolean;
+	private sub$$: Subscription;
 
 	constructor(
 		private readonly sanitizer: DomSanitizer,
@@ -225,10 +235,18 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	}
 
 	ngAfterViewInit() {
-		this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe((replaysShowClassIcon) => {
-			this.replaysShowClassIcon = replaysShowClassIcon;
-			this.updateInfo();
-		});
+		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe(
+			(replaysShowClassIcon) => {
+				this.replaysShowClassIcon = replaysShowClassIcon;
+				this.updateInfo();
+			},
+		);
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$.unsubscribe();
 	}
 
 	showReplay() {

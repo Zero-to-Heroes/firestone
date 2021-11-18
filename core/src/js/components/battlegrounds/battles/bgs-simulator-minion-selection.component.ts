@@ -12,7 +12,7 @@ import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -281,7 +281,7 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 					}))
 					.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name])),
 			),
-			startWith([]),
+			// startWith([]),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			// tap((heroes) => console.debug('minions', heroes)),

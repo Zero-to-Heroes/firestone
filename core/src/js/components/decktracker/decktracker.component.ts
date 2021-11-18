@@ -19,25 +19,25 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 						></global-header>
 						<menu-selection-decktracker
 							class="menu-selection"
-							*ngxCacheIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
+							*ngIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
 						>
 						</menu-selection-decktracker>
 						<decktracker-filters></decktracker-filters>
 						<decktracker-decks
-							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
+							*ngIf="navigation.navigationDecktracker.currentView === 'decks'"
 							[decks]="_state?.decks"
 						></decktracker-decks>
 						<decktracker-ladder-stats
-							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'ladder-stats'"
+							*ngIf="navigation.navigationDecktracker.currentView === 'ladder-stats'"
 							[state]="_state"
 						></decktracker-ladder-stats>
 						<decktracker-deck-details
-							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
+							*ngIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 							[state]="_state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
 						<decktracker-rating-graph
-							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'ladder-ranking'"
+							*ngIf="navigation.navigationDecktracker.currentView === 'ladder-ranking'"
 						></decktracker-rating-graph>
 					</div>
 				</with-loading>
@@ -49,12 +49,12 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 				}"
 			>
 				<decktracker-deck-recap
-					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
+					*ngIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 					[state]="_state"
 					[navigation]="navigation"
 				></decktracker-deck-recap>
 				<decktracker-replays-recap
-					*ngxCacheIf="showReplaysRecap()"
+					*ngIf="showReplaysRecap()"
 					[state]="_state"
 					[navigation]="navigation"
 				></decktracker-replays-recap>
@@ -69,13 +69,13 @@ export class DecktrackerComponent {
 			return;
 		}
 		this._state = value;
-		// this.showAds = this._state?.showAds;
+		this.loading = this._state?.isLoading;
 	}
 
 	@Input() showAds: boolean;
-	@Input() loading: boolean;
 	@Input() navigation: NavigationState;
 
+	loading: boolean;
 	_state: DecktrackerState;
 	// showAds: boolean;
 

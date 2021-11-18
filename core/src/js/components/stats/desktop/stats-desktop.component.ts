@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
 import { StatsCategoryType } from '../../../models/mainwindow/stats/stats-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -31,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</li>
 						</ul>
 						<stats-filters> </stats-filters>
-						<stats-xp-graph *ngxCacheIf="category.value?.id === 'xp-graph'">></stats-xp-graph>
+						<stats-xp-graph *ngIf="category.value?.id === 'xp-graph'">></stats-xp-graph>
 					</div>
 				</with-loading>
 			</section>
@@ -53,7 +53,7 @@ export class StatsDesktopComponent extends AbstractSubscriptionComponent {
 			.pipe(
 				map(([loading]) => loading),
 				distinctUntilChanged(),
-				startWith(true),
+				// startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

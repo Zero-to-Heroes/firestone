@@ -35,12 +35,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						{{ getLabel(tab) }}
 					</li>
 				</ul>
-				<bgs-last-warbands class="stat" *ngxCacheIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
-				<bgs-mmr-evolution-for-hero class="stat" *ngxCacheIf="selectedTab === 'mmr'">
-				</bgs-mmr-evolution-for-hero>
-				<bgs-warband-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'warband-stats'">
+				<bgs-last-warbands class="stat" *ngIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
+				<bgs-mmr-evolution-for-hero class="stat" *ngIf="selectedTab === 'mmr'"> </bgs-mmr-evolution-for-hero>
+				<bgs-warband-stats-for-hero class="stat" *ngIf="selectedTab === 'warband-stats'">
 				</bgs-warband-stats-for-hero>
-				<bgs-winrate-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'winrate-stats'">
+				<bgs-winrate-stats-for-hero class="stat" *ngIf="selectedTab === 'winrate-stats'">
 				</bgs-winrate-stats-for-hero>
 			</div>
 		</div>

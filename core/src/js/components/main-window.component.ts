@@ -87,39 +87,35 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							[currentUser]="dataState.currentUser"
 							[socialShareUserInfo]="dataState.socialShareUserInfo"
 							[globalStats]="dataState.globalStats"
-							*ngxCacheIf="navigationState.currentApp === 'achievements'"
+							*ngIf="navigationState.currentApp === 'achievements'"
 						>
 						</achievements>
 						<collection
 							class="main-section"
 							[state]="dataState.binder"
 							[navigation]="navigationState"
-							*ngxCacheIf="navigationState.currentApp === 'collection'"
+							*ngIf="navigationState.currentApp === 'collection'"
 						></collection>
 						<decktracker
 							class="main-section"
 							[state]="dataState?.decktracker"
 							[showAds]="dataState?.showAds"
-							[loading]="dataState?.isLoading"
 							[navigation]="navigationState"
-							*ngxCacheIf="navigationState.currentApp === 'decktracker'"
+							*ngIf="navigationState.currentApp === 'decktracker'"
 						>
 						</decktracker>
 						<battlegrounds-desktop
 							class="main-section"
-							*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
+							*ngIf="navigationState.currentApp === 'battlegrounds'"
 						>
 						</battlegrounds-desktop>
-						<mercenaries-desktop
-							class="main-section"
-							*ngxCacheIf="navigationState.currentApp === 'mercenaries'"
-						>
+						<mercenaries-desktop class="main-section" *ngIf="navigationState.currentApp === 'mercenaries'">
 						</mercenaries-desktop>
-						<duels-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'duels'">
+						<duels-desktop class="main-section" *ngIf="navigationState.currentApp === 'duels'">
 						</duels-desktop>
-						<arena-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'arena'">
+						<arena-desktop class="main-section" *ngIf="navigationState.currentApp === 'arena'">
 						</arena-desktop>
-						<stats-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'stats'">
+						<stats-desktop class="main-section" *ngIf="navigationState.currentApp === 'stats'">
 						</stats-desktop>
 					</section>
 				</div>

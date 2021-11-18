@@ -4,10 +4,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
+	OnDestroy,
 	Optional,
 	ViewRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -61,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -86,6 +89,8 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	_deckState: DeckState;
 	isScroll: boolean;
 
+	private sub$$: Subscription;
+
 	constructor(
 		private el: ElementRef,
 		@Optional() private ow: OverwolfService,
@@ -96,7 +101,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	}
 
 	ngAfterViewInit() {
-		this.store
+		this.sub$$ = this.store
 			.listenPrefs$((prefs) => prefs.secretsHelperScale)
 			.pipe(
 				debounceTime(100),
@@ -108,6 +113,12 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 			.subscribe((scale) => {
 				this.refreshScroll();
 			});
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		super.ngOnDestroy();
+		this.sub$$.unsubscribe();
 	}
 
 	private refreshScroll() {

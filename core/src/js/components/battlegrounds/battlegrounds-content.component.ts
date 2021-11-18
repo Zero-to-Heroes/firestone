@@ -59,12 +59,12 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			>
 				<div class="title">{{ value.currentPanel?.name }}</div>
 				<ng-container>
-					<bgs-hero-selection-overview *ngxCacheIf="value.currentPanelId === 'bgs-hero-selection-overview'">
+					<bgs-hero-selection-overview *ngIf="value.currentPanelId === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
-					<bgs-next-opponent-overview *ngxCacheIf="value.currentPanelId === 'bgs-next-opponent-overview'">
+					<bgs-next-opponent-overview *ngIf="value.currentPanelId === 'bgs-next-opponent-overview'">
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						*ngxCacheIf="value.currentPanelId === 'bgs-post-match-stats'"
+						*ngIf="value.currentPanelId === 'bgs-post-match-stats'"
 						[panel]="value.currentPanel"
 						[reviewId]="reviewId$ | async"
 						[faceOffs]="faceOffs$ | async"
@@ -72,7 +72,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						[gameEnded]="gameEnded$ | async"
 					>
 					</bgs-post-match-stats>
-					<bgs-battles *ngxCacheIf="value.currentPanelId === 'bgs-battles'"> </bgs-battles>
+					<bgs-battles *ngIf="value.currentPanelId === 'bgs-battles'"> </bgs-battles>
 				</ng-container>
 			</section>
 		</div>

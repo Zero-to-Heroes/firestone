@@ -1,11 +1,21 @@
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
@@ -109,7 +119,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattleComponent implements AfterViewInit {
+export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	@Input() simulationUpdater: (
 		currentFaceOff: BgsFaceOffWithSimulation,
 		partialUpdate: BgsFaceOffWithSimulation,
@@ -181,6 +191,8 @@ export class BgsBattleComponent implements AfterViewInit {
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
+	private sub$$: Subscription;
+
 	constructor(
 		private readonly simulationService: BgsBattleSimulationService,
 		private readonly prefs: PreferencesService,
@@ -193,7 +205,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	async ngAfterViewInit() {
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
-		this.overlayRef.backdropClick().subscribe(() => {
+		this.sub$$ = this.overlayRef.backdropClick().subscribe(() => {
 			console.debug('background clicked');
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -208,6 +220,11 @@ export class BgsBattleComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		this.sub$$.unsubscribe();
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {

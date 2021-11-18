@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -31,12 +31,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</li>
 						</ul>
 						<arena-filters> </arena-filters>
-						<arena-runs-list *ngxCacheIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
+						<arena-runs-list *ngIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
-				<arena-classes-recap *ngxCacheIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
+				<arena-classes-recap *ngIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
 			</section>
 		</div>
 	`,
@@ -55,7 +55,7 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent {
 			.pipe(
 				map(([loading]) => loading),
 				distinctUntilChanged(),
-				startWith(true),
+				// startWith(true),
 				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

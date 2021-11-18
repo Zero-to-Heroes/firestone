@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -79,7 +79,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent {
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(
 				// Prevent NPE
-				startWith([]),
+				// startWith([]),
 				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs ?? [])),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
