@@ -56,6 +56,17 @@ export class AppUiStoreService {
 
 	constructor(private readonly ow: OverwolfService, private allCards: CardsFacadeService) {
 		window['appStore'] = this;
+		window['debugAppStore'] = () =>
+			console.debug({
+				mainStore: this.mainStore.observers,
+				prefs: this.prefs.observers,
+				deckStore: this.deckStore.observers,
+				battlegroundsStore: this.battlegroundsStore.observers,
+				mercenariesStore: this.mercenariesStore.observers,
+				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
+				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
+				bgsHeroStats: this.bgsHeroStats.observers,
+			});
 	}
 
 	// This is called after all constructors have been called, so everything should be filled
