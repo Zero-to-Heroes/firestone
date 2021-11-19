@@ -23,6 +23,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -165,6 +166,7 @@ export class DeckTrackerOverlayRootComponent
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
+		private readonly cardsHighlight: CardsHighlightService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -345,6 +347,7 @@ export class DeckTrackerOverlayRootComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
+		this.cardsHighlight.shutDown();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 
@@ -461,7 +464,7 @@ export class DeckTrackerOverlayRootComponent
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr?.detectChanges();
 		}
 	}
 }

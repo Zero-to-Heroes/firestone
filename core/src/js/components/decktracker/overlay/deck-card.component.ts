@@ -186,7 +186,6 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
-	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,

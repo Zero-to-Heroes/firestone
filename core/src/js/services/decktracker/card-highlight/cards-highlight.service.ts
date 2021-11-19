@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { AbstractSubscriptionService } from '../../abstract-subscription.service';
 import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import {
@@ -41,14 +42,21 @@ import {
 	taunt,
 } from './selectors';
 
+// We don't want a shared service with a facade here, as we don't want any communitication between
+// different decks
 @Injectable()
-export class CardsHighlightService {
+export class CardsHighlightService extends AbstractSubscriptionService {
 	private handlers: { [uniqueId: string]: Handler } = {};
 
 	private gameState: GameState;
 
-	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreFacadeService) {
+	constructor(private readonly prefs: PreferencesService, protected readonly store: AppUiStoreFacadeService) {
+		super(store);
 		this.init();
+	}
+
+	public shutDown() {
+		super.onDestroy();
 	}
 
 	private async init() {
@@ -58,6 +66,7 @@ export class CardsHighlightService {
 			.pipe(
 				map(([gameState]) => gameState),
 				filter((gameState) => !!gameState),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe((gameState) => (this.gameState = gameState));
 	}
