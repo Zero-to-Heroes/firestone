@@ -9,7 +9,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
 import { FeatureFlags } from '../services/feature-flags';
@@ -17,7 +16,6 @@ import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 declare let amplitude;
@@ -165,24 +163,10 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	async ngAfterViewInit() {
 		this.userName$ = this.store
 			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(
-				debounceTime(100),
-				map(([currentUser]) => currentUser?.username),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting userName in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentUser]) => currentUser?.username));
 		this.avatarUrl$ = this.store
 			.listen$(([main, nav, prefs]) => main.currentUser)
-			.pipe(
-				debounceTime(100),
-				map(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting avatarUrl in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.showGoPremium = await this.adService.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {

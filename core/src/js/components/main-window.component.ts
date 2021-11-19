@@ -184,35 +184,10 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		this.windowId = currentWindow.id;
 		this.adRefershToken$ = this.store
 			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				debounceTime(100),
-				map(([gameState]) => gameState.gameStarted),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting adRefershToken in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([gameState]) => gameState.gameStarted));
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
-			.pipe(
-				debounceTime(100),
-				map(([showFtue]) => showFtue),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting showFtue in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
-		// this.activeTheme$ = combineLatest(
-		// 	this.store.listen$(
-		// 		([main, nav, prefs]) => main.showFtue,
-		// 		([main, nav, prefs]) => nav.currentApp,
-		// 	),
-		// 	this.displayingNewVersion.asObservable(),
-		// ).pipe(
-		// 	this.mapData(([[showFtue, currentApp], displayingNewVersion]) =>
-		// 		this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
-		// 	),
-		// );
+			.pipe(this.mapData(([showFtue]) => showFtue));
 		this.activeTheme$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.showFtue,
@@ -220,28 +195,16 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 			),
 			this.displayingNewVersion.asObservable(),
 		).pipe(
-			debounceTime(100),
-			map(([[showFtue, currentApp], displayingNewVersion]) =>
+			this.mapData(([[showFtue, currentApp], displayingNewVersion]) =>
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
-			distinctUntilChanged(),
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting activeTheme in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 		this.showAds$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.showAds,
 				([main, nav, prefs]) => main.showFtue,
 			)
-			.pipe(
-				debounceTime(100),
-				map(([showAds, showFtue]) => showAds && !showFtue),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting showAds in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([showAds, showFtue]) => showAds && !showFtue));
 		// TODO: remove this to avoid having too many refreshes every time any tiny bit of the state
 		// changes
 		this.dataState$ = this.store

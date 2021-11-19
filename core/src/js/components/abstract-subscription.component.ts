@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, HostListener, Injectable, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../models/preferences';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../services/ui-store/app-ui-store.service';
@@ -28,20 +28,19 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 				takeUntil(this.destroyed$),
 			);
 	}
-	// export declare function map<T, R>(project: (value: T, index: number) => R, thisArg?: any): OperatorFunction<T, R>;
 
-	// protected mapData<R>(
-	// 	extractor: (...args) => R,
-	// 	equality = null,
-	// debounceTime = 100,
-	// ): UnaryFunction<Observable<unknown>, Observable<R>> {
-	// 	return pipe(
-	// 		debounceTime(100),
-	// 		map(extractor),
-	// 		distinctUntilChanged(equality ?? ((a, b) => a === b)),
-	// 		tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-	// 		tap((filter) => cdLog('emitting activeTheme in ', this.constructor.name, filter)),
-	// 		takeUntil(this.destroyed$),
-	// 	);
-	// }
+	protected mapData<T, R>(
+		extractor: (arg: T) => R,
+		equality = null,
+		debounceTimeMs = 100,
+	): UnaryFunction<Observable<T>, Observable<R>> {
+		return pipe(
+			debounceTime(debounceTimeMs),
+			map(extractor),
+			distinctUntilChanged(equality ?? ((a, b) => a === b)),
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
+		);
+	}
 }
