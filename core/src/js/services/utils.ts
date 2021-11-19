@@ -60,7 +60,7 @@ const buildAppValue = (appVersion: string): number => {
 	return 1000 * major + 100 * minor + patch;
 };
 
-export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]): boolean => {
+export const arraysEqual = (a: readonly any[] | any[] | any, b: readonly any[] | any[] | any): boolean => {
 	if (a == null && b == null) {
 		return true;
 	}

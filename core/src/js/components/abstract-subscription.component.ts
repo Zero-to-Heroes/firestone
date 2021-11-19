@@ -4,6 +4,7 @@ import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/op
 import { Preferences } from '../models/preferences';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../services/utils';
 
 @Injectable()
 export abstract class AbstractSubscriptionComponent implements OnDestroy {
@@ -36,6 +37,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 	): UnaryFunction<Observable<T>, Observable<R>> {
 		return pipe(
 			debounceTime(debounceTimeMs),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(extractor),
 			distinctUntilChanged(equality ?? ((a, b) => a === b)),
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

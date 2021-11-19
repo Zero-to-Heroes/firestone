@@ -32,7 +32,12 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper
-			*ngIf="{ showAds: showAds$ | async, showFtue: showFtue$ | async, dataState: dataState$ | async } as value"
+			*ngIf="{
+				showAds: showAds$ | async,
+				showFtue: showFtue$ | async,
+				dataState: dataState$ | async,
+				currentApp: currentApp$ | async
+			} as value"
 			[activeTheme]="activeTheme$ | async"
 			[allowResize]="true"
 		>
@@ -41,7 +46,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 					<div class="navigation" [ngClass]="{ 'navigation-ftue': value.showFtue }">
 						<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
 						<div class="main-menu-separator"></div>
-						<menu-selection [selectedModule]="navigationState.currentApp"></menu-selection>
+						<menu-selection [selectedModule]="value.currentApp"></menu-selection>
 					</div>
 					<div class="main">
 						<section class="menu-bar">
@@ -55,7 +60,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 								<control-bug></control-bug>
 								<control-settings
 									[windowId]="windowId"
-									[settingsApp]="navigationState?.currentApp"
+									[settingsApp]="value.currentApp"
 								></control-settings>
 								<control-help (help)="onHelp()"></control-help>
 								<control-discord></control-discord>
@@ -80,7 +85,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 								class="main-section"
 								[state]="value.dataState"
 								[navigation]="navigationState"
-								*ngIf="navigationState.currentApp === 'replays'"
+								*ngIf="value.currentApp === 'replays'"
 							></replays>
 							<achievements
 								class="main-section"
@@ -89,43 +94,34 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 								[currentUser]="value.dataState.currentUser"
 								[socialShareUserInfo]="value.dataState.socialShareUserInfo"
 								[globalStats]="value.dataState.globalStats"
-								*ngIf="navigationState.currentApp === 'achievements'"
+								*ngIf="value.currentApp === 'achievements'"
 							>
 							</achievements>
 							<collection
 								class="main-section"
 								[state]="value.dataState.binder"
 								[navigation]="navigationState"
-								*ngIf="navigationState.currentApp === 'collection'"
+								*ngIf="value.currentApp === 'collection'"
 							></collection>
 							<decktracker
 								class="main-section"
 								[state]="value.dataState.decktracker"
 								[showAds]="value.showAds"
 								[navigation]="navigationState"
-								*ngIf="navigationState.currentApp === 'decktracker'"
+								*ngIf="value.currentApp === 'decktracker'"
 							>
 							</decktracker>
-							<battlegrounds-desktop
-								class="main-section"
-								*ngIf="navigationState.currentApp === 'battlegrounds'"
-							>
+							<battlegrounds-desktop class="main-section" *ngIf="value.currentApp === 'battlegrounds'">
 							</battlegrounds-desktop>
-							<mercenaries-desktop
-								class="main-section"
-								*ngIf="navigationState.currentApp === 'mercenaries'"
-							>
+							<mercenaries-desktop class="main-section" *ngIf="value.currentApp === 'mercenaries'">
 							</mercenaries-desktop>
-							<duels-desktop class="main-section" *ngIf="navigationState.currentApp === 'duels'">
-							</duels-desktop>
-							<arena-desktop class="main-section" *ngIf="navigationState.currentApp === 'arena'">
-							</arena-desktop>
-							<stats-desktop class="main-section" *ngIf="navigationState.currentApp === 'stats'">
-							</stats-desktop>
+							<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
+							<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
+							<stats-desktop class="main-section" *ngIf="value.currentApp === 'stats'"> </stats-desktop>
 						</section>
 					</div>
 				</section>
-				<ftue *ngIf="value.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
+				<ftue *ngIf="value.showFtue" [selectedModule]="value.currentApp"> </ftue>
 				<ads
 					[parentComponent]="'main-window'"
 					[adRefershToken]="adRefershToken$ | async"
@@ -148,6 +144,7 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 	showAds$: Observable<boolean>;
 	showFtue$: Observable<boolean>;
 	dataState$: Observable<MainWindowState>;
+	currentApp$: Observable<CurrentAppType>;
 
 	navigationState: NavigationState;
 	windowId: string;
@@ -188,6 +185,9 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		this.showFtue$ = this.store
 			.listen$(([main, nav, prefs]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => showFtue));
+		this.currentApp$ = this.store
+			.listen$(([main, nav, prefs]) => nav.currentApp)
+			.pipe(this.mapData(([currentApp]) => currentApp));
 		this.activeTheme$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.showFtue,

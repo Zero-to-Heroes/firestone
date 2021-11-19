@@ -1,20 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
-import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
-import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ReplaysFilterEvent } from '../../../services/mainwindow/store/events/replays/replays-filter-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-deck-recap',
@@ -23,19 +14,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-deck-recap.component.scss`,
 	],
 	template: `
-		<div class="decktracker-deck-recap">
+		<div class="decktracker-deck-recap" *ngIf="info$ | async as info">
 			<div class="title">Overall stats</div>
 
 			<div class="deck-summary">
 				<div class="deck-image">
-					<img class="skin" [src]="skin" />
+					<img class="skin" [src]="info.skin" />
 					<img class="frame" src="assets/images/deck/hero_frame.png" />
 				</div>
 				<div class="deck-title">
 					<div class="deck-name">
-						<div class="text">{{ deckName }}</div>
+						<div class="text">{{ info.deckName }}</div>
 						<div class="archetype" *ngIf="enableArchetype">
-							<div class="name">{{ deckArchetype }}</div>
+							<div class="name">{{ info.deckArchetype }}</div>
 							<div
 								class="help"
 								inlineSVG="assets/svg/help.svg"
@@ -52,12 +43,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						<div class="watch">Watch replays</div>
 					</div>
 				</div>
-				<div class="best-against" *ngIf="bestAgainsts?.length">
+				<div class="best-against" *ngIf="info.bestAgainsts?.length">
 					<div class="header">Best against</div>
 					<ul class="classes">
 						<img
 							class="class-icon"
-							*ngFor="let bestAgainst of bestAgainsts"
+							*ngFor="let bestAgainst of info.bestAgainsts"
 							[src]="bestAgainst.icon"
 							[helpTooltip]="bestAgainst.playerClass"
 						/>
@@ -71,7 +62,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							<use xlink:href="assets/svg/replays/replays_icons.svg#match_result_victory" />
 						</svg>
 					</div>
-					<div class="data winrate-data">{{ winRatePercentage }}%</div>
+					<div class="data winrate-data">{{ info.winRatePercentage }}%</div>
 					<div class="text winrate-text">winrate</div>
 				</div>
 				<div class="recap games">
@@ -80,99 +71,83 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							<use xlink:href="assets/svg/sprite.svg#star" />
 						</svg>
 					</div>
-					<div class="data games-data">{{ games }}</div>
+					<div class="data games-data">{{ info.games }}</div>
 					<div class="text games-text">games</div>
 				</div>
-				<deck-mana-curve class="recap mana-curve" [deckstring]="deck?.deckstring"></deck-mana-curve>
+				<deck-mana-curve class="recap mana-curve" [deckstring]="info.deckstring"></deck-mana-curve>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckRecapComponent implements AfterViewInit {
+export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
 
-	@Input() set state(value: DecktrackerState) {
-		this._state = value;
-		this.updateValues();
+	info$: Observable<Info>;
+
+	private deck$: Observable<DeckSummary>;
+	private deckstring: string;
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
-
-	@Input() set navigation(value: NavigationState) {
-		this._navigation = value;
-		this.updateValues();
-	}
-
-	// cards: readonly VisualDeckCard[];
-	deck: DeckSummary;
-	skin: string;
-	deckName: string;
-	deckArchetype: string;
-	deckstring: string;
-	winRatePercentage: string;
-	games: number;
-	bestAgainsts: readonly BestAgainst[];
-
-	private _state: DecktrackerState;
-	private _navigation: NavigationState;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.deck$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.decktracker.decks,
+				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
+			)
+			.pipe(
+				this.mapData(([decks, selectedDeckstring]) =>
+					decks.find((deck) => deck.deckstring === selectedDeckstring),
+				),
+			);
+		this.deck$.subscribe((deck) => (this.deckstring = deck.deckstring));
+		this.info$ = this.deck$.pipe(
+			this.mapData((deck) => {
+				return {
+					skin: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${deck.skin}.jpg`,
+					deckName: deck.deckName,
+					deckArchetype: deck.deckArchetype,
+					deckstring: deck.deckstring,
+					winRatePercentage:
+						deck.winRatePercentage != null
+							? parseFloat('' + deck.winRatePercentage).toLocaleString('en-US', {
+									minimumIntegerDigits: 1,
+									maximumFractionDigits: 1,
+							  })
+							: '-',
+					games: deck.totalGames,
+					bestAgainsts: [...deck.matchupStats]
+						.filter((matchup) => matchup.totalWins > 0)
+						.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)
+						.slice(0, 3)
+						.map(
+							(matchUp) =>
+								({
+									icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
+									playerClass: formatClass(matchUp.opponentClass),
+								} as BestAgainst),
+						),
+				};
+			}),
+		);
 	}
 
 	showReplays() {
-		this.stateUpdater.next(new ReplaysFilterEvent('deckstring', this.deck.deckstring));
+		this.store.send(new ReplaysFilterEvent('deckstring', this.deckstring));
 	}
+}
 
-	private updateValues() {
-		if (!this._state?.decks || !this._navigation?.navigationDecktracker) {
-			return;
-		}
-
-		this.deck = this._state.decks.find(
-			(deck) => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
-		);
-		if (!this.deck) {
-			return;
-		}
-
-		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.deck.skin}.jpg`;
-		this.deckName = this.deck.deckName;
-		this.deckArchetype = this.deck.deckArchetype;
-		this.deckstring = this.deck.deckstring;
-		this.winRatePercentage =
-			this.deck.winRatePercentage != null
-				? parseFloat('' + this.deck.winRatePercentage).toLocaleString('en-US', {
-						minimumIntegerDigits: 1,
-						maximumFractionDigits: 1,
-				  })
-				: '-';
-		this.games = this.deck.totalGames;
-		this.bestAgainsts = null;
-
-		setTimeout(() => {
-			if (!this.deck) {
-				return;
-			}
-			this.bestAgainsts = [...this.deck.matchupStats]
-				.filter((matchup) => matchup.totalWins > 0)
-				.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)
-				.slice(0, 3)
-				.map(
-					(matchUp) =>
-						({
-							icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
-							playerClass: formatClass(matchUp.opponentClass),
-						} as BestAgainst),
-				);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
+interface Info {
+	readonly skin: string;
+	readonly deckName: string;
+	readonly deckArchetype: string;
+	readonly deckstring: string;
+	readonly winRatePercentage: string;
+	readonly games: number;
+	readonly bestAgainsts: readonly BestAgainst[];
 }
 
 interface BestAgainst {

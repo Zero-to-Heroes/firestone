@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
+import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker',
@@ -10,34 +14,32 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 		`../../../css/component/decktracker/decktracker.component.scss`,
 	],
 	template: `
-		<div class="app-section decktracker">
+		<div
+			class="app-section decktracker"
+			*ngIf="{ currentView: currentView$ | async, menuDisplayType: menuDisplayType$ | async } as value"
+		>
 			<section class="main divider">
-				<with-loading [isLoading]="!_state || loading">
+				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content">
-						<global-header
-							*ngIf="navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'"
-						></global-header>
-						<menu-selection-decktracker
-							class="menu-selection"
-							*ngIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
-						>
+						<global-header *ngIf="value.menuDisplayType === 'breadcrumbs'"></global-header>
+						<menu-selection-decktracker class="menu-selection" *ngIf="value.menuDisplayType === 'menu'">
 						</menu-selection-decktracker>
 						<decktracker-filters></decktracker-filters>
 						<decktracker-decks
-							*ngIf="navigation.navigationDecktracker.currentView === 'decks'"
+							*ngIf="value.currentView === 'decks'"
 							[decks]="_state?.decks"
 						></decktracker-decks>
 						<decktracker-ladder-stats
-							*ngIf="navigation.navigationDecktracker.currentView === 'ladder-stats'"
+							*ngIf="value.currentView === 'ladder-stats'"
 							[state]="_state"
 						></decktracker-ladder-stats>
 						<decktracker-deck-details
-							*ngIf="navigation.navigationDecktracker.currentView === 'deck-details'"
+							*ngIf="value.currentView === 'deck-details'"
 							[state]="_state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
 						<decktracker-rating-graph
-							*ngIf="navigation.navigationDecktracker.currentView === 'ladder-ranking'"
+							*ngIf="value.currentView === 'ladder-ranking'"
 						></decktracker-rating-graph>
 					</div>
 				</with-loading>
@@ -45,45 +47,54 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 			<section
 				class="secondary"
 				[ngClass]="{
-					'second-display': !showAds && navigation.navigationDecktracker.currentView === 'deck-details'
+					'second-display': !showAds && value.currentView === 'deck-details'
 				}"
 			>
-				<decktracker-deck-recap
-					*ngIf="navigation.navigationDecktracker.currentView === 'deck-details'"
-					[state]="_state"
-					[navigation]="navigation"
-				></decktracker-deck-recap>
-				<decktracker-replays-recap
-					*ngIf="showReplaysRecap()"
-					[state]="_state"
-					[navigation]="navigation"
-				></decktracker-replays-recap>
+				<decktracker-deck-recap *ngIf="value.currentView === 'deck-details'"></decktracker-deck-recap>
+				<decktracker-replays-recap *ngIf="showReplaysRecap(value.currentView)"></decktracker-replays-recap>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerComponent {
+export class DecktrackerComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+	currentView$: Observable<DecktrackerViewType>;
+	menuDisplayType$: Observable<string>;
+	loading$: Observable<boolean>;
+
 	@Input() set state(value: DecktrackerState) {
 		if (this._state === value) {
 			return;
 		}
 		this._state = value;
-		this.loading = this._state?.isLoading;
 	}
 
 	@Input() showAds: boolean;
 	@Input() navigation: NavigationState;
 
-	loading: boolean;
 	_state: DecktrackerState;
-	// showAds: boolean;
 
-	showReplaysRecap(): boolean {
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
+
+	ngAfterViewInit() {
+		this.currentView$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
+			.pipe(this.mapData(([currentView]) => currentView));
+		this.menuDisplayType$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.menuDisplayType)
+			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
+		this.loading$ = this.store
+			.listen$(([main, nav, prefs]) => main.decktracker.isLoading)
+			.pipe(this.mapData(([isLoading]) => isLoading));
+	}
+
+	showReplaysRecap(currentView: DecktrackerViewType): boolean {
 		return (
-			this.navigation.navigationDecktracker.currentView === 'decks' ||
-			this.navigation.navigationDecktracker.currentView === 'ladder-stats' ||
-			(this.navigation.navigationDecktracker.currentView === 'deck-details' && !this.showAds)
+			currentView === 'decks' ||
+			currentView === 'ladder-stats' ||
+			(currentView === 'deck-details' && !this.showAds)
 		);
 	}
 }
