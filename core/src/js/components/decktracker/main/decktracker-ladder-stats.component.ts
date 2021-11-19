@@ -1,9 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
-import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
@@ -14,13 +14,13 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	],
 	template: `
 		<div class="decktracker-ladder-stats">
-			<decktracker-stats-for-replays [replays]="replays"></decktracker-stats-for-replays>
+			<decktracker-stats-for-replays [replays]="replays$ | async"></decktracker-stats-for-replays>
 			<div class="graphs">
 				<div class="graph player-popularity">
 					<div class="title">Player class breakdown</div>
 					<pie-chart
 						class="chart player-popularity-chart "
-						[data]="playerPieChartData"
+						[data]="playerPieChartData$ | async"
 						[options]="pieChartOptions"
 					></pie-chart>
 				</div>
@@ -28,7 +28,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 					<div class="title">Opponent class breakdown</div>
 					<pie-chart
 						class="chart opponents-popularity-chart"
-						[data]="opponentPieChartData"
+						[data]="opponentPieChartData$ | async"
 						[options]="pieChartOptions"
 					></pie-chart>
 				</div>
@@ -37,39 +37,30 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerLadderStatsComponent implements AfterViewInit {
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+export class DecktrackerLadderStatsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
+	replays$: Observable<readonly GameStat[]>;
+	playerPieChartData$: Observable<readonly InputPieChartData[]>;
+	opponentPieChartData$: Observable<readonly InputPieChartData[]>;
 
-	@Input() set state(value: DecktrackerState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateInfos();
-	}
-
-	replays: readonly GameStat[];
-	// stats: readonly InternalStat[];
-	playerPieChartData: readonly InputPieChartData[];
-	opponentPieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
 
-	private _state: DecktrackerState;
-
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	private updateInfos() {
-		if (!this._state?.decks) {
-			return;
-		}
+	ngAfterContentInit() {
+		this.replays$ = this.store
+			.listen$(([main, nav, prefs]) => main.decktracker.decks)
+			.pipe(this.mapData(([decks]) => decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), [])));
+		this.playerPieChartData$ = this.replays$.pipe(this.mapData((replays) => this.buildPlayerPieChartData(replays)));
+		this.opponentPieChartData$ = this.replays$.pipe(
+			this.mapData((replays) => this.buildOpponentPieChartData(replays)),
+		);
+	}
 
-		this.replays = this._state.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []);
-		this.playerPieChartData = this.buildPlayerPieChartData(this.replays);
-		this.opponentPieChartData = this.buildOpponentPieChartData(this.replays);
+	ngAfterViewInit() {
 		this.pieChartOptions = this.buildPieChartOptions();
 	}
 

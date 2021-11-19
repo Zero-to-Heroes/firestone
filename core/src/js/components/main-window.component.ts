@@ -106,9 +106,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							></collection>
 							<decktracker
 								class="main-section"
-								[state]="value.dataState.decktracker"
 								[showAds]="value.showAds"
-								[navigation]="navigationState"
 								*ngIf="value.currentApp === 'decktracker'"
 							>
 							</decktracker>

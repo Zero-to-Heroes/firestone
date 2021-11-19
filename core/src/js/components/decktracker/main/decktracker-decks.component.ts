@@ -1,15 +1,8 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'decktracker-decks',
@@ -18,13 +11,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-decks.component.scss`,
 	],
 	template: `
-		<div class="decktracker-decks">
-			<ul class="deck-list">
-				<li *ngFor="let deck of _decks">
+		<div class="decktracker-decks" *ngIf="decks$ | async as decks">
+			<ul class="deck-list" scrollable>
+				<li *ngFor="let deck of decks">
 					<decktracker-deck-summary [deck]="deck"></decktracker-deck-summary>
 				</li>
 			</ul>
-			<section class="empty-state" *ngIf="!_decks || _decks.length === 0">
+			<section class="empty-state" *ngIf="!decks || decks.length === 0">
 				<div class="state-container">
 					<i class="i-236X165">
 						<svg>
@@ -39,33 +32,16 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDecksComponent implements AfterViewInit {
-	_decks: readonly DeckSummary[];
+export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	decks$: Observable<readonly DeckSummary[]>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	@Input() set decks(value: readonly DeckSummary[]) {
-		this._decks = value;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const achievementsList = this.el.nativeElement.querySelector('.deck-list');
-		if (!achievementsList) {
-			return;
-		}
-		const rect = achievementsList.getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
+	ngAfterContentInit() {
+		this.decks$ = this.store
+			.listen$(([main, nav, prefs]) => main.decktracker.decks)
+			.pipe(this.mapData(([decks]) => decks));
 	}
 }
