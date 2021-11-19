@@ -8,7 +8,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
@@ -31,116 +31,129 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper *ngIf="dataState && navigationState" [activeTheme]="activeTheme" [allowResize]="true">
-			<section class="layout">
-				<div class="navigation" [ngClass]="{ 'navigation-ftue': dataState.showFtue }">
-					<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
-					<div class="main-menu-separator"></div>
-					<menu-selection
-						[selectedModule]="navigationState.currentApp"
-						[currentUser]="dataState.currentUser"
-					></menu-selection>
-				</div>
-				<div class="main">
-					<section class="menu-bar">
-						<div class="before-main-divider"></div>
-						<hotkey></hotkey>
-						<div class="controls">
-							<control-share
-								[onSocialClick]="takeScreenshotFunction"
-								[page]="navigationState?.getPageName()"
-							></control-share>
-							<control-bug></control-bug>
-							<control-settings
-								[windowId]="windowId"
-								[settingsApp]="navigationState.currentApp"
-							></control-settings>
-							<control-help (help)="onHelp()"></control-help>
-							<control-discord></control-discord>
-							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-							<control-maximize [windowId]="windowId"></control-maximize>
-							<control-close
-								[windowId]="windowId"
-								[helpTooltip]="hotkeyText"
-								helpTooltipPosition="bottom-left"
-								[isMainWindow]="true"
-								[closeAll]="true"
-							></control-close>
-						</div>
-					</section>
-					<section
-						class="content-container"
-						*ngIf="!dataState.showFtue"
-						[ngClass]="{ 'hide-ads': !_showAds }"
-					>
-						<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
-						<replays
-							class="main-section"
-							[state]="dataState"
-							[navigation]="navigationState"
-							*ngIf="navigationState.currentApp === 'replays'"
-						></replays>
-						<achievements
-							class="main-section"
-							[state]="dataState.achievements"
-							[navigation]="navigationState"
-							[currentUser]="dataState.currentUser"
-							[socialShareUserInfo]="dataState.socialShareUserInfo"
-							[globalStats]="dataState.globalStats"
-							*ngIf="navigationState.currentApp === 'achievements'"
+		<window-wrapper
+			*ngIf="{ showAds: showAds$ | async, showFtue: showFtue$ | async, dataState: dataState$ | async } as value"
+			[activeTheme]="activeTheme$ | async"
+			[allowResize]="true"
+		>
+			<ng-container *ngIf="value.dataState && navigationState">
+				<section class="layout">
+					<div class="navigation" [ngClass]="{ 'navigation-ftue': value.showFtue }">
+						<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
+						<div class="main-menu-separator"></div>
+						<menu-selection [selectedModule]="navigationState.currentApp"></menu-selection>
+					</div>
+					<div class="main">
+						<section class="menu-bar">
+							<div class="before-main-divider"></div>
+							<hotkey></hotkey>
+							<div class="controls">
+								<control-share
+									[onSocialClick]="takeScreenshotFunction"
+									[page]="navigationState?.getPageName()"
+								></control-share>
+								<control-bug></control-bug>
+								<control-settings
+									[windowId]="windowId"
+									[settingsApp]="navigationState?.currentApp"
+								></control-settings>
+								<control-help (help)="onHelp()"></control-help>
+								<control-discord></control-discord>
+								<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+								<control-maximize [windowId]="windowId"></control-maximize>
+								<control-close
+									[windowId]="windowId"
+									[helpTooltip]="hotkeyText"
+									helpTooltipPosition="bottom-left"
+									[isMainWindow]="true"
+									[closeAll]="true"
+								></control-close>
+							</div>
+						</section>
+						<section
+							class="content-container"
+							*ngIf="!value.showFtue"
+							[ngClass]="{ 'hide-ads': !value.showAds }"
 						>
-						</achievements>
-						<collection
-							class="main-section"
-							[state]="dataState.binder"
-							[navigation]="navigationState"
-							*ngIf="navigationState.currentApp === 'collection'"
-						></collection>
-						<decktracker
-							class="main-section"
-							[state]="dataState?.decktracker"
-							[showAds]="dataState?.showAds"
-							[navigation]="navigationState"
-							*ngIf="navigationState.currentApp === 'decktracker'"
-						>
-						</decktracker>
-						<battlegrounds-desktop
-							class="main-section"
-							*ngIf="navigationState.currentApp === 'battlegrounds'"
-						>
-						</battlegrounds-desktop>
-						<mercenaries-desktop class="main-section" *ngIf="navigationState.currentApp === 'mercenaries'">
-						</mercenaries-desktop>
-						<duels-desktop class="main-section" *ngIf="navigationState.currentApp === 'duels'">
-						</duels-desktop>
-						<arena-desktop class="main-section" *ngIf="navigationState.currentApp === 'arena'">
-						</arena-desktop>
-						<stats-desktop class="main-section" *ngIf="navigationState.currentApp === 'stats'">
-						</stats-desktop>
-					</section>
-				</div>
-			</section>
-			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
-			<ads [parentComponent]="'main-window'" [adRefershToken]="adRefershToken$ | async" *ngIf="_showAds"></ads>
-			<new-version-notification
-				class="new-version"
-				[forceOpen]="forceShowReleaseNotes"
-				(notificationDisplayed)="onNewVersionDisplayed($event)"
-			></new-version-notification>
+							<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
+							<replays
+								class="main-section"
+								[state]="value.dataState"
+								[navigation]="navigationState"
+								*ngIf="navigationState.currentApp === 'replays'"
+							></replays>
+							<achievements
+								class="main-section"
+								[state]="value.dataState.achievements"
+								[navigation]="navigationState"
+								[currentUser]="value.dataState.currentUser"
+								[socialShareUserInfo]="value.dataState.socialShareUserInfo"
+								[globalStats]="value.dataState.globalStats"
+								*ngIf="navigationState.currentApp === 'achievements'"
+							>
+							</achievements>
+							<collection
+								class="main-section"
+								[state]="value.dataState.binder"
+								[navigation]="navigationState"
+								*ngIf="navigationState.currentApp === 'collection'"
+							></collection>
+							<decktracker
+								class="main-section"
+								[state]="value.dataState.decktracker"
+								[showAds]="value.showAds"
+								[navigation]="navigationState"
+								*ngIf="navigationState.currentApp === 'decktracker'"
+							>
+							</decktracker>
+							<battlegrounds-desktop
+								class="main-section"
+								*ngIf="navigationState.currentApp === 'battlegrounds'"
+							>
+							</battlegrounds-desktop>
+							<mercenaries-desktop
+								class="main-section"
+								*ngIf="navigationState.currentApp === 'mercenaries'"
+							>
+							</mercenaries-desktop>
+							<duels-desktop class="main-section" *ngIf="navigationState.currentApp === 'duels'">
+							</duels-desktop>
+							<arena-desktop class="main-section" *ngIf="navigationState.currentApp === 'arena'">
+							</arena-desktop>
+							<stats-desktop class="main-section" *ngIf="navigationState.currentApp === 'stats'">
+							</stats-desktop>
+						</section>
+					</div>
+				</section>
+				<ftue *ngIf="value.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
+				<ads
+					[parentComponent]="'main-window'"
+					[adRefershToken]="adRefershToken$ | async"
+					*ngIf="value.showAds"
+				></ads>
+				<new-version-notification
+					class="new-version"
+					[forceOpen]="forceShowReleaseNotes$ | async"
+					(notificationDisplayed)="onNewVersionDisplayed($event)"
+				></new-version-notification>
+			</ng-container>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	adRefershToken$: Observable<boolean>;
+	activeTheme$: Observable<CurrentAppType | 'decktracker-desktop'>;
+	forceShowReleaseNotes$: Observable<boolean>;
+	showAds$: Observable<boolean>;
+	showFtue$: Observable<boolean>;
+	dataState$: Observable<MainWindowState>;
 
-	dataState: MainWindowState;
 	navigationState: NavigationState;
 	windowId: string;
-	activeTheme: CurrentAppType | 'decktracker-desktop';
-	displayingNewVersionNotification: boolean;
-	forceShowReleaseNotes: boolean;
-	_showAds = true;
+
+	displayingNewVersion = new BehaviorSubject<boolean>(false);
+	forceShowReleaseNotes = new BehaviorSubject<boolean>(false);
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 	hotkeyText: string;
@@ -149,7 +162,6 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 	private stateChangedListener: (message: any) => void;
 	// private navigationStateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
-	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
@@ -164,6 +176,7 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 	}
 
 	async ngAfterViewInit() {
@@ -172,50 +185,81 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		this.adRefershToken$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
-				map(([gameState]) => gameState.gameStarted),
 				debounceTime(100),
+				map(([gameState]) => gameState.gameStarted),
 				distinctUntilChanged(),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting adRefershToken in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
+		this.showFtue$ = this.store
+			.listen$(([main, nav, prefs]) => main.showFtue)
+			.pipe(
+				debounceTime(100),
+				map(([showFtue]) => showFtue),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting showFtue in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		// this.activeTheme$ = combineLatest(
+		// 	this.store.listen$(
+		// 		([main, nav, prefs]) => main.showFtue,
+		// 		([main, nav, prefs]) => nav.currentApp,
+		// 	),
+		// 	this.displayingNewVersion.asObservable(),
+		// ).pipe(
+		// 	this.mapData(([[showFtue, currentApp], displayingNewVersion]) =>
+		// 		this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
+		// 	),
+		// );
+		this.activeTheme$ = combineLatest(
+			this.store.listen$(
+				([main, nav, prefs]) => main.showFtue,
+				([main, nav, prefs]) => nav.currentApp,
+			),
+			this.displayingNewVersion.asObservable(),
+		).pipe(
+			debounceTime(100),
+			map(([[showFtue, currentApp], displayingNewVersion]) =>
+				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
+			),
+			distinctUntilChanged(),
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting activeTheme in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
+		);
+		this.showAds$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.showAds,
+				([main, nav, prefs]) => main.showFtue,
+			)
+			.pipe(
+				debounceTime(100),
+				map(([showAds, showFtue]) => showAds && !showFtue),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting showAds in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		// TODO: remove this to avoid having too many refreshes every time any tiny bit of the state
+		// changes
+		this.dataState$ = this.store
+			.listen$(([main, nav, prefs]) => main)
+			.pipe(
+				debounceTime(100),
+				map(([main]) => main),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting dataState in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
 
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
-			if (message.id === 'move') {
-				const window = await this.ow.getCurrentWindow();
-				const newX = message.content.x - window.width / 2;
-				const newY = message.content.y - window.height / 2;
-				this.ow.changeWindowPosition(this.windowId, newX, newY);
-			}
-		});
-		const prefs = await this.preferencesService.getPreferences();
-		const windowName = this.ow.getCollectionWindowName(prefs);
-		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
-			// If hidden, restore window to as it was
-			if (message.window_state === 'maximized') {
-				this.isMaximized = true;
-			} else if (message.window_state !== 'minimized') {
-				// When minimized we want to remember the last position
-				this.isMaximized = false;
-			}
-		});
-		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
-		this.dataStoreSubscription = storeBus.subscribe((newState: MainWindowState) => {
-			setTimeout(async () => {
-				this.dataState = newState;
-				this.activeTheme = this.buildActiveTheme();
-				this._showAds = this.showAds();
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
-		});
 		const navigationStoreBus: BehaviorSubject<NavigationState> = this.ow.getMainWindow().mainWindowStoreNavigation;
 		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
 				this.navigationState = newState;
-				this.activeTheme = this.buildActiveTheme();
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -238,6 +282,26 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
 			});
+		});
+
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
+			if (message.id === 'move') {
+				const window = await this.ow.getCurrentWindow();
+				const newX = message.content.x - window.width / 2;
+				const newY = message.content.y - window.height / 2;
+				this.ow.changeWindowPosition(this.windowId, newX, newY);
+			}
+		});
+		const prefs = await this.preferencesService.getPreferences();
+		const windowName = this.ow.getCollectionWindowName(prefs);
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
+			// If hidden, restore window to as it was
+			if (message.window_state === 'maximized') {
+				this.isMaximized = true;
+			} else if (message.window_state !== 'minimized') {
+				// When minimized we want to remember the last position
+				this.isMaximized = false;
+			}
 		});
 
 		this.hotkey = await this.ow.getHotKey('collection');
@@ -294,42 +358,18 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.dataStoreSubscription?.unsubscribe();
 		this.navigationStoreSubscription?.unsubscribe();
 	}
 
 	onHelp(event: MouseEvent) {
-		this.forceShowReleaseNotes = true;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.forceShowReleaseNotes.next(true);
 	}
 
 	onNewVersionDisplayed(value: boolean) {
-		this.displayingNewVersionNotification = value;
-		this.activeTheme = this.buildActiveTheme();
+		this.displayingNewVersion.next(value);
 		if (!value) {
-			this.forceShowReleaseNotes = false;
+			this.forceShowReleaseNotes.next(false);
 		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	showAds(): boolean {
-		if (this.dataState.showFtue) {
-			return false;
-		}
-
-		// Hide the ads for supporters and in the ladder deck details
-		if (!this.dataState.showAds) {
-			return false;
-			// if (this.navigationState?.navigationDecktracker?.currentView === 'deck-details') {
-			// 	return false;
-			// }
-		}
-
-		return true;
 	}
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
@@ -338,14 +378,18 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		};
 	}
 
-	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {
-		if (this.displayingNewVersionNotification) {
+	private buildActiveTheme(
+		showFtue: boolean,
+		currentApp: CurrentAppType,
+		displayingNewVersionNotification: boolean,
+	): CurrentAppType | 'decktracker-desktop' {
+		if (displayingNewVersionNotification) {
 			return 'general';
 		}
-		return this.dataState.showFtue
+		return showFtue
 			? 'general'
-			: ['decktracker', 'arena', 'stats', 'mercenaries'].includes(this.navigationState?.currentApp)
+			: ['decktracker', 'arena', 'stats', 'mercenaries'].includes(currentApp)
 			? 'decktracker-desktop'
-			: this.navigationState?.currentApp;
+			: currentApp;
 	}
 }

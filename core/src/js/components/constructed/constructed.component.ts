@@ -49,8 +49,8 @@ export class ConstructedComponent extends AbstractSubscriptionComponent implemen
 		this.state$ = this.store
 			.listenDeckState$((state) => state)
 			.pipe(
-				map(([info]) => info),
 				debounceTime(100),
+				map(([info]) => info),
 				distinctUntilChanged(),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),

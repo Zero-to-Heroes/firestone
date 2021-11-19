@@ -8,13 +8,17 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
-import { CurrentUser } from '../models/overwolf/profile/current-user';
 import { AdService } from '../services/ad.service';
 import { FeatureFlags } from '../services/feature-flags';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../services/ui-store/app-ui-store.service';
+import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 declare let amplitude;
 
@@ -123,15 +127,11 @@ declare let amplitude;
 				<li class="main-menu-separator"></li>
 			</ng-container>
 			<li class="login-info" (click)="login()">
-				<img class="avatar" [src]="avatarUrl" />
+				<img class="avatar" [src]="avatarUrl$ | async" />
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-text-details">
-						{{
-							_currentUser?.username
-								? 'Logged in as ' + _currentUser.username
-								: 'Log in to save your progress online'
-						}}
+					<div class="menu-text-details" *ngIf="{ userName: userName$ | async } as value">
+						{{ value.userName ? 'Logged in as ' + value.userName : 'Log in to save your progress online' }}
 					</div>
 				</div>
 			</li>
@@ -140,29 +140,49 @@ declare let amplitude;
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionComponent implements AfterViewInit {
+export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	enableStatsTab = FeatureFlags.ENABLE_STATS_TAB;
 	enableMercenariesTab = FeatureFlags.ENABLE_MERCENARIES_TAB;
 
+	userName$: Observable<string>;
+	avatarUrl$: Observable<string>;
+
 	@Input() selectedModule: string;
 
-	@Input() set currentUser(value: CurrentUser) {
-		this._currentUser = value;
-		this.avatarUrl = value?.avatar?.length > 0 ? value.avatar : 'assets/images/social-share-login.png';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	_currentUser: CurrentUser;
 	showGoPremium: boolean;
-	avatarUrl = 'assets/images/social-share-login.png';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef, private adService: AdService) {}
+	constructor(
+		private ow: OverwolfService,
+		private adService: AdService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
+		this.userName$ = this.store
+			.listen$(([main, nav, prefs]) => main.currentUser)
+			.pipe(
+				debounceTime(100),
+				map(([currentUser]) => currentUser?.username),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting userName in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
+		this.avatarUrl$ = this.store
+			.listen$(([main, nav, prefs]) => main.currentUser)
+			.pipe(
+				debounceTime(100),
+				map(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'),
+				distinctUntilChanged(),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting avatarUrl in ', this.constructor.name, filter)),
+				takeUntil(this.destroyed$),
+			);
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.showGoPremium = await this.adService.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
