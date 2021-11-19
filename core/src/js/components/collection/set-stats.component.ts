@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
@@ -64,7 +64,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SetStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set set(value: Set) {
 		this._set = value;
 		this.updateInfos();
@@ -93,7 +93,7 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.listenForBasicPref$((prefs) => prefs.collectionSetShowGoldenStats).subscribe((value) => {
 			this._showGoldenStats = value;
 			this.updateInfos();

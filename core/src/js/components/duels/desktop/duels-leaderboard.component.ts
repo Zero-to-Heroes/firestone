@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -34,11 +34,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent {
+export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.values$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.leaderboard,

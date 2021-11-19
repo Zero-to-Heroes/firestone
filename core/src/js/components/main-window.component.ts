@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -137,7 +138,9 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainWindowComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class MainWindowComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	adRefershToken$: Observable<boolean>;
 	activeTheme$: Observable<CurrentAppType | 'decktracker-desktop'>;
 	forceShowReleaseNotes$: Observable<boolean>;
@@ -173,12 +176,10 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 	}
 
-	async ngAfterViewInit() {
-		const currentWindow = await this.ow.getCurrentWindow();
-		this.windowId = currentWindow.id;
+	ngAfterContentInit() {
+		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.adRefershToken$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(this.mapData(([gameState]) => gameState.gameStarted));
@@ -217,6 +218,11 @@ export class MainWindowComponent extends AbstractSubscriptionComponent implement
 				tap((filter) => cdLog('emitting dataState in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
+	}
+
+	async ngAfterViewInit() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId = currentWindow.id;
 
 		const navigationStoreBus: BehaviorSubject<NavigationState> = this.ow.getMainWindow().mainWindowStoreNavigation;
 		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {

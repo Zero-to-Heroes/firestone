@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -106,7 +107,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class CardsComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
 
 	readonly RARITY_FILTER_ALL = 'rarity-all';
@@ -196,7 +197,7 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
@@ -216,7 +217,9 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 					this.cdr.detectChanges();
 				}
 			});
+	}
 
+	ngAfterViewInit() {
 		// TODO: extract that to its own component
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach((singleEl) => {

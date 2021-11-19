@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComponent {
+export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(
@@ -38,6 +38,9 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,

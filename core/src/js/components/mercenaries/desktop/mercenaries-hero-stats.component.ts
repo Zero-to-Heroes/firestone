@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -38,7 +38,7 @@ import { MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent {
+export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly MercenaryInfo[]>;
 
 	constructor(
@@ -47,6 +47,9 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		// TODO: split into 2 obs: one where the actual data updates, and one that just
 		// shows/hide data (like role of search string)
 		this.stats$ = this.store

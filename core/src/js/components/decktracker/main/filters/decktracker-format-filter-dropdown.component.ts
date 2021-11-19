@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -28,7 +35,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerFormatFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DecktrackerFormatFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -39,6 +48,9 @@ export class DecktrackerFormatFilterDropdownComponent extends AbstractSubscripti
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.gameFormat,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
@@ -27,11 +27,14 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionComponent {
+export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	values$: Observable<Value>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.values$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

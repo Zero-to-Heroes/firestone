@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
@@ -33,7 +40,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsTribesFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
@@ -45,6 +54,9 @@ export class BattlegroundsTribesFilterDropdownComponent extends AbstractSubscrip
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -172,7 +172,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroDetailsComponent extends AbstractSubscriptionComponent {
+export class MercenariesHeroDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroStats$: Observable<MercenaryInfo>;
 
 	constructor(
@@ -182,6 +182,9 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.heroStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,

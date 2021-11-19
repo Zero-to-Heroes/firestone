@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -28,11 +28,14 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionComponent {
+export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	values$: Observable<Value>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.values$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

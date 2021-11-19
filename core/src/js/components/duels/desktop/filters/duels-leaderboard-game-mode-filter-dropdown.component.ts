@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -31,7 +38,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsLeaderboardGameModeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit {
+	implements AfterContentInit, AfterViewInit {
 	options: readonly GameModeFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -44,6 +51,9 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.options = [
 			{
 				value: 'duels',

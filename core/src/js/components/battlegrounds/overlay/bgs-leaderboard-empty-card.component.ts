@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -33,7 +33,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 
 	@Input() set currentTurn(value: number) {
@@ -82,7 +82,7 @@ export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionCompon
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.listenForBasicPref$((prefs) => prefs.bgsOpponentOverlayAtTop).subscribe((value) => {
 			this.position = value ? 'global-top-left' : 'global-bottom-left';
 			this.componentClass = value ? null : 'bottom';

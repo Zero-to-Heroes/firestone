@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -112,7 +113,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class MercenariesTeamRootComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	// @Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -171,8 +174,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+	ngAfterContentInit(): void {
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(
@@ -218,6 +220,10 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();

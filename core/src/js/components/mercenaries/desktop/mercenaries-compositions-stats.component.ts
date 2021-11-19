@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-filter-types';
@@ -45,7 +45,7 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent {
+export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly MercenaryCompositionInfo[]>;
 	showMercNames$: Observable<boolean>;
 
@@ -55,6 +55,9 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.showMercNames$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesShowMercNamesInTeams)
 			.pipe(

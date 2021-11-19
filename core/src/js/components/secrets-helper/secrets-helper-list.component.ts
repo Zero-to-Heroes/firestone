@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -41,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
@@ -66,7 +66,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.secretsHelperScale)
 			.pipe(

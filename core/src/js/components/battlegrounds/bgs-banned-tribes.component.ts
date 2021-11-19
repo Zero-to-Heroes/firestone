@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -41,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	bannedTribes$: Observable<readonly Race[]>;
 	tooltip$: Observable<string>;
 	orientation$: Observable<'row' | 'column'>;
@@ -60,7 +61,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.bannedTribes$ = this.store
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(
@@ -115,6 +116,9 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			});
+	}
+
+	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.restoreWindowPosition();
 	}

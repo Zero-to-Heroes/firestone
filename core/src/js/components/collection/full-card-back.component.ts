@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -32,7 +32,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardBackComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class FullCardBackComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	animated$: Observable<boolean>;
 	_cardBack: InternalCardBack;
 
@@ -54,7 +54,7 @@ export class FullCardBackComponent extends AbstractSubscriptionComponent impleme
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
 	}
 }

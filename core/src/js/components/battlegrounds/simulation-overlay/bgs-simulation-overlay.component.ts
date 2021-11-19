@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -27,7 +27,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements OnInit {
+export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	showSimulationSample$: Observable<boolean>;
 
@@ -42,7 +42,7 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		super(store, cdr);
 	}
 
-	async ngOnInit() {
+	async ngAfterContentInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.nextBattle$ = combineLatest(
 			this.store.listenBattlegrounds$(([state]) => state?.currentGame),

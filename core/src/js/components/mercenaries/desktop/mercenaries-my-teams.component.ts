@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -33,11 +33,14 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent {
+export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	teams$: Observable<readonly MercenaryPersonalTeamInfo[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.teams$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.referenceData,

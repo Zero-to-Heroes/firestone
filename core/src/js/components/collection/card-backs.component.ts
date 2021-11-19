@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { orderBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -41,7 +41,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
 	animated$: Observable<boolean>;
@@ -69,7 +69,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)

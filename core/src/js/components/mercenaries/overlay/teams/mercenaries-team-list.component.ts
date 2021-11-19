@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -40,7 +41,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamListComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class MercenariesTeamListComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	@Input() tooltipPosition: boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
@@ -86,6 +89,9 @@ export class MercenariesTeamListComponent extends AbstractSubscriptionComponent 
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.scaleSub = this.store
 			.listenPrefs$(
 				// So that we don't pass scale extractors around, and the overhead of doing the refresh multiple

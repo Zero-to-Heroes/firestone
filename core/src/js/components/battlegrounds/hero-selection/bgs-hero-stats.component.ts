@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -46,7 +46,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
+export class BgsHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	placementChartData$: Observable<SimpleBarChartData[]>;
 	averagePosition: number;
 	playerAveragePosition: number;
@@ -70,6 +70,9 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent {
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.placementChartData$ = combineLatest(
 			this.placementDistribution$.asObservable(),
 			this.playerPlacementDistribution$.asObservable(),

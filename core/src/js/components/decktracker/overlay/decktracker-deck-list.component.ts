@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -100,7 +100,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.sub$$ = this.store
 			.listenPrefs$((prefs) => prefs.secretsHelperScale)
 			.pipe(

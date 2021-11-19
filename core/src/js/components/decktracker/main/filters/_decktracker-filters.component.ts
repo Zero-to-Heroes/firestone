@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
@@ -43,7 +50,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerFiltersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DecktrackerFiltersComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	showHiddenDecksLink$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -54,6 +63,9 @@ export class DecktrackerFiltersComponent extends AbstractSubscriptionComponent i
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.currentView,

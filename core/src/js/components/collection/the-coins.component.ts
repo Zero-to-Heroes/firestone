@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
@@ -39,7 +39,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 185;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 
@@ -72,7 +72,7 @@ export class TheCoinsComponent extends AbstractSubscriptionComponent implements 
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
 			.pipe(

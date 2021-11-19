@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
@@ -30,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit {
+	implements AfterContentInit, AfterViewInit {
 	options: readonly IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -55,6 +62,9 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 				label: `Tier ${tier}`,
 			})),
 		] as readonly IOption[];
+	}
+
+	ngAfterContentInit() {
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter)
 			.pipe(

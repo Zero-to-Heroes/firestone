@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -37,7 +38,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesOutOfCombatTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	treasures$: Observable<readonly ReferenceCard[]>;
 
 	private windowId: string;
@@ -50,6 +51,9 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
 			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),
 			map(([[state]]) => state.treasureSelection.treasures),

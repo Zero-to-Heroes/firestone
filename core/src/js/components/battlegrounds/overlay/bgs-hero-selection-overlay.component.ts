@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -46,7 +47,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsHeroSelectionOverlayComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	heroOverviews$: Observable<InternalBgsHeroStat[]>;
 	heroTooltipActive$: Observable<boolean>;
 	windowId: string;
@@ -61,6 +62,9 @@ export class BgsHeroSelectionOverlayComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.heroTooltipActive$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
 			.pipe(

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -37,7 +37,9 @@ import { Task } from './mercenaries-team-root..component';
 	></mercenaries-team-root>`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscriptionComponent {
+export class MercenariesOutOfCombatPlayerTeamComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit {
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
@@ -55,6 +57,9 @@ export class MercenariesOutOfCombatPlayerTeamComponent extends AbstractSubscript
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.tasks$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.referenceData,

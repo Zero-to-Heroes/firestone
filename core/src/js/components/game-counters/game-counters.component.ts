@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -49,7 +50,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 			*ngIf="definition$ | async as definition"
 		>
 			<generic-counter
-				*ngIf="activeCounter === definition.type"
+				*ngIf="activeCounter === definition?.type"
 				[image]="definition.image"
 				[helpTooltipText]="definition.tooltip"
 				[value]="definition.value"
@@ -60,7 +61,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	activeCounter: CounterType;
 	side: 'player' | 'opponent';
 	isBgs: boolean;
@@ -83,20 +84,25 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');
 		this.isBgs = this.activeCounter.includes('bgs');
+		console.log('init counter', this.activeCounter, this.side, this.isBgs);
 	}
 
-	async ngAfterViewInit() {
-		if (!this.activeCounter.includes('bgs')) {
+	ngAfterContentInit() {
+		// For some reason, declaring this in ngAfterViewInit doesn't work - the obevrsable is never subscribed
+		if (!this.isBgs) {
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)
 				.pipe(
+					tap((info) => console.debug('info', info)),
 					filter(([state]) => !!state),
 					map(([state]) => this.buildDefinition(state, this.activeCounter, this.side)),
+					tap((info) => console.debug('def', info)),
 					distinctUntilChanged(),
 					tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 					tap((filter) => cdLog('emitting definition in ', this.constructor.name, filter)),
 					takeUntil(this.destroyed$),
 				);
+			console.debug('built def', this.definition$);
 		} else {
 			this.definition$ = this.store
 				.listenBattlegrounds$(([state, prefs]) => state)
@@ -109,6 +115,9 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 					takeUntil(this.destroyed$),
 				);
 		}
+	}
+
+	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.restoreWindowPosition();
 	}

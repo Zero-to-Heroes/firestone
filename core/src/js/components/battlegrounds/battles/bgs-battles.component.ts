@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
@@ -89,7 +96,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattlesComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsBattlesComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 
@@ -106,6 +113,9 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.faceOffs$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(
@@ -195,17 +205,16 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				tap((faceOff) => console.debug('[cd] emitting stats in ', this.constructor.name, faceOff)),
 				takeUntil(this.destroyed$),
 			);
+	}
 
+	async ngAfterViewInit() {
+		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
 			this.battlegroundsUpdater.next(new BgsBattleSimulationUpdateEvent(currentFaceOff, partialUpdate));
 		};
 		this.simulationReset = (faceOffId: string) => {
 			this.battlegroundsUpdater.next(new BgsBattleSimulationResetEvent(faceOffId));
 		};
-	}
-
-	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {

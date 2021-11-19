@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
@@ -92,7 +92,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	twitchUserName$: Observable<string>;
 
 	twitchedLoggedIn: boolean;
@@ -108,7 +108,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.twitchUserName$ = this.listenForBasicPref$((prefs) => prefs.twitchUserName);
 		this.store
 			.listenPrefs$((prefs) => prefs.twitchAccessToken)

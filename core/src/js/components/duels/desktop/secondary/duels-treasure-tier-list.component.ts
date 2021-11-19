@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
@@ -28,7 +28,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponent {
+export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(
@@ -37,6 +37,9 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.tiers$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.treasures,

@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
@@ -42,12 +49,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionBgsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class MenuSelectionBgsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	selectedPanel$: Observable<BgsPanelId>;
 	matchOver$: Observable<boolean>;
-
-	// @Input() selectedPanel: BgsPanelId;
-	// @Input() matchOver: boolean;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -57,6 +63,9 @@ export class MenuSelectionBgsComponent extends AbstractSubscriptionComponent imp
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.selectedPanel$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(

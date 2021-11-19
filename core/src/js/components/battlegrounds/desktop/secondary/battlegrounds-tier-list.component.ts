@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -37,11 +37,14 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent {
+export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.stats$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

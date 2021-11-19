@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -38,7 +39,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class OpponentHandOverlayComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	hand$: Observable<readonly DeckCard[]>;
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
@@ -56,8 +59,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+	ngAfterContentInit(): void {
 		this.hand$ = this.store
 			.listenDeckState$((deckState) => deckState?.opponentDeck?.hand)
 			.pipe(
@@ -71,6 +73,10 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
 		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
 		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();

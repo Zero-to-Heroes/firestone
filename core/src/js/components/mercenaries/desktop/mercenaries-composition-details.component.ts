@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -86,7 +86,7 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionComponent {
+export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	compositionStat$: Observable<CompositionStat>;
 
 	constructor(
@@ -96,6 +96,9 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.compositionStat$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.globalStats,

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
@@ -28,7 +36,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPerfectGamesComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class BattlegroundsPerfectGamesComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	isLoading: boolean;
 	allReplays: readonly GameStat[];
 	displayedGroupedReplays: readonly GroupedReplays[] = [];
@@ -39,6 +49,9 @@ export class BattlegroundsPerfectGamesComponent extends AbstractSubscriptionComp
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,

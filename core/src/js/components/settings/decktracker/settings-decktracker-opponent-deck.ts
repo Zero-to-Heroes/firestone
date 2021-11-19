@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -222,7 +222,9 @@ import { Knob } from '../preference-slider.component';
 	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuffInHand
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerOpponentDeckComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsDecktrackerOpponentDeckComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit {
 	opponentOverlayGroupByZone$: Observable<boolean>;
 	opponentTracker$: Observable<boolean>;
 	dectrackerShowOpponentTurnDraw$: Observable<boolean>;
@@ -255,7 +257,7 @@ export class SettingsDecktrackerOpponentDeckComponent extends AbstractSubscripti
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.opponentTracker$ = this.listenForBasicPref$((prefs) => prefs.opponentTracker);
 		this.secretsHelper$ = this.listenForBasicPref$((prefs) => prefs.secretsHelper);
 		this.opponentOverlayGroupByZone$ = this.listenForBasicPref$((prefs) => prefs.opponentOverlayGroupByZone);

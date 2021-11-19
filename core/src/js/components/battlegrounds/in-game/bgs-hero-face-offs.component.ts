@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -42,13 +42,16 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent {
+export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	nextOpponentCardId$: Observable<string>;
 	opponents$: Observable<readonly BgsPlayer[]>;
 	faceOffsByOpponent$: Observable<{ [opponentHeroCardId: string]: readonly BgsFaceOff[] }>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
 			.listenBattlegrounds$(
 				([state]) => state.panels,

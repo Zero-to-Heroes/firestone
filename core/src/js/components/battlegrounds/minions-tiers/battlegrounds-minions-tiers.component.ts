@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -81,7 +82,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsMinionsTiersOverlayComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	private static readonly WINDOW_WIDTH = 1300;
 
 	tiers$: Observable<readonly Tier[]>;
@@ -110,6 +111,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces)
 			.pipe(

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewRef } from '@angular/core';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
@@ -23,7 +23,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		</div>
 	`,
 })
-export class OpponentCardInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class OpponentCardInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
@@ -48,7 +48,7 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionComponent imp
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.decktrackerOpponentHandScale)
 			.pipe(

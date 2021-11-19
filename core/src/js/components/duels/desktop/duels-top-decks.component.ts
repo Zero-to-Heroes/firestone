@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
@@ -32,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	isLoading: boolean;
 	allDecks: readonly DuelsGroupedDecks[];
 	displayedGroupedDecks: readonly DuelsGroupedDecks[];
@@ -42,6 +50,9 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.topDecks,

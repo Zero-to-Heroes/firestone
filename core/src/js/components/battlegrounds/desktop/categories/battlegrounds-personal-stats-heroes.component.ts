@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -27,7 +34,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsPersonalStatsHeroesComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	stats$: Observable<readonly BgsHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -38,6 +47,9 @@ export class BattlegroundsPersonalStatsHeroesComponent extends AbstractSubscript
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.stats$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats?.length),
 			map((stats) => stats.filter((stat) => stat.id !== 'average')),

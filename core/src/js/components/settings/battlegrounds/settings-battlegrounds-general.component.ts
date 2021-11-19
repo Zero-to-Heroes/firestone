@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -256,7 +263,9 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBattlegroundsGeneralComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsBattlegroundsGeneralComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	useLocalSimulator$: Observable<boolean>;
 	enableSimulation$: Observable<boolean>;
 	bgsEnableBattleSimulationOverlay$: Observable<boolean>;
@@ -303,8 +312,7 @@ export class SettingsBattlegroundsGeneralComponent extends AbstractSubscriptionC
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
-		this.reloadBgWindows = this.ow.getMainWindow().reloadBgWindows;
+	ngAfterContentInit() {
 		this.useLocalSimulator$ = this.listenForBasicPref$((prefs) => prefs.bgsUseLocalSimulator);
 		this.enableSimulation$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableSimulation);
 		this.bgsEnableBattleSimulationOverlay$ = this.listenForBasicPref$(
@@ -322,6 +330,10 @@ export class SettingsBattlegroundsGeneralComponent extends AbstractSubscriptionC
 		this.bgsFullToggle$ = this.listenForBasicPref$((prefs) => prefs.bgsFullToggle);
 		this.showBannedTribes$ = this.listenForBasicPref$((prefs) => prefs.bgsShowBannedTribesOverlay);
 		this.bgsEnableMinionListOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
+	}
+
+	ngAfterViewInit() {
+		this.reloadBgWindows = this.ow.getMainWindow().reloadBgWindows;
 	}
 
 	toggleOverlay = () => {

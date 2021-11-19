@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -29,7 +29,7 @@ import { Task } from './mercenaries-team-root..component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponent {
+export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	teamExtractor = (state: MercenariesBattleState) => state.playerTeam;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
@@ -48,6 +48,9 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.tasks$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.referenceData,

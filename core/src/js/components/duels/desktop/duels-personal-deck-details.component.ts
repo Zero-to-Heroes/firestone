@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -85,7 +85,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionComponent {
+export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	deck$: Observable<DeckInfo>;
 	collection$: Observable<readonly SetCard[]>;
 	decklist$: Observable<string>;
@@ -97,6 +97,9 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(

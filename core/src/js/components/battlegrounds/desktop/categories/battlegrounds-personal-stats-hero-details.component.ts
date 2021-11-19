@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -48,7 +55,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPersonalStatsHeroDetailsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit {
+	implements AfterContentInit, AfterViewInit {
 	tabs$: Observable<readonly BgsHeroStatsFilterId[]>;
 	selectedTab$: Observable<BgsHeroStatsFilterId>;
 	player$: Observable<BgsPlayer>;
@@ -61,6 +68,9 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.tabs$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds,

@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -67,7 +68,9 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class FilterDropdownMultiselectComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
@@ -110,6 +113,9 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
 			filter(([options, selected]) => !!options?.length),
 			map(([options, selected]) => {

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
 import {} from 'lodash';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -8,7 +8,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Directive({
 	selector: '[advancedSetting]',
 })
-export class AdvancedSettingDirective extends AbstractSubscriptionComponent implements AfterViewInit {
+export class AdvancedSettingDirective extends AbstractSubscriptionComponent implements AfterContentInit {
 	constructor(
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,
@@ -18,7 +18,7 @@ export class AdvancedSettingDirective extends AbstractSubscriptionComponent impl
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.advancedModeToggledOn)
 			.pipe(

@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -30,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class ConstructedComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	state$: Observable<GameState>;
 
 	windowId: string;
@@ -44,8 +45,7 @@ export class ConstructedComponent extends AbstractSubscriptionComponent implemen
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+	async ngAfterContentInit() {
 		this.state$ = this.store
 			.listenDeckState$((state) => state)
 			.pipe(
@@ -56,6 +56,10 @@ export class ConstructedComponent extends AbstractSubscriptionComponent implemen
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.positionWindowOnSecondScreen();
 		this.ow.bringToFront(this.windowId);
 	}

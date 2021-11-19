@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -31,7 +31,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsSimulatorComponent extends AbstractSubscriptionComponent {
+export class BattlegroundsSimulatorComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 
@@ -39,6 +41,9 @@ export class BattlegroundsSimulatorComponent extends AbstractSubscriptionCompone
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.faceOff$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
 			.pipe(
@@ -48,7 +53,9 @@ export class BattlegroundsSimulatorComponent extends AbstractSubscriptionCompone
 				tap((faceOff) => console.debug('[cd] emitting in ', this.constructor.name, faceOff)),
 				takeUntil(this.destroyed$),
 			);
+	}
 
+	ngAfterViewInit(): void {
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
 			this.store.send(new BgsCustomSimulationUpdateEvent(currentFaceOff, partialUpdate));
 		};

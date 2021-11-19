@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
@@ -35,7 +42,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionDecktrackerComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class MenuSelectionDecktrackerComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	enableGraph = FeatureFlags.ENABLE_CONSTRUCTED_RANKING_GRAPH;
 
 	selectedTab$: Observable<string>;
@@ -48,6 +57,9 @@ export class MenuSelectionDecktrackerComponent extends AbstractSubscriptionCompo
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.currentView)
 			.pipe(

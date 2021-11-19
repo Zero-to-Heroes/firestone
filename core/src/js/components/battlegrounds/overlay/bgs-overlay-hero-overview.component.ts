@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() set config(value: {
 		player: BgsPlayer;
 		currentTurn: number;
@@ -71,7 +71,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.bgsOpponentBoardScale)
 			.pipe(

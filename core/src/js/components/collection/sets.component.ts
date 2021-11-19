@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
@@ -27,7 +27,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetsComponent extends AbstractSubscriptionComponent {
+export class SetsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	activeFilter$: Observable<string>;
 	sets$: Observable<readonly Set[]>;
 
@@ -55,6 +55,9 @@ export class SetsComponent extends AbstractSubscriptionComponent {
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.activeFilter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
 			.pipe(

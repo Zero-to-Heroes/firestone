@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -198,7 +199,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class BgsSimulatorMinionSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;
@@ -242,6 +245,9 @@ export class BgsSimulatorMinionSelectionComponent extends AbstractSubscriptionCo
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.allMinions$ = combineLatest(
 			this.searchString.asObservable(),
 			this.store.listen$(

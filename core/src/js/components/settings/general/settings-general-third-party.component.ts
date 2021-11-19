@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -129,7 +129,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class SettingsGeneralThirdPartyComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, OnDestroy {
 	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 
@@ -142,7 +142,7 @@ export class SettingsGeneralThirdPartyComponent
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.oocLoggedIn$ = this.store
 			.listenPrefs$((prefs) => prefs.outOfCardsToken)
 			.pipe(

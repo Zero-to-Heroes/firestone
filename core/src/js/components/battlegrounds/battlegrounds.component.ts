@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -38,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	adRefershToken$: Observable<string>;
 	showAds$: Observable<boolean>;
 
@@ -57,6 +58,9 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 	) {
 		super(store, cdr);
 		this.init();
+	}
+
+	ngAfterContentInit() {
 		this.adRefershToken$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.reviewId)
 			.pipe(

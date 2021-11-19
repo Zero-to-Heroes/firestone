@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -67,7 +67,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableSimulation$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 	nextOpponentCardId$: Observable<string>;
@@ -85,6 +85,9 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.enableSimulation$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
 			.pipe(
@@ -194,11 +197,6 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			tap((info) => cdLog('emitting otherOpponents in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
 	}
 
 	trackByOpponentInfoFn(index, item: BgsPlayer) {

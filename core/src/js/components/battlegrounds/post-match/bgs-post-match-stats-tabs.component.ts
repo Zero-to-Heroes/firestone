@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -75,7 +76,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsPostMatchStatsTabsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
 	tabs: readonly BgsStatsFilterId[];
 
@@ -108,6 +111,9 @@ export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponen
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
 			map(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),

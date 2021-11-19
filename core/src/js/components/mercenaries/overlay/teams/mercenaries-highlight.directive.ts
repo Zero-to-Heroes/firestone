@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectorRef,
 	Directive,
@@ -24,7 +25,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	selector: '[mercenariesHighlight]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class MercenariesHighlightDirective extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class MercenariesHighlightDirective
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	@Input('mercenariesHighlight') cardId = undefined;
 
 	private highlightElement;
@@ -42,6 +45,9 @@ export class MercenariesHighlightDirective extends AbstractSubscriptionComponent
 	) {
 		super(store, cdr);
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
+	}
+
+	ngAfterContentInit() {
 		this.subscription$$ = this.store
 			.listenMercenariesHighlights$(
 				([selector, prefs]) =>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesToggleShowHiddenTeamsEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
@@ -43,12 +43,15 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesFiltersComponent extends AbstractSubscriptionComponent {
+export class MercenariesFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showHiddenTeamsLink$: Observable<boolean>;
 	showMercNamesInTeamsLink$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.showHiddenTeamsLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId,

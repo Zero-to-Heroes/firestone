@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -36,7 +36,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroSearchComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class MercenariesHeroSearchComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	searchString: string;
 	searchForm = new FormControl();
 
@@ -45,6 +47,9 @@ export class MercenariesHeroSearchComponent extends AbstractSubscriptionComponen
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.heroSearchString)
 			.pipe(
@@ -55,9 +60,6 @@ export class MercenariesHeroSearchComponent extends AbstractSubscriptionComponen
 				// TODO: force change detectiopn here?
 				this.searchString = heroSearchString;
 			});
-	}
-
-	ngAfterViewInit() {
 		this.searchFormSub$$ = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())

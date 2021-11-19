@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -79,7 +80,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsContentComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class BattlegroundsContentComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
 	reviewId$: Observable<string>;
@@ -98,6 +101,9 @@ export class BattlegroundsContentComponent extends AbstractSubscriptionComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.currentPanelId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
@@ -72,7 +72,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
+export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	boards$: Observable<readonly KnownBoard[]>;
 
 	loading = true;
@@ -84,6 +84,9 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent {
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.boards$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,

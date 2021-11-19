@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -55,7 +55,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsCollectionNotificationComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsCollectionNotificationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableNotifications$: Observable<boolean>;
 
 	cardSizeKnobs: readonly Knob[] = [
@@ -77,7 +77,7 @@ export class SettingsCollectionNotificationComponent extends AbstractSubscriptio
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.enableNotifications$ = this.listenForBasicPref$((prefs) => prefs.collectionEnableNotifications);
 	}
 }

@@ -1,9 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../models/preferences';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'replays',
@@ -14,7 +15,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="app-section replays">
 			<section class="main divider">
-				<with-loading [isLoading]="state.replays.isLoading">
+				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content">
 						<global-header *ngIf="navigation.text"> </global-header>
 						<replays-list
@@ -58,17 +59,21 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysComponent implements AfterViewInit {
+export class ReplaysComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	loading$: Observable<boolean>;
+
 	@Input() navigation: NavigationState;
 	@Input() state: MainWindowState;
 	@Input() prefs: Preferences;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
-	constructor(private ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	ngAfterContentInit() {
+		this.loading$ = this.store
+			.listen$(([main, nav, prefs]) => main.replays.isLoading)
+			.pipe(this.mapData(([isLoading]) => isLoading));
 	}
 
 	isShowingDuelsReplay(): boolean {

@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
@@ -56,7 +63,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsFiltersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DuelsFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	threshold = DuelsStateBuilderService.STATS_THRESHOLD;
 
 	showHiddenDecksLink$: Observable<boolean>;
@@ -70,6 +77,9 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,

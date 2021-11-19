@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -37,7 +37,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class DecktrackerDeckDetailsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	@Input() set state(value: DecktrackerState) {
 		this._state = value;
 		this.updateValues();
@@ -60,7 +62,7 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages).subscribe(
 			(value) => {
 				this.showMatchupAsPercentages = value;

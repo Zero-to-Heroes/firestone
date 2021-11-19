@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -79,7 +80,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsMouseOverOverlayComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	inGame$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
 	lastOpponentCardId$: Observable<string>;
@@ -101,6 +102,9 @@ export class BattlegroundsMouseOverOverlayComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.inGame$ = this.store
 			.listenBattlegrounds$(
 				([state]) => state.inGame,

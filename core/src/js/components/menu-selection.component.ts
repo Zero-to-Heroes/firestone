@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -138,7 +139,7 @@ declare let amplitude;
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	enableStatsTab = FeatureFlags.ENABLE_STATS_TAB;
 	enableMercenariesTab = FeatureFlags.ENABLE_MERCENARIES_TAB;
 
@@ -160,13 +161,16 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.userName$ = this.store
 			.listen$(([main, nav, prefs]) => main.currentUser)
 			.pipe(this.mapData(([currentUser]) => currentUser?.username));
 		this.avatarUrl$ = this.store
 			.listen$(([main, nav, prefs]) => main.currentUser)
 			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
+	}
+
+	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.showGoPremium = await this.adService.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {

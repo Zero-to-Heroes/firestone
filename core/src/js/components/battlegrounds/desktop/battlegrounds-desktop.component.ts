@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -64,7 +71,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsDesktopComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	currentView$: Observable<string>;
@@ -79,6 +88,9 @@ export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.loading)
 			.pipe(

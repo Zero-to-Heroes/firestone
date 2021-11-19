@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
@@ -32,7 +39,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsRankFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -44,6 +53,9 @@ export class BattlegroundsRankFilterDropdownComponent extends AbstractSubscripti
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
 			.pipe(

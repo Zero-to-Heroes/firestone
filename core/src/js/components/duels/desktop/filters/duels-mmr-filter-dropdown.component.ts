@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
@@ -30,7 +37,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DuelsMmrFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -42,6 +51,9 @@ export class DuelsMmrFilterDropdownComponent extends AbstractSubscriptionCompone
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
 			.pipe(

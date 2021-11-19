@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -102,7 +103,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerOverlayRootComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
 	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
 	@Input() opacityExtractor: (prefs: Preferences) => number;
@@ -170,7 +173,30 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (res && res.resolutionChanged) {
+				await this.changeWindowSize();
+				await this.restoreWindowPosition(true);
+			}
+		});
+		this.events.on(Events.SHOW_MODAL).subscribe(() => {
+			this.showBackdrop = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		this.events.on(Events.HIDE_MODAL).subscribe(() => {
+			this.showBackdrop = false;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 
+		await this.changeWindowSize();
+		await this.ow.bringToFront(this.windowId);
+	}
+
+	ngAfterContentInit() {
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(
@@ -314,28 +340,6 @@ export class DeckTrackerOverlayRootComponent extends AbstractSubscriptionCompone
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				this.updateTooltipPosition();
 			});
-
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-				await this.restoreWindowPosition(true);
-			}
-		});
-		this.events.on(Events.SHOW_MODAL).subscribe(() => {
-			this.showBackdrop = true;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		this.events.on(Events.HIDE_MODAL).subscribe(() => {
-			this.showBackdrop = false;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-
-		await this.changeWindowSize();
-		await this.ow.bringToFront(this.windowId);
 	}
 
 	@HostListener('window:beforeunload')

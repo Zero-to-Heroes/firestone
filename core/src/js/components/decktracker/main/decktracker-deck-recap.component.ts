@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
@@ -80,7 +80,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
 
 	info$: Observable<Info>;
@@ -92,7 +92,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.deck$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,

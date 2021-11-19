@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { PackInfo } from '../../models/collection/pack-info';
@@ -67,7 +67,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionPackStatsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class CollectionPackStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 
@@ -99,7 +99,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks).subscribe((value) => {
 			this.showOnlyBuyablePacks = value;
 			this.updateInfos();

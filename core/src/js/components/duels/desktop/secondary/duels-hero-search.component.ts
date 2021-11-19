@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -39,7 +40,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroSearchComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class DuelsHeroSearchComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	searchString: string;
 	searchForm = new FormControl();
 
@@ -53,6 +56,9 @@ export class DuelsHeroSearchComponent extends AbstractSubscriptionComponent impl
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
 			.pipe(

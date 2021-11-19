@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { SetCard } from '../../models/set';
@@ -55,7 +55,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class CardHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
 	@Input() set state(value: BinderState) {
@@ -81,7 +81,7 @@ export class CardHistoryComponent extends AbstractSubscriptionComponent implemen
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards).subscribe((value) => {
 			this._showOnlyNewCards = value;
 			this.updateInfos();

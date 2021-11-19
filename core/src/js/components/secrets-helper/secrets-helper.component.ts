@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -60,7 +61,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class SecretsHelperComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
@@ -88,8 +91,7 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+	ngAfterContentInit(): void {
 		this.active$ = this.store
 			.listenDeckState$((state) => state?.opponentDeck?.secretHelperActive)
 			.pipe(
@@ -167,6 +169,10 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 				this.showTooltips = overlayShowTooltipsOnHover;
 				await this.updateTooltipPosition();
 			});
+	}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();

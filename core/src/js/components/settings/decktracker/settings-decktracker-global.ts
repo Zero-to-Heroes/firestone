@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -93,7 +91,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerGlobalComponent extends AbstractSubscriptionComponent {
+export class SettingsDecktrackerGlobalComponent {
 	resetText = 'Reset positions';
 	confirmationShown = false;
 	showResetConfirmationText = false;
@@ -113,13 +111,7 @@ export class SettingsDecktrackerGlobalComponent extends AbstractSubscriptionComp
 		},
 	];
 
-	constructor(
-		private readonly prefs: PreferencesService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-	) {
-		super(store, cdr);
-	}
+	constructor(private readonly prefs: PreferencesService) {}
 
 	async reset() {
 		if (!this.confirmationShown) {

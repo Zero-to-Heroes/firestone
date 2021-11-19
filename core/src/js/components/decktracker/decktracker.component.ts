@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
 import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
@@ -57,7 +57,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DecktrackerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentView$: Observable<DecktrackerViewType>;
 	menuDisplayType$: Observable<string>;
 	loading$: Observable<boolean>;
@@ -78,7 +78,7 @@ export class DecktrackerComponent extends AbstractSubscriptionComponent implemen
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.currentView$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));

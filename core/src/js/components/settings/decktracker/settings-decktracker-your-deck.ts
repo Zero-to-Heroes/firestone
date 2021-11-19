@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -167,7 +167,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	overlayGroupByZone$: Observable<boolean>;
 	sizeKnobs: readonly Knob[] = [
 		{
@@ -188,7 +188,7 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.overlayGroupByZone$ = this.listenForBasicPref$((prefs) => prefs.overlayGroupByZone);
 	}
 }

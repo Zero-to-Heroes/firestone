@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
@@ -32,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit {
+	implements AfterContentInit, AfterViewInit {
 	options: readonly IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -70,6 +77,9 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 				label: 'No tribe',
 			} as IOption,
 		] as readonly IOption[];
+	}
+
+	ngAfterContentInit() {
 		this.filter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter)
 			.pipe(

@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -68,7 +68,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 174;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
@@ -103,7 +103,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
+	async ngAfterContentInit() {
 		this.listenForBasicPref$((prefs) => prefs.collectionShowUncollectiblePortraits).subscribe((value) => {
 			this.showUncollectiblePortraits = value;
 			this.updateInfo();

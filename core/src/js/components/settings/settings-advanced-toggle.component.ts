@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAdvancedToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class SettingsAdvancedToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	advancedModeToggledOn$: Observable<boolean>;
 
 	constructor(
@@ -31,7 +31,7 @@ export class SettingsAdvancedToggleComponent extends AbstractSubscriptionCompone
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.advancedModeToggledOn$ = this.listenForBasicPref$((prefs) => prefs.advancedModeToggledOn);
 	}
 

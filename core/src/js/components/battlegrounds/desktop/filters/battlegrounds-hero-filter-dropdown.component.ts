@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -30,7 +37,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsHeroFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BattlegroundsHeroFilterDropdownComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit {
 	options: readonly HeroFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -62,6 +71,9 @@ export class BattlegroundsHeroFilterDropdownComponent extends AbstractSubscripti
 				)
 				.sort((a, b) => this.collator.compare(a.label, b.label)),
 		] as readonly HeroFilterOption[];
+	}
+
+	ngAfterContentInit() {
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -31,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	isLoading: boolean;
 	allReplays: readonly ArenaRun[];
 	displayedGroupedReplays: readonly GroupedRun[] = [];
@@ -42,6 +50,9 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
 		this.sub$$ = this.store

@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -63,7 +63,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
@@ -89,7 +89,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 		this.uniqueId = uuid();
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.sub$$ = this.store
 			.listenPrefs$((prefs) => prefs[this.field])
 			.pipe(

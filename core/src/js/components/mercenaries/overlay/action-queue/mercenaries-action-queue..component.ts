@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -52,7 +53,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesActionsQueueComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	actions$: Observable<readonly MercenariesAction[]>;
 
 	windowId: string;
@@ -81,8 +82,7 @@ export class MercenariesActionsQueueComponent
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+	ngAfterContentInit() {
 		this.actions$ = this.store
 			.listenMercenaries$(([state]) => state?.actionQueue)
 			.pipe(
@@ -121,7 +121,10 @@ export class MercenariesActionsQueueComponent
 					this.cdr.detectChanges();
 				}
 			});
+	}
 
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();

@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
@@ -74,7 +81,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDesktopComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class DuelsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly DuelsCategory[]>;
@@ -88,6 +95,9 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.duels.loading)
 			.pipe(

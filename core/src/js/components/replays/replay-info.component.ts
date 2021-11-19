@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -172,7 +172,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
 	@Input() displayCoin = true;
@@ -234,7 +234,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 		super(store, cdr);
 	}
 
-	ngAfterViewInit() {
+	ngAfterContentInit() {
 		this.sub$$ = this.listenForBasicPref$((prefs) => prefs.replaysShowClassIcon).subscribe(
 			(replaysShowClassIcon) => {
 				this.replaysShowClassIcon = replaysShowClassIcon;

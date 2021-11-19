@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -64,7 +65,9 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class WindowWrapperComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class WindowWrapperComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	@Input() allowResize = false;
 
 	maximized: boolean;
@@ -93,11 +96,7 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		const currentWindow = await this.ow.getCurrentWindow();
-		this.windowId = currentWindow.id;
-		console.log('windowId', this.windowId);
-
+	ngAfterContentInit(): void {
 		this.sub$$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.globalZoomLevel)
 			.pipe(
@@ -122,6 +121,12 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 				this.ow.setZoom(this.zoom);
 				this.changeWindowSize();
 			});
+	}
+
+	async ngAfterViewInit() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId = currentWindow.id;
+		console.log('windowId', this.windowId);
 
 		this.stateChangedListener = this.ow.addStateChangedListener(currentWindow.name, (message) => {
 			if (message.window_state_ex === 'maximized') {
