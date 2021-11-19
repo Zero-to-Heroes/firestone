@@ -125,12 +125,14 @@ export class CardTooltipComponent {
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
-				const image = this.localized
-					? this.i18n.getCardImage(cardId, {
-							isBgs: this.isBgs,
-							isPremium: cardId.includes('premium'),
-					  })
-					: this.i18n.getNonLocalizedCardImage(cardId);
+				const image = !!cardId
+					? this.localized
+						? this.i18n.getCardImage(cardId, {
+								isBgs: this.isBgs,
+								isPremium: cardId.includes('premium'),
+						  })
+						: this.i18n.getNonLocalizedCardImage(cardId)
+					: null;
 				return {
 					cardId: cardId,
 					image: image,
