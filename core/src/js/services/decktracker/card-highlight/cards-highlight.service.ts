@@ -182,9 +182,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.WarsongWrangler:
 				return and(inDeck, beast);
 			case CardIds.Drekthar1:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return and(inDeck, minion, effectiveCostMore(card.getEffectiveManaCost() - 1));
 			case CardIds.VanndarStormpike:
-				return and(inDeck, minion, effectiveCostMore(card.getEffectiveManaCost()));
+				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
 
 			// Duels
 			case CardIds.PrincessTavernBrawl:
