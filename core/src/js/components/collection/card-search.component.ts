@@ -1,31 +1,31 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
-	HostListener,
-	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SetCard } from '../../models/set';
-import { Events } from '../../services/events.service';
 import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/events/collection/update-card-search-results-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 declare let amplitude;
 @Component({
 	selector: 'card-search',
 	styleUrls: [`../../../css/component/collection/card-search.component.scss`, `../../../css/global/scrollbar.scss`],
 	template: `
-		<div class="card-search" (keyup)="onValidateSearch($event)">
+		<div
+			class="card-search"
+			(keyup)="onValidateSearch($event)"
+			*ngIf="{ searchResults: searchResults$ | async } as value"
+		>
 			<label class="search-label" [ngClass]="{ 'search-active': _searchString }">
 				<i class="i-30">
 					<svg class="svg-icon-fill">
@@ -42,7 +42,7 @@ declare let amplitude;
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
 				<card-search-autocomplete-item
-					*ngFor="let result of _searchResults; trackBy: trackById"
+					*ngFor="let result of value.searchResults; trackBy: trackById"
 					[fullString]="result.name"
 					[searchString]="_searchString"
 					(mousedown)="showCard(result)"
@@ -53,43 +53,47 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardSearchComponent implements AfterViewInit, OnDestroy {
-	_searchResults: readonly SetCard[];
-	_searchString: string;
+export class CardSearchComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	searchResults$: Observable<readonly SetCard[]>;
 
+	showSearchResults: boolean;
+	_searchString: string;
 	searchForm = new FormControl();
 
-	showSearchResults = false;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private subscription: Subscription;
-
-	constructor(private events: Events, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.subscription = this.searchForm.valueChanges
-			.pipe(debounceTime(200))
-			.pipe(distinctUntilChanged())
+	ngAfterContentInit() {
+		this.searchResults$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.binder.allSets,
+				([main, nav, prefs]) => nav.navigationCollection.searchResults,
+			)
+			.pipe(
+				this.mapData(([allSets, searchResults]) =>
+					searchResults?.length > 0
+						? allSets
+								.map((set) => set.allCards)
+								.reduce((a, b) => a.concat(b), [])
+								.filter((card) => searchResults.indexOf(card.id) !== -1)
+						: null,
+				),
+			);
+		this.searchResults$.subscribe((result) => (this.showSearchResults = !!result?.length));
+		this.store
+			.listen$(([main, nav, prefs]) => nav.navigationCollection.searchString)
+			.pipe(this.mapData(([searchString]) => searchString))
+			.subscribe((searchString) => {
+				this.searchForm.setValue(searchString);
+				this._searchString = searchString;
+			});
+		this.searchForm.valueChanges
+			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
 			.subscribe((data) => {
 				this._searchString = data;
 				this.onSearchStringChange();
 			});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		this.subscription?.unsubscribe();
-	}
-
-	@Input('searchString') set searchString(searchString: string) {
-		this.searchForm.setValue(searchString);
-		this._searchString = searchString;
-	}
-
-	@Input('searchResults') set searchResults(searchResults: readonly SetCard[]) {
-		this._searchResults = searchResults;
-		this.showSearchResults = searchResults && searchResults.length > 0;
 	}
 
 	filterKeyPress(event: KeyboardEvent) {
@@ -108,12 +112,12 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 			'page': 'cards',
 			'searchString': this._searchString,
 		});
-		this.stateUpdater.next(new UpdateCardSearchResultsEvent(this._searchString));
+		this.store.send(new UpdateCardSearchResultsEvent(this._searchString));
 	}
 
 	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this._searchString) {
-			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
+			this.store.send(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -122,7 +126,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 	}
 
 	showCard(result: SetCard) {
-		this.stateUpdater.next(new ShowCardDetailsEvent(result.id));
+		this.store.send(new ShowCardDetailsEvent(result.id));
 	}
 
 	onFocusLost() {

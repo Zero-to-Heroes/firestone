@@ -1,13 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { orderBy } from 'lodash';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
-import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { InternalCardBack } from './internal-card-back';
 
@@ -15,19 +11,23 @@ import { InternalCardBack } from './internal-card-back';
 	selector: 'card-backs',
 	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/card-backs.component.scss`],
 	template: `
-		<div class="card-backs">
+		<div class="card-backs" *ngIf="{ shownCardBacks: shownCardBacks$ | async } as value">
 			<div class="show-filter">
 				<collection-owned-filter
 					class="owned-filter"
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
-				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
+				<progress-bar
+					class="progress-bar"
+					[current]="unlocked$ | async"
+					[total]="total$ | async"
+				></progress-bar>
 			</div>
-			<ul class="cards-list" *ngIf="shownCardBacks?.length" scrollable>
+			<ul class="cards-list" *ngIf="value.shownCardBacks?.length" scrollable>
 				<ng-container *ngIf="{ animated: animated$ | async } as value">
 					<card-back
 						class="card-back"
-						*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
+						*ngFor="let cardBack of value.shownCardBacks; let i = index; trackBy: trackByCardId"
 						[cardBack]="cardBack"
 						[animated]="value.animated"
 						[style.width.px]="cardWidth"
@@ -36,7 +36,7 @@ import { InternalCardBack } from './internal-card-back';
 					</card-back>
 				</ng-container>
 			</ul>
-			<collection-empty-state *ngIf="!shownCardBacks?.length"> </collection-empty-state>
+			<collection-empty-state *ngIf="!value.shownCardBacks?.length"> </collection-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,25 +45,13 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 	readonly DEFAULT_CARD_WIDTH = 139;
 
 	animated$: Observable<boolean>;
+	shownCardBacks$: Observable<readonly InternalCardBack[]>;
+	unlocked$: Observable<number>;
+	total$: Observable<number>;
+
+	cardsOwnedActiveFilter$$ = new BehaviorSubject<'own' | 'dontown' | 'all'>('all');
+
 	cardWidth = this.DEFAULT_CARD_WIDTH;
-
-	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
-
-	@Input() set cardBacks(cardBacks: readonly CardBack[]) {
-		this._cardBacks = orderBy(cardBacks, 'id', 'desc');
-		this.updateInfo();
-	}
-
-	@Input() set navigation(value: NavigationCollection) {
-		this._navigation = value;
-		this.updateInfo();
-	}
-
-	_cardBacks: readonly CardBack[];
-	shownCardBacks: readonly InternalCardBack[];
-	_navigation: NavigationCollection;
-	unlocked: number;
-	total: number;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -73,14 +61,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((value) => {
 				const cardScale = value / 100;
 				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
@@ -88,11 +69,26 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 					this.cdr.detectChanges();
 				}
 			});
+		const cardBacks$ = this.store
+			.listen$(([main, nav, prefs]) => main.binder.cardBacks)
+			.pipe(this.mapData(([cardBacks]) => cardBacks));
+		this.total$ = cardBacks$.pipe(this.mapData((cardBacks) => cardBacks?.length ?? 0));
+		this.unlocked$ = cardBacks$.pipe(
+			this.mapData((cardBacks) => cardBacks?.filter((item) => item.owned).length ?? 0),
+		);
+		this.shownCardBacks$ = combineLatest(this.cardsOwnedActiveFilter$$.asObservable(), cardBacks$).pipe(
+			this.mapData(([filter, cardBacks]) =>
+				cardBacks?.filter(this.filterCardsOwned(filter)).map((cardBack) => ({
+					...cardBack,
+					image: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.png?v=2`,
+					animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
+				})),
+			),
+		);
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
-		this.cardsOwnedActiveFilter = option.value as any;
-		this.updateInfo();
+		this.cardsOwnedActiveFilter$$.next(option.value as any);
 	}
 
 	showFullCardBack(cardBack: CardBack) {
@@ -103,26 +99,8 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 		return card.id;
 	}
 
-	private updateInfo() {
-		if (!this._cardBacks) {
-			return;
-		}
-
-		this.total = this._cardBacks.length;
-		this.unlocked = this._cardBacks.filter((item) => item.owned).length;
-
-		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map((cardBack) => ({
-			...cardBack,
-			image: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.png?v=2`,
-			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
-		}));
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr?.detectChanges();
-		}
-	}
-
-	private filterCardsOwned() {
-		switch (this.cardsOwnedActiveFilter) {
+	private filterCardsOwned(cardsOwnedActiveFilter: 'own' | 'dontown' | 'all') {
+		switch (cardsOwnedActiveFilter) {
 			case 'own':
 				return (card: CardBack) => card.owned;
 			case 'dontown':
@@ -130,7 +108,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 			case 'all':
 				return (card: CardBack) => true;
 			default:
-				console.warn('unknown filter', this.cardsOwnedActiveFilter);
+				console.warn('unknown filter', cardsOwnedActiveFilter);
 				return (card: CardBack) => true;
 		}
 	}

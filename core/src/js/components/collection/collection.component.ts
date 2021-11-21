@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
-import { BinderState } from '../../models/mainwindow/binder-state';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
-import { CollectionReferenceCard } from './collection-reference-card';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'collection',
@@ -14,175 +15,144 @@ import { CollectionReferenceCard } from './collection-reference-card';
 		`../../../css/component/collection/collection.component.scss`,
 	],
 	template: `
-		<div class="app-section collection">
-			<section class="main" [ngClass]="{ 'divider': _navigation.navigationCollection.currentView === 'cards' }">
-				<with-loading [isLoading]="dataState.isLoading">
-					<div class="content main-content">
-						<global-header
-							*ngIf="
-								_navigation.text && _navigation?.navigationCollection.menuDisplayType === 'breadcrumbs'
-							"
-						>
-						</global-header>
+		<div
+			class="app-section collection"
+			*ngIf="{
+				currentView: currentView$ | async,
+				selectedSet: selectedSet$ | async,
+				selectedCard: selectedCard$ | async,
+				selectedCardBack: selectedCardBack$ | async,
+				searchString: searchString$ | async
+			} as value"
+		>
+			<section class="main" [ngClass]="{ 'divider': value.currentView === 'cards' }">
+				<with-loading [isLoading]="loading$ | async">
+					<div class="content main-content" *ngIf="menuDisplayType$ | async as menuDisplayType">
+						<global-header *ngIf="menuDisplayType === 'breadcrumbs'"> </global-header>
 						<collection-menu-selection
 							class="menu-selection"
-							*ngIf="_navigation?.navigationCollection.menuDisplayType === 'menu'"
-							[selectedTab]="_navigation.navigationCollection.currentView"
+							*ngIf="menuDisplayType === 'menu'"
+							[selectedTab]="value.currentView"
 						>
 						</collection-menu-selection>
-						<sets *ngIf="_navigation.navigationCollection.currentView === 'sets'"> </sets>
+						<sets *ngIf="value.currentView === 'sets'"> </sets>
 						<cards
-							[cardList]="_navigation.navigationCollection.cardList"
-							[set]="selectedSet"
+							[set]="value.selectedSet"
 							[searchString]="_navigation.navigationCollection.searchString"
-							*ngIf="_navigation.navigationCollection.currentView === 'cards'"
+							*ngIf="value.currentView === 'cards'"
 						>
 						</cards>
 						<full-card
 							class="full-card"
-							[selectedCard]="selectedCard"
-							*ngIf="_navigation.navigationCollection.currentView === 'card-details'"
+							[selectedCard]="value.selectedCard"
+							*ngIf="value.currentView === 'card-details'"
 						>
 						</full-card>
-						<card-backs
-							*ngIf="_navigation.navigationCollection.currentView === 'card-backs'"
-							[cardBacks]="dataState?.cardBacks"
-						>
-						</card-backs>
+						<card-backs *ngIf="value.currentView === 'card-backs'"> </card-backs>
 						<full-card-back
 							class="full-card"
-							[cardBack]="selectedCardBack"
-							*ngIf="_navigation.navigationCollection.currentView === 'card-back-details'"
+							[cardBack]="value.selectedCardBack"
+							*ngIf="value.currentView === 'card-back-details'"
 						>
 						</full-card-back>
-						<hero-portraits
-							*ngIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
-							[heroPortraits]="heroPortraits"
-						>
-						</hero-portraits>
-						<the-coins *ngIf="_navigation.navigationCollection.currentView === 'coins'" [coins]="coins">
-						</the-coins>
-						<pack-stats
-							*ngIf="_navigation.navigationCollection.currentView === 'packs'"
-							[state]="dataState"
-						>
-						</pack-stats>
+						<hero-portraits *ngIf="value.currentView === 'hero-portraits'"> </hero-portraits>
+						<the-coins *ngIf="value.currentView === 'coins'"> </the-coins>
+						<pack-stats *ngIf="value.currentView === 'packs'"></pack-stats>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
 				<card-search
-					[searchString]="_navigation.navigationCollection.searchString"
-					[searchResults]="searchResults"
-					*ngIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
+					*ngIf="
+						value.currentView !== 'packs' &&
+						!isSetDetails(value.currentView, value.selectedSet, value.searchString)
+					"
 				></card-search>
 				<card-history
-					[selectedCard]="selectedCard"
-					[state]="dataState"
-					*ngIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
+					[selectedCard]="value.selectedCard"
+					*ngIf="
+						value.currentView !== 'packs' &&
+						!isSetDetails(value.currentView, value.selectedSet, value.searchString)
+					"
 				>
 				</card-history>
-				<pack-history [state]="dataState" *ngIf="_navigation.navigationCollection.currentView === 'packs'">
-				</pack-history>
-				<set-stats [set]="selectedSet" [state]="dataState" *ngIf="isSetDetails()"> </set-stats>
+				<pack-history [state]="dataState" *ngIf="value.currentView === 'packs'"> </pack-history>
+				<set-stats
+					[set]="value.selectedSet"
+					*ngIf="isSetDetails(value.currentView, value.selectedSet, value.searchString)"
+				>
+				</set-stats>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionComponent {
-	dataState: BinderState;
-	_navigation: NavigationState;
+export class CollectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	loading$: Observable<boolean>;
+	currentView$: Observable<CurrentView>;
+	menuDisplayType$: Observable<string>;
+	searchString$: Observable<string>;
+	selectedSet$: Observable<Set>;
+	selectedCard$: Observable<SetCard | ReferenceCard>;
+	selectedCardBack$: Observable<CardBack>;
 
-	selectedSet: Set;
-	selectedCard: SetCard | ReferenceCard;
-	selectedCardBack: CardBack;
-	searchResults: readonly SetCard[];
-	heroPortraits: readonly CollectionReferenceCard[] = [];
-	coins: readonly CollectionReferenceCard[] = [];
-
-	@Input() set state(state: BinderState) {
-		this.dataState = state;
-		this.updateValues();
+	isSetDetails(currentView: CurrentView, selectedSet: Set, searchString: string): boolean {
+		return currentView === 'cards' && !!selectedSet && !searchString;
 	}
 
-	@Input() set navigation(value: NavigationState) {
-		this._navigation = value;
-		this.updateValues();
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
 	}
 
-	isSetDetails(): boolean {
-		return (
-			this._navigation.navigationCollection.currentView === 'cards' &&
-			this.selectedSet &&
-			!this._navigation.navigationCollection.searchString
-		);
-	}
-
-	constructor(private readonly allCards: CardsFacadeService) {}
-
-	private updateValues() {
-		if (!this.dataState || !this._navigation) {
-			return;
-		}
-
-		this.selectedSet = this.dataState.allSets.find(
-			(set) => set.id === this._navigation.navigationCollection?.selectedSetId,
-		);
-		this.selectedCard = this._navigation.navigationCollection?.selectedCardId
-			? this.dataState.allSets
-					.map((set) => set.allCards)
-					.reduce((a, b) => a.concat(b), [])
-					.find((card) => card.id === this._navigation.navigationCollection?.selectedCardId) ??
-			  // This is the case when it's not a collectible card for instance
-			  this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId)
-			: null;
-		this.selectedCardBack = this.dataState.cardBacks.find(
-			(cardBack) => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
-		);
-		this.searchResults =
-			this._navigation.navigationCollection.searchResults?.length > 0
-				? this.dataState.allSets
-						.map((set) => set.allCards)
-						.reduce((a, b) => a.concat(b), [])
-						.filter((card) => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
-				: null;
-		this.heroPortraits = this.buildHeroPortraits();
-		this.coins = this.buildCoins();
-	}
-
-	private buildHeroPortraits(): readonly CollectionReferenceCard[] {
-		const allPortraits: readonly ReferenceCard[] = this.allCards
-			.getCards()
-			.filter((card) => card.set === 'Hero_skins')
-			.filter((card) => card.collectible);
-		const portraitCardIds = allPortraits.map((card) => card.id);
-		const ownedPortraits = this.dataState.collection
-			.filter((card) => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
-			.map((card) => card.id)
-			.filter((cardId) => portraitCardIds.includes(cardId));
-		return allPortraits.map((card) =>
-			ownedPortraits.includes(card.id)
-				? ({
-						...card,
-						numberOwned: 1,
-				  } as CollectionReferenceCard)
-				: ({
-						...card,
-						numberOwned: 0,
-				  } as CollectionReferenceCard),
-		) as CollectionReferenceCard[];
-	}
-
-	private buildCoins(): readonly CollectionReferenceCard[] {
-		return this.dataState.coins
-			.map((coin) => {
-				const refCoin = this.allCards.getCard(coin.cardId);
-				return {
-					...refCoin,
-					numberOwned: coin.owned ? 1 : 0,
-				};
-			})
-			.sort((a, b) => a.dbfId - b.dbfId);
+	ngAfterContentInit() {
+		this.loading$ = this.store
+			.listen$(([main, nav, prefs]) => main.binder.isLoading)
+			.pipe(this.mapData(([loading]) => loading));
+		this.currentView$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationCollection.currentView)
+			.pipe(this.mapData(([currentView]) => currentView));
+		this.menuDisplayType$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationCollection.menuDisplayType)
+			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
+		this.searchString$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationCollection.searchString)
+			.pipe(this.mapData(([searchString]) => searchString));
+		this.selectedSet$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.binder.allSets,
+				([main, nav, prefs]) => nav.navigationCollection.selectedSetId,
+			)
+			.pipe(this.mapData(([allSets, selectedSetId]) => allSets.find((set) => set.id === selectedSetId)));
+		this.selectedCard$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.binder.allSets,
+				([main, nav, prefs]) => nav.navigationCollection.selectedCardId,
+			)
+			.pipe(
+				this.mapData(([allSets, selectedCardId]) =>
+					selectedCardId
+						? allSets
+								.map((set) => set.allCards)
+								.reduce((a, b) => a.concat(b), [])
+								.find((card) => card.id === selectedCardId) ??
+						  // This is the case when it's not a collectible card for instance
+						  this.allCards.getCard(selectedCardId)
+						: null,
+				),
+			);
+		this.selectedCardBack$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.binder.cardBacks,
+				([main, nav, prefs]) => nav.navigationCollection.selectedCardBackId,
+			)
+			.pipe(
+				this.mapData(([cardBacks, selectedCardBackId]) =>
+					cardBacks.find((cardBack) => cardBack.id === selectedCardBackId),
+				),
+			);
 	}
 }

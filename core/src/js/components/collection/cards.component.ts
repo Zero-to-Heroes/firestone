@@ -217,6 +217,24 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 					this.cdr.detectChanges();
 				}
 			});
+		this.store
+			.listen$(([main, nav, prefs]) => nav.navigationCollection.cardList)
+			.pipe(this.mapData(([cardList]) => cardList))
+			.subscribe((cardList: readonly SetCard[]) => {
+				this._cardList = sortBy(cardList, 'cost', 'name');
+				this.classActiveFilter = this.CLASS_FILTER_ALL;
+				this.rarityActiveFilter = this.RARITY_FILTER_ALL;
+				this.cardsOwnedActiveFilter = this.FILTER_ALL;
+				// Now render all the card items
+				// TODO: we do this to speed up the initial load of the page
+				// This should probably be improved in several ways:
+				// - Extract this to a directive, so that the logic is abstracted away from each rendering page
+				// - Be smart about how many items to display at first, so that the page looks full right away
+				// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
+				// this.gradualLoadActiveCards(this._cardList);
+				// And hide some of them depending on the filters
+				this.updateShownCards();
+			});
 	}
 
 	ngAfterViewInit() {
@@ -234,22 +252,6 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 
 	@Input('set') set cardSet(set: Set) {
 		this._set = set;
-	}
-
-	@Input('cardList') set cardList(cardList: SetCard[]) {
-		this._cardList = sortBy(cardList, 'cost', 'name');
-		this.classActiveFilter = this.CLASS_FILTER_ALL;
-		this.rarityActiveFilter = this.RARITY_FILTER_ALL;
-		this.cardsOwnedActiveFilter = this.FILTER_ALL;
-		// Now render all the card items
-		// TODO: we do this to speed up the initial load of the page
-		// This should probably be improved in several ways:
-		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
-		// - Be smart about how many items to display at first, so that the page looks full right away
-		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
-		// this.gradualLoadActiveCards(this._cardList);
-		// And hide some of them depending on the filters
-		this.updateShownCards();
 	}
 
 	@Input('searchString') set searchString(searchString: string) {

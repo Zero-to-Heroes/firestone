@@ -1,10 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { combineLatest, Observable } from 'rxjs';
 import { PackInfo } from '../../models/collection/pack-info';
-import { BinderState } from '../../models/mainwindow/binder-state';
 import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { sumOnArray } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -13,19 +14,23 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	template: `
 		<div class="pack-stats" scrollable>
 			<div class="header">
-				All-time packs ({{ totalPacks }})
+				All-time packs ({{ totalPacks$ | async }})
 				<preference-toggle
 					class="show-buyable-packs"
-					[ngClass]="{ 'active': showOnlyBuyablePacks }"
+					[ngClass]="{ 'active': showOnlyBuyablePacks$ | async }"
 					field="collectionShowOnlyBuyablePacks"
 					label="Only show main packs"
 					helpTooltip="Show only the packs that can be bought in the shop, hiding all promotional / reward packs"
 				></preference-toggle>
 			</div>
-			<div class="packs-container" [ngClass]="{ 'empty': !_packs?.length }">
+			<div
+				class="packs-container"
+				*ngIf="{ packs: packs$ | async } as value"
+				[ngClass]="{ 'empty': !value.packs?.length }"
+			>
 				<div
 					class="pack-stat"
-					*ngFor="let pack of _packs; trackBy: trackByPackFn"
+					*ngFor="let pack of value.packs; trackBy: trackByPackFn"
 					[ngClass]="{ 'missing': !pack.totalObtained }"
 				>
 					<div
@@ -50,19 +55,21 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					<div class="value">{{ pack.totalObtained }}</div>
 				</div>
 			</div>
-			<div
-				class="header best-packs-header"
-				*ngIf="bestPacks?.length"
-				helpTooltip="Best packs you opened with Firestone running"
-			>
-				Best {{ bestPacks.length }} opened packs
-			</div>
-			<div class="best-packs-container" *ngIf="bestPacks?.length">
-				<div class="best-pack" *ngFor="let pack of bestPacks">
-					<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
-					<pack-display class="display" [pack]="pack"></pack-display>
+			<ng-container *ngIf="{ bestPacks: bestPacks$ | async } as value">
+				<div
+					class="header best-packs-header"
+					*ngIf="bestPacks?.length"
+					helpTooltip="Best packs you opened with Firestone running"
+				>
+					Best {{ bestPacks.length }} opened packs
 				</div>
-			</div>
+				<div class="best-packs-container" *ngIf="bestPacks?.length">
+					<div class="best-pack" *ngFor="let pack of bestPacks">
+						<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
+						<pack-display class="display" [pack]="pack"></pack-display>
+					</div>
+				</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,69 +78,54 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 
+	totalPacks$: Observable<number>;
+	showOnlyBuyablePacks$: Observable<boolean>;
+	packs$: Observable<readonly InternalPackInfo[]>;
+	bestPacks$: Observable<readonly PackResult[]>;
+
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
-
-	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
-
-	@Input() set state(value: BinderState) {
-		if (value.packs === this._packs && value.packStats === this._packStats) {
-			return;
-		}
-
-		this._packStats = value?.packStats ?? [];
-		this._inputPacks = value.packs ?? [];
-		this.updateInfos();
-	}
-
-	_inputPacks: readonly PackInfo[];
-	_packs: readonly InternalPackInfo[] = [];
-	_packStats: readonly PackResult[];
-	// _navigation: NavigationCollection;
-	totalPacks: number;
-	bestPacks: readonly PackResult[] = [];
-
-	showOnlyBuyablePacks: boolean;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks).subscribe((value) => {
-			this.showOnlyBuyablePacks = value;
-			this.updateInfos();
-		});
+		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
+		this.packs$ = combineLatest(
+			this.showOnlyBuyablePacks$,
+			this.store.listen$(([main, nav, prefs]) => main.binder.packs),
+		).pipe(
+			this.mapData(([showOnlyBuyablePacks, [inputPacks]]) =>
+				Object.values(BoosterType)
+					.filter((boosterId: BoosterType) => !isNaN(boosterId))
+					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
+					.filter(
+						(boosterId: BoosterType) =>
+							!showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
+					)
+					.map((boosterId: BoosterType) => ({
+						packType: boosterId,
+						totalObtained: inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
+						unopened: 0,
+						name: boosterIdToBoosterName(boosterId),
+					}))
+					.filter((info) => info)
+					.reverse(),
+			),
+		);
+		this.totalPacks$ = this.packs$.pipe(this.mapData((packs) => sumOnArray(packs, (pack) => pack.totalObtained)));
+		this.bestPacks$ = this.store
+			.listen$(([main, nav, prefs]) => main.binder.packStats)
+			.pipe(
+				this.mapData(([packStats]) =>
+					[...packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a)).slice(0, 5),
+				),
+			);
 	}
 
 	trackByPackFn(index: number, item: InternalPackInfo) {
 		return item.packType;
-	}
-
-	private updateInfos() {
-		if (!this._packs || !this._packStats) {
-			return;
-		}
-
-		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
-
-		this.bestPacks = orderedPacks.slice(0, 5);
-
-		this._packs = Object.values(BoosterType)
-			.filter((boosterId: BoosterType) => !isNaN(boosterId))
-			.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
-			.filter(
-				(boosterId: BoosterType) => !this.showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
-			)
-			.map((boosterId: BoosterType) => ({
-				packType: boosterId,
-				totalObtained: this._inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
-				unopened: 0,
-				name: boosterIdToBoosterName(boosterId),
-			}))
-			.filter((info) => info)
-			.reverse();
-		this.totalPacks = this._packs.map((pack) => pack.totalObtained).reduce((a, b) => a + b, 0);
 	}
 }
 
