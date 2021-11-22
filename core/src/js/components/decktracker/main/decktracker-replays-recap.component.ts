@@ -41,7 +41,7 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 			)
 			.pipe(
 				this.mapData(([decks, selectedDeckstring]) =>
-					(decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []) as GameStat[])
+					((decks?.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []) as GameStat[]) ?? [])
 						.filter((stat) => (selectedDeckstring ? stat.playerDecklist === selectedDeckstring : true))
 						.sort((a: GameStat, b: GameStat) => {
 							if (a.creationTimestamp <= b.creationTimestamp) {

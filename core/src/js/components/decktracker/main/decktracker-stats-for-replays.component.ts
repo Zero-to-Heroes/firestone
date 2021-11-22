@@ -1,7 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-stats-for-replays',
@@ -19,14 +17,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerStatsForReplaysComponent implements AfterViewInit {
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
+export class DecktrackerStatsForReplaysComponent {
 	@Input() set replays(value: readonly GameStat[]) {
 		if (value === this._replays) {
 			return;
 		}
-		this._replays = value;
+		this._replays = value ?? [];
 		this.updateInfos();
 	}
 
@@ -34,17 +30,7 @@ export class DecktrackerStatsForReplaysComponent implements AfterViewInit {
 
 	private _replays: readonly GameStat[];
 
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	private updateInfos() {
-		if (!this._replays?.length) {
-			return;
-		}
-
 		const replaysFirst = this._replays.filter((replay) => replay.coinPlay === 'play');
 		const replaysCoin = this._replays.filter((replay) => replay.coinPlay === 'coin');
 		const replaysWon = this._replays.filter((replay) => replay.result === 'won');
@@ -67,7 +53,7 @@ export class DecktrackerStatsForReplaysComponent implements AfterViewInit {
 		this.stats = [
 			{
 				label: 'Total games played',
-				value: `${this._replays.length.toLocaleString()}`,
+				value: `${this._replays.length?.toLocaleString() ?? '0'}`,
 				class: 'games',
 			},
 			{

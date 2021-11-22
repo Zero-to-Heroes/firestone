@@ -14,6 +14,7 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { classes } from '../../hs-utils';
+import { groupByFunction } from '../../utils';
 
 @Injectable()
 export class DecksStateBuilderService {
@@ -23,29 +24,37 @@ export class DecksStateBuilderService {
 		patch: PatchInfo,
 		prefs: Preferences = null,
 	): readonly DeckSummary[] {
-		if (!stats || !stats.gameStats) {
+		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
+		if (!stats || !stats.gameStats?.stats?.length) {
 			return [];
 		}
-		const validReplays = this.buildValidReplays(stats, filters, prefs, patch);
-
-		const groupByDeckstring = groupBy('playerDecklist');
-		const statsByDeck = groupByDeckstring(validReplays);
-
+		const rankedStats = stats.gameStats.stats
+			.filter((stat) => stat.gameMode === 'ranked')
+			.filter((stat) => !!stat.playerDecklist);
+		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
+		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings
-			.map((deckstring) => this.buildDeckSummary(deckstring, statsByDeck[deckstring], prefs))
+			.map((deckstring) =>
+				this.buildDeckSummary(
+					deckstring,
+					this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch),
+					prefs,
+					statsByDeck[deckstring][0],
+				),
+			)
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
 	}
 
 	private buildValidReplays(
-		stats: StatsState,
+		stats: readonly GameStat[],
 		filters: DeckFilters,
 		prefs: Preferences,
 		patch: PatchInfo,
 	): readonly GameStat[] {
-		const replaysForDate = stats.gameStats.stats
+		const replaysForDate = stats
 			// We have to also filter the info here, as otherwise we need to do a full state reset
 			// after the user presses the delete button
 			.filter(
@@ -160,7 +169,12 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private buildDeckSummary(deckstring: string, stats: readonly GameStat[], prefs: Preferences): DeckSummary {
+	private buildDeckSummary(
+		deckstring: string,
+		stats: readonly GameStat[],
+		prefs: Preferences,
+		sampleGame?: GameStat,
+	): DeckSummary {
 		const statsWithReset = stats.filter(
 			(stat) =>
 				!prefs?.desktopDeckStatsReset ||
@@ -171,19 +185,19 @@ export class DecksStateBuilderService {
 		const deckName =
 			stats.filter((stat) => stat.playerDeckName).length > 0
 				? stats.filter((stat) => stat.playerDeckName)[0].playerDeckName
-				: undefined;
+				: sampleGame?.playerDeckName;
 		const deckArchetype =
 			stats.filter((stat) => stat.playerArchetypeId).length > 0
 				? stats.filter((stat) => stat.playerArchetypeId)[0].playerArchetypeId
-				: undefined;
+				: sampleGame?.playerArchetypeId;
 		const deckSkin =
 			stats.filter((stat) => stat.playerCardId).length > 0
 				? stats.filter((stat) => stat.playerCardId)[0].playerCardId
-				: undefined;
+				: sampleGame?.playerCardId;
 		const deckClass =
 			stats.filter((stat) => stat.playerClass).length > 0
 				? stats.filter((stat) => stat.playerClass)[0].playerClass
-				: undefined;
+				: sampleGame?.playerClass;
 		const totalGames = statsWithReset.length;
 		const totalWins = statsWithReset.filter((stat) => stat.result === 'won').length;
 		const lastUsed = statsWithReset.filter((stat) => stat.creationTimestamp)?.length
@@ -238,10 +252,3 @@ export class DecksStateBuilderService {
 		});
 	}
 }
-
-const groupBy = (key) => (array) =>
-	array.reduce((objectsByKeyValue, obj) => {
-		const value = obj[key];
-		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-		return objectsByKeyValue;
-	}, {});

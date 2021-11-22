@@ -42,6 +42,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 	ngAfterContentInit() {
 		this.decks$ = this.store
 			.listen$(([main, nav, prefs]) => main.decktracker.decks)
-			.pipe(this.mapData(([decks]) => decks));
+			.pipe(this.mapData(([decks]) => decks?.filter((deck) => deck.totalGames > 0) ?? []));
 	}
 }
