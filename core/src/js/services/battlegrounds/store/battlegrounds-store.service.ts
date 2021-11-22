@@ -7,6 +7,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../models/preferences';
 import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
@@ -167,9 +168,10 @@ export class BattlegroundsStoreService {
 				}
 			});
 
-			const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
+			const mainWindowStoreEmitter: BehaviorSubject<[MainWindowState, NavigationState]> =
+				window['mainWindowStoreMerged'];
 			mainWindowStoreEmitter.subscribe((newState) => {
-				this.mainWindowState = newState;
+				this.mainWindowState = newState[0];
 			});
 
 			const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];

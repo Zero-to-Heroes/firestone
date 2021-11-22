@@ -6,6 +6,7 @@ import { debounceTime, filter, tap } from 'rxjs/operators';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
@@ -25,8 +26,7 @@ import { CollectionManager } from './collection-manager.service';
 @Injectable()
 export class CardsMonitorService {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private pendingTimeout;
-	private mainWindowStore: BehaviorSubject<MainWindowState>;
+	private mainWindowStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 
 	private packNotificationQueue = new BehaviorSubject<boolean>(false);
 
@@ -50,7 +50,7 @@ export class CardsMonitorService {
 		};
 
 		setTimeout(() => {
-			this.mainWindowStore = this.ow.getMainWindow().mainWindowStore;
+			this.mainWindowStore = this.ow.getMainWindow().mainWindowStoreMerged;
 			this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 				const changes: MemoryUpdate = event.data[0];
 				if (changes.IsOpeningPack) {
@@ -118,13 +118,13 @@ export class CardsMonitorService {
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
 			if (boosterId === BoosterType.LETTUCE) {
 				return {
-					cardId: this.getLettuceCardId(card, this.mainWindowStore.value?.mercenaries?.referenceData),
+					cardId: this.getLettuceCardId(card, this.mainWindowStore.value[0]?.mercenaries?.referenceData),
 					// No diamond card in pack, so we can leave it like this for now
 					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
 					currencyAmount: card.CurrencyAmount,
 					mercenaryCardId: this.getMercenaryCardId(
 						card.MercenaryId,
-						this.mainWindowStore.value?.mercenaries?.referenceData,
+						this.mainWindowStore.value[0]?.mercenaries?.referenceData,
 					),
 				} as InternalCardInfo;
 			} else {
