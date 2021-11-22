@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
+import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -136,12 +136,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 	}
 
 	showReplays() {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				replaysActiveDeckstringFilter: this.deckstring,
-			})),
-		);
+		this.store.send(new ShowReplaysEvent(this.deckstring, 'ranked'));
 	}
 }
 

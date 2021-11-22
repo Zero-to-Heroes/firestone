@@ -133,6 +133,7 @@ import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match
 import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
+import { ShowReplaysEvent } from './events/replays/show-replays-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
 import { ShowAdsEvent } from './events/show-ads-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
@@ -251,6 +252,7 @@ import { ChangeMatchStatsNumberOfTabsProcessor } from './processors/replays/chan
 import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
+import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
 import { ShowAdsProcessor } from './processors/show-ads-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
@@ -275,11 +277,6 @@ export class MainWindowStoreService {
 	public navigationState = new NavigationState();
 
 	private navigationHistory = new NavigationHistory();
-	// private stateHistory: readonly StateHistory[] = [];
-
-	private stateEmitter = new BehaviorSubject<MainWindowState>(this.state);
-	private navigationStateEmitter = new BehaviorSubject<NavigationState>(this.navigationState);
-	// For the new store behavior
 	private mergedEmitter = new BehaviorSubject<[MainWindowState, NavigationState]>([this.state, this.navigationState]);
 	private processors: Map<string, Processor>;
 
@@ -317,8 +314,6 @@ export class MainWindowStoreService {
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 	) {
 		this.userService.init(this);
-		window['mainWindowStore'] = this.stateEmitter;
-		window['mainWindowStoreNavigation'] = this.navigationStateEmitter;
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
@@ -379,12 +374,9 @@ export class MainWindowStoreService {
 				this.navigationState = newNavState;
 
 				stateWithNavigation = this.updateNavigationArrows(this.navigationState, newState);
-				this.navigationStateEmitter.next(stateWithNavigation);
 			}
 			if (newState) {
 				this.state = newState;
-
-				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					console.warn(
 						'[store] Event',
@@ -595,6 +587,9 @@ export class MainWindowStoreService {
 			// Replays
 			ShowReplayEvent.eventName(),
 			new ShowReplayProcessor(this.bgsRunStatsService),
+
+			ShowReplaysEvent.eventName(),
+			new ShowReplaysProcessor(this.prefs),
 
 			TriggerShowMatchStatsEvent.eventName(),
 			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs),
