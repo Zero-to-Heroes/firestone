@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
 import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../models/preferences';
@@ -24,7 +24,13 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter, logArgs)),
 				takeUntil(this.destroyed$),
 			);

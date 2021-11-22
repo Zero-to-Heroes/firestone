@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MercenariesOutOfCombatState } from '../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Preferences } from '../../../models/preferences';
 import { CardsFacadeService } from '../../cards-facade.service';
@@ -25,7 +26,7 @@ export class MercenariesOutOfCombatService {
 
 	private preferences$: Observable<Preferences>;
 	private events$: Observable<BroadcastEvent>;
-	private mainWindowState$: Observable<MainWindowState>;
+	private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
 
 	private parsers: { [eventType: string]: readonly MercenariesOutOfCombatParser[] };
 	private eventEmitters: ((state: MercenariesOutOfCombatState) => void)[] = [];
@@ -46,15 +47,16 @@ export class MercenariesOutOfCombatService {
 			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
 				.asObservable()
 				.pipe(map((theEvent) => theEvent.preferences as Preferences));
-			this.mainWindowState$ = (this.ow.getMainWindow()
-				.mainWindowStore as BehaviorSubject<MainWindowState>).asObservable();
+			this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
+				[MainWindowState, NavigationState]
+			>).asObservable();
 			this.events$ = this.events.on(Events.MEMORY_UPDATE);
 
 			combineLatest(this.events$, this.mainWindowState$)
 				.pipe(
 					distinctUntilChanged(),
 					filter(([event, mainWindowState]) => !!event),
-					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState)),
+					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
 				)
 				.subscribe();
 			combineLatest(this.preferences$, this.internalStore$.asObservable())

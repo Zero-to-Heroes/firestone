@@ -9,6 +9,7 @@ import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { CardsFacadeService } from '../../cards-facade.service';
@@ -25,7 +26,7 @@ export class GameStatsUpdaterService {
 	// This is set directly by the store
 	public stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	private stateEmitter: BehaviorSubject<MainWindowState>;
+	private stateEmitter: BehaviorSubject<[MainWindowState, NavigationState]>;
 
 	constructor(
 		private readonly events: Events,
@@ -34,7 +35,7 @@ export class GameStatsUpdaterService {
 	) {
 		this.init();
 		setTimeout(() => {
-			this.stateEmitter = this.ow.getMainWindow().mainWindowStore;
+			this.stateEmitter = this.ow.getMainWindow().mainWindowStoreMerged;
 		});
 	}
 
@@ -80,7 +81,7 @@ export class GameStatsUpdaterService {
 		} as GameStat);
 
 		const mainStore = this.stateEmitter?.value;
-		if (!mainStore?.mercenaries?.referenceData) {
+		if (!mainStore[0]?.mercenaries?.referenceData) {
 			return firstGame;
 		}
 
@@ -88,7 +89,7 @@ export class GameStatsUpdaterService {
 			firstGame,
 			replay,
 			game.uncompressedXmlReplay,
-			mainStore?.mercenaries?.referenceData,
+			mainStore[0]?.mercenaries?.referenceData,
 			this.allCards.getService(),
 		);
 		if (!mercHeroTimings || !mercOpponentHeroTimings) {

@@ -3,6 +3,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
@@ -44,7 +45,7 @@ export class MercenariesStoreService {
 	private internalEventSubject$ = new BehaviorSubject<GameEvent>(null);
 
 	private preferences$: Observable<Preferences>;
-	private mainWindowState$: Observable<MainWindowState>;
+	private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
 
 	private parsers: { [eventType: string]: readonly MercenariesParser[] };
 	private eventEmitters: ((state: MercenariesBattleState) => void)[] = [];
@@ -66,14 +67,15 @@ export class MercenariesStoreService {
 			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
 				.asObservable()
 				.pipe(map((theEvent) => theEvent.preferences as Preferences));
-			this.mainWindowState$ = (this.ow.getMainWindow()
-				.mainWindowStore as BehaviorSubject<MainWindowState>).asObservable();
+			this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
+				[MainWindowState, NavigationState]
+			>).asObservable();
 
 			combineLatest(this.internalEventSubject$.asObservable(), this.mainWindowState$)
 				.pipe(
 					distinctUntilChanged(),
 					filter(([event, mainWindowState]) => !!event),
-					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState)),
+					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
 				)
 				.subscribe();
 			combineLatest(this.preferences$, this.internalStore$.asObservable())
