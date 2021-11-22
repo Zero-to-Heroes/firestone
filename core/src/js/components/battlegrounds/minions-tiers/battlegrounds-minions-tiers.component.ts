@@ -236,7 +236,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		});
 	}
 
-	trackByFn(tavernTier: Tier) {
+	trackByFn(index: number, tavernTier: Tier) {
 		return tavernTier?.tavernTier;
 	}
 

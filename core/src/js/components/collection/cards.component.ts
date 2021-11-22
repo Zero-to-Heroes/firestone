@@ -279,7 +279,7 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 		}
 	}
 
-	trackByCardId(card: Card, index: number) {
+	trackByCardId(index: number, card: Card) {
 		return card.id;
 	}
 

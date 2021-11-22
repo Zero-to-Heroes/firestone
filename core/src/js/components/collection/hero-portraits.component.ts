@@ -184,7 +184,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
 
-	trackByCardId(card: CardBack, index: number) {
+	trackByCardId(index: number, card: CardBack) {
 		return card.id;
 	}
 

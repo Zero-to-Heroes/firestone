@@ -88,15 +88,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 								[navigation]="navigationState"
 								*ngIf="value.currentApp === 'replays'"
 							></replays>
-							<achievements
-								class="main-section"
-								[state]="value.dataState.achievements"
-								[navigation]="navigationState"
-								[currentUser]="value.dataState.currentUser"
-								[socialShareUserInfo]="value.dataState.socialShareUserInfo"
-								[globalStats]="value.dataState.globalStats"
-								*ngIf="value.currentApp === 'achievements'"
-							>
+							<achievements class="main-section" *ngIf="value.currentApp === 'achievements'">
 							</achievements>
 							<collection class="main-section" *ngIf="value.currentApp === 'collection'"></collection>
 							<decktracker

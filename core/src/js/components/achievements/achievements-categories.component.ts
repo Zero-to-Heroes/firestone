@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'achievements-categories',
@@ -14,7 +15,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="achievements-categories" scrollable>
 			<ul class="categories">
 				<achievement-category
-					*ngFor="let category of categories"
+					*ngFor="let category of categories$ | async"
 					class="item"
 					[category]="category"
 					(mousedown)="selectCategory(category)"
@@ -24,22 +25,33 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsCategoriesComponent implements AfterViewInit {
-	@Input() public categories: VisualAchievementCategory[];
+export class AchievementsCategoriesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	categories$: Observable<readonly VisualAchievementCategory[]>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
 
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	ngAfterContentInit() {
+		this.categories$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.achievements.categories,
+				([main, nav, prefs]) => nav.navigationAchievements.selectedCategoryId,
+			)
+			.pipe(
+				this.mapData(
+					([categories, selectedCategoryId]) =>
+						categories.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]
+							?.categories ?? categories,
+				),
+			);
 	}
 
 	selectCategory(category: VisualAchievementCategory) {
-		this.stateUpdater.next(new SelectAchievementCategoryEvent(category.id));
+		this.store.send(new SelectAchievementCategoryEvent(category.id));
 	}
 
-	trackById(value: VisualAchievementCategory, index: number) {
+	trackById(index: number, value: VisualAchievementCategory) {
 		return value.id;
 	}
 }

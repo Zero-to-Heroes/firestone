@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'achievement-history',
@@ -9,15 +12,18 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 	],
 	template: `
 		<div class="achievement-history">
-			<div class="history">
+			<div class="history" scrollable>
 				<div class="top-container">
 					<span class="title">My Achievements History</span>
 				</div>
-				<ul>
-					<li *ngFor="let historyItem of achievementHistory; trackBy: trackById">
+				<ul *ngIf="{ achievementsHistory: achievementHistory$ | async } as value">
+					<li *ngFor="let historyItem of value.achievementHistory; trackBy: trackById">
 						<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
 					</li>
-					<section *ngIf="!achievementHistory || achievementHistory.length === 0" class="empty-state">
+					<section
+						*ngIf="!value.achievementHistory || value.achievementHistory.length === 0"
+						class="empty-state"
+					>
 						<i class="i-60x78 pale-theme">
 							<svg class="svg-icon-fill">
 								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
@@ -32,23 +38,20 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryComponent {
-	@Input() achievementHistory: readonly AchievementHistory[];
+export class AchievementHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	achievementHistory$: Observable<readonly AchievementHistory[]>;
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {}
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		this.achievementHistory$ = this.store
+			.listen$(([main, nav, prefs]) => main.achievements.achievementHistory)
+			.pipe(this.mapData(([history]) => history));
+	}
 
 	trackById(index, history: AchievementHistory) {
 		return history.id;
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
-
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
 	}
 }

@@ -329,7 +329,10 @@ export class BgsChartHpComponent {
 		this.doResize();
 	}
 
-	trackByLegendFn(player: { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean }) {
+	trackByLegendFn(
+		index: number,
+		player: { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean },
+	) {
 		return player.cardId;
 	}
 

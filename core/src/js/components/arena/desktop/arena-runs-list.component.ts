@@ -105,11 +105,11 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 		}
 	}
 
-	trackByGroupedRun(item: GroupedRun) {
+	trackByGroupedRun(index: number, item: GroupedRun) {
 		return item.header;
 	}
 
-	trackByRun(item: ArenaRun) {
+	trackByRun(index: number, item: ArenaRun) {
 		return item.id;
 	}
 

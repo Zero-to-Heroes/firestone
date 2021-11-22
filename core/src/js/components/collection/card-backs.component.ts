@@ -95,7 +95,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 		this.store.send(new ShowCardBackDetailsEvent(cardBack.id));
 	}
 
-	trackByCardId(card: CardBack, index: number) {
+	trackByCardId(index: number, card: CardBack) {
 		return card.id;
 	}
 

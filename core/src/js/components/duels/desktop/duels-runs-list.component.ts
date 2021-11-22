@@ -127,11 +127,11 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 		this.runsIterator && this.runsIterator.next();
 	}
 
-	trackByGroupedRun(item: GroupedRun) {
+	trackByGroupedRun(index: number, item: GroupedRun) {
 		return item.header;
 	}
 
-	trackByRun(item: DuelsRun) {
+	trackByRun(index: number, item: DuelsRun) {
 		return item.id;
 	}
 

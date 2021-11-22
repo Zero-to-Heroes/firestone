@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { AchievementsState } from '../../models/mainwindow/achievements-state';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
-import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { CurrentUser } from '../../models/overwolf/profile/current-user';
-import { VisualAchievement } from '../../models/visual-achievement';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CurrentView } from '../../models/mainwindow/achievement/current-view.type';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'achievements',
@@ -15,65 +13,41 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	],
 	template: `
 		<div class="app-section achievements">
-			<section class="main" [ngClass]="{ 'divider': navigation.navigationAchievements.currentView === 'list' }">
-				<with-loading [isLoading]="state.isLoading">
+			<section
+				class="main"
+				*ngIf="currentView$ | async as currentView"
+				[ngClass]="{ 'divider': currentView === 'list' }"
+			>
+				<with-loading [isLoading]="isLoading$ | async">
 					<div class="content main-content">
-						<global-header *ngIf="navigation.text"></global-header>
-
-						<achievements-categories
-							*ngIf="navigation.navigationAchievements.currentView === 'categories'"
-							[categories]="getCategories()"
-						>
-						</achievements-categories>
-						<achievements-list
-							*ngIf="navigation.navigationAchievements.currentView === 'list'"
-							[socialShareUserInfo]="socialShareUserInfo"
-							[achievementsList]="getDisplayedAchievements()"
-							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
-							[activeFilter]="navigation.navigationAchievements.achievementActiveFilter"
-							[globalStats]="globalStats"
-						>
-						</achievements-list>
+						<global-header></global-header>
+						<achievements-categories *ngIf="currentView === 'categories'"> </achievements-categories>
+						<achievements-list *ngIf="currentView === 'list'"> </achievements-list>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
 				<achievements-filter></achievements-filter>
-				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
+				<achievement-history></achievement-history>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsComponent {
-	@Input() state: AchievementsState;
-	@Input() currentUser: CurrentUser;
-	@Input() socialShareUserInfo: SocialShareUserInfo;
-	// TODO: should probably refactor how state is handled, so that we could
-	// update the achievement text in a single place, instead of having
-	// achievement logic spread out over multiple processors
-	@Input() globalStats: GlobalStats;
-	@Input() navigation: NavigationState;
+export class AchievementsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	currentView$: Observable<CurrentView>;
+	isLoading$: Observable<boolean>;
 
-	getCategories() {
-		if (!this.navigation.navigationAchievements.selectedCategoryId) {
-			return this.state.categories;
-		}
-		const currentCategory = this.state.findCategory(this.navigation.navigationAchievements.selectedCategoryId);
-		return currentCategory.categories;
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	// getCategory(): VisualAchievementCategory {
-	// 	if (!this.navigation.navigationAchievements.selectedCategoryId) {
-	// 		return null;
-	// 	}
-	// 	const currentCategory: VisualAchievementCategory = this.state.findCategory(
-	// 		this.navigation.navigationAchievements.selectedCategoryId,
-	// 	);
-	// 	return currentCategory;
-	// }
-
-	getDisplayedAchievements(): readonly VisualAchievement[] {
-		return this.state.findAchievements(this.navigation.navigationAchievements.displayedAchievementsList);
+	ngAfterContentInit() {
+		this.isLoading$ = this.store
+			.listen$(([main, nav, prefs]) => main.achievements.isLoading)
+			.pipe(this.mapData(([prefs]) => prefs));
+		this.currentView$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationAchievements.currentView)
+			.pipe(this.mapData(([currentView]) => currentView));
 	}
 }

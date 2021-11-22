@@ -33,7 +33,7 @@ export class InGameAchievementsRecapComponent {
 	_state: ConstructedState;
 	effectiveProgress: readonly EffectiveProgress[];
 
-	trackById(progress: EffectiveProgress): string {
+	trackById(index: number, progress: EffectiveProgress): string {
 		return progress.id;
 	}
 

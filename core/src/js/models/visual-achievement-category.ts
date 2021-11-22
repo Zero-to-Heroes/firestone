@@ -14,6 +14,10 @@ export class VisualAchievementCategory {
 	}
 
 	public findCategory(categoryId: string): VisualAchievementCategory {
+		if (!categoryId) {
+			return null;
+		}
+
 		if (categoryId === this.id) {
 			return this;
 		}

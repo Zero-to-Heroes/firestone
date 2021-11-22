@@ -188,7 +188,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		return !isNaN(value);
 	}
 
-	trackByEntity(entity: Entity) {
+	trackByEntity(index: number, entity: Entity) {
 		return entity.id;
 	}
 
@@ -258,7 +258,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		this.doResizeTimeout(300);
 	}
 
-	trackByFn(index, item: Entity) {
+	trackByFn(index: number, item: Entity) {
 		return item.id;
 	}
 

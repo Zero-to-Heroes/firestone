@@ -52,7 +52,7 @@ export class PackDisplayComponent {
 		return offset + i * step;
 	}
 
-	trackByFn(item: CardPackResult, index: number) {
+	trackByFn(index: number, item: CardPackResult) {
 		return item.cardId + '' + index;
 	}
 

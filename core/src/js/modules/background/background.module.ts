@@ -35,6 +35,7 @@ import { AchievementsCategoriesComponent } from '../../components/achievements/a
 import { AchievementsFilterComponent } from '../../components/achievements/achievements-filter.component.ts';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
+import { AchievementsCompletedFilterDropdownComponent } from '../../components/achievements/filters/achievements-completed-filter-dropdown.component';
 import { AppComponent } from '../../components/app.component';
 import { ArenaClassesRecapComponent } from '../../components/arena/desktop/arena-classes-recap.component';
 import { ArenaDesktopComponent } from '../../components/arena/desktop/arena-desktop.component';
@@ -579,6 +580,7 @@ const components = [
 		AchievementProgressBarComponent,
 		AchievementViewComponent,
 		AchievementsFilterComponent,
+		AchievementsCompletedFilterDropdownComponent,
 
 		DecktrackerComponent,
 		DecktrackerDecksComponent,

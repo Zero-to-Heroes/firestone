@@ -101,7 +101,7 @@ export class TheCoinsComponent extends AbstractSubscriptionComponent implements 
 		this.cardsOwnedActiveFilter$$.next(option.value as any);
 	}
 
-	trackByCardId(card: CardBack, index: number) {
+	trackByCardId(index: number, card: CardBack) {
 		return card.id;
 	}
 

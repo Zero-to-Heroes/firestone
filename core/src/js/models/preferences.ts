@@ -11,6 +11,7 @@ import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from './duels/duels-top-decks-dust-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
+import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -56,6 +57,7 @@ export class Preferences {
 	readonly achievementsEnabled2 = false;
 	readonly achievementsLiveTracking2: boolean = false;
 	readonly achievementsDisplayNotifications2 = false;
+	readonly achievementsCompletedActiveFilter: AchievementsCompletedFilterType = 'ALL_ACHIEVEMENTS';
 	readonly resetAchievementsOnAppStart = false;
 
 	// TODO: both should be removed

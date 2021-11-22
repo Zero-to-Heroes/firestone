@@ -1,40 +1,31 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
 import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
-import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'achievement-view',
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
-		<div class="achievement-container {{ achievementStatus }}">
+		<div class="achievement-container {{ achievementStatus$ | async }}" *ngIf="achievement$ | async as achievement">
 			<div class="stripe">
 				<achievement-image
-					[imageId]="_achievement.cardId"
-					[imageType]="_achievement.cardType"
+					[imageId]="achievement.cardId"
+					[imageType]="achievement.cardType"
 				></achievement-image>
 				<div class="achievement-body">
 					<div class="text">
-						<div class="achievement-name">{{ _achievement.name }}</div>
-						<div class="achievement-text" [innerHTML]="achievementText"></div>
+						<div class="achievement-name">{{ achievement.name }}</div>
+						<div class="achievement-text" [innerHTML]="achievementText$ | async"></div>
 					</div>
-					<div class="completion-date" *ngIf="completionDate">Completed: {{ completionDate }}</div>
 					<div class="completion-progress">
 						<achievement-completion-step
-							*ngFor="let completionStep of _achievement.completionSteps"
+							*ngFor="let completionStep of achievement.completionSteps"
 							[step]="completionStep"
 						>
 						</achievement-completion-step>
@@ -45,49 +36,43 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementViewComponent implements AfterViewInit {
-	_achievement: VisualAchievement;
-	@Input() socialShareUserInfo: SocialShareUserInfo;
-	_globalStats: GlobalStats;
+export class AchievementViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	achievement$: Observable<VisualAchievement>;
+	achievementStatus$: Observable<AchievementStatus>;
+	achievementText$: Observable<string>;
 
-	achievementStatus: AchievementStatus;
-	achievementText: string;
-	completionDate: string;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	achievement$$ = new BehaviorSubject<VisualAchievement>(null);
 
 	private placeholderRegex = new RegExp('.*(%%globalStats\\.(.*)\\.(.*)%%).*');
 
 	@Input() set achievement(achievement: VisualAchievement) {
-		this._achievement = achievement;
-		this.completionDate = undefined;
-		this.achievementStatus = this._achievement.achievementStatus();
-		this.updateInfo();
+		this.achievement$$.next(achievement);
 	}
 
-	@Input() set globalStats(value: GlobalStats) {
-		this._globalStats = value;
-		this.updateInfo();
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	private updateInfo() {
-		if (!this._achievement) {
-			return;
-		}
-
-		this.achievementText = this.buildAchievementText(
-			this._achievement.text,
-			this._achievement.getFirstMissingStep(),
+	ngAfterContentInit() {
+		this.achievement$ = this.achievement$$.asObservable();
+		this.achievementStatus$ = this.achievement$.pipe(
+			this.mapData((achievement) => achievement.achievementStatus()),
+		);
+		this.achievementText$ = combineLatest(
+			this.achievement$,
+			this.store.listen$(([main, nav, prefs]) => main.globalStats),
+		).pipe(
+			this.mapData(([achievement, [globalStats]]) =>
+				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
+			),
 		);
 	}
 
-	private buildAchievementText(initialText: string, firstMissingStep: CompletionStep): string {
+	private buildAchievementText(
+		initialText: string,
+		firstMissingStep: CompletionStep,
+		globalStats: GlobalStats,
+	): string {
 		const textToConsider = firstMissingStep?.completedText ?? initialText;
 		if (!textToConsider) {
 			return textToConsider;
@@ -99,8 +84,8 @@ export class AchievementViewComponent implements AfterViewInit {
 			const key: GlobalStatKey = match[2] as GlobalStatKey;
 			const context: StatContext = match[3] as StatContext;
 			const stat =
-				this._globalStats && this._globalStats.stats
-					? this._globalStats.stats.find((stat) => stat.statKey === key && stat.statContext === context)
+				globalStats && globalStats.stats
+					? globalStats.stats.find((stat) => stat.statKey === key && stat.statContext === context)
 					: null;
 			const value = stat ? stat.value : 0;
 			result = textToConsider.replace(match[1], '' + value);
