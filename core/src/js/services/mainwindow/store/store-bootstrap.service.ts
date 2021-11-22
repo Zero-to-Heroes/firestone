@@ -160,11 +160,7 @@ export class StoreBootstrapService {
 			currentRankedMetaPatch,
 			mergedPrefs,
 		);
-		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
-			new ReplaysState(),
-			newStatsState,
-			decktracker.decks,
-		);
+		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(new ReplaysState(), newStatsState);
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
 		const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);

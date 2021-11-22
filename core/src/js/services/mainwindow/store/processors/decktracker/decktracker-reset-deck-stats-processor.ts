@@ -35,11 +35,9 @@ export class DecktrackerResetDeckStatsProcessor implements Processor {
 				newPrefs,
 			),
 		} as DecktrackerState);
-		const replays = await this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				decktracker: newState,
-				replays: replays,
 			} as MainWindowState),
 			null,
 		];

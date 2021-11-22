@@ -26,11 +26,9 @@ export class ChangeDeckRankCategoryFilterProcessor implements Processor {
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			filters: filters,
 		} as DecktrackerState);
-		const replays = await this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				decktracker: newState,
-				replays: replays,
 			} as MainWindowState),
 			null,
 		];

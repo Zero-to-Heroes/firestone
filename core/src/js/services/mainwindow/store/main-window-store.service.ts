@@ -130,7 +130,6 @@ import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/merc
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
-import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
 import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
@@ -249,7 +248,6 @@ import { NavigationBackProcessor } from './processors/navigation/navigation-back
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
 import { ChangeMatchStatsNumberOfTabsProcessor } from './processors/replays/change-match-stats-number-of-tabs-processor';
-import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
 import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
@@ -609,9 +607,6 @@ export class MainWindowStoreService {
 
 			ChangeMatchStatsNumberOfTabsEvent.eventName(),
 			new ChangeMatchStatsNumberOfTabsProcessor(this.prefs),
-
-			ReplaysFilterEvent.eventName(),
-			new ReplaysFilterProcessor(this.replaysStateBuilder, this.prefs),
 
 			// Decktracker
 			SelectDecksViewEvent.eventName(),

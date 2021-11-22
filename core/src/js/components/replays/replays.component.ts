@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
 import { Preferences } from '../../models/preferences';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -13,19 +14,15 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		`../../../css/component/replays/replays.component.scss`,
 	],
 	template: `
-		<div class="app-section replays">
+		<div class="app-section replays" *ngIf="currentView$ | async as currentView">
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content">
-						<global-header *ngIf="navigation.text"> </global-header>
-						<replays-list
-							[state]="state.replays"
-							*ngIf="navigation?.navigationReplays?.currentView === 'list'"
-						></replays-list>
+						<global-header *ngIf="showGlobalHeader$ | async"> </global-header>
+						<replays-list *ngIf="currentView === 'list'"></replays-list>
 						<match-details
-							[state]="state.replays"
 							[navigation]="navigation.navigationReplays"
-							*ngIf="navigation?.navigationReplays?.currentView === 'match-details'"
+							*ngIf="currentView === 'match-details'"
 						></match-details>
 					</div>
 				</with-loading>
@@ -48,8 +45,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				</div>
 				<secondary-default
 					*ngIf="
-						navigation.navigationReplays?.currentView === 'list' ||
-						(navigation.navigationReplays?.currentView === 'match-details' &&
+						currentView === 'list' ||
+						(currentView === 'match-details' &&
 							!navigation.navigationReplays.selectedReplay?.replayInfo?.isDuels() &&
 							!navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel?.player?.cardId)
 					"
@@ -61,6 +58,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class ReplaysComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
+	showGlobalHeader$: Observable<boolean>;
+	currentView$: Observable<CurrentViewType>;
 
 	@Input() navigation: NavigationState;
 	@Input() state: MainWindowState;
@@ -74,6 +73,12 @@ export class ReplaysComponent extends AbstractSubscriptionComponent implements A
 		this.loading$ = this.store
 			.listen$(([main, nav, prefs]) => main.replays.isLoading)
 			.pipe(this.mapData(([isLoading]) => isLoading));
+		this.showGlobalHeader$ = this.store
+			.listen$(([main, nav, prefs]) => nav.text)
+			.pipe(this.mapData(([text]) => !!text));
+		this.currentView$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationReplays.currentView)
+			.pipe(this.mapData(([currentView]) => currentView));
 	}
 
 	isShowingDuelsReplay(): boolean {

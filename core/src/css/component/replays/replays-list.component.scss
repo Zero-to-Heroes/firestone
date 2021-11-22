@@ -53,8 +53,11 @@
 	position: relative;
 	z-index: 10;
 
-	::ng-deep replays-filter ng-select.filter.filter.filter {
-		width: 163px;
+	.filter {
+		margin-right: 8px;
+		::ng-deep .filter {
+			width: 163px;
+		}
 	}
 
 	.icon-toggle {

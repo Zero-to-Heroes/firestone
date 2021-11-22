@@ -260,12 +260,16 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
+import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
+import { ReplaysGameModeFilterDropdownComponent } from '../../components/replays/filters/replays-game-mode-filter-dropdown.component';
+import { ReplaysOpponentClassFilterDropdownComponent } from '../../components/replays/filters/replays-opponent-class-filter-dropdown.component';
+import { ReplaysPlayerClassFilterDropdownComponent } from '../../components/replays/filters/replays-player-class-filter-dropdown.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from '../../components/replays/match-details.component';
 import { RankImageComponent } from '../../components/replays/rank-image.component';
 import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
-import { ReplaysFilterComponent } from '../../components/replays/replays-filter.component';
 import { ReplayIconToggleComponent } from '../../components/replays/replays-icon-toggle.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
@@ -607,13 +611,18 @@ const components = [
 
 		ReplaysComponent,
 		ReplaysListComponent,
-		ReplaysFilterComponent,
+		// ReplaysFilterComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
 		RankImageComponent,
 		ReplayIconToggleComponent,
+		ReplaysGameModeFilterDropdownComponent,
+		ReplaysDeckstringFilterDropdownComponent,
+		ReplaysBgHeroFilterDropdownComponent,
+		ReplaysPlayerClassFilterDropdownComponent,
+		ReplaysOpponentClassFilterDropdownComponent,
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,

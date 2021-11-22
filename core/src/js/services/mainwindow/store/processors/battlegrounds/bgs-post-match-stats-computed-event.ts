@@ -18,11 +18,7 @@ export class BgsPostMatchStatsComputedProcessor implements Processor {
 			bestBgsUserStats: event.newBestStats,
 		} as StatsState);
 		const statsAfterBgsUpdate: StatsState = newStats.updateBgsPostMatchStats(event.reviewId, event.postMatchStats);
-		const replays = await this.replaysBuilder.buildState(
-			currentState.replays,
-			statsAfterBgsUpdate,
-			currentState.decktracker.decks,
-		);
+		const replays = await this.replaysBuilder.buildState(currentState.replays, statsAfterBgsUpdate);
 		return [
 			currentState.update({
 				stats: statsAfterBgsUpdate,

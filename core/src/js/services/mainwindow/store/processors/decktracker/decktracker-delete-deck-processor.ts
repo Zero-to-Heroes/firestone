@@ -44,11 +44,9 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 			'[deck-delete] deck after deletion',
 			newState.decks.find((deck) => deck.deckstring === event.deckstring),
 		);
-		const replays = await this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				decktracker: newState,
-				replays: replays,
 			} as MainWindowState),
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({

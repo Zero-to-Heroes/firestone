@@ -3,7 +3,6 @@ import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bg
 import { BgsStatsFilterId } from '../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { NavigationReplays } from '../../models/mainwindow/navigation/navigation-replays';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
-import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
@@ -39,10 +38,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatchDetailsComponent implements AfterViewInit {
-	@Input() set state(value: ReplaysState) {
-		// Do nothing, not used for now
-	}
-
 	@Input() set navigation(value: NavigationReplays) {
 		this.selectedView = value.currentView === 'match-details' ? value.selectedTab : null;
 		this.selectedReplay = value.selectedReplay;
