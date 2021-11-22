@@ -9,18 +9,14 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
-import { MainWindowState } from '../models/mainwindow/main-window-state';
-import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 @Component({
@@ -36,13 +32,12 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 			*ngIf="{
 				showAds: showAds$ | async,
 				showFtue: showFtue$ | async,
-				dataState: dataState$ | async,
 				currentApp: currentApp$ | async
 			} as value"
 			[activeTheme]="activeTheme$ | async"
 			[allowResize]="true"
 		>
-			<ng-container *ngIf="value.dataState && navigationState">
+			<ng-container>
 				<section class="layout">
 					<div class="navigation" [ngClass]="{ 'navigation-ftue': value.showFtue }">
 						<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
@@ -56,7 +51,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							<div class="controls">
 								<control-share
 									[onSocialClick]="takeScreenshotFunction"
-									[page]="navigationState?.getPageName()"
+									[page]="value.currentApp"
 								></control-share>
 								<control-bug></control-bug>
 								<control-settings
@@ -82,12 +77,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							[ngClass]="{ 'hide-ads': !value.showAds }"
 						>
 							<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
-							<replays
-								class="main-section"
-								[state]="value.dataState"
-								[navigation]="navigationState"
-								*ngIf="value.currentApp === 'replays'"
-							></replays>
+							<replays class="main-section" *ngIf="value.currentApp === 'replays'"></replays>
 							<achievements class="main-section" *ngIf="value.currentApp === 'achievements'">
 							</achievements>
 							<collection class="main-section" *ngIf="value.currentApp === 'collection'"></collection>
@@ -131,10 +121,8 @@ export class MainWindowComponent
 	forceShowReleaseNotes$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 	showFtue$: Observable<boolean>;
-	dataState$: Observable<MainWindowState>;
 	currentApp$: Observable<CurrentAppType>;
 
-	navigationState: NavigationState;
 	windowId: string;
 
 	displayingNewVersion = new BehaviorSubject<boolean>(false);
@@ -145,9 +133,7 @@ export class MainWindowComponent
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
-	// private navigationStateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
-	private navigationStoreSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
 
@@ -191,52 +177,27 @@ export class MainWindowComponent
 				([main, nav, prefs]) => main.showFtue,
 			)
 			.pipe(this.mapData(([showAds, showFtue]) => showAds && !showFtue));
-		// TODO: remove this to avoid having too many refreshes every time any tiny bit of the state
-		// changes
-		this.dataState$ = this.store
-			.listen$(([main, nav, prefs]) => main)
-			.pipe(
-				debounceTime(100),
-				map(([main]) => main),
-				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting dataState in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
-	}
-
-	async ngAfterViewInit() {
-		const currentWindow = await this.ow.getCurrentWindow();
-		this.windowId = currentWindow.id;
-
-		const navigationStoreBus: BehaviorSubject<NavigationState> = this.ow.getMainWindow().mainWindowStoreNavigation;
-		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {
-			setTimeout(async () => {
-				// First update the state before restoring the window
-				this.navigationState = newState;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+		this.store
+			.listen$(([main, nav, prefs]) => nav.isVisible)
+			.pipe(this.mapData(([visible]) => visible))
+			.subscribe(async (visible) => {
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
-				if (
-					newState.isVisible &&
-					(!this.navigationState || !this.navigationState.isVisible || !currentlyVisible)
-				) {
-					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
+				if (visible && !currentlyVisible) {
 					await this.ow.restoreWindow(this.windowId);
 					this.ow.bringToFront(this.windowId);
 					if (this.isMaximized) {
 						await this.ow.maximizeWindow(this.windowId);
 					}
-				} else if (!newState.isVisible && currentlyVisible) {
+				} else if (!visible && currentlyVisible) {
 					await this.ow.hideWindow(this.windowId);
 				}
-				if (this.navigationState && newState.currentApp !== this.navigationState.currentApp) {
-					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
-				}
 			});
-		});
+	}
+
+	async ngAfterViewInit() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId = currentWindow.id;
 
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
@@ -312,7 +273,6 @@ export class MainWindowComponent
 		super.ngOnDestroy();
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.navigationStoreSubscription?.unsubscribe();
 	}
 
 	onHelp(event: MouseEvent) {

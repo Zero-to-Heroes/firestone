@@ -31,31 +31,4 @@ export class NavigationState {
 	public update(base: NavigationState): NavigationState {
 		return Object.assign(new NavigationState(), this, base);
 	}
-
-	public getPageName(): string {
-		return this.currentApp + '-' + this.getSubsectionPageName();
-	}
-
-	private getSubsectionPageName(): string {
-		switch (this.currentApp) {
-			case 'achievements':
-				return this.navigationAchievements.getPageName();
-			case 'battlegrounds':
-				return this.navigationBattlegrounds.getPageName();
-			case 'collection':
-				return this.navigationCollection.getPageName();
-			case 'decktracker':
-				return this.navigationDecktracker.getPageName();
-			case 'duels':
-				return this.navigationDuels.getPageName();
-			case 'arena':
-				return this.navigationArena.getPageName();
-			case 'replays':
-				return this.navigationReplays.getPageName();
-			case 'mercenaries':
-				return this.navigationMercenaries.getPageName();
-			case 'general':
-				return '';
-		}
-	}
 }

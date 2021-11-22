@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DuelsState } from '../../../../models/duels/duels-state';
-import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { PreferencesService } from '../../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'duels-replays-recap-for-run',
@@ -15,7 +15,7 @@ import { PreferencesService } from '../../../../services/preferences.service';
 		<div class="duels-replays-recap">
 			<div class="title">Replays for the same run</div>
 			<ul class="list">
-				<li *ngFor="let replay of replays">
+				<li *ngFor="let replay of replays$ | async">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>
 				</li>
 			</ul>
@@ -23,56 +23,41 @@ import { PreferencesService } from '../../../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsReplaysRecapForRunComponent {
-	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
+export class DuelsReplaysRecapForRunComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	replays$: Observable<readonly GameStat[]>;
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	@Input() set navigation(value: NavigationReplays) {
-		if (value === this._navigation) {
-			return;
-		}
-		this._navigation = value;
-		this.updateValues();
-	}
-
-	_numberOfReplays: number;
-	replays: GameStat[];
-
-	private _state: DuelsState;
-	private _navigation: NavigationReplays;
-
-	constructor(private readonly prefs: PreferencesService) {}
-
-	private updateValues() {
-		if (!this._state?.personalDeckStats?.length || !this._navigation) {
-			return;
-		}
-
-		const runId = this._navigation?.selectedReplay?.replayInfo?.runId;
-		if (!runId) {
-			return;
-		}
-
-		this.replays = this._state.personalDeckStats
-			.map((deck) => deck.runs)
-			.reduce((a, b) => a.concat(b), [])
-			.filter((run) => run.id === runId)
-			.map((run) => run.steps)
-			.reduce((a, b) => a.concat(b), [])
-			.filter((step) => (step as GameStat).opponentCardId)
-			.map((step) => step as GameStat)
-			.sort((a: GameStat, b: GameStat) => {
-				if (a.creationTimestamp <= b.creationTimestamp) {
-					return 1;
-				}
-				return -1;
-			})
-			.slice(0, 20);
-		this._numberOfReplays = this.replays.length;
+	ngAfterContentInit() {
+		this.replays$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.duels.personalDeckStats,
+				([main, nav, prefs]) => nav.navigationReplays.selectedReplay,
+			)
+			.pipe(
+				this.mapData(([duelsDeckStats, selectedReplay]) => {
+					const runId = selectedReplay?.replayInfo?.runId;
+					if (!runId) {
+						return [];
+					}
+					return duelsDeckStats
+						.map((deck) => deck.runs)
+						.reduce((a, b) => a.concat(b), [])
+						.filter((run) => run.id === runId)
+						.map((run) => run.steps)
+						.reduce((a, b) => a.concat(b), [])
+						.filter((step) => (step as GameStat).opponentCardId)
+						.map((step) => step as GameStat)
+						.sort((a: GameStat, b: GameStat) => {
+							if (a.creationTimestamp <= b.creationTimestamp) {
+								return 1;
+							}
+							return -1;
+						})
+						.slice(0, 20);
+				}),
+			);
 	}
 }

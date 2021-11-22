@@ -1,9 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MainWindowState } from '../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
-import { Preferences } from '../../models/preferences';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
@@ -20,35 +18,30 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					<div class="content main-content">
 						<global-header *ngIf="showGlobalHeader$ | async"> </global-header>
 						<replays-list *ngIf="currentView === 'list'"></replays-list>
-						<match-details
-							[navigation]="navigation.navigationReplays"
-							*ngIf="currentView === 'match-details'"
-						></match-details>
+						<match-details *ngIf="currentView === 'match-details'"></match-details>
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
-				<div
-					class="match-stats"
-					*ngIf="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel?.player?.cardId"
-				>
+			<section
+				class="secondary"
+				*ngIf="{
+					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
+					isShowingDuels: isShowingDuels$ | async
+				} as value"
+			>
+				<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
 					<div class="title">Match Stats</div>
-					<bgs-post-match-stats-recap
-						[stats]="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel"
-					></bgs-post-match-stats-recap>
+					<bgs-post-match-stats-recap [stats]="value.bgsPostMatchStatsPanel"></bgs-post-match-stats-recap>
 				</div>
-				<div class="replays-list" *ngIf="isShowingDuelsReplay()">
-					<duels-replays-recap-for-run
-						[state]="state?.duels"
-						[navigation]="navigation?.navigationReplays"
-					></duels-replays-recap-for-run>
+				<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">
+					<duels-replays-recap-for-run></duels-replays-recap-for-run>
 				</div>
 				<secondary-default
 					*ngIf="
 						currentView === 'list' ||
 						(currentView === 'match-details' &&
-							!navigation.navigationReplays.selectedReplay?.replayInfo?.isDuels() &&
-							!navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel?.player?.cardId)
+							!value.isShowingDuels &&
+							!value.bgsPostMatchStatsPanel?.player?.cardId)
 					"
 				></secondary-default>
 			</section>
@@ -60,10 +53,8 @@ export class ReplaysComponent extends AbstractSubscriptionComponent implements A
 	loading$: Observable<boolean>;
 	showGlobalHeader$: Observable<boolean>;
 	currentView$: Observable<CurrentViewType>;
-
-	@Input() navigation: NavigationState;
-	@Input() state: MainWindowState;
-	@Input() prefs: Preferences;
+	bgsPostMatchStatsPanel$: Observable<BgsPostMatchStatsPanel>;
+	isShowingDuels$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -79,12 +70,11 @@ export class ReplaysComponent extends AbstractSubscriptionComponent implements A
 		this.currentView$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationReplays.currentView)
 			.pipe(this.mapData(([currentView]) => currentView));
-	}
-
-	isShowingDuelsReplay(): boolean {
-		return (
-			this.navigation.navigationReplays?.currentView === 'match-details' &&
-			this.navigation.navigationReplays?.selectedReplay?.replayInfo?.isDuels()
-		);
+		this.bgsPostMatchStatsPanel$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.bgsPostMatchStatsPanel)
+			.pipe(this.mapData(([bgsPostMatchStatsPanel]) => bgsPostMatchStatsPanel));
+		this.isShowingDuels$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.replayInfo)
+			.pipe(this.mapData(([replayInfo]) => replayInfo?.isDuels()));
 	}
 }

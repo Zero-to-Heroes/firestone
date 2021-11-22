@@ -1,27 +1,31 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
-import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BgsStatsFilterId } from '../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { NavigationReplays } from '../../models/mainwindow/navigation/navigation-replays';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
 import { SelectMatchStatsTabEvent } from '../../services/mainwindow/store/events/replays/select-match-stats-tab-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'match-details',
 	styleUrls: [`../../../css/component/replays/match-details.component.scss`],
 	template: `
-		<div class="match-details {{ selectedView }}">
-			<replay-info [replay]="replayInfo" *ngIf="replayInfo"></replay-info>
-			<game-replay [replay]="selectedReplay" *ngIf="selectedView === 'replay'"></game-replay>
+		<div
+			class="match-details {{ value.selectedView }}"
+			*ngIf="{ selectedView: selectedView$ | async, selectedReplay: selectedReplay$ | async } as value"
+		>
+			<replay-info
+				[replay]="value.selectedReplay?.replayInfo"
+				*ngIf="value.selectedReplay?.replayInfo"
+			></replay-info>
+			<game-replay [replay]="value.selectedReplay" *ngIf="value.selectedView === 'replay'"></game-replay>
 			<bgs-post-match-stats
-				*ngIf="selectedView === 'match-stats'"
-				[panel]="panel"
-				[mainPlayerCardId]="playerCardId"
-				[mmr]="mmr"
-				[selectedTabs]="selectedTabs"
+				*ngIf="value.selectedView === 'match-stats'"
+				[panel]="value.selectedReplay?.bgsPostMatchStatsPanel"
+				[mainPlayerCardId]="value.selectedReplay?.bgsPostMatchStatsPanel?.player?.playerCardId"
+				[mmr]="parseInt(value.selectedReplay?.replayInfo?.playerRank)"
+				[selectedTabs]="selectedTabs$ | async"
 				[selectTabHandler]="selectTabHandler"
 				[changeTabsNumberHandler]="changeTabsNumberHandler"
 				[showSocialShares]="false"
@@ -37,38 +41,39 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchDetailsComponent implements AfterViewInit {
-	@Input() set navigation(value: NavigationReplays) {
-		this.selectedView = value.currentView === 'match-details' ? value.selectedTab : null;
-		this.selectedReplay = value.selectedReplay;
-		this.replayInfo = value.selectedReplay?.replayInfo;
-		this.panel = value.selectedReplay?.bgsPostMatchStatsPanel;
-		this.playerCardId = this.panel?.player?.cardId;
-		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
-		this.selectedTabs = value.selectedStatsTabs.slice(0, value.numberOfDisplayedTabs);
+export class MatchDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	selectedView$: Observable<string>;
+	selectedReplay$: Observable<MatchDetail>;
+	selectedTabs$: Observable<readonly BgsStatsFilterId[]>;
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	selectedView: string;
-	selectedReplay: MatchDetail;
-	selectedTabs: readonly BgsStatsFilterId[];
-	replayInfo: GameStat;
-	mmr: number;
-	playerCardId: string;
-	panel: BgsPostMatchStatsPanel;
+	ngAfterContentInit() {
+		this.selectedView$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationReplays)
+			.pipe(this.mapData(([nav]) => (nav.currentView === 'match-details' ? nav.selectedTab : null)));
+		this.selectedReplay$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay)
+			.pipe(this.mapData(([selectedReplay]) => selectedReplay));
+		this.selectedTabs$ = this.store
+			.listen$(
+				([main, nav, prefs]) => nav.navigationReplays.selectedStatsTabs,
+				([main, nav, prefs]) => nav.navigationReplays.numberOfDisplayedTabs,
+			)
+			.pipe(
+				this.mapData(([selectedStatsTabs, numberOfDisplayedTabs]) =>
+					selectedStatsTabs.slice(0, numberOfDisplayedTabs),
+				),
+			);
+	}
 
 	selectTabHandler: (tab: string, tabIndex: number) => void = (tab: BgsStatsFilterId, tabIndex: number) => {
-		this.stateUpdater.next(new SelectMatchStatsTabEvent(tab, tabIndex));
+		this.store.send(new SelectMatchStatsTabEvent(tab, tabIndex));
 	};
 
 	changeTabsNumberHandler = (numbersOfTabs: number) => {
-		this.stateUpdater.next(new ChangeMatchStatsNumberOfTabsEvent(numbersOfTabs));
+		this.store.send(new ChangeMatchStatsNumberOfTabsEvent(numbersOfTabs));
 	};
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 }
