@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.2.13',
+		version: '8.3.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,17 +49,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'content',
-								text: `Update for patch 21.8. There are still a few missing things that should be fixed in the coming days (updated card images, Tasmin's hero power in custom BG simulator, Diablo special battles in simulator, missing hero emotes in collection)`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Shows the current ability queue (the order in which all queued abilities will trigger), mostly for PvE (since in PvP the opponent's actions are hidden, this is far less useful)`,
+								type: 'misc',
+								text: `This version brings along a major internal refactoring that will make it possible for me to better track and improve the app's memory and CPU usage. So no immediate benefits yet, but they should come in the near future :)`,
 							},
 						],
 					},
@@ -70,11 +61,29 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where mousing over a minion would not show its golden image anymore.`,
+							},
+						],
+					},
+					{
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'feature',
-								text: `Tasks are now refreshed right after picking a Mysterious Stranger node (instead of having to go into battle for that).`,
+								type: 'bug',
+								text: `Fix an issue where searching for mercs would return some unrelated results.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where clicking on the "Watch replays" button from the deck page would not do anything.`,
 							},
 						],
 					},
@@ -84,7 +93,7 @@ export const updates: readonly Update[] = [
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
 			// 	text: `
-
+			// 		This release
 			// 	`,
 			// },
 		],
