@@ -76,4 +76,8 @@ export class MatchDetailsComponent extends AbstractSubscriptionComponent impleme
 	changeTabsNumberHandler = (numbersOfTabs: number) => {
 		this.store.send(new ChangeMatchStatsNumberOfTabsEvent(numbersOfTabs));
 	};
+
+	parseInt(value: string | number): number {
+		return parseInt('' + value);
+	}
 }
