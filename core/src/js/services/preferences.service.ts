@@ -56,9 +56,16 @@ export class PreferencesService {
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 	) {
-		// It will create one per window that uses the service, but we don't really care
-		// We just have to always use the one from the MainWindow
-		window['preferencesEventBus'] = this.preferencesEventBus;
+		this.setup();
+	}
+
+	private async setup() {
+		const currentWindow = await this.ow.getCurrentWindow();
+		if (currentWindow.name === OverwolfService.MAIN_WINDOW) {
+			// It will create one per window that uses the service, but we don't really care
+			// We just have to always use the one from the MainWindow
+			window['preferencesEventBus'] = this.preferencesEventBus;
+		}
 	}
 
 	public init() {
