@@ -21,9 +21,16 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		) as BattlegroundsPersonalStatsHeroDetailsCategory;
 		const currentHeroId = category?.heroId;
 		console.debug('[gr] new hero?', currentHeroId, event, category, currentState, navigationState);
+		let newState = currentState;
 		if (event.heroCardId !== currentState.battlegrounds.lastHeroPostMatchStatsHeroId) {
 			console.debug('[gr] new hero');
 			this.events.broadcast(Events.POPULATE_HERO_DETAILS_FOR_BG, event.heroCardId);
+			newState = currentState.update({
+				battlegrounds: currentState.battlegrounds.update({
+					lastHeroPostMatchStats: null,
+					lastHeroPostMatchStatsHeroId: event.heroCardId,
+				}),
+			});
 		}
 
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
@@ -32,7 +39,7 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 			selectedCategoryId: category.id,
 		} as NavigationBattlegrounds);
 		return [
-			null,
+			newState,
 			navigationState.update({
 				isVisible: true,
 				navigationBattlegrounds: navigationBattlegrounds,
