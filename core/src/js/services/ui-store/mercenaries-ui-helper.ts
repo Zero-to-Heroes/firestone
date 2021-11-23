@@ -57,9 +57,8 @@ export const applySearchStringFilter = (
 			normalizeMercenariesCardId(allCards.getCardFromDbfId(merc.cardDbfId).id) ===
 			normalizeMercenariesCardId(heroCardId),
 	);
-	// console.debug('referenceHero', referenceHero, heroCardId, referenceData);
 	const result =
-		isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.id), searchString) ||
+		isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.cardDbfId), searchString) ||
 		referenceHero.abilities.some((ability) =>
 			isValidMercSearchItem(allCards.getCardFromDbfId(ability.cardDbfId), searchString),
 		) ||
