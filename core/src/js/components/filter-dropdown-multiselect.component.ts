@@ -1,5 +1,4 @@
 import {
-	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -68,9 +67,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
 	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
@@ -113,10 +110,10 @@ export class FilterDropdownMultiselectComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-	}
-
-	ngAfterContentInit() {
+		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
+		// the first time (maybe because of "visible"?)
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
+			tap((info) => console.debug('hop', info)),
 			filter(([options, selected]) => !!options?.length),
 			map(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {
