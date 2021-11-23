@@ -46,7 +46,13 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(extractor),
 			distinctUntilChanged(equality ?? ((a, b) => a === b)),
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);

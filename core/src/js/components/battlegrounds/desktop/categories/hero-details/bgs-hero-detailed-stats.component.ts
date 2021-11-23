@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -113,7 +113,13 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 			map(([heroId, bgsStats]) => bgsStats.find((stat) => stat.id === heroId)),
 			distinctUntilChanged(),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 			takeUntil(this.destroyed$),
 		);

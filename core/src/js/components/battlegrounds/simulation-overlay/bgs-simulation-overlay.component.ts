@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -64,7 +65,13 @@ export class BgsSimulationOverlayComponent
 				currentGame.getRelevantFaceOff(bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit),
 			),
 			distinctUntilChanged(),
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((filter) => cdLog('emitting nextBattle in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
@@ -73,7 +80,13 @@ export class BgsSimulationOverlayComponent
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting showSimulationSample in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

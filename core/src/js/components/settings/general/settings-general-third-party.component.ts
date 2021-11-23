@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -149,7 +156,13 @@ export class SettingsGeneralThirdPartyComponent
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 				map((token) => token?.access_token && token?.expires_timestamp > Date.now()),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting oocLoggedIn in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

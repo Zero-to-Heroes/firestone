@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesToggleShowHiddenTeamsEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
@@ -63,7 +63,13 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent i
 					([currentView, hiddenTeamIds]) =>
 						currentView === 'mercenaries-my-teams' && hiddenTeamIds.length > 0,
 				),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -72,7 +78,13 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent i
 			.pipe(
 				filter(([currentView]) => !!currentView),
 				map(([currentView]) => currentView === 'mercenaries-compositions-stats'),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				// tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

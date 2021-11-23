@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
@@ -115,7 +115,13 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting twitchAccessToken in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			)

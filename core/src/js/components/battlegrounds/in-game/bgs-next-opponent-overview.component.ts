@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -94,14 +94,26 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting enableSimulation in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
 		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(
 			distinctUntilChanged(),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting showAds in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
@@ -119,7 +131,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				filter((panel) => !!panel?.opponentOverview),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -127,7 +145,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			map((panel) => panel.opponentOverview.cardId),
 			distinctUntilChanged(),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting nextOpponentCardId in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
@@ -137,7 +161,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				map(([lastOpponentCardId]) => lastOpponentCardId),
 				distinctUntilChanged(),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting lastOpponentCardId in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -148,7 +178,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				map(([game]) => game.lastFaceOff()),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting nextBattle in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -183,7 +219,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			)
@@ -193,7 +235,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			map((opponents) => opponents.slice(1)),
 			// distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting otherOpponents in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);

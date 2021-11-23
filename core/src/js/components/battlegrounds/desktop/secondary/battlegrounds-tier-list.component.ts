@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -125,7 +125,13 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				};
 			}),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);

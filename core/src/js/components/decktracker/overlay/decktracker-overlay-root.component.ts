@@ -313,7 +313,13 @@ export class DeckTrackerOverlayRootComponent
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			)

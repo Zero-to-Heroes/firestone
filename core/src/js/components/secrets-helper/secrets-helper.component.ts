@@ -97,7 +97,13 @@ export class SecretsHelperComponent
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting active in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
@@ -106,7 +112,13 @@ export class SecretsHelperComponent
 			.pipe(
 				map(([secrets]) => secrets),
 				distinctUntilChanged(arraysEqual),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting secrets in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
@@ -116,7 +128,13 @@ export class SecretsHelperComponent
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 				map((opacity) => opacity / 100),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting opacity in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
@@ -125,7 +143,13 @@ export class SecretsHelperComponent
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting colorManaCost in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
@@ -134,7 +158,13 @@ export class SecretsHelperComponent
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting cardsGoToBottom in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

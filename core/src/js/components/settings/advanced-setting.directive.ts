@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2, ViewRef } from '@angular/core';
 import {} from 'lodash';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -24,7 +24,13 @@ export class AdvancedSettingDirective extends AbstractSubscriptionComponent impl
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			)

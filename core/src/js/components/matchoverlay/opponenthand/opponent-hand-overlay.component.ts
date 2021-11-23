@@ -66,7 +66,13 @@ export class OpponentHandOverlayComponent
 				filter(([hand]) => !!hand?.length),
 				distinctUntilChanged(arraysEqual),
 				map(([hand]) => hand),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting hand in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

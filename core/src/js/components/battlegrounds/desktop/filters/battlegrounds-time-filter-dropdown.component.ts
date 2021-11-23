@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -101,7 +102,13 @@ export class BattlegroundsTimeFilterDropdownComponent
 					};
 				}),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

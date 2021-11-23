@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -66,7 +66,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 				filter((panel) => !!panel?.opponentOverview),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -74,7 +80,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 			map((panel) => panel.opponentOverview.cardId),
 			distinctUntilChanged(),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting nextOpponentCardId in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
@@ -86,7 +98,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs ?? [])),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting faceOffsByOpponent in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -115,7 +133,13 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

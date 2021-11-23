@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
@@ -116,7 +116,13 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

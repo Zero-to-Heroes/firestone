@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
@@ -63,7 +63,13 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 			.pipe(
 				map(([pref]) => pref),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting activeFilter in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -74,7 +80,13 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 				debounceTime(1000),
 				map(([pref]) => pref),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting allSets in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -88,7 +100,13 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 						: allSets.filter((set) => !set.standard);
 				return [...sets].sort(this.sortSets());
 			}),
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting sets in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);

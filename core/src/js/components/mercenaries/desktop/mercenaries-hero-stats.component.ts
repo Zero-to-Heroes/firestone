@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ScenarioId } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -187,7 +187,13 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 						})
 						.sort((a, b) => b.globalWinrate - a.globalWinrate);
 				}),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

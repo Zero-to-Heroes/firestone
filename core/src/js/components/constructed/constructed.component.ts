@@ -6,6 +6,7 @@ import {
 	Component,
 	HostListener,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
@@ -52,7 +53,13 @@ export class ConstructedComponent extends AbstractSubscriptionComponent implemen
 				debounceTime(100),
 				map(([info]) => info),
 				distinctUntilChanged(),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);

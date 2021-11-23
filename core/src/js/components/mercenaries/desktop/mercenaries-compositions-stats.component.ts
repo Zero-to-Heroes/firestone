@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-filter-types';
@@ -62,7 +62,13 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 			.listen$(([main, nav, prefs]) => prefs.mercenariesShowMercNamesInTeams)
 			.pipe(
 				map(([pref]) => pref),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting showMercNames in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -147,7 +153,13 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 						.slice(0, 15);
 				}),
 				map((stats) => (!stats?.length ? null : stats)),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

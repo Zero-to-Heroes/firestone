@@ -95,7 +95,13 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				map(([sortCriteria]) => sortCriteria[0]),
 				filter((sortCriteria) => !!sortCriteria),
 				distinctUntilChanged((a, b) => a?.criteria == b?.criteria && a?.direction == b?.direction),
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
@@ -113,7 +119,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
 					),
 				),
-				// tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
 				takeUntil(this.destroyed$),
 			);
@@ -135,7 +140,13 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			map(([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, sortCriteria, referenceData),
 			),
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
 			takeUntil(this.destroyed$),
 		);

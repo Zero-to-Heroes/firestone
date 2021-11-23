@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -115,7 +116,13 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 				} as BgsPlayer),
 			),
 			// FIXME
-			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
 			tap((stat) => cdLog('emitting player in ', this.constructor.name, stat)),
 			takeUntil(this.destroyed$),
 		);

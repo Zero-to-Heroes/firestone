@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
@@ -120,7 +120,13 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 					].filter((tier) => tier.items?.length);
 				}),
 				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 				takeUntil(this.destroyed$),
 			);

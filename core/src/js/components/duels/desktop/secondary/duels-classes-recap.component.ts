@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -120,7 +120,13 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 					};
 				}),
 				// FIXME (same as all filters)
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((filter) =>
+					setTimeout(() => {
+						if (!(this.cdr as ViewRef)?.destroyed) {
+							this.cdr.detectChanges();
+						}
+					}, 0),
+				),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 				takeUntil(this.destroyed$),
 			);
