@@ -99,7 +99,9 @@ export class BattlegroundsTribesFilterDropdownComponent
 				placeholder: 'All tribes',
 				visible:
 					!['categories', 'category'].includes(currentView) &&
-					!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
+					!['bgs-category-personal-stats', 'bgs-category-simulator', 'bgs-category-personal-rating'].includes(
+						categoryId,
+					),
 			})),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

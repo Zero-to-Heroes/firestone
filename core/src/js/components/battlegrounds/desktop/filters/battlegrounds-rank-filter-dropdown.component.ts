@@ -93,7 +93,9 @@ export class BattlegroundsRankFilterDropdownComponent
 				placeholder: options.find((option) => +option.value === filter)?.label ?? options[0].label,
 				visible:
 					!['categories', 'category'].includes(currentView) &&
-					!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
+					!['bgs-category-personal-stats', 'bgs-category-simulator', 'bgs-category-personal-rating'].includes(
+						categoryId,
+					),
 			})),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

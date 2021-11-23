@@ -97,27 +97,16 @@ export class BattlegroundsPersonalStatsRatingComponent
 		const dataWithTime = dataWithCurrentMmr.filter((stat) =>
 			this.timeFilter(stat, timeFilter, currentBattlegroundsMetaPatch),
 		);
-		// Remove the first match if we're on a "last patch" filter
-		const finalData =
-			timeFilter === 'last-patch'
-				? [
-						GameStat.create({
-							...dataWithTime[0],
-							playerRank: '0',
-						} as GameStat),
-						...dataWithTime.slice(1),
-				  ]
-				: dataWithTime;
 		if (mmrGroupFilter === 'per-day') {
 			const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
 				formatDate(new Date(match.creationTimestamp)),
-			)(finalData);
+			)(dataWithTime);
 			const daysSinceStart = daysBetweenDates(
-				formatDate(new Date(finalData[0].creationTimestamp)),
-				formatDate(new Date(finalData[finalData.length - 1].creationTimestamp)),
+				formatDate(new Date(dataWithTime[0].creationTimestamp)),
+				formatDate(new Date(dataWithTime[dataWithTime.length - 1].creationTimestamp)),
 			);
 			const labels = Array.from(Array(daysSinceStart), (_, i) =>
-				addDaysToDate(finalData[0].creationTimestamp, i),
+				addDaysToDate(dataWithTime[0].creationTimestamp, i),
 			).map((date) => formatDate(date));
 			const values = [];
 			for (const date of labels) {
@@ -138,7 +127,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 				labels: labels,
 			} as Value;
 		} else {
-			const data = finalData.map((match) => parseInt(match.playerRank));
+			const data = dataWithTime.map((match) => parseInt(match.playerRank));
 			return {
 				data: [
 					{
@@ -151,7 +140,11 @@ export class BattlegroundsPersonalStatsRatingComponent
 		}
 	}
 
-	private timeFilter(stat: GameStat, timeFilter: string, currentBattlegroundsMetaPatch: number): boolean {
+	private timeFilter(
+		stat: GameStat,
+		timeFilter: BgsActiveTimeFilterType,
+		currentBattlegroundsMetaPatch: number,
+	): boolean {
 		if (!timeFilter) {
 			return true;
 		}
@@ -159,13 +152,13 @@ export class BattlegroundsPersonalStatsRatingComponent
 		switch (timeFilter) {
 			case 'last-patch':
 				return stat.buildNumber >= currentBattlegroundsMetaPatch;
-			case 'past-30':
-				return Date.now() - stat.creationTimestamp <= 30 * 24 * 60 * 60 * 1000;
-			case 'past-7':
+			case 'past-three':
+				return Date.now() - stat.creationTimestamp <= 3 * 24 * 60 * 60 * 1000;
+			case 'past-seven':
 				return Date.now() - stat.creationTimestamp <= 7 * 24 * 60 * 60 * 1000;
 			case 'all-time':
 			default:
-				return true;
+				return true; //Date.now() - stat.creationTimestamp <= 30 * 24 * 60 * 60 * 1000;
 		}
 	}
 

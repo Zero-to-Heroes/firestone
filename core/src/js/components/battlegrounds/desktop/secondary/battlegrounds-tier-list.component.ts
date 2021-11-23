@@ -114,7 +114,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 						<div class="content">
 							<div class="title">Built from ${totalMatches.toLocaleString('en-US')} matches filtering for:</div>
 							<ul class="filters">
-								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter)}</li>
+								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(
 									info.mmrPercentiles.find((percentile) => percentile.percentile === info.rankFilter),
 								)}</li>
