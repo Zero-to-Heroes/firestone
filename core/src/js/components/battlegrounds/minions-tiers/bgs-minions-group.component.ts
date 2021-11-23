@@ -151,7 +151,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.minions = this._group.minions
 			.map((minion) => {
 				const card = this.allCards.getCard(minion.id);
-				return {
+				const result = {
 					cardId: minion.id,
 					displayedCardIds: this.buildAllCardIds(minion.id),
 					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
@@ -159,6 +159,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					highlighted: this._group.highlightedMinions.includes(minion.id),
 					techLevel: card.techLevel,
 				};
+				return result;
 			})
 			.sort((a, b) => {
 				if (a.techLevel < b.techLevel) {
@@ -195,7 +196,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			return id;
 		}
 
-		return [id, `${premiumCard.id}_bgs_premium`].join(',');
+		return [id, `${premiumCard.id}_golden`].join(',');
 	}
 
 	private buildTitle(tribe: Race): string {

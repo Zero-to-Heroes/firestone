@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
+import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { groupByFunction } from '../../services/utils';
@@ -54,12 +55,10 @@ export class CardTooltipComponent {
 
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
 		this._cardType = value;
-		// this.updateInfos();
 	}
 
 	@Input() set cardTooltipBgs(value: boolean) {
 		this.isBgs = value;
-		// this.updateInfos();
 	}
 
 	@Input() localized = true;
@@ -106,6 +105,7 @@ export class CardTooltipComponent {
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 		@Optional() private prefs: PreferencesService,
 	) {}
 
@@ -125,16 +125,20 @@ export class CardTooltipComponent {
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
-				const image = !!cardId
+				// const card = this.allCards.getCard(cardId);
+				// console.debug('card', card);
+				const isPremium = cardId.endsWith('_golden');
+				const realCardId = cardId.split('_golden')[0];
+				const image = !!realCardId
 					? this.localized
-						? this.i18n.getCardImage(cardId, {
+						? this.i18n.getCardImage(realCardId, {
 								isBgs: this.isBgs,
-								isPremium: cardId.includes('premium'),
+								isPremium: isPremium,
 						  })
-						: this.i18n.getNonLocalizedCardImage(cardId)
+						: this.i18n.getNonLocalizedCardImage(realCardId)
 					: null;
 				return {
-					cardId: cardId,
+					cardId: realCardId,
 					image: image,
 					// For now there are no cases where we have multiple card IDs, and different buffs for
 					// each one. If the case arises, we'll have to handle this differently
