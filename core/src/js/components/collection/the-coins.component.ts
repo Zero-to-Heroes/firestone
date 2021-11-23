@@ -25,7 +25,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				></progress-bar>
 			</div>
 			<ng-container *ngIf="{ shownCards: shownCards$ | async } as value">
-				<ul class="cards-list" *ngIf="value.shownCards?.length" scrollable>
+				<ul class="cards-list" *ngIf="!!value.shownCards?.length" scrollable>
 					<card-view
 						class="card"
 						*ngFor="let card of value.shownCards; let i = index; trackBy: trackByCardId"
@@ -36,7 +36,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					>
 					</card-view>
 				</ul>
-				<collection-empty-state *ngIf="!shownCards?.length"> </collection-empty-state>
+				<collection-empty-state *ngIf="!value.shownCards?.length"> </collection-empty-state>
 			</ng-container>
 		</div>
 	`,

@@ -23,13 +23,13 @@ import { InternalCardBack } from './internal-card-back';
 					[total]="total$ | async"
 				></progress-bar>
 			</div>
-			<ul class="cards-list" *ngIf="value.shownCardBacks?.length" scrollable>
-				<ng-container *ngIf="{ animated: animated$ | async } as value">
+			<ul class="cards-list" *ngIf="!!value.shownCardBacks?.length" scrollable>
+				<ng-container *ngIf="{ animated: animated$ | async } as value2">
 					<card-back
 						class="card-back"
 						*ngFor="let cardBack of value.shownCardBacks; let i = index; trackBy: trackByCardId"
 						[cardBack]="cardBack"
-						[animated]="value.animated"
+						[animated]="value2.animated"
 						[style.width.px]="cardWidth"
 						(click)="showFullCardBack(cardBack)"
 					>

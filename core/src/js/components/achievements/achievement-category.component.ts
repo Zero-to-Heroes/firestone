@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 @Component({
@@ -48,7 +47,7 @@ export class AchievementCategoryComponent {
 	complete = false;
 	empty = false;
 
-	constructor(private domSanitizer: DomSanitizer) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	@Input() set category(value: VisualAchievementCategory) {
 		this._category = value;
@@ -63,6 +62,12 @@ export class AchievementCategoryComponent {
 			this.achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
 			this.empty = this.achieved === 0;
 			this.complete = this.totalAchievements === this.achieved && !this.empty;
+			// Without the timeout I get a "detectChanges is not a function" error?
+			setTimeout(() => {
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 		}
 	}
 }

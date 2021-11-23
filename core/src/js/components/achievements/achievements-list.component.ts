@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<ul class="achievements-list" *ngIf="value.activeAchievements && value.activeAchievements.length > 0">
 				<li *ngFor="let achievement of value.activeAchievements; trackBy: trackByAchievementId">
 					<achievement-view
-						[attr.data-achievement-id]="achievement.id.toLowerCase()"
+						[attr.data-achievement-id]="achievement.id?.toLowerCase()"
 						[achievement]="achievement"
 					>
 					</achievement-view>
@@ -113,7 +113,7 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 			.pipe(this.mapData(([selectedAchievementId]) => selectedAchievementId))
 			.subscribe((selectedAchievementId) => {
 				const achievementToShow: Element = this.el.nativeElement.querySelector(
-					`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
+					`achievement-view[data-achievement-id=${selectedAchievementId?.toLowerCase()}]`,
 				);
 				if (achievementToShow) {
 					setTimeout(() => {
