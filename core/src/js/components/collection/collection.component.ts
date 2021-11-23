@@ -38,7 +38,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						<sets *ngIf="value.currentView === 'sets'"> </sets>
 						<cards
 							[set]="value.selectedSet"
-							[searchString]="_navigation.navigationCollection.searchString"
+							[searchString]="value.searchString"
 							*ngIf="value.currentView === 'cards'"
 						>
 						</cards>

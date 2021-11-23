@@ -100,10 +100,10 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 			)
 			.pipe(
 				this.mapData(([decks, selectedDeckstring]) =>
-					decks.find((deck) => deck.deckstring === selectedDeckstring),
+					decks.find((deck) => deck?.deckstring === selectedDeckstring),
 				),
 			);
-		this.deck$.subscribe((deck) => (this.deckstring = deck.deckstring));
+		this.deck$.subscribe((deck) => (this.deckstring = deck?.deckstring));
 		this.info$ = this.deck$.pipe(
 			this.mapData((deck) => {
 				return {
