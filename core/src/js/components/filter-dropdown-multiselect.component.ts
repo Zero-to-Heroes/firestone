@@ -113,7 +113,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
 		// the first time (maybe because of "visible"?)
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
-			tap((info) => console.debug('hop', info)),
 			filter(([options, selected]) => !!options?.length),
 			map(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {

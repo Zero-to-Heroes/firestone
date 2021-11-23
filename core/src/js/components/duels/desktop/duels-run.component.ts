@@ -102,6 +102,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set isExpanded(value: boolean) {
 		this._isExpanded = value;
+		console.debug('isExpanded', value);
 		this.updateValues();
 	}
 

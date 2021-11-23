@@ -75,11 +75,7 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 	ngAfterContentInit(): void {
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
-			.pipe(
-				map(([expandedRunIds]) => expandedRunIds),
-				tap((expandedRunIds) => cdLog('emitting expandedRunIds in ', this.constructor.name, expandedRunIds)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([expandedRunIds]) => expandedRunIds));
 		this.sub$$ = combineLatest(
 			this.store
 				.listen$(
