@@ -40,7 +40,8 @@ export class BgsChartWarbandStatsComponent {
 					value: Math.round(stat.totalStats),
 				} as NumericTurnInfo;
 			})
-			.filter((stat) => stat);
+			.filter((stat) => stat)
+			.slice(0, 15);
 		if (areDeepEqual(this.communityValues, communityValues)) {
 			return;
 		}

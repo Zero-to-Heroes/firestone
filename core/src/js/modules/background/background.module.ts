@@ -93,7 +93,7 @@ import { BattlegroundsReplaysRecapComponent } from '../../components/battlegroun
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
-import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
+// import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-offs.component';
 import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
@@ -501,7 +501,7 @@ const components = [
 
 		BattlegroundsContentComponent,
 		BgsHeroSelectionOverviewComponent,
-		BgsHeroWarbandStatsComponent,
+		// BgsHeroWarbandStatsComponent,
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffComponent,
 		BgsOpponentOverviewComponent,

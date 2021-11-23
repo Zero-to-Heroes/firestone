@@ -176,14 +176,24 @@ const convertToBgsHeroStat = (
 				)) /
 			placementTotalMatches,
 		averagePosition: avgPosition,
-		warbandStats: stat.warbandStats.map((info) => ({
-			turn: info.turn,
-			totalStats: info.totalStats / info.dataPoints,
-		})) as readonly { turn: number; totalStats: number }[],
-		combatWinrate: stat.combatWinrate.map((info) => ({
-			turn: info.turn,
-			winrate: info.totalWinrate / info.dataPoints,
-		})) as readonly { turn: number; winrate: number }[],
+		warbandStats: stat.warbandStats
+			.map((info) => ({
+				turn: info.turn,
+				totalStats: info.totalStats / info.dataPoints,
+			}))
+			.slice(0, 15) as readonly {
+			turn: number;
+			totalStats: number;
+		}[],
+		combatWinrate: stat.combatWinrate
+			.map((info) => ({
+				turn: info.turn,
+				winrate: info.totalWinrate / info.dataPoints,
+			}))
+			.slice(0, 15) as readonly {
+			turn: number;
+			winrate: number;
+		}[],
 		placementDistribution: stat.placementDistribution,
 	} as BgsHeroStat;
 };

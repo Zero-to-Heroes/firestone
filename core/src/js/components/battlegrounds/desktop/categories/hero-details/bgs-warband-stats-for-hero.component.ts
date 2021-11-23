@@ -92,7 +92,8 @@ export class BgsWarbandStatsForHeroComponent extends AbstractSubscriptionCompone
 			community: heroStats
 				.find((stat) => stat.id === heroId)
 				?.warbandStats?.map((stat) => ({ turn: stat.turn, value: stat.totalStats } as NumericTurnInfo))
-				.filter((stat) => stat),
+				.filter((stat) => stat)
+				.slice(0, 15),
 			your: your,
 		} as Value;
 	}

@@ -100,7 +100,8 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionCompone
 				.find((stat) => stat.id === heroId)
 				?.combatWinrate?.filter((stat) => stat.turn > 0)
 				?.map((stat) => ({ turn: stat.turn, value: Math.round(10 * stat.winrate) / 10 } as NumericTurnInfo))
-				.filter((stat) => stat),
+				.filter((stat) => stat)
+				.slice(0, 15),
 			your: your,
 		} as Value;
 	}

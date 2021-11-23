@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
 import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../patches';
@@ -20,7 +21,7 @@ export class BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
 	}
 
-	public update(base: BattlegroundsAppState): BattlegroundsAppState {
+	public update(base: Partial<NonFunctionProperties<BattlegroundsAppState>>): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
 	}
 
