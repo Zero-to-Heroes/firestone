@@ -5,12 +5,13 @@ import { HeroStat } from './hero-stat';
 @Component({
 	selector: 'battlegrounds-hero-records-broken',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component.scss`,
 		`../../../../../css/global/components-global.scss`,
+		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component.scss`,
 	],
 	template: `
 		<div class="battlegrounds-hero-records-broken">
-			<img [src]="icon" class="portrait" />
+			<!-- <img [src]="icon" class="portrait" /> -->
+			<bgs-hero-portrait class="portrait" [heroCardId]="heroCardId"></bgs-hero-portrait>
 			<div class="records">
 				<div class="icon">
 					<svg class="svg-icon-fill">
@@ -24,11 +25,13 @@ import { HeroStat } from './hero-stat';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsHeroRecordsBrokenComponent {
-	icon: string;
+	// icon: string;
+	heroCardId: string;
 	numberOfRecords: number;
 
 	@Input() set stat(value: HeroStat) {
-		this.icon = this.i18n.getCardImage(value.heroId, { isBgs: true });
+		// this.icon = this.i18n.getCardImage(value.heroId, { isBgs: true });
+		this.heroCardId = value.heroId;
 		this.numberOfRecords = value.numberOfRecords;
 	}
 
