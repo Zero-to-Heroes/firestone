@@ -131,6 +131,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
+		return new Promise<readonly number[]>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getBattlegroundsOwnedHeroSkinDbfIds((collection) => {
+					resolve(collection ? JSON.parse(collection) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getBattlegroundsOwnedHeroSkinDbfIds', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getCardBacks(): Promise<any[]> {
 		return new Promise<any[]>(async (resolve, reject) => {
 			const plugin = await this.get();

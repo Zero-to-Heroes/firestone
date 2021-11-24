@@ -22,42 +22,18 @@
 		justify-content: flex-start;
 		margin-bottom: 10px;
 
-		.owned-filter {
-			width: 250px;
-
-			// Colors are not properly aligned between all the themes
-			::ng-deep filter-dropdown ng-select select-dropdown .below {
-				background: var(--color-5);
+		.filter {
+			::ng-deep filter-dropdown {
+				width: 175px;
+				margin-right: 10px;
+				ng-select select-dropdown .below {
+					background: var(--color-5);
+				}
 			}
 		}
 
 		.progress-bar {
 			margin-left: auto;
-		}
-	}
-
-	.show-uncollectible-portraits {
-		opacity: 0.5;
-		height: 30px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		position: relative;
-		top: 0;
-		right: 0;
-		align-self: auto;
-		margin-left: 30px;
-
-		::ng-deep .preference-toggle.preference-toggle.preference-toggle {
-			margin-top: 0;
-
-			.settings-p {
-				width: 150px;
-			}
-		}
-
-		&.active {
-			opacity: 1;
 		}
 	}
 
@@ -85,7 +61,7 @@
 			display: flex;
 			flex-direction: column;
 			align-content: start;
-			margin-bottom: 10px;
+			margin-bottom: 50px;
 
 			.portraits-container {
 				list-style: none;
@@ -97,6 +73,7 @@
 				// flex-wrap: wrap;
 				align-content: start;
 				flex-wrap: wrap;
+				padding-right: 10px;
 			}
 
 			.header {
@@ -116,7 +93,8 @@
 			position: relative;
 			transition: all 0.15s ease;
 			width: 175px;
-			padding: 10px;
+			padding: 0;
+			margin-right: -20px;
 		}
 	}
 }

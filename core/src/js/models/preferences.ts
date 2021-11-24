@@ -4,6 +4,7 @@ import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { ArenaClassFilterType } from './arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from './arena/arena-time-filter.type';
 import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
+import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from './collection/filter-types';
 import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
@@ -78,8 +79,9 @@ export class Preferences {
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
 	readonly collectionUseAnimatedCardBacks: boolean = false;
-	readonly collectionShowUncollectiblePortraits: boolean = false;
 	readonly collectionShowOnlyBuyablePacks: boolean = false;
+	readonly collectionActivePortraitCategoryFilter: CollectionPortraitCategoryFilter = 'collectible';
+	readonly collectionActivePortraitOwnedFilter: CollectionPortraitOwnedFilter = 'all';
 
 	readonly desktopDeckFilters: DeckFilters;
 	readonly desktopDeckShowHiddenDecks: boolean = false;

@@ -54,6 +54,27 @@ export class CollectionManager {
 		}
 	}
 
+	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
+		console.log('[collection-manager] getBattlegroundsOwnedHeroSkinDbfIds', skipMemoryReading);
+		const collection = !skipMemoryReading ? await this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds() : null;
+		console.debug('[collection-manager] got getBattlegroundsOwnedHeroSkinDbfIds', collection);
+		if (!collection || collection.length === 0) {
+			console.log('[collection-manager] retrieving getBattlegroundsOwnedHeroSkinDbfIds from db');
+			const collectionFromDb = await this.db.getBattlegroundsOwnedHeroSkinDbfIds();
+			console.log(
+				'[collection-manager] retrieved getBattlegroundsOwnedHeroSkinDbfIds from db',
+				collectionFromDb.length,
+			);
+			return collectionFromDb;
+		} else {
+			console.log(
+				'[collection-manager] retrieved getBattlegroundsOwnedHeroSkinDbfIds from MindVision, updating collection in db',
+			);
+			const savedCollection = await this.db.saveBattlegroundsOwnedHeroSkinDbfIds(collection);
+			return savedCollection;
+		}
+	}
+
 	public async getPacks(): Promise<readonly PackInfo[]> {
 		console.log('[collection-manager] getting pack info');
 		const packInfo = (await this.memoryReading.getBoostersInfo()) ?? [];

@@ -9,10 +9,11 @@ import {
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortBy } from 'lodash';
-import { IOption } from 'ng-select';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
+import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -30,17 +31,12 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	template: `
 		<div class="hero-portraits">
 			<div class="show-filter">
-				<collection-owned-filter
-					class="owned-filter"
-					(onOptionSelected)="selectCardsOwnedFilter($event)"
-				></collection-owned-filter>
-				<!-- <preference-toggle
-					class="show-uncollectible-portraits"
-					[ngClass]="{ 'active': showUncollectiblePortraits$ | async }"
-					field="collectionShowUncollectiblePortraits"
-					label="Show non-collectible"
-					helpTooltip="Show non-collectible heroes, such as adventure bosses"
-				></preference-toggle> -->
+				<collection-hero-portrait-owned-filter
+					class="filter hero-portrait-owned-filter"
+				></collection-hero-portrait-owned-filter>
+				<collection-hero-portrait-categories-filter
+					class="filter hero-portrait-categories-filter"
+				></collection-hero-portrait-categories-filter>
 				<progress-bar
 					class="progress-bar"
 					*ngIf="total$ | async as total"
@@ -78,30 +74,13 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	readonly DEFAULT_CARD_WIDTH = 174;
+	readonly DEFAULT_CARD_WIDTH = 206;
 
-	// showUncollectiblePortraits$: Observable<boolean>;
 	total$: Observable<number>;
 	unlocked$: Observable<number>;
 	shownHeroPortraits$: Observable<readonly PortraitGroup[]>;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
-	cardsOwnedActiveFilter$$ = new BehaviorSubject<'own' | 'dontown' | 'all'>('all');
-
-	// @Input() set heroPortraits(value: readonly CollectionReferenceCard[]) {
-	// 	sortedHeroes = sortBy(value, 'id', 'playerClass');
-	// 	this.updateInfo();
-	// }
-
-	// @Input() set navigation(value: NavigationCollection) {
-	// 	this._navigation = value;
-	// 	this.updateInfo();
-	// }
-
-	// _heroPortraits: readonly CollectionReferenceCard[];
-	// _navigation: NavigationCollection;
-
-	private allPortraits: readonly ReferenceCard[];
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -110,58 +89,52 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		this.allPortraits = this.allCards
-			.getCards()
-			.filter((card) => card.type === 'Hero')
-			.filter((card) => card.audio && Object.keys(card.audio).length > 0)
-			.filter((card) => !card.collectible);
 	}
 
 	async ngAfterContentInit() {
-		// this.showUncollectiblePortraits$ = this.listenForBasicPref$(
-		// 	(prefs) => prefs.collectionShowUncollectiblePortraits,
-		// );
-
-		const sortedHeroes$ = this.store
-			.listen$(([main, nav, prefs]) => main.binder.collection)
-			.pipe(
-				this.mapData(([collection]) => {
-					const heroPortraits = this.buildHeroPortraits(collection);
-					return sortBy(heroPortraits, 'id', 'playerClass');
-				}),
-			);
-		this.shownHeroPortraits$ = combineLatest(
-			// this.showUncollectiblePortraits$,
-			sortedHeroes$,
-			this.cardsOwnedActiveFilter$$.asObservable(),
+		const allBgPortraits: readonly ReferenceCard[] = this.allCards
+			.getCards()
+			.filter((card) => card.set === 'Battlegrounds')
+			.filter((card) => card.battlegroundsHero || card.battlegroundsHeroSkin);
+		const allCollectiblePortraits: readonly ReferenceCard[] = this.allCards
+			.getCards()
+			.filter((card) => card.set === 'Hero_skins')
+			.filter((card) => card.collectible);
+		const relevantHeroes$ = combineLatest(
+			this.store.listen$(
+				([main, nav, prefs]) => main.binder.collection,
+				([main, nav, prefs]) => main.binder.ownedBgsHeroSkins,
+			),
+			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
 		).pipe(
-			this.mapData(([sortedHeroes, cardsOwnedActiveFilter]) => {
-				// if (!showUncollectiblePortraits) {
-				const groupedByClass = groupByFunction((portrait: CollectionReferenceCard) =>
-					portrait.playerClass?.toLowerCase(),
-				)(sortedHeroes.filter(this.filterCardsOwned(cardsOwnedActiveFilter)));
-				return Object.keys(groupedByClass)
-					.sort()
-					.map((playerClass) => ({
-						title: formatClass(playerClass),
-						portraits: groupedByClass[playerClass],
-					}));
-				// } else {
-				// 	const groupedByClass = groupByFunction((portrait: ReferenceCard) =>
-				// 		portrait.playerClass?.toLowerCase(),
-				// 	)(this.allPortraits);
-				// 	return Object.keys(groupedByClass)
-				// 		.sort()
-				// 		.map((playerClass) => ({
-				// 			title: formatClass(playerClass),
-				// 			portraits: groupedByClass[playerClass],
-				// 		}));
-				// }
+			this.mapData(([[collection, ownedBgsHeroSkins], category]) => {
+				console.debug('collection', collection);
+				switch (category) {
+					case 'collectible':
+						return this.buildCollectibleHeroPortraits(collection, allCollectiblePortraits);
+					case 'battlegrounds':
+						return this.buildBattlegroundsHeroPortraits(ownedBgsHeroSkins, allBgPortraits);
+				}
 			}),
 		);
-		this.total$ = sortedHeroes$.pipe(this.mapData((heroes) => heroes.length));
-		this.unlocked$ = sortedHeroes$.pipe(
+		this.total$ = relevantHeroes$.pipe(this.mapData((heroes) => heroes.length));
+		this.unlocked$ = relevantHeroes$.pipe(
 			this.mapData((heroes) => heroes.filter((item) => item.numberOwned > 0).length),
+		);
+
+		const filteredHeroPortraits$ = combineLatest(
+			relevantHeroes$,
+			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
+			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitOwnedFilter),
+		).pipe(this.mapData(([heroes, category, owned]) => heroes.filter(this.filterCardsOwned(owned))));
+		this.shownHeroPortraits$ = combineLatest(
+			filteredHeroPortraits$,
+			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
+			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitOwnedFilter),
+		).pipe(
+			this.mapData(([portraitCards, category, cardsOwnedActiveFilter]) =>
+				this.groupPortraits(portraitCards, category),
+			),
 		);
 
 		this.store
@@ -176,10 +149,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			});
 	}
 
-	selectCardsOwnedFilter(option: IOption) {
-		this.cardsOwnedActiveFilter$$.next(option.value as any);
-	}
-
 	showFullHeroPortrait(heroPortrait: CollectionReferenceCard) {
 		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
@@ -188,17 +157,78 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		return card.id;
 	}
 
-	private buildHeroPortraits(collection: readonly Card[]): readonly CollectionReferenceCard[] {
-		const allPortraits: readonly ReferenceCard[] = this.allCards
-			.getCards()
-			.filter((card) => card.set === 'Hero_skins')
-			.filter((card) => card.collectible);
-		const portraitCardIds = allPortraits.map((card) => card.id);
+	private groupPortraits(
+		portraitCards: CollectionReferenceCard[],
+		category: CollectionPortraitCategoryFilter,
+	): readonly PortraitGroup[] {
+		const groupingFunction = this.buildGroupingFunction(category);
+		const sortingFunction = this.buildSortingFunction(category);
+		const groupedByClass = groupByFunction(groupingFunction)(portraitCards);
+		return Object.keys(groupedByClass)
+			.map((groupingKey) => ({
+				title: this.buildGroupTitle(category, groupedByClass[groupingKey][0]),
+				portraits: groupedByClass[groupingKey],
+			}))
+			.sort(sortingFunction);
+	}
+
+	private buildGroupingFunction(category: CollectionPortraitCategoryFilter): (portrait: ReferenceCard) => string {
+		switch (category) {
+			case 'collectible':
+				return (portrait: ReferenceCard) => portrait.playerClass?.toLowerCase();
+			case 'battlegrounds':
+				return (portrait: ReferenceCard) => normalizeHeroCardId(portrait.id);
+		}
+	}
+
+	private buildSortingFunction(
+		category: CollectionPortraitCategoryFilter,
+	): (a: PortraitGroup, b: PortraitGroup) => number {
+		switch (category) {
+			case 'collectible':
+			case 'battlegrounds':
+				return (a, b) => (a.title < b.title ? -1 : 1);
+		}
+	}
+
+	private buildGroupTitle(category: CollectionPortraitCategoryFilter, refPortrait: ReferenceCard): string {
+		switch (category) {
+			case 'collectible':
+				return formatClass(refPortrait.playerClass);
+			case 'battlegrounds':
+				return refPortrait.name;
+		}
+	}
+
+	private buildBattlegroundsHeroPortraits(
+		ownedBgsHeroSkins: readonly number[],
+		relevantPortraits: readonly ReferenceCard[],
+	): readonly CollectionReferenceCard[] {
+		const heroPortraits = relevantPortraits.map((card) =>
+			ownedBgsHeroSkins.includes(card.dbfId) || !card.battlegroundsHeroSkin
+				? ({
+						...card,
+						numberOwned: 1,
+				  } as CollectionReferenceCard)
+				: ({
+						...card,
+						numberOwned: 0,
+				  } as CollectionReferenceCard),
+		) as CollectionReferenceCard[];
+		const sortedHeroes = sortBy(heroPortraits, 'id');
+		return sortedHeroes;
+	}
+
+	private buildCollectibleHeroPortraits(
+		collection: readonly Card[],
+		relevantPortraits: readonly ReferenceCard[],
+	): readonly CollectionReferenceCard[] {
+		const portraitCardIds = relevantPortraits.map((card) => card.id);
 		const ownedPortraits = collection
 			.filter((card) => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
 			.map((card) => card.id)
 			.filter((cardId) => portraitCardIds.includes(cardId));
-		return allPortraits.map((card) =>
+		const heroPortraits = relevantPortraits.map((card) =>
 			ownedPortraits.includes(card.id)
 				? ({
 						...card,
@@ -209,9 +239,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 						numberOwned: 0,
 				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
+		const sortedHeroes = sortBy(heroPortraits, 'id', 'playerClass');
+		return sortedHeroes;
 	}
 
-	private filterCardsOwned(cardsOwnedActiveFilter: 'own' | 'dontown' | 'all') {
+	private filterCardsOwned(cardsOwnedActiveFilter: CollectionPortraitOwnedFilter) {
 		switch (cardsOwnedActiveFilter) {
 			case 'own':
 				return (card: CollectionReferenceCard) => card.numberOwned > 0;

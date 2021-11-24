@@ -24,6 +24,7 @@ import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
+import { GetBattlegroundsOwnedHeroSkinDbfIdsOperation } from './mind-vision/get-bgs-hero-skin-dbf-ids-operation';
 import { GetBoostersInfoOperation } from './mind-vision/get-boosters-info-operation';
 import { GetCardBacksOperation } from './mind-vision/get-card-backs-operation';
 import { GetCoinsOperation } from './mind-vision/get-coins-operation';
@@ -51,6 +52,11 @@ export class MemoryInspectionService {
 
 	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVision, this.ow);
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
+	private getBattlegroundsOwnedHeroSkinDbfIdsOperation = new GetBattlegroundsOwnedHeroSkinDbfIdsOperation(
+		this.mindVision,
+		this.ow,
+		this.cards,
+	);
 	private getCardBacksOperation = new GetCardBacksOperation(this.mindVision, this.ow, this.cards);
 	private getCoinsOperation = new GetCoinsOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
@@ -91,6 +97,10 @@ export class MemoryInspectionService {
 
 	public async getCollection(): Promise<readonly Card[]> {
 		return this.getCollectionOperation.call();
+	}
+
+	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
+		return this.getBattlegroundsOwnedHeroSkinDbfIdsOperation.call();
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {

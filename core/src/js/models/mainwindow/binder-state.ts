@@ -8,6 +8,7 @@ import { Set, SetCard } from '../set';
 
 export class BinderState {
 	readonly collection: readonly Card[] = [];
+	readonly ownedBgsHeroSkins: readonly number[] = [];
 	readonly packs: readonly PackInfo[];
 	readonly packStats: readonly PackResult[];
 	readonly allSets: readonly Set[] = [];

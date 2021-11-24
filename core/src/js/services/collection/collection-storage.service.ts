@@ -24,6 +24,11 @@ export class CollectionStorageService {
 		return collection;
 	}
 
+	public async saveBattlegroundsOwnedHeroSkinDbfIds(collection: readonly number[]): Promise<readonly number[]> {
+		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_BGS_HERO_SKIN_IDS, collection);
+		return collection;
+	}
+
 	public async saveCardBacks(cardBacks: readonly CardBack[]): Promise<readonly CardBack[]> {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARD_BACKS, cardBacks);
 		return cardBacks;
@@ -37,6 +42,10 @@ export class CollectionStorageService {
 	public async saveCoins(coins: readonly Coin[]): Promise<readonly Coin[]> {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_COINS, coins);
 		return coins;
+	}
+
+	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
+		return this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_BGS_HERO_SKIN_IDS);
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {

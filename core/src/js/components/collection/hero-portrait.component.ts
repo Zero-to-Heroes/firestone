@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data';
-import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
@@ -8,7 +6,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	selector: 'hero-portrait',
 	styleUrls: [`../../../css/component/collection/hero-portrait.component.scss`],
 	template: `
-		<div class="hero-portrait" [ngClass]="{ 'missing': isMissing(_heroPortrait) }" rotateOnMouseOver>
+		<div class="hero-portrait" [ngClass]="{ 'missing': missing }" rotateOnMouseOver>
 			<div class="perspective-wrapper" rotateOnMouseOver>
 				<img [src]="image" />
 			</div>
@@ -17,24 +15,13 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroPortraitComponent {
-	@Input() set heroPortrait(value: CollectionReferenceCard | ReferenceCard) {
-		this._heroPortrait = value;
-		this.image = this.i18n.getCardImage(value.id);
-		this.playerClass = formatClass(value.playerClass);
+	@Input() set heroPortrait(value: CollectionReferenceCard) {
+		this.missing = value.numberOwned === 0;
+		this.image = this.i18n.getCardImage(value.id, { isHeroSkin: true });
 	}
 
-	_heroPortrait: CollectionReferenceCard | ReferenceCard;
+	missing: boolean;
 	image: string;
-	playerClass: string;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
-
-	isMissing(portrait: CollectionReferenceCard | ReferenceCard): boolean {
-		// A ReferenceCard
-		if ((portrait as CollectionReferenceCard).numberOwned == null) {
-			return false;
-		}
-
-		return (portrait as CollectionReferenceCard).numberOwned === 0;
-	}
 }

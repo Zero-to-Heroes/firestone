@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LocalizationService } from './localization.service';
+import { ImageLocalizationOptions, LocalizationService } from './localization.service';
 import { OverwolfService } from './overwolf.service';
 
 @Injectable()
@@ -10,17 +10,11 @@ export class LocalizationFacadeService {
 		this.service = this.ow.getMainWindow().localizationService;
 	}
 
-	public getCardImage(
-		cardId: string,
-		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
-	): string {
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		return this.service.getCardImage(cardId, options);
 	}
 
-	public getNonLocalizedCardImage(
-		cardId: string,
-		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
-	): string {
+	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		return this.service.getNonLocalizedCardImage(cardId, options);
 	}
 }

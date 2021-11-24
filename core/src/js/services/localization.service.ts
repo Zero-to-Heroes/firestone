@@ -26,23 +26,25 @@ export class LocalizationService {
 		window['localizationService'] = this;
 	}
 
-	public getCardImage(
-		cardId: string,
-		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
-	): string {
-		const base = `https://static.firestoneapp.com/cards/${options?.isBgs ? 'bgs/' : ''}${this.locale}/${
-			this.useHighResImages || options?.isHighRes ? '512' : '256'
-		}`;
+	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+		const bgs = options?.isBgs ? 'bgs/' : '';
+		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
+		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
+		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}?v=2`;
 	}
 
-	public getNonLocalizedCardImage(
-		cardId: string,
-		options?: { isBgs?: boolean; isPremium?: boolean; isHighRes?: boolean },
-	): string {
+	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		const base = `https://static.firestoneapp.com/cards`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}?v=2`;
 	}
+}
+
+export interface ImageLocalizationOptions {
+	readonly isBgs?: boolean;
+	readonly isPremium?: boolean;
+	readonly isHighRes?: boolean;
+	readonly isHeroSkin?: boolean;
 }

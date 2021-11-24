@@ -118,6 +118,8 @@ import { CardsComponent } from '../../components/collection/cards.component';
 import { CollectionEmptyStateComponent } from '../../components/collection/collection-empty-state.component';
 import { CollectionMenuSelectionComponent } from '../../components/collection/collection-menu-selection.component';
 import { CollectionComponent } from '../../components/collection/collection.component';
+import { CollectionHeroPortraitCategoriesFilterDropdownComponent } from '../../components/collection/filters/collection-hero-portrait-categories-filter-dropdown.component';
+import { CollectionHeroPortraitOwnedFilterDropdownComponent } from '../../components/collection/filters/collection-hero-portrait-owned-filter-dropdown.component';
 import { OwnedFilterComponent } from '../../components/collection/filters/owned-filter.component';
 import { FullCardBackComponent } from '../../components/collection/full-card-back.component';
 import { FullCardComponent } from '../../components/collection/full-card.component';
@@ -568,11 +570,14 @@ const components = [
 		HeroPortraitsComponent,
 		HeroPortraitComponent,
 		TheCoinsComponent,
-		OwnedFilterComponent,
 		CollectionPackStatsComponent,
 		PackHistoryComponent,
 		PackHistoryItemComponent,
 		PackDisplayComponent,
+
+		CollectionHeroPortraitOwnedFilterDropdownComponent,
+		CollectionHeroPortraitCategoriesFilterDropdownComponent,
+		OwnedFilterComponent,
 
 		AchievementsComponent,
 		AchievementCompletionStepComponent,
