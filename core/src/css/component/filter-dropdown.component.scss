@@ -93,6 +93,10 @@ ng-select.disabled {
 				align-items: center;
 				height: 30px;
 
+				&.unselectable {
+					pointer-events: none;
+				}
+
 				&.selected {
 					background-color: inherit;
 					color: inherit;

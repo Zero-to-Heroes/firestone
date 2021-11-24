@@ -27,7 +27,11 @@ import { IOption } from 'ng-select';
 			[noFilter]="1"
 		>
 			<ng-template #optionTemplate let-option="option">
-				<span [helpTooltip]="option.label" [innerHTML]="option?.label"></span>
+				<span
+					[helpTooltip]="option.label"
+					[ngClass]="{ 'unselectable': option?.unselectable }"
+					[innerHTML]="option?.label"
+				></span>
 				<div class="tooltip" *ngIf="option?.tooltip" [helpTooltip]="option.tooltip">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#info" />

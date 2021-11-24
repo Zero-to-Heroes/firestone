@@ -13,9 +13,12 @@ import { combineLatest, Observable } from 'rxjs';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
+import { MemoryMercenary } from '../../models/memory/memory-mercenaries-info';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
+import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';
@@ -92,30 +95,37 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 	}
 
 	async ngAfterContentInit() {
-		const allBgPortraits: readonly ReferenceCard[] = this.allCards
-			.getCards()
-			.filter((card) => card.set === 'Battlegrounds')
-			.filter((card) => card.battlegroundsHero || card.battlegroundsHeroSkin);
-		const allCollectiblePortraits: readonly ReferenceCard[] = this.allCards
-			.getCards()
-			.filter((card) => card.set === 'Hero_skins')
-			.filter((card) => card.collectible);
+		const mercenariesReferenceData$ = this.store
+			.listen$(([main, nav, prefs]) => main.mercenaries.referenceData?.mercenaries)
+			.pipe(this.mapData(([mercs]) => mercs));
 		const relevantHeroes$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.binder.collection,
 				([main, nav, prefs]) => main.binder.ownedBgsHeroSkins,
+				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Mercenaries,
 			),
+			mercenariesReferenceData$,
 			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
 		).pipe(
-			this.mapData(([[collection, ownedBgsHeroSkins], category]) => {
-				console.debug('collection', collection);
-				switch (category) {
-					case 'collectible':
-						return this.buildCollectibleHeroPortraits(collection, allCollectiblePortraits);
-					case 'battlegrounds':
-						return this.buildBattlegroundsHeroPortraits(ownedBgsHeroSkins, allBgPortraits);
-				}
-			}),
+			this.mapData(
+				([[collection, ownedBgsHeroSkins, mercenariesCollection], mercenariesReferenceData, category]) => {
+					console.debug('collection', collection);
+					switch (category) {
+						case 'collectible':
+							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());
+						case 'battlegrounds':
+							return this.buildBattlegroundsHeroPortraits(ownedBgsHeroSkins, this.allCards.getCards());
+						case 'mercenaries':
+							return this.buildMercenariesHeroPortraits(
+								mercenariesCollection,
+								mercenariesReferenceData,
+								this.allCards.getCards(),
+							);
+						case 'book-of-mercs':
+							return this.buildBookOfMercenariesHeroPortraits(this.allCards.getCards());
+					}
+				},
+			),
 		);
 		this.total$ = relevantHeroes$.pipe(this.mapData((heroes) => heroes.length));
 		this.unlocked$ = relevantHeroes$.pipe(
@@ -178,6 +188,10 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 				return (portrait: ReferenceCard) => portrait.playerClass?.toLowerCase();
 			case 'battlegrounds':
 				return (portrait: ReferenceCard) => normalizeHeroCardId(portrait.id);
+			case 'mercenaries':
+				return (portrait: ReferenceCard) => normalizeMercenariesCardId(portrait.id);
+			case 'book-of-mercs':
+				return (portrait: ReferenceCard) => /BOM_(\d+)_.*/g.exec(portrait.id)[1];
 		}
 	}
 
@@ -185,8 +199,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		category: CollectionPortraitCategoryFilter,
 	): (a: PortraitGroup, b: PortraitGroup) => number {
 		switch (category) {
-			case 'collectible':
-			case 'battlegrounds':
+			default:
 				return (a, b) => (a.title < b.title ? -1 : 1);
 		}
 	}
@@ -196,14 +209,39 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'collectible':
 				return formatClass(refPortrait.playerClass);
 			case 'battlegrounds':
+			case 'mercenaries':
 				return refPortrait.name;
+			case 'book-of-mercs':
+				const storyIndex = /BOM_(\d+)_.*/g.exec(refPortrait.id)[1];
+				console.debug('story index', storyIndex);
+				switch (+storyIndex) {
+					case 1:
+						return `${storyIndex.padStart(2, '0')} - Rokara's story`;
+					case 2:
+						return `${storyIndex.padStart(2, '0')} - Xyrella's story`;
+					case 3:
+						return `${storyIndex.padStart(2, '0')} - Guff's story`;
+					case 4:
+						return `${storyIndex.padStart(2, '0')} - Kurtrus' story`;
+					case 5:
+						return `${storyIndex.padStart(2, '0')} - Tamsin's story`;
+					case 6:
+						return `${storyIndex.padStart(2, '0')} - Cariel's story`;
+					case 7:
+						return `${storyIndex.padStart(2, '0')} - Scabbs' story`;
+					default:
+						return `${storyIndex.padStart(2, '0')} - Other stories`;
+				}
 		}
 	}
 
 	private buildBattlegroundsHeroPortraits(
 		ownedBgsHeroSkins: readonly number[],
-		relevantPortraits: readonly ReferenceCard[],
+		cards: readonly ReferenceCard[],
 	): readonly CollectionReferenceCard[] {
+		const relevantPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.set === 'Battlegrounds')
+			.filter((card) => card.battlegroundsHero || card.battlegroundsHeroSkin);
 		const heroPortraits = relevantPortraits.map((card) =>
 			ownedBgsHeroSkins.includes(card.dbfId) || !card.battlegroundsHeroSkin
 				? ({
@@ -219,10 +257,49 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		return sortedHeroes;
 	}
 
+	private buildMercenariesHeroPortraits(
+		mercenariesCollection: readonly MemoryMercenary[],
+		mercenariesReferenceData: readonly MercenariesReferenceData['mercenaries'][0][],
+		cards: readonly ReferenceCard[],
+	): readonly CollectionReferenceCard[] {
+		if (!mercenariesCollection || !mercenariesReferenceData?.length) {
+			return [];
+		}
+		const allMercenariesPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.set === 'Lettuce')
+			.filter((card) => card.mercenary);
+		const allArtVariations = mercenariesReferenceData
+			.map((data) => data.skins)
+			.reduce((a, b) => a.concat(b), [])
+			.map((skin) => skin.cardId);
+		const ownedMercenariesSkins = mercenariesCollection
+			.map((merc) => merc.Skins)
+			.reduce((a, b) => a.concat(b), [])
+			.map((skin) => skin.CardDbfId);
+		const heroPortraits = allMercenariesPortraits
+			.filter((card) => allArtVariations.includes(card.dbfId))
+			.map((card) =>
+				ownedMercenariesSkins.includes(card.dbfId)
+					? ({
+							...card,
+							numberOwned: 1,
+					  } as CollectionReferenceCard)
+					: ({
+							...card,
+							numberOwned: 0,
+					  } as CollectionReferenceCard),
+			) as CollectionReferenceCard[];
+		const sortedHeroes = sortBy(heroPortraits, 'id');
+		return sortedHeroes;
+	}
+
 	private buildCollectibleHeroPortraits(
 		collection: readonly Card[],
-		relevantPortraits: readonly ReferenceCard[],
+		cards: readonly ReferenceCard[],
 	): readonly CollectionReferenceCard[] {
+		const relevantPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.set === 'Hero_skins')
+			.filter((card) => card.collectible);
 		const portraitCardIds = relevantPortraits.map((card) => card.id);
 		const ownedPortraits = collection
 			.filter((card) => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
@@ -240,6 +317,21 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
 		const sortedHeroes = sortBy(heroPortraits, 'id', 'playerClass');
+		return sortedHeroes;
+	}
+
+	private buildBookOfMercenariesHeroPortraits(cards: readonly ReferenceCard[]): readonly CollectionReferenceCard[] {
+		const relevantPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.id.startsWith('BOM_'))
+			.filter((card) => card.type === 'Hero');
+		const heroPortraits = relevantPortraits.map(
+			(card) =>
+				({
+					...card,
+					numberOwned: 1,
+				} as CollectionReferenceCard),
+		) as CollectionReferenceCard[];
+		const sortedHeroes = sortBy(heroPortraits, 'id');
 		return sortedHeroes;
 	}
 

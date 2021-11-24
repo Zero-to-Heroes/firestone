@@ -26,8 +26,11 @@
 			::ng-deep filter-dropdown {
 				width: 175px;
 				margin-right: 10px;
-				ng-select select-dropdown .below {
-					background: var(--color-5);
+				ng-select {
+					width: 175px;
+					select-dropdown .below {
+						background: var(--color-5);
+					}
 				}
 			}
 		}

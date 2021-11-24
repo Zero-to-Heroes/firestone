@@ -43,6 +43,14 @@ export class CollectionHeroPortraitCategoriesFilterDropdownComponent
 				value: 'battlegrounds',
 				label: 'Battlegrounds',
 			} as IOption,
+			{
+				value: 'mercenaries',
+				label: 'Mercenaries',
+			} as IOption,
+			{
+				value: 'book-of-mercs',
+				label: 'Book of Mercenaries',
+			} as IOption,
 		] as readonly IOption[];
 	}
 
