@@ -215,6 +215,7 @@ export const publicCardCreators = [
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.ForgeOfSouls,
 	CardIds.FreeAdmission,
+	CardIds.FrostweaveDungeoneer,
 	CardIds.FungalFortunes,
 	CardIds.GalakrondTheNightmare,
 	CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken,
