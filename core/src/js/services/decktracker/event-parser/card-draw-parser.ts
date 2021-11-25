@@ -1,14 +1,15 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { cardsRevealedWhenDrawn, forceHideInfoWhenDrawnInfluencers, publicCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardDrawParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK;
@@ -16,7 +17,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		//console.debug('drawing from deck', cardId, gameEvent);
+		console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -27,6 +28,8 @@ export class CardDrawParser implements EventParser {
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
+		const isTradable = !!this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
+		console.debug('drawing from deck', isTradable, this.allCards.getCard(cardId));
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
@@ -38,8 +41,10 @@ export class CardDrawParser implements EventParser {
 			isPlayer ||
 			(!isCardDrawnBySecretPassage &&
 				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-					publicCardCreators.includes(lastInfluencedByCardId)));
-		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
+					// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
+					(!isTradable && publicCardCreators.includes(lastInfluencedByCardId))));
+		const isCreatorPublic =
+			isCardInfoPublic || (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 
 		//console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 

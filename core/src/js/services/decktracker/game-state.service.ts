@@ -584,7 +584,7 @@ export class GameStateService {
 			new MatchMetadataParser(this.deckParser, this.prefs, this.deckHandler, this.allCards),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),
-			new CardDrawParser(this.helper),
+			new CardDrawParser(this.helper, this.allCards),
 			new ReceiveCardInHandParser(this.helper, this.allCards),
 			new CardBackToDeckParser(this.helper, this.allCards),
 			new CreateCardInDeckParser(this.helper, this.allCards),
