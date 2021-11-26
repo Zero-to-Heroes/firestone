@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -41,6 +42,7 @@ export class ReplaysDeckstringFilterDropdownComponent
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringFilter,
 			)
 			.pipe(
+				filter(([decks, gameModeFilter, deckstringFilter]) => !!decks),
 				this.mapData(([decks, gameModeFilter, deckstringFilter]) => {
 					const options = [
 						{
