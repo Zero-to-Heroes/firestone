@@ -38,12 +38,14 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 			</div>
 
 			<div class="coins left">
-				<img class="icon" [src]="portraitUrl" />
-				<img
-					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
-				/>
-				<div class="amount">{{ totalCoinsLeft }}</div>
+				<div class="coin-container">
+					<img class="icon" [src]="portraitUrl" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+					/>
+					<div class="amount">{{ totalCoinsLeft }}</div>
+				</div>
 			</div>
 
 			<div
@@ -51,12 +53,14 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				[helpTooltip]="coinsNeededTooltip"
 				helpTooltipClasses="mercenaries-personal-hero-stat-coins-needed-tooltip"
 			>
-				<img class="icon" [src]="portraitUrl" />
-				<img
-					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
-				/>
-				<div class="amount">{{ totalCoinsForFullUpgrade }}</div>
+				<div class="coin-container">
+					<img class="icon" [src]="portraitUrl" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+					/>
+					<div class="amount">{{ totalCoinsForFullUpgrade }}</div>
+				</div>
 			</div>
 
 			<div

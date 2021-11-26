@@ -28,8 +28,10 @@
 
 	.rarity-level {
 		position: relative;
-		width: 20px;
+		width: 25px;
 		top: 5px;
+		padding-left: 2px;
+		padding-right: 3px;
 		flex-shrink: 0;
 
 		.rarity {
@@ -95,9 +97,11 @@
 		flex-shrink: 0;
 		flex-grow: 1;
 		max-width: 200px;
+		padding-left: 10px;
 	}
 
 	.xp {
+		width: 60px;
 		margin-right: 20px;
 		flex-shrink: 0;
 
@@ -116,19 +120,27 @@
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
-		width: 30px;
+		align-items: center;
+		justify-content: center;
+		width: 50px;
 		position: relative;
 		top: -5px;
 		left: 0;
 		z-index: 9;
 		margin-top: 0;
 		margin-bottom: 0;
-		margin-right: 30px;
+
+		&.left {
+			display: none;
+		}
+
+		.coin-container {
+			display: flex;
+			position: relative;
+			width: 35px;
+		}
 
 		.icon {
-			position: absolute;
-			top: 5%;
-			left: -3%;
 			width: 100%;
 			clip-path: ellipse(40% 44% at 50% 50%);
 			filter: grayscale(1);
@@ -137,6 +149,9 @@
 		.frame {
 			width: 100%;
 			z-index: 1;
+			position: absolute;
+			left: 0;
+			top: 0;
 		}
 
 		.amount {
@@ -156,19 +171,18 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-right: 30px;
 		font-size: 12px;
-		width: 25px;
+		width: 80px;
 		flex-shrink: 0;
 	}
 
 	.abilities,
 	.equipments {
 		display: flex;
-		margin-right: 25px;
 		flex-shrink: 0;
 		flex-grow: 1;
 		max-width: 180px;
+		justify-content: center;
 
 		.item {
 			width: 40px;
@@ -271,10 +285,20 @@
 		}
 	}
 
+	.abilities {
+		margin-right: 10px;
+	}
+
 	// TODO: find a better way to show what equipment is equipped
 	// .equipments {
 	// 	.item:not(.missing):not(.equipped) {
 	// 		opacity: 0.8;
 	// 	}
 	// }
+}
+
+@media (min-width: 1420px) {
+	.mercenaries-personal-hero-stat .coins.left {
+		display: flex;
+	}
 }

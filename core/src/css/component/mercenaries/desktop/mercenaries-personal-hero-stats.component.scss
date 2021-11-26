@@ -33,7 +33,7 @@
 		}
 
 		.role {
-			width: 50px;
+			width: 55px;
 		}
 
 		.name {
@@ -49,20 +49,22 @@
 		}
 
 		.coins {
-			width: 30px;
-			margin-right: 30px;
+			width: 50px;
+
+			&.left {
+				display: none;
+			}
 		}
 
 		.tasks {
-			width: 25px;
-			margin-right: 30px;
+			width: 80px;
 		}
 
 		.abilities {
 			width: 150px;
-			margin-right: 40px;
 			flex-grow: 1;
 			max-width: 180px;
+			margin-right: 10px;
 		}
 
 		.equipments {
@@ -87,5 +89,11 @@
 		width: 100%;
 		height: 60px;
 		margin-bottom: 10px;
+	}
+}
+
+@media (min-width: 1420px) {
+	.mercenaries-personal-hero-stats .header .coins.left {
+		display: flex;
 	}
 }
