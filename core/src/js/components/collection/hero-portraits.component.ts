@@ -191,7 +191,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'mercenaries':
 				return (portrait: ReferenceCard) => normalizeMercenariesCardId(portrait.id);
 			case 'book-of-mercs':
-				return (portrait: ReferenceCard) => /BOM_(\d+)_.*/g.exec(portrait.id)[1];
+				return (portrait: ReferenceCard) => {
+					console.debug('considering', portrait, /BOM_(\d+)_.*/g.exec(portrait.id));
+					const match = /BOM_(\d+)_.*/g.exec(portrait.id);
+					return match ? match[1] : '';
+				};
 		}
 	}
 
@@ -212,7 +216,8 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'mercenaries':
 				return refPortrait.name;
 			case 'book-of-mercs':
-				const storyIndex = /BOM_(\d+)_.*/g.exec(refPortrait.id)[1];
+				const match = /BOM_(\d+)_.*/g.exec(refPortrait.id);
+				const storyIndex = match ? match[1] : '';
 				console.debug('story index', storyIndex);
 				switch (+storyIndex) {
 					case 1:
@@ -265,13 +270,16 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		if (!mercenariesCollection || !mercenariesReferenceData?.length) {
 			return [];
 		}
-		const allMercenariesPortraits: readonly ReferenceCard[] = cards
-			.filter((card) => card.set === 'Lettuce')
-			.filter((card) => card.mercenary);
 		const allArtVariations = mercenariesReferenceData
+			// Get rid of the enemies
+			.filter((data) => data.skins?.length > 1)
 			.map((data) => data.skins)
 			.reduce((a, b) => a.concat(b), [])
 			.map((skin) => skin.cardId);
+		const allMercenariesPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.set === 'Lettuce')
+			.filter((card) => card.mercenary)
+			.filter((card) => allArtVariations.includes(card.dbfId));
 		const ownedMercenariesSkins = mercenariesCollection
 			.map((merc) => merc.Skins)
 			.reduce((a, b) => a.concat(b), [])
