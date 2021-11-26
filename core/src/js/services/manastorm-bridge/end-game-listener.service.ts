@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
+import { MemoryUpdate } from '../../models/memory/memory-update';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { EndGameUploaderService } from './end-game-uploader.service';
@@ -16,9 +18,11 @@ export class EndGameListenerService {
 	private currentScenarioId: number;
 	private currentGameMode: number;
 	private bgsHasPrizes: boolean;
+	private bgsNewRating: number;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
+		private events: Events,
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
 		private gameState: GameStateService,
@@ -28,6 +32,13 @@ export class EndGameListenerService {
 
 	private init(): void {
 		console.log('[manastorm-bridge] stgarting end-game-listener init');
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.BattlegroundsNewRating) {
+				this.bgsNewRating = changes.BattlegroundsNewRating;
+				console.log('[manastorm-bridge] assigned BGS new rating', this.bgsNewRating);
+			}
+		});
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
 				case GameEvent.GAME_START:
@@ -70,6 +81,7 @@ export class EndGameListenerService {
 						this.currentScenarioId,
 						{
 							hasPrizes: this.bgsHasPrizes,
+							bgsNewRating: this.bgsNewRating,
 						},
 					);
 					break;

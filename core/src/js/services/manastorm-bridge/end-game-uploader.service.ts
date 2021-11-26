@@ -63,6 +63,7 @@ export class EndGameUploaderService {
 		scenarioId: number,
 		bgsOptions?: {
 			hasPrizes: boolean;
+			bgsNewRating: number;
 		},
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
@@ -87,6 +88,7 @@ export class EndGameUploaderService {
 		// scenarioId: number,
 		bgsOptions?: {
 			hasPrizes: boolean;
+			bgsNewRating: number;
 		},
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
@@ -138,7 +140,7 @@ export class EndGameUploaderService {
 		if (game.gameMode === 'battlegrounds') {
 			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo?.rating ?? this.bgsStore?.state?.currentGame?.mmrAtStart;
-			newPlayerRank = battlegroundsInfo?.newRating;
+			newPlayerRank = battlegroundsInfo?.newRating ?? bgsOptions.bgsNewRating;
 			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				battlegroundsInfo?.game?.AvailableRaces,
 			);

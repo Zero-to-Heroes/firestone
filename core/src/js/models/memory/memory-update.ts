@@ -12,6 +12,7 @@ export interface MemoryUpdate {
 	readonly IsMercenariesSelectingTreasure: boolean;
 	readonly IsMercenariesTasksUpdated: boolean;
 	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
+	readonly BattlegroundsNewRating: number;
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPack: PackInfo;
