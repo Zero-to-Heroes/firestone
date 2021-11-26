@@ -123,9 +123,9 @@ export class BattlegroundsMouseOverOverlayComponent
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(
 				debounceTime(1000),
-				filter(([state]) => !!state.currentGame),
+				filter(([state]) => !!state.currentGame && state.currentGame.players?.length === 8),
 				map(([state]) =>
-					[...(state.currentGame.players ?? [])].sort(
+					[...state.currentGame.players].sort(
 						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 					),
 				),
