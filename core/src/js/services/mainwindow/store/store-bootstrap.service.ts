@@ -268,9 +268,9 @@ export class StoreBootstrapService {
 		}
 		await this.prefs.savePreferences(merged);
 		console.debug('merged prefs', merged);
-		if (!merged?.opponentOverlayPosition) {
-			console.warn('no-format', 'pref missing overlay position', merged, new Error().stack);
-		}
+		// if (!merged?.opponentOverlayPosition) {
+		// 	console.warn('no-format', 'pref missing overlay position', merged, new Error().stack);
+		// }
 		return merged;
 	}
 
