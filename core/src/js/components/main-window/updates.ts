@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.1',
+		version: '8.3.4',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -54,6 +54,24 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where re-drawing a card sent back to deck with Tradeable would flag the drawn card in hand in some cases.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Reorganize the "Hero Portraits" page. It now lets you see all the usual collectible ones (for constructed), the BG skins, and the Mercenaries, as well as all heroes you face in the Book of Mercenaries.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -67,6 +85,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where mousing over a minion would not show its golden image anymore.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where you could mouse over the leaderboard in the hero selection phase and see what other heroes had already been picked.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the net MMR for a game would sometimes not be properly computed.`,
+							},
 						],
 					},
 					{
@@ -76,11 +102,19 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where searching for mercs would return some unrelated results.`,
 							},
+							{
+								type: 'ui',
+								text: `Only show "Coins left" when the window is big enough, to improve how things looks like on smaller windows.`,
+							},
 						],
 					},
 					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'feature',
+								text: `Flag the card drawn by Frostweave Dungeoneer.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where clicking on the "Watch replays" button from the deck page would not do anything.`,
