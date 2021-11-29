@@ -248,7 +248,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			.filter((card) => card.set === 'Battlegrounds')
 			.filter((card) => card.battlegroundsHero || card.battlegroundsHeroSkin);
 		const heroPortraits = relevantPortraits.map((card) =>
-			ownedBgsHeroSkins.includes(card.dbfId) || !card.battlegroundsHeroSkin
+			(ownedBgsHeroSkins ?? []).includes(card.dbfId) || !card.battlegroundsHeroSkin
 				? ({
 						...card,
 						numberOwned: 1,
@@ -270,20 +270,22 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		if (!mercenariesCollection || !mercenariesReferenceData?.length) {
 			return [];
 		}
-		const allArtVariations = mercenariesReferenceData
-			// Get rid of the enemies
-			.filter((data) => data.skins?.length > 1)
-			.map((data) => data.skins)
-			.reduce((a, b) => a.concat(b), [])
-			.map((skin) => skin.cardId);
+		const allArtVariations =
+			mercenariesReferenceData
+				// Get rid of the enemies
+				?.filter((data) => data.skins?.length > 1)
+				.map((data) => data.skins)
+				.reduce((a, b) => a.concat(b), [])
+				.map((skin) => skin.cardId) ?? [];
 		const allMercenariesPortraits: readonly ReferenceCard[] = cards
 			.filter((card) => card.set === 'Lettuce')
 			.filter((card) => card.mercenary)
 			.filter((card) => allArtVariations.includes(card.dbfId));
-		const ownedMercenariesSkins = mercenariesCollection
-			.map((merc) => merc.Skins)
-			.reduce((a, b) => a.concat(b), [])
-			.map((skin) => skin.CardDbfId);
+		const ownedMercenariesSkins =
+			mercenariesCollection
+				?.map((merc) => merc.Skins)
+				.reduce((a, b) => a.concat(b), [])
+				.map((skin) => skin.CardDbfId) ?? [];
 		const heroPortraits = allMercenariesPortraits
 			.filter((card) => allArtVariations.includes(card.dbfId))
 			.map((card) =>

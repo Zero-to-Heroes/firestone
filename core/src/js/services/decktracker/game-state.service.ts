@@ -193,19 +193,22 @@ export class GameStateService {
 			console.warn('[game-state] Could not find OW service');
 			return;
 		}
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe(async (event) => {
-			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				this.buildEventEmitters();
-				return;
-			}
-		});
-		this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
-			this.processingQueue.enqueue(event);
-		});
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckUpdater'] = this.deckUpdater;
 		setTimeout(() => {
+			const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
+			preferencesEventBus.subscribe(async (event) => {
+				if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+					this.buildEventEmitters();
+					return;
+				}
+				if (event) {
+					this.handleDisplayPreferences(event.preferences);
+				}
+			});
+			this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
+				this.processingQueue.enqueue(event);
+			});
 			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe((event) => {
@@ -217,14 +220,6 @@ export class GameStateService {
 			});
 		});
 		this.handleDisplayPreferences();
-		setTimeout(() => {
-			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			preferencesEventBus.subscribe((event) => {
-				if (event) {
-					this.handleDisplayPreferences(event.preferences);
-				}
-			});
-		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res) || !(await this.ow.inGame())) {
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);

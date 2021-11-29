@@ -127,8 +127,8 @@ export class CardTooltipComponent {
 			.map((cardId) => {
 				// const card = this.allCards.getCard(cardId);
 				// console.debug('card', card);
-				const isPremium = cardId.endsWith('_golden');
-				const realCardId = cardId.split('_golden')[0];
+				const isPremium = cardId?.endsWith('_golden');
+				const realCardId = cardId?.split('_golden')[0];
 				const image = !!realCardId
 					? this.localized
 						? this.i18n.getCardImage(realCardId, {

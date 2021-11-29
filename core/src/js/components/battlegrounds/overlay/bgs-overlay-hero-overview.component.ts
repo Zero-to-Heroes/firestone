@@ -82,11 +82,15 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
-				console.debug('updating scale', scale);
-				this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
-				const newScale = scale / 100;
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				try {
+					console.debug('updating scale', scale);
+					this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
+					const newScale = scale / 100;
+					const element = this.el.nativeElement.querySelector('.scalable');
+					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+				} catch (e) {
+					// Do nothing
+				}
 			});
 	}
 }

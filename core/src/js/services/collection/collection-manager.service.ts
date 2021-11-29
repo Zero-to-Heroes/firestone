@@ -45,7 +45,7 @@ export class CollectionManager {
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
-			console.log('[collection-manager] retrieved collection from db', collectionFromDb.length);
+			console.log('[collection-manager] retrieved collection from db', collectionFromDb?.length);
 			return collectionFromDb;
 		} else {
 			console.log('[collection-manager] retrieved collection from MindVision, updating collection in db');
@@ -63,7 +63,7 @@ export class CollectionManager {
 			const collectionFromDb = await this.db.getBattlegroundsOwnedHeroSkinDbfIds();
 			console.log(
 				'[collection-manager] retrieved getBattlegroundsOwnedHeroSkinDbfIds from db',
-				collectionFromDb.length,
+				collectionFromDb?.length,
 			);
 			return collectionFromDb;
 		} else {
@@ -82,7 +82,7 @@ export class CollectionManager {
 		if (!packInfo || packInfo.length === 0) {
 			console.log('[collection-manager] retrieving pack info from db');
 			const packsFromDb = await this.db.getPackInfos();
-			console.log('[collection-manager] retrieved pack info from db', packsFromDb.length);
+			console.log('[collection-manager] retrieved pack info from db', packsFromDb?.length);
 			return packsFromDb;
 		} else {
 			const saved = await this.db.savePackInfos(packInfo);
@@ -105,7 +105,7 @@ export class CollectionManager {
 		if (!cardBacks || cardBacks.length === 0) {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
-			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb.length);
+			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb?.length);
 			console.debug('[collection-manager] card from db', cardBacksFromDb);
 			// We do this so that if we update the reference, we still see them until the info
 			// has been refreshed from the in-game memory
@@ -126,7 +126,7 @@ export class CollectionManager {
 		if (!memoryCoins || memoryCoins.length === 0) {
 			console.log('[collection-manager] retrieving coins from db');
 			const coinsFromDb = await this.db.getCoins();
-			console.log('[collection-manager] retrieved coins from db', coinsFromDb.length);
+			console.log('[collection-manager] retrieved coins from db', coinsFromDb?.length);
 			return coinsFromDb;
 		} else {
 			const refCoins = this.allCards
