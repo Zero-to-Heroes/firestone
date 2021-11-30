@@ -60,11 +60,10 @@ export class PreferencesService {
 	}
 
 	private async setup() {
+		window['preferencesEventBus'] = this.preferencesEventBus;
 		const currentWindow = await this.ow.getCurrentWindow();
-		if (currentWindow.name === OverwolfService.MAIN_WINDOW) {
-			// It will create one per window that uses the service, but we don't really care
-			// We just have to always use the one from the MainWindow
-			window['preferencesEventBus'] = this.preferencesEventBus;
+		if (currentWindow.name !== OverwolfService.MAIN_WINDOW) {
+			window['preferencesEventBus'] = null;
 		}
 	}
 
