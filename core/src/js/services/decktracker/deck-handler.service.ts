@@ -153,6 +153,8 @@ export class DeckHandlerService {
 				return 'SCH_199t27';
 			case Board.STORMWIND_2:
 				return 'SCH_199t28';
+			case Board.ALTERAC:
+				return 'SCH_199t29';
 			default:
 				return cardId;
 		}

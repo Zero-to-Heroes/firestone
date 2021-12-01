@@ -1,4 +1,4 @@
-import { CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler } from './cards-highlight.service';
 
@@ -12,6 +12,10 @@ export const or = (
 	...filters: ((h: Handler, d?: DeckState) => boolean)[]
 ): ((handler: Handler, d?: DeckState) => boolean) => {
 	return (handler, deckState) => filters.some((filter) => filter(handler, deckState));
+};
+
+export const not = (filter: (h: Handler, d?: DeckState) => boolean): ((handler: Handler, d?: DeckState) => boolean) => {
+	return (handler, deckState) => !filter(handler, deckState);
 };
 
 export const inDeck = (handler: Handler): boolean => {
@@ -36,6 +40,10 @@ export const effectiveCostLess = (cost: number) => (handler: Handler): boolean =
 
 export const effectiveCostMore = (cost: number) => (handler: Handler): boolean => {
 	return handler.deckCardProvider()?.getEffectiveManaCost() > cost;
+};
+
+export const effectiveCostEqual = (cost: number) => (handler: Handler): boolean => {
+	return handler.deckCardProvider()?.getEffectiveManaCost() === cost;
 };
 
 export const notInInitialDeck = (handler: Handler): boolean => {
@@ -88,6 +96,8 @@ export const spellSchool = (spellSchool: SpellSchool) => (handler: Handler): boo
 	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
 };
 export const shadow = spellSchool(SpellSchool.SHADOW);
+export const holy = spellSchool(SpellSchool.HOLY);
+export const frost = spellSchool(SpellSchool.FROST);
 
 export const cardType = (type: CardType) => (handler: Handler): boolean => {
 	return (
@@ -97,6 +107,7 @@ export const cardType = (type: CardType) => (handler: Handler): boolean => {
 };
 export const minion = cardType(CardType.MINION);
 export const spell = cardType(CardType.SPELL);
+export const weapon = cardType(CardType.WEAPON);
 
 export const race = (race: Race) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.race === Race[race];
@@ -106,3 +117,8 @@ export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
 export const mech = race(Race.MECH);
 export const pirate = race(Race.PIRATE);
+
+export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
+	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
+};
+export const rogue = cardClass(CardClass.ROGUE);

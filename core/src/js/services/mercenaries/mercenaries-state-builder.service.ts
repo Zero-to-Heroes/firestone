@@ -5,8 +5,8 @@ import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=6';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=13';
+const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=7';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=14';
 
 @Injectable()
 export class MercenariesStateBuilderService {

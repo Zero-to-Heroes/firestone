@@ -16,7 +16,7 @@ export const standardSets: readonly string[] = [
 export const sets: readonly ReferenceSet[] = [
 	{
 		id: 'alterac_valley',
-		name: 'Alterac Valley',
+		name: 'Fractured in Alterac Valley',
 		launchDate: new Date('2021-12-07'),
 	},
 	{

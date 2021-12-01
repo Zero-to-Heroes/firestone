@@ -20,6 +20,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const secretClass: string = gameEvent.additionalData.playerClass;
+		const creatorCardId: string = gameEvent.additionalData.creatorCardId;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;

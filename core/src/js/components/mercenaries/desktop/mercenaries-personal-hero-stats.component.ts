@@ -117,7 +117,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				map(([referenceData, collectionInfo]) =>
 					collectionInfo.Mercenaries.map((memMerc) =>
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
-					),
+					).filter((stat) => stat),
 				),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
 				takeUntil(this.destroyed$),
@@ -158,6 +158,9 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		visitors: readonly MemoryVisitor[],
 	): PersonalHeroStat {
 		const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
+		if (!refMerc) {
+			return null;
+		}
 		const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 		const taskChain = referenceData.taskChains
 			.filter((chain) => chain.mercenaryId === refMerc.id)
@@ -168,7 +171,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			}))[0];
 		// console.debug('taskChain', refMerc.name, taskChain);
 		// Can have only one task per mercenary at the same time
-		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain.mercenaryVisitorId);
+		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		// console.debug('visitorInfo', visitorInfo);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
 		const currentStep = !visitorInfo
@@ -214,7 +217,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			totalCoinsForFullUpgrade:
 				sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft),
 			totalCoinsLeft: memMerc.CurrencyAmount,
-			totalTasks: taskChain.tasks.length,
+			totalTasks: taskChain?.tasks.length,
 			// Because human-readable starts at 1
 			currentTask: currentStep,
 			currentTaskDescription: currentTaskDescription,
@@ -274,34 +277,36 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		refMerc: MercenariesReferenceData['mercenaries'][0],
 		memMerc: MemoryMercenary,
 	): readonly PersonalHeroStatAbility[] {
-		return refMerc.abilities.map((info) => {
-			const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-			const memAbility = memMerc.Abilities.find(
-				(a) => normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(baseAbilityCard.id),
-			);
-			const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
+		return refMerc.abilities
+			.filter((info) => info)
+			.map((info) => {
+				const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+				const memAbility = memMerc.Abilities.find(
+					(a) => normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(baseAbilityCard.id),
+				);
+				const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
 
-			const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
+				const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
 
-			const currentUnlockedTier = memAbility?.Tier ?? 0;
-			const coinsToCraft = refAbility.tiers
-				.filter((a) => a.tier > currentUnlockedTier)
-				.map((tier) => tier.coinCraftCost)
-				.reduce((a, b) => a + b, 0);
-			const cardDbfId = refAbility.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
-			const abilityCard = this.allCards.getCardFromDbfId(cardDbfId);
-			return {
-				cardId: abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
-				tier: currentUnlockedTier,
-				coinsToCraft: coinsToCraft,
-				owned: !!memAbility,
-				speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
-				cooldown:
-					abilityCard.mercenaryAbilityCooldown ??
-					memAbilityCard.mercenaryAbilityCooldown ??
-					baseAbilityCard.mercenaryAbilityCooldown,
-			};
-		});
+				const currentUnlockedTier = memAbility?.Tier ?? 0;
+				const coinsToCraft = refAbility.tiers
+					.filter((a) => a.tier > currentUnlockedTier)
+					.map((tier) => tier.coinCraftCost)
+					.reduce((a, b) => a + b, 0);
+				const cardDbfId = refAbility.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
+				const abilityCard = this.allCards.getCardFromDbfId(cardDbfId);
+				return {
+					cardId: abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
+					tier: currentUnlockedTier,
+					coinsToCraft: coinsToCraft,
+					owned: !!memAbility,
+					speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
+					cooldown:
+						abilityCard.mercenaryAbilityCooldown ??
+						memAbilityCard.mercenaryAbilityCooldown ??
+						baseAbilityCard.mercenaryAbilityCooldown,
+				};
+			});
 	}
 
 	private buildTaskDescription(
@@ -318,7 +323,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			return null;
 		}
 
-		const sortedTasks = [...taskChain.tasks].sort((a, b) => a.id - b.id);
+		const sortedTasks = [...(taskChain?.tasks ?? [])].sort((a, b) => a.id - b.id);
 		const currentTask = sortedTasks[currentStep];
 		if (!currentTask) {
 			return null;

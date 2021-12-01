@@ -9,8 +9,10 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnSpellPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [
+	private secretsTriggeringOnSpellPlayed = [
 		CardIds.CatTrick,
+		CardIds.IceTrap,
+		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 		CardIds.PressurePlate,
 		CardIds.CounterspellLegacy,
 		CardIds.CounterspellCore,
@@ -123,7 +125,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ManaBind);
 		}
 
-		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
+		const optionsToFlagAsInvalid = this.secretsTriggeringOnSpellPlayed.filter(
 			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];

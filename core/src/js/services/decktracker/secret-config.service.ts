@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
+import { CardIds, formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=10';
@@ -13,7 +13,19 @@ export class SecretConfigService {
 		this.init();
 	}
 
-	public getValidSecrets(metadata: Metadata, playerClass: string): readonly string[] {
+	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
+		// For now hardcode this
+		if ([CardIds.BeaststalkerTavish].includes(creatorCardId as CardIds)) {
+			return [
+				CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
+				CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
+				CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
+				CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
+				CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
+				CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
+			];
+		}
+
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
 			return null;

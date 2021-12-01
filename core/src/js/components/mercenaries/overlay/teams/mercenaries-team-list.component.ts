@@ -47,32 +47,34 @@ export class MercenariesTeamListComponent
 	@Input() tooltipPosition: boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
-		this.mercenaries = [...(value.mercenaries ?? [])].sort((a, b) => {
-			if (a.zone === Zone.PLAY && b.zone !== Zone.PLAY) {
-				return -1;
-			} else if (a.zone !== Zone.PLAY && b.zone === Zone.PLAY) {
-				return 1;
-			}
+		this.mercenaries = [...(value.mercenaries ?? [])]
+			.filter((merc) => merc)
+			.sort((a, b) => {
+				if (a.zone === Zone.PLAY && b.zone !== Zone.PLAY) {
+					return -1;
+				} else if (a.zone !== Zone.PLAY && b.zone === Zone.PLAY) {
+					return 1;
+				}
 
-			if (a.zone === Zone.SETASIDE && b.zone !== Zone.SETASIDE) {
-				return -1;
-			} else if (a.zone !== Zone.SETASIDE && b.zone === Zone.SETASIDE) {
-				return 1;
-			}
+				if (a.zone === Zone.SETASIDE && b.zone !== Zone.SETASIDE) {
+					return -1;
+				} else if (a.zone !== Zone.SETASIDE && b.zone === Zone.SETASIDE) {
+					return 1;
+				}
 
-			if (a.isDead < b.isDead) {
-				return -1;
-			} else if (a.isDead > b.isDead) {
-				return 1;
-			}
+				if (a.isDead < b.isDead) {
+					return -1;
+				} else if (a.isDead > b.isDead) {
+					return 1;
+				}
 
-			if (a.zonePosition < b.zonePosition) {
-				return -1;
-			} else if (a.zonePosition > b.zonePosition) {
-				return 1;
-			}
-			return 0;
-		});
+				if (a.zonePosition < b.zonePosition) {
+					return -1;
+				} else if (a.zonePosition > b.zonePosition) {
+					return 1;
+				}
+				return 0;
+			});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}

@@ -7,7 +7,11 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnStartSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnStart = [CardIds.CompetitiveSpirit1, CardIds.OpenTheCages];
+	private secretsTriggeringOnTurnStart = [
+		CardIds.CompetitiveSpirit1,
+		CardIds.OpenTheCages,
+		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -37,6 +41,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 			deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length < 2 ||
 			deckWithSecretToCheck.board.length === 7
 		) {
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken);
 			secretsWeCantRuleOut.push(CardIds.OpenTheCages);
 		}
 

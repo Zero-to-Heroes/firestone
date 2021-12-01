@@ -46,7 +46,7 @@ export class SecretCreatedInGameParser implements EventParser {
 				BoardSecret.create(
 					entityId,
 					cardId,
-					this.secretConfig.getValidSecrets(currentState.metadata, secretClass),
+					this.secretConfig.getValidSecrets(currentState.metadata, secretClass, creatorCardId),
 				),
 			] as readonly BoardSecret[],
 		} as DeckState);

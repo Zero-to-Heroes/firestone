@@ -134,18 +134,22 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 
 export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.AmuletOfSwiftnessLettuceEnchantment,
-	CardIds.HeatingUpLettuceEnchantment,
-	CardIds.ManaBlinkLettuceEnchantment,
+	CardIds.CenarionSurgeLettuceEnchantment,
+	CardIds.CasterHasteLettuceEnchantment,
+	CardIds.DreadbladesLettuceEnchantment,
+	CardIds.ElunesGraceLettuceEnchantment,
 	CardIds.EnduranceAuraLettuceEnchantment2, // 1 is the taunt
 	CardIds.EnduranceAuraLettuceEnchantment3,
-	CardIds.CenarionSurgeLettuceEnchantment,
-	CardIds.ElunesGraceLettuceEnchantment,
-	CardIds.HammerOfJusticeLettuceEnchantment,
-	CardIds.HeroicLeapLettuceEnchantment,
-	CardIds.RingOfHasteLettuceEnchantment,
-	CardIds.ProtectorHasteLettuceEnchantment,
+	CardIds.FanOfKnivesLettuceEnchantment, // Check that it's the correct card ID
 	CardIds.FighterHasteLettuceEnchantment,
-	CardIds.CasterHasteLettuceEnchantment,
+	CardIds.HammerOfJusticeLettuceEnchantment,
+	CardIds.HeatingUpLettuceEnchantment,
+	CardIds.HeroicLeapLettuceEnchantment,
+	CardIds.ManaBlinkLettuceEnchantment,
+	CardIds.ProtectorHasteLettuceEnchantment,
+	CardIds.RingOfHasteLettuceEnchantment,
+	// CardIds.ShadowDaggerLettuceEnchantment,
+	CardIds.UnnaturalSmokeLettuceEnchantment,
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [

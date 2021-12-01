@@ -42,6 +42,8 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 				CardIds.TheCoin9,
 				CardIds.TheCoin10,
 				CardIds.TheCoin11,
+				CardIds.TheCoin12,
+				CardIds.TheCoin13,
 			].includes(baseCardId as CardIds)
 		) {
 			return currentState;

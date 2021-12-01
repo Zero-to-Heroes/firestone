@@ -225,6 +225,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.CookieTheCook_StirThePot;
 		case CardIds.TamsinRoame2:
 			return CardIds.TamsinRoame_FragrantPhylactery;
+		case CardIds.ScabbsCutterbutter2:
+			return CardIds.ScabbsCutterbutter_ISpy;
 
 		case '':
 			return null; // new heroes

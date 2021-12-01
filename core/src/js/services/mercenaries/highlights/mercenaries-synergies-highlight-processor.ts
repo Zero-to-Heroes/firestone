@@ -19,11 +19,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ArcaneBlast4Lettuce:
 		case CardIds.ArcaneBlast5Lettuce:
 			return arcane;
-		case CardIds.ArcaneBolt1Lettuce1:
-		case CardIds.ArcaneBolt2Lettuce1:
-		case CardIds.ArcaneBolt3Lettuce1:
-		case CardIds.ArcaneBolt4Lettuce1:
-		case CardIds.ArcaneBolt5Lettuce1:
+		case CardIds.ArcaneBolt1Lettuce:
+		case CardIds.ArcaneBolt2Lettuce:
+		case CardIds.ArcaneBolt3Lettuce:
+		case CardIds.ArcaneBolt4Lettuce:
+		case CardIds.ArcaneBolt5Lettuce:
 			return arcane;
 		case CardIds.ArcaneLance1Lettuce:
 		case CardIds.ArcaneLance2Lettuce:
@@ -219,11 +219,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.LifebindersLocket4Lettuce:
 		case CardIds.LifebindersLocket5Lettuce:
 			return and(fire, dealsDamage);
-		case CardIds.LightningBolt1Lettuce1:
-		case CardIds.LightningBolt2Lettuce1:
-		case CardIds.LightningBolt3Lettuce1:
-		case CardIds.LightningBolt4Lettuce1:
-		case CardIds.LightningBolt5Lettuce1:
+		case CardIds.LightningBolt1Lettuce:
+		case CardIds.LightningBolt2Lettuce:
+		case CardIds.LightningBolt3Lettuce:
+		case CardIds.LightningBolt4Lettuce:
+		case CardIds.LightningBolt5Lettuce:
 			return and(nature, dealsDamage);
 		case CardIds.Manastorm1Lettuce:
 		case CardIds.Manastorm2Lettuce:

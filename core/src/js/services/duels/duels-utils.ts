@@ -93,10 +93,13 @@ export const duelsTreasureRank = (cardId: string): number => {
 		// Passives
 		case CardIds.AvengingArmamentsTavernBrawl:
 		// case CardIds.AllTogetherNowTavernBrawl:
+		case CardIds.BattleStanceTavernBrawl:
 		case CardIds.BattleTotem2:
 		// case CardIds.BookOfWonders:
 		// case CardIds.Caltrops:
 		// case CardIds.CannibalismTavernBrawl:
+		case CardIds.BronzeSignetTavernBrawl:
+		case CardIds.CloakOfEmeraldDreamsTavernBrawl:
 		case CardIds.CorruptedFelstoneTavernBrawl:
 		case CardIds.DisksOfLegend:
 		case CardIds.DragonboneRitualTavernBrawl:
@@ -104,16 +107,24 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.ElixirOfVigor:
 		case CardIds.EmeraldGogglesTavernBrawl:
 		case CardIds.EnduranceTrainingTavernBrawl:
+		case CardIds.ExpeditedBurialTavernBrawl:
 		case CardIds.FlameWavesTavernBrawl:
 		// case CardIds.FromTheSwampTavernBrawl:
+		case CardIds.GlacialDownpourTavernBrawl:
 		case CardIds.HagathasEmbrace:
+		case CardIds.IdolsOfEluneTavernBrawl:
+		case CardIds.ImpCredibleTrousersTavernBrawl:
+		case CardIds.IronRootsTavernBrawl:
 		case CardIds.KhadgarsScryingOrb:
 		case CardIds.LegendaryLootTavernBrawl:
+		case CardIds.MantleOfIgnitionTavernBrawl:
 		case CardIds.MeekMasteryTavernBrawl:
 		case CardIds.MummyMagic:
 		case CardIds.OoopsAllSpellsTavernBrawl:
 		case CardIds.OrbOfRevelationTavernBrawl:
 		case CardIds.RallyTheTroopsTavernBrawl:
+		case CardIds.RingOfBlackIceTavernBrawl:
+		case CardIds.RunicHelmTavernBrawl:
 		case CardIds.ScepterOfSummoning:
 		case CardIds.SpecialDeliveryTavernBrawl:
 		case CardIds.SpreadingSaplingsTavernBrawl:
@@ -121,6 +132,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.TotemOfTheDead2:
 		case CardIds.UnlockedPotential:
 			return 2;
+
 		// Passives Ultra Rare
 		case CardIds.BandOfBeesTavernBrawl:
 		case CardIds.CapturedFlag:
@@ -133,6 +145,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.RobeOfTheMagi:
 		case CardIds.Stargazing:
 			return 3;
+
 		// Actives
 		case CardIds.ArchmageStaffTavernBrawl:
 		case CardIds.BookOfTheDeadTavernBrawl:
@@ -149,6 +162,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.WandOfDisintegrationTavernBrawl:
 		case CardIds.LocuuuustsTavernBrawl:
 			return 2;
+
 		// Actives Ultra Rare
 		case CardIds.ChaosTheoryTavernBrawl:
 		case CardIds.OverpoweredTavernBrawl:
@@ -157,6 +171,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.WaxRager:
 		case CardIds.WishTavernBrawl:
 			return 3;
+
 		default:
 			return 1;
 	}

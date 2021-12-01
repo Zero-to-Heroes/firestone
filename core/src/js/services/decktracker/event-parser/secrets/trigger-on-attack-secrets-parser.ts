@@ -13,13 +13,17 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.BearTrap,
 		CardIds.MisdirectionLegacy,
 		CardIds.MisdirectionVanilla,
+		CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
 		CardIds.SnakeTrapLegacy,
 		CardIds.SnakeTrapCore,
 		CardIds.SnakeTrapVanilla,
+		CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
 		CardIds.PackTactics,
+		CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
 		CardIds.ExplosiveTrapLegacy,
 		CardIds.ExplosiveTrapCore,
 		CardIds.ExplosiveTrapVanilla,
+		CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
 		CardIds.FreezingTrapLegacy,
 		CardIds.FreezingTrapCore,
 		CardIds.FreezingTrapVanilla,
@@ -130,9 +134,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const secretsWeCantRuleOut = [];
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.BearTrap);
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapCore);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.SplittingImage1);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
@@ -142,6 +148,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
 		}
 		if (!isAttackerMinion) {
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken);
 			secretsWeCantRuleOut.push(CardIds.FreezingTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.FreezingTrapCore);
 			secretsWeCantRuleOut.push(CardIds.FreezingTrapVanilla);
@@ -153,9 +160,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
 		}
 		if (!isDefenderMinion) {
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapCore);
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.VenomstrikeTrap1);
 			secretsWeCantRuleOut.push(CardIds.SplittingImage1);
@@ -170,6 +179,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.BearTrap);
 			secretsWeCantRuleOut.push(CardIds.MisdirectionLegacy);
 			secretsWeCantRuleOut.push(CardIds.MisdirectionVanilla);
+			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);

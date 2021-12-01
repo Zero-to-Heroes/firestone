@@ -40,6 +40,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			zone: 'SECRET',
 		} as DeckCard);
 		const secretClass: string = gameEvent.additionalData.playerClass;
+		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
 		const isCardCountered =
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
@@ -69,7 +70,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 						BoardSecret.create(
 							entityId,
 							cardId,
-							this.secretConfig.getValidSecrets(currentState.metadata, secretClass),
+							this.secretConfig.getValidSecrets(currentState.metadata, secretClass, creatorCardId),
 						),
 				  ] as readonly BoardSecret[]),
 			cardsPlayedThisTurn:

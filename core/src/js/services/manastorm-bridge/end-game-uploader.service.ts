@@ -422,6 +422,9 @@ export class EndGameUploaderService {
 		const allBounties = referenceData.bountySets.map((set) => set.bounties).reduce((a, b) => a.concat(b), []);
 		console.debug('allBounties', allBounties);
 		const bounty = allBounties.find((b) => b.id === bountyId);
+		if (!bounty) {
+			return `${bountyId}`;
+		}
 
 		return `${bounty.name} (${mercenariesInfo.Map.CurrentStep} / ${mercenariesInfo.Map.MaxStep})`;
 	}
