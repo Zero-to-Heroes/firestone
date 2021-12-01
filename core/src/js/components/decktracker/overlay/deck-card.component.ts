@@ -47,11 +47,6 @@ import { uuid } from '../../../services/utils';
 			<div class="card-name">
 				<span>{{ cardName || 'Unknown card' }}</span>
 			</div>
-			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
-				<div class="inner-border">
-					<span>{{ numberOfCopies }}</span>
-				</div>
-			</div>
 			<div class="icon-symbol" *ngIf="isBurned" [helpTooltip]="'Card burned'" [bindTooltipToGameWindow]="true">
 				<div class="inner-border">
 					<i>
@@ -104,6 +99,11 @@ import { uuid } from '../../../services/utils';
 							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
 						</svg>
 					</i>
+				</div>
+			</div>
+			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+				<div class="inner-border">
+					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
