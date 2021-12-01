@@ -1,17 +1,21 @@
-import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
 import { GameEvent } from '../../../../../../models/game-event';
-import { RealTimeStatsState } from '../../real-time-stats';
+import { normalizeHeroCardId } from '../../../../bgs-utils';
+import { HpTurnInfo, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsTurnStartParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return gameEvent.type === GameEvent.TURN_START;
+		return (
+			gameEvent.type === GameEvent.BATTLEGROUNDS_RECRUIT_PHASE ||
+			gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START
+		);
 	}
 
 	parse(
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
+		const heroesFromGame: readonly Hero[] = gameEvent.additionalData.heroes;
 		const newCurrentTurn = Math.ceil(gameEvent.additionalData.turnNumber / 2);
 		const hpOverTurn = currentState.hpOverTurn;
 		for (const hero of Object.keys(hpOverTurn)) {
@@ -23,11 +27,14 @@ export class RTStatBgsTurnStartParser implements EventParser {
 			if (!existingStats?.length) {
 				continue;
 			}
-			const newStats: readonly NumericTurnInfo[] = [
+
+			const { currentHp, currentArmor } = this.getHpForHero(hero, heroesFromGame);
+			const newStats: readonly HpTurnInfo[] = [
 				...existingStats.filter((stat) => stat.turn !== newCurrentTurn),
 				{
 					turn: newCurrentTurn,
-					value: existingStats[existingStats.length - 1].value,
+					value: currentHp,
+					armor: currentArmor,
 				},
 			];
 			hpOverTurn[hero] = newStats;
@@ -38,7 +45,22 @@ export class RTStatBgsTurnStartParser implements EventParser {
 		} as RealTimeStatsState);
 	}
 
+	private getHpForHero(heroCardId: string, heroes: readonly Hero[]): { currentHp: number; currentArmor: number } {
+		const hero = heroes.find((h) => normalizeHeroCardId(h.CardId) === normalizeHeroCardId(heroCardId));
+		return {
+			currentHp: hero.Health,
+			currentArmor: hero.Armor,
+		};
+	}
+
 	name(): string {
 		return 'RTStatBgsTurnStartParser';
 	}
+}
+
+interface Hero {
+	readonly CardId: string;
+	readonly EntityId: number;
+	readonly Health: number;
+	readonly Armor: number;
 }

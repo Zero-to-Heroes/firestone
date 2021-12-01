@@ -25,7 +25,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	// Coins means any form of mana resource
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[] = [];
 	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[] = [];
-	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
+	readonly hpOverTurn: { [playerCardId: string]: readonly HpTurnInfo[] } = {};
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[] = [];
 	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [];
 	readonly totalMinionsDamageDealt: { [cardId: string]: number } = {};
@@ -64,4 +64,8 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	public update(base: RealTimeStatsState): RealTimeStatsState {
 		return Object.assign(new RealTimeStatsState(), this, base);
 	}
+}
+
+export interface HpTurnInfo extends NumericTurnInfo {
+	readonly armor: number;
 }

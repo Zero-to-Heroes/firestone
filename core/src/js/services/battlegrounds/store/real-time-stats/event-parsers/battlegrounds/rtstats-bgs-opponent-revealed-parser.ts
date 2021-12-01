@@ -1,6 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../../../../../models/game-event';
-import { defaultStartingHp } from '../../../../../hs-utils';
 import { normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
@@ -18,6 +17,9 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const heroCardId = normalizeHeroCardId(gameEvent.additionalData.cardId);
+		// const armor = gameEvent.additionalData.armor;
+		const health = gameEvent.additionalData.health;
+
 		const turn = currentState.reconnectOngoing ? currentState.currentTurn : 0;
 		const hpOverTurn = currentState.hpOverTurn;
 		const existingData = hpOverTurn[heroCardId] ?? [];
@@ -25,12 +27,11 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 			...existingData.filter((data) => data.turn !== turn),
 			{
 				turn: turn,
-				value:
-					turn === 0 || existingData.length === 0
-						? defaultStartingHp(currentState.gameType, heroCardId)
-						: existingData[existingData.length - 1].value,
+				value: turn === 0 || existingData.length === 0 ? health : existingData[existingData.length - 1].value,
+				armor: 0,
 			},
 		];
+		console.debug('bgs damage armor opponentRevealed', heroCardId, newData, hpOverTurn[heroCardId]);
 		hpOverTurn[heroCardId] = newData;
 		return currentState.update({
 			hpOverTurn: hpOverTurn,

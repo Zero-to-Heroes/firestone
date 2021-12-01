@@ -30,7 +30,11 @@ import { areEqualDataSets } from './chart-utils';
 	template: `
 		<div class="legend">
 			<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="item">
-				<bgs-hero-portrait class="portrait" [heroCardId]="player.cardId"></bgs-hero-portrait>
+				<bgs-hero-portrait
+					class="portrait"
+					[heroCardId]="player.cardId"
+					[cardTooltip]="player.cardId"
+				></bgs-hero-portrait>
 				<!-- <img [src]="player.icon" class="portrait" /> -->
 				<div
 					class="position"
@@ -378,6 +382,17 @@ export class BgsChartHpComponent {
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
+		console.debug(
+			'stats in HP chart',
+			Object.keys(hpOverTurn).map((heroCardId) => ({
+				cardId: heroCardId,
+				name: this.allCards.getCard(heroCardId).name,
+				hp: hpOverTurn[heroCardId][hpOverTurn[heroCardId].length - 1].value,
+				armor: hpOverTurn[heroCardId][hpOverTurn[heroCardId].length - 1].armor,
+			})),
+			hpOverTurn,
+			this._stats,
+		);
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerCardIds = [...playerOrder].sort();
@@ -386,7 +401,10 @@ export class BgsChartHpComponent {
 			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
 			position: playerOrder.indexOf(cardId) + 1,
 			isPlayer: normalizeHeroCardId(cardId) === this._mainPlayerCardId,
-			hpOverTurn: hpOverTurn[cardId]?.filter((turnInfo) => turnInfo).map((turnInfo) => turnInfo.value) || [],
+			hpOverTurn:
+				hpOverTurn[cardId]
+					?.filter((turnInfo) => turnInfo)
+					.map((turnInfo) => turnInfo.value + (turnInfo.armor ?? 0)) || [],
 		}));
 		console.debug('built players', players, this._mainPlayerCardId);
 
@@ -430,22 +448,26 @@ export class BgsChartHpComponent {
 	private buildPlayerOrder(): readonly string[] {
 		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
 			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
-			.map((playerCardId) => ({
-				playerCardId: playerCardId,
-				turnDeath: this._stats.hpOverTurn[playerCardId].find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
-				lastKnownHp:
-					this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
-			}));
+			.map((playerCardId) => {
+				const info = this._stats.hpOverTurn[playerCardId];
+				return {
+					playerCardId: playerCardId,
+					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
+					lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
+					// Not populated???
+					// lastKnownPosition:
+					// 	this._stats.leaderboardPositionOverTurn[playerCardId][
+					// 		this._stats.leaderboardPositionOverTurn[playerCardId].length - 1
+					// 	]?.value ?? 99,
+				};
+			});
 		let playerOrder: string[] = turnAtWhichEachPlayerDies
-			.sort((a, b) => {
-				if (a.turnDeath < b.turnDeath) {
-					return 1;
-				}
-				if (a.turnDeath > b.turnDeath) {
-					return -1;
-				}
-				return b.lastKnownHp - a.lastKnownHp;
-			})
+			.sort(
+				(a, b) =>
+					b.turnDeath - a.turnDeath ||
+					// a.lastKnownPosition - b.lastKnownPosition ||
+					b.lastKnownHp - a.lastKnownHp,
+			)
 			.map((playerInfo) => playerInfo.playerCardId);
 		// Legacy issue - the heroes that were offered during the hero selection phase are
 		// also proposed there
@@ -481,6 +503,7 @@ export class BgsChartHpComponent {
 		for (let i = 0; i <= max; i++) {
 			turns.push('' + i);
 		}
+		console.debug('turns', turns, max, value);
 		return turns;
 	}
 }

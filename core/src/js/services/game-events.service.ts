@@ -718,9 +718,11 @@ export class GameEvents {
 				);
 				break;
 			case 'ARMOR_CHANGED':
+				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
-						armorChange: gameEvent.Value.ArmorChange,
+						armorChange: gameEvent.Value.AdditionalProps.ArmorChange,
+						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
 					}),
 				);
 				break;
@@ -886,6 +888,7 @@ export class GameEvents {
 						// These are set after a reconnect, and usually not present when the match starts
 						leaderboardPlace: gameEvent.Value.LeaderboardPlace,
 						health: gameEvent.Value.Health,
+						armor: gameEvent.Value.Armor,
 						damage: gameEvent.Value.Damage,
 						tavernLevel: gameEvent.Value.TavernLevel,
 						nextOpponentCardId: gameEvent.Value.NextOpponentCardId,
@@ -919,6 +922,10 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
+						additionalData: {
+							heroes: gameEvent.Value.Heroes,
+							turnNumber: gameEvent.Value.Turn,
+						},
 					} as GameEvent),
 				);
 				break;
@@ -927,6 +934,10 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
+						additionalData: {
+							heroes: gameEvent.Value.Heroes,
+							turnNumber: gameEvent.Value.Turn,
+						},
 					} as GameEvent),
 				);
 				break;
@@ -962,6 +973,7 @@ export class GameEvents {
 						additionalData: {
 							cardId: gameEvent.Value.CardId,
 							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
+							health: gameEvent.Value.Health,
 						},
 					} as GameEvent),
 				);

@@ -19,7 +19,6 @@ import { RTStatsBgsTriplesCreatedParser } from './event-parsers/battlegrounds/rt
 import { RTStatBgsTurnStartParser } from './event-parsers/battlegrounds/rtstats-bgs-turn-start-parser';
 import { RTStatsGameStartParser } from './event-parsers/rtstats-game-start-parser';
 import { RTStatHeroPowerUsedParser } from './event-parsers/rtstats-hero-power-used-parser';
-import { RTStatHpOverTurnParser } from './event-parsers/rtstats-hp-over-turn-parser';
 import { RTStatsMetadataParser } from './event-parsers/rtstats-metadata-parser';
 import { RTStatsMinionsKilledParser } from './event-parsers/rtstats-minions-killed-parser';
 import { RTStatsReconnectOverParser } from './event-parsers/rtstats-reconnect-over-parser';
@@ -124,7 +123,6 @@ export class RealTimeStatsService {
 			new RTStatsResourcesWastedPerTurnParser(this.allCards),
 			new RTStatHeroPowerUsedParser(),
 			new RTStatsMinionsKilledParser(),
-			new RTStatHpOverTurnParser(this.allCards),
 
 			// BG-specific
 			new RTStatBgsTurnStartParser(),
