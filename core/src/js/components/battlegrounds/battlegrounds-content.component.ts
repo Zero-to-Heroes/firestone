@@ -71,6 +71,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						[faceOffs]="faceOffs$ | async"
 						[mmr]="mmr$ | async"
 						[gameEnded]="gameEnded$ | async"
+						[mainPlayerCardId]="mainPlayerCardId$ | async"
 					>
 					</bgs-post-match-stats>
 					<bgs-battles *ngIf="value.currentPanelId === 'bgs-battles'"> </bgs-battles>
@@ -86,6 +87,7 @@ export class BattlegroundsContentComponent
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
 	reviewId$: Observable<string>;
+	mainPlayerCardId$: Observable<string>;
 	mmr$: Observable<number>;
 	gameEnded$: Observable<boolean>;
 	faceOffs$: Observable<readonly BgsFaceOffWithSimulation[]>;
@@ -140,6 +142,9 @@ export class BattlegroundsContentComponent
 				tap((info) => cdLog('emitting reviewId in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.mainPlayerCardId$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
+			.pipe(this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.getNormalizedHeroCardId()));
 		this.mmr$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(

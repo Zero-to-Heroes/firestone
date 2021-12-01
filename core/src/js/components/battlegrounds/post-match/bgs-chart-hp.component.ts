@@ -15,6 +15,7 @@ import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.
 import { Color } from 'ng2-charts';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
+import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { thisAsThat } from '../../../services/utils';
 import { areEqualDataSets } from './chart-utils';
@@ -384,9 +385,10 @@ export class BgsChartHpComponent {
 			cardId: cardId,
 			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
 			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer: cardId === this._mainPlayerCardId,
+			isPlayer: normalizeHeroCardId(cardId) === this._mainPlayerCardId,
 			hpOverTurn: hpOverTurn[cardId]?.filter((turnInfo) => turnInfo).map((turnInfo) => turnInfo.value) || [],
 		}));
+		console.debug('built players', players, this._mainPlayerCardId);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
