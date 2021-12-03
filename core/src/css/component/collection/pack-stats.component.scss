@@ -68,8 +68,8 @@
 		}
 
 		.pack-stat {
-			margin-right: 15px;
-			margin-bottom: 15px;
+			margin-right: 0;
+			margin-bottom: 10px;
 
 			.icon-container {
 				position: relative;
@@ -84,6 +84,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				position: relative;
+				top: -5px;
 			}
 
 			&.missing {

@@ -76,7 +76,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					"
 				>
 				</card-history>
-				<pack-history [state]="dataState" *ngIf="value.currentView === 'packs'"> </pack-history>
+				<pack-history *ngIf="value.currentView === 'packs'"> </pack-history>
 				<set-stats
 					[set]="value.selectedSet"
 					*ngIf="isSetDetails(value.currentView, value.selectedSet, value.searchString)"

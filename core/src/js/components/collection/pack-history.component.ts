@@ -1,17 +1,10 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CardHistory } from '../../models/card-history';
-import { BinderState } from '../../models/mainwindow/binder-state';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'pack-history',
@@ -27,17 +20,26 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="top-container">
 					<span class="title">My Pack History</span>
 				</div>
-				<ul scrollable>
-					<li *ngFor="let historyItem of packHistory; trackBy: trackById">
+				<ul
+					*ngIf="{
+						packHistory: packHistory$ | async,
+						totalHistoryLength: totalHistoryLength$ | async
+					} as value"
+					scrollable
+				>
+					<li *ngFor="let historyItem of value.packHistory; trackBy: trackById">
 						<pack-history-item [historyItem]="historyItem"> </pack-history-item>
 					</li>
-					<li *ngIf="packHistory && packHistory.length < totalHistoryLength" class="more-data-container">
+					<li
+						*ngIf="value.packHistory && value.packHistory.length < value.totalHistoryLength"
+						class="more-data-container"
+					>
 						<span class="more-data-text"
-							>You've viewed {{ packHistory.length }} of {{ totalHistoryLength }} packs</span
+							>You've viewed {{ value.packHistory.length }} of {{ value.totalHistoryLength }} packs</span
 						>
 						<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
 					</li>
-					<section *ngIf="!packHistory || packHistory.length === 0" class="empty-state">
+					<section *ngIf="!value.packHistory || value.packHistory.length === 0" class="empty-state">
 						<i class="i-60x78 pale-theme">
 							<svg class="svg-icon-fill">
 								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
@@ -52,47 +54,38 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackHistoryComponent implements AfterViewInit {
-	private readonly MAX_RESULTS_DISPLAYED = 1000;
+export class PackHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	packHistory$: Observable<readonly PackResult[]>;
+	totalHistoryLength$: Observable<number>;
 
-	@Input() set state(value: BinderState) {
-		this._state = value;
-		this.updateInfos();
+	private displayedHistorySize = new BehaviorSubject<number>(50);
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
 	}
 
-	_state: BinderState;
-	totalHistoryLength: number;
-	packHistory: readonly PackResult[];
-
-	private displayedHistorySize = 50;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	ngAfterContentInit() {
+		const filteredHistory$ = this.store
+			.listen$(([main, nav, prefs]) => main.binder.packStats)
+			.pipe(
+				tap((info) => console.debug('packs history', info)),
+				this.mapData(([packs]) =>
+					(packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof'),
+				),
+				tap((info) => console.debug('filtered packs history', info)),
+			);
+		this.packHistory$ = combineLatest(filteredHistory$, this.displayedHistorySize.asObservable()).pipe(
+			this.mapData(([packs, displayedHistorySize]) => packs.slice(0, displayedHistorySize)),
+			tap((info) => console.debug('final packs history', info)),
+		);
+		this.totalHistoryLength$ = filteredHistory$.pipe(this.mapData((packs) => packs.length));
 	}
 
 	loadMore() {
-		this.displayedHistorySize += 100;
-		this.updateInfos();
+		this.displayedHistorySize.next(this.displayedHistorySize.value + 100);
 	}
 
 	trackById(index, history: CardHistory) {
 		return history.creationTimestamp;
-	}
-
-	private updateInfos() {
-		if (!this._state) {
-			return;
-		}
-
-		const fullStats = (this._state.packStats ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof');
-		// console.debug('fullStats', fullStats);
-		this.totalHistoryLength = fullStats.length;
-		this.packHistory = fullStats.slice(0, this.displayedHistorySize);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
