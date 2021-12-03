@@ -284,10 +284,25 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				.reduce((a, b) => a + b, 0);
 			const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
 			const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
+			console.debug(
+				'equipments',
+				refMerc.name,
+				equipmentCard.name,
+				equipmentCard,
+				baseEquipmentCard,
+				refEquip,
+				memEquip,
+			);
 			return {
 				cardId: equipmentCard.id ?? baseEquipmentCard.id,
 				coinsToCraft: coinsToCraft,
-				tier: currentUnlockedTier,
+				tier:
+					currentUnlockedTier > 0
+						? refEquip.tiers?.length === 1
+							? // For some reason a few single-tier equipments are stored as tier 1 instead of tier 4, so we manually correct this
+							  4
+							: currentUnlockedTier
+						: currentUnlockedTier,
 				owned: !!memEquip?.Owned,
 				isEquipped: !!memEquip ? memEquip.Equipped : false,
 			};
