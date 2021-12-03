@@ -184,6 +184,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(inDeck, beast);
+			case CardIds.NzothGodOfTheDeep:
+				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
 			case CardIds.ProvingGrounds:
