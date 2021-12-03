@@ -110,7 +110,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 		this.tip$ = this.tip.asObservable().pipe(this.mapData((tip) => tip));
 		this.interval = setInterval(() => {
 			this.tip.next(this.tipService.getRandomTip());
-		}, 10000);
+		}, 30000);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
