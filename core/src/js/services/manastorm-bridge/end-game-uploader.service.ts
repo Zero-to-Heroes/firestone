@@ -163,13 +163,13 @@ export class EndGameUploaderService {
 			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? mercenariesInfo?.Map?.BountyId : null;
 
 			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
-			const [mercHeroTimings] = await extractHeroTimings(
+			const { mercHeroTimings, ...other } = await extractHeroTimings(
 				{ gameMode: game.gameMode },
 				replay,
-				game.uncompressedXmlReplay,
 				referenceData,
 				this.allCards.getService(),
 			);
+			// console.debug('mercs stats in uploader', mercHeroTimings, other);
 
 			// These don't work in PvP
 			if (!!mercHeroTimings?.length) {
