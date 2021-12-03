@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { RarityTYpe, TaskStatus } from '@firestone-hs/reference-data';
+import { RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
@@ -46,6 +46,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[sort]="sort"
 					[criteria]="'coins-needed-to-max'"
 					helpTooltip="Total coins you need to spend to fully max out this merc"
+				>
+				</sortable-label>
+				<sortable-label
+					class="coins to-farm"
+					[name]="'Coins To Farm'"
+					[sort]="sort"
+					[criteria]="'coins-to-farm-to-max'"
+					helpTooltip="Total coins you still need to earn to fully max out this merc (counts coins you already have and coins you will get by maxing all tasks)"
 				>
 				</sortable-label>
 				<sortable-label
@@ -187,6 +195,16 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const abilities = this.buildAbilities(refMerc, memMerc);
 		const equipments = this.buildEquipments(refMerc, memMerc);
 		const bountiesForMerc: readonly BountyForMerc[] = this.buildBounties(refMerc, referenceData.bountySets);
+
+		const totalCoinsForFullUpgrade =
+			sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft);
+		const totalCoinsLeft = memMerc.CurrencyAmount;
+		const coinsMissingFromTasks = taskChain.tasks
+			.filter((task, index) => index > (currentStep ?? -1))
+			.filter((task) => task.reward?.type === RewardItemType.MERCENARY_CURRENCY)
+			.map((task) => task.reward.quantity)
+			.reduce((a, b) => a + b, 0);
+
 		return {
 			mercenaryId: refMerc.id,
 			owned: memMerc.Owned,
@@ -214,9 +232,12 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			abilities: abilities,
 			equipments: equipments,
 			minCostOfNextUpgrade: null,
-			totalCoinsForFullUpgrade:
-				sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft),
-			totalCoinsLeft: memMerc.CurrencyAmount,
+
+			totalCoinsForFullUpgrade: totalCoinsForFullUpgrade,
+			totalCoinsLeft: totalCoinsLeft,
+			coinsMissingFromTasks: coinsMissingFromTasks,
+			totalCoinsToFarm: Math.max(0, totalCoinsForFullUpgrade - totalCoinsLeft - coinsMissingFromTasks),
+
 			totalTasks: taskChain?.tasks.length,
 			// Because human-readable starts at 1
 			currentTask: currentStep,
@@ -420,6 +441,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				return this.buildCompare(criteria.direction, (a) => a.totalCoinsLeft);
 			case 'coins-needed-to-max':
 				return this.buildCompare(criteria.direction, (a) => a.totalCoinsForFullUpgrade);
+			case 'coins-to-farm-to-max':
+				return this.buildCompare(criteria.direction, (a) => a.totalCoinsToFarm);
 			case 'task-progress':
 				return this.buildCompare(criteria.direction, (a) => a.currentTask);
 		}
@@ -516,6 +539,8 @@ export interface PersonalHeroStat {
 	readonly xpInCurrentLevel: number;
 	readonly totalCoinsLeft: number;
 	readonly totalCoinsForFullUpgrade: number;
+	readonly coinsMissingFromTasks: number;
+	readonly totalCoinsToFarm: number;
 	readonly minCostOfNextUpgrade: number;
 	readonly abilities: readonly PersonalHeroStatAbility[];
 	readonly equipments: readonly PersonalHeroStatEquipment[];

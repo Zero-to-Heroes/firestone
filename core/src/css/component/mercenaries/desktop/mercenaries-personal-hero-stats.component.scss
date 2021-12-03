@@ -54,6 +54,10 @@
 			&.left {
 				display: none;
 			}
+
+			&.needed {
+				display: none;
+			}
 		}
 
 		.tasks {
@@ -94,6 +98,12 @@
 
 @media (min-width: 1420px) {
 	.mercenaries-personal-hero-stats .header .coins.left {
+		display: flex;
+	}
+}
+
+@media (min-width: 1470px) {
+	.mercenaries-personal-hero-stats .header .coins.needed {
 		display: flex;
 	}
 }

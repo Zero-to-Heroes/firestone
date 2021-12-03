@@ -134,6 +134,10 @@
 			display: none;
 		}
 
+		&.needed {
+			display: none;
+		}
+
 		.coin-container {
 			display: flex;
 			position: relative;
@@ -299,6 +303,12 @@
 
 @media (min-width: 1420px) {
 	.mercenaries-personal-hero-stat .coins.left {
+		display: flex;
+	}
+}
+
+@media (min-width: 1470px) {
+	.mercenaries-personal-hero-stat .coins.needed {
 		display: flex;
 	}
 }

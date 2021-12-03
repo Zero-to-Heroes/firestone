@@ -10,5 +10,6 @@ export type MercenariesPersonalHeroesSortCriteriaType =
 	| 'xp-in-level'
 	| 'coins-left'
 	| 'coins-needed-to-max'
+	| 'coins-to-farm-to-max'
 	| 'task-progress';
 export type MercenariesPersonalHeroesSortCriteriaDirection = 'asc' | 'desc';

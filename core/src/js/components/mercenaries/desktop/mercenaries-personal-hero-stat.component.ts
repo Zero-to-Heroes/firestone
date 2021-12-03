@@ -64,6 +64,21 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 			</div>
 
 			<div
+				class="coins to-farm"
+				[helpTooltip]="coinsToFarmTooltip"
+				helpTooltipClasses="mercenaries-personal-hero-stat-coins-needed-tooltip"
+			>
+				<div class="coin-container">
+					<img class="icon" [src]="portraitUrl" />
+					<img
+						class="frame"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+					/>
+					<div class="amount">{{ totalCoinsToFarm }}</div>
+				</div>
+			</div>
+
+			<div
 				class="current-task"
 				[helpTooltip]="currentTaskTooltip"
 				helpTooltipClasses="mercenaries-personal-hero-stat-task-tooltip"
@@ -144,6 +159,7 @@ export class MercenariesPersonalHeroStatComponent {
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
 		this.totalCoinsForFullUpgrade = value.totalCoinsForFullUpgrade;
+		this.totalCoinsToFarm = value.totalCoinsToFarm;
 
 		this.currentTaskLabel = '???';
 		this.currentTaskTooltip =
@@ -179,6 +195,7 @@ export class MercenariesPersonalHeroStatComponent {
 		});
 
 		this.coinsNeededTooltip = this.buildCoinsNeededTooltip(value);
+		this.coinsToFarmTooltip = this.buildCoinsToFarmTooltip(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}
@@ -200,11 +217,13 @@ export class MercenariesPersonalHeroStatComponent {
 
 	totalCoinsLeft: number;
 	totalCoinsForFullUpgrade: number;
+	totalCoinsToFarm: number;
 
 	currentTaskLabel: string;
 	currentTaskTooltip: string;
 
 	coinsNeededTooltip: string;
+	coinsToFarmTooltip: string;
 
 	abilities: readonly VisualAbility[];
 	equipments: readonly VisualEquipment[];
@@ -257,6 +276,14 @@ export class MercenariesPersonalHeroStatComponent {
 			<div class="container">
 				<div class="header">Where to farm coins</div>
 				${bounties.join('')}
+			</div>
+		`;
+	}
+
+	private buildCoinsToFarmTooltip(value: PersonalHeroStat): string {
+		return `
+			<div class="container">
+				Expecting that you get ${value.coinsMissingFromTasks} coins from uncompleted tasks
 			</div>
 		`;
 	}
