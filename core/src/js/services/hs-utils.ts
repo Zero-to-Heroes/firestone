@@ -624,6 +624,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Wild Pack';
 		case BoosterType.LETTUCE:
 			return 'Mercenaries';
+		case BoosterType.ALTERAC_VALLEY:
+			return 'Fractured in Alterac Valley';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
