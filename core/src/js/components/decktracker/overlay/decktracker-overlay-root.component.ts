@@ -11,16 +11,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
+import { formatFormat } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
-import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
@@ -30,7 +27,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -201,87 +197,59 @@ export class DeckTrackerOverlayRootComponent
 	ngAfterContentInit() {
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				debounceTime(50),
-				filter(([gameState]) => !!gameState),
-				map(([gameState]) => this.deckExtractor(gameState)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting deck in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([gameState]) => (!gameState ? null : this.deckExtractor(gameState))));
+		const gamesForDeck$ = combineLatest(
+			this.store.listenDeckState$(
+				(gameState) => gameState?.playerDeck?.deckstring,
+				(gameState) => gameState?.metadata?.formatType,
+			),
+			this.store.listen$(
+				([main, nav, prefs]) => main.stats.gameStats,
+				([main, nav, prefs]) => main.decktracker.filters.time,
+				([main, nav, prefs]) => main.decktracker.patch,
+				([main, nav, prefs]) => prefs.desktopDeckStatsReset,
+				([main, nav, prefs]) => prefs.desktopDeckDeletes,
+			),
+		).pipe(
+			filter(
+				([
+					[deckstring, formatType],
+					[gameStats, timeFilter, patch, desktopDeckStatsReset, desktopDeckDeletes],
+				]) => !!gameStats?.stats?.length,
+			),
+			this.mapData(
+				([
+					[deckstring, formatType],
+					[gameStats, timeFilter, patch, desktopDeckStatsReset, desktopDeckDeletes],
+				]) => {
+					const resetForDeck = (desktopDeckStatsReset ?? {})[deckstring] ?? [];
+					const lastResetDate = resetForDeck[0] ?? 0;
+
+					const deleteForDeck = (desktopDeckDeletes ?? {})[deckstring] ?? [];
+					const lastDeleteDate = deleteForDeck[0] ?? 0;
+					const result = gameStats.stats
+						.filter((stat) => stat.gameMode === 'ranked')
+						.filter((stat) => stat.gameFormat === formatFormat(formatType))
+						.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
+						.filter((stat) => stat.playerDecklist === deckstring)
+						.filter((stat) => stat.creationTimestamp > lastResetDate)
+						.filter((stat) => stat.creationTimestamp > lastDeleteDate);
+					return result;
+				},
+			),
+		);
+
 		this.matchupStatsRecap$ = combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
-			this.store.listen$(
-				([main, nav, prefs]) => main.stats.gameStats,
-				([main, nav, prefs]) => main.decktracker.filters.time,
-				([main, nav, prefs]) => main.decktracker.patch,
-			),
+			gamesForDeck$,
 		).pipe(
-			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
-			map(
-				([[gameState], [gameStats, timeFilter, patch]]) =>
-					[
-						formatFormat(gameState.metadata.formatType),
-						timeFilter,
-						gameState.playerDeck.deckstring,
-						gameState.opponentDeck?.hero?.playerClass,
-						gameStats.stats,
-						patch,
-					] as [GameFormatString, DeckTimeFilterType, string, string, readonly GameStat[], PatchInfo],
-			),
-			map(
-				([gameFormat, timeFilter, deckstring, opponentClass, gameStats, patch]) =>
-					[
-						gameStats
-							.filter((stat) => stat.gameMode === 'ranked')
-							.filter((stat) => stat.gameFormat === gameFormat)
-							.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
-							.filter((stat) => stat.playerDecklist === deckstring)
-							.filter((stat) => stat.opponentClass === opponentClass),
-						opponentClass,
-					] as [readonly GameStat[], string],
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([gameStats, opponentClass]) => StatsRecap.from(gameStats, opponentClass)),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting matchupStatsRecap in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
+			this.mapData(([[gameState], gamesForDeck]) => {
+				const opponentClass = gameState.opponentDeck?.hero?.playerClass;
+				const gamesForOpponent = gamesForDeck.filter((stat) => stat.opponentClass === opponentClass);
+				return StatsRecap.from(gamesForOpponent, opponentClass);
+			}),
 		);
-		this.deckStatsRecap$ = combineLatest(
-			this.store.listenDeckState$((gameState) => gameState),
-			this.store.listen$(
-				([main, nav, prefs]) => main.stats.gameStats,
-				([main, nav, prefs]) => main.decktracker.filters.time,
-				([main, nav, prefs]) => main.decktracker.patch,
-			),
-		).pipe(
-			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
-			map(
-				([[gameState], [gameStats, timeFilter, patch]]) =>
-					[
-						formatFormat(gameState.metadata.formatType),
-						timeFilter,
-						gameState.playerDeck.deckstring,
-						gameStats.stats,
-						patch,
-					] as [GameFormatString, DeckTimeFilterType, string, readonly GameStat[], PatchInfo],
-			),
-			map(([gameFormat, timeFilter, deckstring, gameStats, patch]) =>
-				gameStats
-					.filter((stat) => stat.gameMode === 'ranked')
-					.filter((stat) => stat.gameFormat === gameFormat)
-					.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
-					.filter((stat) => stat.playerDecklist === deckstring),
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map((gameStats) => StatsRecap.from(gameStats)),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting deckStatsRecap in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
-		);
+		this.deckStatsRecap$ = gamesForDeck$.pipe(this.mapData((gameStats) => StatsRecap.from(gameStats)));
 
 		this.displayMode$ = this.listenForBasicPref$((preferences) => this.overlayDisplayModeExtractor(preferences));
 		this.showTitleBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowTitleBar);
