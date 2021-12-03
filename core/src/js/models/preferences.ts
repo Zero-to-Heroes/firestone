@@ -258,6 +258,7 @@ export class Preferences {
 	readonly replaysFilterPlayerClass: string;
 	readonly replaysFilterOpponentClass: string;
 	readonly replaysShowClassIcon: boolean = false;
+	readonly replaysShowMercDetails: boolean = true;
 	readonly replaysActiveGameModeFilter: string = null;
 	readonly replaysActiveDeckstringFilter: string = null;
 	readonly replaysActiveBgHeroFilter: string = null;

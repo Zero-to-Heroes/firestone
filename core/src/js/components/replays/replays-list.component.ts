@@ -22,7 +22,12 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'replays-list',
 	styleUrls: [`../../../css/component/replays/replays-list.component.scss`],
 	template: `
-		<div class="replays-container">
+		<div
+			class="replays-container"
+			*ngIf="{
+				showMercDetailsToggle: showMercDetailsToggle$ | async
+			} as value"
+		>
 			<div class="filters">
 				<replays-game-mode-filter-dropdown class="filter"></replays-game-mode-filter-dropdown>
 				<replays-deckstring-filter-dropdown class="filter"></replays-deckstring-filter-dropdown>
@@ -31,7 +36,12 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<replays-icon-toggle
 					class="icon-toggle"
 					[ngClass]="{ 'absolute': !(replaysIconToggleAbsolutePosition$ | async) }"
+					*ngIf="showUseClassIconsToggle$ | async"
 				></replays-icon-toggle>
+				<replays-merc-details-toggle
+					class="icon-toggle"
+					*ngIf="value.showMercDetailsToggle"
+				></replays-merc-details-toggle>
 			</div>
 			<infinite-scroll *ngIf="allReplays?.length" class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let groupedReplay of displayedGroupedReplays">
@@ -56,6 +66,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class ReplaysListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
+	showUseClassIconsToggle$: Observable<boolean>;
+	showMercDetailsToggle$: Observable<boolean>;
 
 	isLoading: boolean;
 	allReplays: readonly GameStat[];
@@ -70,6 +82,15 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	}
 
 	ngAfterContentInit() {
+		this.showUseClassIconsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
+			this.mapData(
+				(gameModeFilter) =>
+					!['battlegrounds'].includes(gameModeFilter) && !gameModeFilter?.startsWith('mercenaries'),
+			),
+		);
+		this.showMercDetailsToggle$ = this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter).pipe(
+			this.mapData((gameModeFilter) => gameModeFilter?.startsWith('mercenaries')),
+		);
 		this.replaysIconToggleAbsolutePosition$ = this.listenForBasicPref$(
 			(prefs) => prefs.replaysActiveGameModeFilter,
 		).pipe(

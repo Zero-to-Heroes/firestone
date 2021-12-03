@@ -33,6 +33,34 @@
 		}
 	}
 
+	&.mercenaries.show-merc-details {
+		height: 60px;
+
+		.mercenaries-player-images {
+			height: calc(100% + 20px);
+			.portrait {
+				&.bench {
+					display: flex;
+				}
+			}
+		}
+
+		::ng-deep replay-info-merc-player {
+			.merc-portrait {
+				width: 60px;
+				margin-right: -15px;
+
+				.equipment {
+					display: flex;
+				}
+			}
+		}
+
+		.vs {
+			margin-left: 20px;
+		}
+	}
+
 	// &.battlegrounds,
 	// &.arena {
 	// 	::ng-deep .rank-text {
@@ -43,7 +71,8 @@
 }
 
 .result-color-code {
-	height: 45px;
+	// For padding
+	height: calc(100% + 20px);
 	width: 3px;
 	position: relative;
 	left: -10px;
@@ -120,32 +149,70 @@
 	}
 }
 
-.mercenaries-player-images {
-	.portrait {
+.merc-portrait {
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	width: 40px;
+	height: auto;
+	position: relative;
+	top: 0;
+	left: 0;
+	z-index: 9;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-right: -5px;
+
+	.icon {
+		position: absolute;
+		top: 11%;
+		left: 13%;
+		width: 76%;
+		height: auto;
+		clip-path: ellipse(35% 44% at 50% 50%);
+	}
+
+	.frame {
+		width: 100%;
+		z-index: 1;
+	}
+
+	.equipment {
+		position: absolute;
+		width: 30px;
+		z-index: 9;
 		flex-grow: 0;
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
-		width: 40px;
-		position: relative;
-		top: 0;
-		left: 0;
 		z-index: 9;
-		margin-top: 0;
-		margin-bottom: 0;
-		margin-right: -5px;
+		bottom: 0;
+		top: auto;
+		left: 14px;
+		display: none;
 
 		.icon {
 			position: absolute;
-			top: 11%;
-			left: 13%;
-			width: 76%;
-			clip-path: ellipse(40% 44% at 50% 50%);
+			width: 85%;
+			height: auto;
+			top: 4%;
+			left: 4%;
+			clip-path: inset(10% 15% 15% 10%);
 		}
 
 		.frame {
 			width: 100%;
 			z-index: 1;
+		}
+	}
+}
+
+.mercenaries-player-images {
+	.portrait {
+		&.bench {
+			opacity: 0.5;
+			display: none;
 		}
 	}
 

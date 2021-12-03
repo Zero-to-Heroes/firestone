@@ -27,6 +27,9 @@ export class LocalizationService {
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+		if (!cardId) {
+			return null;
+		}
 		const bgs = options?.isBgs ? 'bgs/' : '';
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
@@ -36,6 +39,9 @@ export class LocalizationService {
 	}
 
 	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
+		if (!cardId) {
+			return null;
+		}
 		const base = `https://static.firestoneapp.com/cards`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}?v=2`;

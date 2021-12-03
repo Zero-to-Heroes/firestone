@@ -11,7 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ScenarioId } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Subscription } from 'rxjs';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -19,7 +19,7 @@ import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.t
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
-import { getHeroRole, isMercenaries } from '../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, isMercenaries, normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -30,7 +30,13 @@ declare let amplitude;
 	selector: 'replay-info',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
 	template: `
-		<div class="replay-info {{ gameMode }} {{ visualResult }}" [ngClass]="{ 'mercenaries': isMercenariesGame }">
+		<div
+			class="replay-info {{ gameMode }} {{ visualResult }}"
+			[ngClass]="{
+				'mercenaries': isMercenariesGame,
+				'show-merc-details': showMercDetails$ | async
+			}"
+		>
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -51,19 +57,27 @@ declare let amplitude;
 				</div>
 
 				<div class="group mercenaries-player-images" *ngIf="isMercenariesGame">
-					<div class="portrait player" *ngFor="let hero of playerStartingTeam" [cardTooltip]="hero.cardId">
-						<img class="icon" [src]="hero.portraitUrl" />
-						<img class="frame" [src]="hero.frameUrl" />
-					</div>
+					<replay-info-merc-player
+						class="portrait player bench"
+						*ngFor="let hero of playerBench"
+						[hero]="hero"
+					></replay-info-merc-player>
+					<replay-info-merc-player
+						class="portrait player"
+						*ngFor="let hero of playerStartingTeam"
+						[hero]="hero"
+					></replay-info-merc-player>
 					<div class="vs">VS</div>
-					<div
+					<replay-info-merc-player
 						class="portrait opponent"
 						*ngFor="let hero of opponentStartingTeam"
-						[cardTooltip]="hero.cardId"
-					>
-						<img class="icon" [src]="hero.portraitUrl" />
-						<img class="frame" [src]="hero.frameUrl" />
-					</div>
+						[hero]="hero"
+					></replay-info-merc-player>
+					<replay-info-merc-player
+						class="portrait opponent bench"
+						*ngFor="let hero of opponentBench"
+						[hero]="hero"
+					></replay-info-merc-player>
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
@@ -173,6 +187,8 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	showMercDetails$: Observable<boolean>;
+
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
 	@Input() displayCoin = true;
@@ -205,7 +221,9 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	opponentClassTooltip: string;
 
 	playerStartingTeam: readonly MercenaryHero[];
+	playerBench: readonly MercenaryHero[];
 	opponentStartingTeam: readonly MercenaryHero[];
+	opponentBench: readonly MercenaryHero[];
 
 	opponentName: string;
 	// matchResultIconSvg: SafeHtml;
@@ -241,6 +259,10 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 				this.updateInfo();
 			},
 		);
+		this.showMercDetails$ = combineLatest(
+			this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter),
+			this.listenForBasicPref$((prefs) => prefs.replaysShowMercDetails),
+		).pipe(this.mapData(([gameMode, showDetails]) => showDetails && gameMode.startsWith('mercenaries')));
 	}
 
 	@HostListener('window:beforeunload')
@@ -280,8 +302,10 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			false,
 			this.replaysShowClassIcon,
 		);
-		this.playerStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, true);
-		this.opponentStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, false);
+		this.playerBench = this.buildPlayerTeam(this.replayInfo, true, false);
+		this.playerStartingTeam = this.buildPlayerTeam(this.replayInfo, true, true);
+		this.opponentStartingTeam = this.buildPlayerTeam(this.replayInfo, false, true);
+		this.opponentBench = this.buildPlayerTeam(this.replayInfo, false, false);
 
 		this.result = this.buildMatchResultText(this.replayInfo);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
@@ -367,7 +391,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 		}
 	}
 
-	private buildPlayerStartingTeam(info: GameStat, isPlayer: boolean): readonly MercenaryHero[] {
+	private buildPlayerTeam(info: GameStat, isPlayer: boolean, isStarter: boolean): readonly MercenaryHero[] {
 		if (!info.gameMode || !info.gameMode.startsWith('mercenaries')) {
 			return [];
 		}
@@ -377,14 +401,22 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			return [];
 		}
 
+		const equipments = isPlayer ? info.mercEquipments : info.mercOpponentEquipments;
+
 		return heroTimings
-			.filter((timing) => timing.turnInPlay === 1)
+			.filter((timing) => (isStarter ? timing.turnInPlay === 1 : timing.turnInPlay !== 1))
 			.map((timing) => {
 				const initialRole = this.allCards.getCard(timing.cardId).mercenaryRole;
 				const role = initialRole ? getHeroRole(initialRole) : null;
+				const equipment = (equipments ?? []).find(
+					(equip) =>
+						normalizeMercenariesCardId(equip.mercCardId) === normalizeMercenariesCardId(timing.cardId),
+				);
 				return {
 					cardId: timing.cardId,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${timing.cardId}.jpg`,
+					equipmentCardId: equipment?.equipmentCardId,
+					equipmentUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${equipment?.equipmentCardId}.jpg`,
 					frameUrl: role
 						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=2`
 						: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_neutral.png?v=3`,
@@ -500,6 +532,30 @@ interface KnownBoard {
 interface MercenaryHero {
 	readonly cardId: string;
 	readonly portraitUrl: string;
+	readonly equipmentCardId: string;
+	readonly equipmentUrl: string;
 	readonly frameUrl: string;
 	readonly role: 'caster' | 'fighter' | 'protector';
+}
+
+@Component({
+	selector: 'replay-info-merc-player',
+	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
+	template: `
+		<div class="merc-portrait player" [cardTooltip]="hero.cardId">
+			<img class="icon" [src]="hero.portraitUrl" />
+			<img class="frame" [src]="hero.frameUrl" />
+			<div class="equipment" [cardTooltip]="hero.equipmentCardId" *ngIf="hero.equipmentCardId">
+				<img class="icon" [src]="hero.equipmentUrl" />
+				<img
+					class="frame"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+				/>
+			</div>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ReplayInfoMercPlayerComponent {
+	@Input() hero: MercenaryHero;
 }

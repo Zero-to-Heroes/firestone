@@ -42,6 +42,8 @@ export class GameStat {
 	readonly postMatchStats?: BgsPostMatchStats;
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
 	readonly mercOpponentHeroTimings: readonly { cardId: string; turnInPlay: number }[];
+	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
+	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 
 	public static create(base: GameStat): GameStat {
 		return Object.assign(new GameStat(), base);
