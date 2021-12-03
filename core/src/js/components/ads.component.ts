@@ -9,10 +9,14 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event';
 import { OverwolfService } from '../services/overwolf.service';
+import { TipService } from '../services/tip.service';
+import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 declare let adsReady: any;
 declare let OwAd: any;
@@ -36,13 +40,16 @@ const REFRESH_CAP = 5;
 						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
+				<div class="tip" *ngIf="tip$ | async as tip" [innerHTML]="tip"></div>
 			</div>
 			<div class="ads" id="ad-div"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdsComponent implements AfterViewInit, OnDestroy {
+export class AdsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+	tip$: Observable<string>;
+
 	@Input() parentComponent: string;
 
 	@Input() set adRefershToken(value: any) {
@@ -70,7 +77,18 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private refreshesLeft = REFRESH_CAP;
 
-	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
+	private tip = new BehaviorSubject<string>(null);
+	private interval;
+
+	constructor(
+		private adService: AdService,
+		private ow: OverwolfService,
+		private readonly tipService: TipService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
 		// this.cdr.detach();
@@ -89,6 +107,10 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		console.log('[ads] should display ads?', this.shouldDisplayAds);
 		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();
+		this.tip$ = this.tip.asObservable().pipe(this.mapData((tip) => tip));
+		this.interval = setInterval(() => {
+			this.tip.next(this.tipService.getRandomTip());
+		}, 10000);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -96,10 +118,14 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		super.ngOnDestroy();
 		console.log('[ads] removing event listeners');
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.adRef?.removeEventListener(this.impressionListener);
 		this.adRef?.removeEventListener(this.displayImpressionListener);
+		if (this.interval) {
+			clearInterval(this.interval);
+		}
 	}
 
 	showSubscription() {

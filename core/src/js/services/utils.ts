@@ -183,6 +183,13 @@ export const cutNumber = (x: number, precision = 10): number => {
 // https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
 export const freeRegexp = () => /\s*/g.exec('');
 
+export const pickRandom = <T>(array: readonly T[]): T => {
+	if (!array?.length) {
+		return null;
+	}
+	return array[Math.floor(Math.random() * array.length)];
+};
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];

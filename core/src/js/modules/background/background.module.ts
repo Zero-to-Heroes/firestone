@@ -271,9 +271,10 @@ import { GameReplayComponent } from '../../components/replays/game-replay.compon
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from '../../components/replays/match-details.component';
 import { RankImageComponent } from '../../components/replays/rank-image.component';
-import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
+import { ReplayInfoComponent, ReplayInfoMercPlayerComponent } from '../../components/replays/replay-info.component';
 import { ReplayIconToggleComponent } from '../../components/replays/replays-icon-toggle.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
+import { ReplayMercDetailsToggleComponent } from '../../components/replays/replays-merc-details-toggle.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
 import { SecretsHelperControlBarComponent } from '../../components/secrets-helper/secrets-helper-control-bar.component';
 import { SecretsHelperWidgetIconComponent } from '../../components/secrets-helper/secrets-helper-widget-icon.component';
@@ -404,6 +405,7 @@ import { SettingsCommunicationService } from '../../services/settings/settings-c
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
+import { TipService } from '../../services/tip.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from '../../services/ui-store/app-ui-store.service';
 import { UserService } from '../../services/user.service';
@@ -620,10 +622,12 @@ const components = [
 		// ReplaysFilterComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
+		ReplayInfoMercPlayerComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
 		RankImageComponent,
 		ReplayIconToggleComponent,
+		ReplayMercDetailsToggleComponent,
 		ReplaysGameModeFilterDropdownComponent,
 		ReplaysDeckstringFilterDropdownComponent,
 		ReplaysBgHeroFilterDropdownComponent,
@@ -812,6 +816,7 @@ const components = [
 		AppBootstrapService,
 		RealTimeNotificationService,
 		AdService,
+		TipService,
 		MainWindowStoreService,
 		StoreBootstrapService,
 		CollaboratorsService,

@@ -19,12 +19,22 @@
 		align-items: center;
 		justify-content: center;
 		background-color: var(--ads-background-color);
+		flex-direction: column;
+		padding: 30px;
+		color: var(--color-3);
+		font-family: Open Sans;
 
 		.logo {
 			width: 109px;
 			height: 154px;
 			color: var(--ads-color);
 			--icon-color: var(--ads-color);
+		}
+
+		.tip {
+			margin-top: 20px;
+			font-size: 12px;
+			text-align: center;
 		}
 	}
 
