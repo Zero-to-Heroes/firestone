@@ -22,6 +22,8 @@ import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/util
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryInfo } from './mercenary-info';
 
+const THRESHOLD = 50;
+
 @Component({
 	selector: 'mercenaries-hero-stats',
 	styleUrls: [
@@ -185,6 +187,7 @@ export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent
 								// 	  gameStats.length,
 							} as MercenaryInfo;
 						})
+						.filter((stat) => stat.globalTotalMatches > THRESHOLD)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate);
 				}),
 				tap((filter) =>
