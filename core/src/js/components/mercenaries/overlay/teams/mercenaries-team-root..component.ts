@@ -366,6 +366,8 @@ export class MercenariesTeamRootComponent
 
 export interface Task {
 	readonly mercenaryCardId: string;
+	readonly mercenaryRole: 'TANK' | 'CASTER' | 'FIGHTER';
+	readonly mercenaryName: string;
 	readonly title: string;
 	readonly description: string;
 	readonly taskChainProgress: number;

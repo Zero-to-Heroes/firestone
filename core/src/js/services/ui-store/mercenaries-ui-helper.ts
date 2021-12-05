@@ -148,6 +148,8 @@ export const buildMercenariesTasksList = (
 			const result = {
 				...visitor, // For debugging purpose
 				mercenaryCardId: mercenaryCardId,
+				mercenaryRole: mercenaryCard.mercenaryRole,
+				mercenaryName: mercenaryCard.name,
 				title: task.title,
 				description: task.description,
 				progress: visitor.TaskProgress,
@@ -159,7 +161,28 @@ export const buildMercenariesTasksList = (
 			} as Task;
 			return result;
 		})
-		.filter((task) => !!task);
+		.filter((task) => !!task)
+		.sort((a, b) => {
+			if (a.mercenaryRole === 'TANK' && b.mercenaryRole !== 'TANK') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'TANK' && b.mercenaryRole === 'TANK') {
+				return 1;
+			}
+			if (a.mercenaryRole === 'FIGHTER' && b.mercenaryRole !== 'FIGHTER') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'FIGHTER' && b.mercenaryRole === 'FIGHTER') {
+				return 1;
+			}
+			if (a.mercenaryRole === 'CASTER' && b.mercenaryRole !== 'CASTER') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'CASTER' && b.mercenaryRole === 'CASTER') {
+				return 1;
+			}
+			return a.mercenaryName < b.mercenaryName ? -1 : 1;
+		});
 };
 
 const applyStarterFilter = (stat: MercenariesHeroStat, starterFilter: MercenariesStarterFilterType): boolean => {

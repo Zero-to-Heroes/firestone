@@ -6,7 +6,7 @@ import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=9';
+const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=9';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=17';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class MercenariesStateBuilderService {
 	constructor(private readonly api: ApiRunner) {}
 
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
-		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(MERCENARIES_DATA);
+		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(MERCENARIES_REFERENCE_DATA);
 		return referenceData;
 	}
 
