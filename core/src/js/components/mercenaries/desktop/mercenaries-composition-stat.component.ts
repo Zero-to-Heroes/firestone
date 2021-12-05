@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
-import { MercenariesSelectCompositionEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-composition-event';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './mercenary-info';
@@ -93,7 +92,7 @@ export class MercenariesCompositionStatComponent {
 	) {}
 
 	select() {
-		this.store.send(new MercenariesSelectCompositionEvent(this.id));
+		// this.store.send(new MercenariesSelectCompositionEvent(this.id));
 	}
 
 	buildPercents(value: number): string {
