@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
+import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
@@ -177,17 +177,15 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				// The last 2 tasks are present in the ref data, but not activated in-game
 				tasks: chain.tasks.slice(0, 18),
 			}))[0];
-		// console.debug('taskChain', refMerc.name, taskChain);
 		// Can have only one task per mercenary at the same time
 		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
-		// console.debug('visitorInfo', visitorInfo);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
 		const currentStep = !visitorInfo
 			? null
 			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
 			? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 			: Math.max(0, currentTaskStep);
-		// console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo);
+		console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -201,8 +199,14 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const totalCoinsLeft = memMerc.CurrencyAmount;
 		const coinsMissingFromTasks = taskChain.tasks
 			.filter((task, index) => index > (currentStep ?? -1))
-			.filter((task) => task.reward?.type === RewardItemType.MERCENARY_CURRENCY)
-			.map((task) => task.reward.quantity)
+			.flatMap((task) => task.rewards)
+			.filter((task) => task)
+			.filter(
+				(task) =>
+					task.type === RewardItemType.MERCENARY_CURRENCY &&
+					task.mercenarySelector === MercenarySelector.CONTEXT,
+			)
+			.map((task) => task.quantity)
 			.reduce((a, b) => a + b, 0);
 
 		return {

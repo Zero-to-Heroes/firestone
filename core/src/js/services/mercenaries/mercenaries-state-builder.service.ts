@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { MercenarySelector } from '@firestone-hs/reference-data';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=8';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=14';
+const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=9';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=17';
 
 @Injectable()
 export class MercenariesStateBuilderService {
@@ -121,10 +122,11 @@ export interface MercenariesReferenceData {
 			readonly id: number;
 			readonly title: string;
 			readonly description: string;
-			readonly reward: {
+			readonly rewards: readonly {
 				readonly type: number;
 				readonly quantity: number;
-			};
+				readonly mercenarySelector: MercenarySelector;
+			}[];
 		}[];
 	}[];
 }

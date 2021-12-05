@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "8.3.9",
+	"version": "8.3.10",
 	"scripts": {
 		"lint": "node --max_old_space_size=8000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --colors",
@@ -39,7 +39,7 @@
 		"@firestone-hs/duels-global-stats": "^1.0.7",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.89",
-		"@firestone-hs/reference-data": "^0.1.178",
+		"@firestone-hs/reference-data": "^0.1.179",
 		"@firestone-hs/replay-parser": "^1.1.44",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
