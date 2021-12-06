@@ -66,7 +66,7 @@ export class MercenariesStarterFilterDropdownComponent
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
 						selectedCategoryId === 'mercenaries-hero-stats' ||
-						selectedCategoryId === 'mercenaries-hero-details',
+						selectedCategoryId === 'mercenaries-meta-hero-details',
 				})),
 				// FIXME
 				tap((filter) =>

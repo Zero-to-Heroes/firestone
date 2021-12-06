@@ -74,7 +74,7 @@ export class MercenariesPveDifficultyFilterDropdownComponent
 						!!globalStats?.pve?.heroStats?.length &&
 						(selectedCategoryId === 'mercenaries-hero-stats' ||
 							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-							selectedCategoryId === 'mercenaries-hero-details' ||
+							selectedCategoryId === 'mercenaries-meta-hero-details' ||
 							selectedCategoryId === 'mercenaries-compositions-stats' ||
 							selectedCategoryId === 'mercenaries-composition-details'),
 				})),

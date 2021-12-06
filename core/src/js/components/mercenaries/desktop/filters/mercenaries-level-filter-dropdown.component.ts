@@ -73,9 +73,6 @@ export class MercenariesHeroLevelFilterDropdownComponent
 					placeholder:
 						this.options.find((option) => option.value === '' + filter)?.label ?? this.options[0].label,
 					visible: false,
-					// selectedCategoryId === 'mercenaries-hero-stats' ||
-					// selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-					// selectedCategoryId === 'mercenaries-hero-details',
 				})),
 				// FIXME
 				tap((filter) =>

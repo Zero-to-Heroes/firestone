@@ -16,7 +16,7 @@ export class MercenariesHeroSelectedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const nav = navigationState.update({
 			navigationMercenaries: navigationState.navigationMercenaries.update({
-				selectedCategoryId: `mercenaries-hero-details`,
+				selectedCategoryId: `mercenaries-meta-hero-details`,
 				selectedHeroId: event.heroId,
 				menuDisplayType: 'breadcrumbs',
 			} as NavigationMercenaries),

@@ -84,7 +84,7 @@ export class MercenariesPvpMmrFilterDropdownComponent
 					selectedCategoryId === 'mercenaries-compositions-stats' ||
 					(modeFilter === 'pvp' &&
 						(selectedCategoryId === 'mercenaries-personal-hero-stats' ||
-							selectedCategoryId === 'mercenaries-hero-details' ||
+							selectedCategoryId === 'mercenaries-meta-hero-details' ||
 							selectedCategoryId === 'mercenaries-composition-details')),
 			})),
 			// FIXME
