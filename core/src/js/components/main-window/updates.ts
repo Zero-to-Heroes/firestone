@@ -62,17 +62,12 @@ export const updates: readonly Update[] = [
 								text: `Add a new "Coins to Farm" column that recaps how many coins you, well, need to farm, taking into account the coins you'll get from uncompleted tasks.`,
 							},
 							{
+								type: 'feature',
+								text: `Add an option to show more details on merc teams in the Replays tab(like the benches and the player equipped items).`,
+							},
+							{
 								type: 'ui',
 								text: `The "Coins left" and "Coins needed" columns are now hidden by default, and can be displayed by making the window wider.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to show more details on merc teams (like the benches and the player equiped items).`,
 							},
 						],
 					},
