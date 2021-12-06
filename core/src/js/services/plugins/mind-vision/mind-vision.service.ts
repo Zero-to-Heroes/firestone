@@ -40,7 +40,6 @@ export class MindVisionService {
 		const inGame = await this.ow.inGame();
 		if (inGame) {
 			this.initialize();
-			this.listenForUpdates();
 		} else {
 			console.log('[mind-vision] not in game, not starting memory poll or memory reading plugin');
 		}
@@ -57,7 +56,6 @@ export class MindVisionService {
 				if (!this.memoryUpdateListener) {
 					console.log('[mind-vision] starting game, starting memory poll');
 					this.initialize();
-					this.listenForUpdates();
 				}
 			}
 		});
@@ -443,6 +441,8 @@ export class MindVisionService {
 					return;
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
+
+				this.listenForUpdates();
 				this.initialized = true;
 				this.initializing = false;
 			});
@@ -459,6 +459,7 @@ export class MindVisionService {
 			});
 		} catch (e) {
 			console.warn('[mind-vision]Could not load plugin, retrying', e);
+			this.initializing = false;
 			this.initialized = false;
 			setTimeout(() => this.initialize(), 2000);
 		}
