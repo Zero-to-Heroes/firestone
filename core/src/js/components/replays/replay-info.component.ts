@@ -262,7 +262,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 		this.showMercDetails$ = combineLatest(
 			this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter),
 			this.listenForBasicPref$((prefs) => prefs.replaysShowMercDetails),
-		).pipe(this.mapData(([gameMode, showDetails]) => showDetails && gameMode.startsWith('mercenaries')));
+		).pipe(this.mapData(([gameMode, showDetails]) => showDetails && gameMode?.startsWith('mercenaries')));
 	}
 
 	@HostListener('window:beforeunload')
@@ -392,7 +392,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	}
 
 	private buildPlayerTeam(info: GameStat, isPlayer: boolean, isStarter: boolean): readonly MercenaryHero[] {
-		if (!info.gameMode || !info.gameMode.startsWith('mercenaries')) {
+		if (!info.gameMode || !info.gameMode?.startsWith('mercenaries')) {
 			return [];
 		}
 

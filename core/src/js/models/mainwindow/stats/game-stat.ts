@@ -100,7 +100,7 @@ export class GameStat {
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = 'Battlegrounds';
-		} else if (this.gameMode.startsWith('mercenaries')) {
+		} else if (this.gameMode?.startsWith('mercenaries')) {
 			rankIcon = 'mercenaries';
 			rankIconTooltip = 'Mercenaries';
 		} else if (this.gameMode === 'practice') {
