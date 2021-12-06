@@ -12,7 +12,7 @@ import { MercenaryInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stat.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-meta-hero-stat" (click)="select()">
+		<div class="mercenaries-hero-stat" (click)="select()">
 			<div class="name-container">
 				<div class="name" [helpTooltip]="role + ' - ' + name">{{ name }}</div>
 				<div class="info" [helpTooltip]="numberOfGamesTooltip">
