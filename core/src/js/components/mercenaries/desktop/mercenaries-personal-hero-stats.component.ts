@@ -239,6 +239,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 			totalCoinsForFullUpgrade: totalCoinsForFullUpgrade,
 			totalCoinsLeft: totalCoinsLeft,
+			totalCoinsNeeded: Math.max(0, totalCoinsForFullUpgrade - totalCoinsLeft),
 			coinsMissingFromTasks: coinsMissingFromTasks,
 			totalCoinsToFarm: Math.max(0, totalCoinsForFullUpgrade - totalCoinsLeft - coinsMissingFromTasks),
 
@@ -459,7 +460,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			case 'coins-left':
 				return this.buildCompare(criteria.direction, (a) => a.totalCoinsLeft);
 			case 'coins-needed-to-max':
-				return this.buildCompare(criteria.direction, (a) => a.totalCoinsForFullUpgrade);
+				return this.buildCompare(criteria.direction, (a) => a.totalCoinsNeeded);
 			case 'coins-to-farm-to-max':
 				return this.buildCompare(criteria.direction, (a) => a.totalCoinsToFarm);
 			case 'task-progress':
@@ -557,6 +558,7 @@ export interface PersonalHeroStat {
 	readonly xpNeededForLevel: number;
 	readonly xpInCurrentLevel: number;
 	readonly totalCoinsLeft: number;
+	readonly totalCoinsNeeded: number;
 	readonly totalCoinsForFullUpgrade: number;
 	readonly coinsMissingFromTasks: number;
 	readonly totalCoinsToFarm: number;

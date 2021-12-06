@@ -158,7 +158,7 @@ export class MercenariesPersonalHeroStatComponent {
 		this.fullTotalTooltip = `${value.totalXp.toLocaleString('en-US')} XP`;
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
-		this.totalCoinsNeeded = Math.max(0, value.totalCoinsForFullUpgrade - value.totalCoinsLeft);
+		this.totalCoinsNeeded = value.totalCoinsNeeded;
 		this.totalCoinsToFarm = value.totalCoinsToFarm;
 
 		this.currentTaskLabel = '???';
