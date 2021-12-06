@@ -5,14 +5,14 @@ import { capitalizeFirstLetter } from '../../../services/utils';
 import { MercenaryInfo } from './mercenary-info';
 
 @Component({
-	selector: 'mercenaries-hero-stat',
+	selector: 'mercenaries-meta-hero-stat',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,
 		`../../../../css/component/menu-selection.component.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-hero-stat.component.scss`,
+		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stat.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-hero-stat" (click)="select()">
+		<div class="mercenaries-meta-hero-stat" (click)="select()">
 			<div class="name-container">
 				<div class="name" [helpTooltip]="role + ' - ' + name">{{ name }}</div>
 				<div class="info" [helpTooltip]="numberOfGamesTooltip">
@@ -56,7 +56,7 @@ import { MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroStatComponent {
+export class MercenariesMetaHeroStatComponent {
 	@Input() set stat(value: MercenaryInfo) {
 		// console.debug('set value', value.name, value);
 		this.cardId = value.id;

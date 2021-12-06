@@ -25,22 +25,22 @@ import { MercenaryInfo } from './mercenary-info';
 const THRESHOLD = 50;
 
 @Component({
-	selector: 'mercenaries-hero-stats',
+	selector: 'mercenaries-meta-hero-stats',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-hero-stats.component.scss`,
+		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stats.component.scss`,
 	],
 	template: `
 		<div class="mercenaries-stats" scrollable>
-			<mercenaries-hero-stat
+			<mercenaries-meta-hero-stat
 				*ngFor="let stat of stats$ | async; trackBy: trackByFn"
 				[stat]="stat"
-			></mercenaries-hero-stat>
+			></mercenaries-meta-hero-stat>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly MercenaryInfo[]>;
 
 	constructor(

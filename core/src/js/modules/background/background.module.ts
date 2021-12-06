@@ -238,9 +238,9 @@ import { MercenariesCompositionStatComponent } from '../../components/mercenarie
 import { MercenariesCompositionsStatsComponent } from '../../components/mercenaries/desktop/mercenaries-compositions-stats.component';
 import { MercenariesDesktopComponent } from '../../components/mercenaries/desktop/mercenaries-desktop.component';
 import { MercenariesEmptyStateComponent } from '../../components/mercenaries/desktop/mercenaries-empty-state.component';
-import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-details.component';
-import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
-import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
+import { MercenariesMetaHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-meta-hero-details.component';
+import { MercenariesMetaHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-meta-hero-stat.component';
+import { MercenariesMetaHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-meta-hero-stats.component';
 import { MercenariesMyTeamsComponent } from '../../components/mercenaries/desktop/mercenaries-my-teams.component';
 import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
@@ -721,13 +721,13 @@ const components = [
 		MercenariesTeamMercenaryComponent,
 
 		MercenariesDesktopComponent,
-		MercenariesHeroStatsComponent,
-		MercenariesHeroStatComponent,
+		MercenariesMetaHeroStatsComponent,
+		MercenariesMetaHeroStatComponent,
 		MercenariesPersonalHeroStatsComponent,
 		MercenariesPersonalHeroStatComponent,
 		MercenariesMyTeamsComponent,
 		MercenariesPersonalTeamSummaryComponent,
-		MercenariesHeroDetailsComponent,
+		MercenariesMetaHeroDetailsComponent,
 		MercenariesCompositionsStatsComponent,
 		MercenariesCompositionStatComponent,
 		MercenariesComposiionDetailsComponent,

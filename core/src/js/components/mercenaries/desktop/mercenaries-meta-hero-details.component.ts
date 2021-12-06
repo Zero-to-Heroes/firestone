@@ -25,10 +25,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
 @Component({
-	selector: 'mercenaries-hero-details',
+	selector: 'mercenaries-meta-hero-details',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-hero-details.component.scss`,
+		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-details.component.scss`,
 	],
 	template: `
 		<div class="mercenaries-hero-details" *ngIf="heroStats$ | async as stats">
@@ -172,7 +172,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesHeroDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroStats$: Observable<MercenaryInfo>;
 
 	constructor(
