@@ -59,7 +59,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						class="frame"
 						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
 					/>
-					<div class="amount">{{ totalCoinsForFullUpgrade }}</div>
+					<div class="amount">{{ totalCoinsNeeded }}</div>
 				</div>
 			</div>
 
@@ -158,7 +158,7 @@ export class MercenariesPersonalHeroStatComponent {
 		this.fullTotalTooltip = `${value.totalXp.toLocaleString('en-US')} XP`;
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
-		this.totalCoinsForFullUpgrade = value.totalCoinsForFullUpgrade;
+		this.totalCoinsNeeded = Math.max(0, value.totalCoinsForFullUpgrade - value.totalCoinsLeft);
 		this.totalCoinsToFarm = value.totalCoinsToFarm;
 
 		this.currentTaskLabel = '???';
@@ -195,7 +195,7 @@ export class MercenariesPersonalHeroStatComponent {
 		});
 
 		this.coinsNeededTooltip = this.buildCoinsNeededTooltip(value);
-		this.coinsToFarmTooltip = this.buildCoinsToFarmTooltip(value);
+		this.coinsToFarmTooltip = this.buildCoinsToFarmTooltip(value, this.totalCoinsToFarm);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}
@@ -216,7 +216,7 @@ export class MercenariesPersonalHeroStatComponent {
 	fullTotalTooltip: string;
 
 	totalCoinsLeft: number;
-	totalCoinsForFullUpgrade: number;
+	totalCoinsNeeded: number;
 	totalCoinsToFarm: number;
 
 	currentTaskLabel: string;
@@ -280,12 +280,15 @@ export class MercenariesPersonalHeroStatComponent {
 		`;
 	}
 
-	private buildCoinsToFarmTooltip(value: PersonalHeroStat): string {
-		return `
+	private buildCoinsToFarmTooltip(value: PersonalHeroStat, totalCoinsToFarm: number): string {
+		// Don't show the tooltip if the user already has enough coins to max the merc
+		return !!totalCoinsToFarm
+			? `
 			<div class="container">
 				Expecting that you get ${value.coinsMissingFromTasks} coins from uncompleted tasks
 			</div>
-		`;
+		`
+			: null;
 	}
 }
 

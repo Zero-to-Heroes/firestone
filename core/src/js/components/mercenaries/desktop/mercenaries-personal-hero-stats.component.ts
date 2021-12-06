@@ -45,7 +45,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[name]="'Coins Needed'"
 					[sort]="sort"
 					[criteria]="'coins-needed-to-max'"
-					helpTooltip="Total coins you need to spend to fully max out this merc"
+					helpTooltip="Total coins you still need to get to fully max out this merc"
 				>
 				</sortable-label>
 				<sortable-label

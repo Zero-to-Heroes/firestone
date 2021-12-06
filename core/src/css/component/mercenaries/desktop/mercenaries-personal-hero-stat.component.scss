@@ -134,7 +134,7 @@
 			display: none;
 		}
 
-		&.needed {
+		&.to-farm {
 			display: none;
 		}
 
@@ -308,7 +308,7 @@
 }
 
 @media (min-width: 1470px) {
-	.mercenaries-personal-hero-stat .coins.needed {
+	.mercenaries-personal-hero-stat .coins.to-farm {
 		display: flex;
 	}
 }
