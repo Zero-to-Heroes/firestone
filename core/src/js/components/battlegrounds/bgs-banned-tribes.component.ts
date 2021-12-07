@@ -112,7 +112,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
-				this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
+				// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			});
