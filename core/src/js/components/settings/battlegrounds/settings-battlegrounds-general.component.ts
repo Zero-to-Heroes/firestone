@@ -242,7 +242,7 @@ import { Knob } from '../preference-slider.component';
 					[showCurrentValue]="false"
 					displayedValueUnit=""
 					[min]="80"
-					[max]="200"
+					[max]="135"
 					[snapSensitivity]="5"
 					[knobs]="sizeKnobs"
 				>

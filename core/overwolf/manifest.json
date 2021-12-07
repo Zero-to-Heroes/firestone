@@ -250,8 +250,8 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 500, "height": 400 },
-				"min_size": { "width": 500, "height": 400 },
+				"size": { "width": 700, "height": 400 },
+				"min_size": { "width": 700, "height": 400 },
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
