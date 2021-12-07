@@ -1,23 +1,28 @@
 .mercenaries-hero-details {
+	display: flex;
+	width: 100%;
+
 	.layout-main {
 		display: flex;
-		width: 100%;
 		margin: 0;
-		max-width: 100%;
 		flex-direction: row;
+		flex-shrink: 0;
+		// order: 2;
 
 		.first {
 			display: flex;
 			flex-direction: column;
 			width: 400px;
 			flex-shrink: 0;
+			order: 2;
 
 			.portrait-container {
 				width: 100%;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				margin-bottom: 15px;
+				margin-top: 20px;
+				margin-bottom: 20px;
 			}
 
 			.equipments {
@@ -39,7 +44,7 @@
 		.second {
 			display: flex;
 			flex-direction: column;
-			width: calc(100% - 550px);
+			order: 1;
 
 			.abilities {
 				display: flex;
@@ -55,6 +60,28 @@
 						height: auto;
 					}
 				}
+			}
+		}
+	}
+
+	.secondary {
+		// order: 1;
+		width: 460px;
+		color: var(--color-1);
+		margin-left: 40px;
+		display: flex;
+		flex-direction: column;
+
+		.section {
+			display: flex;
+			flex-direction: column;
+
+			.header {
+				color: var(--default-title-color);
+			}
+			.block {
+				background: rgba(255, 255, 255, 0.08);
+				padding: 10px;
 			}
 		}
 	}

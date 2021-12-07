@@ -1,10 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { RewardItemType } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationService } from '../../../services/localization.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 
 @Component({
 	selector: 'mercenaries-hero-details',
@@ -37,8 +40,50 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 			</div>
 			<div class="secondary">
-				<div class="farm-spots"></div>
-				<div class="tasks"></div>
+				<div class="section farm-spots">
+					<div class="header">Farm coins in</div>
+					<div class="spots block">
+						<div class="spot" *ngFor="let bounty of merc.bounties">
+							<div class="bounty-zone">{{ bounty.bountySetName }}</div>
+							<div class="bounty-name">{{ bounty.bountyName }}</div>
+						</div>
+					</div>
+				</div>
+				<div class="section all-tasks">
+					<div class="header">Tasks</div>
+					<div class="tasks block">
+						<div class="task" *ngFor="let bounty of merc.tasks">
+							<div class="index">#{{ bounty.index }}</div>
+							<div class="text">
+								<div class="title">{{ bounty.title }}</div>
+								<div class="description">{{ bounty.description }}</div>
+							</div>
+							<div class="rewards">
+								<div class="reward" *ngFor="let reward of bounty.rewards">
+									<div class="coin-container" *ngIf="reward.isCoin">
+										<img class="icon" [src]="reward.imageUrl" />
+										<img
+											class="frame"
+											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+										/>
+										<div class="amount">{{ reward.quantity }}</div>
+									</div>
+									<div
+										class="equip-container"
+										*ngIf="reward.isEquipment"
+										[cardTooltip]="reward.cardId"
+									>
+										<img class="icon" [src]="reward.imageUrl" />
+										<img
+											class="frame"
+											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -69,6 +114,23 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 					const refMercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 					const skin = refMerc.skins.find((skin) => skin.isDefaultVariation);
 					const skinCardId = this.allCards.getCardFromDbfId(skin.cardId).id;
+					const refTasks = referenceData.taskChains.find((chain) => chain.mercenaryId === mercId).tasks;
+					console.debug('refTasks', refTasks);
+					const tasks: readonly TaskForMerc[] = refTasks.map((task, index) => {
+						return {
+							index: index + 1,
+							description: task.description,
+							title: task.title,
+							rewards: task.rewards.map((reward) => {
+								return {
+									type: reward.type,
+									quantity: reward.quantity,
+									cardId: null,
+									imageUrl: null,
+								};
+							}),
+						};
+					});
 					return {
 						cardId: skinCardId,
 						portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${skinCardId}.jpg`,
@@ -92,6 +154,8 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 								imageUrl: this.i18n.getCardImage(cardId, { isHighRes: true }),
 							};
 						}),
+						bounties: buildBounties(refMerc, referenceData.bountySets),
+						tasks: tasks,
 					};
 				}),
 			);
@@ -115,6 +179,8 @@ interface Merc {
 	frameUrl: string;
 	equipments: readonly Equip[];
 	abilities: readonly Ability[];
+	bounties: readonly BountyForMerc[];
+	tasks: readonly TaskForMerc[];
 }
 
 interface Equip {
@@ -127,4 +193,18 @@ interface Ability {
 	cardId: string;
 	tier: number;
 	imageUrl: string;
+}
+
+interface TaskForMerc {
+	index: number;
+	title: string;
+	description: string;
+	rewards: readonly {
+		type: RewardItemType;
+		quantity: number;
+		cardId: string;
+		imageUrl: string;
+		isCoin?: boolean;
+		isEquipment?: boolean;
+	}[];
 }

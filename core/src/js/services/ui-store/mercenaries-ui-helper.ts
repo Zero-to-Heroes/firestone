@@ -1,4 +1,5 @@
 import { ReferenceCard, ScenarioId, TaskStatus } from '@firestone-hs/reference-data';
+import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
@@ -183,6 +184,28 @@ export const buildMercenariesTasksList = (
 			}
 			return a.mercenaryName < b.mercenaryName ? -1 : 1;
 		});
+};
+
+export const buildBounties = (
+	refMerc: MercenariesReferenceData['mercenaries'][0],
+	bountySets: MercenariesReferenceData['bountySets'],
+): readonly BountyForMerc[] => {
+	return bountySets
+		.map((bountySet) =>
+			bountySet.bounties
+				.map((bounty) => {
+					if (bounty.rewardMercenaryIds.includes(refMerc.id)) {
+						return {
+							bountySetName: bountySet.name,
+							bountyName: bounty.name,
+							sortOrder: bounty.sortOrder,
+						};
+					}
+					return null;
+				})
+				.filter((info) => !!info),
+		)
+		.reduce((a, b) => [...a, ...b], []);
 };
 
 const applyStarterFilter = (stat: MercenariesHeroStat, starterFilter: MercenariesStarterFilterType): boolean => {

@@ -15,7 +15,7 @@ import { MercenariesReferenceData } from '../../../services/mercenaries/mercenar
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { applySearchStringFilter } from '../../../services/ui-store/mercenaries-ui-helper';
+import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { areDeepEqual, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -192,7 +192,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 		const abilities = this.buildAbilities(refMerc, memMerc);
 		const equipments = this.buildEquipments(refMerc, memMerc);
-		const bountiesForMerc: readonly BountyForMerc[] = this.buildBounties(refMerc, referenceData.bountySets);
+		const bountiesForMerc: readonly BountyForMerc[] = buildBounties(refMerc, referenceData.bountySets);
 
 		const totalCoinsForFullUpgrade =
 			sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft);
@@ -249,27 +249,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			currentTaskDescription: currentTaskDescription,
 			bountiesWithRewards: bountiesForMerc,
 		} as PersonalHeroStat;
-	}
-
-	private buildBounties(
-		refMerc: MercenariesReferenceData['mercenaries'][0],
-		bountySets: MercenariesReferenceData['bountySets'],
-	): readonly BountyForMerc[] {
-		return bountySets
-			.map((bountySet) =>
-				bountySet.bounties
-					.map((bounty) => {
-						if (bounty.rewardMercenaryIds.includes(refMerc.id)) {
-							return {
-								bountySetName: bountySet.name,
-								bountyName: bounty.name,
-							};
-						}
-						return null;
-					})
-					.filter((info) => !!info),
-			)
-			.reduce((a, b) => [...a, ...b], []);
 	}
 
 	private buildEquipments(
@@ -591,4 +570,5 @@ export interface PersonalHeroStatEquipment {
 export interface BountyForMerc {
 	readonly bountySetName: string;
 	readonly bountyName: string;
+	readonly sortOrder: number;
 }
