@@ -4,6 +4,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DUELS_LEADERBOARD = true;
 	public static readonly ENABLE_BGS_FULL_SIMULATOR = true;
 	public static readonly ENABLE_MERCENARIES_TAB = true;
+	public static readonly ENABLE_DETAILED_MERC = false;
 
 	public static readonly ENABLE_STATS_TAB = true;
 	public static readonly ENABLE_MERCENARIES_TEAM_WIDGET = true;

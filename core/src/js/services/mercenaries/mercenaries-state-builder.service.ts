@@ -6,7 +6,7 @@ import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 
-const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=10';
+const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=11';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=17';
 
 @Injectable()
@@ -87,6 +87,11 @@ export interface MercenariesReferenceData {
 			readonly artVariationId: number;
 			readonly cardId: number;
 			readonly isDefaultVariation: boolean;
+		}[];
+		readonly stats: readonly {
+			readonly level: number;
+			readonly health: number;
+			readonly attack: number;
 		}[];
 	}[];
 	readonly mercenaryLevels: readonly {

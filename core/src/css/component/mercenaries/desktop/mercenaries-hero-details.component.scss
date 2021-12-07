@@ -7,6 +7,43 @@
 	width: 100%;
 	height: 100%;
 
+	.controls {
+		display: flex;
+		font-size: 14px;
+
+		.control {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&:not(:last-child) {
+				margin-right: 15px;
+			}
+		}
+
+		.arrow {
+			--icon-color: var(--color-3);
+			background: transparent;
+			width: 13px;
+			height: 8px;
+
+			&.left {
+				transform: rotate(-90deg);
+				margin-right: 2px;
+			}
+
+			&.right {
+				transform: rotate(90deg);
+				margin-left: 2px;
+			}
+
+			&:hover {
+				background: transparent;
+				--icon-color: var(--color-2);
+			}
+		}
+	}
+
 	.layout-main {
 		display: flex;
 		margin: 0;
@@ -24,11 +61,63 @@
 			.portrait-container {
 				width: 100%;
 				display: flex;
+				flex-direction: column;
 				align-items: center;
 				justify-content: center;
-				margin-top: 20px;
+				margin-top: 0;
 				margin-bottom: 20px;
 				margin-left: 35px;
+
+				.portrait {
+					flex-grow: 0;
+					flex-shrink: 0;
+					display: flex;
+					flex-direction: column;
+					width: 400px;
+					position: relative;
+					top: 0;
+					left: 0;
+					z-index: 9;
+					margin-top: 0;
+					margin-bottom: 0;
+
+					.icon {
+						position: absolute;
+						top: 11%;
+						left: 9%;
+						width: 76%;
+						clip-path: ellipse(34% 44% at 50% 50%);
+					}
+
+					.frame {
+						width: 100%;
+						z-index: 1;
+					}
+
+					.stats {
+						font-family: Passion one;
+						font-weight: 700;
+						font-size: 60px;
+						color: white;
+						text-shadow: -2px -2px 0 var(--color-7), 0px -2px 0 var(--color-7), 2px -2px 0 var(--color-7),
+							-2px 2px 0 var(--color-7), 0px 2px 0 var(--color-7), 2px 2px 0 var(--color-7);
+						position: absolute;
+						bottom: 19%;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						width: 100%;
+						padding-left: 20%;
+						z-index: 1;
+						padding-right: 23%;
+
+						.attack {
+						}
+
+						.health {
+						}
+					}
+				}
 			}
 
 			.equipments {
@@ -66,6 +155,25 @@
 						height: auto;
 					}
 				}
+			}
+		}
+	}
+
+	.equipments,
+	.abilities {
+		.controls {
+			position: absolute;
+			bottom: 45%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding-left: 11%;
+			padding-right: 8%;
+
+			.arrow {
+				width: 18px;
+				height: 12px;
 			}
 		}
 	}
@@ -212,33 +320,6 @@
 					}
 				}
 			}
-		}
-	}
-
-	.portrait {
-		flex-grow: 0;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		width: 400px;
-		position: relative;
-		top: 0;
-		left: 0;
-		z-index: 9;
-		margin-top: 0;
-		margin-bottom: 0;
-
-		.icon {
-			position: absolute;
-			top: 11%;
-			left: 9%;
-			width: 76%;
-			clip-path: ellipse(34% 44% at 50% 50%);
-		}
-
-		.frame {
-			width: 100%;
-			z-index: 1;
 		}
 	}
 
