@@ -26,13 +26,15 @@ export class DungeonLootParserService {
 
 	public currentDuelsRunId: string;
 	public busyRetrievingInfo: boolean;
+	public currentDuelsWins: number;
+	public currentDuelsLosses: number;
+	public currentDuelsRating: number;
+	public currentDuelsPaidRating: number;
 
 	private spectating: boolean;
 	private lastDuelsMatch: GameStat;
 	private currentDuelsHeroPowerCardDbfId: number;
 	private currentDuelsSignatureTreasureCardId: string;
-	private currentDuelsWins: number;
-	private currentDuelsLosses: number;
 
 	private currentReviewId: string;
 	private duelsInfo: DuelsInfo;
@@ -320,6 +322,8 @@ export class DungeonLootParserService {
 			this.log('not sending info in the first game, as data might be from the previous run');
 			this.currentDuelsLosses = 0;
 			this.currentDuelsWins = 0;
+			this.currentDuelsRating = undefined;
+			this.currentDuelsPaidRating = undefined;
 			this.currentDuelsHeroPowerCardDbfId = undefined;
 			this.currentDuelsSignatureTreasureCardId = undefined;
 			return;
@@ -370,6 +374,8 @@ export class DungeonLootParserService {
 		this.currentDuelsSignatureTreasureCardId = this.findSignatureTreasure(duelsInfo.DeckList || []);
 		this.currentDuelsWins = duelsInfo.Wins;
 		this.currentDuelsLosses = duelsInfo.Losses;
+		this.currentDuelsRating = duelsInfo.Rating;
+		this.currentDuelsPaidRating = duelsInfo.PaidRating;
 		this.log(
 			'updated current duels info',
 			this.currentDuelsWins,

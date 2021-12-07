@@ -61,9 +61,15 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
-		bgsOptions?: {
+		params?: {
 			hasPrizes: boolean;
 			bgsNewRating: number;
+			duelsInfo: {
+				wins: number;
+				losses: number;
+				rating: number;
+				paidRating: number;
+			};
 		},
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
@@ -74,7 +80,7 @@ export class EndGameUploaderService {
 			deckName,
 			buildNumber,
 			// scenarioId,
-			bgsOptions,
+			params,
 		);
 		await this.replayUploadService.uploadGame(game);
 	}
@@ -86,9 +92,15 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		// scenarioId: number,
-		bgsOptions?: {
+		params?: {
 			hasPrizes: boolean;
 			bgsNewRating: number;
+			duelsInfo: {
+				wins: number;
+				losses: number;
+				rating: number;
+				paidRating: number;
+			};
 		},
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
@@ -140,7 +152,7 @@ export class EndGameUploaderService {
 		if (game.gameMode === 'battlegrounds') {
 			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo?.rating ?? this.bgsStore?.state?.currentGame?.mmrAtStart;
-			newPlayerRank = battlegroundsInfo?.newRating ?? bgsOptions.bgsNewRating;
+			newPlayerRank = battlegroundsInfo?.newRating ?? params.bgsNewRating;
 			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				battlegroundsInfo?.game?.AvailableRaces,
 			);
@@ -150,7 +162,7 @@ export class EndGameUploaderService {
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
-			game.hasBgsPrizes = bgsOptions.hasPrizes;
+			game.hasBgsPrizes = params.hasPrizes;
 		} else if (isMercenaries(game.gameMode)) {
 			// Looks like we can assume the mapId is unique for a given player
 			game.runId = isMercenariesPvE(game.gameMode)
@@ -203,25 +215,28 @@ export class EndGameUploaderService {
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
-			if (duelsInfo) {
-				console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);
-				playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
-				game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
-				try {
-					if (
-						(replay.result === 'won' && duelsInfo.Wins === 11) ||
-						(replay.result === 'lost' && duelsInfo.Losses === 2)
-					) {
-						const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
-						console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
-						if (newPlayerRank != null) {
-							game.newPlayerRank = '' + newPlayerRank;
-						}
+			// if (duelsInfo) {
+			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo, params.duelsInfo);
+			playerRank =
+				game.gameMode === 'duels'
+					? params.duelsInfo?.rating ?? duelsInfo.Rating
+					: params.duelsInfo?.paidRating ?? duelsInfo.PaidRating;
+			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
+			try {
+				if (
+					(replay.result === 'won' && (params.duelsInfo?.wins ?? duelsInfo.Wins) === 11) ||
+					(replay.result === 'lost' && (params.duelsInfo?.losses ?? duelsInfo.Losses) === 2)
+				) {
+					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
+					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
+					if (newPlayerRank != null) {
+						game.newPlayerRank = '' + newPlayerRank;
 					}
-				} catch (e) {
-					console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
 				}
+			} catch (e) {
+				console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
 			}
+			// }
 		} else if (game.gameMode === 'arena') {
 			// const arenaInfo = await this.memoryInspection.getArenaInfo();
 			// TODO: move away from player rank for arena to match what is done in duels

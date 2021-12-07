@@ -4,6 +4,7 @@ import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { DeckParserService } from '../decktracker/deck-parser.service';
+import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -26,6 +27,7 @@ export class EndGameListenerService {
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
 		private gameState: GameStateService,
+		private duelsMonitor: DungeonLootParserService,
 	) {
 		this.init();
 	}
@@ -82,6 +84,12 @@ export class EndGameListenerService {
 						{
 							hasPrizes: this.bgsHasPrizes,
 							bgsNewRating: this.bgsNewRating,
+							duelsInfo: {
+								wins: this.duelsMonitor.currentDuelsWins,
+								losses: this.duelsMonitor.currentDuelsLosses,
+								rating: this.duelsMonitor.currentDuelsRating,
+								paidRating: this.duelsMonitor.currentDuelsPaidRating,
+							},
 						},
 					);
 					break;
