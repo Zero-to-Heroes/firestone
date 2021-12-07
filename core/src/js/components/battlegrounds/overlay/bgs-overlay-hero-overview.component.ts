@@ -9,7 +9,6 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -23,7 +22,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		'../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-theme bgs-hero-overview-tooltip">
+		<div class="battlegrounds-theme bgs-hero-overview-tooltip scalable">
 			<bgs-opponent-overview-big
 				[opponent]="_opponent"
 				[enableSimulation]="false"
@@ -69,28 +68,25 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-	}
-
-	async ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.bgsOpponentBoardScale)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => {
 				try {
 					console.debug('updating scale', scale);
-					this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
+					// this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
 					const newScale = scale / 100;
 					const element = this.el.nativeElement.querySelector('.scalable');
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				} catch (e) {
 					// Do nothing
+					console.debug('error', e);
 				}
 			});
+	}
+
+	async ngAfterContentInit() {
+		// This method is not called, because we create teh component manually
+		console.debug('after content init');
 	}
 }

@@ -40,6 +40,7 @@
 	// border-image-slice: 1;
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 	height: 100%;
+	transform-origin: top left;
 
 	bgs-opponent-overview-big {
 		height: 100%;
