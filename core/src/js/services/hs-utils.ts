@@ -462,6 +462,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 			return 'stormwind';
 		case BoosterType.LETTUCE:
 			return 'lettuce';
+		case BoosterType.ALTERAC_VALLEY:
+			return 'alterac_valley';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
