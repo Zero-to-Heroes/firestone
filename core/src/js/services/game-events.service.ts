@@ -406,6 +406,7 @@ export class GameEvents {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 							: null,
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
 				break;
