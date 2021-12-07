@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '../../../services/utils';
 import { CurrentAppType } from '../current-app.type';
 import { NavigationAchievements } from './navigation-achievements';
 import { NavigationArena } from './navigation-arena';
@@ -28,7 +29,7 @@ export class NavigationState {
 	readonly text: string = 'Categories'; // Init for Achievements, which is the default
 	readonly image: string;
 
-	public update(base: NavigationState): NavigationState {
+	public update(base: Partial<NonFunctionProperties<NavigationState>>): NavigationState {
 		return Object.assign(new NavigationState(), this, base);
 	}
 }

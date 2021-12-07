@@ -1,0 +1,117 @@
+.mercenaries-hero-details {
+	.layout-main {
+		display: flex;
+		width: 100%;
+		margin: 0;
+		max-width: 100%;
+		flex-direction: row;
+
+		.first {
+			display: flex;
+			flex-direction: column;
+			width: 400px;
+			flex-shrink: 0;
+
+			.portrait-container {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 15px;
+			}
+
+			.equipments {
+				display: flex;
+
+				.equipment-card {
+					width: 175px;
+					position: relative;
+					margin-right: -20px;
+
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+			}
+		}
+
+		.second {
+			display: flex;
+			flex-direction: column;
+			width: calc(100% - 550px);
+
+			.abilities {
+				display: flex;
+				flex-direction: column;
+
+				.ability-card {
+					width: 175px;
+					position: relative;
+					margin-bottom: -26px;
+
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+			}
+		}
+	}
+
+	.portrait {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 400px;
+		position: relative;
+		top: 0;
+		left: 0;
+		z-index: 9;
+		margin-top: 0;
+		margin-bottom: 0;
+
+		.icon {
+			position: absolute;
+			top: 11%;
+			left: 9%;
+			width: 76%;
+			clip-path: ellipse(34% 44% at 50% 50%);
+		}
+
+		.frame {
+			width: 100%;
+			z-index: 1;
+		}
+	}
+
+	// Rotations and effects
+	// & {
+	// 	.portrait {
+	// 		transform: rotate(-5deg);
+	// 	}
+	// 	.equipment-card {
+	// 		&:nth-child(1) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 		&:nth-child(2) {
+	// 			transform: rotate(-5deg);
+	// 		}
+	// 		&:nth-child(3) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 	}
+	// 	.ability-card {
+	// 		&:nth-child(1) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 		&:nth-child(2) {
+	// 			transform: rotate(-5deg);
+	// 		}
+	// 		&:nth-child(3) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 	}
+	// }
+}

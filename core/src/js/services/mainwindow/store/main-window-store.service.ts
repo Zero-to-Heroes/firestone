@@ -127,6 +127,7 @@ import { MercenariesSelectCompositionEvent } from './events/mercenaries/mercenar
 import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
 import { MercenariesTaskUpdateCurrentStepEvent } from './events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
+import { MercenariesViewMercDetailsEvent } from './events/mercenaries/mercenaries-view-merc-details-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
@@ -245,6 +246,7 @@ import { MercenariesSelectCompositionProcessor } from './processors/mercenaries/
 import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
 import { MercenariesTaskUpdateCurrentStepProcessor } from './processors/mercenaries/mercenaries-task-update-current-step-processor';
 import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
+import { MercenariesViewMercDetailsProcessor } from './processors/mercenaries/mercenaries-view-merc-details-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
@@ -743,6 +745,9 @@ export class MainWindowStoreService {
 
 			MercenariesTaskUpdateCurrentStepEvent.eventName(),
 			new MercenariesTaskUpdateCurrentStepProcessor(this.mercenariesMemoryCache, this.prefs),
+
+			MercenariesViewMercDetailsEvent.eventName(),
+			new MercenariesViewMercDetailsProcessor(),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),

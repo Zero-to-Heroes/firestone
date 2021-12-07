@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
 import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
+import { MercenariesViewMercDetailsEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-view-merc-details-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { areDeepEqual } from '../../../services/utils';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
@@ -13,7 +14,11 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stat.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-personal-hero-stat" [ngClass]="{ 'missing': !owned, 'fully-upgraded': fullyUpgraded }">
+		<div
+			class="mercenaries-personal-hero-stat"
+			[ngClass]="{ 'missing': !owned, 'fully-upgraded': fullyUpgraded }"
+			(click)="select()"
+		>
 			<div class="rarity-level">
 				<img class="rarity" [src]="rarityImg" />
 				<div class="level">
@@ -256,7 +261,12 @@ export class MercenariesPersonalHeroStatComponent {
 		const operation = event.ctrlKey ? 'add' : event.altKey ? 'remove' : null;
 		if (operation) {
 			this.store.send(new MercenariesTaskUpdateCurrentStepEvent(this.mercenaryId, operation));
+			event.stopPropagation();
 		}
+	}
+
+	select() {
+		this.store.send(new MercenariesViewMercDetailsEvent(this.mercenaryId));
 	}
 
 	private buildCoinsNeededTooltip(value: PersonalHeroStat): string {

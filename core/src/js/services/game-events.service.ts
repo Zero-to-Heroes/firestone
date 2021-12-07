@@ -72,6 +72,7 @@ export class GameEvents {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CurrentScene) {
 				try {
+					console.log('emitting new scene event', changes.CurrentScene);
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.SCENE_CHANGED_MINDVISION,

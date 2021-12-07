@@ -44,6 +44,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 							>
 							</mercenaries-personal-hero-stats>
+							<mercenaries-hero-details *ngIf="selectedCategoryId === 'mercenaries-hero-details'">
+							</mercenaries-hero-details>
 							<mercenaries-my-teams *ngIf="selectedCategoryId === 'mercenaries-my-teams'">
 							</mercenaries-my-teams>
 							<mercenaries-meta-hero-stats *ngIf="selectedCategoryId === 'mercenaries-hero-stats'">
