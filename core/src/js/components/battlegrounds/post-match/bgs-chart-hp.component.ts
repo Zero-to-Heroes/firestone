@@ -404,7 +404,7 @@ export class BgsChartHpComponent {
 			hpOverTurn:
 				hpOverTurn[cardId]
 					?.filter((turnInfo) => turnInfo)
-					.map((turnInfo) => turnInfo.value + (turnInfo.armor ?? 0)) || [],
+					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
 		console.debug('built players', players, this._mainPlayerCardId);
 
