@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.11',
+		version: '8.3.16',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,34 +49,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add some "tips" in the empty ad space when not showing ads. Often, some hidden features or new settings are mentioned in the patch notes, but then become hard to find. This section will try to highlight these to make it easier to figure out everything you can do with the app.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a new "Coins to Farm" column that recaps how many coins you, well, need to farm, taking into account the coins you'll get from uncompleted tasks.`,
-							},
-							{
-								type: 'feature',
-								text: `Add an option to show more details on merc teams in the Replays tab(like the benches and the player equipped items).`,
-							},
-							{
-								type: 'ui',
-								text: `The "Coins left" and "Coins needed" columns are now hidden by default, and can be displayed by making the window wider.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix broken pack history.`,
+								type: 'content',
+								text: `Update for Fractured in Alterac Valley. All cards should be flagged in hand, Tavish's secrets have their own entries in the secret tracker, and cards are highlighted appropriately in the tracker. Let me know if you see something missing!`,
 							},
 						],
 					},
@@ -87,62 +61,28 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Highlight minions with tribe in the graveyard when mousing over N'Zoth in the tracker.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where "reset" and "deleted" actions would be ignored when showing deck stats in-game.`,
-							},
-							{
-								type: 'ui',
-								text: `The "number of copies" for each card will now always be the righmost element, so that all numbers stay aligned even when some cards are gifted, burned, dead, and so on.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add an option to increase the size of the Battle Simulation widget.`,
+							},
+							{
+								type: 'ui',
+								text: `Make the red cross on banned tribes less visible.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue where the HP graph would show incorrect values for heroes with armor.`,
+								text: `Fix an issue where the opponent's last known board could not be made bigger.`,
 							},
 						],
 					},
 					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where clicking on a meta PvP team would bring you to another empty screen and sometime freeze the app.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where PvP teams in replays were sometimes not displayed until an app reboot.`,
-							},
-							{
-								type: 'ui',
-								text: `Order the tasks in the tasks list according to the merc order in collection, to make it easier to build your team for task farming.`,
-							},
-							{
-								type: 'ui',
-								text: `Hide global stats that have too few matches (the cutoff is at 50 for now).`,
-							},
-							{
-								type: 'ui',
-								text: `Manually force some equipments to display tier 4 when they can't be upgraded.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
+						category: 'general',
 						details: [
 							{
 								type: 'ui',
-								text: `Fix missing image for Alterac Valley packs.`,
+								text: `Make "tips" less flashy.`,
 							},
 						],
 					},
