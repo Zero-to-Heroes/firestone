@@ -17,7 +17,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('drawing from deck', cardId, gameEvent);
+		// console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -29,7 +29,7 @@ export class CardDrawParser implements EventParser {
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
 		const isTradable = !!this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
-		console.debug('drawing from deck', isTradable, this.allCards.getCard(cardId));
+		// console.debug('drawing from deck', isTradable, this.allCards.getCard(cardId));
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
