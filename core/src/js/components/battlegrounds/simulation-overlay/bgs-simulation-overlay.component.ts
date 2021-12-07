@@ -4,7 +4,9 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostListener,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
@@ -26,7 +28,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		'../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
-		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay">
+		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay scalable">
 			<bgs-battle-status
 				[nextBattle]="nextBattle$ | async"
 				[showReplayLink]="showSimulationSample$ | async"
@@ -46,6 +48,8 @@ export class BgsSimulationOverlayComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -90,6 +94,14 @@ export class BgsSimulationOverlayComponent
 				tap((filter) => cdLog('emitting showSimulationSample in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
 			);
+		this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsSimulatorScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
 	}
 
 	async ngAfterViewInit() {

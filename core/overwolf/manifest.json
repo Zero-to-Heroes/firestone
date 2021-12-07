@@ -136,8 +136,8 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": false,
-				"size": { "width": 1270, "height": 700 },
-				"min_size": { "width": 1270, "height": 700 },
+				"size": { "width": 1400, "height": 700 },
+				"min_size": { "width": 1400, "height": 700 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -152,8 +152,8 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 1270, "height": 700 },
-				"min_size": { "width": 1270, "height": 700 },
+				"size": { "width": 1400, "height": 700 },
+				"min_size": { "width": 1400, "height": 700 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -240,8 +240,8 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 400, "height": 200 },
-				"min_size": { "width": 400, "height": 200 },
+				"size": { "width": 700, "height": 400 },
+				"min_size": { "width": 700, "height": 400 },
 				"start_position": { "top": 0, "left": 600 },
 				"in_game_only": true
 			},

@@ -286,6 +286,8 @@ export class Preferences {
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsBannedTribeScale = 101.6;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsSimulatorScale = 100;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

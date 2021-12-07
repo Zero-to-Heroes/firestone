@@ -187,7 +187,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle> -->
 			</div>
 
-			<div class="title">Local simulator configuration</div>
+			<div class="title">Simulator configuration</div>
 			<div class="settings-group">
 				<div
 					class="text"
@@ -208,6 +208,19 @@ import { Knob } from '../preference-slider.component';
 					[max]="15000"
 					[snapSensitivity]="200"
 					[knobs]="numberOfSimsKnobs"
+				>
+				</preference-slider>
+				<div class="text">Widget size</div>
+				<preference-slider
+					class="simulator-size-slider"
+					field="bgsSimulatorScale"
+					[enabled]="value.bgsFullToggle && value.bgsEnableApp"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="80"
+					[max]="170"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
 			</div>
