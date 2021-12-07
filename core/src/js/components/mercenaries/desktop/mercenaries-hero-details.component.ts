@@ -1,11 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { RewardItemType } from '@firestone-hs/reference-data';
+import { MercenarySelector, RewardItemType } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationService } from '../../../services/localization.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
+import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 
@@ -45,13 +46,13 @@ import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 					<div class="spots block">
 						<div class="spot" *ngFor="let bounty of merc.bounties">
 							<div class="bounty-zone">{{ bounty.bountySetName }}</div>
-							<div class="bounty-name">{{ bounty.bountyName }}</div>
+							<div class="bounty-name" *ngFor="let name of bounty.bountyNames">{{ name }}</div>
 						</div>
 					</div>
 				</div>
 				<div class="section all-tasks">
 					<div class="header">Tasks</div>
-					<div class="tasks block">
+					<div class="tasks block" scrollable>
 						<div class="task" *ngFor="let bounty of merc.tasks">
 							<div class="index">#{{ bounty.index }}</div>
 							<div class="text">
@@ -60,12 +61,16 @@ import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 							</div>
 							<div class="rewards">
 								<div class="reward" *ngFor="let reward of bounty.rewards">
-									<div class="coin-container" *ngIf="reward.isCoin">
+									<div class="coin-container" *ngIf="reward.isCoin && !reward.isRandomCoin">
 										<img class="icon" [src]="reward.imageUrl" />
 										<img
 											class="frame"
 											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
 										/>
+										<div class="amount">{{ reward.quantity }}</div>
+									</div>
+									<div class="coin-container" *ngIf="reward.isCoin && reward.isRandomCoin">
+										<img class="frame relative" [src]="reward.imageUrl" />
 										<div class="amount">{{ reward.quantity }}</div>
 									</div>
 									<div
@@ -122,15 +127,42 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 							description: task.description,
 							title: task.title,
 							rewards: task.rewards.map((reward) => {
+								const isEquipment = reward.type === RewardItemType.MERCENARY_EQUIPMENT;
+								const imageUrl = isEquipment
+									? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${
+											this.allCards.getCardFromDbfId(reward.equipmentDbfId).id
+									  }.jpg`
+									: reward.mercenarySelector === MercenarySelector.CONTEXT
+									? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${refMercCard.id}.jpg`
+									: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_random_coin.png`;
 								return {
 									type: reward.type,
 									quantity: reward.quantity,
 									cardId: null,
-									imageUrl: null,
+									imageUrl: imageUrl,
+									isCoin: reward.type === RewardItemType.MERCENARY_CURRENCY,
+									isRandomCoin: reward.mercenarySelector !== MercenarySelector.CONTEXT,
+									isEquipment: isEquipment,
 								};
 							}),
 						};
 					});
+					const refBounties = buildBounties(refMerc, referenceData.bountySets);
+					const groupedBounties = groupByFunction((bounty: BountyForMerc) => bounty.bountySetName)(
+						refBounties,
+					);
+					const finalBounties: readonly BountyForMercInternal[] = Object.values(groupedBounties).map(
+						(bounties) => {
+							return {
+								bountySetName: bounties[0].bountySetName,
+								sortOrder: bounties[0].sortOrder,
+								bountyNames: [...bounties]
+									.sort((a, b) => a.sortOrder - b.sortOrder)
+									.map((b) => b.bountyName),
+							};
+						},
+					);
+					console.debug('finalBountyies', finalBounties);
 					return {
 						cardId: skinCardId,
 						portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${skinCardId}.jpg`,
@@ -154,7 +186,7 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 								imageUrl: this.i18n.getCardImage(cardId, { isHighRes: true }),
 							};
 						}),
-						bounties: buildBounties(refMerc, referenceData.bountySets),
+						bounties: finalBounties,
 						tasks: tasks,
 					};
 				}),
@@ -179,7 +211,7 @@ interface Merc {
 	frameUrl: string;
 	equipments: readonly Equip[];
 	abilities: readonly Ability[];
-	bounties: readonly BountyForMerc[];
+	bounties: readonly BountyForMercInternal[];
 	tasks: readonly TaskForMerc[];
 }
 
@@ -207,4 +239,10 @@ interface TaskForMerc {
 		isCoin?: boolean;
 		isEquipment?: boolean;
 	}[];
+}
+
+interface BountyForMercInternal {
+	readonly bountySetName: string;
+	readonly bountyNames: readonly string[];
+	readonly sortOrder: number;
 }

@@ -1,6 +1,11 @@
+:host() {
+	overflow: hidden;
+}
+
 .mercenaries-hero-details {
 	display: flex;
 	width: 100%;
+	height: 100%;
 
 	.layout-main {
 		display: flex;
@@ -23,6 +28,7 @@
 				justify-content: center;
 				margin-top: 20px;
 				margin-bottom: 20px;
+				margin-left: 35px;
 			}
 
 			.equipments {
@@ -68,6 +74,7 @@
 		// order: 1;
 		width: 460px;
 		color: var(--color-1);
+		font-size: 14px;
 		margin-left: 40px;
 		display: flex;
 		flex-direction: column;
@@ -76,12 +83,134 @@
 			display: flex;
 			flex-direction: column;
 
+			&.all-tasks {
+				overflow: hidden;
+			}
+
+			&:not(:last-child) {
+				margin-bottom: 15px;
+			}
+
 			.header {
 				color: var(--default-title-color);
+				margin-bottom: 5px;
 			}
+
 			.block {
 				background: rgba(255, 255, 255, 0.08);
 				padding: 10px;
+			}
+
+			.bounty-zone {
+				font-weight: bold;
+			}
+
+			.bounty-name {
+				font-size: 13px;
+				text-indent: 15px;
+			}
+
+			.tasks {
+				overflow: scroll;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+				margin-bottom: 10px;
+
+				.task {
+					display: flex;
+					position: relative;
+					margin-bottom: 15px;
+
+					.index {
+						width: 25px;
+						flex-shrink: 0;
+					}
+
+					.text {
+						display: flex;
+						flex-direction: column;
+						flex-grow: 1;
+
+						.title {
+							font-weight: bold;
+						}
+
+						.description {
+							font-size: 13px;
+						}
+					}
+
+					.rewards {
+						width: 50px;
+						flex-shrink: 0;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+
+						.reward {
+							&:not(:last-child) {
+								margin-bottom: 5px;
+							}
+						}
+					}
+
+					.coin-container {
+						display: flex;
+						position: relative;
+						align-items: center;
+						justify-content: center;
+
+						.icon {
+							width: 30px;
+							clip-path: ellipse(40% 44% at 50% 50%);
+							filter: grayscale(1);
+						}
+
+						.frame {
+							width: 30px;
+							z-index: 1;
+							position: absolute;
+							left: 0;
+							top: 0;
+
+							&.relative {
+								position: relative;
+							}
+						}
+
+						.amount {
+							margin-left: 5px;
+						}
+					}
+
+					.equip-container {
+						flex-grow: 0;
+						flex-shrink: 0;
+						display: flex;
+						flex-direction: column;
+						width: 100%;
+						position: relative;
+						top: 0;
+						left: 0;
+						z-index: 9;
+						// margin-right: 20px;
+
+						.icon {
+							position: absolute;
+							top: 11%;
+							left: 13%;
+							width: 76%;
+							// clip-path: ellipse(40% 44% at 50% 50%);
+						}
+
+						.frame {
+							width: 100%;
+							z-index: 1;
+						}
+					}
+				}
 			}
 		}
 	}
