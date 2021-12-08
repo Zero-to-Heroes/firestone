@@ -14,6 +14,7 @@ import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { SecretOption } from '../../models/decktracker/secret-option';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
@@ -60,6 +61,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 	constructor(
 		private el: ElementRef,
 		private allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -126,7 +128,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 				const dbCard = this.allCards.getCard(refOption.cardId);
 				return VisualDeckCard.create({
 					cardId: refOption.cardId,
-					cardName: dbCard.name,
+					cardName: this.i18n.getCardName(dbCard.id),
 					manaCost: dbCard.cost,
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
 					highlight: refOption.isValidOption ? 'normal' : 'dim',

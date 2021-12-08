@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { CardsFacadeService } from './cards-facade.service';
+import { formatClass } from './hs-utils';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
+import { capitalizeEachWord } from './utils';
 
 @Injectable()
 export class LocalizationService {
 	private locale = 'enUS';
 	private useHighResImages: boolean;
 
-	constructor(private readonly store: AppUiStoreFacadeService) {}
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly allCards: CardsFacadeService) {}
 
 	public async start() {
 		await this.store.initComplete();
@@ -45,6 +48,28 @@ export class LocalizationService {
 		const base = `https://static.firestoneapp.com/cards`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}?v=2`;
+	}
+
+	public getCardName(cardId: string, defaultName: string = null): string {
+		const card = this.allCards.getCard(cardId);
+		const loc = card.locales?.find((locale) => locale?.locale === this.locale);
+		return loc?.name ?? defaultName ?? card.name;
+	}
+
+	public getCreatedByCardName(creatorCardId: string): string {
+		return `Created by ${this.getCardName(creatorCardId) ?? 'unknown'}`;
+	}
+
+	public getUnknownCardName(playerClass: string = null): string {
+		return playerClass ? `Unknown ${formatClass(playerClass)} card` : 'Unknown Card';
+	}
+
+	public getUnknownManaSpellName(manaCost: number): string {
+		return `Unknown ${manaCost} mana spell`;
+	}
+
+	public getUnknownRaceName(race: string): string {
+		return `Unknown ${capitalizeEachWord(race)}`;
 	}
 }
 

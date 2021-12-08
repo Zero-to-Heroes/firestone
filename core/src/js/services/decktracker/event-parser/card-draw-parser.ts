@@ -5,11 +5,16 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { cardsRevealedWhenDrawn, forceHideInfoWhenDrawnInfluencers, publicCardCreators } from '../../hs-utils';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardDrawParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK;
@@ -52,7 +57,8 @@ export class CardDrawParser implements EventParser {
 		const cardWithCreator = card.update({
 			creatorCardId: isCardInfoPublic ? creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			cardName: isCardInfoPublic ? card.cardName : undefined,
+			// cardName: isCardInfoPublic ? card.cardName : undefined,
+			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
 		} as DeckCard);
 		//console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);

@@ -5,11 +5,16 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { globalEffectQuestlines, globalEffectQuestlinesTriggers } from '../../hs-utils';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class QuestCreatedInGameParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly cards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly cards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.QUEST_CREATED_IN_GAME;
@@ -26,7 +31,7 @@ export class QuestCreatedInGameParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: dbCard.name,
+			cardName: this.i18n.getCardName(cardId, dbCard.name),
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
@@ -46,7 +51,7 @@ export class QuestCreatedInGameParser implements EventParser {
 				deck.globalEffects,
 				DeckCard.create({
 					cardId: globalEffectCard.id,
-					cardName: globalEffectCard.name,
+					cardName: this.i18n.getCardName(globalEffectCard.id, globalEffectCard.name),
 					manaCost: globalEffectCard.cost,
 					rarity: globalEffectCard.rarity,
 					creatorCardId: cardId,

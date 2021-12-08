@@ -5,12 +5,17 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { COUNTERSPELLS, globalEffectCards } from '../../hs-utils';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDeckForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardPlayedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_PLAYED;
@@ -76,7 +81,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			DeckCard.create({
 				entityId: entityId,
 				cardId: cardId,
-				cardName: refCard?.name,
+				cardName: this.i18n.getCardName(refCard?.id),
 				manaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,
@@ -140,7 +145,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
 			? newPlayerDeck
-			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
+			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards, this.i18n);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,

@@ -4,11 +4,16 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardBackToDeckParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_BACK_TO_DECK;
@@ -74,7 +79,7 @@ export class CardBackToDeckParser implements EventParser {
 			DeckCard.create({
 				cardId: cardId,
 				entityId: entityId,
-				cardName: dbCard.name,
+				cardName: this.i18n.getCardName(dbCard.id),
 				manaCost: dbCard.cost,
 				rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 			} as DeckCard)

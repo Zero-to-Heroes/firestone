@@ -14,6 +14,7 @@ import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-sta
 import { GameState } from '../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -77,11 +78,12 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		private readonly el: ElementRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		const nativeElement = el.nativeElement;
+		const nativeElement = this.el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');
 		this.isBgs = this.activeCounter.includes('bgs');
@@ -171,7 +173,7 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 			case 'elwynn-boar':
 				return ElwynnBoarCounterDefinition.create(gameState, side);
 			case 'bolner':
-				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards);
+				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'hero-power-damage':
 				return HeroPowerDamageCounterDefinition.create(gameState, side);
 			default:

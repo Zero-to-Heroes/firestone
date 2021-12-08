@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
+import { LocalizationFacadeService } from '../localization-facade.service';
 
 @Injectable()
 export class DeckCardService {
-	constructor(private cards: CardsFacadeService) {}
+	constructor(private cards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	// Doesn't handle dynamic zones, so should be called before dynamic zones are built
 	public fillMissingCardInfoInDeck(deckState: DeckState): DeckState {
@@ -32,7 +33,7 @@ export class DeckCardService {
 		}
 
 		return card.update({
-			cardName: card.cardName ?? dbCard.name,
+			cardName: this.i18n.getCardName(card.cardId, card.cardName) ?? this.i18n.getCardName(dbCard.id),
 			manaCost: card.manaCost ?? dbCard.cost,
 			rarity: card.rarity ?? dbCard.rarity ? (card.rarity ?? dbCard.rarity).toLowerCase() : undefined,
 		} as DeckCard);

@@ -4,6 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { SecretConfigService } from '../secret-config.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -13,6 +14,7 @@ export class SecretCreatedInGameParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
 		private readonly cards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -31,7 +33,7 @@ export class SecretCreatedInGameParser implements EventParser {
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
-			cardName: dbCard.name,
+			cardName: this.i18n.getCardName(cardId, dbCard.name),
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,

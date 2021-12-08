@@ -8,10 +8,11 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
 import { EntityGameState, GameEvent, GameState as EventGameState, PlayerGameState } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 
 @Injectable()
 export class DeckManipulationHelper {
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],
@@ -250,7 +251,7 @@ export class DeckManipulationHelper {
 				? card
 				: card.update({
 						cardId: cardId,
-						cardName: this.allCards.getCard(cardId)?.name,
+						cardName: this.i18n.getCardName(cardId),
 				  } as DeckCard),
 		);
 	}
@@ -277,7 +278,7 @@ export class DeckManipulationHelper {
 						return idByCardId.update({
 							entityId: entityId,
 							cardId: cardId,
-							cardName: card && card.name,
+							cardName: card && this.i18n.getCardName(card.id),
 						} as DeckCard);
 					} else {
 						// console.warn(
@@ -311,7 +312,7 @@ export class DeckManipulationHelper {
 				const card = this.allCards.getCard(cardId);
 				return found.update({
 					cardId: cardId,
-					cardName: (card && card.name) || found.cardName,
+					cardName: (card && this.i18n.getCardName(card.id)) || found.cardName,
 				} as DeckCard);
 			}
 			if (found) {
@@ -328,7 +329,7 @@ export class DeckManipulationHelper {
 				const card = this.allCards.getCard(cardId);
 				return DeckCard.create({
 					cardId: cardId,
-					cardName: card ? card.name : null,
+					cardName: card ? this.i18n.getCardName(card.id) : null,
 					entityId: entityId,
 				} as DeckCard);
 			}
@@ -353,7 +354,7 @@ export class DeckManipulationHelper {
 		if (cardInHand && !cardInHand.cardId) {
 			const newCard = cardInHand.update({
 				cardId: cardId,
-				cardName: this.allCards.getCard(cardId)?.name,
+				cardName: this.i18n.getCardName(cardId),
 			} as DeckCard);
 			const newHand = this.replaceCardInZone(deck.hand, newCard);
 			return Object.assign(new DeckState(), deck, {

@@ -1,13 +1,13 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class EntityUpdateParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.ENTITY_UPDATE;
@@ -27,16 +27,16 @@ export class EntityUpdateParser implements EventParser {
 		const newCardInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
 			cardInHand && cardInHand.cardId !== cardId && isPlayer
-				? cardInHand.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				? cardInHand.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
 				: null;
 
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId
-				? cardInDeck.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				? cardInDeck.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
 				: null;
 		const newCardInOther =
 			cardInOther && cardInOther.cardId !== cardId
-				? cardInOther.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				? cardInOther.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
 				: null;
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;

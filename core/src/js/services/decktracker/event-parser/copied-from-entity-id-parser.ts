@@ -1,4 +1,3 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -6,11 +5,12 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CopiedFromEntityIdParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.COPIED_FROM_ENTITY_ID;
@@ -38,7 +38,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const updatedCardId = newCopy?.cardId ?? copiedCard.cardId;
 		const updatedCopiedCard = copiedCard.update({
 			cardId: updatedCardId,
-			cardName: this.allCards.getCard(updatedCardId)?.name ?? copiedCard.cardId,
+			cardName: this.i18n.getCardName(updatedCardId, copiedCard.cardId),
 		} as DeckCard);
 		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard);
 

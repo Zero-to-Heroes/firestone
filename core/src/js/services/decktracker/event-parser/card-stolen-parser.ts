@@ -1,13 +1,13 @@
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardStolenParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_STOLEN;
@@ -72,7 +72,7 @@ export class CardStolenParser implements EventParser {
 					stealingToDeck.hand,
 					cardInHand.update({
 						cardId: cardInHand.cardId || cardId,
-						cardName: cardInHand.cardName || this.allCards.getCard(cardId).name,
+						cardName: this.i18n.getCardName(cardInHand.cardId) ?? this.i18n.getCardName(cardId),
 					} as DeckCard),
 			  )
 			: stealingToDeck.hand;
@@ -82,7 +82,7 @@ export class CardStolenParser implements EventParser {
 					stealingToDeck.board,
 					cardInBoard.update({
 						cardId: cardInBoard.cardId || cardId,
-						cardName: cardInBoard.cardName || this.allCards.getCard(cardId).name,
+						cardName: this.i18n.getCardName(cardInBoard.cardId) ?? this.i18n.getCardName(cardId),
 					} as DeckCard),
 			  )
 			: stealingToDeck.board;
@@ -91,7 +91,7 @@ export class CardStolenParser implements EventParser {
 					stealingToDeck.deck,
 					cardInDeck.update({
 						cardId: cardInDeck.cardId || cardId,
-						cardName: cardInDeck.cardName || this.allCards.getCard(cardId).name,
+						cardName: this.i18n.getCardName(cardInDeck.cardId) ?? this.i18n.getCardName(cardId),
 					} as DeckCard),
 			  )
 			: stealingToDeck.deck;

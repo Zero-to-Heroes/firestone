@@ -4,11 +4,16 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { publicCardCreators } from '../../hs-utils';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardChangedInHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_CHANGED_IN_HAND;
@@ -29,7 +34,10 @@ export class CardChangedInHandParser implements EventParser {
 			? cardInHand.update({
 					cardId: isCardInfoPublic ? cardId : cardInHand.cardId,
 					entityId: entityId,
-					cardName: isCardInfoPublic ? cardData.name : cardInHand.cardName,
+					// cardName: isCardInfoPublic ? cardData.name : cardInHand.cardName,
+					cardName: isCardInfoPublic
+						? this.i18n.getCardName(cardData.id)
+						: this.i18n.getCardName(cardInHand.cardId),
 					manaCost: isCardInfoPublic && cardData ? cardData.cost : undefined,
 					actualManaCost:
 						isCardInfoPublic && cardData ? cardInHand.actualManaCost ?? cardData.cost : undefined,

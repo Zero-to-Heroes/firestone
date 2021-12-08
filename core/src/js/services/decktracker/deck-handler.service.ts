@@ -5,11 +5,16 @@ import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { MatchInfo } from '../../models/match-info';
 import { getDefaultHeroDbfIdForClass } from '../hs-utils';
+import { LocalizationFacadeService } from '../localization-facade.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class DeckHandlerService {
-	constructor(private readonly allCards: CardsFacadeService, private readonly memory: MemoryInspectionService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly memory: MemoryInspectionService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {
@@ -46,7 +51,7 @@ export class DeckHandlerService {
 			result.push(
 				DeckCard.create({
 					cardId: card.id,
-					cardName: card.name,
+					cardName: this.i18n.getCardName(card.id),
 					manaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 				} as DeckCard),
@@ -72,7 +77,7 @@ export class DeckHandlerService {
 		const newCard = this.allCards.getCard(newCardId);
 		return deckCard.update({
 			cardId: newCard.id,
-			cardName: newCard.name,
+			cardName: this.i18n.getCardName(newCard.id),
 		} as DeckCard);
 	}
 

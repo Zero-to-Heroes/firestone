@@ -13,6 +13,7 @@ import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -184,6 +185,7 @@ export class GameStateService {
 		private secretsConfig: SecretConfigService,
 		private secretsParser: SecretsParserService,
 		private readonly deckHandler: DeckHandlerService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -218,6 +220,7 @@ export class GameStateService {
 				this.showDecktrackerFromGameMode = event;
 				this.updateOverlays(this.state, false, false);
 			});
+			this.i18n.init();
 		});
 		this.handleDisplayPreferences();
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
@@ -579,40 +582,40 @@ export class GameStateService {
 			new MatchMetadataParser(this.deckParser, this.prefs, this.deckHandler, this.allCards),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),
-			new CardDrawParser(this.helper, this.allCards),
-			new ReceiveCardInHandParser(this.helper, this.allCards),
-			new CardBackToDeckParser(this.helper, this.allCards),
-			new CreateCardInDeckParser(this.helper, this.allCards),
+			new CardDrawParser(this.helper, this.allCards, this.i18n),
+			new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n),
+			new CardBackToDeckParser(this.helper, this.allCards, this.i18n),
+			new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
 			new CardRemovedFromDeckParser(this.helper),
 			new CardRemovedFromHandParser(this.helper),
 			new CardRemovedFromBoardParser(this.helper),
-			new CardChangedOnBoardParser(this.helper, this.allCards),
-			new CardChangedInHandParser(this.helper, this.allCards),
-			new CardChangedInDeckParser(this.helper, this.allCards),
-			new CardPlayedFromHandParser(this.helper, this.allCards),
-			new CardPlayedByEffectParser(this.helper, this.allCards),
-			new MinionSummonedFromHandParser(this.helper, this.allCards),
+			new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n),
+			new CardChangedInHandParser(this.helper, this.allCards, this.i18n),
+			new CardChangedInDeckParser(this.helper, this.allCards, this.i18n),
+			new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
+			new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n),
+			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
 			new CardRecruitedParser(this.helper),
 			new MinionBackOnBoardParser(this.helper),
-			new MinionSummonedParser(this.helper, this.allCards),
-			new CardRevealedParser(this.helper, this.allCards),
-			new LinkedEntityParser(this.helper, this.allCards),
+			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
+			new CardRevealedParser(this.helper, this.allCards, this.i18n),
+			new LinkedEntityParser(this.helper, this.i18n),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
 			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
-			new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards),
+			new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 			new SecretDestroyedParser(this.helper),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
-			new CardStolenParser(this.helper, this.allCards),
+			new CardStolenParser(this.helper, this.i18n),
 			new CardCreatorChangedParser(this.helper),
 			new AssignCardIdParser(this.helper),
-			new HeroPowerChangedParser(this.helper, this.allCards),
-			new WeaponEquippedParser(this.helper, this.allCards),
+			new HeroPowerChangedParser(this.allCards, this.i18n),
+			new WeaponEquippedParser(this.allCards, this.i18n),
 			new WeaponDestroyedParser(),
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
@@ -622,7 +625,7 @@ export class GameStateService {
 			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckHandler),
 			new SecretTriggeredParser(this.helper),
-			new QuestCreatedInGameParser(this.helper, this.allCards),
+			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
 			new QuestDestroyedParser(),
 			new QuestPlayedFromDeckParser(this.helper),
 			new QuestPlayedFromHandParser(this.helper),
@@ -634,16 +637,16 @@ export class GameStateService {
 			new CardBuffedInHandParser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
-			new EntityUpdateParser(this.helper, this.allCards),
-			new PassiveTriggeredParser(this.helper, this.allCards),
+			new EntityUpdateParser(this.helper, this.i18n),
+			new PassiveTriggeredParser(this.helper, this.allCards, this.i18n),
 			new DamageTakenParser(),
 			new HeroPowerDamageParser(this.allCards),
-			new CthunRevealedParser(this.helper, this.allCards),
+			new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 			new MindrenderIlluciaParser(),
-			new GlobalMinionEffectParser(this.helper, this.allCards),
-			new CopiedFromEntityIdParser(this.helper, this.allCards),
+			new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
+			new CopiedFromEntityIdParser(this.helper, this.i18n),
 
-			new CreateCardInGraveyardParser(this.helper, this.allCards),
+			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new ReconnectOverParser(this.deckHandler),
 		];
 

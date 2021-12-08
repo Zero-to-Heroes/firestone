@@ -7,7 +7,16 @@ export class LocalizationFacadeService {
 	private service: LocalizationService;
 
 	constructor(private readonly ow: OverwolfService) {
+		this.init();
+	}
+
+	public init() {
 		this.service = this.ow.getMainWindow().localizationService;
+		if (!this.service) {
+			console.warn('localization init failed');
+			setTimeout(() => this.init(), 20);
+			return;
+		}
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
@@ -16,5 +25,25 @@ export class LocalizationFacadeService {
 
 	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		return this.service.getNonLocalizedCardImage(cardId, options);
+	}
+
+	public getCardName(cardId: string, defaultName: string = null): string {
+		return this.service.getCardName(cardId, defaultName);
+	}
+
+	public getCreatedByCardName(creatorCardId: string): string {
+		return this.service.getCreatedByCardName(creatorCardId);
+	}
+
+	public getUnknownCardName(playerClass: string = null): string {
+		return this.service.getUnknownCardName(playerClass);
+	}
+
+	public getUnknownManaSpellName(manaCost: number): string {
+		return this.service.getUnknownManaSpellName(manaCost);
+	}
+
+	public getUnknownRaceName(race: string): string {
+		return this.service.getUnknownRaceName(race);
 	}
 }

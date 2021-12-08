@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'opponent-card-info-id',
@@ -48,7 +48,7 @@ export class OpponentCardInfoIdComponent {
 		this._card = value.update({
 			cardId: this.cardId,
 			// We probably don't need to update the other fields, as they are not displayed
-			cardName: this.cardId === value.cardId ? value.cardName : this.allCards.getCard(this.cardId)?.name,
+			cardName: this.cardId === value.cardId ? value.cardName : this.i18n.getCardName(this.cardId),
 		} as DeckCard);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
@@ -60,7 +60,7 @@ export class OpponentCardInfoIdComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Subscription } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'deck-list',
@@ -43,7 +43,7 @@ export class DeckListComponent {
 			.map((card) => {
 				return DeckCard.create({
 					cardId: card.id,
-					cardName: card.name,
+					cardName: this.i18n.getCardName(card.id),
 					manaCost: card.cost,
 					rarity: card.rarity ? card.rarity.toLowerCase() : null,
 				} as DeckCard);
@@ -58,7 +58,9 @@ export class DeckListComponent {
 
 	deckState: DeckState;
 
-	private preferencesSubscription: Subscription;
-
-	constructor(private readonly deckHandler: DeckHandlerService, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly deckHandler: DeckHandlerService,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 }

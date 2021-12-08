@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { Option } from './option';
 
 @Component({
@@ -34,7 +35,7 @@ export class LootBundleComponent {
 				? null
 				: VisualDeckCard.create({
 						cardId: cardId,
-						cardName: card.name,
+						cardName: this.i18n.getCardName(card.id),
 						manaCost: card.cost,
 				  } as VisualDeckCard);
 		});
@@ -43,5 +44,5 @@ export class LootBundleComponent {
 	bundleName: string;
 	cards: readonly VisualDeckCard[];
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 }
