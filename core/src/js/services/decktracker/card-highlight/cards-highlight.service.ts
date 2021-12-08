@@ -116,6 +116,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildSelector(cardId: string, card: DeckCard): (handler: Handler, deckState?: DeckState) => boolean {
 		switch (cardId) {
+			case CardIds.AmuletOfUndying:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.ArcaneBrilliance:
 				return and(
 					inDeck,
@@ -128,12 +130,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, secret);
 			case CardIds.ArcanologistCore:
 				return and(inDeck, spell, secret);
+			case CardIds.AwakenTheMakers:
+				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.AxeBerserker:
 				return and(inDeck, weapon);
 			case CardIds.BalindaStonehearth:
 				return and(inDeck, spell);
 			case CardIds.BarakKodobane1:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
+			case CardIds.BloodreaverGuldan:
+				return and(inGraveyard, minion, demon);
 			case CardIds.BookOfSpecters:
 				return and(inDeck, spell);
 			case CardIds.CagematchCustodian:
@@ -144,6 +150,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inOther, not(rogue));
 			case CardIds.DarkInquisitorXanesh:
 				return and(or(inDeck, inHand), or(corrupt, corrupted));
+			case CardIds.DaUndatakah:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DoubleJump:
 				return and(inDeck, outcast);
 			case CardIds.DunBaldarBunker:
@@ -162,6 +170,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HeraldOfLokholar:
 				return and(inDeck, spell, frost);
+			case CardIds.Hadronox:
+				return and(inGraveyard, minion, taunt);
 			case CardIds.HarborScamp:
 				return and(inDeck, pirate);
 			case CardIds.IcebloodTower:
@@ -186,6 +196,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.NzothGodOfTheDeep:
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
+			case CardIds.NzothTheCorruptor:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
 			case CardIds.ProvingGrounds:
@@ -216,6 +228,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.Tuskpiercer:
 				return and(inDeck, deathrattle);
+			case CardIds.TwilightsCall:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
 			case CardIds.VengefulSpirit2:
