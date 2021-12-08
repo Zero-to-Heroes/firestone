@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.16',
+		version: '8.3.17',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,8 +49,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'content',
-								text: `Update for Fractured in Alterac Valley. All cards should be flagged in hand, Tavish's secrets have their own entries in the secret tracker, and cards are highlighted appropriately in the tracker. Let me know if you see something missing!`,
+								type: 'feature',
+								text: `Add a very first small step towards localizing the app! You can now choose to display the card names and images in French, from the Localization tab in the settings. More is coming soon :)`,
 							},
 						],
 					},
@@ -61,28 +61,37 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to increase the size of the Battle Simulation widget.`,
-							},
-							{
-								type: 'ui',
-								text: `Make the red cross on banned tribes less visible.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's last known board could not be made bigger.`,
+								text: `Add a "Restart App" button under Settings > General.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'decktracker',
 						details: [
 							{
-								type: 'ui',
-								text: `Make "tips" less flashy.`,
+								type: 'feature',
+								text: `Add more card highlights, mostly around Deathrattle / dead minions.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix Maestra games being parsed incorrectly since patch 22.0.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where HPs in the HP chart could go below 0.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where banned tribes icons could be cut off when zoomed too much.`,
 							},
 						],
 					},
