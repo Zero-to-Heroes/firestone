@@ -1,7 +1,8 @@
-.general-launch {
-	margin-left: 15px;
-	margin-right: 15px;
+:host() {
+	padding: 0 15px;
+}
 
+.general-launch {
 	.toggle-label {
 		display: flex;
 		flex-direction: column;
@@ -16,7 +17,9 @@
 	.title {
 		margin-top: 30px;
 	}
+}
 
+.settings-group {
 	.first-slider {
 		width: 300px;
 		margin-bottom: 15px;
@@ -50,11 +53,10 @@
 	}
 }
 
-.reset-container {
-	color: #d9c3ab;
+.buttons {
 	display: flex;
-	flex-direction: column;
-	padding: 20px;
+	justify-content: space-between;
+	align-items: center;
 
 	button {
 		border: 1px solid #d9c3ab;
@@ -84,8 +86,16 @@
 		}
 	}
 
-	.confirmation {
-		margin-top: 5px;
-		font-size: 12px;
+	.reset-container {
+		color: #d9c3ab;
+		display: flex;
+		flex-direction: column;
+		padding: 20px;
+		padding-left: 0;
+
+		.confirmation {
+			margin-top: 5px;
+			font-size: 12px;
+		}
 	}
 }

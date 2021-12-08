@@ -50,36 +50,41 @@ import { Knob } from '../preference-slider.component';
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
-
-				<div class="title">Accessibility</div>
-				<div class="settings-group">
-					<div class="subtitle" helpTooltip="A zoom level that will be applied to all windows">
-						Zoom level
-					</div>
-					<preference-slider
-						class="first-slider"
-						[field]="'globalZoomLevel'"
-						[enabled]="true"
-						[min]="100"
-						[max]="400"
-						[snapSensitivity]="5"
-						[knobs]="sizeKnobs"
-					>
-					</preference-slider>
-				</div>
 			</section>
 		</div>
 
-		<div class="reset-container">
-			<button
-				(mousedown)="reset()"
-				helpTooltip="Reset ALL your preferences, including the various widgets positions on screen"
+		<div class="title">Accessibility</div>
+		<div class="settings-group">
+			<div class="subtitle" helpTooltip="A zoom level that will be applied to all windows">Zoom level</div>
+			<preference-slider
+				class="first-slider"
+				[field]="'globalZoomLevel'"
+				[enabled]="true"
+				[min]="100"
+				[max]="400"
+				[snapSensitivity]="5"
+				[knobs]="sizeKnobs"
 			>
-				<span>{{ resetText }}</span>
-			</button>
-			<div class="confirmation" *ngIf="showResetConfirmationText">
-				All your preferences have been reset. This includes the various widgets locations on screen, as well as
-				your Twitch settings, so don't forget to set back what you need :)
+			</preference-slider>
+		</div>
+
+		<div class="buttons">
+			<div class="reset-container">
+				<button
+					(mousedown)="reset()"
+					helpTooltip="Reset ALL your preferences, including the various widgets positions on screen"
+				>
+					<span>{{ resetText }}</span>
+				</button>
+				<div class="confirmation" *ngIf="showResetConfirmationText">
+					All your preferences have been reset. This includes the various widgets locations on screen, as well
+					as your Twitch settings, so don't forget to set back what you need :)
+				</div>
+			</div>
+			<div class="res-container">
+				<button (mousedown)="restartApp()" helpTooltip="Restart the app. ">
+					<span>Restart App</span>
+				</button>
 			</div>
 		</div>
 	`,
@@ -128,5 +133,9 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 		this.showResetConfirmationText = true;
 		await this.prefs.reset();
 		this.reloadWindows();
+	}
+
+	async restartApp() {
+		this.ow.relaunchApp();
 	}
 }
