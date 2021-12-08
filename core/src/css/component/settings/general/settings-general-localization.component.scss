@@ -1,0 +1,12 @@
+.localization {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	min-height: 0;
+	overflow: auto;
+
+	.text {
+		font-size: 14px;
+		margin-bottom: 15px;
+	}
+}

@@ -40,7 +40,7 @@ export class Preferences {
 	readonly lastUpdateDate: Date;
 	readonly id: number = 1;
 
-	readonly locale = 'enUS';
+	readonly locale: string = 'enUS';
 
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;

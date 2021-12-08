@@ -302,8 +302,10 @@ import { SettingsDecktrackerMenuComponent } from '../../components/settings/deck
 import { SettingsDecktrackerOpponentDeckComponent } from '../../components/settings/decktracker/settings-decktracker-opponent-deck';
 import { SettingsDecktrackerYourDeckComponent } from '../../components/settings/decktracker/settings-decktracker-your-deck';
 import { SettingsDecktrackerComponent } from '../../components/settings/decktracker/settings-decktracker.component';
+import { LocalizationDropdownComponent } from '../../components/settings/general/localization-dropdown.component';
 import { SettingsGeneralBugReportComponent } from '../../components/settings/general/settings-general-bug-report.component';
 import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
+import { SettingsGeneralLocalizationComponent } from '../../components/settings/general/settings-general-localization.component';
 import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
 import { SettingsGeneralThirdPartyComponent } from '../../components/settings/general/settings-general-third-party.component';
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
@@ -764,6 +766,7 @@ const components = [
 		SettingsGeneralComponent,
 		SettingsGeneralMenuComponent,
 		SettingsGeneralLaunchComponent,
+		SettingsGeneralLocalizationComponent,
 		SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent,
 
@@ -803,6 +806,7 @@ const components = [
 		SettingsMercenariesGeneralComponent,
 
 		PreferenceSliderComponent,
+		LocalizationDropdownComponent,
 
 		AdvancedSettingDirective,
 		MercenariesHighlightDirective,

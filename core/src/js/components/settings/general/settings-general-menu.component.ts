@@ -11,6 +11,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ 'selected': selectedMenu === 'launch' }" (mousedown)="selectMenu('launch')">
 				<span>General</span>
 			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'localization' }" (mousedown)="selectMenu('localization')">
+				<span>Localization</span>
+			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'bugreport' }" (mousedown)="selectMenu('bugreport')">
 				<span>Report a bug</span>
 			</li>
