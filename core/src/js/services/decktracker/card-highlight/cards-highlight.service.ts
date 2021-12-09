@@ -152,6 +152,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.DaUndatakah:
 				return and(inGraveyard, minion, deathrattle);
+			case CardIds.DeadRinger:
+				return and(inDeck, minion, deathrattle);
 			case CardIds.DoubleJump:
 				return and(inDeck, outcast);
 			case CardIds.DunBaldarBunker:
