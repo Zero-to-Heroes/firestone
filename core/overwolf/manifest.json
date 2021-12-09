@@ -599,6 +599,8 @@
 				"http://static.zerotoheroes.com",
 				"https://static.zerotoheroes.com",
 				"https://api.twitch.tv",
+				"http://*.twitch.tv",
+				"https://*.twitch.tv",
 				"https://*.outof.cards",
 				"https://*.firestoneapp.com"
 			]

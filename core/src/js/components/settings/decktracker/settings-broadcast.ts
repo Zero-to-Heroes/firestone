@@ -1,11 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -112,19 +110,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 		this.twitchUserName$ = this.listenForBasicPref$((prefs) => prefs.twitchUserName);
 		this.store
 			.listenPrefs$((prefs) => prefs.twitchAccessToken)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting twitchAccessToken in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe(async (token) => {
 				this.twitchedLoggedIn = await this.twitch.isLoggedIn();
 				this.twitchLoginUrl = this.twitch.buildLoginUrl();
@@ -133,7 +119,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	}
 
 	connect() {
-		this.ow.openUrlInOverwolfBrowser(this.twitchLoginUrl);
+		this.ow.openUrlInDefaultBrowser(this.twitchLoginUrl);
 	}
 
 	disconnect() {
