@@ -182,7 +182,7 @@ export class DungeonLootParserService {
 			rewards: rewards,
 			currentWins: this.duelsInfo.Wins,
 			currentLosses: this.duelsInfo.Losses,
-			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
+			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo?.Rating : this.duelsInfo?.PaidRating,
 			appVersion: process.env.APP_VERSION,
 		} as Input;
 		this.log('sending rewards info', this.rewardsInput);
@@ -361,7 +361,7 @@ export class DungeonLootParserService {
 			rewards: null,
 			currentWins: this.duelsInfo.Wins,
 			currentLosses: this.duelsInfo.Losses,
-			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
+			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo?.Rating : this.duelsInfo?.PaidRating,
 			appVersion: process.env.APP_VERSION,
 		};
 		this.log('sending loot into', input);

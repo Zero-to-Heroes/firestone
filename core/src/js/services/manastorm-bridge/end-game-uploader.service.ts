@@ -219,9 +219,9 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo, params.duelsInfo);
 			playerRank =
 				game.gameMode === 'duels'
-					? params.duelsInfo?.rating ?? duelsInfo.Rating
-					: params.duelsInfo?.paidRating ?? duelsInfo.PaidRating;
-			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
+					? params.duelsInfo?.rating ?? duelsInfo?.Rating
+					: params.duelsInfo?.paidRating ?? duelsInfo?.PaidRating;
+			game.additionalResult = duelsInfo?.Wins + '-' + duelsInfo?.Losses;
 			try {
 				if (
 					(replay.result === 'won' && (params.duelsInfo?.wins ?? duelsInfo.Wins) === 11) ||

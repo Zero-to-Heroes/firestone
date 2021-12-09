@@ -33,8 +33,8 @@ export class RTStatBgsTurnStartParser implements EventParser {
 				...existingStats.filter((stat) => stat.turn !== newCurrentTurn),
 				{
 					turn: newCurrentTurn,
-					value: currentHp,
-					armor: currentArmor,
+					value: currentHp ?? 0,
+					armor: currentArmor ?? 0,
 				},
 			];
 			hpOverTurn[hero] = newStats;
@@ -47,9 +47,12 @@ export class RTStatBgsTurnStartParser implements EventParser {
 
 	private getHpForHero(heroCardId: string, heroes: readonly Hero[]): { currentHp: number; currentArmor: number } {
 		const hero = heroes.find((h) => normalizeHeroCardId(h.CardId) === normalizeHeroCardId(heroCardId));
+		if (!hero) {
+			console.warn('could not find hero', heroCardId, heroes);
+		}
 		return {
-			currentHp: hero.Health,
-			currentArmor: hero.Armor,
+			currentHp: hero?.Health,
+			currentArmor: hero?.Armor,
 		};
 	}
 
