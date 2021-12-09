@@ -25,7 +25,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
-const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/twitch-auth-callback.html';
+const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
 const SCOPES = 'channel_read';
 const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
@@ -50,6 +50,7 @@ export class TwitchAuthService {
 
 	private lastProcessTimestamp = 0;
 	private lastProcessBgsTimestamp = 0;
+	private twitchUserId: string;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -419,8 +420,9 @@ export class TwitchAuthService {
 		return new Promise<boolean>((resolve) => {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
-				(data) => {
+				(data: any) => {
 					console.log('[twitch-auth] validating token', data);
+					this.twitchUserId = data.user_id;
 					resolve(true);
 				},
 				() => {
@@ -433,13 +435,16 @@ export class TwitchAuthService {
 
 	private async retrieveUserName(accessToken: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${accessToken}`);
-			this.http.get(TWITCH_USER_URL, { headers: httpHeaders }).subscribe(
+			const httpHeaders: HttpHeaders = new HttpHeaders()
+				.set('Authorization', `Bearer ${accessToken}`)
+				.set('Client-Id', 'jbmhw349lqbus9j8tx4wac18nsja9u');
+			this.http.get(`${TWITCH_USER_URL}`, { headers: httpHeaders }).subscribe(
 				(data: any) => {
 					console.log('[twitch-auth] received user info', data);
 					this.prefs.setTwitchUserName(data.data && data.data.length > 0 && data.data[0].display_name);
 				},
-				() => {
+				(error) => {
+					console.log('[twitch-auth] could not retrieve user info', error);
 					resolve(false);
 				},
 			);

@@ -181,8 +181,23 @@ export class AppBootstrapService {
 		// await this.ow.hideWindow(collectionWindow.id);
 		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
-		this.ow.addAppLaunchTriggeredListener(() => {
-			this.startApp(true);
+		this.ow.addAppLaunchTriggeredListener((info) => {
+			console.debug('received app launch event', info);
+			if (
+				info?.origin === 'urlscheme' &&
+				decodeURIComponent(info.parameter).startsWith('firestoneapp://twitch/')
+			) {
+				const hash = decodeURIComponent(info.parameter).split('firestoneapp://twitch/')[1];
+				const hashAsObject: any = hash
+					?.substring(1)
+					.split('&')
+					.map((v) => v.split('='))
+					.reduce((pre, [key, value]) => ({ ...pre, [key]: value }), {});
+				console.log('hash is', hashAsObject);
+				this.twitchAuth.stateUpdater.next(hashAsObject);
+			} else {
+				this.startApp(true);
+			}
 		});
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

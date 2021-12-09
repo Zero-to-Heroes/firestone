@@ -585,6 +585,9 @@
 		"protocol_override_domains": {
 			"googlesyndication": "http"
 		},
+		"url_protocol": {
+			"scheme": "firestoneapp"
+		},
 		"externally_connectable": {
 			"matches": [
 				"http://*.overwolf.com",
