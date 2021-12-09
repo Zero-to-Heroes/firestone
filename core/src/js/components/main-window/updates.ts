@@ -54,6 +54,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Tentative fix for wrong deck detection. As the issue is not systemarically reproducible, I have a hard time validating the fix, so let me know if the issue continues to appear.`,
+							},
+						],
+					},
 				],
 			},
 			{
