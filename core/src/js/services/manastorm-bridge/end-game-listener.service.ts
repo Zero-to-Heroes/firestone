@@ -9,6 +9,7 @@ import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
+import { sleep } from '../utils';
 import { EndGameUploaderService } from './end-game-uploader.service';
 
 @Injectable()
@@ -100,6 +101,10 @@ export class EndGameListenerService {
 	private listening: boolean;
 
 	private async listenToDeckUpdate() {
+		// Wait for a while to make sure the deck has been parsed
+		await sleep(15_000);
+		// This in fact doesn't work, because if the deckService still has a deck in memory from
+		// last game, it will be used instead of the current one.
 		this.listening = true;
 		const currentDeck = await Promise.race([this.deckService.getCurrentDeck(10000), this.listenerTimeout()]);
 		if (!currentDeck?.deckstring) {
