@@ -26,7 +26,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 			ow,
 			prefs,
 			allCards,
-			false,
+			process.env.NODE_ENV !== 'production',
 		);
 		this.name = 'decktracker-player';
 	}
