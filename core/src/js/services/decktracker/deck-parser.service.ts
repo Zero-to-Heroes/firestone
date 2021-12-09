@@ -122,10 +122,10 @@ export class DeckParserService {
 		let deckInfo: DeckInfo;
 		if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
-			deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId);
+			deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId, metadata.gameType);
 		} else if (this.isDeckLogged(metadata.scenarioId)) {
 			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
-			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId);
+			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType);
 		} else {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;
@@ -135,7 +135,7 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	public async getWhizbangDeck(deckId: number, scenarioId: number): Promise<DeckInfo> {
+	public async getWhizbangDeck(deckId: number, scenarioId: number, gameType: GameType): Promise<DeckInfo> {
 		if (this.spectating) {
 			console.log('[deck-parser] spectating, not returning Whizbang deck');
 			return;
@@ -145,7 +145,7 @@ export class DeckParserService {
 		console.debug('[deck-parser] found template deck', deckId, deck, this.deckTemplates);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
-			this.currentDeck = this.updateDeckFromMemory(deck, scenarioId);
+			this.currentDeck = this.updateDeckFromMemory(deck, scenarioId, gameType);
 		} else {
 			this.currentDeck = null;
 		}
@@ -157,6 +157,19 @@ export class DeckParserService {
 			if (event.type === GameEvent.SPECTATING) {
 				console.log('[deck-parser] spectating, resetting deck', event.additionalData);
 				this.spectating = event.additionalData.spectating;
+				this.currentDeck = {} as DeckInfo;
+			} else if (event.type === GameEvent.GAME_END) {
+				if (
+					this.currentDeck?.gameType !== GameType.GT_VS_AI ||
+					SCENARIO_WITHOUT_RESTART.includes(this.currentDeck?.scenarioId)
+				) {
+					console.log(
+						'[deck-parser] game end on a non-restart scenario, resetting deck',
+						this.currentDeck?.gameType,
+						this.currentDeck?.scenarioId,
+					);
+					this.currentDeck = {} as DeckInfo;
+				}
 			}
 		});
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
@@ -177,7 +190,7 @@ export class DeckParserService {
 				);
 				if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 					console.log('[deck-parser] updating active deck after ID selection', activeDeck, this.currentDeck);
-					this.currentDeck = this.updateDeckFromMemory(activeDeck, null);
+					this.currentDeck = this.updateDeckFromMemory(activeDeck, null, null);
 				}
 			}
 			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
@@ -223,7 +236,7 @@ export class DeckParserService {
 		return result;
 	}
 
-	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number) {
+	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
 		if (!deckFromMemory) {
 			console.error('[deck-parser] no deck to update');
@@ -250,6 +263,7 @@ export class DeckParserService {
 			name: deckFromMemory.Name,
 			deckstring: deckString,
 			scenarioId: scenarioId,
+			gameType: gameType,
 		};
 		console.log('[deck-parser] built deck info', currentDeck);
 		return currentDeck;
@@ -283,7 +297,11 @@ export class DeckParserService {
 		return loggingSCenarios.includes(scenarioId);
 	}
 
-	private async readDeckFromLogFile(scenarioId: number, fileName = 'Decks.log'): Promise<DeckInfo> {
+	private async readDeckFromLogFile(
+		scenarioId: number,
+		gameType: GameType,
+		fileName = 'Decks.log',
+	): Promise<DeckInfo> {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!this.ow.gameRunning(gameInfo)) {
 			return;
@@ -337,6 +355,7 @@ export class DeckParserService {
 				deckstring: deckstring,
 				name: deckName,
 				scenarioId: scenarioId,
+				gameType: gameType,
 				deck: !!deckstring ? decode(deckstring) : undefined,
 			} as DeckInfo;
 			console.log('[deck-parser] finished reading previous deck from logs');
@@ -383,4 +402,5 @@ export interface DeckInfo {
 	name: string;
 	deckstring: string;
 	deck: DeckDefinition;
+	gameType: GameType;
 }
