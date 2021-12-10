@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -14,7 +15,9 @@ import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegr
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
 @Component({
@@ -81,7 +84,9 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
+export class BattlegroundsMinionsGroupComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, AfterContentInit {
 	@Output() minionClick: EventEmitter<string> = new EventEmitter<string>();
 
 	@Input() set tooltipPosition(value: string) {
@@ -110,16 +115,28 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	_tooltipPosition: string;
 	_showTribesHighlight: boolean;
 
+	private showGoldenCards = true;
+
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(store, cdr);
+	}
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
+	}
+
+	ngAfterContentInit() {
+		this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowGoldenCard).subscribe((pref) => {
+			this.showGoldenCards = pref;
+			this.updateInfos();
+		});
 	}
 
 	highlightMinion(minion: Minion) {
@@ -153,7 +170,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const card = this.allCards.getCard(minion.id);
 				const result = {
 					cardId: minion.id,
-					displayedCardIds: this.buildAllCardIds(minion.id),
+					displayedCardIds: this.buildAllCardIds(minion.id, this.showGoldenCards),
 					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
 					name: card.name,
 					highlighted: this._group.highlightedMinions.includes(minion.id),
@@ -185,7 +202,11 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			});
 	}
 
-	private buildAllCardIds(id: string): string {
+	private buildAllCardIds(id: string, showGoldenCards: boolean): string {
+		if (!showGoldenCards) {
+			return id;
+		}
+
 		const premiumId = this.allCards.getCard(id).battlegroundsPremiumDbfId;
 		if (!premiumId) {
 			return id;
