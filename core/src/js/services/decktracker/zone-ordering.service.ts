@@ -9,7 +9,7 @@ export class ZoneOrderingService {
 		if (!stateFromTracker) {
 			return deckState;
 		}
-		console.debug('ordering board', stateFromTracker.Board, deckState.board);
+		// console.debug('ordering board', stateFromTracker.Board, deckState.board);
 		const newBoard = stateFromTracker.Board
 			? this.orderZone(deckState.board, stateFromTracker.Board)
 			: deckState.board;
@@ -22,7 +22,7 @@ export class ZoneOrderingService {
 	}
 
 	private orderZone(zone: readonly DeckCard[], stateFromTracker: any[]): readonly DeckCard[] {
-		const trackerEntityIds = stateFromTracker.map((entity) => entity.entityId);
+		// const trackerEntityIds = stateFromTracker.map((entity) => entity.entityId);
 		// console.debug('trackerEntityIds', trackerEntityIds);
 		if (zone.some((card) => !card.entityId)) {
 			console.error('Trying to order zone without entityId', zone);
@@ -53,7 +53,7 @@ export class ZoneOrderingService {
 		// 	// If not, we can maybe do something by sending an event AFTER a ZONE_POSITION tag change
 		// 	return this.indexOf(trackerEntityIds, a.entityId) - this.indexOf(trackerEntityIds, b.entityId);
 		// });
-		console.debug('sorted', sorted);
+		// console.debug('sorted', sorted);
 
 		return sorted;
 	}

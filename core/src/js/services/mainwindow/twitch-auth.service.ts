@@ -160,13 +160,14 @@ export class TwitchAuthService {
 		if (!prefs.twitchAccessToken) {
 			return;
 		}
+		const latestBattle = state.currentGame.lastFaceOff();
 		const stateToSend: TwitchBgsState = {
 			leaderboard: this.buildLeaderboard(state),
 			// TODO: remove this once everything is properly deployed on Twitch
-			// currentBattle: {
-			// 	battleInfo: state.currentGame?.battleResult,
-			// 	status: state.currentGame?.battleInfoStatus,
-			// },
+			currentBattle: {
+				battleInfo: latestBattle?.battleResult ? { ...latestBattle?.battleResult, outcomeSamples: null } : null,
+				status: latestBattle?.battleInfoStatus,
+			},
 			currentTurn: state.currentGame?.currentTurn,
 			inGame: state.inGame,
 			gameEnded: state.currentGame?.gameEnded,

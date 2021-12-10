@@ -9,6 +9,7 @@ import { init } from '@sentry/browser';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsSimulationOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
+import { CardsFacadeStandaloneService } from '../../components/decktracker/overlay/twitch/cards-facade-standalone.service';
 import { DeckTrackerOverlayContainerComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
@@ -64,7 +65,7 @@ console.log('version is', process.env.APP_VERSION);
 		OverwolfService,
 		LocalizationStandaloneService,
 		LocalStorageService,
-		{ provide: CardsFacadeService, useClass: AllCardsService },
+		{ provide: CardsFacadeService, useClass: CardsFacadeStandaloneService },
 		{ provide: LocalizationFacadeService, useClass: LocalizationStandaloneService },
 		{ provide: AppUiStoreFacadeService, useFactory: () => null },
 		{ provide: CardsHighlightService, useFactory: () => null },

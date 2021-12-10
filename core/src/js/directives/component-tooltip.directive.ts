@@ -132,6 +132,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		// return;
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

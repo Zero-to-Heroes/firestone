@@ -107,7 +107,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
-		this.sub$$.unsubscribe();
+		this.sub$$?.unsubscribe();
 	}
 
 	private refreshScroll() {
