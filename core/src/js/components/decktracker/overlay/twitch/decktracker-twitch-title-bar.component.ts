@@ -16,7 +16,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 				</svg>
 			</i>
 			<i
-				*ngIf="deckState.deckstring"
+				*ngIf="deckState?.deckstring"
 				class="copy-deckstring"
 				(mousedown)="copyDeckstring()"
 				(mouseenter)="onMouseEnter()"
