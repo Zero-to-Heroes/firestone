@@ -13,7 +13,6 @@ import {
 import { ResizedEvent } from 'angular-resize-event';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../../models/decktracker/game-state';
-import { Events } from '../../../../services/events.service';
 
 @Component({
 	selector: 'decktracker-overlay-standalone',
@@ -63,12 +62,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 
-	constructor(
-		private events: Events,
-		private cdr: ChangeDetectorRef,
-		private el: ElementRef,
-		private renderer: Renderer2,
-	) {}
+	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
 
 	ngAfterViewInit() {
 		this.displayMode = 'DISPLAY_MODE_GROUPED';

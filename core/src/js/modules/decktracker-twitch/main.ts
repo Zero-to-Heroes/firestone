@@ -6,4 +6,6 @@ if (process.env.NODE_ENV === 'production') {
 	enableProdMode();
 }
 
+window['amplitude'] = null;
+
 platformBrowserDynamic().bootstrapModule(DeckTrackerTwitchModule);

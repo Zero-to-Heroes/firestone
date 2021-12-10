@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const webpack = require('@artonge/webpack');
+// const webpack = require('@artonge/webpack');
 // const ngcWebpack = require("ngc-webpack");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
-const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
+// const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const DefinePlugin = require('webpack').DefinePlugin;
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -21,7 +21,13 @@ function getRoot(args) {
 	return path.join.apply(path, [_root].concat(args));
 }
 
-module.exports = function(env, argv) {
+const entry = {
+	// Keep polyfills at the top so that it's imported first in the HTML
+	polyfills: './src/polyfills.ts',
+	tracker: './src/js/modules/background/main.ts',
+};
+
+module.exports = function (env, argv) {
 	const plugins = [
 		// Define environment variables to export to Angular
 		new DefinePlugin({
@@ -31,7 +37,7 @@ module.exports = function(env, argv) {
 
 		new AngularCompilerPlugin({
 			tsConfigPath: './tsconfig.json',
-			entryModules: ['./src/js/modules/decktracker-twitch/decktracker-twitch.module#DeckTrackerTwitchModule'],
+			entryModule: './src/js/modules/decktracker-twitch/decktracker-twitch.module#DeckTrackerTwitchModule',
 			sourceMap: true,
 		}),
 
@@ -73,6 +79,9 @@ module.exports = function(env, argv) {
 								mangle: false,
 								keep_classnames: true,
 								keep_fnames: true,
+								compress: {
+									pure_funcs: ['console.debug'],
+								},
 							},
 						}),
 					],
@@ -141,7 +150,7 @@ module.exports = function(env, argv) {
 				{
 					test: /\.ts$/,
 					exclude: [/node_modules/, /test/, /\.worker.ts$/],
-					use: ['@artonge/webpack', 'ts-loader'],
+					use: ['@ngtools/webpack', 'ts-loader'],
 				},
 				{
 					test: /\.worker.ts$/,

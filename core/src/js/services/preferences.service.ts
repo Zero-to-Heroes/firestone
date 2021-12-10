@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
@@ -53,22 +53,26 @@ export class PreferencesService {
 
 	constructor(
 		private readonly storage: GenericStorageService,
-		private readonly ow: OverwolfService,
+		@Optional() private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 	) {
-		this.setup();
+		if (this.ow) {
+			this.setup();
+		}
 	}
 
 	private async setup() {
 		window['preferencesEventBus'] = this.preferencesEventBus;
-		const currentWindow = await this.ow.getCurrentWindow();
-		if (currentWindow.name !== OverwolfService.MAIN_WINDOW) {
+		const currentWindow = await this.ow?.getCurrentWindow();
+		if (currentWindow?.name !== OverwolfService.MAIN_WINDOW) {
 			window['preferencesEventBus'] = null;
 		}
 	}
 
 	public init() {
-		this.startPrefsSync();
+		if (this.ow) {
+			this.startPrefsSync();
+		}
 	}
 
 	public getPreferences(): Promise<Preferences> {
@@ -575,14 +579,17 @@ export class PreferencesService {
 		};
 		await this.storage.saveUserPreferences(finalPrefs);
 
-		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		eventBus.next({
+		const eventBus: EventEmitter<any> = this.ow?.getMainWindow().preferencesEventBus;
+		eventBus?.next({
 			name: eventName,
 			preferences: finalPrefs,
 		});
 	}
 
 	public async updateRemotePreferences() {
+		if (!this.ow) {
+			return;
+		}
 		const userPrefs = await this.getPreferences();
 		console.log('[preferences] prefs from DB', userPrefs != null);
 		const currentUser = await this.ow.getCurrentUser();
@@ -602,6 +609,9 @@ export class PreferencesService {
 	}
 
 	public async loadRemotePrefs(): Promise<Preferences | undefined> {
+		if (!this.ow) {
+			return;
+		}
 		const currentUser = await this.ow.getCurrentUser();
 		const result: Preferences = await this.api.callPostApi(PREF_RETRIEVE_URL, {
 			userId: currentUser.userId,

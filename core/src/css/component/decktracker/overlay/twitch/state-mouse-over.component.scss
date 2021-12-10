@@ -6,11 +6,13 @@
 	height: 100%;
 	z-index: 1;
 	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .state-mouse-over {
-	width: 100%;
 	height: 100%;
+	aspect-ratio: 16/9;
 }
 
 empty-card {
@@ -27,7 +29,7 @@ empty-card {
 
 	empty-card {
 		margin-left: 0.5%;
-		width: 7%;
+		width: 6.2%;
 	}
 }
 
@@ -44,39 +46,54 @@ empty-card {
 		width: 15vh;
 		height: 69%;
 		left: 35%;
-		top: 30%;
 	}
 
 	.hero-power {
 		position: absolute;
 		width: 15vh;
 		height: 69%;
-		left: 55%;
-		top: 30%;
+		left: 54%;
 	}
 }
 
 .top-hero {
-	height: 22%;
+	height: 19%;
 	top: 8%;
+
+	.weapon {
+		top: auto;
+		bottom: 0%;
+		left: 37%;
+	}
+
+	.hero-power {
+		top: auto;
+		bottom: 0%;
+	}
 }
 
 .top-board {
-	height: 17%;
-	top: 30%;
+	height: 16%;
+	top: 27%;
 }
 
 .bottom-board {
 	height: 17%;
-	top: 47%;
+	top: 44%;
 }
 
 .bottom-hero {
 	height: 21%;
-	top: 65%;
+	top: 61%;
 
 	.hero-power {
-		top: 19%;
+		top: 14%;
+	}
+
+	.weapon {
+		left: 36.5%;
+		bottom: 16%;
+		top: auto;
 	}
 }
 
@@ -88,7 +105,7 @@ empty-card {
 	align-items: center;
 	justify-content: center;
 	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
-	top: 85%;
+	top: 80%;
 	height: 20%;
 
 	// So that it's easier to mouse over the card

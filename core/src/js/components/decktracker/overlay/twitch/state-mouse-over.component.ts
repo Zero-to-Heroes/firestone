@@ -93,6 +93,7 @@ export class StateMouseOverComponent {
 				this._gameState.opponentDeck.heroPower && this._gameState.opponentDeck.heroPower.cardId;
 			this.topWeaponCard = this._gameState.opponentDeck.weapon && this._gameState.opponentDeck.weapon.cardId;
 			this.topBoardCards = this._gameState.opponentDeck.board.map((card) => card.cardId);
+			// console.debug('top cards info', this.topHeroPowerCard, this.topWeaponCard, this.topBoardCards);
 		}
 		if (this._gameState.playerDeck) {
 			this.bottomBoardCards = this._gameState.playerDeck.board.map((card) => card.cardId);
@@ -100,6 +101,7 @@ export class StateMouseOverComponent {
 				this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
 			this.bottomWeaponCard = this._gameState.playerDeck.weapon && this._gameState.playerDeck.weapon.cardId;
 			this.bottomHandCards = this._gameState.playerDeck.hand.map((card) => card.cardId);
+			// console.debug('bottom cards info', this.bottomHeroPowerCard, this.bottomWeaponCard, this.bottomBoardCards);
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

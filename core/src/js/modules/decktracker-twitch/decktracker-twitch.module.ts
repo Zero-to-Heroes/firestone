@@ -13,11 +13,17 @@ import { DeckTrackerOverlayContainerComponent } from '../../components/decktrack
 import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
 import { EmptyCardComponent } from '../../components/decktracker/overlay/twitch/empty-card.component';
+import { LocalizationStandaloneService } from '../../components/decktracker/overlay/twitch/localization-standalone.service';
 import { StateMouseOverComponent } from '../../components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
+import { CardsFacadeService } from '../../services/cards-facade.service';
+import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { Events } from '../../services/events.service';
+import { LocalStorageService } from '../../services/local-storage';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -51,6 +57,17 @@ console.log('version is', process.env.APP_VERSION);
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
-	providers: [Events, AllCardsService, BgsBattleSimulationService, OverwolfService],
+	providers: [
+		Events,
+		AllCardsService,
+		BgsBattleSimulationService,
+		OverwolfService,
+		LocalizationStandaloneService,
+		LocalStorageService,
+		{ provide: CardsFacadeService, useClass: AllCardsService },
+		{ provide: LocalizationFacadeService, useClass: LocalizationStandaloneService },
+		{ provide: AppUiStoreFacadeService, useFactory: () => null },
+		{ provide: CardsHighlightService, useFactory: () => null },
+	],
 })
 export class DeckTrackerTwitchModule {}

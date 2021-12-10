@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	selector: 'empty-card',
@@ -11,14 +10,10 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 		<div
 			class="card"
 			[cardTooltip]="_cardId"
-			[cardTooltipPosition]="'right'"
 			[style.transform]="transform"
 			[style.left.%]="leftOffset"
 			[style.top.%]="topOffset"
-		>
-			<!-- transparent image with 1:1 intrinsic aspect ratio -->
-			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-		</div>
+		></div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,12 +25,10 @@ export class EmptyCardComponent {
 
 	@Input('cardId') set cardId(value: string) {
 		this._cardId = value;
-		const imageUrl = this.i18n.getCardImage(this.cardId);
+		const imageUrl = `https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png?v=3`;
 		// Preload
 		const image = new Image();
 		image.onload = () => console.debug('[image-preloader] preloaded image', imageUrl);
 		image.src = imageUrl;
 	}
-
-	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

@@ -6,6 +6,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
+	Optional,
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
@@ -189,13 +190,13 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
-		private readonly cardsHighlightService: CardsHighlightService,
-		private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly cardsHighlightService: CardsHighlightService,
+		@Optional() private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	ngAfterViewInit() {
 		this._uniqueId = uuid();
-		this.cardsHighlightService.register(this._uniqueId, {
+		this.cardsHighlightService?.register(this._uniqueId, {
 			referenceCardProvider: () => this._referenceCard,
 			deckCardProvider: () => this._card,
 			zoneProvider: () => this._zone,
@@ -206,7 +207,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.cardsHighlightService.unregister(this._uniqueId);
+		this.cardsHighlightService?.unregister(this._uniqueId);
 	}
 
 	doHighlight() {
@@ -224,11 +225,11 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		this.cardsHighlightService.onMouseEnter(this.cardId, this.side, this._card);
+		this.cardsHighlightService?.onMouseEnter(this.cardId, this.side, this._card);
 	}
 
 	onMouseLeave(event: MouseEvent) {
-		this.cardsHighlightService.onMouseLeave(this.cardId);
+		this.cardsHighlightService?.onMouseLeave(this.cardId);
 	}
 
 	private async updateInfos() {
@@ -242,7 +243,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
 		this.cardName = !!this._card.cardName?.length
 			? this._card.cardName + this.buildSuffix(this._card)
-			: this.i18n.getUnknownCardName();
+			: this.i18n?.getUnknownCardName() ?? 'Unkown card';
 
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;
@@ -265,7 +266,9 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		}
 		// Preload
 		if (this.cardId) {
-			const imageUrl = this.i18n.getCardImage(this.cardId);
+			const imageUrl =
+				this.i18n?.getCardImage(this.cardId) ??
+				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png?v=3`;
 			const image = new Image();
 			image.src = imageUrl;
 			this._referenceCard = this.cards.getCard(this.cardId);

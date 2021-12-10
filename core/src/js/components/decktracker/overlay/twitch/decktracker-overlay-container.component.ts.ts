@@ -3,7 +3,6 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, V
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
-import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 
@@ -144,7 +143,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 
 	private addDebugGameState() {
 		this.gameState = fakeState as any;
-		this.bgsState = fakeBgsState as any;
+		// this.bgsState = fakeBgsState as any;
 		console.log('loaded fake state', this.gameState, this.bgsState);
 	}
 }

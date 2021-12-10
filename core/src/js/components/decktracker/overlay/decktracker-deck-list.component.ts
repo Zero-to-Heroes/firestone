@@ -11,11 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -93,8 +91,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 
 	constructor(
 		private el: ElementRef,
-		@Optional() private ow: OverwolfService,
-		protected readonly store: AppUiStoreFacadeService,
+		@Optional() protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
@@ -102,17 +99,9 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 
 	ngAfterContentInit() {
 		this.sub$$ = this.store
-			.listenPrefs$((prefs) => prefs.secretsHelperScale)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((scale) => {
-				this.refreshScroll();
-			});
+			?.listenPrefs$((prefs) => prefs.decktrackerScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => this.refreshScroll());
 	}
 
 	@HostListener('window:beforeunload')

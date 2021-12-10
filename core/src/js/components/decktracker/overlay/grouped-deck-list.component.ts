@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -68,8 +68,6 @@ export class GroupedDeckListComponent implements OnDestroy {
 		this._darkenUsedCards = value;
 		this.buildGroupedList();
 	}
-
-	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {

@@ -27,7 +27,7 @@ import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 			(cdkDragReleased)="stopDragging()"
 		>
 			<div class="battlegrounds-theme simulation-overlay">
-				<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="true"></bgs-battle-status>
+				<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="false"></bgs-battle-status>
 			</div>
 		</div>
 	`,

@@ -43,7 +43,7 @@ export class GenericStorageService {
 			try {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
 					if (!!preferences) {
-						amplitude.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
+						amplitude?.getInstance().logEvent('load-from-indexeddb', { 'category': 'user-prefs' });
 					}
 					const result = Object.assign(new Preferences(), preferences[0] || {});
 					this.saveUserPreferences(result);

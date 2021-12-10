@@ -112,8 +112,8 @@ export class TwitchAuthService {
 
 		// TODO: clean this to only send the relevant info
 		const newState = Object.assign(new GameState(), {
-			playerDeck: newEvent.state.playerDeck,
-			opponentDeck: newEvent.state.opponentDeck,
+			playerDeck: this.cleanDeck(newEvent.state.playerDeck),
+			opponentDeck: this.cleanDeck(newEvent.state.opponentDeck),
 			mulliganOver: newEvent.state.mulliganOver,
 			metadata: newEvent.state.metadata,
 			currentTurn: newEvent.state.currentTurn,
@@ -206,6 +206,23 @@ export class TwitchAuthService {
 			this.sendEvent(bgsBattleEvent);
 		}
 	}
+
+	private cleanDeck(playerDeck: DeckState): DeckState {
+		return playerDeck;
+		// return {
+		// 	...playerDeck,
+		// 	board: playerDeck.board.map((card) => this.cleanCard(card)) as readonly DeckCard[],
+		// 	deck: playerDeck.deck.map((card) => this.cleanCard(card)) as readonly DeckCard[],
+		// 	hand: playerDeck.hand.map((card) => this.cleanCard(card)) as readonly DeckCard[],
+		// } as DeckState;
+	}
+
+	// private cleanCard(card: DeckCard): DeckCard {
+	// 	return {
+	// 		...card,
+
+	// 	}
+	// }
 
 	private cleanCurrentBattle(currentBattle: TwitchBgsCurrentBattle, threshold = 15): TwitchBgsCurrentBattle {
 		let shouldSplit = true;
