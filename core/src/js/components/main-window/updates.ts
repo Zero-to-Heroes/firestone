@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.17',
+		version: '8.3.20',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -51,6 +51,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a very first small step towards localizing the app! You can now choose to display the card names and images in French, from the Localization tab in the settings. More is coming soon :)`,
+							},
+							{
+								type: 'bug',
+								text: `Fix Twitch login and communication with the extension. The new extension version still needs to be validated by Twitch, but expect things to start working again in a week or so.`,
 							},
 						],
 					},
