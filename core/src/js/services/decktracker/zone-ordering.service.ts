@@ -28,7 +28,7 @@ export class ZoneOrderingService {
 			console.error('Trying to order zone without entityId', zone);
 		}
 		if (zone.length !== stateFromTracker.length) {
-			console.warn('invalid zone length', zone.length, stateFromTracker.length, zone, stateFromTracker);
+			// console.warn('invalid zone length', zone.length, stateFromTracker.length, zone, stateFromTracker);
 			return zone;
 		}
 
@@ -37,7 +37,7 @@ export class ZoneOrderingService {
 		for (let i = 0; i < stateFromTracker.length; i++) {
 			sorted[i] = zone.find((card) => card.entityId === stateFromTracker[i].entityId);
 			if (!sorted[i]) {
-				console.warn('Could not find card in zone', stateFromTracker[i], zone);
+				// console.warn('Could not find card in zone while ordering', stateFromTracker[i], zone);
 				return zone;
 			}
 		}
