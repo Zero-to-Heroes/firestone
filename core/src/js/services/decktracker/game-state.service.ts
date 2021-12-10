@@ -449,14 +449,14 @@ export class GameStateService {
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
-		const newBoard: readonly DeckCard[] = stateWithMetaInfos.board.map((card) => {
+		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
 			const entity = playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({
 				...card,
 				dormant: this.hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
-		const totalAttackOnBoard = stateWithMetaInfos.board
+		const totalAttackOnBoard = newBoard
 			.map((card) => playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
 			.filter((entity) => this.canAttack(entity, stateWithMetaInfos.isActivePlayer))
