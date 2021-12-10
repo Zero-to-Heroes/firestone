@@ -132,6 +132,12 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Adds a small widget that shows what tribes are banned in the current run"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsEnableMinionListOverlay"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					label="Show minions list"
+					tooltip="Show the list of minions, grouped by tavern tier"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowLastOpponentIconInOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
 					label="Last opponent icon"
@@ -144,40 +150,10 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the last known opponent's board (and additional info) when mousing over their portrait in the leaderboard"
 				></preference-toggle>
 				<preference-toggle
-					field="bgsEnableMinionListOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show minions list"
-					tooltip="Show the list of minions, grouped by tavern tier"
-				></preference-toggle>
-				<preference-toggle
-					field="bgsEnableMinionListMouseOver"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
-					label="Show minions list on mouse over"
-					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
-					advancedSetting
-					messageWhenToggleValue="Got it, we will only show you the minions details when you click on a star"
-					[valueToDisplayMessageOn]="false"
-				></preference-toggle>
-				<preference-toggle
-					field="bgsShowTribesHighlight"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show tribes highlight"
-					tooltip="Adds buttons to highlight specific tribes in Bob's Tavern"
-				></preference-toggle>
-				<preference-toggle
 					field="bgsEnableBattleSimulationOverlay"
 					[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
 					label="Battle Simulation overlay"
 					tooltip="Also show the current battle simulation results as an overlay on top of the game"
-				></preference-toggle>
-				<preference-toggle
-					field="bgsEnableSimulationSampleInOverlay"
-					[ngClass]="{
-						'disabled':
-							!value.enableSimulation || !value.bgsEnableBattleSimulationOverlay || !value.bgsFullToggle
-					}"
-					label="Simulation example in overlay"
-					tooltip="Adds a button to view an example of how the simulator reached a specific result. WARNING: it will open a new tab in your default browser."
 				></preference-toggle>
 				<!-- <preference-toggle
 					field="playerBgsPogoCounter"
@@ -189,8 +165,17 @@ import { Knob } from '../preference-slider.component';
 
 			<div class="title">Simulator configuration</div>
 			<div class="settings-group">
+				<preference-toggle
+					field="bgsEnableSimulationSampleInOverlay"
+					[ngClass]="{
+						'disabled':
+							!value.enableSimulation || !value.bgsEnableBattleSimulationOverlay || !value.bgsFullToggle
+					}"
+					label="Simulation example in overlay"
+					tooltip="Adds a button to view an example of how the simulator reached a specific result. WARNING: it will open a new tab in your default browser."
+				></preference-toggle>
 				<div
-					class="text"
+					class="slider-label"
 					[ngClass]="{
 						'disabled': !value.useLocalSimulator || !value.enableSimulation || !value.bgsFullToggle
 					}"
@@ -210,7 +195,7 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="numberOfSimsKnobs"
 				>
 				</preference-slider>
-				<div class="text">Widget size</div>
+				<div class="slider-label">Widget size</div>
 				<preference-slider
 					class="simulator-size-slider"
 					field="bgsSimulatorScale"
@@ -234,11 +219,49 @@ import { Knob } from '../preference-slider.component';
 					label="Show in column"
 					tooltip="When active, banned tribes are shown in a column instead of a row"
 				></preference-toggle>
-				<div class="text">Icon size</div>
+				<div class="slider-label">Icon size</div>
 				<preference-slider
 					class="banned-tribes-size-slider"
 					field="bgsBannedTribeScale"
 					[enabled]="value.bgsFullToggle"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="80"
+					[max]="135"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
+
+			<div class="title">Minions list</div>
+			<div class="settings-group">
+				<preference-toggle
+					field="bgsEnableMinionListMouseOver"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					label="Show minions list on mouse over"
+					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
+					advancedSetting
+					messageWhenToggleValue="Got it, we will only show you the minions details when you click on a star"
+					[valueToDisplayMessageOn]="false"
+				></preference-toggle>
+				<preference-toggle
+					field="bgsShowTribesHighlight"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					label="Show tribes highlight"
+					tooltip="Adds buttons to highlight specific tribes in Bob's Tavern"
+				></preference-toggle>
+				<preference-toggle
+					field="bgsMinionListShowGoldenCard"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					label="Show golden cards"
+					tooltip="Show both the normal and golden version of cards when mousing over the minion"
+				></preference-toggle>
+				<div class="slider-label">Widget size</div>
+				<preference-slider
+					class="minions-list-size-slider"
+					field="bgsMinionsListScale"
+					[enabled]="value.bgsFullToggle && value.bgsEnableMinionListOverlay"
 					[showCurrentValue]="false"
 					displayedValueUnit=""
 					[min]="80"
@@ -258,7 +281,7 @@ import { Knob } from '../preference-slider.component';
 					label="Show at top of the screen"
 					tooltip="Toggle to show the opponent board at the top or bottom of the screen"
 				></preference-toggle>
-				<div class="text">Icon size</div>
+				<div class="slider-label">Icon size</div>
 				<preference-slider
 					class="opponent-board-size-slider"
 					field="bgsOpponentBoardScale"

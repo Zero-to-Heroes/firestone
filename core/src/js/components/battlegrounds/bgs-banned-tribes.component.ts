@@ -103,14 +103,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			);
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsBannedTribeScale)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting bgsBannedTribeScale in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => {
 				// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');

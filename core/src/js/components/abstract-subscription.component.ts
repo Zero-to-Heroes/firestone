@@ -19,21 +19,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 	}
 
 	protected listenForBasicPref$<T>(selector: (prefs: Preferences) => T, ...logArgs: any[]) {
-		return this.store
-			.listenPrefs$((prefs) => selector(prefs))
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter, logArgs)),
-				takeUntil(this.destroyed$),
-			);
+		return this.store.listenPrefs$((prefs) => selector(prefs)).pipe(this.mapData(([pref]) => pref));
 	}
 
 	protected mapData<T, R>(

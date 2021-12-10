@@ -4,8 +4,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostListener,
 	OnDestroy,
+	Renderer2,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
@@ -33,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div
-			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme"
+			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme scalable"
 			(mouseleave)="onTavernMouseLeave()"
 			(mousedown)="dragMove($event)"
 		>
@@ -107,6 +109,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -183,6 +187,14 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([info]) => (this.enableMouseOver = info));
+		this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsMinionsListScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
 	}
 
 	async ngAfterViewInit() {

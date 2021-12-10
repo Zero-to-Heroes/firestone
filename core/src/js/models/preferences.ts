@@ -288,6 +288,8 @@ export class Preferences {
 	readonly bgsBannedTribeScale = 101.6;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsSimulatorScale = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsMinionsListScale = 100;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -297,6 +299,7 @@ export class Preferences {
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
+	readonly bgsMinionListShowGoldenCard: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
 	readonly bgsShowOverlayButton: boolean = true;

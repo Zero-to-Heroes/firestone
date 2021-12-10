@@ -16,6 +16,10 @@
 	align-items: flex-start;
 }
 
+.scalable {
+	transform-origin: top right;
+}
+
 .tiers-container {
 	display: flex;
 	flex-direction: column;
