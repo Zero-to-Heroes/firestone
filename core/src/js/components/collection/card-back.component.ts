@@ -10,7 +10,6 @@ import { InternalCardBack } from './internal-card-back';
 			*ngIf="_cardBack"
 			[ngClass]="{ 'missing': !_cardBack.owned }"
 			[helpTooltip]="_cardBack.name"
-			rotateOnMouseOver
 		>
 			<div class="perspective-wrapper" rotateOnMouseOver>
 				<img [src]="_cardBack.image + '?v=3'" />

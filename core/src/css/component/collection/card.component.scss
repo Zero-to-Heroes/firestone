@@ -7,6 +7,8 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 
 	.real-card {
 		width: 100%;
@@ -47,9 +49,13 @@
 		align-items: center;
 		top: -13px;
 		width: 100%;
+		padding-left: 16%;
+		padding-right: 11%;
+		zoom: 1.1; // Because of the 0.8 scale
 
 		.non-premium,
-		.premium {
+		.premium,
+		.diamond {
 			@extend %dust-number;
 			// font-size: 1.7vh;
 			border: 1px solid;
@@ -63,7 +69,8 @@
 			}
 		}
 
-		.premium {
+		.premium,
+		.diamond {
 			border-color: $yellow03;
 			position: relative;
 			width: 44px;
@@ -90,7 +97,16 @@
 			}
 		}
 
-		div:nth-child(2) {
+		.diamond {
+			border-color: silver;
+
+			.gold-theme {
+				--icon-color: silver;
+			}
+		}
+
+		div:nth-child(2),
+		div:nth-child(3) {
 			margin-left: 5px;
 		}
 	}
@@ -112,10 +128,10 @@
 	&:hover {
 		.real-card {
 			opacity: 1;
-			transform: scale3d(1.035, 1.035, 1.035);
+			// transform: scale3d(1.035, 1.035, 1.035);
 		}
 		.count {
-			top: -2px;
+			// top: -2px;
 		}
 	}
 

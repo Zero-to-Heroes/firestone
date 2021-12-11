@@ -22,7 +22,6 @@ import { CollectionReferenceCard } from './collection-reference-card';
 		<div
 			class="card-container {{ secondaryClass }}"
 			[ngClass]="{ 'missing': missing, 'showing-placeholder': showPlaceholder }"
-			rotateOnMouseOver
 		>
 			<div class="perspective-wrapper" [cardTooltip]="tooltips && _card.id" rotateOnMouseOver>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
@@ -44,6 +43,19 @@ import { CollectionReferenceCard } from './collection-reference-card';
 							</svg>
 						</i>
 					</div>
+					<div class="diamond" *ngIf="showDiamondCount">
+						<i class="gold-theme left">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
+							</svg>
+						</i>
+						<span>{{ ownedDiamond }}</span>
+						<i class="gold-theme right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
+							</svg>
+						</i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -58,12 +70,17 @@ export class CardComponent implements AfterViewInit {
 		if (!card) {
 			return;
 		}
+		console.debug('card', card.name, card);
 
 		this.ownedNonPremium = (this._card as SetCard).ownedNonPremium ?? 0;
 		this.showNonPremiumCount = this.ownedNonPremium > 0;
 
-		this.ownedPremium = ((this._card as SetCard).ownedPremium ?? 0) + ((this._card as SetCard).ownedDiamond ?? 0);
+		this.ownedPremium = (this._card as SetCard).ownedPremium ?? 0;
 		this.showPremiumCount = this.ownedPremium > 0;
+
+		this.ownedDiamond = (this._card as SetCard).ownedDiamond ?? 0;
+		this.showDiamondCount = this.ownedDiamond > 0;
+
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium + this._card.ownedDiamond === 0;
 		this.updateImage();
 	}
@@ -103,12 +120,14 @@ export class CardComponent implements AfterViewInit {
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
 	showPremiumCount: boolean;
+	showDiamondCount: boolean;
 
 	secondaryClass: string;
 	image: string;
 	missing: boolean;
 	_card: SetCard | CollectionReferenceCard;
 	ownedPremium: number;
+	ownedDiamond: number;
 	ownedNonPremium: number;
 
 	// private _loadImage = true;
