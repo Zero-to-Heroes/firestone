@@ -13,7 +13,7 @@ export class LocalizationFacadeService {
 	public init() {
 		this.service = this.ow.getMainWindow().localizationService;
 		if (!this.service) {
-			console.warn('localization init failed');
+			console.warn('localization init failed, retrying');
 			setTimeout(() => this.init(), 20);
 			return;
 		}
