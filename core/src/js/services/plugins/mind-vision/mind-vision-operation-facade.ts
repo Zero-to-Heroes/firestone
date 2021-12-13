@@ -12,7 +12,7 @@ export class MindVisionOperationFacade<T> {
 		private ow: OverwolfService,
 		private serviceName: string,
 		private mindVisionOperation: (forceReset?: boolean, input?: any) => Promise<any>,
-		private emptyCheck: (input: any) => boolean,
+		public emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
 		private delay = 3000,
@@ -128,7 +128,7 @@ export class MindVisionOperationFacade<T> {
 			return;
 		}
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
-			// this.log('result from memory is empty, retying');
+			this.debug('result from memory is empty, retying');
 			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1), this.delay);
 			return;
 		}

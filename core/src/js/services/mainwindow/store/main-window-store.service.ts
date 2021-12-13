@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
@@ -116,6 +117,7 @@ import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/me
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
 import { MercenariesHideTeamSummaryEvent } from './events/mercenaries/mercenaries-hide-team-summary-event';
+import { MercenariesMapInformationFromMemoryEvent } from './events/mercenaries/mercenaries-map-information-from-memory-event';
 import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
 import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
@@ -136,6 +138,7 @@ import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowReplaysEvent } from './events/replays/show-replays-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
+import { SceneChangedEvent } from './events/scene-changed-event';
 import { ShowAdsEvent } from './events/show-ads-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
@@ -235,6 +238,7 @@ import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercen
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
 import { MercenariesHideTeamSummaryProcessor } from './processors/mercenaries/mercenaries-hide-team-summary-processor';
+import { MercenariesMapInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-map-information-from-memory-processor';
 import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
 import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
@@ -256,6 +260,7 @@ import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-p
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
+import { SceneChangedProcessor } from './processors/scene-changed-processor';
 import { ShowAdsProcessor } from './processors/show-ads-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
@@ -390,6 +395,7 @@ export class MainWindowStoreService {
 			} else {
 			}
 
+			// console.debug(
 			// 	'emitting new merged state',
 			// 	event.eventName(),
 			// 	event,
@@ -487,6 +493,9 @@ export class MainWindowStoreService {
 
 			GenericPreferencesUpdateEvent.eventName(),
 			new GenericPreferencesUpdateProcessor(this.prefs),
+
+			SceneChangedEvent.eventName(),
+			new SceneChangedProcessor(),
 
 			// Collection
 			CollectionInitEvent.eventName(),
@@ -731,6 +740,9 @@ export class MainWindowStoreService {
 			MercenariesCollectionInformationFromMemoryEvent.eventName(),
 			new MercenariesCollectionInformationFromMemoryProcessor(),
 
+			MercenariesMapInformationFromMemoryEvent.eventName(),
+			new MercenariesMapInformationFromMemoryProcessor(),
+
 			MercenariesPersonalHeroesSortEvent.eventName(),
 			new MercenariesPersonalHeroesSortProcessor(this.prefs),
 
@@ -853,6 +865,13 @@ export class MainWindowStoreService {
 	private listenForSocialAccountLoginUpdates() {
 		this.ow.addTwitterLoginStateChangedListener(() => {
 			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
+		});
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			const changes: MemoryUpdate = event.data[0];
+			const newScene = changes.CurrentScene;
+			if (!!newScene) {
+				this.stateUpdater.next(new SceneChangedEvent(newScene));
+			}
 		});
 	}
 }

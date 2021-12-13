@@ -1,5 +1,4 @@
 import { SceneMode } from '@firestone-hs/reference-data';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { MemoryUpdate } from '../../../../models/memory/memory-update';
 import { MercenariesOutOfCombatState } from '../../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { CardsFacadeService } from '../../../cards-facade.service';
@@ -16,13 +15,9 @@ export class MercenariesTreasureSelectionParser implements MercenariesOutOfComba
 	async parse(
 		state: MercenariesOutOfCombatState,
 		event: BroadcastEvent,
-		mainWindowState: MainWindowState,
+		currentScene: SceneMode,
 	): Promise<MercenariesOutOfCombatState> {
 		const changes: MemoryUpdate = event.data[0];
-		if (state.currentScene !== SceneMode.LETTUCE_MAP && changes.CurrentScene !== SceneMode.LETTUCE_MAP) {
-			return state;
-		}
-
 		if (changes.IsMercenariesSelectingTreasure && changes.MercenariesPendingTreasureSelection) {
 			const result = state.update({
 				treasureSelection: {

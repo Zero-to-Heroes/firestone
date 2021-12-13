@@ -1,4 +1,4 @@
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { MercenariesOutOfCombatState } from '../../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { BroadcastEvent } from '../../../events.service';
 
@@ -8,6 +8,6 @@ export interface MercenariesOutOfCombatParser {
 	parse(
 		state: MercenariesOutOfCombatState,
 		event: BroadcastEvent,
-		mainWindowState: MainWindowState,
+		currentScene: SceneMode,
 	): MercenariesOutOfCombatState | PromiseLike<MercenariesOutOfCombatState>;
 }

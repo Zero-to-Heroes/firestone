@@ -14,6 +14,7 @@ export class MercenariesBattleState {
 	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 	readonly actionQueue: readonly MercenariesAction[] = [];
 
+	// A cache that is populated on game start
 	readonly mercenariesFromMemory: MemoryMercenariesInfo;
 	readonly playerClosedManually: boolean;
 	readonly opponentClosedManually: boolean;

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
 import { Subject } from 'rxjs';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
+import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { LocalStorageService } from '../local-storage';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { groupByFunction, sleep } from '../utils';
+import { areDeepEqual, groupByFunction, sleep } from '../utils';
 
 export const MERCENARIES_SCENES = [
 	SceneMode.LETTUCE_BOUNTY_BOARD,
@@ -37,8 +38,12 @@ export const SCENE_WITH_RELEVANT_MERC_INFO = [
 @Injectable()
 export class MercenariesMemoryCacheService {
 	public memoryCollectionInfo$ = new Subject<MemoryMercenariesCollectionInfo>();
+	public memoryMapInfo$ = new Subject<MemoryMercenariesInfo>();
 
 	private previousScene: SceneMode;
+	private previousCollectionInfo: MemoryMercenariesCollectionInfo;
+	private previousVisitorsInfo: readonly MemoryVisitor[];
+	private previousMapInfo: MemoryMercenariesInfo;
 
 	constructor(
 		private readonly memoryService: MemoryInspectionService,
@@ -60,19 +65,30 @@ export class MercenariesMemoryCacheService {
 				}
 				this.previousScene = newScene;
 				console.debug('[merc-memory] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
-				await sleep(2000);
-				console.debug('[merc-memory] done waiting');
+				// Because when we get into a new map, the old map info is present in the memory for a short while
+				if (newScene === SceneMode.LETTUCE_MAP) {
+					await sleep(2000);
+					console.debug('[merc-memory] done waiting');
+				}
 			} else if (changes.IsMercenariesTasksUpdated) {
 				console.debug('[merc-memory] updating tasks', changes);
 			} else {
 				return;
 			}
-			const newMercenariesInfo = await this.getMercenariesMergedCollectionInfo();
-			this.memoryCollectionInfo$.next(newMercenariesInfo);
+			const newMercenariesCollectionInfo = await this.getMercenariesMergedCollectionInfo(true);
+			if (newMercenariesCollectionInfo) {
+				this.memoryCollectionInfo$.next(newMercenariesCollectionInfo);
+			}
+
+			const mapInfo = await this.memoryService.getMercenariesInfo();
+			if (!areDeepEqual(mapInfo, this.previousMapInfo)) {
+				this.previousMapInfo = mapInfo;
+				this.memoryMapInfo$.next(mapInfo);
+			}
 		});
 	}
 
-	public shouldFetchMercenariesMemoryInfo(newScene: SceneMode): boolean {
+	private shouldFetchMercenariesMemoryInfo(newScene: SceneMode): boolean {
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
 			console.debug('[merc-memory] non relevant scene', newScene);
 			return false;
@@ -84,28 +100,68 @@ export class MercenariesMemoryCacheService {
 		return true;
 	}
 
-	public async getMercenariesMergedCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
-		let newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo();
+	public async getMercenariesMergedCollectionInfo(
+		forceMemoryResetIfCollectionInfoEmpty = false,
+	): Promise<MemoryMercenariesCollectionInfo> {
+		let newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(
+			5,
+			forceMemoryResetIfCollectionInfoEmpty,
+		);
+		if (!!newMercenariesInfo) {
+			console.debug('[merc-memory] retrieved merc info from memory', newMercenariesInfo);
+		}
+		let readFromMemory = true;
 		if (!newMercenariesInfo?.Mercenaries?.length) {
 			newMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
+			readFromMemory = false;
 		}
-		if (!newMercenariesInfo) {
+
+		const prefs = await this.prefs.getPreferences();
+		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
+		if (
+			!newMercenariesInfo ||
+			(areDeepEqual(newMercenariesInfo, this.previousCollectionInfo) &&
+				areDeepEqual(savedVisitorsInfo, this.previousVisitorsInfo))
+		) {
+			console.debug(
+				'[merc-memory] no new info',
+				newMercenariesInfo,
+				this.previousCollectionInfo,
+				savedVisitorsInfo,
+				this.previousVisitorsInfo,
+			);
 			return null;
 		}
 
+		// console.debug(
+		// 	'[merc-memory] new collection retrieved',
+		// 	JSON.stringify(newMercenariesInfo),
+		// 	JSON.stringify(this.previousCollectionInfo),
+		// );
+		// console.debug(
+		// 	'[merc-memory] new saved visitor info retrieved',
+		// 	JSON.stringify(savedVisitorsInfo),
+		// 	JSON.stringify(this.previousVisitorsInfo),
+		// );
+		this.previousCollectionInfo = newMercenariesInfo;
+		this.previousVisitorsInfo = savedVisitorsInfo;
+
+		// We don't persist the updated visitors info because they are in the prefs (so that they
+		// can be synched between devices)
 		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
 		console.debug('[merc-memory] new merc info', newMercenariesInfo.Visitors);
-		console.debug(
-			'[merc-memory] ref infos',
-			await this.memoryService.getMercenariesCollectionInfo(),
-			await this.loadLocalMercenariesCollectionInfo(),
-		);
-		const prefs = await this.prefs.getPreferences();
-		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
+		// console.debug(
+		// 	'[merc-memory] ref infos',
+		// 	await this.memoryService.getMercenariesCollectionInfo(),
+		// 	await this.loadLocalMercenariesCollectionInfo(),
+		// );
 		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo);
+		// There is an issue if we couldn't get any info from the memory, as the merge will just clean up everything
+		// So we pass a flag to know if we read the info from memory, and if not we don't remove tasks
 		const newVisitorsInformation: readonly MemoryVisitor[] = this.mergeVisitors(
 			newMercenariesInfo.Visitors ?? [],
 			savedVisitorsInfo ?? [],
+			readFromMemory,
 		);
 		console.debug('[merc-memory] newVisitorsInformation', newVisitorsInformation);
 		const newCollection = {
@@ -134,18 +190,18 @@ export class MercenariesMemoryCacheService {
 	private mergeVisitors(
 		fromMemory: readonly MemoryVisitor[],
 		savedVisitorsInfo: readonly MemoryVisitor[],
+		readFromMemory: boolean,
 	): readonly MemoryVisitor[] {
 		const updatedSavedVisitorsInfo = savedVisitorsInfo
 			.map((visitor) => {
 				const memoryVisitor = fromMemory.find(
 					(v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId,
 				);
-				return !memoryVisitor
+				return !memoryVisitor && readFromMemory
 					? // If there are tasks in the saved preferences that don't appear in the memory, it means
 					  // that they have been either completed or abandoned
 					  visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
-						? // Default to it being abandoned, and the user can manually flag the progress if they want to
-						  { ...visitor, Status: TaskStatus.CLAIMED }
+						? { ...visitor, Status: TaskStatus.CLAIMED }
 						: null
 					: // And if a task in memory is also in the prefs, make sure they have the same status
 					  {
@@ -153,7 +209,7 @@ export class MercenariesMemoryCacheService {
 							Status:
 								visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
 									? TaskStatus.CLAIMED
-									: memoryVisitor.Status,
+									: memoryVisitor?.Status ?? visitor.Status,
 					  };
 			})
 			.filter((visitor) => visitor);

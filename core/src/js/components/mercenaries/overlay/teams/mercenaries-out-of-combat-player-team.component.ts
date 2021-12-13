@@ -74,19 +74,23 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 			);
 		this.team$ = combineLatest(
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
-			this.store.listen$(([main, nav, prefs]) => main.mercenaries?.referenceData),
+			this.store.listen$(
+				([main, nav, prefs]) => main.currentScene,
+				([main, nav, prefs]) => main.mercenaries?.referenceData,
+				([main, nav, prefs]) => main.mercenaries?.mapInfo,
+			),
 		).pipe(
 			debounceTime(50),
 			filter(
-				([[state], [referenceData]]) =>
-					!!referenceData && !!state?.mercenariesMemoryInfo?.Map?.PlayerTeam?.length,
+				([[state], [currentScene, referenceData, mapInfo]]) =>
+					!!referenceData && !!mapInfo?.Map?.PlayerTeam?.length,
 			),
 			map(
-				([[state], [referenceData]]) =>
-					[
-						state.currentScene === SceneMode.LETTUCE_MAP ? state.mercenariesMemoryInfo.Map : null,
-						referenceData,
-					] as [MemoryMercenariesMap, MercenariesReferenceData],
+				([[state], [currentScene, referenceData, mapInfo]]) =>
+					[currentScene === SceneMode.LETTUCE_MAP ? mapInfo.Map : null, referenceData] as [
+						MemoryMercenariesMap,
+						MercenariesReferenceData,
+					],
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([mapInfo, referenceData]) =>

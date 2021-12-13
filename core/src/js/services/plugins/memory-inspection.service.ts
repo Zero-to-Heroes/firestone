@@ -123,8 +123,15 @@ export class MemoryInspectionService {
 		return this.getMercenariesInfoOperation.call(numberOfRetries);
 	}
 
-	public async getMercenariesCollectionInfo(numberOfRetries?: number): Promise<MemoryMercenariesCollectionInfo> {
-		return this.getMercenariesCollectionInfoOperation.call(numberOfRetries);
+	public async getMercenariesCollectionInfo(
+		numberOfRetries?: number,
+		forceResetAfterEmptyCalls = false,
+	): Promise<MemoryMercenariesCollectionInfo> {
+		let result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries);
+		if (this.getMercenariesCollectionInfoOperation.emptyCheck(result) && forceResetAfterEmptyCalls) {
+			result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries, true);
+		}
+		return result;
 	}
 
 	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {
@@ -138,8 +145,19 @@ export class MemoryInspectionService {
 		return this.getBattlegroundsMatchOperation.call(numberOfRetries, forceReset);
 	}
 
-	public async getActiveDeck(selectedDeckId: number, numberOfRetries: number): Promise<DeckInfoFromMemory> {
-		return this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId);
+	public async getActiveDeck(
+		selectedDeckId: number,
+		numberOfRetries: number,
+		forceResetIfResultEmpty = false,
+	): Promise<DeckInfoFromMemory> {
+		let result = await this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId);
+		console.debug('[mind-vision] [getActiveDeck]', result, forceResetIfResultEmpty);
+		if (this.getActiveDeckOperation.emptyCheck(result) && forceResetIfResultEmpty) {
+			console.debug('[mind-vision] [getActiveDeck]', 'calling with force reset');
+			result = await this.getActiveDeckOperation.call(numberOfRetries, true, selectedDeckId);
+			console.debug('[mind-vision] [getActiveDeck]', 'after force reset', result);
+		}
+		return result;
 	}
 
 	public async getWhizbangDeck(deckId: number): Promise<DeckInfoFromMemory> {

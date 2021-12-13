@@ -9,11 +9,11 @@ export class GetMercenariesCollectionInfoOperation extends MindVisionOperationFa
 			ow,
 			'getMercenariesCollectionInfo',
 			(forceReset?: boolean) => mindVision.getMercenariesCollectionInfo(forceReset),
-			(info) => false,
+			(info) => !info?.Mercenaries?.length,
 			(info) => info,
-			2,
-			1000,
-			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length,
+			5,
+			800,
+			// (info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length,
 		);
 	}
 }

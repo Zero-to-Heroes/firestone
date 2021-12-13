@@ -1,4 +1,5 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
@@ -14,6 +15,7 @@ import { GameStat } from './stats/game-stat';
 import { StatsState } from './stats/stats-state';
 
 export class MainWindowState {
+	readonly currentScene: SceneMode = null;
 	readonly currentUser: CurrentUser = null;
 	readonly showFtue: boolean = false;
 	readonly replays: ReplaysState = new ReplaysState();

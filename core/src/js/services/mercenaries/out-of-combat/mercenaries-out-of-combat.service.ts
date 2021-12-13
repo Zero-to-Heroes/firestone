@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -10,11 +11,11 @@ import { BroadcastEvent, Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
+import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';
 import { MercenariesOutOfCombatTeamOverlayHandler } from './overlay/mercenaries-out-of-combat-team-overlay-handler';
 import { MercenariesOutOfCombatTreasureSelectionOverlayHandler } from './overlay/mercenaries-out-of-combat-treasure-selection-handler';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
-import { MercenariesMemoryInformationParser } from './parser/mercenaries-memory-information-parser';
 import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
 
@@ -39,47 +40,24 @@ export class MercenariesOutOfCombatService {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly memoryCache: MercenariesMemoryCacheService,
 		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
-
-		// So that we're sure that all services have been initialized
-		setTimeout(() => {
-			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
-				.asObservable()
-				.pipe(map((theEvent) => theEvent.preferences as Preferences));
-			this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
-				[MainWindowState, NavigationState]
-			>).asObservable();
-			this.events$ = this.events.on(Events.MEMORY_UPDATE);
-
-			combineLatest(this.events$, this.mainWindowState$)
-				.pipe(
-					distinctUntilChanged(),
-					filter(([event, mainWindowState]) => !!event),
-					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState[0])),
-				)
-				.subscribe();
-			combineLatest(this.preferences$, this.internalStore$.asObservable())
-				.pipe(
-					distinctUntilChanged(),
-					concatMap(async ([prefs, newState]) => await this.emitState(newState, prefs)),
-				)
-				.subscribe();
-		});
 		window['mercenariesOutOfCombatStore'] = this.store$;
 	}
 
-	private async processEvent(event: BroadcastEvent, mainWindowState: MainWindowState): Promise<void> {
+	private async processEvent(event: BroadcastEvent, currentScene: SceneMode): Promise<void> {
 		try {
 			const parsers = this.getParsersFor(event.key, this.internalStore$.value);
+			// console.debug('parsers for', event.key, parsers, event);
 			if (!parsers?.length) {
 				return;
 			}
 
 			let state = this.internalStore$.value;
 			for (const parser of parsers) {
-				state = await parser.parse(state, event, mainWindowState);
-				// console.debug('[merc-ooc-store] updated state', state);
+				state = await parser.parse(state, event, currentScene);
+				console.debug('[merc-ooc-store] updated state', state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {
@@ -87,15 +65,55 @@ export class MercenariesOutOfCombatService {
 		}
 	}
 
-	private async emitState(newState: MercenariesOutOfCombatState, preferences: Preferences): Promise<void> {
+	private async emitState(
+		newState: MercenariesOutOfCombatState,
+		currentScene: SceneMode,
+		preferences: Preferences,
+	): Promise<void> {
 		this.eventEmitters.forEach((emitter) => emitter(newState));
-		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState, preferences)));
+		await Promise.all(
+			this.overlayHandlers.map((handler) => handler.updateOverlay(newState, currentScene, preferences)),
+		);
 	}
 
-	private init() {
+	private async init() {
 		this.registerParser();
 		this.buildEventEmitters();
 		this.buildOverlayHandlers();
+
+		// So that we're sure that all services have been initialized
+		await this.store.initComplete();
+		// setTimeout(() => {
+		this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
+			.asObservable()
+			.pipe(map((theEvent) => theEvent.preferences as Preferences));
+		this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
+			[MainWindowState, NavigationState]
+		>).asObservable();
+		this.events$ = this.events.on(Events.MEMORY_UPDATE);
+
+		combineLatest(
+			this.events$,
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+		)
+			.pipe(
+				distinctUntilChanged(),
+				filter(([event, currentScene]) => !!event),
+				concatMap(async ([event, [currentScene]]) => await this.processEvent(event, currentScene)),
+			)
+			.subscribe();
+		combineLatest(
+			this.preferences$,
+			this.internalStore$.asObservable(),
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+		)
+			.pipe(
+				concatMap(
+					async ([prefs, newState, [currentScene]]) => await this.emitState(newState, currentScene, prefs),
+				),
+			)
+			.subscribe();
+		// });
 	}
 
 	private getParsersFor(type: string, state: MercenariesOutOfCombatState): readonly MercenariesOutOfCombatParser[] {
@@ -117,7 +135,7 @@ export class MercenariesOutOfCombatService {
 
 	private registerParser() {
 		const parsers: readonly MercenariesOutOfCombatParser[] = [
-			new MercenariesMemoryInformationParser(this.memoryService, this.memoryCache),
+			// new MercenariesMemoryInformationParser(this.memoryService, this.memoryCache),
 			new MercenariesTreasureSelectionParser(this.allCards),
 		];
 		this.parsers = {};

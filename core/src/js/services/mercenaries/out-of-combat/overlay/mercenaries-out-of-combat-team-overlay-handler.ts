@@ -8,7 +8,11 @@ import { MercenariesOutOfCombatOverlayHandler } from './_mercenaries-out-of-comb
 export class MercenariesOutOfCombatTeamOverlayHandler implements MercenariesOutOfCombatOverlayHandler {
 	constructor(private readonly ow: OverwolfService) {}
 
-	public async updateOverlay(state: MercenariesOutOfCombatState, preferences: Preferences): Promise<void> {
+	public async updateOverlay(
+		state: MercenariesOutOfCombatState,
+		currentScene: SceneMode,
+		preferences: Preferences,
+	): Promise<void> {
 		// const prefs = await this.prefs.getPreferences();
 		const windowId = OverwolfService.MERCENARIES_OUT_OF_COMBAT_PLAYER_TEAM_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
@@ -19,8 +23,8 @@ export class MercenariesOutOfCombatTeamOverlayHandler implements MercenariesOutO
 		if (preferences?.mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage) {
 			scenes.push(SceneMode.LETTUCE_BOUNTY_TEAM_SELECT, SceneMode.LETTUCE_COLLECTION);
 		}
-		const shouldShow = !!state && scenes.includes(state.currentScene);
-		console.debug('should show?', state, state?.currentScene, scenes, preferences);
+		const shouldShow = !!state && scenes.includes(currentScene);
+		console.debug('should show?', state, currentScene, scenes, preferences);
 		if (shouldShow && isWindowClosed(theWindow.window_state_ex)) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);

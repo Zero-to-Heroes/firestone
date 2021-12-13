@@ -76,7 +76,7 @@ export class MindVisionService {
 				console.log('[mind-vision] memory update', changes);
 				const changesToBroadcast: MemoryUpdate | 'reset' = JSON.parse(changes);
 				// Happens when the plugin is reset, we need to resubscribe
-				if (changesToBroadcast === 'reset') {
+				if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
 					console.log('[mind-vision] resetting memory update?', this.retriesLeft);
 					if (this.retriesLeft >= 0) {
 						this.retriesLeft--;
@@ -219,7 +219,7 @@ export class MindVisionService {
 		return new Promise<MemoryMercenariesInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getMercenariesInfo((info) => {
+				plugin.getMercenariesInfo(forceReset, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -233,7 +233,7 @@ export class MindVisionService {
 		return new Promise<MemoryMercenariesCollectionInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getMercenariesCollectionInfo((info) => {
+				plugin.getMercenariesCollectionInfo(forceReset, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -257,11 +257,11 @@ export class MindVisionService {
 		});
 	}
 
-	public async getActiveDeck(selectedDeckId: number): Promise<any> {
+	public async getActiveDeck(selectedDeckId: number, forceReset: boolean): Promise<any> {
 		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getActiveDeck(selectedDeckId, (activeDeck) => {
+				plugin.getActiveDeck(selectedDeckId, forceReset, (activeDeck) => {
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {
