@@ -26,35 +26,35 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	switch (tribe) {
 		case 'Mech':
 		case Race.MECH:
-			referenceCardId = CardIds.Pupbot;
+			referenceCardId = CardIds.MicroMummy;
 			break;
 		case 'Beast':
 		case Race.BEAST:
-			referenceCardId = CardIds.Leapfrogger;
+			referenceCardId = CardIds.Alleycat;
 			break;
 		case 'Demon':
 		case Race.DEMON:
-			referenceCardId = CardIds.FamishedFelbat;
+			referenceCardId = CardIds.WrathWeaver;
 			break;
 		case 'Dragon':
 		case Race.DRAGON:
-			referenceCardId = CardIds.RazorgoreTavernBrawl;
+			referenceCardId = CardIds.RedWhelp;
 			break;
 		case 'Murloc':
 		case Race.MURLOC:
-			referenceCardId = CardIds.KingBagurgle;
+			referenceCardId = CardIds.MurlocTidehunterCore;
 			break;
 		case 'Pirate':
 		case Race.PIRATE:
-			referenceCardId = CardIds.DreadAdmiralEliza;
+			referenceCardId = CardIds.Scallywag;
 			break;
 		case 'Elemental':
 		case Race.ELEMENTAL:
-			referenceCardId = CardIds.LilRag;
+			referenceCardId = CardIds.Sellemental;
 			break;
 		case 'Quilboar':
 		case Race.QUILBOAR:
-			referenceCardId = CardIds.Charlga;
+			referenceCardId = CardIds.SunBaconRelaxer;
 			break;
 		case 'All':
 		case Race.ALL:
