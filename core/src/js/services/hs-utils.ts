@@ -628,6 +628,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Mercenaries';
 		case BoosterType.ALTERAC_VALLEY:
 			return 'Fractured in Alterac Valley';
+		case BoosterType.GOLDEN_ALTERAC_VALLEY:
+			return 'Golden Alterac Valley';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
