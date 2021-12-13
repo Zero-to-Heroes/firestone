@@ -20,7 +20,8 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		console.debug('[task] event', event);
 		const referenceData = currentState.mercenaries.referenceData;
 		const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === event.mercenaryId);
-		const collectionInfo = await this.cache.getMercenariesMergedCollectionInfo(true);
+		const collectionInfo = currentState.mercenaries.collectionInfo;
+		console.debug('[task] collectionInfo', collectionInfo);
 		const visitors = collectionInfo.Visitors;
 		console.debug('[task] cleaned visitors', visitors, currentState.mercenaries.collectionInfo.Visitors);
 		const currentVisitor = visitors.find((visitor) => visitor.VisitorId === taskChain.mercenaryVisitorId);
