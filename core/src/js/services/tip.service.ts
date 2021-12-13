@@ -5,6 +5,7 @@ export class TipService {
 	private allTips = [
 		`Click on the "Help" icon at the top to view the app's latest release notes`,
 		`Click on the "Bug" icon at the top to report a bug or suggest an improvement`,
+		`If you're experiencing big bugs (like collection not synching, tracker not working, etc.), try running the app as Admin.`,
 		`The Settings have lots of customization options, don't hesitate to have a look to enable / disable some features`,
 		`[Mercenaries] See the "Total Coins" column by making the window wider`,
 		`[Mercenaries] Select the "Mercenaries (PvP)" option in Replays to see more details about the Teams in each match`,
