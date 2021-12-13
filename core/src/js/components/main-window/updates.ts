@@ -90,7 +90,7 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'ui',
+								type: 'feature',
 								text: `Add a separate counter for Diamond cards.`,
 							},
 						],
