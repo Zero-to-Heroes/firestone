@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.20',
+		version: '8.3.21',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,24 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a very first small step towards localizing the app! You can now choose to display the card names and images in French, from the Localization tab in the settings. More is coming soon :)`,
-							},
-							{
-								type: 'bug',
-								text: `Fix Twitch login and communication with the extension. The new extension version still needs to be validated by Twitch, but expect things to start working again in a week or so.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Tentative fix for wrong deck detection. As the issue is not systemarically reproducible, I have a hard time validating the fix, so let me know if the issue continues to appear.`,
+								text: `Next round of tentative fix for wrong deck detection. As the issue is not systemarically reproducible, I have a hard time validating the fix, so let me know if the issue continues to appear.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Tentative fix for tasks not properly synching with the game. As above, this is an issue that I can't reproduce on my machine, so I might need to iterate on it a few times to get it right.`,
 							},
 						],
 					},
@@ -74,37 +70,28 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a "Restart App" button under Settings > General.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add more card highlights, mostly around Deathrattle / dead minions.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix Maestra games being parsed incorrectly since patch 22.0.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where HPs in the HP chart could go below 0.`,
+								type: 'feature',
+								text: `Add an option to toggle off the golden version of minions in the minion list tooltip.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where banned tribes icons could be cut off when zoomed too much.`,
+								type: 'feature',
+								text: `Add a slider to change the minions list size.`,
+							},
+							{
+								type: 'ui',
+								text: `Update the design for the Banned Tribes widget to not hide the card image anymore. Also, the tribe icons have changed to use their most iconic tier 1 minions :)`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'ui',
+								text: `Add a separate counter for Diamond cards.`,
 							},
 						],
 					},
