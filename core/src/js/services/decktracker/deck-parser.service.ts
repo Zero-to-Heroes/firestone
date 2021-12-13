@@ -169,6 +169,10 @@ export class DeckParserService {
 						this.currentDeck?.scenarioId,
 					);
 					this.currentDeck = {} as DeckInfo;
+					// In some cases, the "selected deck" memory event is not fired when switching decks (I don't know why though)
+					// So it's probably safer to reset the selected deck id, since normally the event is also fired when the
+					// deck is not changed
+					this.selectedDeckId = null;
 				}
 			}
 		});
