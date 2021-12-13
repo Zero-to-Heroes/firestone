@@ -98,7 +98,7 @@ export class TwitchAuthService {
 
 	private async emitEvent(event: any) {
 		// return;
-		let newEvent = Object.assign(
+		let newEvent: { type: string; state: GameState } = Object.assign(
 			{
 				type: 'deck-event',
 			},
@@ -142,11 +142,18 @@ export class TwitchAuthService {
 				state: newState,
 			});
 		}
+		// We need deck info for board and hand at least
 		if (newEvent.state && (newEvent.state.isBattlegrounds() || newEvent.state.isMercenaries())) {
 			// Don't show anything in the deck itself
 			const newState = Object.assign(new GameState(), newEvent.state, {
-				playerDeck: null,
-				opponentDeck: null,
+				playerDeck: {
+					hand: newEvent.state.playerDeck.hand,
+					board: newEvent.state.playerDeck.board,
+				},
+				opponentDeck: {
+					hand: newEvent.state.opponentDeck.hand,
+					board: newEvent.state.opponentDeck.board,
+				},
 			} as GameState);
 			newEvent = Object.assign({}, newEvent, {
 				state: newState,
