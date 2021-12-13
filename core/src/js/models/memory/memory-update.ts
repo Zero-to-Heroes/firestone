@@ -2,6 +2,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
+	readonly ShouldReset: boolean;
 	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly XpChanges: readonly XpChange[];

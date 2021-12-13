@@ -186,7 +186,7 @@ export class DeckParserService {
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
 				this.selectedDeckId = changes.SelectedDeckId;
-				const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2);
+				const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2, true);
 				console.log(
 					'[deck-parser] getting active deck from memory after ID selection',
 					this.selectedDeckId,
