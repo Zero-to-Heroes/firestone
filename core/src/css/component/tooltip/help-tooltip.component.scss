@@ -68,6 +68,8 @@
 
 .help-tooltip.mercenaries-personal-hero-stat-task-tooltip {
 	::ng-deep .text {
+		max-width: 350px;
+
 		.container {
 			display: flex;
 			flex-direction: column;
@@ -81,9 +83,11 @@
 			.title {
 				font-size: 14px;
 				font-weight: bold;
+				text-align: left;
 			}
 			.description {
 				font-size: 12px;
+				text-align: left;
 			}
 		}
 

@@ -187,7 +187,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			: Math.max(0, currentTaskStep);
 		console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
 
-		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep);
+		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
 		const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 		const abilities = this.buildAbilities(refMerc, memMerc);
@@ -338,6 +338,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			mercenaryVisitorId: number;
 		},
 		currentStep: number,
+		visitorInfo: MemoryVisitor,
 	): string {
 		if (currentStep == null) {
 			return null;
@@ -345,18 +346,37 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 		const sortedTasks = [...(taskChain?.tasks ?? [])].sort((a, b) => a.id - b.id);
 		const currentTask = sortedTasks[currentStep];
+		console.debug('currentTask', taskChain.mercenaryVisitorId, taskChain.mercenaryId, currentTask);
 		if (!currentTask) {
 			return null;
 		}
 
-		const nextTaskDescription = `
+		const isTaskOngoing =
+			visitorInfo?.TaskChainProgress === currentStep &&
+			(visitorInfo?.Status === TaskStatus.ACTIVE || visitorInfo?.Status === TaskStatus.NEW);
+		console.debug('isTaskOngoing', isTaskOngoing, visitorInfo, currentStep);
+		const taskLabel = isTaskOngoing ? 'Current' : 'Next';
+
+		const currentTaskDescription = `
 				<div class="current-task">
-					<div class="title">Next: Task ${currentStep + 1}: ${currentTask.title}</div>
+					<div class="title">${taskLabel} Task ${currentStep + 1}: ${currentTask.title}</div>
 					<div class="description">${currentTask.description}</div>
 				</div>
 		`;
+		let nextTaskDescription = '';
+		if (isTaskOngoing && currentStep + 1 < sortedTasks.length) {
+			const nextTask = sortedTasks[currentStep + 1];
+			nextTaskDescription = `
+				<div class="next-task">
+					<div class="title">Next Task ${currentStep + 2}: ${nextTask.title}</div>
+					<div class="description">${nextTask.description}</div>
+				</div>
+			`;
+		}
+
 		const taskDescription = `
 			<div class="container">
+				${currentTaskDescription}
 				${nextTaskDescription}
 			</div>
 		`;
