@@ -5,6 +5,7 @@ import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../overwolf.service';
+import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { AbstractOverlayHandler } from './_abstract-overlay-handler';
 
@@ -13,7 +14,12 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 	private onGameScreen: boolean;
 	private gameStarted: boolean;
 
-	constructor(ow: OverwolfService, allCards: CardsFacadeService, prefs: PreferencesService) {
+	constructor(
+		ow: OverwolfService,
+		allCards: CardsFacadeService,
+		prefs: PreferencesService,
+		private readonly memory: MemoryInspectionService,
+	) {
 		super(
 			OverwolfService.DECKTRACKER_WINDOW,
 			(prefs) => true,
@@ -29,6 +35,11 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 			process.env.NODE_ENV !== 'production',
 		);
 		this.name = 'decktracker-player';
+		this.init();
+	}
+
+	private async init() {
+		this.onGameScreen = (await this.memory.getCurrentSceneFromMindVision()) === SceneMode.GAMEPLAY;
 	}
 
 	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {

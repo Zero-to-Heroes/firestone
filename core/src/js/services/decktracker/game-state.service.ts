@@ -16,6 +16,7 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { uuid } from '../utils';
@@ -185,6 +186,7 @@ export class GameStateService {
 		private secretsConfig: SecretConfigService,
 		private secretsParser: SecretsParserService,
 		private readonly deckHandler: DeckHandlerService,
+		private readonly memory: MemoryInspectionService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.eventParsers = this.buildEventParsers();
@@ -541,8 +543,8 @@ export class GameStateService {
 
 	private buildOverlayHandlers() {
 		this.overlayHandlers = [
-			new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs),
-			new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs),
+			new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
+			new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
 			new OpponentHandOverlayHandler(this.ow, this.allCards, this.prefs),
 			new SecretsHelperOverlayHandler(this.ow, this.allCards, this.prefs),
 			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
