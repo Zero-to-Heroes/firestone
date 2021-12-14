@@ -49,12 +49,19 @@ export class MindVisionService {
 					console.log('[mind-vision] leaving game, stopping memory poll', res);
 					const plugin = await this.get();
 					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+					await this.stopListening();
 					this.memoryUpdateListener = null;
+					this.initialized = false;
+					this.initializing = false;
 				}
 				await this.reset();
 			} else if ((await this.ow.inGame()) && res.gameChanged) {
 				if (!this.memoryUpdateListener) {
-					console.log('[mind-vision] starting game, starting memory poll');
+					console.log(
+						'[mind-vision] starting game, starting memory poll',
+						this.initialized,
+						this.initializing,
+					);
 					this.initialize();
 				}
 			}
@@ -418,6 +425,22 @@ export class MindVisionService {
 		});
 	}
 
+	public async stopListening(): Promise<void> {
+		console.log('[mind-vision] calling stopListening');
+		return new Promise<void>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.stopListening((result) => {
+					console.log('[mind-vision] stopListening done');
+					resolve();
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not stopListening', e);
+				resolve(null);
+			}
+		});
+	}
+
 	private async get() {
 		await this.waitForInit();
 		return this.mindVisionPlugin.get();
@@ -425,6 +448,7 @@ export class MindVisionService {
 
 	private async initialize() {
 		if (this.initialized || this.initializing) {
+			console.log('[mind-vision] already initialized, returning', this.initialized, this.initializing);
 			return;
 		}
 
