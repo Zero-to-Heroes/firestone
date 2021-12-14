@@ -421,7 +421,7 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	decrementSneed() {
-		if (this.sneeds <= 1) {
+		if (this.sneeds <= 0) {
 			return;
 		}
 		this.sneeds--;
@@ -520,7 +520,7 @@ export class BgsSimulatorMinionSelectionComponent
 			.includes(CardIds.LivingSpores_LivingSporesEnchantment);
 		this.sneeds = this._entity.enchantments
 			.map((e) => e.cardId)
-			.filter((cardId) => cardId === CardIds.LivingSpores_LivingSporesEnchantment).length;
+			.filter((cardId) => cardId === CardIds.SneedsReplicator_ReplicateEnchantment).length;
 		this.updateCard();
 	}
 
