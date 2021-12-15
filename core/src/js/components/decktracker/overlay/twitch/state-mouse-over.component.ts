@@ -101,7 +101,14 @@ export class StateMouseOverComponent {
 				this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
 			this.bottomWeaponCard = this._gameState.playerDeck.weapon && this._gameState.playerDeck.weapon.cardId;
 			this.bottomHandCards = this._gameState.playerDeck.hand.map((card) => card.cardId);
-			// console.debug('bottom cards info', this.bottomHeroPowerCard, this.bottomWeaponCard, this.bottomBoardCards);
+			console.debug(
+				'bottom cards info',
+				this.bottomHeroPowerCard,
+				this.bottomWeaponCard,
+				this.bottomBoardCards,
+				this.bottomHandCards,
+				this._gameState,
+			);
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

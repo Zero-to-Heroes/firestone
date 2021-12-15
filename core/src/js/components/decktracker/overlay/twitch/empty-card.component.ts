@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 
 @Component({
 	selector: 'empty-card',
@@ -23,12 +23,17 @@ export class EmptyCardComponent {
 	@Input() topOffset: number;
 	@Input() transform: string;
 
-	@Input('cardId') set cardId(value: string) {
+	@Input() set cardId(value: string) {
 		this._cardId = value;
-		const imageUrl = `https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png?v=3`;
-		// Preload
-		const image = new Image();
-		image.onload = () => console.debug('[image-preloader] preloaded image', imageUrl);
-		image.src = imageUrl;
+		// const imageUrl = `https://static.firestoneapp.com/cards/enUS/512/${value}.png?v=3`;
+		// // Preload
+		// const image = new Image();
+		// image.onload = () => console.debug('[image-preloader] preloaded image', imageUrl);
+		// image.src = imageUrl;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }

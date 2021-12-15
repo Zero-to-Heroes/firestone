@@ -15,9 +15,9 @@ import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 	styleUrls: [
 		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/global/reset-styles.scss`,
+		'../../../../../css/themes/battlegrounds-theme.scss',
 		`../../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
 		`../../../../../css/component/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component.scss`,
-		'../../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
 		<div

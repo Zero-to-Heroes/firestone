@@ -17,6 +17,7 @@ import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
+import { GameEvent } from '../../models/game-event';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
@@ -76,11 +77,12 @@ export class TwitchAuthService {
 
 	private async processQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
-		if (Date.now() - this.lastProcessTimestamp < 4000) {
+		if (Date.now() - this.lastProcessTimestamp < 4000 || !eventQueue?.length) {
 			return eventQueue;
 		}
 		this.lastProcessTimestamp = Date.now();
-		const mostRecentEvent = eventQueue[eventQueue.length - 1];
+		const mostRecentEvent =
+			eventQueue.find((event) => event.event.name === GameEvent.GAME_END) ?? eventQueue[eventQueue.length - 1];
 		await this.emitEvent(mostRecentEvent);
 		return [];
 	}

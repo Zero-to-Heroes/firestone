@@ -26,7 +26,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				*ngIf="gameState || bgsState"
 			></state-mouse-over>
 			<decktracker-overlay-standalone
-				*ngIf="!bgsState?.inGame"
+				*ngIf="!bgsState?.inGame && !gameState?.gameEnded"
 				[gameState]="gameState"
 				(dragStart)="onDragStart()"
 				(dragEnd)="onDragEnd()"
@@ -67,7 +67,6 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			this.fetchInitialState();
 			this.twitch.listen('broadcast', (target, contentType, event) => {
 				const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
-
 				this.processEvent(deckEvent);
 			});
 		});
@@ -107,27 +106,26 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	}
 
 	private async processEvent(event) {
-		// console.log('received event', event);
+		console.log('received event', event);
 		if (event.type === 'bgs') {
 			this.bgsState = event.state;
 			// Don't overwrite the battle state if not present in the input state
 			this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
-
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} else if (event.type === 'bgs-battle') {
 			this.bgsBattleState = event.state;
-
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-		} else if (event && event.event) {
+		} else if (event && !!event.event) {
 			switch (event.event.name) {
 				case GameEvent.GAME_END:
 					console.log('received GAME_END event');
 					this.gameState = undefined;
 					this.bgsState = undefined;
+					this.bgsBattleState = undefined;
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}

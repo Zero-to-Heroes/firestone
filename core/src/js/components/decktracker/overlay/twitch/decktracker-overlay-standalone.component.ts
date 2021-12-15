@@ -40,7 +40,7 @@ import { GameState } from '../../../../models/decktracker/game-state';
 						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck">
 						</decktracker-twitch-title-bar>
 						<decktracker-deck-list
-							*ngIf="gameState.playerDeck?.deck.length > 0"
+							*ngIf="gameState?.playerDeck?.deck?.length > 0"
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
 							[tooltipPosition]="tooltipPosition"
@@ -54,13 +54,13 @@ import { GameState } from '../../../../models/decktracker/game-state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
+	@Output() dragStart = new EventEmitter<void>();
+	@Output() dragEnd = new EventEmitter<void>();
 	@Input('gameState') gameState: GameState;
+
 	displayMode: string;
 	dragging: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
-
-	@Output() dragStart = new EventEmitter<void>();
-	@Output() dragEnd = new EventEmitter<void>();
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
 
