@@ -13,7 +13,7 @@ export class GenericPreferencesUpdateEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 
 	public isResetHistoryEvent(): boolean {
