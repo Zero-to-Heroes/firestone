@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
@@ -83,6 +84,7 @@ export class AppBootstrapService {
 		private gameStateService: GameStateService,
 		private prefs: PreferencesService,
 		private notifs: OwNotificationsService,
+		private translate: TranslateService,
 		private settingsCommunicationService: SettingsCommunicationService,
 		private init_decktrackerDisplayService: OverlayDisplayService,
 		private init_endGameListenerService: EndGameListenerService,
@@ -113,6 +115,10 @@ export class AppBootstrapService {
 	}
 
 	private async doInit() {
+		// this language will be used as a fallback when a translation isn't found in the current language
+		this.translate.setDefaultLang('enUS');
+		window['translateService'] = this.translate;
+
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
@@ -178,6 +184,16 @@ export class AppBootstrapService {
 		// const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		const prefs = await this.prefs.getPreferences();
 		await this.ow.hideCollectionWindow(prefs);
+
+		// the lang to use, if the lang isn't available, it will use the current loader to get them
+		await this.translate.use(prefs.locale).toPromise();
+		console.log(
+			'using locale for app',
+			prefs.locale,
+			this.translate.currentLang,
+			await this.translate.get('app.menu.go-premium-header').toPromise(),
+		);
+
 		// await this.ow.hideWindow(collectionWindow.id);
 		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);

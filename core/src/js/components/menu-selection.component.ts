@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
@@ -34,8 +35,7 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/decktracker.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Constructed</div>
-					<!-- <div class="menu-text-details">See all your constructed stuff!</div> -->
+					<div class="menu-header" [owTranslate]="'app.menu.constructed-header'"></div>
 				</div>
 			</li>
 			<li
@@ -45,7 +45,7 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Battlegrounds</div>
+					<div class="menu-header" [owTranslate]="'app.menu.battlegrounds-header'"></div>
 				</div>
 			</li>
 			<li
@@ -56,21 +56,21 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Mercenaries</div>
+					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
 				</div>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'duels' }" (mousedown)="selectModule('duels')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Duels</div>
+					<div class="menu-header" [owTranslate]="'app.menu.duels-header'"></div>
 				</div>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'arena' }" (mousedown)="selectModule('arena')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/arena.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Arena</div>
+					<div class="menu-header" [owTranslate]="'app.menu.arena-header'"></div>
 				</div>
 			</li>
 			<li class="main-menu-separator"></li>
@@ -82,7 +82,7 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/replays.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Replays</div>
+					<div class="menu-header" [owTranslate]="'app.menu.replays-header'"></div>
 				</div>
 			</li>
 			<li
@@ -92,14 +92,14 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/achievements.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Achievements</div>
+					<div class="menu-header" [owTranslate]="'app.menu.achievements-header'"></div>
 				</div>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/collection.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Collection</div>
+					<div class="menu-header" [owTranslate]="'app.menu.collection-header'"></div>
 				</div>
 			</li>
 			<li
@@ -110,7 +110,7 @@ declare let amplitude;
 				<div class="icon" inlineSVG="assets/svg/whatsnew/stats.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-header">Stats</div>
+					<div class="menu-header" [owTranslate]="'app.menu.stats-header'"></div>
 				</div>
 			</li>
 
@@ -120,7 +120,7 @@ declare let amplitude;
 					<div class="icon" inlineSVG="assets/svg/whatsnew/go_premium.svg"></div>
 					<div class="text">
 						<div class="text-background"></div>
-						<div class="menu-header">Support the dev and remove the ads</div>
+						<div class="menu-header" [owTranslate]="'app.menu.go-premium-header'"></div>
 					</div>
 				</li>
 				<li class="main-menu-separator"></li>
@@ -129,9 +129,14 @@ declare let amplitude;
 				<img class="avatar" [src]="avatarUrl$ | async" />
 				<div class="text">
 					<div class="text-background"></div>
-					<div class="menu-text-details" *ngIf="{ userName: userName$ | async } as value">
-						{{ value.userName ? 'Logged in as ' + value.userName : 'Log in to save your progress online' }}
-					</div>
+					<div
+						class="menu-text-details"
+						*ngIf="{ userName: userName$ | async } as value"
+						[owTranslate]="
+							value.userName ? 'app.menu.logged-in-as-header' : 'app.menu.not-logged-in-header'
+						"
+						[translateParams]="{ value: value.userName }"
+					></div>
 				</div>
 			</li>
 		</ul>
@@ -155,6 +160,7 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	constructor(
 		private ow: OverwolfService,
 		private adService: AdService,
+		private readonly translate: TranslateService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -173,6 +179,17 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.showGoPremium = await this.adService.shouldDisplayAds();
+		console.debug('translate', this.translate);
+		// TODO: this doesn't work because each window is a new module, and doesn't share the translation service
+		// with the main window.
+		// Either have each window listen to loc change events and reload the translations, or find a way to share the service,
+		// which probably means rewriting the directive
+		console.debug(
+			'using locale for app',
+			this.translate.currentLang,
+			await this.translate.get('app.menu.go-premium-header').toPromise(),
+		);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

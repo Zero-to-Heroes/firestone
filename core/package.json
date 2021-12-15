@@ -48,6 +48,8 @@
 		"@firestone-hs/user-bgs-post-match-stats": "^1.0.3",
 		"@firestone-hs/user-packs": "^1.0.1",
 		"@ng-select/ng-select": "^6.1.0",
+		"@ngx-translate/core": "^13.0.0",
+		"@ngx-translate/http-loader": "^6.0.0",
 		"@sebastientromp/ngx-charts": "^19.0.5",
 		"@sentry/browser": "^6.2.5",
 		"@sentry/integrations": "^6.2.5",

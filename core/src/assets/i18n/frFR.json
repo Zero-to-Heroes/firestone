@@ -1,0 +1,18 @@
+{
+	"app": {
+		"menu": {
+			"constructed-header": "Construit",
+			"battlegrounds-header": "Champs de Bataille",
+			"mercenaries-header": "Mercenaires",
+			"duels-header": "Duels",
+			"arena-header": "Arène",
+			"replays-header": "Replays",
+			"achievements-header": "Hauts-faits",
+			"collection-header": "Collection",
+			"stats-header": "Stats",
+			"go-premium-header": "Soutenez le dev et supprimez les pubs",
+			"logged-in-as-header": "Connecté(e) en tant que {{value}}",
+			"not-logged-in-header": "Connectez-vous pour sauvegarder votre progression en ligne"
+		}
+	}
+}

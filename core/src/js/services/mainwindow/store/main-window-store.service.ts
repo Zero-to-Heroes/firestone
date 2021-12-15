@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
@@ -111,6 +112,7 @@ import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { GenericPreferencesUpdateEvent } from './events/generic-preferences-update-event';
+import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
@@ -233,6 +235,7 @@ import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
+import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
@@ -319,6 +322,7 @@ export class MainWindowStoreService {
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
+		private readonly translate: TranslateService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -493,6 +497,9 @@ export class MainWindowStoreService {
 
 			GenericPreferencesUpdateEvent.eventName(),
 			new GenericPreferencesUpdateProcessor(this.prefs),
+
+			LocalizationUpdateEvent.eventName(),
+			new LocalizationUpdateProcessor(this.prefs, this.translate),
 
 			SceneChangedEvent.eventName(),
 			new SceneChangedProcessor(),

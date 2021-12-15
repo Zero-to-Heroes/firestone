@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
+import { LocalizationUpdateEvent } from '../../../services/mainwindow/store/events/localization-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -56,6 +56,6 @@ export class LocalizationDropdownComponent extends AbstractSubscriptionComponent
 	}
 
 	onSelected(option: IOption) {
-		this.store.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, locale: option.value })));
+		this.store.send(new LocalizationUpdateEvent(option.value));
 	}
 }

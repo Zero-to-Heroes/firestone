@@ -1,0 +1,18 @@
+{
+	"app": {
+		"menu": {
+			"constructed-header": "Constructed",
+			"battlegrounds-header": "Battlegrounds",
+			"mercenaries-header": "Mercenaries",
+			"duels-header": "Duels",
+			"arena-header": "Arena",
+			"replays-header": "Replays",
+			"achievements-header": "Achievements",
+			"collection-header": "Collection",
+			"stats-header": "Stats",
+			"go-premium-header": "Support the dev and remove the ads",
+			"logged-in-as-header": "Logged in as {{value}}",
+			"not-logged-in-header": "Log in to save your progress online"
+		}
+	}
+}
