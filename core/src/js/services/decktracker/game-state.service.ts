@@ -26,6 +26,7 @@ import { DeckHandlerService } from './deck-handler.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
+import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
@@ -420,6 +421,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -601,6 +603,7 @@ export class GameStateService {
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
+			new BgsHeroSelectedCardParser(this.helper),
 			new CardRecruitedParser(this.helper),
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
