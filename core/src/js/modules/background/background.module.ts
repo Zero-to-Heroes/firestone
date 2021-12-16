@@ -328,7 +328,6 @@ import { StatsFiltersComponent } from '../../components/stats/desktop/filters/_s
 import { StatsDesktopComponent } from '../../components/stats/desktop/stats-desktop.component';
 import { StatsXpGraphComponent } from '../../components/stats/desktop/stats-xp-graph.component';
 import { OutOfCardsCallbackComponent } from '../../components/third-party/out-of-cards-callback.component';
-import { TwitchAuthCallbackComponent } from '../../components/twitch-auth/twitch-auth-callback.component';
 import { OwTranslateDirective } from '../../directives/ow-translate.directive';
 import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
@@ -485,7 +484,6 @@ const components = [
 	MercenariesOutOfCombatPlayerTeamComponent,
 	MercenariesOutOfCombatTreasureSelectionComponent,
 
-	TwitchAuthCallbackComponent,
 	SettingsComponent,
 ];
 
@@ -857,7 +855,7 @@ const components = [
 		CardsFacadeService,
 		RefCards,
 		// For coliseum-components
-		{ provide: AllCardsService, useClass: CardsFacadeService },
+		{ provide: AllCardsService, useExisting: CardsFacadeService },
 
 		DevService,
 		GameEvents,

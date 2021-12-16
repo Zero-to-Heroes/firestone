@@ -2,12 +2,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
-import { OutcomeSamples } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { deflate } from 'pako';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
-	TwitchBgsCurrentBattle,
 	TwitchBgsPlayer,
 	TwitchBgsState,
 } from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
@@ -20,7 +19,8 @@ import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
-import { ProcessingQueue } from '../processing-queue.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { areDeepEqual } from '../utils';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
@@ -32,282 +32,151 @@ const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
 const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
-const MAX_TWITCH_MESSAGE_SIZE = 4500;
-
 @Injectable()
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
-	private processingQueue = new ProcessingQueue<any>(
-		(eventQueue) => this.processQueue(eventQueue),
-		1000,
-		'twitch-emitter',
-	);
-	private bgsProcessingQueue = new ProcessingQueue<any>(
-		(eventQueue) => this.processBgsQueue(eventQueue),
-		1000,
-		'twitch-bgs-emitter',
-	);
-
-	private lastProcessTimestamp = 0;
-	private lastProcessBgsTimestamp = 0;
-	private twitchUserId: string;
+	private deckEvents = new BehaviorSubject<{ event: string; state: GameState }>(null);
+	private bgEvents = new BehaviorSubject<BattlegroundsState>(null);
+	private twitchAccessToken$: Observable<string>;
 
 	constructor(
 		private prefs: PreferencesService,
 		private http: HttpClient,
 		private notificationService: OwNotificationsService,
+		private store: AppUiStoreFacadeService,
 	) {
-		window['twitchAuthUpdater'] = this.stateUpdater;
+		this.init();
+	}
 
+	private async init() {
 		this.stateUpdater.subscribe((twitchInfo: any) => {
 			console.log('[twitch-auth] received access token', !!twitchInfo);
 			this.saveAccessToken(twitchInfo.access_token);
 		});
-		console.log('[twitch-auth] handler init done');
+
+		await this.store.initComplete();
+		this.twitchAccessToken$ = this.store
+			.listenPrefs$((prefs) => prefs.twitchAccessToken)
+			.pipe(
+				map(([pref]) => pref),
+				distinctUntilChanged(),
+			);
+		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$)
+			.pipe(
+				debounceTime(1000),
+				distinctUntilChanged(),
+				map(([deckEvent, bgsState, twitchAccessToken]) =>
+					this.buildEvent(deckEvent, bgsState, twitchAccessToken),
+				),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+			)
+			.subscribe((event) => this.sendEvent(event));
+		console.log('[twitch-auth] init done');
 	}
 
 	public async emitDeckEvent(event: any) {
-		this.processingQueue.enqueue(event);
+		console.debug('[twitch-auth] enqueueing deck event', event);
+		if ([GameEvent.SCENE_CHANGED_MINDVISION].includes(event.event.name)) {
+			return;
+		}
+		this.deckEvents.next({ event: event.event.name, state: event.state });
 	}
 
 	public async emitBattlegroundsEvent(event: any) {
-		this.bgsProcessingQueue.enqueue(event);
+		console.debug('[twitch-auth] enqueueing bg event', event);
+		this.bgEvents.next(event);
 	}
 
-	private async processQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
-		// Debounce events
-		if (Date.now() - this.lastProcessTimestamp < 4000 || !eventQueue?.length) {
-			return eventQueue;
-		}
-		this.lastProcessTimestamp = Date.now();
-		const mostRecentEvent =
-			eventQueue.find((event) => event.event.name === GameEvent.GAME_END) ?? eventQueue[eventQueue.length - 1];
-		await this.emitEvent(mostRecentEvent);
-		return [];
-	}
-
-	private async processBgsQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
-		// Debounce events
-		if (Date.now() - this.lastProcessBgsTimestamp < 4000) {
-			return eventQueue;
-		}
-		this.lastProcessBgsTimestamp = Date.now();
-		const mostRecentEvent = eventQueue[eventQueue.length - 1];
-		await this.emitBgsEvent(mostRecentEvent);
-		return [];
-	}
-
-	private async emitEvent(event: any) {
-		// return;
-		let newEvent: { type: string; state: GameState } = Object.assign(
-			{
-				type: 'deck-event',
-			},
-			event,
-		);
-		if (!newEvent.state) {
-			newEvent = Object.assign({}, newEvent, {
-				state: GameState.create(),
-			});
+	private buildEvent(
+		deckEvent: { event: string; state: GameState },
+		bgsState: BattlegroundsState,
+		twitchAccessToken: string,
+	): TwitchEvent {
+		if (!twitchAccessToken) {
+			return null;
 		}
 
-		// TODO: clean this to only send the relevant info
-		const newState = Object.assign(new GameState(), {
-			playerDeck: this.cleanDeck(newEvent.state.playerDeck),
-			opponentDeck: this.cleanDeck(newEvent.state.opponentDeck),
-			mulliganOver: newEvent.state.mulliganOver,
-			metadata: newEvent.state.metadata,
-			currentTurn: newEvent.state.currentTurn,
-			gameStarted: newEvent.state.gameStarted,
-			gameEnded: newEvent.state.gameEnded,
-		} as GameState);
+		if (!deckEvent) {
+			return null;
+		}
 
-		newEvent = Object.assign({}, newEvent, {
-			state: newState,
+		const newDeckState = GameState.create({
+			playerDeck: this.cleanDeck(
+				deckEvent.state.playerDeck,
+				deckEvent.state.isBattlegrounds(),
+				deckEvent.state.isMercenaries(),
+			),
+			opponentDeck: this.cleanDeck(
+				deckEvent.state.opponentDeck,
+				deckEvent.state.isBattlegrounds(),
+				deckEvent.state.isMercenaries(),
+			),
+			mulliganOver: deckEvent.state.mulliganOver,
+			metadata: deckEvent.state.metadata,
+			currentTurn: deckEvent.state.currentTurn,
+			gameStarted: deckEvent.state.gameStarted,
+			gameEnded: deckEvent.state.gameEnded,
 		});
 
-		// Tmp fix until we fix the twitch extension
-		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
-			const newDeck: readonly DeckCard[] = [
-				...newEvent.state.playerDeck.deck,
-				...newEvent.state.playerDeck.hand,
-				...newEvent.state.playerDeck.otherZone,
-			].sort((a, b) => a.manaCost - b.manaCost);
-			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
-				deck: newDeck,
-			} as DeckState);
-			const newState = Object.assign(new GameState(), newEvent.state, {
-				playerDeck: newPlayerDeck,
-			} as GameState);
-			newEvent = Object.assign({}, newEvent, {
-				state: newState,
-			});
-		}
-		// We need deck info for board and hand at least
-		if (newEvent.state && (newEvent.state.isBattlegrounds() || newEvent.state.isMercenaries())) {
-			// Don't show anything in the deck itself
-			const newState = Object.assign(new GameState(), newEvent.state, {
-				playerDeck: {
-					hand: newEvent.state.playerDeck.hand,
-					board: newEvent.state.playerDeck.board,
-				},
-				opponentDeck: {
-					hand: newEvent.state.opponentDeck.hand,
-					board: newEvent.state.opponentDeck.board,
-				},
-			} as GameState);
-			newEvent = Object.assign({}, newEvent, {
-				state: newState,
-			});
-		}
-		this.sendEvent(newEvent);
-	}
-
-	private async emitBgsEvent(state: BattlegroundsState) {
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs.twitchAccessToken) {
-			return;
-		}
-		const latestBattle = state.currentGame?.lastFaceOff();
-		const stateToSend: TwitchBgsState = {
-			leaderboard: this.buildLeaderboard(state),
-			// TODO: remove this once everything is properly deployed on Twitch
-			currentBattle: {
-				battleInfo: latestBattle?.battleResult ? { ...latestBattle?.battleResult, outcomeSamples: null } : null,
-				status: latestBattle?.battleInfoStatus,
-			},
-			currentTurn: state.currentGame?.currentTurn,
-			inGame: state.inGame,
-			gameEnded: state.currentGame?.gameEnded,
-		};
-
-		// For now remove this, as it's clearly not optimized and can cause some CPU issues
-		const shouldSplitMessage = false; // this.shouldSplitMessage(stateToSend);
-		if (!shouldSplitMessage) {
-			this.sendEvent({
-				type: 'bgs',
-				state: stateToSend,
-			});
-		} else {
-			const { currentBattle, ...newEvent } = stateToSend;
-
-			const bgsStateEvent = {
-				type: 'bgs',
-				state: newEvent,
-			};
-			this.sendEvent(bgsStateEvent);
-
-			// console.warn('battle message too big, considering splitting it');
-			const cleanedCurrentBattle = this.cleanCurrentBattle(currentBattle);
-			if (!cleanedCurrentBattle) {
-				console.warn('Could not compress message enough');
-				return;
-			}
-			const bgsBattleEvent = {
-				event: {
-					// Here for backward compatibility purpose
-					name: 'bgs-battle',
-				},
-				type: 'bgs-battle',
-				state: cleanedCurrentBattle,
-			};
-
-			this.sendEvent(bgsBattleEvent);
-		}
-	}
-
-	private cleanDeck(playerDeck: DeckState): DeckState {
-		return playerDeck;
-		// return {
-		// 	...playerDeck,
-		// 	board: playerDeck.board.map((card) => this.cleanCard(card)) as readonly DeckCard[],
-		// 	deck: playerDeck.deck.map((card) => this.cleanCard(card)) as readonly DeckCard[],
-		// 	hand: playerDeck.hand.map((card) => this.cleanCard(card)) as readonly DeckCard[],
-		// } as DeckState;
-	}
-
-	// private cleanCard(card: DeckCard): DeckCard {
-	// 	return {
-	// 		...card,
-
-	// 	}
-	// }
-
-	private cleanCurrentBattle(currentBattle: TwitchBgsCurrentBattle, threshold = 15): TwitchBgsCurrentBattle {
-		let shouldSplit = true;
-		while (threshold && threshold > 0 && shouldSplit) {
-			currentBattle = this.cleanOutcome(currentBattle, threshold, [
-				{
-					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.lostPercent,
-					cleaner: (outcomeSamples: OutcomeSamples) => ({
-						...outcomeSamples,
-						lost: undefined,
-					}),
-				} as Cleaner,
-				{
-					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.tiedPercent,
-					cleaner: (outcomeSamples: OutcomeSamples) => ({
-						...outcomeSamples,
-						tied: undefined,
-					}),
-				} as Cleaner,
-				{
-					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.wonPercent,
-					cleaner: (outcomeSamples: OutcomeSamples) => ({
-						...outcomeSamples,
-						won: undefined,
-					}),
-				} as Cleaner,
-			]);
-			threshold = threshold - 3;
-			if (threshold > 0) {
-				shouldSplit = this.shouldSplitMessage(currentBattle);
-			}
-			if (shouldSplit) {
-				// console.warn(
-				// 	'[twitch] battle message still too big, considering further cleaning',
-				// 	new Blob([deflate(JSON.stringify(currentBattle), { to: 'string' })]).size,
-				// 	JSON.stringify(currentBattle).length,
-				// 	currentBattle,
-				// 	threshold,
-				// );
-			} else {
-			}
-		}
-		return currentBattle;
-	}
-
-	private cleanOutcome(
-		battle: TwitchBgsCurrentBattle,
-		threshold: number,
-		cleaners: readonly Cleaner[],
-	): TwitchBgsCurrentBattle {
-		for (const cleaner of cleaners) {
-			if (cleaner.selector(battle) >= threshold) {
-				battle = {
-					...battle,
-					battleInfo: {
-						...battle.battleInfo,
-						outcomeSamples: cleaner.cleaner(battle.battleInfo.outcomeSamples),
+		const latestBattle = bgsState?.currentGame?.lastFaceOff();
+		const newBgsState: TwitchBgsState = !!bgsState
+			? {
+					leaderboard: this.buildLeaderboard(bgsState),
+					currentBattle: {
+						battleInfo: latestBattle?.battleResult
+							? { ...latestBattle?.battleResult, outcomeSamples: null }
+							: null,
+						status: latestBattle?.battleInfoStatus,
 					},
-				};
-			}
-		}
+					currentTurn: bgsState.currentGame?.currentTurn,
+					inGame: bgsState.inGame,
+					gameEnded: bgsState.currentGame?.gameEnded,
+			  }
+			: null;
 
-		return battle;
+		return {
+			deck: newDeckState,
+			bgs: newBgsState,
+		};
 	}
 
-	private shouldSplitMessage(message: any) {
-		const compressedMessage = deflate(JSON.stringify(message), { to: 'string' });
-		const messageSize = new Blob([compressedMessage]).size;
-		return messageSize >= MAX_TWITCH_MESSAGE_SIZE;
+	private cleanDeck(deckState: DeckState, isBattlegrounds: boolean, isMercenaries: boolean): DeckState {
+		if (isBattlegrounds || isMercenaries) {
+			return {
+				hand: this.cleanZone(deckState.hand),
+				board: this.cleanZone(deckState.board),
+			} as DeckState;
+		}
+		return {
+			...deckState,
+			hand: this.cleanZone(deckState.hand),
+			board: this.cleanZone(deckState.board),
+			deck: this.cleanZone(deckState.deck),
+			otherZone: this.cleanZone(deckState.otherZone),
+			deckList: this.cleanZone(deckState.deckList),
+			secrets: undefined,
+			spellsPlayedThisMatch: undefined,
+			dynamicZones: undefined,
+			cardsPlayedThisTurn: undefined,
+			cardsPlayedFromInitialDeck: undefined,
+		} as DeckState;
+	}
+
+	private cleanZone(zone: readonly DeckCard[]): readonly DeckCard[] {
+		return zone.map(
+			(card) =>
+				({
+					...card,
+					// So that we localize the card name, even if that means we lose some info
+					cardName: undefined,
+					metaInfo: undefined,
+				} as DeckCard),
+		);
 	}
 
 	private hasLoggedInfoOnce = false;
-	private async sendEvent(newEvent) {
-		// return;
-
+	private async sendEvent(newEvent: TwitchEvent) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
 			return;
@@ -318,19 +187,13 @@ export class TwitchAuthService {
 			(data: any) => {
 				// Do nothing
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
-					// 	const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
 					this.hasLoggedInfoOnce = true;
 					console.error('no-format', '[twitch] Message sent to Twitch is too large');
 					console.debug('[twitch] message', data, newEvent);
 				}
 			},
 			(error) => {
-				// if (!this.hasLoggedInfoOnce) {
-				// 	const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
-				// 	const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
-				// 	this.hasLoggedInfoOnce = true;
 				console.error('[twitch-auth] Could not send deck event to EBS', error);
-				// }
 			},
 		);
 	}
@@ -449,7 +312,7 @@ export class TwitchAuthService {
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
 				(data: any) => {
 					console.log('[twitch-auth] validating token', data);
-					this.twitchUserId = data.user_id;
+					// this.twitchUserId = data.user_id;
 					resolve(true);
 				},
 				() => {
@@ -485,7 +348,7 @@ export class TwitchAuthService {
 	}
 }
 
-interface Cleaner {
-	selector: (battle: TwitchBgsCurrentBattle) => number;
-	cleaner: (outcomeSamples: OutcomeSamples) => OutcomeSamples;
+export interface TwitchEvent {
+	readonly deck: GameState;
+	readonly bgs: TwitchBgsState;
 }

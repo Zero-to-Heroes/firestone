@@ -1,4 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '../../services/utils';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
 
@@ -15,9 +16,8 @@ export class GameState {
 	readonly spectating: boolean;
 
 	// When adding new stuff, don't forget to clean them in twitch-auth.service.ts
-
-	public static create(): GameState {
-		return Object.assign(new GameState());
+	public static create(base?: Partial<NonFunctionProperties<GameState>>): GameState {
+		return Object.assign(new GameState(), base);
 	}
 
 	public update(value: GameState): GameState {
