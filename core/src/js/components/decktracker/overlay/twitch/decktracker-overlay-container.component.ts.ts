@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
+import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
+import { LocalizationStandaloneService } from './localization-standalone.service';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
@@ -21,12 +22,13 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	template: `
 		<div class="container drag-boundary overlay-container-parent battlegrounds-theme">
 			<state-mouse-over
+				*ngIf="gameState || bgsState"
 				[gameState]="gameState"
 				[bgsState]="bgsState"
-				*ngIf="gameState || bgsState"
+				[overlayLeftOffset]="horizontalOffset"
 			></state-mouse-over>
 			<decktracker-overlay-standalone
-				*ngIf="!bgsState?.inGame && !gameState?.gameEnded"
+				*ngIf="showDecktracker"
 				[gameState]="gameState"
 				(dragStart)="onDragStart()"
 				(dragEnd)="onDragEnd()"
@@ -48,11 +50,18 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	bgsState: TwitchBgsState;
 	bgsBattleState: TwitchBgsCurrentBattle;
 	activeTooltip: string;
+	showDecktracker: boolean;
+	horizontalOffset: number;
 
 	private twitch;
 	private token: string;
+	private localeInit: boolean;
 
-	constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly http: HttpClient,
+		private readonly i18n: LocalizationStandaloneService,
+	) {}
 
 	async ngAfterViewInit() {
 		if (!(window as any).Twitch) {
@@ -60,18 +69,57 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			return;
 		}
 		this.twitch = (window as any).Twitch.ext;
-		this.twitch.onAuthorized((auth) => {
+		this.twitch.onAuthorized(async (auth) => {
+			this.localeInit = false;
 			console.log('on authorized', auth);
 			this.token = auth.token;
 			console.log('set token', this.token);
-			this.fetchInitialState();
-			this.twitch.listen('broadcast', (target, contentType, event) => {
-				const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
+			console.log('search params', window.location.search);
+			const queryLanguage = new URLSearchParams(window.location.search).get('language');
+			const language = mapTwitchLanguageToHsLocale(queryLanguage);
+			console.log('mapped to HS locale', language);
+			await this.i18n.setLocale(language);
+			console.log('finished setting up locale', language, this.i18n);
+			this.localeInit = true;
+			// this.fetchInitialState();
+			this.twitch.listen('broadcast', async (target, contentType, event) => {
+				await this.waitForLocaleInit();
+				const deckEvent: TwitchEvent = JSON.parse(inflate(event, { to: 'string' }));
 				this.processEvent(deckEvent);
 			});
 		});
+		// this.twitch.onContext(async (context, props) => {
+		// 	console.log('on context', context, props);
+		// 	if (!props?.length || props.includes('language')) {
+		// 		this.localeInit = false;
+		// 		console.log('changing extension language', context?.language);
+		// 		const language = mapTwitchLanguageToHsLocale(context?.language);
+		// 		console.log('mapped to HS locale', language);
+		// 		await this.i18n.setLocale(language);
+		// 		console.log('finished setting up locale', language);
+		// 		this.localeInit = true;
+		// 	}
+		// });
+		this.twitch.configuration.onChanged(() => {
+			console.log();
+			console.log(
+				'received configuration',
+				this.twitch.configuration.broadcaster,
+				window,
+				window.location,
+				window.location.search,
+			);
+			if (this.twitch.configuration.broadcaster) {
+				const config = JSON.parse(this.twitch.configuration.broadcaster.content);
+				console.log('config', config);
+				this.horizontalOffset = config?.horizontalOffset;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
+		});
 		console.log('init done');
-		this.addDebugGameState();
+		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -105,38 +153,19 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		);
 	}
 
-	private async processEvent(event) {
+	private async processEvent(event: TwitchEvent) {
 		console.log('received event', event);
-		if (event.type === 'bgs') {
-			this.bgsState = event.state;
-			// Don't overwrite the battle state if not present in the input state
-			this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		} else if (event.type === 'bgs-battle') {
-			this.bgsBattleState = event.state;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		} else if (event && !!event.event) {
-			switch (event.event.name) {
-				case GameEvent.GAME_END:
-					console.log('received GAME_END event');
-					this.gameState = undefined;
-					this.bgsState = undefined;
-					this.bgsBattleState = undefined;
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-					break;
-				default:
-					this.gameState = event.state;
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-					break;
-			}
+		this.bgsState = event?.bgs;
+		// Don't overwrite the battle state if not present in the input state
+		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
+		this.gameState = event?.deck;
+		this.showDecktracker =
+			!!this.gameState &&
+			!this.bgsState?.inGame &&
+			!this.gameState.gameEnded &&
+			(!!this.gameState.playerDeck?.deckList?.length || !!this.gameState.playerDeck?.deck?.length);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
@@ -145,4 +174,40 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		this.bgsState = fakeBgsState as any;
 		console.log('loaded fake state', this.gameState, this.bgsState);
 	}
+
+	private waitForLocaleInit(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.localeInit) {
+					resolve();
+				} else {
+					setTimeout(() => dbWait(), 50);
+				}
+			};
+			dbWait();
+		});
+	}
 }
+
+const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
+	const mapping = {
+		// 'de': 'deDE',
+		'en': 'enUS',
+		'en-gb': 'enUS',
+		// 'es': 'esES',
+		// 'es-mx': 'esMX',
+		'fr': 'frFR',
+		// 'it': 'itIT',
+		// 'ja': 'jaJP',
+		// 'ko': 'koKR',
+		// 'pl': 'plPL',
+		// 'pt': 'ptBR',
+		// 'pt-br': 'ptBR',
+		// 'ru': 'ruRU',
+		// 'th': 'thTH',
+		// 'zh-cn': 'zhCN',
+		// 'zh-tw': 'zhTW',
+	};
+	const hsLocale = mapping[twitchLanguage] ?? 'enUS';
+	return hsLocale;
+};

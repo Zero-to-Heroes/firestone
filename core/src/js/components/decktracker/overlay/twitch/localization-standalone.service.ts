@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
 import { ImageLocalizationOptions } from '../../../../services/localization.service';
-import { capitalizeEachWord } from '../../../../services/utils';
+import { capitalizeEachWord, uuid } from '../../../../services/utils';
+import { CardsFacadeStandaloneService } from './cards-facade-standalone.service';
 
 // For Twitch
 @Injectable()
@@ -10,7 +10,12 @@ export class LocalizationStandaloneService {
 	private locale = 'enUS';
 	private useHighResImages = true;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeStandaloneService) {}
+
+	public async setLocale(locale: string) {
+		this.locale = locale;
+		await this.allCards.setLocale(locale);
+	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		if (!cardId) {

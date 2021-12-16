@@ -17,7 +17,7 @@
 		"justbuild": "node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors && npm run zipdist",
 		"postinstall": "npm run remove_evil:sentry-types && npm run remove_evil:node_modules",
 		"dev-twitch": "npm run postinstall && rimraf dist-twitch && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
-		"build-twitch": "rimraf dist-twitch && npm audit fix && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
+		"build-twitch": "rimraf dist-twitch && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
 	},
 	"license": "MIT",
 	"dependencies": {

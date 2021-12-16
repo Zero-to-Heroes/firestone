@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, Locale, ReferenceCard } from '@firestone-hs/reference-data';
+import { AllCardsService, ReferenceCard } from '@firestone-hs/reference-data';
 import { CARDS_VERSION } from '../../../../services/hs-utils';
 
 @Injectable()
 export class CardsFacadeStandaloneService {
 	constructor(private readonly service: AllCardsService) {
-		const fileName = this.getFileName('enUS');
-		console.log('initializing cards db with', fileName);
-		this.service.initializeCardsDb(CARDS_VERSION, fileName);
+		// this.setLocale('enUS');
 	}
 
-	private getFileName(locale: string) {
-		return `cards_${Locale[Locale.enUS]}.json`;
+	public async setLocale(locale: string) {
+		const fileName = this.getFileName(locale);
+		console.log('initializing cards db with', fileName);
+		await this.service.initializeCardsDb(CARDS_VERSION, fileName);
+		console.log('cards initialized', this.service.getCards()[0]);
 	}
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
@@ -34,5 +35,9 @@ export class CardsFacadeStandaloneService {
 
 	public getService() {
 		return this.service;
+	}
+
+	private getFileName(locale: string) {
+		return `cards_${locale}.json`;
 	}
 }

@@ -13,6 +13,7 @@
 .state-mouse-over {
 	height: 100%;
 	aspect-ratio: 16/9;
+	position: relative;
 }
 
 empty-card {
@@ -73,18 +74,18 @@ empty-card {
 }
 
 .top-board {
-	height: 16%;
+	height: 19%;
 	top: 27%;
 }
 
 .bottom-board {
-	height: 17%;
-	top: 44%;
+	height: 19%;
+	top: 47%;
 }
 
 .bottom-hero {
 	height: 21%;
-	top: 61%;
+	top: 65%;
 
 	.hero-power {
 		top: 14%;
@@ -123,10 +124,10 @@ empty-card {
 
 .bgs-leaderboard {
 	position: absolute;
-	height: 66%;
+	height: 73%;
 	width: 7%;
 	left: 15%;
-	top: 13%;
+	top: 14%;
 	display: flex;
 	flex-direction: column;
 	z-index: 1;

@@ -10,7 +10,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 		'../../../../../css/component/decktracker/overlay/twitch/state-mouse-over.component.scss',
 	],
 	template: `
-		<div class="state-mouse-over">
+		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
 			<ul class="bgs-leaderboard" *ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded">
 				<leaderboard-empty-card
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index"
@@ -56,8 +56,16 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StateMouseOverComponent {
+	@Input() set overlayLeftOffset(value: number) {
+		this.horizontalOffset = value ?? 0;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_gameState: GameState;
 	_bgsState: TwitchBgsState;
+	horizontalOffset = 0;
 
 	topHeroPowerCard: string;
 	topWeaponCard: string;
@@ -76,8 +84,11 @@ export class StateMouseOverComponent {
 			return;
 		}
 		this._bgsState = value;
-		this.bgsPlayers = this._bgsState.leaderboard;
-		this.currentTurn = this._bgsState.currentTurn;
+		this.bgsPlayers = this._bgsState?.leaderboard;
+		this.currentTurn = this._bgsState?.currentTurn;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@Input() set gameState(value: GameState) {
@@ -85,32 +96,22 @@ export class StateMouseOverComponent {
 			return;
 		}
 		this._gameState = value;
-		if (!value) {
-			return;
-		}
-		if (this._gameState.opponentDeck) {
-			this.topHeroPowerCard =
-				this._gameState.opponentDeck.heroPower && this._gameState.opponentDeck.heroPower.cardId;
-			this.topWeaponCard = this._gameState.opponentDeck.weapon && this._gameState.opponentDeck.weapon.cardId;
-			this.topBoardCards = this._gameState.opponentDeck.board.map((card) => card.cardId);
-			// console.debug('top cards info', this.topHeroPowerCard, this.topWeaponCard, this.topBoardCards);
-		}
-		if (this._gameState.playerDeck) {
-			this.bottomBoardCards = this._gameState.playerDeck.board.map((card) => card.cardId);
-			this.bottomHeroPowerCard =
-				this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
-			this.bottomWeaponCard = this._gameState.playerDeck.weapon && this._gameState.playerDeck.weapon.cardId;
-			this.bottomHandCards = this._gameState.playerDeck.hand.map((card) => card.cardId);
-			console.debug(
-				'bottom cards info',
-				this.bottomHeroPowerCard,
-				this.bottomWeaponCard,
-				this.bottomBoardCards,
-				this.bottomHandCards,
-				this._gameState,
-			);
-		}
-
+		this.topHeroPowerCard =
+			this._gameState.opponentDeck?.heroPower && this._gameState.opponentDeck.heroPower.cardId;
+		this.topWeaponCard = this._gameState.opponentDeck?.weapon && this._gameState.opponentDeck.weapon.cardId;
+		this.topBoardCards = this._gameState.opponentDeck?.board.map((card) => card.cardId);
+		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
+		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower && this._gameState.playerDeck.heroPower.cardId;
+		this.bottomWeaponCard = this._gameState.playerDeck?.weapon && this._gameState.playerDeck.weapon.cardId;
+		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
+		console.debug(
+			'bottom cards info',
+			this.bottomHeroPowerCard,
+			this.bottomWeaponCard,
+			this.bottomBoardCards,
+			this.bottomHandCards,
+			this._gameState,
+		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -144,7 +145,9 @@ export class StateMouseOverComponent {
 			// console.warn('could not get handPositionLeft', i);
 			return 0;
 		}
-		return this.handAdjustment.get(totalCards, Adjustment.create()).positionLeft.get(i, 0);
+		const handAdjustment = this.handAdjustment.get(totalCards, Adjustment.create());
+		const result = handAdjustment.positionLeft.get(i, 0);
+		return result;
 	}
 
 	handPositionTop(i: number) {

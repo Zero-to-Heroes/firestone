@@ -243,7 +243,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
 		this.cardName = !!this._card.cardName?.length
 			? this._card.cardName + this.buildSuffix(this._card)
-			: this.i18n?.getUnknownCardName() ?? 'Unkown card';
+			: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName() ?? 'Unkown card';
 
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;

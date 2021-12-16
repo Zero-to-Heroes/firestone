@@ -42,9 +42,9 @@ export class DeckCard {
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
-		if (base.cardId && !base.cardName) {
-			console.warn('creating deck card without name', base, new Error().stack);
-		}
+		// if (base.cardId && !base.cardName) {
+		// console.warn('creating deck card without name', base, new Error().stack);
+		// }
 		return Object.assign(new DeckCard(), base);
 	}
 

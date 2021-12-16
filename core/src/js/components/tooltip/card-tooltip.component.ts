@@ -126,7 +126,6 @@ export class CardTooltipComponent {
 			.reverse()
 			.map((cardId) => {
 				// const card = this.allCards.getCard(cardId);
-				// console.debug('card', card);
 				const isPremium = cardId?.endsWith('_golden');
 				const realCardId = cardId?.split('_golden')[0];
 				const image = !!realCardId
@@ -137,7 +136,7 @@ export class CardTooltipComponent {
 						  })
 						: this.i18n.getNonLocalizedCardImage(realCardId)
 					: null;
-				return {
+				const result = {
 					cardId: realCardId,
 					image: image,
 					// For now there are no cases where we have multiple card IDs, and different buffs for
@@ -147,6 +146,7 @@ export class CardTooltipComponent {
 					createdBy: this.createdBy,
 					additionalClass: this._additionalClass,
 				};
+				return result;
 			});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
