@@ -26,17 +26,17 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<ul class="menu-selection" *ngIf="selectedTab$ | async as selectedTab">
 			<li [ngClass]="{ 'selected': selectedTab === 'decks' }" (mousedown)="selectStage('decks')">
-				<span>Decks</span>
+				<span [owTranslate]="'app.decktracker.menu.decks-header'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedTab === 'ladder-stats' }" (mousedown)="selectStage('ladder-stats')">
-				<span>Stats</span>
+				<span [owTranslate]="'app.decktracker.menu.stats-header'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedTab === 'ladder-ranking' }"
 				(mousedown)="selectStage('ladder-ranking')"
 				*ngIf="enableGraph"
 			>
-				<span>Ranking</span>
+				<span [owTranslate]="'app.decktracker.menu.ranking-header'"></span>
 			</li>
 		</ul>
 	`,

@@ -46,4 +46,8 @@ export class LocalizationFacadeService {
 	public getUnknownRaceName(race: string): string {
 		return this.service.getUnknownRaceName(race);
 	}
+
+	public translateString(key: string): string {
+		return this.service.translateString(key);
+	}
 }

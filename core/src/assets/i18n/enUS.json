@@ -13,6 +13,20 @@
 			"go-premium-header": "Support the dev and remove the ads",
 			"logged-in-as-header": "Logged in as {{value}}",
 			"not-logged-in-header": "Log in to save your progress online"
+		},
+		"decktracker": {
+			"menu": {
+				"decks-header": "Decks",
+				"stats-header": "Stats",
+				"ranking-header": "Ranking"
+			},
+			"filters": {
+				"deck-sort": {
+					"last-played": "Last used",
+					"games-played": "Games played",
+					"winrate": "Winrate"
+				}
+			}
 		}
 	}
 }

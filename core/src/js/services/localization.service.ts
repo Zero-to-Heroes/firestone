@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { CardsFacadeService } from './cards-facade.service';
 import { formatClass } from './hs-utils';
+import { OverwolfService } from './overwolf.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from './utils';
 
@@ -10,10 +12,17 @@ export class LocalizationService {
 	private locale = 'enUS';
 	private useHighResImages: boolean;
 
-	constructor(private readonly store: AppUiStoreFacadeService, private readonly allCards: CardsFacadeService) {}
+	private translate: TranslateService;
+
+	constructor(
+		private readonly store: AppUiStoreFacadeService,
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
+	) {}
 
 	public async start() {
 		await this.store.initComplete();
+		this.translate = this.ow.getMainWindow().translateService;
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.locale)
 			.pipe(map(([pref]) => pref))
@@ -71,6 +80,10 @@ export class LocalizationService {
 
 	public getUnknownRaceName(race: string): string {
 		return `Unknown ${capitalizeEachWord(race)}`;
+	}
+
+	public translateString(key: string): string {
+		return this.translate.instant(key);
 	}
 }
 

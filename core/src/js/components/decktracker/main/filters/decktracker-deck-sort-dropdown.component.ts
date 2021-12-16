@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckSortEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -44,6 +45,7 @@ export class DecktrackerDeckSortDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -63,15 +65,15 @@ export class DecktrackerDeckSortDropdownComponent
 					const options = [
 						{
 							value: 'last-played',
-							label: 'Last used',
+							label: this.i18n.translateString('app.decktracker.filters.deck-sort.last-played'),
 						} as DeckSortOption,
 						{
 							value: 'games-played',
-							label: 'Games played',
+							label: this.i18n.translateString('app.decktracker.filters.deck-sort.games-played'),
 						} as DeckSortOption,
 						{
 							value: 'winrate',
-							label: 'Winrate',
+							label: this.i18n.translateString('app.decktracker.filters.deck-sort.winrate'),
 						} as DeckSortOption,
 					] as readonly DeckSortOption[];
 					return {
