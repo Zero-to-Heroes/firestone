@@ -64,7 +64,7 @@ export class TwitchAuthService {
 			);
 		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$)
 			.pipe(
-				debounceTime(1000),
+				debounceTime(500),
 				distinctUntilChanged(),
 				map(([deckEvent, bgsState, twitchAccessToken]) =>
 					this.buildEvent(deckEvent, bgsState, twitchAccessToken),
@@ -76,7 +76,7 @@ export class TwitchAuthService {
 	}
 
 	public async emitDeckEvent(event: any) {
-		console.debug('[twitch-auth] enqueueing deck event', event);
+		// console.debug('[twitch-auth] enqueueing deck event', event);
 		if ([GameEvent.SCENE_CHANGED_MINDVISION].includes(event.event.name)) {
 			return;
 		}
@@ -84,7 +84,7 @@ export class TwitchAuthService {
 	}
 
 	public async emitBattlegroundsEvent(event: any) {
-		console.debug('[twitch-auth] enqueueing bg event', event);
+		// console.debug('[twitch-auth] enqueueing bg event', event);
 		this.bgEvents.next(event);
 	}
 
@@ -135,10 +135,12 @@ export class TwitchAuthService {
 			  }
 			: null;
 
-		return {
+		const result = {
 			deck: newDeckState,
 			bgs: newBgsState,
 		};
+		// console.debug('[twitch-auth] built event', result);
+		return result;
 	}
 
 	private cleanDeck(deckState: DeckState, isBattlegrounds: boolean, isMercenaries: boolean): DeckState {
@@ -146,6 +148,7 @@ export class TwitchAuthService {
 			return {
 				hand: this.cleanZone(deckState.hand),
 				board: this.cleanZone(deckState.board),
+				heroPower: deckState.heroPower,
 			} as DeckState;
 		}
 		return {
@@ -183,6 +186,7 @@ export class TwitchAuthService {
 		}
 
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
+		// console.debug('[twitch-auth] sending event', newEvent);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			(data: any) => {
 				// Do nothing

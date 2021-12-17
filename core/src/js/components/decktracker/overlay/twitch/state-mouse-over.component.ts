@@ -28,10 +28,18 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 				</div>
 			</ul>
 			<ul class="board top-board">
-				<empty-card *ngFor="let cardId of topBoardCards" [cardId]="cardId"></empty-card>
+				<empty-card
+					*ngFor="let cardId of topBoardCards"
+					[cardId]="cardId"
+					[cardTooltipBgs]="isBgs"
+				></empty-card>
 			</ul>
 			<ul class="board bottom-board">
-				<empty-card *ngFor="let cardId of bottomBoardCards" [cardId]="cardId"></empty-card>
+				<empty-card
+					*ngFor="let cardId of bottomBoardCards"
+					[cardId]="cardId"
+					[cardTooltipBgs]="isBgs"
+				></empty-card>
 			</ul>
 			<ul class="hero bottom-hero">
 				<div class="weapon">
@@ -48,6 +56,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 					[leftOffset]="handPositionLeft(i)"
 					[topOffset]="handPositionTop(i)"
 					[cardId]="cardId"
+					[cardTooltipBgs]="isBgs"
 				>
 				</empty-card>
 			</ul>
@@ -62,6 +71,8 @@ export class StateMouseOverComponent {
 			this.cdr.detectChanges();
 		}
 	}
+
+	isBgs: boolean;
 
 	_gameState: GameState;
 	_bgsState: TwitchBgsState;
@@ -86,6 +97,9 @@ export class StateMouseOverComponent {
 		this._bgsState = value;
 		this.bgsPlayers = this._bgsState?.leaderboard;
 		this.currentTurn = this._bgsState?.currentTurn;
+		this.isBgs =
+			!!this._bgsState && !!this.bgsPlayers?.length && this._bgsState?.inGame && !this._bgsState?.gameEnded;
+		// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

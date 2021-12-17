@@ -35,7 +35,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 			>
 			</decktracker-overlay-standalone>
 			<bgs-simulation-overlay-standalone
-				*ngIf="bgsState?.inGame"
+				*ngIf="bgsState?.inGame && !bgsState?.gameEnded"
 				[bgsState]="bgsBattleState"
 				(dragStart)="onDragStart()"
 				(dragEnd)="onDragEnd()"
@@ -158,6 +158,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		this.bgsState = event?.bgs;
 		// Don't overwrite the battle state if not present in the input state
 		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
+		// console.log('bgsBattleState', this.bgsBattleState, this.bgsState);
 		this.gameState = event?.deck;
 		this.showDecktracker =
 			!!this.gameState &&

@@ -125,8 +125,8 @@ export class CardTooltipComponent {
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
-				// const card = this.allCards.getCard(cardId);
-				const isPremium = cardId?.endsWith('_golden');
+				const card = this.allCards.getCard(cardId);
+				const isPremium = cardId?.endsWith('_golden') || !!card.battlegroundsNormalDbfId;
 				const realCardId = cardId?.split('_golden')[0];
 				const image = !!realCardId
 					? this.localized
