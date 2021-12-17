@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 import { CardsFacadeService } from './cards-facade.service';
 import { formatClass } from './hs-utils';
+import { LocalizationFacadeService } from './localization-facade.service';
 import { OverwolfService } from './overwolf.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from './utils';
@@ -70,8 +71,8 @@ export class LocalizationService {
 		return `Created by ${this.getCardName(creatorCardId) ?? 'unknown'}`;
 	}
 
-	public getUnknownCardName(playerClass: string = null): string {
-		return playerClass ? `Unknown ${formatClass(playerClass)} card` : 'Unknown Card';
+	public getUnknownCardName(i18n: LocalizationFacadeService, playerClass: string = null): string {
+		return playerClass ? `Unknown ${formatClass(playerClass, i18n)} card` : 'Unknown Card';
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {

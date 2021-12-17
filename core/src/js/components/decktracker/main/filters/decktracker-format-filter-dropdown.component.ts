@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -44,6 +45,7 @@ export class DecktrackerFormatFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -62,19 +64,19 @@ export class DecktrackerFormatFilterDropdownComponent
 					const options = [
 						{
 							value: 'all',
-							label: 'All formats',
+							label: this.i18n.translateString('app.decktracker.filters.format-filter.all-formats'),
 						} as FormatFilterOption,
 						{
 							value: 'standard',
-							label: 'Standard',
+							label: this.i18n.translateString('app.decktracker.filters.format-filter.standard'),
 						} as FormatFilterOption,
 						{
 							value: 'wild',
-							label: 'Wild',
+							label: this.i18n.translateString('app.decktracker.filters.format-filter.wild'),
 						} as FormatFilterOption,
 						{
 							value: 'classic',
-							label: 'Classic',
+							label: this.i18n.translateString('app.decktracker.filters.format-filter.classic'),
 						} as FormatFilterOption,
 					] as readonly FormatFilterOption[];
 					return {

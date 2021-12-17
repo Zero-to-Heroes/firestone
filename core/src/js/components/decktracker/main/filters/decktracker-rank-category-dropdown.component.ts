@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckRankingCategoryType } from '../../../../models/mainwindow/decktracker/deck-ranking-category.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankCategoryFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-category-filter-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -44,6 +45,7 @@ export class DecktrackerRankCategoryDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -62,11 +64,11 @@ export class DecktrackerRankCategoryDropdownComponent
 					const options = [
 						{
 							value: 'leagues',
-							label: 'Bronze-Diamond',
+							label: this.i18n.translateString('app.decktracker.filters.rank-category.leagues'),
 						} as RankingCategoryOption,
 						{
 							value: 'legend',
-							label: 'Legend',
+							label: this.i18n.translateString('app.decktracker.filters.rank-category.legend'),
 						} as RankingCategoryOption,
 					] as readonly RankingCategoryOption[];
 					return {

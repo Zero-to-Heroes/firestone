@@ -11,6 +11,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -31,10 +32,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<decktracker-rank-filter-dropdown class="filter rank-filter"></decktracker-rank-filter-dropdown>
 			<decktracker-deck-sort-dropdown class="filter deck-sort"></decktracker-deck-sort-dropdown>
 
-			<div
-				class="filter-info"
-				helpTooltip="Changing these filters will also impact the stats displayed in the decktracker in-game"
-			>
+			<div class="filter-info" [helpTooltip]="helpTooltip">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#info" />
 				</svg>
@@ -54,11 +52,13 @@ export class DecktrackerFiltersComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
 	showHiddenDecksLink$: Observable<boolean>;
+	helpTooltip: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -66,6 +66,7 @@ export class DecktrackerFiltersComponent
 	}
 
 	ngAfterContentInit() {
+		this.helpTooltip = this.i18n.translateString('app.decktracker.filters.filter-info-tooltip');
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.currentView,

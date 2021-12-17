@@ -12,6 +12,7 @@ import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsSignatureTreasureFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-signature-treasure-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -50,6 +51,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -106,7 +108,10 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 							const card = this.allCards.getCard(signatureTreasureCardId);
 							return {
 								value: signatureTreasureCardId,
-								label: `${card?.name ?? signatureTreasureCardId} (${formatClass(card.playerClass)})`,
+								label: `${card?.name ?? signatureTreasureCardId} (${formatClass(
+									card.playerClass,
+									this.i18n,
+								)})`,
 							};
 						}),
 				]),

@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankGroupEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-group-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -44,6 +45,7 @@ export class DecktrackerRankGroupDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -62,12 +64,12 @@ export class DecktrackerRankGroupDropdownComponent
 					const options = [
 						{
 							value: 'per-match',
-							label: 'Show each match',
+							label: this.i18n.translateString('app.decktracker.filters.rank-group.per-match'),
 						} as RankingGroupOption,
 						{
 							value: 'per-day',
-							label: 'Group per day',
-							tooltip: 'Show the rating at the start of each day',
+							label: this.i18n.translateString('app.decktracker.filters.rank-group.per-day'),
+							tooltip: this.i18n.translateString('app.decktracker.filters.rank-group.per-day-tooltip'),
 						} as RankingGroupOption,
 					] as readonly RankingGroupOption[];
 					return {

@@ -16,10 +16,10 @@ import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from 
 import { MemoryMercenary } from '../../models/memory/memory-mercenaries-info';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { formatClass } from '../../services/hs-utils';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -86,7 +86,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
@@ -211,7 +211,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 	private buildGroupTitle(category: CollectionPortraitCategoryFilter, refPortrait: ReferenceCard): string {
 		switch (category) {
 			case 'collectible':
-				return formatClass(refPortrait.playerClass);
+				return formatClass(refPortrait.playerClass, this.i18n);
 			case 'battlegrounds':
 			case 'mercenaries':
 				return refPortrait.name;

@@ -8,6 +8,7 @@ import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.typ
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
@@ -90,6 +91,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -153,7 +155,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 			const totalMatches = matches.length;
 			const wins = matches.filter((match) => match.result === 'won').length;
 			const winrate = (100 * wins) / totalMatches;
-			const playerClass = formatClass(this.allCards.getCard(runsForClass[0].heroCardId)?.playerClass);
+			const playerClass = formatClass(this.allCards.getCard(runsForClass[0].heroCardId)?.playerClass, this.i18n);
 			return {
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${runsForClass[0].heroCardId}.jpg`,
 				totalRuns: runsForClass.length,
@@ -180,7 +182,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		);
 		const mostFacedClasses = Object.values(groupedByFacedClass).sort(sortFunction).slice(0, 3);
 		return mostFacedClasses.map((gamesForClass) => {
-			const opponentClass = formatClass(gamesForClass[0].opponentClass);
+			const opponentClass = formatClass(gamesForClass[0].opponentClass, this.i18n);
 			const wins = gamesForClass.filter((match) => match.result === 'won').length;
 			const winrate = (100 * wins) / gamesForClass.length;
 			return {

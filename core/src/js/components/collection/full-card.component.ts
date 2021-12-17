@@ -1,19 +1,11 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
-import { PreferencesService } from '../../services/preferences.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { capitalizeEachWord } from '../../services/utils';
 
 declare let amplitude;
@@ -128,7 +120,7 @@ export class FullCardComponent {
 			card.playerClass !== 'Neutral'
 				? card.playerClass
 				: card.classes?.length
-				? card.classes.map((playerClass) => formatClass(playerClass)).join(', ')
+				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
 				: 'All classes';
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
@@ -140,12 +132,10 @@ export class FullCardComponent {
 	}
 
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly elRef: ElementRef,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly cards: SetsService,
 		private readonly allCards: CardsFacadeService,
 		private readonly sanitizer: DomSanitizer,
-		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	playSound(audioClip) {

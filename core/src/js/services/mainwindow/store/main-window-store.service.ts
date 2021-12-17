@@ -21,6 +21,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
+import { LocalizationFacadeService } from '../../localization-facade.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
@@ -323,6 +324,7 @@ export class MainWindowStoreService {
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly translate: TranslateService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -815,7 +817,7 @@ export class MainWindowStoreService {
 			new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsViewDeckDetailsEvent.eventName(),
-			new DuelsViewDeckDetailsProcessor(this.events),
+			new DuelsViewDeckDetailsProcessor(this.events, this.i18n),
 
 			DuelsViewPersonalDeckDetailsEvent.eventName(),
 			new DuelsViewPersonalDeckDetailsProcessor(),

@@ -1,6 +1,5 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { capitalizeEachWord } from './utils';
 
 export const CARDS_VERSION = '2021-12-08-16-52';
 
@@ -29,12 +28,8 @@ export const classesForPieChart = [
 	'priest',
 ];
 
-export const formatClass = (playerClass: string): string => {
-	let update = playerClass?.toLowerCase();
-	if (update === 'demonhunter') {
-		update = 'demon hunter';
-	}
-	return capitalizeEachWord(update);
+export const formatClass = (playerClass: string, i18n: { translateString: (string) => string }): string => {
+	return i18n.translateString(`global.class.${playerClass?.toLowerCase()}`);
 };
 
 export const colorForClass = (playerClass: string): string => {

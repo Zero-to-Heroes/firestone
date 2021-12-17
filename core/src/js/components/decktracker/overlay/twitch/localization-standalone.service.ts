@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { formatClass } from '../../../../services/hs-utils';
 import { ImageLocalizationOptions } from '../../../../services/localization.service';
-import { capitalizeEachWord, uuid } from '../../../../services/utils';
+import { capitalizeEachWord } from '../../../../services/utils';
 import { CardsFacadeStandaloneService } from './cards-facade-standalone.service';
 
 // For Twitch
@@ -10,10 +11,14 @@ export class LocalizationStandaloneService {
 	private locale = 'enUS';
 	private useHighResImages = true;
 
-	constructor(private readonly allCards: CardsFacadeStandaloneService) {}
+	constructor(
+		private readonly allCards: CardsFacadeStandaloneService,
+		private readonly translate: TranslateService,
+	) {}
 
 	public async setLocale(locale: string) {
 		this.locale = locale;
+		await this.translate.use(locale).toPromise();
 		await this.allCards.setLocale(locale);
 	}
 
@@ -50,7 +55,7 @@ export class LocalizationStandaloneService {
 	}
 
 	public getUnknownCardName(playerClass: string = null): string {
-		return playerClass ? `Unknown ${formatClass(playerClass)} card` : 'Unknown Card';
+		return playerClass ? `Unknown ${formatClass(playerClass, this)} card` : 'Unknown Card';
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {
@@ -59,5 +64,9 @@ export class LocalizationStandaloneService {
 
 	public getUnknownRaceName(race: string): string {
 		return `Unknown ${capitalizeEachWord(race)}`;
+	}
+
+	public translateString(key: string): string {
+		return this.translate.instant(key);
 	}
 }

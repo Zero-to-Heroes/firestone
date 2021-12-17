@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsClassFilterType } from '../../../../models/duels/duels-class-filter.type';
 import { classes, formatClass } from '../../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -48,6 +49,7 @@ export class DuelsClassFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -59,7 +61,7 @@ export class DuelsClassFilterDropdownComponent
 			(option) =>
 				({
 					value: option,
-					label: option === 'all' ? 'All classes' : formatClass(option),
+					label: option === 'all' ? 'All classes' : formatClass(option, this.i18n),
 				} as ClassFilterOption),
 		);
 		this.filter$ = this.store

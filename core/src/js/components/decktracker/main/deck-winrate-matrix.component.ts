@@ -10,6 +10,7 @@ import {
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -100,7 +101,11 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -163,7 +168,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	private buildPieChartData(): readonly InputPieChartData[] {
 		return classesForPieChart.map((className) => {
 			return {
-				label: formatClass(className),
+				label: formatClass(className, this.i18n),
 				data: this.matchups.find((matchup) => matchup.opponentClass === className)?.totalGames ?? 0,
 				color: `${colorForClass(className)}`,
 			};

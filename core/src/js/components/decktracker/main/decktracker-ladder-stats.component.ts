@@ -2,6 +2,7 @@ import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { Observable } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
@@ -46,7 +47,11 @@ export class DecktrackerLadderStatsComponent
 
 	pieChartOptions: InputPieChartOptions;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -81,7 +86,7 @@ export class DecktrackerLadderStatsComponent
 	private buildPlayerPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
 		return classesForPieChart.map((className) => {
 			return {
-				label: formatClass(className),
+				label: formatClass(className, this.i18n),
 				data: replays.filter((replay) => replay.playerClass === className)?.length ?? 0,
 				color: `${colorForClass(className)}`,
 			};
@@ -91,7 +96,7 @@ export class DecktrackerLadderStatsComponent
 	private buildOpponentPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
 		return classesForPieChart.map((className) => {
 			return {
-				label: formatClass(className),
+				label: formatClass(className, this.i18n),
 				data: replays.filter((replay) => replay.opponentClass === className)?.length ?? 0,
 				color: `${colorForClass(className)}`,
 			};

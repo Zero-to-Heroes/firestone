@@ -30,6 +30,7 @@ import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { formatClass } from '../hs-utils';
+import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
@@ -54,6 +55,7 @@ export class DuelsStateBuilderService {
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
 		private readonly events: Events,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
@@ -292,6 +294,7 @@ export class DuelsStateBuilderService {
 						this.getDeckName(firstMatch.initialDeckList, prefs) ??
 						`${mainStats.global.averageWinsPerRun.toFixed(1)} wins ${formatClass(
 							playerClass,
+							this.i18n,
 						)} (${getDuelsModeName(firstMatch.type)})`,
 					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;

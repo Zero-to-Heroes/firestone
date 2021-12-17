@@ -1,9 +1,12 @@
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
+import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
@@ -101,6 +104,7 @@ import { DoubleClickDirective } from '../../directives/exclusive-double-click.di
 import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { NgxCacheIfDirective } from '../../directives/ngx-cache-if.directive';
+import { OwTranslateDirective } from '../../directives/ow-translate.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
 import { RippleOnClickDirective } from '../../directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from '../../directives/rotate-on-mouse-over.directive';
@@ -113,6 +117,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	maxScrollbarLength: 100,
 };
 
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+	return new TranslateHttpLoader(http, '/Files/assets/i18n/', '.json');
+}
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -127,6 +135,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BrowserAnimationsModule,
 		PerfectScrollbarModule,
 		SharedServicesModule.forRoot(),
+		TranslateModule.forRoot({
+			defaultLanguage: 'enUS',
+			loader: {
+				provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+				deps: [HttpClient],
+			},
+		}),
 	],
 	declarations: [
 		WindowWrapperComponent,
@@ -163,6 +179,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
+		OwTranslateDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
@@ -280,6 +297,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
 		DoubleClickDirective,
+		OwTranslateDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,

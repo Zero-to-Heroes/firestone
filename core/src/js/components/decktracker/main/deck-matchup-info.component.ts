@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { formatClass } from '../../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'deck-matchup-info',
@@ -64,7 +63,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckMatchupInfoComponent implements AfterViewInit {
+export class DeckMatchupInfoComponent {
 	@Input() set matchup(value: MatchupStat) {
 		this._matchup = value;
 		this.updateInfos();
@@ -94,13 +93,8 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 	lossesSecond: number;
 
 	private _matchup: MatchupStat;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	buildValue(value: number): string {
 		return value == null ? '-' : value.toFixed(0) + '%';
@@ -113,7 +107,7 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 
 		const isTotalRow = this._matchup.opponentClass.toLowerCase() === 'total';
 		this.icon = isTotalRow ? null : `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
-		this.className = formatClass(this._matchup.opponentClass);
+		this.className = formatClass(this._matchup.opponentClass, this.i18n);
 		this.games = this._matchup.totalGames;
 		this.wins = this._matchup.totalWins;
 		this.losses = this._matchup.totalGames - this._matchup.totalWins;

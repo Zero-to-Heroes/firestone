@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -88,7 +89,11 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 	private deck$: Observable<DeckSummary>;
 	private deckstring: string;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -127,7 +132,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 							(matchUp) =>
 								({
 									icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
-									playerClass: formatClass(matchUp.opponentClass),
+									playerClass: formatClass(matchUp.opponentClass, this.i18n),
 								} as BestAgainst),
 						),
 				};

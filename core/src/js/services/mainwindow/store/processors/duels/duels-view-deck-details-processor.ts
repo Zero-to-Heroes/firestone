@@ -3,11 +3,12 @@ import { NavigationDuels } from '../../../../../models/mainwindow/navigation/nav
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Events } from '../../../../events.service';
 import { formatClass } from '../../../../hs-utils';
+import { LocalizationFacadeService } from '../../../../localization-facade.service';
 import { DuelsViewDeckDetailsEvent } from '../../events/duels/duels-view-deck-details-event';
 import { Processor } from '../processor';
 
 export class DuelsViewDeckDetailsProcessor implements Processor {
-	constructor(private readonly events: Events) {}
+	constructor(private readonly events: Events, private readonly i18n: LocalizationFacadeService) {}
 
 	public async process(
 		event: DuelsViewDeckDetailsEvent,
@@ -48,6 +49,6 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 			return null;
 		}
 		const prefix = deck.wins ? `${deck.wins}-${deck.losses} ` : '';
-		return prefix + formatClass(deck.playerClass);
+		return prefix + formatClass(deck.playerClass, this.i18n);
 	}
 }

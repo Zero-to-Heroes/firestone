@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { classes, formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -31,7 +32,11 @@ export class ReplaysPlayerClassFilterDropdownComponent
 	options: readonly IOption[];
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 		const collator = new Intl.Collator('en-US');
 		this.options = [
@@ -43,7 +48,7 @@ export class ReplaysPlayerClassFilterDropdownComponent
 				.map(
 					(playerClass) =>
 						({
-							label: formatClass(playerClass),
+							label: formatClass(playerClass, this.i18n),
 							value: playerClass,
 						} as IOption),
 				)

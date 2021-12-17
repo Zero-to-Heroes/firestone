@@ -1,6 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import {
 	ApplicationRef,
 	ComponentFactoryResolver,
@@ -16,8 +16,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
@@ -328,7 +326,6 @@ import { StatsFiltersComponent } from '../../components/stats/desktop/filters/_s
 import { StatsDesktopComponent } from '../../components/stats/desktop/stats-desktop.component';
 import { StatsXpGraphComponent } from '../../components/stats/desktop/stats-xp-graph.component';
 import { OutOfCardsCallbackComponent } from '../../components/third-party/out-of-cards-callback.component';
-import { OwTranslateDirective } from '../../directives/ow-translate.directive';
 import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from '../../services/achievement/achievements-notification.service';
@@ -453,11 +450,6 @@ export class SentryErrorHandler implements ErrorHandler {
 	}
 }
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, '/Files/assets/i18n/', '.json');
-}
-
 const components = [
 	AppComponent,
 	MainWindowComponent,
@@ -506,14 +498,6 @@ const components = [
 		PerfectScrollbarModule,
 		ColiseumComponentsModule,
 		SharedDeckTrackerModule,
-		TranslateModule.forRoot({
-			defaultLanguage: 'enUS',
-			loader: {
-				provide: TranslateLoader,
-				useFactory: HttpLoaderFactory,
-				deps: [HttpClient],
-			},
-		}),
 	],
 	declarations: [
 		...components,
@@ -824,7 +808,6 @@ const components = [
 
 		AdvancedSettingDirective,
 		MercenariesHighlightDirective,
-		OwTranslateDirective,
 	],
 	entryComponents: [
 		BgsCardTooltipComponent,

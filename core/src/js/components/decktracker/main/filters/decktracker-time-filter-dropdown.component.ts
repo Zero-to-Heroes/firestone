@@ -14,6 +14,7 @@ import { formatPatch } from '@services/utils';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
@@ -45,6 +46,7 @@ export class DecktrackerTimeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -64,28 +66,28 @@ export class DecktrackerTimeFilterDropdownComponent
 					const options = [
 						{
 							value: 'all-time',
-							label: 'Past 100 days',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.all-time'),
 						} as TimeFilterOption,
 						{
 							value: 'season-start',
-							label: 'This season',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.season-start'),
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',
-							label: 'Last patch',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.last-patch'),
 							tooltip: formatPatch(patch),
 						} as TimeFilterOption,
 						{
 							value: 'past-30',
-							label: 'Past 30 days',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.past-30'),
 						} as TimeFilterOption,
 						{
 							value: 'past-7',
-							label: 'Past 7 days',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.past-7'),
 						} as TimeFilterOption,
 						{
 							value: 'past-1',
-							label: 'Past day',
+							label: this.i18n.translateString('app.decktracker.filters.time-filter.past-1'),
 						} as TimeFilterOption,
 					] as readonly TimeFilterOption[];
 					return {

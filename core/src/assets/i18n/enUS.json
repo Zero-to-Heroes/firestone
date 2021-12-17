@@ -1,4 +1,18 @@
 {
+	"global": {
+		"class": {
+			"demonhunter": "Demon Hunter",
+			"druid": "Druid",
+			"hunter": "Hunter",
+			"mage": "Mage",
+			"paladin": "Paladin",
+			"priest": "Priest",
+			"rogue": "Rogue",
+			"shaman": "Shaman",
+			"warlock": "Warlock",
+			"warrior": "Warrior"
+		}
+	},
 	"app": {
 		"menu": {
 			"constructed-header": "Constructed",
@@ -21,10 +35,43 @@
 				"ranking-header": "Ranking"
 			},
 			"filters": {
+				"filter-info-tooltip": "Changing these filters will also impact the stats displayed in the decktracker in-game",
 				"deck-sort": {
 					"last-played": "Last used",
 					"games-played": "Games played",
 					"winrate": "Winrate"
+				},
+				"format-filter": {
+					"all-formats": "All formats",
+					"standard": "Standard",
+					"wild": "Wild",
+					"classic": "Classic"
+				},
+				"rank-category": {
+					"leagues": "Bronze-Diamond",
+					"legend": "Legend"
+				},
+				"rank-filter": {
+					"all": "All",
+					"silver": "Silver+",
+					"gold": "Gold+",
+					"platinum": "Platinum+",
+					"diamond": "Diamond+",
+					"legend": "Legend",
+					"legend-500": "Top 500"
+				},
+				"rank-group": {
+					"per-match": "Show each match",
+					"per-day": "Group by day",
+					"per-day-tooltip": "Show the rating at the start of each day"
+				},
+				"time-filter": {
+					"all-time": "Past 100 days",
+					"season-start": "This season",
+					"last-patch": "Last patch",
+					"past-30": "Past 30 days",
+					"past-7": "Past 7 days",
+					"past-1": "Past day"
 				}
 			}
 		}

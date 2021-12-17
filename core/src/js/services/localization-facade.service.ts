@@ -36,7 +36,7 @@ export class LocalizationFacadeService {
 	}
 
 	public getUnknownCardName(playerClass: string = null): string {
-		return this.service.getUnknownCardName(playerClass);
+		return this.service.getUnknownCardName(this, playerClass);
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {

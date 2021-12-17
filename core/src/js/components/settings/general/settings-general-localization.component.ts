@@ -16,6 +16,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 				will also be translated. But it takes time, so please be patient :)
 			</div>
 			<div class="text">
+				IMPORTANT: the localization effort is community-driven, and I can't proofread all translations. If you
+				see something weird, please ping me on Discord.
+			</div>
+			<div class="text">
 				Please restart the app (from the General tab) to make sure the new language is taken into account
 			</div>
 			<localization-dropdown class="language-dropdown"></localization-dropdown>

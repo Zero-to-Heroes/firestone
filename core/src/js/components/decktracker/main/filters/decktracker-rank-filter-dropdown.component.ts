@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckRankFilterType } from '../../../../models/mainwindow/decktracker/deck-rank-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-filter-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -46,6 +47,7 @@ export class DecktrackerRankFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -64,31 +66,31 @@ export class DecktrackerRankFilterDropdownComponent
 					const options = [
 						{
 							value: 'all',
-							label: 'All ranks',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.all'),
 						} as DeckRankOption,
 						{
 							value: 'silver',
-							label: 'Silver+',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.silver'),
 						} as DeckRankOption,
 						{
 							value: 'gold',
-							label: 'Gold+',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.gold'),
 						} as DeckRankOption,
 						{
 							value: 'platinum',
-							label: 'Platinum+',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.platinum'),
 						} as DeckRankOption,
 						{
 							value: 'diamond',
-							label: 'Diamond+',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.diamond'),
 						} as DeckRankOption,
 						{
 							value: 'legend',
-							label: 'Legend',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend'),
 						} as DeckRankOption,
 						{
 							value: 'legend-500',
-							label: 'Top 500',
+							label: this.i18n.translateString('app.decktracker.filters.rank-filter.legend-500'),
 						} as DeckRankOption,
 					] as readonly DeckRankOption[];
 					return {

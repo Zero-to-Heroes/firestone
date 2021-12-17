@@ -1,4 +1,18 @@
 {
+	"global": {
+		"class": {
+			"demonhunter": "Chasseur de démons",
+			"druid": "Druide",
+			"hunter": "Chasseur",
+			"mage": "Mage",
+			"paladin": "Paladin",
+			"priest": "Prêtre",
+			"rogue": "Voleur",
+			"shaman": "Chaman",
+			"warlock": "Démoniste",
+			"warrior": "Guerrier"
+		}
+	},
 	"app": {
 		"menu": {
 			"constructed-header": "Construit",
@@ -7,12 +21,59 @@
 			"duels-header": "Duels",
 			"arena-header": "Arène",
 			"replays-header": "Replays",
-			"achievements-header": "Hauts-faits",
+			"achievements-header": "Hauts Faits",
 			"collection-header": "Collection",
 			"stats-header": "Stats",
-			"go-premium-header": "Soutenez le dev et supprimez les pubs",
-			"logged-in-as-header": "Connecté(e) en tant que {{value}}",
-			"not-logged-in-header": "Connectez-vous pour sauvegarder votre progression en ligne"
+			"go-premium-header": "Soutenez le développeur et enlevez la pub",
+			"logged-in-as-header": "Connecté en tant que {{value}}",
+			"not-logged-in-header": "Connectez-vous pour enregistrer votre progression en ligne"
+		},
+		"decktracker": {
+			"menu": {
+				"decks-header": "Decks",
+				"stats-header": "Stats",
+				"ranking-header": "Rang"
+			},
+			"filters": {
+				"filter-info-tooltip": "La modification de ces filtres aura également un impact sur les statistiques affichées dans le decktracker en jeu",
+				"deck-sort": {
+					"last-played": "Utilisé récemment",
+					"games-played": "Parties jouées",
+					"winrate": "Taux de victoires"
+				},
+				"format-filter": {
+					"all-formats": "Tous les formats",
+					"standard": "Standard",
+					"wild": "Libre",
+					"classic": "Classique"
+				},
+				"rank-category": {
+					"leagues": "Bronze - Diamant",
+					"legend": "Légende"
+				},
+				"rank-filter": {
+					"all": "Tous",
+					"silver": "Argent+",
+					"gold": "Or+",
+					"platinum": "Platine+",
+					"diamond": "Diamant+",
+					"legend": "Légende",
+					"legend-500": "Top 500"
+				},
+				"rank-group": {
+					"per-match": "Afficher chaque partie",
+					"per-day": "Grouper par jour",
+					"per-day-tooltip": "Afficher la cote au début de chaque jour"
+				},
+				"time-filter": {
+					"all-time": "100 derniers jours",
+					"season-start": "Cette saison",
+					"last-patch": "Dernière mise à jour",
+					"past-30": "30 derniers jours",
+					"past-7": "7 derniers jours",
+					"past-1": "Dernier jour"
+				}
+			}
 		}
 	}
 }

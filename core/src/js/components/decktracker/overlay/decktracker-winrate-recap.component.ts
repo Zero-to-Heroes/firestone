@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { formatClass } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'decktracker-winrate-recap',
@@ -61,7 +62,7 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 		this.updateInfo();
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
@@ -83,7 +84,7 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 			this.text = "Deck's winrate";
 			this.tooltip = "This deck's winrate in ranked since " + dateFrom;
 		} else {
-			const readableClass = formatClass(this._stats.opponentClass);
+			const readableClass = formatClass(this._stats.opponentClass, this.i18n);
 			this.text = 'VS. ' + readableClass;
 			this.tooltip = "This deck's winrate in ranked against " + readableClass + ' since ' + dateFrom;
 		}
