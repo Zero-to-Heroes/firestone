@@ -380,7 +380,7 @@ export class DeckManipulationHelper {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
+		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard?.creatorCardId && !removedCard?.cardId) {
 			const newCardId = getBaseCardId(cardId);
 			const result = this.removeSingleCardFromZone(deck.deck, newCardId, entityId);
 			return result[0];

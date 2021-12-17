@@ -25,7 +25,7 @@ export class BgsHeroSelectedCardParser implements EventParser {
 		const newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		const cardWithZone = card.update({
-			zone: 'DISCARD',
+			zone: 'SETASIDE',
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
