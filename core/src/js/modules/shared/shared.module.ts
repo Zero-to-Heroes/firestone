@@ -105,6 +105,7 @@ import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { NgxCacheIfDirective } from '../../directives/ngx-cache-if.directive';
 import { OwTranslateDirective } from '../../directives/ow-translate.directive';
+import { OwTranslatePipe } from '../../directives/ow-translate.pipe';
 import { PulseDirective } from '../../directives/pulse.directive';
 import { RippleOnClickDirective } from '../../directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from '../../directives/rotate-on-mouse-over.directive';
@@ -190,6 +191,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
+		OwTranslatePipe,
 
 		SocialSharesComponent,
 		SocialShareModalComponent,
@@ -308,6 +310,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
+		OwTranslatePipe,
 
 		AdsComponent,
 
