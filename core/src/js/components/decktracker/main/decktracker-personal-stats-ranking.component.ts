@@ -24,7 +24,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="decktracker-personal-stats-ranking">
-			<div class="header">Rank evolution / Matches</div>
+			<div class="header" [owTranslate]="'app.decktracker.personal-stats-ranking.header'"></div>
 			<div class="container-1" *ngIf="lineChartData">
 				<div style="display: block; position: relative; height: 100%; width: 100%;">
 					<canvas

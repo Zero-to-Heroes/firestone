@@ -11,6 +11,21 @@
 			"shaman": "Shaman",
 			"warlock": "Warlock",
 			"warrior": "Warrior"
+		},
+		"format": {
+			"standard": "Standard",
+			"wild": "Wild",
+			"classic": "Classic"
+		},
+		"ranks": {
+			"constructed": {
+				"bronze": "Bronze",
+				"silver": "Silver",
+				"gold": "Gold",
+				"platinum": "Platinum",
+				"diamond": "Diamond",
+				"legend": "Legend"
+			}
 		}
 	},
 	"app": {
@@ -105,7 +120,24 @@
 			"deck-summary": {
 				"total-games": "{{value}} games",
 				"winrate": "{{value}}% winrate",
-				"last-used": "Last used: {{value}}"
+				"last-used": "Last used: {{value}}",
+				"archive-button-tooltip": "Archive this deck (you can restore it later)",
+				"restore-button-tooltip": "Restore this deck",
+				"default-deck-name": "Deck name"
+			},
+			"decks": {
+				"empty-state-title": "Nothing here yet",
+				"empty-state-subtitle": "Play a ranked match to get started, or check your filters above :)"
+			},
+			"ladder-stats": {
+				"title-player": "Player class breakdown",
+				"title-opponent": "Opponent class breakdown"
+			},
+			"personal-stats-ranking": {
+				"header": "Rank evolution / Matches"
+			},
+			"rating-graph": {
+				"empty-state-message": "Please make sure a unique game mode (Standard, Wild or Classic) is selected above, and check the Bronze / Legend filter."
 			}
 		}
 	}

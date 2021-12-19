@@ -13,6 +13,7 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { PatchInfo } from '../../../models/patches';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -29,7 +30,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[labels]="value.labels"
 				[labelFormattingFn]="value.labelFormattingFn"
 				[reverse]="value.reverse"
-				emptyStateMessage="Please make sure a unique game mode (Standard, Wild or Classic) is selected above, and check the Bronze / Legend filter."
+				[emptyStateMessage]="'app.decktracker.rating-graph.empty-state-message' | owTranslate"
 				emptyStateIcon="assets/svg/ftue/decktracker.svg"
 			></graph-with-single-value>
 		</div>
@@ -39,7 +40,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DecktrackerRatingGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -176,7 +181,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 					return label;
 				}
 
-				return ladderIntRankToString(+label, rankingCategory === 'legend');
+				return ladderIntRankToString(+label, rankingCategory === 'legend', this.i18n);
 			},
 			reverse: rankingCategory === 'legend',
 		} as Value;

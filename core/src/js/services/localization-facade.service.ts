@@ -50,4 +50,8 @@ export class LocalizationFacadeService {
 	public translateString(key: string): string {
 		return this.service.translateString(key);
 	}
+
+	public formatCurrentLocale(): string {
+		return this.service.formatCurrentLocale();
+	}
 }

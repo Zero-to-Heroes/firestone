@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { capitalizeEachWord } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-deck-summary',
@@ -46,7 +46,7 @@ import { capitalizeEachWord } from '../../../services/utils';
 			</div>
 			<button
 				class="close-button"
-				helpTooltip="Archive deck (you can restore it later)"
+				[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!hidden"
 			>
@@ -54,7 +54,12 @@ import { capitalizeEachWord } from '../../../services/utils';
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#bin"></use>
 				</svg>
 			</button>
-			<button class="restore-button" helpTooltip="Restore deck" (mousedown)="restoreDeck($event)" *ngIf="hidden">
+			<button
+				class="restore-button"
+				[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
+				(mousedown)="restoreDeck($event)"
+				*ngIf="hidden"
+			>
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
 				</svg>
@@ -66,13 +71,13 @@ import { capitalizeEachWord } from '../../../services/utils';
 export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	@Input() set deck(value: DeckSummary) {
 		this._deck = value;
-		this.deckName = value.deckName || 'Deck name';
+		this.deckName = value.deckName || this.i18n.translateString('app.decktracker.deck-summary.default-deck-name');
 		this.format = value.format;
-		this.deckNameTooltip = `${this.deckName} (${capitalizeEachWord(this.format)})`;
+		this.deckNameTooltip = `${this.deckName} (${this.i18n.translateString('app.global.format.' + this.format)})`;
 		this.totalGames = value.totalGames;
 		this.winRatePercentage =
 			value.winRatePercentage != null
-				? parseFloat('' + value.winRatePercentage).toLocaleString('en-US', {
+				? parseFloat('' + value.winRatePercentage).toLocaleString(this.i18n.formatCurrentLocale(), {
 						minimumIntegerDigits: 1,
 						maximumFractionDigits: 2,
 				  })
@@ -97,7 +102,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly elementRef: ElementRef) {}
+	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -126,7 +131,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
 		const date = new Date(lastUsedTimestamp);
-		return date.toLocaleDateString('en-US', {
+		return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			month: 'short',
 			day: '2-digit',
 			year: 'numeric',

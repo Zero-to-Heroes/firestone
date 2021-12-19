@@ -86,6 +86,15 @@ export class LocalizationService {
 	public translateString(key: string): string {
 		return this.translate.instant(key);
 	}
+
+	public formatCurrentLocale(): string {
+		switch (this.locale) {
+			case 'frFR':
+				return 'fr-FR';
+			default:
+				return 'en-US';
+		}
+	}
 }
 
 export interface ImageLocalizationOptions {

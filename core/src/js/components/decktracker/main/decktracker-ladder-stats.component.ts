@@ -18,7 +18,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 			<decktracker-stats-for-replays [replays]="replays$ | async"></decktracker-stats-for-replays>
 			<div class="graphs">
 				<div class="graph player-popularity">
-					<div class="title">Player class breakdown</div>
+					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-player'"></div>
 					<pie-chart
 						class="chart player-popularity-chart "
 						[data]="playerPieChartData$ | async"
@@ -26,7 +26,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 					></pie-chart>
 				</div>
 				<div class="graph opponents-popularity">
-					<div class="title">Opponent class breakdown</div>
+					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-opponent'"></div>
 					<pie-chart
 						class="chart opponents-popularity-chart"
 						[data]="opponentPieChartData$ | async"

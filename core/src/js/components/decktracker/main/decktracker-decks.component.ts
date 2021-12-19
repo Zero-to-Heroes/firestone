@@ -24,8 +24,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 						</svg>
 					</i>
-					<span class="title">Nothing here yet</span>
-					<span class="subtitle">Play a ranked match to get started, or check your filters above :)</span>
+					<span class="title" [owTranslate]="'app.decktracker.decks.empty-state-title'"></span>
+					<span class="subtitle" [owTranslate]="'app.decktracker.decks.empty-state-subtitle'"></span>
 				</div>
 			</section>
 		</div>

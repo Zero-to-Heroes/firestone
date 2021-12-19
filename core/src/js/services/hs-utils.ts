@@ -1,5 +1,6 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { LocalizationFacadeService } from './localization-facade.service';
 
 export const CARDS_VERSION = '2021-12-08-16-52';
 
@@ -691,7 +692,7 @@ export const ladderRankToInt = (rank: string): number => {
 	return -(league - 5) * 10 + (10 - rankInLeague);
 };
 
-export const ladderIntRankToString = (rank: number, isLegend = false): string => {
+export const ladderIntRankToString = (rank: number, isLegend: boolean, i18n: LocalizationFacadeService): string => {
 	if (rank == null) {
 		return null;
 	}
@@ -700,26 +701,26 @@ export const ladderIntRankToString = (rank: number, isLegend = false): string =>
 		return `${rank}`;
 	}
 
-	const league = rankToLeague(rank);
+	const league = rankToLeague(rank, i18n);
 	if (rank >= 50) {
-		return 'Legend';
+		return i18n.translateString('global.ranks.constructed.legend');
 	}
 
 	const rankInLeague = 10 - (rank % 10);
 	return `${league} ${rankInLeague}`;
 };
 
-const rankToLeague = (rank: number): string => {
+const rankToLeague = (rank: number, i18n: LocalizationFacadeService): string => {
 	if (rank < 10) {
-		return 'Bronze';
+		return i18n.translateString('global.ranks.constructed.bronze');
 	} else if (rank < 20) {
-		return 'Silver';
+		return i18n.translateString('global.ranks.constructed.silver');
 	} else if (rank < 30) {
-		return 'Gold';
+		return i18n.translateString('global.ranks.constructed.gold');
 	} else if (rank < 40) {
-		return 'Platinum';
+		return i18n.translateString('global.ranks.constructed.platinum');
 	} else if (rank < 50) {
-		return 'Diamond';
+		return i18n.translateString('global.ranks.constructed.diamond');
 	}
-	return 'Legend';
+	return i18n.translateString('global.ranks.constructed.legend');
 };
