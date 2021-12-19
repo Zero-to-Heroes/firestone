@@ -73,6 +73,39 @@
 					"past-7": "Past 7 days",
 					"past-1": "Past day"
 				}
+			},
+			"matchup-info": {
+				"total-matches-header": "Total matches",
+				"win-percent-header": "Win%",
+				"win-total-header": "Wins",
+				"win-play-percent-header": "Win% Play",
+				"win-play-total-header": "Wins Play",
+				"win-coin-percent-header": "Win% Coin",
+				"win-coin-total-header": "Wins Coin",
+				"total-header": "Total",
+				"show-as-percent-button-label": "Show as %",
+				"reset-button-label": "Reset stats",
+				"reset-button-tooltip": "Reset the win/loss stats of the current deck. The previous matches will still appear in the replays tab.",
+				"reset-confirmation": "Your win/loss stats have been reset.",
+				"reset-are-you-sure": "Are you sure?",
+				"delete-button-step-2": "Delete",
+				"delete-confirmation": "This will permanently delete the deck from all your stats and can't be undone.",
+				"delete-tooltip": "Delete your deck. This can't be undone. If you just want to hide it, consider archiving it instead."
+			},
+			"deck-details": {
+				"copy-deck-code-button": "Copy deck code"
+			},
+			"deck-recap": {
+				"overall-stats-header": "Overall stats",
+				"watch-replays-button": "Watch replays",
+				"best-against": "Best against",
+				"winrate": "winrate",
+				"games": "games"
+			},
+			"deck-summary": {
+				"total-games": "{{value}} games",
+				"winrate": "{{value}}% winrate",
+				"last-used": "Last used: {{value}}"
 			}
 		}
 	}

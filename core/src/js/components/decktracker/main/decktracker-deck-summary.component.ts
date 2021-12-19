@@ -26,9 +26,23 @@ import { capitalizeEachWord } from '../../../services/utils';
 				<img class="decoration {{ format }}" *ngIf="decoration" [src]="decoration" />
 			</div>
 			<div class="stats">
-				<div class="text total-games">{{ totalGames }} games</div>
-				<div class="text win-rate" *ngIf="winRatePercentage != null">{{ winRatePercentage }}% win rate</div>
-				<div class="last-used">Last used: {{ lastUsed }}</div>
+				<div
+					class="text total-games"
+					[owTranslate]="'app.decktracker.deck-summary.total-games'"
+					[translateParams]="{ value: totalGames }"
+				></div>
+				<div
+					class="text win-rate"
+					*ngIf="winRatePercentage != null"
+					[owTranslate]="'app.decktracker.deck-summary.winrate'"
+					[translateParams]="{ value: winRatePercentage }"
+				></div>
+				<!-- TODO translate: don't forget to format the date as well -->
+				<div
+					class="last-used"
+					[owTranslate]="'app.decktracker.deck-summary.last-used'"
+					[translateParams]="{ value: lastUsed }"
+				></div>
 			</div>
 			<button
 				class="close-button"

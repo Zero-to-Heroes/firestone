@@ -107,7 +107,10 @@ export class DeckMatchupInfoComponent {
 
 		const isTotalRow = this._matchup.opponentClass.toLowerCase() === 'total';
 		this.icon = isTotalRow ? null : `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
-		this.className = formatClass(this._matchup.opponentClass, this.i18n);
+		this.className =
+			this._matchup.opponentClass?.toLowerCase() === 'total'
+				? this.i18n.translateString('app.decktracker.matchup-info.total-header')
+				: formatClass(this._matchup.opponentClass, this.i18n);
 		this.games = this._matchup.totalGames;
 		this.wins = this._matchup.totalWins;
 		this.losses = this._matchup.totalGames - this._matchup.totalWins;

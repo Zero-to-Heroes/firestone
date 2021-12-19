@@ -22,7 +22,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<copy-deckstring
 						class="copy-deckcode"
 						[deckstring]="value.deck?.deckstring"
-						copyText="Copy deck code"
+						[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
 					>
 					</copy-deckstring>
 					<deck-list class="deck-list" [deckstring]="value.deck?.deckstring"></deck-list>

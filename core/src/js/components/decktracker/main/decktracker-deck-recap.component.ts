@@ -16,7 +16,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="decktracker-deck-recap" *ngIf="info$ | async as info">
-			<div class="title">Overall stats</div>
+			<div class="title" [owTranslate]="'app.decktracker.deck-recap.overall-stats-header'"></div>
 
 			<div class="deck-summary">
 				<div class="deck-image">
@@ -26,14 +26,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<div class="deck-title">
 					<div class="deck-name">
 						<div class="text">{{ info.deckName }}</div>
-						<div class="archetype" *ngIf="enableArchetype">
+						<!-- <div class="archetype" *ngIf="enableArchetype">
 							<div class="name">{{ info.deckArchetype }}</div>
 							<div
 								class="help"
 								inlineSVG="assets/svg/help.svg"
 								helpTooltip="Trying to guess the deck's archetype. Don't hesitate to ping me on Discord or report a bug if it's incorrect :)"
 							></div>
-						</div>
+						</div> -->
 					</div>
 					<div class="replay" (click)="showReplays()">
 						<div class="watch-icon">
@@ -41,11 +41,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 							</svg>
 						</div>
-						<div class="watch">Watch replays</div>
+						<div class="watch" [owTranslate]="'app.decktracker.deck-recap.watch-replays-button'"></div>
 					</div>
 				</div>
 				<div class="best-against" *ngIf="info.bestAgainsts?.length">
-					<div class="header">Best against</div>
+					<div class="header" [owTranslate]="'app.decktracker.deck-recap.best-against'"></div>
 					<ul class="classes">
 						<img
 							class="class-icon"
@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						</svg>
 					</div>
 					<div class="data winrate-data">{{ info.winRatePercentage }}%</div>
-					<div class="text winrate-text">winrate</div>
+					<div class="text winrate-text" [owTranslate]="'app.decktracker.deck-recap.winrate'"></div>
 				</div>
 				<div class="recap games">
 					<div class="icon games-icon">
@@ -73,7 +73,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						</svg>
 					</div>
 					<div class="data games-data">{{ info.games }}</div>
-					<div class="text games-text">games</div>
+					<div class="text games-text" [owTranslate]="'app.decktracker.deck-recap.games'"></div>
 				</div>
 				<deck-mana-curve class="recap mana-curve" [deckstring]="info.deckstring"></deck-mana-curve>
 			</div>

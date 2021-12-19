@@ -31,10 +31,31 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 		<div class="deck-winrate-matrix">
 			<div class="header ">
 				<div class="cell class"></div>
-				<div class="cell total-games">Total matches</div>
-				<div class="cell winrate">{{ _showMatchupAsPercentagesValue ? 'Win%' : 'Wins' }}</div>
-				<div class="cell winrate">{{ _showMatchupAsPercentagesValue ? 'Win% Play' : 'Wins Play' }}</div>
-				<div class="cell winrate">{{ _showMatchupAsPercentagesValue ? 'Win% Coin' : 'Wins Coin' }}</div>
+				<div class="cell total-games" [owTranslate]="'app.decktracker.matchup-info.total-matches-header'"></div>
+				<div
+					class="cell winrate"
+					[owTranslate]="
+						_showMatchupAsPercentagesValue
+							? 'app.decktracker.matchup-info.win-percent-header'
+							: 'app.decktracker.matchup-info.win-total-header'
+					"
+				></div>
+				<div
+					class="cell winrate"
+					[owTranslate]="
+						_showMatchupAsPercentagesValue
+							? 'app.decktracker.matchup-info.win-play-percent-header'
+							: 'app.decktracker.matchup-info.win-play-total-header'
+					"
+				></div>
+				<div
+					class="cell winrate"
+					[owTranslate]="
+						_showMatchupAsPercentagesValue
+							? 'app.decktracker.matchup-info.win-coin-percent-header'
+							: 'app.decktracker.matchup-info.win-coin-total-header'
+					"
+				></div>
 			</div>
 			<deck-matchup-info
 				*ngFor="let matchup of matchups"
@@ -46,28 +67,30 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 				<preference-toggle
 					class="percentage-toggle"
 					field="desktopDeckShowMatchupAsPercentages"
-					label="Show as %"
+					[label]="'app.decktracker.matchup-info.show-as-percent-button-label' | owTranslate"
 				></preference-toggle>
 
 				<div class="reset-container">
 					<button
 						(mousedown)="reset()"
-						helpTooltip="Reset the win/loss stats of the current deck. The previous matches will still appear in the replays tab."
+						[helpTooltip]="'app.decktracker.matchup-info.reset-button-tooltip' | owTranslate"
 					>
 						<span>{{ resetText }}</span>
 					</button>
-					<div class="confirmation" *ngIf="showResetConfirmationText">
-						Your win/loss stats have been reset.
-					</div>
+					<div
+						class="confirmation"
+						*ngIf="showResetConfirmationText"
+						[owTranslate]="'app.decktracker.matchup-info.reset-confirmation'"
+					></div>
 				</div>
 				<div class="delete-container">
 					<button
 						confirmationTooltip
 						[askConfirmation]="true"
-						validButtonText="Delete"
-						confirmationText="This will permanently delete the deck from all your stats and can't be undone."
+						[validButtonText]="'app.decktracker.matchup-info.delete-button-step-2' | owTranslate"
+						[confirmationText]="'app.decktracker.matchup-info.delete-confirmation' | owTranslate"
 						(onConfirm)="deleteDeck()"
-						helpTooltip="Delete your deck. This can't be undone. If you just want to hide it, consider archiving it instead."
+						[helpTooltip]="'app.decktracker.matchup-info.delete-tooltip' | owTranslate"
 					>
 						<span>{{ deleteText }}</span>
 					</button>
@@ -120,14 +143,14 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		if (!this.confirmationShown) {
 			console.debug('showing confirmation', this.confirmationShown);
 			this.confirmationShown = true;
-			this.resetText = 'Are you sure?';
+			this.resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-are-you-sure');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			return;
 		}
 
-		this.resetText = 'Reset stats';
+		this.resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-button-label');
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
 		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this._deck.deckstring));
