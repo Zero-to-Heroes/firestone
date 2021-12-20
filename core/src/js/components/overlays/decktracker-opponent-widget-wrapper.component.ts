@@ -34,7 +34,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) => 0;
 	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
-	protected positionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
+	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	showOpponentDecktracker$: Observable<boolean>;

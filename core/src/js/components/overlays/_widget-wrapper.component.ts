@@ -11,7 +11,10 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, windowWidth: number) => number;
 	protected abstract defaultPositionTopProvider: (gameHeight: number, windowHeight: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
-	protected abstract positionExtractor: (prefs: Preferences) => { left: number; top: number };
+	protected abstract positionExtractor: (
+		prefs: Preferences,
+		prefService?: PreferencesService,
+	) => Promise<{ left: number; top: number }>;
 	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
 
 	constructor(
@@ -31,7 +34,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 	private async reposition() {
 		const prefs = await this.prefs.getPreferences();
-		let positionFromPrefs = this.positionExtractor(prefs);
+		let positionFromPrefs = await this.positionExtractor(prefs, this.prefs);
 		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const gameWidth = gameInfo.width;

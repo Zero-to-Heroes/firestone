@@ -35,6 +35,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
+			<player-attack-widget-wrapper></player-attack-widget-wrapper>
+			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

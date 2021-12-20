@@ -259,14 +259,17 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/abstract-counter-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
-import { FullScreenOverlaysComponent } from '../../components/overlays/full-screen-overlays.component';
+import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/opponent-attack-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
+import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/player-attack-widget-wrapper.component';
+import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
 import { ReplaysGameModeFilterDropdownComponent } from '../../components/replays/filters/replays-game-mode-filter-dropdown.component';
@@ -763,6 +766,9 @@ const components = [
 
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,
+		AbstractCounterWidgetWrapperComponent,
+		PlayerCounterWidgetWrapperComponent,
+		OpponentCounterWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

@@ -31,7 +31,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			debounceTime(debounceTimeMs),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(extractor),
-			distinctUntilChanged(equality ?? ((a, b) => a === b)),
+			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			tap((filter) =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {
@@ -39,7 +39,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 					}
 				}, 0),
 			),
-			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter)),
+			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter, extractor)),
 			takeUntil(this.destroyed$),
 		);
 	}

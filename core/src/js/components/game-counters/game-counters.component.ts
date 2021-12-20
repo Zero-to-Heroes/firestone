@@ -5,7 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
+	Input,
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -47,7 +47,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	template: `
 		<div
 			class="root overlay-container-parent"
-			[ngClass]="{ 'isBgs': isBgs }"
+			[ngClass]="{ 'isBgs': activeCounter?.includes('bgs') }"
 			[activeTheme]="'decktracker'"
 			*ngIf="definition$ | async as definition"
 		>
@@ -64,9 +64,9 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
-	activeCounter: CounterType;
-	side: 'player' | 'opponent';
-	isBgs: boolean;
+	@Input() activeCounter: CounterType;
+	@Input() side: 'player' | 'opponent';
+	// isBgs: boolean;
 
 	definition$: Observable<CounterDefinition>;
 
@@ -84,15 +84,15 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	) {
 		super(store, cdr);
 		const nativeElement = this.el.nativeElement;
-		this.activeCounter = nativeElement.getAttribute('counter');
-		this.side = nativeElement.getAttribute('side');
-		this.isBgs = this.activeCounter.includes('bgs');
-		console.log('init counter', this.activeCounter, this.side, this.isBgs);
+		this.activeCounter = this.activeCounter ?? nativeElement.getAttribute('counter');
+		this.side = this.side ?? nativeElement.getAttribute('side');
+		// this.isBgs = this.activeCounter.includes('bgs');
+		console.log('init counter', this.activeCounter, this.side, this.activeCounter?.includes('bgs'));
 	}
 
 	ngAfterContentInit() {
 		// For some reason, declaring this in ngAfterViewInit doesn't work - the obevrsable is never subscribed
-		if (!this.isBgs) {
+		if (!this.activeCounter?.includes('bgs')) {
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)
 				.pipe(
@@ -134,19 +134,19 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		await this.restoreWindowPosition();
+		// await this.restoreWindowPosition();
 	}
 
-	@HostListener('mousedown')
-	dragMove() {
-		this.ow.dragMove(this.windowId, async (result) => {
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
-		});
-	}
+	// @HostListener('mousedown')
+	// dragMove() {
+	// 	this.ow.dragMove(this.windowId, async (result) => {
+	// 		const window = await this.ow.getCurrentWindow();
+	// 		if (!window) {
+	// 			return;
+	// 		}
+	// 		this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
+	// 	});
+	// }
 
 	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {
 		switch (activeCounter) {

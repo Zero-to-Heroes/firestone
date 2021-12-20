@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -271,6 +271,7 @@ export class DeckTrackerOverlayRootComponent
 			.pipe(
 				this.mapData(([pref]) => pref),
 				filter((pref) => !!pref),
+				distinctUntilChanged(),
 			)
 			.subscribe((scale) => {
 				console.debug('updating scale', scale);
@@ -282,7 +283,6 @@ export class DeckTrackerOverlayRootComponent
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				// this.updateTooltipPosition();
 			});
 	}
 
@@ -300,82 +300,5 @@ export class DeckTrackerOverlayRootComponent
 		this.active = toggled;
 		// Avoid artifacts when minimizing
 		this.showTooltips = this.active && this.showTooltipsFromPrefs;
-		// await this.updateTooltipPosition();
 	}
-
-	// private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
-	// 	const gameInfo = await this.ow.getRunningGameInfo();
-	// 	if (!gameInfo) {
-	// 		return;
-	// 	}
-
-	// 	const currentWindow = await this.ow.getCurrentWindow();
-	// 	// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
-	// 	// logical* properties are not DPI aware either, so we should work with them
-	// 	const windowWidth = currentWindow.width;
-	// 	console.log('window position', currentWindow, gameInfo, windowWidth);
-
-	// 	const prefs = await this.prefs.getPreferences();
-	// 	const trackerPosition = this.trackerPositionExtractor(prefs);
-	// 	console.log('loaded tracker position', prefs);
-
-	// 	const minAcceptableLeft = -windowWidth / 2;
-	// 	const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
-	// 	const minAcceptableTop = -100;
-	// 	const maxAcceptableTop = gameInfo.logicalHeight - 100;
-	// 	console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
-	// 	const newLogicalLeft = Math.min(
-	// 		maxAcceptableLeft,
-	// 		Math.max(
-	// 			minAcceptableLeft,
-	// 			trackerPosition && !forceTrackerReposition
-	// 				? trackerPosition.left || 0
-	// 				: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
-	// 		),
-	// 	);
-	// 	const newLogicalTop = Math.min(
-	// 		maxAcceptableTop,
-	// 		Math.max(
-	// 			minAcceptableTop,
-	// 			trackerPosition && !forceTrackerReposition
-	// 				? trackerPosition.top || 0
-	// 				: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
-	// 		),
-	// 	);
-	// 	console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
-	// 	await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
-	// 	console.log('after window position update', await this.ow.getCurrentWindow());
-	// 	await this.updateTooltipPosition();
-	// }
-
-	// private async changeWindowSize(): Promise<void> {
-	// 	const width = 252 * 3; // Max scale
-	// 	const gameInfo = await this.ow.getRunningGameInfo();
-	// 	if (!gameInfo) {
-	// 		return;
-	// 	}
-	// 	const gameHeight = gameInfo.logicalHeight;
-	// 	await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-	// 	await this.restoreWindowPosition();
-	// 	await this.updateTooltipPosition();
-	// }
-
-	// private async updateTooltipPosition() {
-	// 	const window = await this.ow.getCurrentWindow();
-	// 	if (!window) {
-	// 		return;
-	// 	}
-
-	// 	if (!this.showTooltips) {
-	// 		this.tooltipPosition = 'none';
-	// 	} else if (window.left < 0) {
-	// 		this.tooltipPosition = 'right';
-	// 	} else {
-	// 		this.tooltipPosition = 'left';
-	// 	}
-
-	// 	if (!(this.cdr as ViewRef)?.destroyed) {
-	// 		this.cdr?.detectChanges();
-	// 	}
-	// }
 }

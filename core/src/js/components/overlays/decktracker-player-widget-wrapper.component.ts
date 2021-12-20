@@ -35,7 +35,7 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		gameWidth - windowWidth / 2 - 180;
 	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
-	protected positionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
+	protected positionExtractor = async (prefs: Preferences) => prefs.decktrackerPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	showPlayerDecktracker$: Observable<boolean>;

@@ -105,7 +105,6 @@ import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
-import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-cthun-handler';
 import { ElwynnBoarOpponentCounterOverlayHandler } from './overlays/counter-opponent-elwynn-boar-handler';
 import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
@@ -115,7 +114,6 @@ import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-oppon
 import { LibramOpponentCounterOverlayHandler } from './overlays/counter-opponent-libram-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { WatchpostOpponentCounterOverlayHandler } from './overlays/counter-opponent-watchpost-handler';
-import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { BolnerPlayerCounterOverlayHandler } from './overlays/counter-player-bolner-handler';
 import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
 import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
@@ -573,8 +571,8 @@ export class GameStateService {
 			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new AttackPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			// new AttackPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			// new AttackOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new WatchpostPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
