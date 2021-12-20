@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -14,7 +13,7 @@ import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'decktracker-player-widget-wrapper',
@@ -31,24 +30,25 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerPlayerWidgetWrapperComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
-	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
-	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
+	extends AbstractWidgetWrapperComponent
+	implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) =>
+		gameWidth - windowWidth / 2 - 180;
+	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
+	protected positionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
 
 	showPlayerDecktracker$: Observable<boolean>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
-		private readonly prefs: PreferencesService,
-		private readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		ow: OverwolfService,
+		el: ElementRef,
+		prefs: PreferencesService,
+		renderer: Renderer2,
+		store: AppUiStoreFacadeService,
+		cdr: ChangeDetectorRef,
 	) {
-		super(store, cdr);
+		super(ow, el, prefs, renderer, store, cdr);
 	}
 
 	ngAfterContentInit(): void {
@@ -102,55 +102,4 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 		);
 	}
-
-	async ngAfterViewInit() {
-		const prefs = await this.prefs.getPreferences();
-		let positionFromPrefs = this.trackerPositionExtractor(prefs);
-		console.debug('positionFromPrefs', positionFromPrefs);
-		if (!positionFromPrefs) {
-			const gameInfo = await this.ow.getRunningGameInfo();
-			const gameWidth = gameInfo.width;
-			const gameHeight = gameInfo.height;
-			const height = gameHeight;
-			const width = gameWidth;
-			positionFromPrefs = {
-				left: this.defaultTrackerPositionLeftProvider(width, height),
-				top: this.defaultTrackerPositionTopProvider(width, height),
-			};
-			console.debug('built default position', positionFromPrefs);
-		}
-		this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
-		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
-	}
-
-	startDragging() {
-		console.debug('start dragging', this.el.nativeElement);
-	}
-
-	stopDragging() {
-		console.debug(
-			'stopDragging',
-			this.el.nativeElement.querySelector('.widget'),
-			this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect(),
-			getPosition(this.el.nativeElement.querySelector('.widget')),
-		);
-		const newPosition = {
-			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
-			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
-		};
-		console.debug('new position', newPosition);
-		this.trackerPositionUpdater(newPosition.x, newPosition.y);
-	}
 }
-
-const getPosition = (el) => {
-	let offsetLeft = 0;
-	let offsetTop = 0;
-
-	while (el) {
-		offsetLeft += el.offsetLeft;
-		offsetTop += el.offsetTop;
-		el = el.offsetParent;
-	}
-	return { offsetTop: offsetTop, offsetLeft: offsetLeft };
-};
