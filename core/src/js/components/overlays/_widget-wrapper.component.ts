@@ -26,9 +26,13 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	async ngAfterViewInit() {
+		this.reposition();
+	}
+
+	private async reposition() {
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor(prefs);
-		console.debug('positionFromPrefs', positionFromPrefs);
+		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
@@ -37,24 +41,25 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight),
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight),
 			};
-			console.debug('built default position', positionFromPrefs);
+			// console.debug('built default position', positionFromPrefs);
 		}
+		const widgetRect = this.getRect();
+		if (!widgetRect?.width) {
+			setTimeout(() => this.reposition(), 100);
+			return;
+		}
+		// Make sure the widget stays in bounds
+		const boundPositionFromPrefs = {
+			left: Math.min(gameWidth - widgetRect.width, Math.max(0, positionFromPrefs.left)),
+			top: Math.min(gameHeight - widgetRect.height, Math.max(0, positionFromPrefs.top)),
+		};
 
-		setTimeout(() => {
-			// Make sure the widget stays in bounds
-			const widgetRect = this.getRect();
-			const boundPositionFromPrefs = {
-				left: Math.min(gameWidth - widgetRect.width, Math.max(0, positionFromPrefs.left)),
-				top: Math.min(gameHeight - widgetRect.height, Math.max(0, positionFromPrefs.top)),
-			};
-
-			this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
-			this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
-		}, 100);
+		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
+		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
 	}
 
 	startDragging() {
-		console.debug('start dragging', this.el.nativeElement);
+		// console.debug('start dragging', this.el.nativeElement);
 	}
 
 	stopDragging() {
@@ -62,7 +67,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
-		console.debug('new position', newPosition);
+		// console.debug('new position', newPosition);
 		this.positionUpdater(newPosition.x, newPosition.y);
 	}
 }

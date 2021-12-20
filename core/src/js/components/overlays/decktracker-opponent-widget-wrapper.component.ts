@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -52,7 +51,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		console.debug('store', this.store);
+		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showOpponentDecktracker$ = combineLatest(
@@ -72,7 +71,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		).pipe(
-			tap((info) => console.debug('info', info)),
+			// tap((info) => console.debug('info', info)),
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs, decktrackerCloseOnGameEnd],

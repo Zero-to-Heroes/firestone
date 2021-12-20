@@ -315,7 +315,7 @@ export class GameStateService {
 
 		for (const handler of this.overlayHandlers) {
 			const newState = handler.processEvent(event, this.state, this.showDecktrackerFromGameMode);
-			console.debug('newState', newState, this.state, handler, event);
+			// console.debug('newState', newState, this.state, handler, event);
 			this.state = newState ?? this.state;
 		}
 		// this.overlayHandlers.forEach((handler) =>
@@ -351,7 +351,7 @@ export class GameStateService {
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
 		for (const handler of this.overlayHandlers) {
 			const newState = handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode);
-			console.debug('newState', newState, this.state, handler, gameEvent);
+			// console.debug('newState', newState, this.state, handler, gameEvent);
 			this.state = newState ?? this.state;
 		}
 		// this.overlayHandlers.forEach((handler) =>
