@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.3.21',
+		version: '8.4.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Next round of tentative fix for wrong deck detection. As the issue is not systemarically reproducible, I have a hard time validating the fix, so let me know if the issue continues to appear.`,
+								type: 'misc',
+								text: `I have started work on fixing the memory leak. It has some pretty big implications for all the in-game overlays, so please let me know if anything is broken :)`,
 							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
 							{
-								type: 'bug',
-								text: `Tentative fix for tasks not properly synching with the game. As above, this is an issue that I can't reproduce on my machine, so I might need to iterate on it a few times to get it right.`,
+								type: 'misc',
+								text: `The first elements for localization are in place. If you switch the app to French (in the settings), you'll see a few strings that are now translated. There is still a huge amount of work to do to be able to translate all the strings, so this will be a long-term effort.`,
 							},
 						],
 					},
@@ -70,28 +65,20 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to toggle off the golden version of minions in the minion list tooltip.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a slider to change the minions list size.`,
-							},
-							{
-								type: 'ui',
-								text: `Update the design for the Banned Tribes widget to not hide the card image anymore. Also, the tribe icons have changed to use their most iconic tier 1 minions :)`,
+								text: `Add card highlights for Oracle of Elune and Razormane Battleguard.`,
 							},
 						],
 					},
 					{
-						category: 'collection',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a separate counter for Diamond cards.`,
+								type: 'bug',
+								text: `Fix an issue where the navigation was sometimes broken after changing some dropdown filters.`,
 							},
 						],
 					},
