@@ -19,6 +19,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { AngularResizedEventModule } from 'angular-resize-event';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
@@ -219,11 +220,6 @@ import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
 import { NewVersionNotificationComponent } from '../../components/main-window/new-version-notification.component';
-import { OpponentCardInfoIdComponent } from '../../components/matchoverlay/opponenthand/opponent-card-info-id.component';
-import { OpponentCardInfoComponent } from '../../components/matchoverlay/opponenthand/opponent-card-info.component';
-import { OpponentCardInfosComponent } from '../../components/matchoverlay/opponenthand/opponent-card-infos.component';
-import { OpponentCardTurnNumberComponent } from '../../components/matchoverlay/opponenthand/opponent-card-turn-number.component';
-import { OpponentHandOverlayComponent } from '../../components/matchoverlay/opponenthand/opponent-hand-overlay.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
 import { MercenariesFullyUpgradedFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
 import { MercenariesHeroLevelFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
@@ -263,6 +259,13 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
+import { FullScreenOverlaysComponent } from '../../components/overlays/full-screen-overlays.component';
+import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
+import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
+import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
+import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
+import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
 import { ReplaysGameModeFilterDropdownComponent } from '../../components/replays/filters/replays-game-mode-filter-dropdown.component';
@@ -456,6 +459,7 @@ const components = [
 	LoadingComponent,
 	NotificationsComponent,
 	BattlegroundsComponent,
+	FullScreenOverlaysComponent,
 	BattlegroundsMouseOverOverlayComponent,
 	BattlegroundsMinionsTiersOverlayComponent,
 	BattlegroundsOverlayButtonComponent,
@@ -498,6 +502,7 @@ const components = [
 		PerfectScrollbarModule,
 		ColiseumComponentsModule,
 		SharedDeckTrackerModule,
+		AngularResizedEventModule,
 	],
 	declarations: [
 		...components,
@@ -754,6 +759,8 @@ const components = [
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
 		StatsXpSeasonFilterDropdownComponent,
+
+		DecktrackerPlayerWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

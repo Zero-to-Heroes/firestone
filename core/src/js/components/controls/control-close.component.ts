@@ -64,7 +64,7 @@ export class ControlCloseComponent implements AfterViewInit {
 			!isWindowClosed(mainWindowOverlay.window_state_ex) &&
 			!isWindowClosed(bgsWindow.window_state_ex) &&
 			!isWindowClosed(bgsWindowOverlay.window_state_ex);
-		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
+		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen && this.windowId) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
 			this.prefs.updateRemotePreferences();

@@ -4,7 +4,11 @@ import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 
 export interface OverlayHandler {
-	processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean);
+	processEvent(
+		gameEvent: GameEvent | GameStateEvent,
+		state: GameState,
+		showDecktrackerFromGameMode: boolean,
+	): GameState;
 	handleDisplayPreferences(preferences: Preferences);
 	updateOverlay(
 		state: GameState,

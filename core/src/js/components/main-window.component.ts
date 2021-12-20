@@ -54,10 +54,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 									[page]="value.currentApp"
 								></control-share>
 								<control-bug></control-bug>
-								<control-settings
-									[windowId]="windowId"
-									[settingsApp]="value.currentApp"
-								></control-settings>
+								<control-settings [settingsApp]="value.currentApp"></control-settings>
 								<control-help (help)="onHelp()"></control-help>
 								<control-discord></control-discord>
 								<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>

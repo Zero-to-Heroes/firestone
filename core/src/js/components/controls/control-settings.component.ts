@@ -23,11 +23,9 @@ import { PreferencesService } from '../../services/preferences.service';
 })
 export class ControlSettingsComponent implements AfterViewInit {
 	@Input() settingsApp: string;
-	@Input() windowId: string;
 	@Input() shouldMoveSettingsWindow = true;
 	@Input() settingsSection: string;
 
-	// private settingsWindowId: string;
 	private settingsEventBus: EventEmitter<[string, string]>;
 
 	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}

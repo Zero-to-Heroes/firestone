@@ -24,6 +24,7 @@ import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-mem
 import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
+import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { StatsStateBuilderService } from '../../stats/stats-state-builder.service';
@@ -61,6 +62,7 @@ export class StoreBootstrapService {
 		private readonly stats: StatsStateBuilderService,
 		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryCacheService,
+		private readonly memory: MemoryInspectionService,
 	) {
 		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
@@ -101,6 +103,7 @@ export class StoreBootstrapService {
 				achievementHistory,
 				globalStats,
 				collectionState,
+				currentScene,
 			],
 			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
@@ -115,6 +118,7 @@ export class StoreBootstrapService {
 				this.achievementsHelper.buildAchievementHistory(),
 				this.globalStats.getGlobalStats(),
 				this.collectionBootstrap.initCollectionState(),
+				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
 			Promise.all([
@@ -212,6 +216,7 @@ export class StoreBootstrapService {
 		);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
+			currentScene: currentScene,
 			currentUser: currentUser,
 			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
 			replays: replayState,
@@ -226,6 +231,7 @@ export class StoreBootstrapService {
 			stats: newStatsState,
 			globalStats: globalStats,
 		} as MainWindowState);
+		console.debug('[debug]', 'initialWindowState', initialWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}
 

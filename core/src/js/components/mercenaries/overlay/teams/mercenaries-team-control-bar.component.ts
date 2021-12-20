@@ -19,12 +19,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			</i>
 			<div class="controls">
 				<control-bug></control-bug>
-				<control-settings
-					[settingsApp]="'mercenaries'"
-					[shouldMoveSettingsWindow]="false"
-					[windowId]="windowId"
-				>
-				</control-settings>
+				<control-settings [settingsApp]="'mercenaries'" [shouldMoveSettingsWindow]="false"> </control-settings>
 				<control-close
 					[windowId]="windowId"
 					[eventProvider]="closeHandler"

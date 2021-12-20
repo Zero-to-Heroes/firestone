@@ -25,7 +25,7 @@ declare let amplitude: any;
 					</svg>
 				</i>
 				<div class="controls">
-					<control-settings [windowId]="thisWindowId"></control-settings>
+					<control-settings></control-settings>
 					<control-discord></control-discord>
 					<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 						<svg class="svg-icon-fill">

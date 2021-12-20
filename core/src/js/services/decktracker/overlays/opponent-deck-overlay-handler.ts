@@ -60,6 +60,7 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 
 		// 	this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		// }
+		return state;
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {

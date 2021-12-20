@@ -5,7 +5,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	selector: 'opponent-card-turn-number',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/matchoverlay/opponenthand/opponent-card-turn-number.component.scss',
+		'../../../../css/component/overlays/opponenthand/opponent-card-turn-number.component.scss',
 	],
 	template: `
 		<div class="opponent-card-turn-number">

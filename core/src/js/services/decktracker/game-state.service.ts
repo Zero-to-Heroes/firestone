@@ -305,11 +305,24 @@ export class GameStateService {
 					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
 				} as DeckState),
 			} as GameState);
+		} else if (event.type === 'CLOSE_TRACKER') {
+			this.state = this.state.update({
+				playerTrackerClosedByUser: true,
+			});
+		} else if (event.type === 'CLOSE_OPPONENT_TRACKER') {
+			// this.state = this.state.update({
+			// 	opponentTrackerClosedByUser: true,
+			// });
 		}
 
-		this.overlayHandlers.forEach((handler) =>
-			handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
-		);
+		for (const handler of this.overlayHandlers) {
+			const newState = handler.processEvent(event, this.state, this.showDecktrackerFromGameMode);
+			console.debug('newState', newState, this.state, handler, event);
+			this.state = newState ?? this.state;
+		}
+		// this.overlayHandlers.forEach((handler) =>
+		// 	handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
+		// );
 
 		for (const parser of this.eventParsers) {
 			try {
@@ -338,9 +351,14 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
-		this.overlayHandlers.forEach((handler) =>
-			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
-		);
+		for (const handler of this.overlayHandlers) {
+			const newState = handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode);
+			console.debug('newState', newState, this.state, handler, gameEvent);
+			this.state = newState ?? this.state;
+		}
+		// this.overlayHandlers.forEach((handler) =>
+		// 	handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
+		// );
 
 		if (gameEvent.type === GameEvent.GAME_START) {
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);

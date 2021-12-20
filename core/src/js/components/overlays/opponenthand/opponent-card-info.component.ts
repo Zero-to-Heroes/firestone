@@ -9,7 +9,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'opponent-card-info',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/matchoverlay/opponenthand/opponent-card-info.component.scss',
+		'../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss',
 	],
 	template: `
 		<div class="opponent-card-info scalable" [style.left.vw]="leftVwOffset" [style.top.vw]="topVwOffset">

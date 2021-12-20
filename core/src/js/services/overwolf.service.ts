@@ -18,6 +18,7 @@ export class OverwolfService {
 	public static SETTINGS_WINDOW = 'SettingsWindow';
 	public static SETTINGS_WINDOW_OVERLAY = 'SettingsOverlayWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
+	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
 	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
 	public static DECKTRACKER_OPPONENT_WINDOW = 'DeckTrackerOpponentWindow';
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';

@@ -42,14 +42,24 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		this.onGameScreen = (await this.memory.getCurrentSceneFromMindVision()) === SceneMode.GAMEPLAY;
 	}
 
-	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
-		super.processEvent(gameEvent, state, showDecktrackerFromGameMode);
+	public processEvent(
+		gameEvent: GameEvent | GameStateEvent,
+		state: GameState,
+		showDecktrackerFromGameMode: boolean,
+	): GameState {
+		let result = super.processEvent(gameEvent, state, showDecktrackerFromGameMode);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
+			result = result.update({
+				playerTrackerClosedByUser: true,
+			});
 			this.closedByUser = true;
 			this.updateOverlay(state, showDecktrackerFromGameMode);
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.closedByUser = false;
 			this.gameStarted = true;
+			result = result.update({
+				playerTrackerClosedByUser: false,
+			});
 			console.debug(`[${this.name}] game started`);
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
@@ -63,6 +73,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		// 	console.log(`[${this.name}] received GEP scene changed`, (gameEvent as GameEvent).additionalData.scene);
 		// 	this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		// }
+		return state;
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {

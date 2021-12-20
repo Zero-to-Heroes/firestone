@@ -7,7 +7,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	selector: 'opponent-card-infos',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/matchoverlay/opponenthand/opponent-card-infos.component.scss',
+		'../../../../css/component/overlays/opponenthand/opponent-card-infos.component.scss',
 	],
 	template: `
 		<ul class="opponent-card-infos">

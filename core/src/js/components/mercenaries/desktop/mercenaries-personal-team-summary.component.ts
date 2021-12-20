@@ -64,7 +64,7 @@ export class MercenariesPersonalTeamSummaryComponent {
 		const gamesForTeam = value.games;
 		// Because we can't pass non ISU-8859-1 to AWS S3 metadata, so the deck name has to be encoded
 		this.teamName = decodeURIComponent(
-			gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName || 'Unnamed Team',
+			gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName ?? 'Unnamed Team',
 		);
 		this.teamNameTooltip = `${this.teamName}`;
 		this.totalGames = gamesForTeam.length;

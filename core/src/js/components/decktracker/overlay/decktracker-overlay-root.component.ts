@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -26,7 +26,6 @@ import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -34,8 +33,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
-		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		`../../../../css/themes/decktracker-theme.scss`,
+		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 	],
 	template: `
 		<div
@@ -61,7 +60,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						>
 							<div class="background"></div>
 							<decktracker-control-bar
-								[windowId]="windowId"
 								[settingsCategory]="player"
 								[closeEvent]="closeEvent"
 								(onMinimize)="onMinimize()"
@@ -153,8 +151,6 @@ export class DeckTrackerOverlayRootComponent
 	private showTooltipsFromPrefs = true;
 	private showTooltips = true;
 
-	private gameInfoUpdatedListener: (message: any) => void;
-
 	constructor(
 		private prefs: PreferencesService,
 		private ow: OverwolfService,
@@ -170,13 +166,6 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-				await this.restoreWindowPosition(true);
-			}
-		});
 		this.events.on(Events.SHOW_MODAL).subscribe(() => {
 			this.showBackdrop = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -189,9 +178,6 @@ export class DeckTrackerOverlayRootComponent
 				this.cdr.detectChanges();
 			}
 		});
-
-		await this.changeWindowSize();
-		await this.ow.bringToFront(this.windowId);
 	}
 
 	ngAfterContentInit() {
@@ -278,19 +264,7 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.store
 			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((value) => {
 				this.showTooltipsFromPrefs = value;
 				this.cdr?.detectChanges();
@@ -298,11 +272,8 @@ export class DeckTrackerOverlayRootComponent
 		this.store
 			.listenPrefs$((prefs) => this.scaleExtractor(prefs))
 			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
+				this.mapData(([pref]) => pref),
+				filter((pref) => !!pref),
 			)
 			.subscribe((scale) => {
 				console.debug('updating scale', scale);
@@ -322,7 +293,6 @@ export class DeckTrackerOverlayRootComponent
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		this.cardsHighlight.shutDown();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 
 	onMinimize() {
@@ -336,92 +306,62 @@ export class DeckTrackerOverlayRootComponent
 		await this.updateTooltipPosition();
 	}
 
-	@HostListener('mousedown', ['$event'])
-	dragMove(event: MouseEvent) {
-		const path: any[] = event.composedPath();
-		// Hack for drop-downs
-		if (
-			path.length > 2 &&
-			path[0].localName === 'div' &&
-			path[0].className?.includes('options') &&
-			path[1].localName === 'div' &&
-			path[1].className?.includes('below')
-		) {
-			return;
-		}
+	// private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
+	// 	const gameInfo = await this.ow.getRunningGameInfo();
+	// 	if (!gameInfo) {
+	// 		return;
+	// 	}
 
-		this.tooltipPosition = 'none';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		this.ow.dragMove(this.windowId, async (result) => {
-			await this.updateTooltipPosition();
-			const window = await this.ow.getCurrentWindow();
+	// 	const currentWindow = await this.ow.getCurrentWindow();
+	// 	// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
+	// 	// logical* properties are not DPI aware either, so we should work with them
+	// 	const windowWidth = currentWindow.width;
+	// 	console.log('window position', currentWindow, gameInfo, windowWidth);
 
-			if (!window) {
-				return;
-			}
+	// 	const prefs = await this.prefs.getPreferences();
+	// 	const trackerPosition = this.trackerPositionExtractor(prefs);
+	// 	console.log('loaded tracker position', prefs);
 
-			this.trackerPositionUpdater(window.left, window.top);
-		});
-	}
+	// 	const minAcceptableLeft = -windowWidth / 2;
+	// 	const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
+	// 	const minAcceptableTop = -100;
+	// 	const maxAcceptableTop = gameInfo.logicalHeight - 100;
+	// 	console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
+	// 	const newLogicalLeft = Math.min(
+	// 		maxAcceptableLeft,
+	// 		Math.max(
+	// 			minAcceptableLeft,
+	// 			trackerPosition && !forceTrackerReposition
+	// 				? trackerPosition.left || 0
+	// 				: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
+	// 		),
+	// 	);
+	// 	const newLogicalTop = Math.min(
+	// 		maxAcceptableTop,
+	// 		Math.max(
+	// 			minAcceptableTop,
+	// 			trackerPosition && !forceTrackerReposition
+	// 				? trackerPosition.top || 0
+	// 				: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
+	// 		),
+	// 	);
+	// 	console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
+	// 	await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
+	// 	console.log('after window position update', await this.ow.getCurrentWindow());
+	// 	await this.updateTooltipPosition();
+	// }
 
-	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-
-		const currentWindow = await this.ow.getCurrentWindow();
-		// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
-		// logical* properties are not DPI aware either, so we should work with them
-		const windowWidth = currentWindow.width;
-		console.log('window position', currentWindow, gameInfo, windowWidth);
-
-		const prefs = await this.prefs.getPreferences();
-		const trackerPosition = this.trackerPositionExtractor(prefs);
-		console.log('loaded tracker position', prefs);
-
-		const minAcceptableLeft = -windowWidth / 2;
-		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
-		const minAcceptableTop = -100;
-		const maxAcceptableTop = gameInfo.logicalHeight - 100;
-		console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
-		const newLogicalLeft = Math.min(
-			maxAcceptableLeft,
-			Math.max(
-				minAcceptableLeft,
-				trackerPosition && !forceTrackerReposition
-					? trackerPosition.left || 0
-					: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
-			),
-		);
-		const newLogicalTop = Math.min(
-			maxAcceptableTop,
-			Math.max(
-				minAcceptableTop,
-				trackerPosition && !forceTrackerReposition
-					? trackerPosition.top || 0
-					: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
-			),
-		);
-		console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
-		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
-		console.log('after window position update', await this.ow.getCurrentWindow());
-		await this.updateTooltipPosition();
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const width = 252 * 3; // Max scale
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.logicalHeight;
-		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-		await this.restoreWindowPosition();
-		await this.updateTooltipPosition();
-	}
+	// private async changeWindowSize(): Promise<void> {
+	// 	const width = 252 * 3; // Max scale
+	// 	const gameInfo = await this.ow.getRunningGameInfo();
+	// 	if (!gameInfo) {
+	// 		return;
+	// 	}
+	// 	const gameHeight = gameInfo.logicalHeight;
+	// 	await this.ow.changeWindowSize(this.windowId, width, gameHeight);
+	// 	await this.restoreWindowPosition();
+	// 	await this.updateTooltipPosition();
+	// }
 
 	private async updateTooltipPosition() {
 		const window = await this.ow.getCurrentWindow();

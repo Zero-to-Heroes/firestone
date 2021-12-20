@@ -22,7 +22,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[settingsApp]="'decktracker'"
 					[settingsSection]="settingsSection"
 					[shouldMoveSettingsWindow]="false"
-					[windowId]="windowId"
 				>
 				</control-settings>
 				<button (mousedown)="minimize()">
@@ -33,11 +32,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						></use>
 					</svg>
 				</button>
-				<control-close
-					[windowId]="windowId"
-					[eventProvider]="closeHandler"
-					[askConfirmation]="true"
-				></control-close>
+				<control-close [eventProvider]="closeHandler" [askConfirmation]="true"></control-close>
 			</div>
 		</div>
 	`,
@@ -48,7 +43,6 @@ export class DeckTrackerControlBarComponent {
 
 	@Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
 
-	@Input() windowId: string;
 	@Input() closeEvent: string;
 	@Input() set settingsCategory(value: string) {
 		if (value === 'opponent') {

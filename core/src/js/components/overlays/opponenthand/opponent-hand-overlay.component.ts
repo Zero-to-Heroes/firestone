@@ -24,7 +24,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
-		'../../../../css/component/matchoverlay/opponenthand/opponent-hand-overlay.component.scss',
+		'../../../../css/component/overlays/opponenthand/opponent-hand-overlay.component.scss',
 	],
 	template: `
 		<div class="opponent-hand-overlay overlay-container-parent">

@@ -39,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
 				<div class="controls exclude-dbclick">
 					<control-bug></control-bug>
-					<control-settings [windowId]="windowId" [settingsApp]="'battlegrounds'"></control-settings>
+					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId"></control-minimize>
 					<control-maximize

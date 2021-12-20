@@ -106,6 +106,15 @@ export class DeckState {
 		return result;
 	}
 
+	public totalCardsInZones(): number {
+		return (
+			(this.deck?.length ?? 0) +
+			(this.hand?.length ?? 0) +
+			(this.board?.length ?? 0) +
+			(this.otherZone?.length ?? 0)
+		);
+	}
+
 	// TODO: Probably not the place for these methods
 	public containsGalakrond(allCards?: CardsFacadeService): boolean {
 		if (this.galakrondInvokesCount > 0) {

@@ -159,6 +159,7 @@ export class AppBootstrapService {
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
+				this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
 				// This can happen when we're in another game, so we exit the app for good
 
 				if (this.ow.inAnotherGame(res)) {
@@ -178,6 +179,7 @@ export class AppBootstrapService {
 					this.handleExitGame();
 				}
 			} else if (await this.ow.inGame()) {
+				this.showFullScreenOverlaysWindow();
 				this.showLoadingScreen();
 			}
 		});
@@ -324,6 +326,9 @@ export class AppBootstrapService {
 		if (!isRunning || showMainWindow) {
 			this.showCollectionWindow();
 		}
+		if (isRunning) {
+			this.showFullScreenOverlaysWindow();
+		}
 	}
 
 	private closeApp() {
@@ -351,6 +356,12 @@ export class AppBootstrapService {
 		this.ow.bringToFront(window.id);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
+	}
+
+	private async showFullScreenOverlaysWindow() {
+		console.log('[bootstrap] ready to show full screen overlays window');
+		const overlaysWindow = await this.ow.obtainDeclaredWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
+		this.ow.restoreWindow(overlaysWindow.id);
 	}
 
 	private async handleExitGame() {

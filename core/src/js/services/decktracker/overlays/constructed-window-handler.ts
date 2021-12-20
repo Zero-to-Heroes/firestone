@@ -40,6 +40,7 @@ export class ConstructedWindowHandler extends AbstractOverlayHandler {
 			this.gameStarted = true;
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		}
+		return state;
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences) {
