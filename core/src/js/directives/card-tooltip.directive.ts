@@ -146,6 +146,21 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 					overlayY: 'bottom',
 				},
 			];
+		} else if (this._position === 'auto') {
+			positions = [
+				{
+					originX: 'start',
+					originY: 'center',
+					overlayX: 'end',
+					overlayY: 'center',
+				},
+				{
+					originX: 'end',
+					originY: 'center',
+					overlayX: 'start',
+					overlayY: 'center',
+				},
+			];
 		}
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef

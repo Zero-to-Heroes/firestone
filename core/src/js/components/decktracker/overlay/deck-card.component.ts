@@ -35,7 +35,7 @@ import { uuid } from '../../../services/utils';
 				'linked-card': isLinkedCardHighlight
 			}"
 			[cardTooltip]="cardId"
-			[cardTooltipPosition]="_tooltipPosition"
+			[cardTooltipPosition]="'auto'"
 			(mouseenter)="onMouseEnter($event)"
 			(mouseleave)="onMouseLeave($event)"
 		>
