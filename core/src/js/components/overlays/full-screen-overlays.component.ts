@@ -34,9 +34,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	template: `
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
-			<!-- <widget-wrapper *ngIf="showOpponentDecktracker$ | async">
-				<decktracker-overlay-opponent></decktracker-overlay-opponent
-			></widget-wrapper> -->
+			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

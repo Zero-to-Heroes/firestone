@@ -48,13 +48,14 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		showDecktrackerFromGameMode: boolean,
 	): GameState {
 		let result = super.processEvent(gameEvent, state, showDecktrackerFromGameMode);
-		if (gameEvent.type === 'CLOSE_TRACKER') {
-			result = result.update({
-				playerTrackerClosedByUser: true,
-			});
-			this.closedByUser = true;
-			this.updateOverlay(state, showDecktrackerFromGameMode);
-		} else if (gameEvent.type === GameEvent.GAME_START) {
+		// if (gameEvent.type === 'CLOSE_TRACKER') {
+		// 	result = result.update({
+		// 		playerTrackerClosedByUser: true,
+		// 	});
+		// 	this.closedByUser = true;
+		// 	this.updateOverlay(state, showDecktrackerFromGameMode);
+		// } else
+		if (gameEvent.type === GameEvent.GAME_START) {
 			this.closedByUser = false;
 			this.gameStarted = true;
 			result = result.update({
@@ -73,7 +74,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		// 	console.log(`[${this.name}] received GEP scene changed`, (gameEvent as GameEvent).additionalData.scene);
 		// 	this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		// }
-		return state;
+		return result;
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {

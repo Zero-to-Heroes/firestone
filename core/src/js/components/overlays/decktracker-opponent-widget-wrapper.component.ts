@@ -16,30 +16,29 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
-	selector: 'decktracker-player-widget-wrapper',
+	selector: 'decktracker-opponent-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<decktracker-overlay-player
+		<decktracker-overlay-opponent
 			class="widget"
-			*ngIf="showPlayerDecktracker$ | async"
+			*ngIf="showOpponentDecktracker$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-		></decktracker-overlay-player>
+		></decktracker-overlay-opponent>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerPlayerWidgetWrapperComponent
+export class DecktrackerOpponentWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) =>
-		gameWidth - windowWidth / 2 - 180;
-	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
-	protected positionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
+	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) => 0;
+	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
+	protected positionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
-	showPlayerDecktracker$: Observable<boolean>;
+	showOpponentDecktracker$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -56,20 +55,20 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
-		this.showPlayerDecktracker$ = combineLatest(
+		this.showOpponentDecktracker$ = combineLatest(
 			this.store.listen$(
 				([main, nav, pref]) => main.currentScene,
 				// Show from prefs
-				([main, nav, pref]) => true,
+				([main, nav, pref]) => pref.opponentTracker,
 				([main, nav, pref]) => pref.decktrackerCloseOnGameEnd,
 			),
 			this.store.listenDeckState$(
-				(deckState) => deckState?.playerTrackerClosedByUser,
+				(deckState) => deckState?.opponentTrackerClosedByUser,
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
 				(deckState) => deckState?.isBattlegrounds(),
 				(deckState) => deckState?.isMercenaries(),
-				(deckState) => deckState?.playerDeck?.totalCardsInZones(),
+				(deckState) => deckState?.opponentDeck?.totalCardsInZones(),
 			),
 			displayFromGameMode$,
 		).pipe(

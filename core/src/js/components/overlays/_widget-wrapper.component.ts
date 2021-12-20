@@ -5,12 +5,14 @@ import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
+// https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
 export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, windowWidth: number) => number;
 	protected abstract defaultPositionTopProvider: (gameHeight: number, windowHeight: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
 	protected abstract positionExtractor: (prefs: Preferences) => { left: number; top: number };
+	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -27,20 +29,28 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor(prefs);
 		console.debug('positionFromPrefs', positionFromPrefs);
+		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameWidth = gameInfo.width;
+		const gameHeight = gameInfo.height;
 		if (!positionFromPrefs) {
-			const gameInfo = await this.ow.getRunningGameInfo();
-			const gameWidth = gameInfo.width;
-			const gameHeight = gameInfo.height;
-			const height = gameHeight;
-			const width = gameWidth;
 			positionFromPrefs = {
-				left: this.defaultPositionLeftProvider(width, height),
-				top: this.defaultPositionTopProvider(width, height),
+				left: this.defaultPositionLeftProvider(gameWidth, gameHeight),
+				top: this.defaultPositionTopProvider(gameWidth, gameHeight),
 			};
 			console.debug('built default position', positionFromPrefs);
 		}
-		this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
-		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
+
+		setTimeout(() => {
+			// Make sure the widget stays in bounds
+			const widgetRect = this.getRect();
+			const boundPositionFromPrefs = {
+				left: Math.min(gameWidth - widgetRect.width, Math.max(0, positionFromPrefs.left)),
+				top: Math.min(gameHeight - widgetRect.height, Math.max(0, positionFromPrefs.top)),
+			};
+
+			this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
+			this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
+		}, 100);
 	}
 
 	startDragging() {

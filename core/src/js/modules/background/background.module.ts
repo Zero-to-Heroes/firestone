@@ -259,6 +259,7 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/full-screen-overlays.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
@@ -761,6 +762,7 @@ const components = [
 		StatsXpSeasonFilterDropdownComponent,
 
 		DecktrackerPlayerWidgetWrapperComponent,
+		DecktrackerOpponentWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

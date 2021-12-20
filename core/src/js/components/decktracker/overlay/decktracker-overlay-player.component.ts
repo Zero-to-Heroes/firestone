@@ -18,12 +18,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[hideGeneratedCardsInOtherZoneExtractor]="hideGeneratedCardsInOtherZoneExtractor"
 			[sortCardsByManaCostInOtherZoneExtractor]="sortCardsByManaCostInOtherZoneExtractor"
 			[deckExtractor]="deckExtractor"
-			[trackerPositionUpdater]="trackerPositionUpdater"
-			[trackerPositionExtractor]="trackerPositionExtractor"
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
-			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
-			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 			closeEvent="CLOSE_TRACKER"
 			player="player"
 		>
@@ -43,12 +39,12 @@ export class DeckTrackerOverlayPlayerComponent {
 	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.overlayHideGeneratedCardsInOtherZone;
 	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.overlaySortByManaInOtherZone;
 	deckExtractor = (state: GameState) => state.playerDeck;
-	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
+	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
+	// trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => prefs.overlayShowDeckWinrate;
 	showMatchupWinrateExtractor = (prefs: Preferences) => prefs.overlayShowMatchupWinrate;
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
-	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
+	// defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
+	// defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 
 	constructor(private prefs: PreferencesService) {}
 }

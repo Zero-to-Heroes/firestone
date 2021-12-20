@@ -14,7 +14,6 @@ import {
 import { formatFormat } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -71,7 +70,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[showMatchupWinrate]="showMatchupWinrate$ | async"
 								[deckWinrate]="deckStatsRecap$ | async"
 								[matchupWinrate]="matchupStatsRecap$ | async"
-								[tooltipPosition]="tooltipPosition"
 							></decktracker-title-bar>
 							<decktracker-deck-list
 								[deckState]="value.deck"
@@ -82,7 +80,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
 								[showStatsChange]="showStatsChange$ | async"
 								[cardsGoToBottom]="cardsGoToBottom$ | async"
-								[tooltipPosition]="tooltipPosition"
 								[darkenUsedCards]="darkenUsedCards$ | async"
 								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone$ | async"
 								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone$ | async"
@@ -111,10 +108,10 @@ export class DeckTrackerOverlayRootComponent
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
-	@Input() trackerPositionUpdater: (left: number, top: number) => void;
-	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
-	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
-	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
+	// @Input() trackerPositionUpdater: (left: number, top: number) => void;
+	// @Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
+	// @Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
+	// @Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() closeEvent: string;
@@ -145,7 +142,7 @@ export class DeckTrackerOverlayRootComponent
 
 	overlayWidthInPx = 227;
 
-	tooltipPosition: CardTooltipPositionType = 'left';
+	// tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
 	private showTooltipsFromPrefs = true;
@@ -285,7 +282,7 @@ export class DeckTrackerOverlayRootComponent
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				this.updateTooltipPosition();
+				// this.updateTooltipPosition();
 			});
 	}
 
@@ -303,7 +300,7 @@ export class DeckTrackerOverlayRootComponent
 		this.active = toggled;
 		// Avoid artifacts when minimizing
 		this.showTooltips = this.active && this.showTooltipsFromPrefs;
-		await this.updateTooltipPosition();
+		// await this.updateTooltipPosition();
 	}
 
 	// private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
@@ -363,22 +360,22 @@ export class DeckTrackerOverlayRootComponent
 	// 	await this.updateTooltipPosition();
 	// }
 
-	private async updateTooltipPosition() {
-		const window = await this.ow.getCurrentWindow();
-		if (!window) {
-			return;
-		}
+	// private async updateTooltipPosition() {
+	// 	const window = await this.ow.getCurrentWindow();
+	// 	if (!window) {
+	// 		return;
+	// 	}
 
-		if (!this.showTooltips) {
-			this.tooltipPosition = 'none';
-		} else if (window.left < 0) {
-			this.tooltipPosition = 'right';
-		} else {
-			this.tooltipPosition = 'left';
-		}
+	// 	if (!this.showTooltips) {
+	// 		this.tooltipPosition = 'none';
+	// 	} else if (window.left < 0) {
+	// 		this.tooltipPosition = 'right';
+	// 	} else {
+	// 		this.tooltipPosition = 'left';
+	// 	}
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr?.detectChanges();
-		}
-	}
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr?.detectChanges();
+	// 	}
+	// }
 }

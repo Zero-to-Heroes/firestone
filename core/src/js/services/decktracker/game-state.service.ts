@@ -128,10 +128,8 @@ import { LibramPlayerCounterOverlayHandler } from './overlays/counter-player-lib
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
 import { SpellsPlayerCounterOverlayHandler } from './overlays/counter-player-spells-handler';
 import { WatchpostPlayerCounterOverlayHandler } from './overlays/counter-player-watchpost-handler';
-import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
-import { PlayerDeckOverlayHandler } from './overlays/player-deck-overlay-handler';
 import { SecretsHelperOverlayHandler } from './overlays/secrets-helper-overlay-handler';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
@@ -310,9 +308,9 @@ export class GameStateService {
 				playerTrackerClosedByUser: true,
 			});
 		} else if (event.type === 'CLOSE_OPPONENT_TRACKER') {
-			// this.state = this.state.update({
-			// 	opponentTrackerClosedByUser: true,
-			// });
+			this.state = this.state.update({
+				opponentTrackerClosedByUser: true,
+			});
 		}
 
 		for (const handler of this.overlayHandlers) {
@@ -361,6 +359,10 @@ export class GameStateService {
 		// );
 
 		if (gameEvent.type === GameEvent.GAME_START) {
+			this.state = this.state.update({
+				playerTrackerClosedByUser: false,
+				opponentTrackerClosedByUser: false,
+			});
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
 			this.state = this.state
@@ -563,8 +565,8 @@ export class GameStateService {
 
 	private buildOverlayHandlers() {
 		this.overlayHandlers = [
-			new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
-			new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
+			// new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
+			// new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
 			new OpponentHandOverlayHandler(this.ow, this.allCards, this.prefs),
 			new SecretsHelperOverlayHandler(this.ow, this.allCards, this.prefs),
 			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),

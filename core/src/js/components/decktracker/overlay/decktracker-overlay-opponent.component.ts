@@ -18,12 +18,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[hideGeneratedCardsInOtherZoneExtractor]="hideGeneratedCardsInOtherZoneExtractor"
 			[sortCardsByManaCostInOtherZoneExtractor]="sortCardsByManaCostInOtherZoneExtractor"
 			[deckExtractor]="deckExtractor"
-			[trackerPositionUpdater]="trackerPositionUpdater"
-			[trackerPositionExtractor]="trackerPositionExtractor"
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
-			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
-			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 			closeEvent="CLOSE_OPPONENT_TRACKER"
 			player="opponent"
 		>
@@ -43,13 +39,13 @@ export class DeckTrackerOverlayOpponentComponent {
 	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlayHideGeneratedCardsInOtherZone;
 	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlaySortByManaInOtherZone;
 	deckExtractor = (state: GameState) => state.opponentDeck;
-	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
+	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
+	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => false;
 	showMatchupWinrateExtractor = (prefs: Preferences) => false;
 	// Because whitespace for the tooltips
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
-	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
+	// defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
+	// defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
 
 	constructor(private prefs: PreferencesService) {}
 }

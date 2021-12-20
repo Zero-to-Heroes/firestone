@@ -16,6 +16,7 @@ export class GameState {
 	readonly spectating: boolean;
 
 	readonly playerTrackerClosedByUser: boolean;
+	readonly opponentTrackerClosedByUser: boolean;
 
 	// When adding new stuff, don't forget to clean them in twitch-auth.service.ts
 	public static create(base?: Partial<NonFunctionProperties<GameState>>): GameState {
