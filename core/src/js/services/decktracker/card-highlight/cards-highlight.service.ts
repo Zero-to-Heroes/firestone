@@ -200,12 +200,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
 			case CardIds.NzothTheCorruptor:
 				return and(inGraveyard, minion, deathrattle);
+			case CardIds.OracleOfElune:
+				return and(minion, effectiveCostLess(3));
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
+			case CardIds.RazormaneBattleguard:
+				return and(minion, taunt);
 			case CardIds.RedscaleDragontamer:
 				return and(inDeck, dragon);
 			case CardIds.RevivePet:
