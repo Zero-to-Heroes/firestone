@@ -259,16 +259,36 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
-import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/abstract-counter-widget-wrapper.component';
+import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
+import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
+import { OpponentCthunWidgetWrapperComponent } from '../../components/overlays/counters/opponent-cthun-widget-wrapper.component';
+import { OpponentElwynnBoarWidgetWrapperComponent } from '../../components/overlays/counters/opponent-elwynn-boar-widget-wrapper.component';
+import { OpponentFatigueWidgetWrapperComponent } from '../../components/overlays/counters/opponent-fatigue-widget-wrapper.component';
+import { OpponentGalakrondWidgetWrapperComponent } from '../../components/overlays/counters/opponent-galakrond-widget-wrapper.component';
+import { OpponentJadeWidgetWrapperComponent } from '../../components/overlays/counters/opponent-jade-widget-wrapper.component';
+import { OpponentLibramWidgetWrapperComponent } from '../../components/overlays/counters/opponent-libram-widget-wrapper.component';
+import { OpponentPogoWidgetWrapperComponent } from '../../components/overlays/counters/opponent-pogo-widget-wrapper.component';
+import { OpponentWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-watchpost-widget-wrapper.component';
+import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-attack-widget-wrapper.component';
+import { PlayerBolnerWidgetWrapperComponent } from '../../components/overlays/counters/player-bolner-widget-wrapper.component';
+import { PlayerCthunWidgetWrapperComponent } from '../../components/overlays/counters/player-cthun-widget-wrapper.component';
+import { PlayerElementalWidgetWrapperComponent } from '../../components/overlays/counters/player-elemental-widget-wrapper.component';
+import { PlayerElwynnBoarWidgetWrapperComponent } from '../../components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
+import { PlayerFatigueWidgetWrapperComponent } from '../../components/overlays/counters/player-fatigue-widget-wrapper.component';
+import { PlayerGalakrondWidgetWrapperComponent } from '../../components/overlays/counters/player-galakrond-widget-wrapper.component';
+import { PlayerHeroPowerDamageWidgetWrapperComponent } from '../../components/overlays/counters/player-hero-power-damage-widget-wrapper.component';
+import { PlayerJadeWidgetWrapperComponent } from '../../components/overlays/counters/player-jade-widget-wrapper.component';
+import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/counters/player-libram-widget-wrapper.component';
+import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
+import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
+import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
-import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/opponent-attack-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
-import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/player-attack-widget-wrapper.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
@@ -767,8 +787,30 @@ const components = [
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,
 		AbstractCounterWidgetWrapperComponent,
+
 		PlayerCounterWidgetWrapperComponent,
+		PlayerWatchpostCounterWidgetWrapperComponent,
+		PlayerSpellWidgetWrapperComponent,
+		PlayerPogoWidgetWrapperComponent,
+		PlayerLibramWidgetWrapperComponent,
+		PlayerJadeWidgetWrapperComponent,
+		PlayerHeroPowerDamageWidgetWrapperComponent,
+		PlayerGalakrondWidgetWrapperComponent,
+		PlayerFatigueWidgetWrapperComponent,
+		PlayerElwynnBoarWidgetWrapperComponent,
+		PlayerElementalWidgetWrapperComponent,
+		PlayerCthunWidgetWrapperComponent,
+		PlayerBolnerWidgetWrapperComponent,
+
 		OpponentCounterWidgetWrapperComponent,
+		OpponentWatchpostCounterWidgetWrapperComponent,
+		OpponentPogoWidgetWrapperComponent,
+		OpponentJadeWidgetWrapperComponent,
+		OpponentGalakrondWidgetWrapperComponent,
+		OpponentFatigueWidgetWrapperComponent,
+		OpponentElwynnBoarWidgetWrapperComponent,
+		OpponentCthunWidgetWrapperComponent,
+		OpponentLibramWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

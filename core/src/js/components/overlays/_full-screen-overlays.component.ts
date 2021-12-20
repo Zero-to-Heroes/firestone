@@ -35,8 +35,31 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
+
+			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
+			<player-watchpost-widget-wrapper></player-watchpost-widget-wrapper>
+			<player-spell-widget-wrapper></player-spell-widget-wrapper>
+			<player-pogo-widget-wrapper></player-pogo-widget-wrapper>
+			<player-libram-widget-wrapper></player-libram-widget-wrapper>
+			<player-jade-widget-wrapper></player-jade-widget-wrapper>
+			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
+			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
+			<player-elwynn-boar-widget-wrapper></player-elwynn-boar-widget-wrapper>
+			<player-elemental-widget-wrapper></player-elemental-widget-wrapper>
+			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
+			<player-bolner-widget-wrapper></player-bolner-widget-wrapper>
+			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
+
+			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
+			<opponent-watchpost-widget-wrapper></opponent-watchpost-widget-wrapper>
+			<opponent-pogo-widget-wrapper></opponent-pogo-widget-wrapper>
+			<opponent-jade-widget-wrapper></opponent-jade-widget-wrapper>
+			<opponent-galakrond-widget-wrapper></opponent-galakrond-widget-wrapper>
+			<opponent-fatigue-widget-wrapper></opponent-fatigue-widget-wrapper>
+			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
+			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,13 +1,4 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -16,7 +7,6 @@ import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -63,19 +53,14 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() activeCounter: CounterType;
 	@Input() side: 'player' | 'opponent';
-	// isBgs: boolean;
 
 	definition$: Observable<CounterDefinition>;
 
-	private windowId: string;
-
 	constructor(
-		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
@@ -83,9 +68,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		const nativeElement = this.el.nativeElement;
-		this.activeCounter = this.activeCounter ?? nativeElement.getAttribute('counter');
-		this.side = this.side ?? nativeElement.getAttribute('side');
 		// this.isBgs = this.activeCounter.includes('bgs');
 		console.log('init counter', this.activeCounter, this.side, this.activeCounter?.includes('bgs'));
 	}
@@ -132,22 +114,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		}
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		// await this.restoreWindowPosition();
-	}
-
-	// @HostListener('mousedown')
-	// dragMove() {
-	// 	this.ow.dragMove(this.windowId, async (result) => {
-	// 		const window = await this.ow.getCurrentWindow();
-	// 		if (!window) {
-	// 			return;
-	// 		}
-	// 		this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
-	// 	});
-	// }
-
 	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {
 		switch (activeCounter) {
 			case 'galakrond':
@@ -191,53 +157,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BgsPogoCounterDefinition.create(gameState, side);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
-		}
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.logicalWidth;
-		const gameHeight = gameInfo.logicalHeight;
-
-		const trackerPosition = await this.prefs.getCounterPosition(this.activeCounter, this.side);
-		const newLeft = Math.min(
-			gameWidth - 100,
-			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
-		);
-		const newTop = Math.min(
-			gameHeight - 100,
-			Math.max(0, (trackerPosition && trackerPosition.top) || (await this.getDefaultTop())),
-		);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-	}
-
-	private async getDefaultLeft() {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.activeCounter === 'attack') {
-			return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.16;
-		} else {
-			const offset = this.activeCounter === 'galakrond' ? 0 : 150;
-			return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.2 + offset;
-		}
-	}
-
-	private async getDefaultTop() {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.side === 'player') {
-			if (this.activeCounter === 'attack') {
-				return gameInfo.logicalHeight * 0.65;
-			} else {
-				return gameInfo.logicalHeight * 0.7;
-			}
-		} else {
-			if (this.activeCounter === 'attack') {
-				return gameInfo.logicalHeight * 0.1;
-			} else {
-				return gameInfo.logicalHeight * 0.1;
-			}
 		}
 	}
 }

@@ -232,9 +232,9 @@ export class Preferences {
 	readonly playerHeroPowerDamageCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
-	readonly opponentHeroPowerDamageCounter: boolean = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
+	// readonly opponentHeroPowerDamageCounter: boolean = true;
+	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
+	// readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerElwynnBoarCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

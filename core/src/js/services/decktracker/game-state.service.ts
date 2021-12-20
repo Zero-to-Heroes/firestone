@@ -105,27 +105,6 @@ import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
-import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-cthun-handler';
-import { ElwynnBoarOpponentCounterOverlayHandler } from './overlays/counter-opponent-elwynn-boar-handler';
-import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
-import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
-import { HeroPowerDamageOpponentCounterOverlayHandler } from './overlays/counter-opponent-hero-power-damage-handler';
-import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
-import { LibramOpponentCounterOverlayHandler } from './overlays/counter-opponent-libram-handler';
-import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
-import { WatchpostOpponentCounterOverlayHandler } from './overlays/counter-opponent-watchpost-handler';
-import { BolnerPlayerCounterOverlayHandler } from './overlays/counter-player-bolner-handler';
-import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
-import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
-import { ElwynnBoarPlayerCounterOverlayHandler } from './overlays/counter-player-elwynn-boar-handler';
-import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
-import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
-import { HeroPowerDamagePlayerCounterOverlayHandler } from './overlays/counter-player-hero-power-damage-handler';
-import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
-import { LibramPlayerCounterOverlayHandler } from './overlays/counter-player-libram-handler';
-import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
-import { SpellsPlayerCounterOverlayHandler } from './overlays/counter-player-spells-handler';
-import { WatchpostPlayerCounterOverlayHandler } from './overlays/counter-player-watchpost-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
 import { SecretsHelperOverlayHandler } from './overlays/secrets-helper-overlay-handler';
@@ -563,33 +542,8 @@ export class GameStateService {
 
 	private buildOverlayHandlers() {
 		this.overlayHandlers = [
-			// new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
-			// new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs, this.memory),
 			new OpponentHandOverlayHandler(this.ow, this.allCards, this.prefs),
 			new SecretsHelperOverlayHandler(this.ow, this.allCards, this.prefs),
-			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			// new AttackPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			// new AttackOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new WatchpostPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new WatchpostOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new LibramPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new LibramOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new CthunPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new ElwynnBoarPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new ElwynnBoarOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new BolnerPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new HeroPowerDamagePlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
-			new HeroPowerDamageOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
