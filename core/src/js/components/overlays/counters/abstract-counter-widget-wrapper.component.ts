@@ -25,6 +25,7 @@ export const templateBase = `
 		cdkDrag
 		(cdkDragStarted)="startDragging()"
 		(cdkDragReleased)="stopDragging()"
+		(cdkDragEnded)="dragEnded($event)"
 	></game-counters>
 `;
 

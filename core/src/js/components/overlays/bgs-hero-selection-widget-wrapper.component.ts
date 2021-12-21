@@ -9,10 +9,10 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractWidgetWrapperComponent } from '../../overlays/_widget-wrapper.component';
+import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'bgs-hero-selection-widget-wrapper',
@@ -68,13 +68,12 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 			this.mapData(
 				([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded, heroSelectionDone]]) => {
 					return (
-						true ||
-						(inGame &&
-							isCurrentGame &&
-							!gameEnded &&
-							!heroSelectionDone &&
-							displayFromPrefs &&
-							currentScene === SceneMode.GAMEPLAY)
+						inGame &&
+						isCurrentGame &&
+						!gameEnded &&
+						!heroSelectionDone &&
+						displayFromPrefs &&
+						currentScene === SceneMode.GAMEPLAY
 					);
 				},
 			),

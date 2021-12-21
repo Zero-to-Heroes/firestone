@@ -160,6 +160,7 @@ export class AppBootstrapService {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
 				this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
+				this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW);
 				// This can happen when we're in another game, so we exit the app for good
 
 				if (this.ow.inAnotherGame(res)) {
@@ -362,6 +363,10 @@ export class AppBootstrapService {
 		console.log('[bootstrap] ready to show full screen overlays window');
 		const overlaysWindow = await this.ow.obtainDeclaredWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
 		this.ow.restoreWindow(overlaysWindow.id);
+		const overlaysClickthroughWindow = await this.ow.obtainDeclaredWindow(
+			OverwolfService.FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW,
+		);
+		this.ow.restoreWindow(overlaysClickthroughWindow.id);
 	}
 
 	private async handleExitGame() {

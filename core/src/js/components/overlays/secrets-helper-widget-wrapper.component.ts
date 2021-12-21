@@ -24,6 +24,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
+			(cdkDragEnded)="dragEnded($event)"
 		></secrets-helper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

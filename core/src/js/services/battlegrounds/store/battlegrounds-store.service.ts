@@ -87,8 +87,6 @@ import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
-import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
-import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
 import { RealTimeStatsState } from './real-time-stats/real-time-stats';
 import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
@@ -542,10 +540,6 @@ export class BattlegroundsStoreService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [
-			new BgsMainWindowOverlay(this.prefs, this.ow),
-			new BgsPlayerPogoOverlay(this.ow),
-			new BgsMouseOverOverlay(this.prefs, this.ow),
-		];
+		this.overlayHandlers = [new BgsMainWindowOverlay(this.prefs, this.ow)];
 	}
 }

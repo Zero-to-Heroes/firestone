@@ -55,8 +55,8 @@
 				"block_top_window_navigation": true,
 				"in_game_only": true
 			},
-			"MatchOverlayBattlegroundsMouseOverWindow": {
-				"file": "Files/match_overlay_bgs_mouse_over.html",
+			"FullScreenOverlaysClickthroughWindow": {
+				"file": "Files/full_screen_overlays_clickthrough.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,

@@ -103,10 +103,8 @@ import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-s
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsMinionsGroupComponent } from '../../components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '../../components/battlegrounds/minions-tiers/minions-list.component';
-import { BattlegroundsMouseOverOverlayComponent } from '../../components/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
 import { BgsHeroSelectionOverlayComponent } from '../../components/battlegrounds/overlay/bgs-hero-selection-overlay.component';
-import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/battlegrounds/overlay/bgs-hero-selection-widget-wrapper.component';
 import { BgsTavernMinionComponent } from '../../components/battlegrounds/overlay/bgs-tavern-minion.component';
 import { BgsSimulationOverlayComponent } from '../../components/battlegrounds/simulation-overlay/bgs-simulation-overlay.component';
 import { CardBackComponent } from '../../components/collection/card-back.component';
@@ -262,6 +260,9 @@ import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../componen
 import { NotificationsComponent } from '../../components/notifications.component';
 import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
 import { BgsBattleSimulationWidgetWrapperComponent } from '../../components/overlays/bgs-battle-simulation-widget-wrapper.component';
+import { BgsBoardWidgetWrapperComponent } from '../../components/overlays/bgs-board-widget-wrapper.component';
+import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/overlays/bgs-hero-selection-widget-wrapper.component';
+import { BgsLeaderboardWidgetWrapperComponent } from '../../components/overlays/bgs-leaderboard-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
@@ -296,6 +297,7 @@ import { OpponentCardInfosComponent } from '../../components/overlays/opponentha
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
 import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/secrets-helper-widget-wrapper.component';
+import { FullScreenOverlaysClickthroughComponent } from '../../components/overlays/_full-screen-overlays-clickthrough.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
@@ -491,7 +493,7 @@ const components = [
 	NotificationsComponent,
 	BattlegroundsComponent,
 	FullScreenOverlaysComponent,
-	BattlegroundsMouseOverOverlayComponent,
+	FullScreenOverlaysClickthroughComponent,
 	BattlegroundsMinionsTiersOverlayComponent,
 	BattlegroundsOverlayButtonComponent,
 	BgsBannedTribesComponent,
@@ -801,6 +803,8 @@ const components = [
 		BgsBannedTribesWidgetWrapperComponent,
 		BgsWindowButtonWidgetWrapperComponent,
 		BgsHeroSelectionWidgetWrapperComponent,
+		BgsLeaderboardWidgetWrapperComponent,
+		BgsBoardWidgetWrapperComponent,
 
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,

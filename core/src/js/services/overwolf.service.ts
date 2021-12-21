@@ -18,15 +18,16 @@ export class OverwolfService {
 	public static SETTINGS_WINDOW = 'SettingsWindow';
 	public static SETTINGS_WINDOW_OVERLAY = 'SettingsOverlayWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
+	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
 	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
+	public static FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW = 'FullScreenOverlaysClickthroughWindow';
+
 	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
 	public static DECKTRACKER_OPPONENT_WINDOW = 'DeckTrackerOpponentWindow';
-	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
 	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
-	public static BATTLEGROUNDS_WINDOW_MOUSE_OVER_OVERLAY = 'MatchOverlayBattlegroundsMouseOverWindow';
 	public static BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY = 'BgsBattleSimulationOverlay';
 	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
 	public static BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY = 'BattlegroundsMinionsTiersWindow';

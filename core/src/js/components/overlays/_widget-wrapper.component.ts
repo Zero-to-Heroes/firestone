@@ -1,3 +1,4 @@
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -32,7 +33,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		this.reposition();
 	}
 
-	protected async reposition() {
+	protected async reposition(cleanup: () => void = null) {
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
 		// console.debug('positionFromPrefs', positionFromPrefs);
@@ -60,20 +61,28 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
+		if (cleanup) {
+			cleanup();
+		}
 	}
 
 	startDragging() {
-		// console.debug('start dragging', this.el.nativeElement);
+		console.debug('start dragging', this.el.nativeElement);
 	}
 
 	async stopDragging() {
+		// Do nothing for now
+	}
+
+	async dragEnded(event: CdkDragEnd) {
+		console.debug('drag ended', event);
 		const newPosition = {
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
-		// console.debug('new position', newPosition);
+		console.debug('new position', newPosition);
 		await this.positionUpdater(newPosition.x, newPosition.y);
-		this.reposition();
+		this.reposition(() => event.source._dragRef.reset());
 	}
 
 	@HostListener('window:window-resize')
