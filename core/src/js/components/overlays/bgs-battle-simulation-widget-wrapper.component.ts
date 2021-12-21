@@ -15,24 +15,26 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
-	selector: 'bgs-minion-tiers-widget-wrapper',
+	selector: 'bgs-battle-simulation-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<battlegrounds-minions-tiers
+		<bgs-simulation-overlay
 			class="widget"
 			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-		></battlegrounds-minions-tiers>
+		></bgs-simulation-overlay>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 252;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 20;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsMinionsListPosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.bgsMinionsListPosition;
+export class BgsBattleSimulationWidgetWrapperComponent
+	extends AbstractWidgetWrapperComponent
+	implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth / 2 - 200;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsSimulationWidgetPosition(left, top);
+	protected positionExtractor = async (prefs: Preferences) => prefs.bgsSimulationWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	showWidget$: Observable<boolean>;
@@ -54,7 +56,7 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
 				([main, nav, prefs]) =>
-					(prefs.bgsEnableMinionListOverlay || prefs.bgsShowTribesHighlight) && prefs.bgsFullToggle,
+					prefs.bgsEnableBattleSimulationOverlay && prefs.bgsEnableSimulation && prefs.bgsFullToggle,
 			),
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,

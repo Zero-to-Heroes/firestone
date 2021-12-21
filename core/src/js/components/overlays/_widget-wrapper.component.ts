@@ -66,13 +66,14 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		// console.debug('start dragging', this.el.nativeElement);
 	}
 
-	stopDragging() {
+	async stopDragging() {
 		const newPosition = {
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
 		// console.debug('new position', newPosition);
-		this.positionUpdater(newPosition.x, newPosition.y);
+		await this.positionUpdater(newPosition.x, newPosition.y);
+		this.reposition();
 	}
 
 	@HostListener('window:window-resize')

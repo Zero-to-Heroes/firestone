@@ -15,24 +15,24 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
-	selector: 'bgs-minion-tiers-widget-wrapper',
+	selector: 'bgs-banned-tribes-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<battlegrounds-minions-tiers
+		<bgs-banned-tribes
 			class="widget"
 			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-		></battlegrounds-minions-tiers>
+		></bgs-banned-tribes>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 252;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 20;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsMinionsListPosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.bgsMinionsListPosition;
+export class BgsBannedTribesWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth / 2 + 300;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 200;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsBannedTribedPosition(left, top);
+	protected positionExtractor = async (prefs: Preferences) => prefs.bgsBannedTribesWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	showWidget$: Observable<boolean>;
@@ -53,8 +53,7 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
-				([main, nav, prefs]) =>
-					(prefs.bgsEnableMinionListOverlay || prefs.bgsShowTribesHighlight) && prefs.bgsFullToggle,
+				([main, nav, prefs]) => prefs.bgsShowBannedTribesOverlay && prefs.bgsFullToggle,
 			),
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,

@@ -1,17 +1,14 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	Renderer2,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { Preferences } from '../../models/preferences';
 import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -42,13 +39,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	bannedTribes$: Observable<readonly Race[]>;
 	tooltip$: Observable<string>;
 	orientation$: Observable<'row' | 'column'>;
-
-	// private stateSubscription: Subscription;
-	private windowId: string;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -111,22 +105,6 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 			});
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		await this.restoreWindowPosition();
-	}
-
-	@HostListener('mousedown')
-	dragMove() {
-		this.ow.dragMove(this.windowId, async (result) => {
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			this.prefs.updateBgsBannedTribedPosition(window.left, window.top);
-		});
-	}
-
 	private getExceptions(value: Race): string[] {
 		switch (value) {
 			case Race.BEAST:
@@ -147,23 +125,5 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				return [];
 		}
 		return [];
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		console.log('gameInfo', gameInfo);
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.logicalWidth;
-		console.log('gameWidth', gameWidth);
-		const prefs: Preferences = await this.prefs.getPreferences();
-		const trackerPosition = prefs.bgsBannedTribesWidgetPosition;
-		console.log('trackerPosition', trackerPosition);
-		const newLeft = (trackerPosition && trackerPosition.left) || gameWidth / 2 + 300;
-		console.log('newLeft', newLeft);
-		const newTop = (trackerPosition && trackerPosition.top) || 200;
-		console.log('newTop', newTop);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }

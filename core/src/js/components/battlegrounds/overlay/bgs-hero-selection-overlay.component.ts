@@ -1,13 +1,4 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -32,7 +23,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div
-			class="app-container overlay-container-parent battlegrounds-theme bgs-hero-selection-overlay"
+			class="app-container battlegrounds-theme bgs-hero-selection-overlay"
 			[ngClass]="{ 'with-hero-tooltips': heroTooltipActive$ | async }"
 		>
 			<bgs-hero-overview
@@ -45,14 +36,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionOverlayComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<InternalBgsHeroStat[]>;
 	heroTooltipActive$: Observable<boolean>;
-	windowId: string;
-
-	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -148,45 +134,8 @@ export class BgsHeroSelectionOverlayComponent
 		);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.ow.setWindowPassthrough(this.windowId);
-
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-		await this.changeWindowSize();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-	}
-
 	trackByHeroFn(index, item: BgsHeroStat) {
 		return item?.id;
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.width;
-		const gameHeight = gameInfo.height;
-		const height = gameHeight * 0.85;
-		const width = gameHeight * 1.1;
-		await this.ow.changeWindowSize(this.windowId, width, height);
-		const dpi = gameInfo.logicalWidth / gameWidth;
-		const newLeft = dpi * 0.5 * (gameWidth - width);
-		const newTop = 0;
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }
 

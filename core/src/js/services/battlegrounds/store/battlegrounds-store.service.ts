@@ -86,13 +86,9 @@ import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
-import { BgsBannedTribesOverlay } from './overlay/bgs-banned-tribes-overlay';
-import { BgsHeroSelectionOverlay } from './overlay/bgs-hero-selection-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
-import { BgsOverlayButtonOverlay } from './overlay/bgs-overlay-button-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
-import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
 import { RealTimeStatsState } from './real-time-stats/real-time-stats';
 import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
@@ -549,11 +545,7 @@ export class BattlegroundsStoreService {
 		this.overlayHandlers = [
 			new BgsMainWindowOverlay(this.prefs, this.ow),
 			new BgsPlayerPogoOverlay(this.ow),
-			new BgsSimulationOverlay(this.prefs, this.ow),
-			new BgsBannedTribesOverlay(this.prefs, this.ow),
 			new BgsMouseOverOverlay(this.prefs, this.ow),
-			new BgsOverlayButtonOverlay(this.ow),
-			new BgsHeroSelectionOverlay(this.ow),
 		];
 	}
 }

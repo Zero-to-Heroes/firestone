@@ -41,6 +41,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 			<!-- BG -->
 			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
+			<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
+			<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
+			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
 
 			<!-- Mercs -->
 

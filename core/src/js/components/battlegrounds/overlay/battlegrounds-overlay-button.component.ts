@@ -1,13 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	HostListener,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, ViewRef } from '@angular/core';
 import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { DebugService } from '../../../services/debug.service';
@@ -25,7 +16,7 @@ declare let amplitude;
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-overlay-button.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-overlay-button overlay-container-parent" [activeTheme]="'battlegrounds'">
+		<div class="battlegrounds-overlay-button" [activeTheme]="'battlegrounds'">
 			<div
 				class="battlegrounds-widget"
 				[ngClass]="{ 'big': big }"
@@ -35,14 +26,12 @@ declare let amplitude;
 				<div class="icon idle"></div>
 				<div class="icon active"></div>
 			</div>
-			<control-close class="close" [windowId]="windowId"></control-close>
+			<!-- <control-close class="close" [windowId]="windowId"></control-close> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class BattlegroundsOverlayButtonComponent implements AfterViewInit {
-	windowId: string;
+export class BattlegroundsOverlayButtonComponent {
 	big: boolean;
 
 	// private isDragging = false;
@@ -56,27 +45,10 @@ export class BattlegroundsOverlayButtonComponent implements AfterViewInit {
 	) {}
 
 	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-		await this.restoreWindowPosition();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private mouseDownStart: number;
-
-	@HostListener('mousedown')
-	dragMove() {
-		this.mouseDownStart = Date.now();
-		this.ow.dragMove(this.windowId, async (result) => {
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			this.prefs.updateBgsOverlayButtonPosition(window.left, window.top);
-		});
-	}
 
 	toggleOverlay() {
 		// Assume it's a drag and do nothing
@@ -92,18 +64,5 @@ export class BattlegroundsOverlayButtonComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}, 150);
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const prefs = await this.prefs.getPreferences();
-		const trackerPosition = prefs.bgsOverlayButtonPosition;
-		// TODO: default to bottom right corner
-		const newLeft = (trackerPosition && trackerPosition.left) || 10;
-		const newTop = (trackerPosition && trackerPosition.top) || 10;
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }

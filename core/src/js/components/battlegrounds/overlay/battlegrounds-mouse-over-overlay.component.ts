@@ -73,6 +73,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					></bgs-tavern-minion>
 				</ul>
 			</div>
+			<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -224,6 +225,7 @@ export class BattlegroundsMouseOverOverlayComponent
 			}
 		});
 		await this.changeWindowSize();
+		window.dispatchEvent(new Event('window-resize'));
 	}
 
 	@HostListener('window:beforeunload')
@@ -253,5 +255,6 @@ export class BattlegroundsMouseOverOverlayComponent
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = dpi * 0.5 * (gameWidth - width);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
+		window.dispatchEvent(new Event('window-resize'));
 	}
 }

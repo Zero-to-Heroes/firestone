@@ -106,6 +106,7 @@ import { BattlegroundsMinionsListComponent } from '../../components/battleground
 import { BattlegroundsMouseOverOverlayComponent } from '../../components/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
 import { BgsHeroSelectionOverlayComponent } from '../../components/battlegrounds/overlay/bgs-hero-selection-overlay.component';
+import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/battlegrounds/overlay/bgs-hero-selection-widget-wrapper.component';
 import { BgsTavernMinionComponent } from '../../components/battlegrounds/overlay/bgs-tavern-minion.component';
 import { BgsSimulationOverlayComponent } from '../../components/battlegrounds/simulation-overlay/bgs-simulation-overlay.component';
 import { CardBackComponent } from '../../components/collection/card-back.component';
@@ -259,7 +260,10 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
+import { BgsBattleSimulationWidgetWrapperComponent } from '../../components/overlays/bgs-battle-simulation-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
+import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
 import { OpponentCthunWidgetWrapperComponent } from '../../components/overlays/counters/opponent-cthun-widget-wrapper.component';
@@ -793,6 +797,10 @@ const components = [
 		OpponentHandWidgetWrapperComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
+		BgsBattleSimulationWidgetWrapperComponent,
+		BgsBannedTribesWidgetWrapperComponent,
+		BgsWindowButtonWidgetWrapperComponent,
+		BgsHeroSelectionWidgetWrapperComponent,
 
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,
