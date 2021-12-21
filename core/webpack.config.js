@@ -127,11 +127,11 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('full_screen_overlays.html', 'overlays'),
 		buildHtmlWebpackPluginConf('match_overlay_bgs_mouse_over.html', 'battlegroundsmouseover'),
 
-		buildHtmlWebpackPluginConf('battlegrounds_minions_tiers.html', 'battlegroundsminionstiers'),
 		buildHtmlWebpackPluginConf('bgs_battle_simulation.html', 'bgsbattlesimulation'),
 		buildHtmlWebpackPluginConf('bgs_banned_tribes.html', 'bgsbannedtribes'),
 		buildHtmlWebpackPluginConf('bgs_hero_selection_overlay.html', 'bgsheroselectionoverlay'),
 		buildHtmlWebpackPluginConf('battlegrounds_overlay_button.html', 'battlegroundsoverlaybutton'),
+
 		buildHtmlWebpackPluginConf('mercenaries_player_team.html', 'mercenariesplayerteam'),
 		buildHtmlWebpackPluginConf('mercenaries_opponent_team.html', 'mercenariesopponentteam'),
 		buildHtmlWebpackPluginConf('mercenaries_action_queue.html', 'mercenariesactionqueue'),

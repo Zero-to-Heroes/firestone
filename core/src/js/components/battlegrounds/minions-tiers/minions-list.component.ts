@@ -28,7 +28,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				class="minion-group"
 				*ngFor="let group of groups"
 				[group]="group"
-				[tooltipPosition]="_tooltipPosition"
 				[showTribesHighlight]="_showTribesHighlight"
 			></bgs-minions-group>
 			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="_showTribesHighlight">
@@ -44,13 +43,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionsListComponent implements AfterViewInit {
-	@Input() set tooltipPosition(value: string) {
-		this._tooltipPosition = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	@Input() set cards(value: readonly ReferenceCard[]) {
 		this._cards = value;
 		this.updateInfos();
@@ -78,7 +70,6 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	_highlightedTribes: readonly Race[];
 	_showTribesHighlight: boolean;
 	groups: readonly BgsMinionsGroup[];
-	_tooltipPosition: string;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 

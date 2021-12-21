@@ -56,7 +56,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					*ngFor="let minion of minions"
 					[cardTooltip]="minion.displayedCardIds"
 					[cardTooltipBgs]="true"
-					[cardTooltipPosition]="_tooltipPosition"
 					(click)="clickMinion(minion)"
 				>
 					<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
@@ -89,13 +88,6 @@ export class BattlegroundsMinionsGroupComponent
 	implements AfterViewInit, AfterContentInit {
 	@Output() minionClick: EventEmitter<string> = new EventEmitter<string>();
 
-	@Input() set tooltipPosition(value: string) {
-		this._tooltipPosition = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	@Input() set group(value: BgsMinionsGroup) {
 		this._group = value;
 		this.updateInfos();
@@ -112,7 +104,6 @@ export class BattlegroundsMinionsGroupComponent
 	highlighted: boolean;
 	minions: readonly Minion[];
 	_group: BgsMinionsGroup;
-	_tooltipPosition: string;
 	_showTribesHighlight: boolean;
 
 	private showGoldenCards = true;

@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -15,7 +14,6 @@ import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -37,7 +35,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div
 			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme scalable"
 			(mouseleave)="onTavernMouseLeave()"
-			(mousedown)="dragMove($event)"
 		>
 			<div class="tiers-container" *ngIf="showMinionsList$ | async">
 				<ng-container *ngIf="{ tiers: tiers$ | async, currentTurn: currentTurn$ | async } as value">
@@ -73,7 +70,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						[showTribesHighlight]="showTribesHighlight$ | async"
 						[highlightedMinions]="highlightedMinions$ | async"
 						[highlightedTribes]="highlightedTribes$ | async"
-						[tooltipPosition]="tooltipPosition"
 					></bgs-minions-list>
 				</ng-container>
 			</div>
@@ -84,7 +80,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsMinionsTiersOverlayComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit, OnDestroy {
 	private static readonly WINDOW_WIDTH = 1300;
 
 	tiers$: Observable<readonly Tier[]>;
@@ -94,14 +90,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showTribesHighlight$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
 
-	private windowId: string;
 	private enableMouseOver: boolean;
 
 	displayedTier: Tier;
 	lockedTier: Tier;
-	tooltipPosition: CardTooltipPositionType = 'left';
 
-	private gameInfoUpdatedListener: (message: any) => void;
 	private prefSubscription: Subscription;
 
 	constructor(
@@ -197,55 +190,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			});
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-		await this.changeWindowSize();
-		await this.updateTooltipPosition();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.prefSubscription?.unsubscribe();
-	}
-
-	@HostListener('mousedown', ['$event'])
-	dragMove(event: MouseEvent) {
-		const path: any[] = event.composedPath();
-		// Hack for drop-downs
-		if (
-			path.length > 2 &&
-			path[0].localName === 'div' &&
-			path[0].className?.includes('options') &&
-			path[1].localName === 'div' &&
-			path[1].className?.includes('below')
-		) {
-			return;
-		}
-
-		this.tooltipPosition = 'none';
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		this.ow.dragMove(this.windowId, async (result) => {
-			await this.updateTooltipPosition();
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			await this.prefs.updateBgsMinionsListPosition(window.left, window.top);
-			await this.restoreWindowPosition();
-		});
 	}
 
 	trackByFn(index: number, tavernTier: Tier) {
@@ -303,61 +251,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
 		}));
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-
-		const gameWidth = gameInfo.width;
-		const height = gameInfo.height;
-		const width = BattlegroundsMinionsTiersOverlayComponent.WINDOW_WIDTH;
-		await this.ow.changeWindowSize(this.windowId, width, height);
-		const dpi = gameInfo.logicalWidth / gameWidth;
-		const newLeft = dpi * (gameWidth - width);
-		await this.ow.changeWindowPosition(this.windowId, newLeft - 15, 15);
-		await this.restoreWindowPosition();
-		await this.updateTooltipPosition();
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const width = BattlegroundsMinionsTiersOverlayComponent.WINDOW_WIDTH;
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
-		const prefs = await this.prefs.getPreferences();
-		const windowPosition = prefs.bgsMinionsListPosition;
-		const newLeft =
-			windowPosition && windowPosition.left < gameWidth && windowPosition.left > -width
-				? windowPosition.left || 0
-				: gameWidth - width * dpi;
-		const newTop =
-			windowPosition && windowPosition.top < gameInfo.logicalHeight && windowPosition.top > -300
-				? windowPosition.top || 0
-				: 0;
-		console.log('changing window position', newLeft, newTop, windowPosition, gameWidth, width);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		await this.updateTooltipPosition();
-	}
-
-	private async updateTooltipPosition() {
-		const window = await this.ow.getCurrentWindow();
-		if (!window) {
-			return;
-		}
-		if (window.left < 0) {
-			this.tooltipPosition = 'right';
-		} else {
-			this.tooltipPosition = 'left';
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
 

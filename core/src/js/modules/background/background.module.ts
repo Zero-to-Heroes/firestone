@@ -259,6 +259,7 @@ import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
+import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
 import { OpponentCthunWidgetWrapperComponent } from '../../components/overlays/counters/opponent-cthun-widget-wrapper.component';
@@ -790,8 +791,10 @@ const components = [
 		DecktrackerOpponentWidgetWrapperComponent,
 		SecretsHelperWidgetWrapperComponent,
 		OpponentHandWidgetWrapperComponent,
-		AbstractCounterWidgetWrapperComponent,
 
+		BgsMinionsTiersWidgetWrapperComponent,
+
+		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,
 		PlayerWatchpostCounterWidgetWrapperComponent,
 		PlayerSpellWidgetWrapperComponent,

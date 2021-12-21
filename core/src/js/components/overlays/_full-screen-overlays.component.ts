@@ -33,10 +33,16 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	],
 	template: `
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
+			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
+
+			<!-- BG -->
+			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
+
+			<!-- Mercs -->
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>

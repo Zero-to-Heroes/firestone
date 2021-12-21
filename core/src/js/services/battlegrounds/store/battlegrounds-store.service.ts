@@ -89,7 +89,6 @@ import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsBannedTribesOverlay } from './overlay/bgs-banned-tribes-overlay';
 import { BgsHeroSelectionOverlay } from './overlay/bgs-hero-selection-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
-import { BgsMinionsListOverlay } from './overlay/bgs-minions-list-overlay';
 import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
 import { BgsOverlayButtonOverlay } from './overlay/bgs-overlay-button-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
@@ -553,7 +552,6 @@ export class BattlegroundsStoreService {
 			new BgsSimulationOverlay(this.prefs, this.ow),
 			new BgsBannedTribesOverlay(this.prefs, this.ow),
 			new BgsMouseOverOverlay(this.prefs, this.ow),
-			new BgsMinionsListOverlay(this.prefs, this.ow),
 			new BgsOverlayButtonOverlay(this.ow),
 			new BgsHeroSelectionOverlay(this.ow),
 		];
