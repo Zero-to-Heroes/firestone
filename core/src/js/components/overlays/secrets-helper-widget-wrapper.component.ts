@@ -15,29 +15,28 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
-	selector: 'decktracker-opponent-widget-wrapper',
+	selector: 'secrets-helper-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<decktracker-overlay-opponent
+		<secrets-helper
 			class="widget"
-			*ngIf="showOpponentDecktracker$ | async"
+			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-		></decktracker-overlay-opponent>
+		></secrets-helper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerOpponentWidgetWrapperComponent
-	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => 0;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 50;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
+export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
+		gameWidth / 2 - 252 - gameHeight * 0.3;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.05;
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateSecretsHelperPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
-	showOpponentDecktracker$: Observable<boolean>;
+	showWidget$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -54,49 +53,39 @@ export class DecktrackerOpponentWidgetWrapperComponent
 		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
-		this.showOpponentDecktracker$ = combineLatest(
+		this.showWidget$ = combineLatest(
 			this.store.listen$(
 				([main, nav, pref]) => main.currentScene,
 				// Show from prefs
-				([main, nav, pref]) => pref.opponentTracker,
-				([main, nav, pref]) => pref.decktrackerCloseOnGameEnd,
+				([main, nav, pref]) => pref.secretsHelper,
 			),
 			this.store.listenDeckState$(
-				(deckState) => deckState?.opponentTrackerClosedByUser,
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
 				(deckState) => deckState?.isBattlegrounds(),
 				(deckState) => deckState?.isMercenaries(),
-				(deckState) => deckState?.opponentDeck?.totalCardsInZones(),
+				(deckState) => !!deckState?.opponentDeck?.secrets?.length,
 			),
 			displayFromGameMode$,
 		).pipe(
 			// tap((info) => console.debug('info', info)),
 			this.mapData(
 				([
-					[currentScene, displayFromPrefs, decktrackerCloseOnGameEnd],
-					[closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones],
+					[currentScene, displayFromPrefs],
+					[gameStarted, gameEnded, isBgs, isMercs, hasSecrets],
 					displayFromGameMode,
 				]) => {
-					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
-						console.debug(closedByUser, gameStarted, isBgs, isMercs, displayFromGameMode, displayFromPrefs);
+					if (!gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
 						return false;
-					}
-
-					if (!decktrackerCloseOnGameEnd) {
-						console.debug(decktrackerCloseOnGameEnd, displayFromGameMode);
-						return displayFromGameMode;
 					}
 
 					// We explicitely don't check for null, so that if the memory updates are broken
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
-						console.debug(currentScene);
 						return false;
 					}
 
-					console.debug(gameEnded, totalCardsInZones);
-					return !gameEnded && totalCardsInZones > 0;
+					return !gameEnded && hasSecrets;
 				},
 			),
 		);

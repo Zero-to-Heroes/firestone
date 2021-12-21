@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { SecretOption } from '../../models/decktracker/secret-option';
@@ -30,12 +29,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<perfect-scrollbar class="secrets-helper-list" [ngClass]="{ 'active': isScroll }">
 			<ul class="card-list" scrollable>
 				<li *ngFor="let card of cards; trackBy: trackCard">
-					<deck-card
-						[card]="card"
-						[tooltipPosition]="_tooltipPosition"
-						[colorManaCost]="colorManaCost"
-						[colorClassCards]="true"
-					></deck-card>
+					<deck-card [card]="card" [colorManaCost]="colorManaCost" [colorClassCards]="true"></deck-card>
 				</li>
 			</ul>
 		</perfect-scrollbar>
@@ -45,15 +39,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
 	@Input() set secrets(value: readonly BoardSecret[]) {
 		this._secrets = value;
 		this.updateCards();
 	}
 
-	_tooltipPosition: CardTooltipPositionType;
 	_secrets: readonly BoardSecret[];
 	cards: readonly DeckCard[];
 	isScroll: boolean;

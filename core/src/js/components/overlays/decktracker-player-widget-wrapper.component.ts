@@ -31,9 +31,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 export class DecktrackerPlayerWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) =>
-		gameWidth - windowWidth / 2 - 180;
-	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.decktrackerPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();

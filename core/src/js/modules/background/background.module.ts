@@ -289,6 +289,7 @@ import { OpponentCardInfoComponent } from '../../components/overlays/opponenthan
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
+import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/secrets-helper-widget-wrapper.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
@@ -786,6 +787,7 @@ const components = [
 
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,
+		SecretsHelperWidgetWrapperComponent,
 		AbstractCounterWidgetWrapperComponent,
 
 		PlayerCounterWidgetWrapperComponent,

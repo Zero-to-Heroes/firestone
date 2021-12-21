@@ -8,8 +8,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
 export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent implements AfterViewInit {
-	protected abstract defaultPositionLeftProvider: (gameWidth: number, windowWidth: number) => number;
-	protected abstract defaultPositionTopProvider: (gameHeight: number, windowHeight: number) => number;
+	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number) => number;
+	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
 	protected abstract positionExtractor: (
 		prefs: Preferences,

@@ -122,14 +122,12 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('collection.html', 'collection'),
 		buildHtmlWebpackPluginConf('loading.html', 'loading'),
 		buildHtmlWebpackPluginConf('notifications.html', 'notifications'),
-		buildHtmlWebpackPluginConf('full_screen_overlays.html', 'overlays'),
-		buildHtmlWebpackPluginConf('secrets_helper.html', 'secretshelper'),
 		buildHtmlWebpackPluginConf('settings.html', 'settings'),
-		buildHtmlWebpackPluginConf('outofcards-callback.html', 'outofcardscallback'),
-		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
-		buildHtmlWebpackPluginConf('constructed.html', 'constructed'),
 		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
+		buildHtmlWebpackPluginConf('full_screen_overlays.html', 'overlays'),
 		buildHtmlWebpackPluginConf('match_overlay_bgs_mouse_over.html', 'battlegroundsmouseover'),
+
+		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
 		buildHtmlWebpackPluginConf('battlegrounds_minions_tiers.html', 'battlegroundsminionstiers'),
 		buildHtmlWebpackPluginConf('bgs_battle_simulation.html', 'bgsbattlesimulation'),
 		buildHtmlWebpackPluginConf('bgs_banned_tribes.html', 'bgsbannedtribes'),
@@ -143,6 +141,8 @@ module.exports = function (env, argv) {
 			'mercenaries_out_of_combat_treasure_selection.html',
 			'mercenariesoutofcombattreasureselection',
 		),
+
+		buildHtmlWebpackPluginConf('outofcards-callback.html', 'outofcardscallback'),
 		// new BundleAnalyzerPlugin(),
 	];
 

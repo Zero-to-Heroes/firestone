@@ -39,9 +39,9 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	activeCounter: CounterType;
 	side: string;
 
-	protected defaultPositionLeftProvider = (gameWidth: number, windowWidth: number) =>
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
 		gameWidth * 0.5 + 150 + Math.random() * 150;
-	protected defaultPositionTopProvider = (gameHeight: number, windowHeight: number) =>
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) =>
 		this.side === 'player' ? gameHeight * 0.65 : gameHeight * 0.1;
 	protected positionUpdater = (left: number, top: number) =>
 		this.prefs.updateCounterPosition(this.activeCounter, this.side, left, top);

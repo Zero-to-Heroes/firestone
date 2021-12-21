@@ -1,22 +1,17 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DebugService } from '../../services/debug.service';
-import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../services/utils';
@@ -50,7 +45,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 								[secrets]="secrets$ | async"
 								[colorManaCost]="colorManaCost$ | async"
 								[cardsGoToBottom]="cardsGoToBottom$ | async"
-								[tooltipPosition]="tooltipPosition"
 							>
 							</secrets-helper-list>
 						</div>
@@ -61,27 +55,17 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+export class SecretsHelperComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
 	active$: Observable<boolean>;
 	secrets$: Observable<readonly BoardSecret[]>;
 
-	tooltipPosition: CardTooltipPositionType = 'left';
-
 	windowId: string;
 	widthInPx = 227;
 
-	private showTooltips = true;
-
-	private gameInfoUpdatedListener: (message: any) => void;
-
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly init_DebugService: DebugService,
@@ -185,127 +169,6 @@ export class SecretsHelperComponent
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-				this.updateTooltipPosition();
 			});
-		this.store
-			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(async (overlayShowTooltipsOnHover) => {
-				this.showTooltips = overlayShowTooltipsOnHover;
-				await this.updateTooltipPosition();
-			});
-	}
-
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-
-		await this.changeWindowSize();
-		await this.restoreWindowPosition();
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-	}
-
-	@HostListener('mousedown')
-	dragMove() {
-		this.tooltipPosition = 'none';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		this.ow.dragMove(this.windowId, async (result) => {
-			await this.updateTooltipPosition();
-			const window = await this.ow.getCurrentWindow();
-
-			if (!window) {
-				return;
-			}
-			this.prefs.updateSecretsHelperPosition(window.left, window.top);
-		});
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-
-		const currentWindow = await this.ow.getCurrentWindow();
-		const windowWidth = currentWindow.width;
-
-		const prefs = await this.prefs.getPreferences();
-		const trackerPosition = prefs.secretsHelperPosition;
-
-		const minAcceptableLeft = -windowWidth / 2;
-		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
-		const minAcceptableTop = -100;
-		const maxAcceptableTop = gameInfo.logicalHeight - 100;
-		const newLogicalLeft = Math.min(
-			maxAcceptableLeft,
-			Math.max(minAcceptableLeft, (trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft())),
-		);
-		const newTop = Math.min(
-			maxAcceptableTop,
-			Math.max(minAcceptableTop, (trackerPosition && trackerPosition.top) ?? (await this.getDefaultTop())),
-		);
-		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newTop);
-		await this.updateTooltipPosition();
-	}
-
-	private async getDefaultLeft(): Promise<number> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		const width = Math.max(252, 252 * 2);
-		// Use the height as a way to change the position, as the width can expand around the play
-		// area based on the screen resolution
-		return gameInfo.width / 2 - width - gameInfo.height * 0.3;
-	}
-
-	private async getDefaultTop(): Promise<number> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		return gameInfo.height * 0.05;
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		// const dpi = gameInfo.logicalWidth / gameInfo.width;
-		// We don't divide by the DPI here, because we need a lot of space when displaying tooltips
-		const width = 252 * 3; // Max scale
-		const gameHeight = gameInfo.logicalHeight;
-		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-		await this.updateTooltipPosition();
-	}
-
-	private async updateTooltipPosition() {
-		const window = await this.ow.getCurrentWindow();
-		if (!window) {
-			return;
-		}
-
-		if (!this.showTooltips) {
-			this.tooltipPosition = 'none';
-		} else if (window.left < 0) {
-			this.tooltipPosition = 'right';
-		} else {
-			this.tooltipPosition = 'left';
-		}
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

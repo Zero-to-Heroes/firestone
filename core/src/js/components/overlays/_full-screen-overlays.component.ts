@@ -35,6 +35,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
+			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
