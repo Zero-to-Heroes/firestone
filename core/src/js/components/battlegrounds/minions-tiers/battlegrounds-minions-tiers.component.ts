@@ -28,14 +28,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
-		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
 	],
 	template: `
-		<div
-			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme scalable"
-			(mouseleave)="onTavernMouseLeave()"
-		>
+		<div class="battlegrounds-minions-tiers scalable" (mouseleave)="onTavernMouseLeave()">
 			<div class="tiers-container" *ngIf="showMinionsList$ | async">
 				<ng-container *ngIf="{ tiers: tiers$ | async, currentTurn: currentTurn$ | async } as value">
 					<div class="logo-container" *ngIf="value.currentTurn">

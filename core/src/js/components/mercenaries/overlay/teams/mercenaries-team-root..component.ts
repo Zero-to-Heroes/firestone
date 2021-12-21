@@ -208,23 +208,16 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	private updateTaskListBottomPx() {
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
-			console.debug('taskListEl', taskListEl);
 			if (!taskListEl) {
 				return;
 			}
 
 			const rect = taskListEl.getBoundingClientRect();
-			console.debug('rect', rect);
 			const taskListHeight = rect.height;
-			console.debug('taskListHeight', taskListHeight);
 			const widgetEl = this.el.nativeElement.querySelector('.team-container');
-			console.debug('widgetEl', widgetEl);
 			const widgetRect = widgetEl.getBoundingClientRect();
-			console.debug('widgetRect', widgetRect);
 			const widgetHeight = widgetRect.height;
-			console.debug('widgetHeight', widgetHeight);
 			this.taskListBottomPx = widgetHeight > taskListHeight ? 0 : widgetHeight - taskListHeight;
-			console.debug('taskListBottomPx', this.taskListBottomPx);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

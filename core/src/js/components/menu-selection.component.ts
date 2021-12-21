@@ -179,17 +179,6 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.showGoPremium = await this.adService.shouldDisplayAds();
-		console.debug('translate', this.translate);
-		// TODO: this doesn't work because each window is a new module, and doesn't share the translation service
-		// with the main window.
-		// Either have each window listen to loc change events and reload the translations, or find a way to share the service,
-		// which probably means rewriting the directive
-		console.debug(
-			'using locale for app',
-			this.translate.currentLang,
-			await this.translate.get('app.menu.go-premium-header').toPromise(),
-		);
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

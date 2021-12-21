@@ -1,12 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	Output,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -58,21 +50,5 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 		setTimeout(() => (this.big = false), 200);
 		this._decktrackerToggled = !this._decktrackerToggled;
 		this.decktrackerToggle.next(this._decktrackerToggled);
-	}
-
-	@HostListener('mousedown', ['$event'])
-	dragMove(event: MouseEvent) {
-		this.draggingTimeout = setTimeout(() => {
-			this.isDragging = true;
-		}, 500);
-		this.ow.dragMove(this.windowId, async (result) => {
-			clearTimeout(this.draggingTimeout);
-			this.isDragging = false;
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			// this.prefs.updateSecretsHelperWidgetPosition(window.left, window.top);
-		});
 	}
 }

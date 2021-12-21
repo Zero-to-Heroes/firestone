@@ -30,13 +30,11 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	selector: 'game-counters',
 	styleUrls: [
 		'../../../css/global/components-global.scss',
-		`../../../css/global/cdk-overlay.scss`,
-		`../../../css/themes/decktracker-theme.scss`,
 		'../../../css/component/game-counters/game-counters.component.scss',
 	],
 	template: `
 		<div
-			class="root overlay-container-parent"
+			class="root"
 			[ngClass]="{ 'isBgs': activeCounter?.includes('bgs') }"
 			[activeTheme]="'decktracker'"
 			*ngIf="definition$ | async as definition"

@@ -20,10 +20,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
-		'../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
-		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay scalable">
+		<div class="app-container battlegrounds-theme simulation-overlay scalable">
 			<bgs-battle-status
 				[nextBattle]="nextBattle$ | async"
 				[showReplayLink]="showSimulationSample$ | async"

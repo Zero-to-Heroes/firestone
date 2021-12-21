@@ -20,11 +20,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'opponent-hand-overlay',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/overlays/opponenthand/opponent-hand-overlay.component.scss',
 	],
 	template: `
-		<div class="opponent-hand-overlay overlay-container-parent">
+		<div class="opponent-hand-overlay">
 			<opponent-card-infos
 				[cards]="hand$ | async"
 				[displayTurnNumber]="displayTurnNumber$ | async"

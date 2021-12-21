@@ -9,7 +9,6 @@ import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
-import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -104,8 +103,6 @@ import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
-import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
-import { OverlayHandler } from './overlays/overlay-handler';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
@@ -128,7 +125,6 @@ export class GameStateService {
 	private deckEventBus = new BehaviorSubject<any>(null);
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters = [];
-	private overlayHandlers: OverlayHandler[] = [];
 
 	private currentReviewId: string;
 	private secretWillTrigger: {
@@ -166,7 +162,6 @@ export class GameStateService {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		this.buildEventEmitters();
-		this.buildOverlayHandlers();
 		if (!this.ow) {
 			console.warn('[game-state] Could not find OW service');
 			return;
@@ -180,9 +175,6 @@ export class GameStateService {
 					this.buildEventEmitters();
 					return;
 				}
-				if (event) {
-					this.handleDisplayPreferences(event.preferences);
-				}
 			});
 			this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
 				this.processingQueue.enqueue(event);
@@ -194,20 +186,8 @@ export class GameStateService {
 					return;
 				}
 				this.showDecktrackerFromGameMode = event;
-				this.updateOverlays(this.state, false, false);
 			});
 			this.i18n.init();
-		});
-		this.handleDisplayPreferences();
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.exitGame(res) || !(await this.ow.inGame())) {
-				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
-				this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
-				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
-			}
-			if (await this.ow.inGame()) {
-				this.updateOverlays(this.state);
-			}
 		});
 	}
 
@@ -260,7 +240,7 @@ export class GameStateService {
 			].filter((event) => event);
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				if (eventsToProcess[i] instanceof GameEvent) {
-					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
+					await this.processEvent(eventsToProcess[i] as GameEvent);
 				} else {
 					await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
 				}
@@ -288,15 +268,6 @@ export class GameStateService {
 			});
 		}
 
-		for (const handler of this.overlayHandlers) {
-			const newState = handler.processEvent(event, this.state, this.showDecktrackerFromGameMode);
-			// console.debug('newState', newState, this.state, handler, event);
-			this.state = newState ?? this.state;
-		}
-		// this.overlayHandlers.forEach((handler) =>
-		// 	handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
-		// );
-
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(event, this.state)) {
@@ -313,7 +284,6 @@ export class GameStateService {
 			}
 		}
 
-		this.updateOverlays(this.state);
 		const emittedEvent = {
 			event: {
 				name: event.type,
@@ -323,22 +293,12 @@ export class GameStateService {
 		this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 	}
 
-	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
-		for (const handler of this.overlayHandlers) {
-			const newState = handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode);
-			// console.debug('newState', newState, this.state, handler, gameEvent);
-			this.state = newState ?? this.state;
-		}
-		// this.overlayHandlers.forEach((handler) =>
-		// 	handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
-		// );
-
+	private async processEvent(gameEvent: GameEvent) {
 		if (gameEvent.type === GameEvent.GAME_START) {
 			this.state = this.state.update({
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
-			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
 			this.state = this.state
 				? this.state.update({
@@ -346,10 +306,6 @@ export class GameStateService {
 						spectating: this.state.spectating || gameEvent.additionalData.spectating,
 				  } as GameState)
 				: null;
-		} else if (gameEvent.type === GameEvent.GAME_END) {
-			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
-		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
-			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SECRET_WILL_TRIGGER) {
 			this.secretWillTrigger = {
 				cardId: gameEvent.cardId,
@@ -409,7 +365,6 @@ export class GameStateService {
 		}
 
 		if (this.state) {
-			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 			const emittedEvent = {
 				event: {
 					name: gameEvent.type,
@@ -489,39 +444,6 @@ export class GameStateService {
 		return 1;
 	}
 
-	private async updateOverlays(
-		state: GameState,
-		shouldForceCloseSecretsHelper = false,
-		forceLogs = false,
-		updateOverlays = true,
-	) {
-		if (!updateOverlays) {
-			return;
-		}
-		if (!this.ow) {
-			console.log('ow not defined, returning');
-			return;
-		}
-		await Promise.all(
-			this.overlayHandlers.map((handler) =>
-				handler.updateOverlay(
-					state,
-					this.showDecktrackerFromGameMode,
-					shouldForceCloseSecretsHelper,
-					forceLogs,
-				),
-			),
-		);
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.overlayHandlers.forEach((handler) => handler.handleDisplayPreferences(preferences));
-		// this.showOpponentTracker = preferences.opponentTracker;
-
-		this.updateOverlays(this.state);
-	}
-
 	private async buildEventEmitters() {
 		const result = [(event) => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
@@ -536,14 +458,6 @@ export class GameStateService {
 			}
 		}
 		this.eventEmitters = result;
-	}
-
-	private buildOverlayHandlers() {
-		this.overlayHandlers = [];
-
-		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
-			this.overlayHandlers.push(new ConstructedWindowHandler(this.ow, this.allCards, this.prefs));
-		}
 	}
 
 	private buildEventParsers(): readonly EventParser[] {

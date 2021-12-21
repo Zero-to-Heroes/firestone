@@ -72,12 +72,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	@Input() placeholder: string;
 	@Input() set options(value: readonly IOption[]) {
-		console.debug('setting optiosn', value);
 		this.options$.next(value);
 	}
 
 	@Input() set selected(value: readonly string[]) {
-		console.debug('setting selected', value);
 		this.tempSelected$.next(value);
 		this.selected$.next(value);
 	}

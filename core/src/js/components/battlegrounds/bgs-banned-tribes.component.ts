@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div class="root scalable overlay-container-parent" [activeTheme]="'battlegrounds'">
+		<div class="root scalable" [activeTheme]="'battlegrounds'">
 			<div
 				*ngIf="bannedTribes$ | async as bannedTribes"
 				class="banned-tribes {{ orientation$ | async }}"

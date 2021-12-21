@@ -21,13 +21,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'secrets-helper',
 	styleUrls: [
 		'../../../css/global/components-global.scss',
-		`../../../css/global/cdk-overlay.scss`,
-		`../../../css/themes/decktracker-theme.scss`,
 		'../../../css/component/secrets-helper/secrets-helper.component.scss',
 	],
 	template: `
 		<div
-			class="root overlay-container-parent"
+			class="root"
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity$ | async"
 			*ngIf="{ active: active$ | async } as value"

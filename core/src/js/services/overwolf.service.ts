@@ -19,54 +19,10 @@ export class OverwolfService {
 	public static SETTINGS_WINDOW_OVERLAY = 'SettingsOverlayWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
-	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
-	public static FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW = 'FullScreenOverlaysClickthroughWindow';
-
-	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
-	public static DECKTRACKER_OPPONENT_WINDOW = 'DeckTrackerOpponentWindow';
-	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
-	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
-	public static BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY = 'BgsBattleSimulationOverlay';
-	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
-	public static BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY = 'BattlegroundsMinionsTiersWindow';
-	public static BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW = 'BattlegroundsOverlayButtonWindow';
-	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY = 'BgsHeroSelectionOverlay';
-
-	public static MERCENARIES_PLAYER_TEAM_WINDOW = 'MercenariesPlayerTeamWindow';
-	public static MERCENARIES_OPPONENT_TEAM_WINDOW = 'MercenariesOpponentTeamWindow';
-	public static MERCENARIES_OUT_OF_COMBAT_PLAYER_TEAM_WINDOW = 'MercenariesOutOfCombatPlayerTeamWindow';
-	public static MERCENARIES_OUT_OF_COMBAT_TREASURE_SELECTION_WINDOW = 'MercenariesOutOfCombatTreasureSelectionWindow';
-	public static MERCENARIES_ACTION_QUEUE_WINDOW = 'MercenariesActionQueueWindow';
-
-	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';
-
-	// public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
-	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
-	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';
-	public static COUNTER_PLAYER_LIBRAM_WINDOW = 'CounterPlayerLibram';
-	public static COUNTER_OPPONENT_LIBRAM_WINDOW = 'CounterOpponentLibram';
-	public static COUNTER_PLAYER_WATCHPOST_WINDOW = 'CounterPlayerWatchpost';
-	public static COUNTER_OPPONENT_WATCHPOST_WINDOW = 'CounterOpponentWatchpost';
-	public static COUNTER_PLAYER_POGO_WINDOW = 'CounterPlayerPogo';
-	public static COUNTER_PLAYER_JADE_WINDOW = 'CounterPlayerJadeGolem';
-	public static COUNTER_OPPONENT_POGO_WINDOW = 'CounterOpponentPogo';
-	public static COUNTER_OPPONENT_JADE_WINDOW = 'CounterOpponentJadeGolem';
-	public static COUNTER_PLAYER_CTHUN_WINDOW = 'CounterPlayerCthun';
-	public static COUNTER_OPPONENT_CTHUN_WINDOW = 'CounterOpponentCthun';
-	public static COUNTER_PLAYER_FATIGUE_WINDOW = 'CounterPlayerFatigue';
-	public static COUNTER_OPPONENT_FATIGUE_WINDOW = 'CounterOpponentFatigue';
-	public static COUNTER_PLAYER_ATTACK_WINDOW = 'CounterPlayerAttack';
-	public static COUNTER_OPPONENT_ATTACK_WINDOW = 'CounterOpponentAttack';
-	public static COUNTER_PLAYER_SPELL_WINDOW = 'CounterPlayerSpells';
-	public static COUNTER_PLAYER_ELEMENTAL_WINDOW = 'CounterPlayerElemental';
-	public static COUNTER_PLAYER_ELWYNN_BOAR_WINDOW = 'CounterPlayerElwynnBoar';
-	public static COUNTER_OPPONENT_ELWYNN_BOAR_WINDOW = 'CounterOpponentElwynnBoar';
-	public static COUNTER_PLAYER_BOLNER_WINDOW = 'CounterPlayerBolner';
-	public static COUNTER_OPPONENT_HERO_POWER_DAMAGE = 'CounterOpponentHeroPowerDamage';
-	public static COUNTER_PLAYER_HERO_POWER_DAMAGE = 'CounterPlayerHeroPowerDamage';
-	public static BGS_COUNTER_PLAYER_POGO_WINDOW = 'BgsCounterPlayerPogo';
+	public static FULL_SCREEN_OVERLAYS_WINDOW = 'FullScreenOverlaysWindow';
+	public static FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW = 'FullScreenOverlaysClickthroughWindow';
 
 	public isOwEnabled(): boolean {
 		try {

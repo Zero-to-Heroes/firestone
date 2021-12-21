@@ -31,13 +31,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'decktracker-overlay-root',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		`../../../../css/global/cdk-overlay.scss`,
-		`../../../../css/themes/decktracker-theme.scss`,
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 	],
 	template: `
 		<div
-			class="root overlay-container-parent {{ player }}"
+			class="root {{ player }}"
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity$ | async"
 			[ngClass]="{ 'active': active }"

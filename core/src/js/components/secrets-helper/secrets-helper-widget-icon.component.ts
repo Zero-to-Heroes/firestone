@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { GameEvent } from '../../models/game-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -45,33 +45,5 @@ export class SecretsHelperWidgetIconComponent implements AfterViewInit {
 				type: 'TOGGLE_SECRET_HELPER',
 			} as GameEvent),
 		);
-	}
-
-	@HostListener('mousedown', ['$event'])
-	dragMove(event: MouseEvent) {
-		const path: any[] = event.composedPath();
-		// Hack for drop-downs
-		if (
-			path.length > 2 &&
-			path[0].localName === 'div' &&
-			path[0].className?.includes('options') &&
-			path[1].localName === 'div' &&
-			path[1].className?.includes('below')
-		) {
-			return;
-		}
-
-		this.draggingTimeout = setTimeout(() => {
-			this.isDragging = true;
-		}, 500);
-		this.ow.dragMove(this.windowId, async (result) => {
-			clearTimeout(this.draggingTimeout);
-			this.isDragging = false;
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			this.prefs.updateSecretsHelperWidgetPosition(window.left, window.top);
-		});
 	}
 }
