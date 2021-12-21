@@ -28,24 +28,16 @@ import { Task } from './mercenaries-team-root..component';
 		[team]="team$ | async"
 		[tasks]="tasks$ | async"
 		[side]="'out-of-combat-player'"
-		[trackerPositionUpdater]="trackerPositionUpdater"
-		[trackerPositionExtractor]="trackerPositionExtractor"
 		[showTasksExtractor]="showTasksExtractor"
 		[scaleExtractor]="scaleExtractor"
-		[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
-		[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 	></mercenaries-team-root>`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOutOfCombatPlayerTeamComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit {
-	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	scaleExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayScale;
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
-	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 
 	team$: Observable<MercenariesBattleTeam>;
 	tasks$: Observable<readonly Task[]>;

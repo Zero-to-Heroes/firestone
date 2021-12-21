@@ -19,25 +19,16 @@ import { Task } from './mercenaries-team-root..component';
 			[team]="team$ | async"
 			[tasks]="tasks$ | async"
 			[side]="'opponent'"
-			[trackerPositionUpdater]="trackerPositionUpdater"
-			[trackerPositionExtractor]="trackerPositionExtractor"
 			[showTasksExtractor]="showTasksExtractor"
 			[scaleExtractor]="scaleExtractor"
-			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
-			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 		></mercenaries-team-root>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOpponentTeamComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;
-	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamOpponentPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesOpponentTeamOverlayPosition;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	scaleExtractor = (prefs: Preferences) => prefs.mercenariesOpponentTeamOverlayScale;
-	// Because whitespace for the tooltips
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
-	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
 
 	team$: Observable<MercenariesBattleTeam>;
 	tasks$: Observable<readonly Task[]>;

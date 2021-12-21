@@ -39,7 +39,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 					}
 				}, 0),
 			),
-			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter, extractor)),
+			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
 	}

@@ -290,6 +290,11 @@ import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/cou
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
+import { MercsActionQueueWidgetWrapperComponent } from '../../components/overlays/mercs-action-queue-widget-wrapper.component';
+import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overlays/mercs-opponent-team-widget-wrapper.component';
+import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
+import { MercsPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-player-team-widget-wrapper.component';
+import { MercsTreasureSelectionWidgetWrapperComponent } from '../../components/overlays/mercs-treasure-selection-widget-wrapper.component';
 import { OpponentHandWidgetWrapperComponent } from '../../components/overlays/opponent-hand-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
@@ -805,6 +810,12 @@ const components = [
 		BgsHeroSelectionWidgetWrapperComponent,
 		BgsLeaderboardWidgetWrapperComponent,
 		BgsBoardWidgetWrapperComponent,
+
+		MercsPlayerTeamWidgetWrapperComponent,
+		MercsOpponentTeamWidgetWrapperComponent,
+		MercsActionQueueWidgetWrapperComponent,
+		MercsOutOfCombatPlayerTeamWidgetWrapperComponent,
+		MercsTreasureSelectionWidgetWrapperComponent,
 
 		AbstractCounterWidgetWrapperComponent,
 		PlayerCounterWidgetWrapperComponent,

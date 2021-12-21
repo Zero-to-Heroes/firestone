@@ -11,9 +11,6 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { MercenariesActionQueueOverlayHandler } from './overlay-handler/mercenaries-action-queue-overlay-handler';
-import { MercenariesOpponentBattleTeamOverlayHandler } from './overlay-handler/mercenaries-opponent-battle-team-overlay-handler';
-import { MercenariesPlayerBattleTeamOverlayHandler } from './overlay-handler/mercenaries-player-battle-team-overlay-handler';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -135,11 +132,7 @@ export class MercenariesStoreService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [
-			new MercenariesPlayerBattleTeamOverlayHandler(this.prefs, this.ow),
-			new MercenariesOpponentBattleTeamOverlayHandler(this.prefs, this.ow),
-			new MercenariesActionQueueOverlayHandler(this.prefs, this.ow),
-		];
+		this.overlayHandlers = [];
 	}
 
 	private registerParser() {

@@ -20,18 +20,13 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<div class="controls">
 				<control-bug></control-bug>
 				<control-settings [settingsApp]="'mercenaries'" [shouldMoveSettingsWindow]="false"> </control-settings>
-				<control-close
-					[windowId]="windowId"
-					[eventProvider]="closeHandler"
-					[askConfirmation]="true"
-				></control-close>
+				<control-close [eventProvider]="closeHandler" [askConfirmation]="true"></control-close>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamControlBarComponent {
-	@Input() windowId: string;
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 
 	closeHandler: () => void;
@@ -41,7 +36,6 @@ export class MercenariesTeamControlBarComponent {
 	constructor(private readonly ow: OverwolfService) {
 		this.battleStateUpdater = this.ow.getMainWindow().battleStateUpdater;
 		this.closeHandler = () => {
-			console.debug('performing close', this.windowId, this.side);
 			if (this.side !== 'out-of-combat-player') {
 				this.battleStateUpdater.next(
 					Object.assign(new GameEvent(), {
@@ -52,7 +46,7 @@ export class MercenariesTeamControlBarComponent {
 					} as GameEvent),
 				);
 			} else {
-				this.ow.closeWindow(this.windowId);
+				// this.ow.closeWindow(this.windowId);
 			}
 		};
 	}

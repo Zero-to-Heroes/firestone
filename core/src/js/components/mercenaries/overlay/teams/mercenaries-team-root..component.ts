@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -13,7 +12,6 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
@@ -32,16 +30,13 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-root.component.scss',
 	],
 	template: `
-		<div class="root overlay-container-parent {{ side }}" [activeTheme]="'decktracker'">
+		<div class="root {{ side }}">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="team-container">
 					<div class="team" *ngIf="_team" [style.width.px]="overlayWidthInPx">
 						<div class="background"></div>
-						<mercenaries-team-control-bar
-							[windowId]="windowId"
-							[side]="side"
-						></mercenaries-team-control-bar>
+						<mercenaries-team-control-bar [side]="side"></mercenaries-team-control-bar>
 						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition">
 						</mercenaries-team-list>
 						<div class="footer">
@@ -113,16 +108,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamRootComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
-	// @Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
+export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
-	@Input() trackerPositionUpdater: (left: number, top: number) => void;
-	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
-	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
-	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
-
 	@Input() showTasksExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 
@@ -153,12 +140,8 @@ export class MercenariesTeamRootComponent
 	_team: MercenariesBattleTeam;
 	_tasks: readonly Task[];
 
-	windowId: string;
 	overlayWidthInPx = 225;
-	tooltipPosition: CardTooltipPositionType = 'left';
 	taskListBottomPx = 0;
-
-	private gameInfoUpdatedListener: (message: any) => void;
 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
@@ -222,18 +205,6 @@ export class MercenariesTeamRootComponent
 		);
 	}
 
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-				await this.restoreWindowPosition();
-			}
-		});
-		await this.changeWindowSize();
-		await this.updateTooltipPosition();
-	}
-
 	private updateTaskListBottomPx() {
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
@@ -263,7 +234,6 @@ export class MercenariesTeamRootComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.scale?.unsubscribe();
 	}
 
@@ -273,94 +243,6 @@ export class MercenariesTeamRootComponent
 
 	hideTasks() {
 		this.showTaskList$$.next(false);
-	}
-
-	@HostListener('mousedown', ['$event'])
-	dragMove(event: MouseEvent) {
-		this.tooltipPosition = 'none';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		this.ow.dragMove(this.windowId, async (result) => {
-			await this.updateTooltipPosition();
-			const window = await this.ow.getCurrentWindow();
-
-			if (!window) {
-				return;
-			}
-
-			console.log('updating tracker position', window.left, window.top);
-			this.trackerPositionUpdater(window.left, window.top);
-		});
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const width = 252 * 4.5; // Max scale + room for the tasks list
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameHeight = gameInfo.logicalHeight;
-		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-		await this.restoreWindowPosition();
-		await this.updateTooltipPosition();
-		this.updateTaskListBottomPx();
-	}
-
-	private async restoreWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-
-		const currentWindow = await this.ow.getCurrentWindow();
-		// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
-		// logical* properties are not DPI aware either, so we should work with them
-		const windowWidth = currentWindow.width;
-		console.log('window position', currentWindow, gameInfo, windowWidth);
-
-		const prefs = await this.prefs.getPreferences();
-		const trackerPosition = this.trackerPositionExtractor(prefs);
-		console.log('loaded tracker position', trackerPosition);
-
-		const minAcceptableLeft = -windowWidth / 2;
-		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
-		const minAcceptableTop = -100;
-		const maxAcceptableTop = gameInfo.logicalHeight - 100;
-		console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
-		const newLogicalLeft = Math.min(
-			maxAcceptableLeft,
-			Math.max(
-				minAcceptableLeft,
-				trackerPosition
-					? trackerPosition.left || 0
-					: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
-			),
-		);
-		const newLogicalTop = Math.min(
-			maxAcceptableTop,
-			Math.max(
-				minAcceptableTop,
-				trackerPosition
-					? trackerPosition.top || 0
-					: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
-			),
-		);
-		console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
-		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
-		console.log('after window position update', await this.ow.getCurrentWindow());
-		await this.updateTooltipPosition();
-	}
-
-	private async updateTooltipPosition() {
-		const window = await this.ow.getCurrentWindow();
-		if (!window) {
-			return;
-		}
-		this.tooltipPosition = window.left < 0 ? 'right' : 'left';
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
 

@@ -1,12 +1,4 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -38,11 +30,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesOutOfCombatTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit {
 	treasures$: Observable<readonly ReferenceCard[]>;
 
-	private windowId: string;
-	private gameInfoUpdatedListener: (message: any) => void;
 	private highlightService: MercenariesSynergiesHighlightService;
 
 	constructor(
@@ -66,21 +56,7 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 	}
 
 	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.ow.setWindowPassthrough(this.windowId);
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-		await this.changeWindowSize();
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 
 	@HostListener('mouseenter')
@@ -91,20 +67,5 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 	@HostListener('mouseleave')
 	onMouseLeave(cardId: string) {
 		this.highlightService?.unselectCardId();
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.width;
-		const gameHeight = gameInfo.height;
-		const height = gameHeight;
-		const width = gameHeight * 1.4;
-		await this.ow.changeWindowSize(this.windowId, width, height);
-		const dpi = gameInfo.logicalWidth / gameWidth;
-		const newLeft = dpi * 0.5 * (gameWidth - width);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
 	}
 }

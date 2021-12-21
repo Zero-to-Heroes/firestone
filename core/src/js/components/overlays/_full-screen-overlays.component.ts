@@ -46,6 +46,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
 
 			<!-- Mercs -->
+			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+			<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
+			<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
+			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>

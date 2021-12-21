@@ -13,8 +13,6 @@ import { MemoryInspectionService } from '../../plugins/memory-inspection.service
 import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { MercenariesMemoryCacheService } from '../mercenaries-memory-cache.service';
-import { MercenariesOutOfCombatTeamOverlayHandler } from './overlay/mercenaries-out-of-combat-team-overlay-handler';
-import { MercenariesOutOfCombatTreasureSelectionOverlayHandler } from './overlay/mercenaries-out-of-combat-treasure-selection-handler';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
@@ -127,15 +125,11 @@ export class MercenariesOutOfCombatService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [
-			new MercenariesOutOfCombatTeamOverlayHandler(this.ow),
-			new MercenariesOutOfCombatTreasureSelectionOverlayHandler(this.ow),
-		];
+		this.overlayHandlers = [];
 	}
 
 	private registerParser() {
 		const parsers: readonly MercenariesOutOfCombatParser[] = [
-			// new MercenariesMemoryInformationParser(this.memoryService, this.memoryCache),
 			new MercenariesTreasureSelectionParser(this.allCards),
 		];
 		this.parsers = {};
