@@ -127,7 +127,6 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('full_screen_overlays.html', 'overlays'),
 		buildHtmlWebpackPluginConf('match_overlay_bgs_mouse_over.html', 'battlegroundsmouseover'),
 
-		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
 		buildHtmlWebpackPluginConf('battlegrounds_minions_tiers.html', 'battlegroundsminionstiers'),
 		buildHtmlWebpackPluginConf('bgs_battle_simulation.html', 'bgsbattlesimulation'),
 		buildHtmlWebpackPluginConf('bgs_banned_tribes.html', 'bgsbannedtribes'),

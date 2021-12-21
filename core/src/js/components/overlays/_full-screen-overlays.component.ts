@@ -36,6 +36,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
+			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
 
 			<!-- Player Counters -->
 			<player-attack-widget-wrapper></player-attack-widget-wrapper>
@@ -108,6 +109,7 @@ export class FullScreenOverlaysComponent
 			}
 		});
 		await this.changeWindowSize();
+		window.dispatchEvent(new Event('window-resize'));
 	}
 
 	@HostListener('window:beforeunload')
@@ -128,5 +130,6 @@ export class FullScreenOverlaysComponent
 		const width = gameWidth;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		await this.ow.changeWindowPosition(this.windowId, 0, 0);
+		window.dispatchEvent(new Event('window-resize'));
 	}
 }

@@ -284,6 +284,7 @@ import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/cou
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
+import { OpponentHandWidgetWrapperComponent } from '../../components/overlays/opponent-hand-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
@@ -788,6 +789,7 @@ const components = [
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,
 		SecretsHelperWidgetWrapperComponent,
+		OpponentHandWidgetWrapperComponent,
 		AbstractCounterWidgetWrapperComponent,
 
 		PlayerCounterWidgetWrapperComponent,

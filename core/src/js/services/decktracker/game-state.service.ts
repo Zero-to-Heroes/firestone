@@ -105,9 +105,7 @@ import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
-import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
-import { SecretsHelperOverlayHandler } from './overlays/secrets-helper-overlay-handler';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
@@ -541,10 +539,7 @@ export class GameStateService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [
-			new OpponentHandOverlayHandler(this.ow, this.allCards, this.prefs),
-			new SecretsHelperOverlayHandler(this.ow, this.allCards, this.prefs),
-		];
+		this.overlayHandlers = [];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
 			this.overlayHandlers.push(new ConstructedWindowHandler(this.ow, this.allCards, this.prefs));

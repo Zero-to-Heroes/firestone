@@ -12,7 +12,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		'../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss',
 	],
 	template: `
-		<div class="opponent-card-info scalable" [style.left.vw]="leftVwOffset" [style.top.vw]="topVwOffset">
+		<div class="opponent-card-info scalable" [style.left.vh]="leftVwOffset" [style.top.vh]="topVwOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
 			<opponent-card-info-id
 				*ngIf="displayGuess || displayBuff"

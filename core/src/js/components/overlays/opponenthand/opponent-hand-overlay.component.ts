@@ -1,12 +1,9 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
 	OnDestroy,
-	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -37,18 +34,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
-export class OpponentHandOverlayComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	hand$: Observable<readonly DeckCard[]>;
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
-
-	private windowId: string;
-	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -79,39 +70,5 @@ export class OpponentHandOverlayComponent
 		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
 		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
 		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
-	}
-
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-		await this.changeWindowSize();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
-		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-	}
-
-	private async changeWindowSize(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const gameWidth = gameInfo.width;
-		const gameHeight = gameInfo.height;
-		const height = gameHeight * 0.8;
-		const width = gameHeight;
-		await this.ow.changeWindowSize(this.windowId, width, height);
-		const dpi = gameInfo.logicalWidth / gameInfo.width;
-		const newLeft = dpi * 0.5 * (gameWidth - width);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
 	}
 }

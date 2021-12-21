@@ -5,38 +5,39 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
-	selector: 'secrets-helper-widget-wrapper',
+	selector: 'opponent-hand-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
-		<secrets-helper
+		<opponent-hand-overlay
 			class="widget"
 			*ngIf="showWidget$ | async"
-			cdkDrag
-			(cdkDragStarted)="startDragging()"
-			(cdkDragReleased)="stopDragging()"
-		></secrets-helper>
+			[style.width.px]="windowWidth"
+			[style.height.px]="windowHeight"
+		></opponent-hand-overlay>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
-		gameWidth / 2 - 252 - gameHeight * 0.3;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.05;
-	protected positionUpdater = (left: number, top: number) => this.prefs.updateSecretsHelperPosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
+export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
+		dpi * 0.5 * (gameWidth - gameHeight);
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => 0;
+	protected positionUpdater = null;
+	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	showWidget$: Observable<boolean>;
+	windowWidth: number;
+	windowHeight: number;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -52,20 +53,19 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listen$(
-				([main, nav, pref]) => main.currentScene,
+				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
-				([main, nav, pref]) => pref.secretsHelper,
+				([main, nav, prefs]) => prefs.dectrackerShowOpponentGuess || prefs.dectrackerShowOpponentTurnDraw,
 			),
 			this.store.listenDeckState$(
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
 				(deckState) => deckState?.isBattlegrounds(),
 				(deckState) => deckState?.isMercenaries(),
-				(deckState) => !!deckState?.opponentDeck?.secrets?.length,
 			),
 		).pipe(
 			// tap((info) => console.debug('info', info)),
-			this.mapData(([[currentScene, displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs, hasSecrets]]) => {
+			this.mapData(([[currentScene, displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}
@@ -76,8 +76,23 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 					return false;
 				}
 
-				return !gameEnded && hasSecrets;
+				return !gameEnded;
 			}),
 		);
+	}
+
+	protected async doResize(): Promise<void> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		console.debug('resizing window', gameInfo);
+		if (!gameInfo) {
+			return;
+		}
+		const gameHeight = gameInfo.height;
+		this.windowWidth = gameHeight;
+		this.windowHeight = gameHeight * 0.1;
+		console.debug('new size', this.windowWidth, this.windowHeight);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
