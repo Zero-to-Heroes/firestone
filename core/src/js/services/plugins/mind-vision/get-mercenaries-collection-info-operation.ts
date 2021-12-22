@@ -13,7 +13,7 @@ export class GetMercenariesCollectionInfoOperation extends MindVisionOperationFa
 			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length || !info.Visitors?.length,
 			(info: MemoryMercenariesCollectionInfo) => info,
 			5,
-			800,
+			2000,
 			// (info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length,
 		);
 	}
