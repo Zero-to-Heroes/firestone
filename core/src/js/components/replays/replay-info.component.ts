@@ -380,7 +380,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
 		const name = heroCard.name;
-		const deckName = info.playerDeckName ? ` with ${info.playerDeckName}` : '';
+		const deckName = info.playerDeckName ? ` with ${decodeURIComponent(info.playerDeckName)}` : '';
 		const tooltip = isPlayer ? name + deckName : null;
 		if (replaysShowClassIcon) {
 			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
