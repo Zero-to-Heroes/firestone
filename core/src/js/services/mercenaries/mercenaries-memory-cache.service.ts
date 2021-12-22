@@ -201,8 +201,10 @@ export class MercenariesMemoryCacheService {
 					? // If there are tasks in the saved preferences that don't appear in the memory, it means
 					  // that they have been either completed or abandoned
 					  visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
-						? { ...visitor, Status: TaskStatus.CLAIMED }
-						: null
+						? // If their last known status was COMPLETE, we assume they are claimed
+						  { ...visitor, Status: TaskStatus.CLAIMED }
+						: // Otherwise, we assume the task has been abandoned
+						  null
 					: // And if a task in memory is also in the prefs, make sure they have the same status
 					  {
 							...visitor,
@@ -213,8 +215,10 @@ export class MercenariesMemoryCacheService {
 					  };
 			})
 			.filter((visitor) => visitor);
+		console.debug('[merc-memory] updated savedVisitorsInfo', updatedSavedVisitorsInfo);
 
 		const cleanedVisitors = this.cleanVisitors([...fromMemory, ...updatedSavedVisitorsInfo]);
+		console.debug('[merc-memory] cleanedVisitors', cleanedVisitors);
 		this.prefs.updateMercenariesVisitorsProgress(cleanedVisitors);
 		return cleanedVisitors;
 	}
