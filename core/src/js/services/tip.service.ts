@@ -11,6 +11,7 @@ export class TipService {
 		`[Mercenaries] Select the "Mercenaries (PvP)" option in Replays to see more details about the Teams in each match`,
 		`[Mercenaries] Mouse over the "Task Completed" column to learn how to manually set each merc's task progress`,
 		`[Battlegrounds] See detailed live stats in a match by bringing up the Battlegrounds window with Alt + B`,
+		`[Battlegrounds] Make the BG window wider to see average damage and lethal chances in the simulator`,
 	];
 
 	private previousIndex = -1;
