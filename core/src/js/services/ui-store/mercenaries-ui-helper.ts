@@ -128,62 +128,72 @@ export const buildMercenariesTasksList = (
 	visitors: readonly MemoryVisitor[],
 	allCards: CardsFacadeService,
 ): readonly Task[] => {
-	return visitors
-		.filter((visitor) => visitor.Status == TaskStatus.NEW || visitor.Status === TaskStatus.ACTIVE)
-		.map((visitor) => {
-			const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryVisitorId === visitor.VisitorId);
-			// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
-			if (!taskChain) {
-				return null;
-			}
+	return (
+		visitors
+			// Just remove CLAIMED and INVALID
+			.filter(
+				(visitor) =>
+					visitor.Status === TaskStatus.NEW ||
+					visitor.Status === TaskStatus.ACTIVE ||
+					visitor.Status === TaskStatus.COMPLETE,
+			)
+			.map((visitor) => {
+				const taskChain = referenceData.taskChains.find(
+					(chain) => chain.mercenaryVisitorId === visitor.VisitorId,
+				);
+				// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
+				if (!taskChain) {
+					return null;
+				}
 
-			const task = [...taskChain.tasks].sort((a, b) => a.id - b.id)[visitor.TaskChainProgress];
-			if (!task) {
-				console.warn('empty task', visitor, taskChain);
-				return null;
-			}
+				const task = [...taskChain.tasks].sort((a, b) => a.id - b.id)[visitor.TaskChainProgress];
+				if (!task) {
+					console.warn('empty task', visitor, taskChain);
+					return null;
+				}
 
-			const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
-			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
-			const mercenaryCardId = mercenaryCard.id;
-			const result = {
-				...visitor, // For debugging purpose
-				mercenaryCardId: mercenaryCardId,
-				mercenaryRole: mercenaryCard.mercenaryRole,
-				mercenaryName: mercenaryCard.name,
-				title: task.title,
-				description: task.description,
-				progress: visitor.TaskProgress,
-				taskChainProgress: visitor.TaskChainProgress,
-				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
-				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
-					mercenaryCard.mercenaryRole,
-				)}.png?v=5`,
-			} as Task;
-			return result;
-		})
-		.filter((task) => !!task)
-		.sort((a, b) => {
-			if (a.mercenaryRole === 'TANK' && b.mercenaryRole !== 'TANK') {
-				return -1;
-			}
-			if (a.mercenaryRole !== 'TANK' && b.mercenaryRole === 'TANK') {
-				return 1;
-			}
-			if (a.mercenaryRole === 'FIGHTER' && b.mercenaryRole !== 'FIGHTER') {
-				return -1;
-			}
-			if (a.mercenaryRole !== 'FIGHTER' && b.mercenaryRole === 'FIGHTER') {
-				return 1;
-			}
-			if (a.mercenaryRole === 'CASTER' && b.mercenaryRole !== 'CASTER') {
-				return -1;
-			}
-			if (a.mercenaryRole !== 'CASTER' && b.mercenaryRole === 'CASTER') {
-				return 1;
-			}
-			return a.mercenaryName < b.mercenaryName ? -1 : 1;
-		});
+				const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
+				const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
+				const mercenaryCardId = mercenaryCard.id;
+				const result = {
+					...visitor, // For debugging purpose
+					mercenaryCardId: mercenaryCardId,
+					mercenaryRole: mercenaryCard.mercenaryRole,
+					mercenaryName: mercenaryCard.name,
+					title: task.title,
+					description: task.description,
+					progress: visitor.TaskProgress,
+					taskChainProgress: visitor.TaskChainProgress,
+					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
+					frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
+						mercenaryCard.mercenaryRole,
+					)}.png?v=5`,
+				} as Task;
+				return result;
+			})
+			.filter((task) => !!task)
+			.sort((a, b) => {
+				if (a.mercenaryRole === 'TANK' && b.mercenaryRole !== 'TANK') {
+					return -1;
+				}
+				if (a.mercenaryRole !== 'TANK' && b.mercenaryRole === 'TANK') {
+					return 1;
+				}
+				if (a.mercenaryRole === 'FIGHTER' && b.mercenaryRole !== 'FIGHTER') {
+					return -1;
+				}
+				if (a.mercenaryRole !== 'FIGHTER' && b.mercenaryRole === 'FIGHTER') {
+					return 1;
+				}
+				if (a.mercenaryRole === 'CASTER' && b.mercenaryRole !== 'CASTER') {
+					return -1;
+				}
+				if (a.mercenaryRole !== 'CASTER' && b.mercenaryRole === 'CASTER') {
+					return 1;
+				}
+				return a.mercenaryName < b.mercenaryName ? -1 : 1;
+			})
+	);
 };
 
 export const buildBounties = (
