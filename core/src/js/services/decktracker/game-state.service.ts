@@ -295,17 +295,15 @@ export class GameStateService {
 
 	private async processEvent(gameEvent: GameEvent) {
 		if (gameEvent.type === GameEvent.GAME_START) {
-			this.state = this.state.update({
+			this.state = this.state?.update({
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
-			this.state = this.state
-				? this.state.update({
-						// We can't "unspectate" a game
-						spectating: this.state.spectating || gameEvent.additionalData.spectating,
-				  } as GameState)
-				: null;
+			this.state = this.state?.update({
+				// We can't "unspectate" a game
+				spectating: this.state.spectating || gameEvent.additionalData.spectating,
+			} as GameState);
 		} else if (gameEvent.type === GameEvent.SECRET_WILL_TRIGGER) {
 			this.secretWillTrigger = {
 				cardId: gameEvent.cardId,
