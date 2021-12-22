@@ -140,5 +140,13 @@
 				"empty-state-message": "Please make sure a unique game mode (Standard, Wild or Classic) is selected above, and check the Bronze / Legend filter."
 			}
 		}
+	},
+	"battlegrounds": {
+		"hero-stats": {
+			"avg-position-label": "Average position:",
+			"avg-position-tooltip": "Average final position",
+			"avg-position-your-tooltip": "Your value",
+			"avg-position-global-tooltip": "Global value"
+		}
 	}
 }

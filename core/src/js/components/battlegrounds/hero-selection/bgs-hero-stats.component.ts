@@ -25,11 +25,36 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 				[midLineValue]="100 / 8"
 			></basic-bar-chart-2>
 			<div class="entry">
-				<div class="label" helpTooltip="Average final position">Avg position:</div>
-				<div class="global-value" helpTooltip="Global value">
+				<div
+					class="label"
+					[helpTooltip]="'battlegrounds.hero-stats.avg-position-tooltip' | owTranslate"
+					[owTranslate]="'battlegrounds.hero-stats.avg-position-label'"
+				></div>
+				<div
+					class="global-value"
+					[helpTooltip]="'battlegrounds.hero-stats.avg-position-global-tooltip' | owTranslate"
+				>
 					{{ buildValue(averagePosition) }}
 				</div>
-				<div class="player-value" helpTooltip="Your value">({{ buildValue(playerAveragePosition) }})</div>
+				<div
+					class="player-value"
+					[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
+				>
+					({{ buildValue(playerAveragePosition) }})
+				</div>
+			</div>
+			<div class="entry">
+				<div
+					class="label"
+					[helpTooltip]="'battlegrounds.hero-stats.matches-played-tooltip' | owTranslate"
+					[owTranslate]="'battlegrounds.hero-stats.matches-played-label'"
+				></div>
+				<div
+					class="player-value"
+					[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
+				>
+					{{ totalPlayerMatches }}
+				</div>
 			</div>
 			<div class="winrate">
 				<div
@@ -50,6 +75,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 	placementChartData$: Observable<SimpleBarChartData[]>;
 	averagePosition: number;
 	playerAveragePosition: number;
+	totalPlayerMatches: number;
 	cardId: string;
 	_hero: BgsHeroStat;
 
@@ -63,6 +89,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 		this.cardId = value.id;
 		this._hero = value;
 		this.averagePosition = value.averagePosition;
+		this.totalPlayerMatches = value.playerGamesPlayed;
 		this.playerAveragePosition = value.playerAveragePosition;
 		this.placementDistribution$.next(value.placementDistribution);
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
