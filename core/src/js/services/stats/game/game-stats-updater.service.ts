@@ -52,7 +52,8 @@ export class GameStatsUpdaterService {
 
 	private async buildGameStat(reviewId: string, game: GameForUpload): Promise<GameStat> {
 		// console.debug('uncompressedXmlReplay', game.uncompressedXmlReplay, game);
-		const replay = parseHsReplayString(game.uncompressedXmlReplay);
+		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
+		// console.debug('[debug] parsed replay', replay, game);
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 
