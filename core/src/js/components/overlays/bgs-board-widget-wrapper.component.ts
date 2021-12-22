@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { Race, SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
@@ -23,25 +23,26 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	selector: 'bgs-board-widget-wrapper',
 	styleUrls: ['../../../css/component/overlays/bgs-board-widget-wrapper.component.scss'],
 	template: `
-		<div
-			class="board-container"
+		<ng-container
 			*ngIf="{
 				showTribesHighlight: showTribesHighlight$ | async,
 				highlightedTribes: highlightedTribes$ | async,
 				highlightedMinions: highlightedMinions$ | async
 			} as value"
 		>
-			<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">
-				<bgs-tavern-minion
-					class="tavern-minion"
-					*ngFor="let minion of minionCardIds; trackBy: trackByMinion"
-					[minion]="minion"
-					[showTribesHighlight]="value.showTribesHighlight"
-					[highlightedTribes]="value.highlightedTribes"
-					[highlightedMinions]="value.highlightedMinions"
-				></bgs-tavern-minion>
-			</ul>
-		</div>
+			<div class="board-container" *ngIf="inGame$ | async">
+				<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">
+					<bgs-tavern-minion
+						class="tavern-minion"
+						*ngFor="let minion of minionCardIds; trackBy: trackByMinion"
+						[minion]="minion"
+						[showTribesHighlight]="value.showTribesHighlight"
+						[highlightedTribes]="value.highlightedTribes"
+						[highlightedMinions]="value.highlightedMinions"
+					></bgs-tavern-minion>
+				</ul>
+			</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -53,6 +54,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
+	inGame$: Observable<boolean>;
 	minionCardIds$: Observable<readonly string[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMinions$: Observable<readonly string[]>;
@@ -72,6 +74,17 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	}
 
 	ngAfterContentInit(): void {
+		this.inGame$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.store.listenBattlegrounds$(
+				([state]) => state?.inGame,
+				([state]) => state?.currentGame?.gameEnded,
+			),
+		).pipe(
+			this.mapData(
+				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
+			),
+		);
 		this.minionCardIds$ = combineLatest(
 			this.store.listenBattlegrounds$(([state]) => state.currentGame?.phase),
 			this.store.listenDeckState$((state) => state?.opponentDeck?.board),

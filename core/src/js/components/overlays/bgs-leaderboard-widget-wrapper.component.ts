@@ -7,9 +7,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -24,15 +25,15 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	styleUrls: ['../../../css/component/overlays/bgs-leaderboard-widget-wrapper.component.scss'],
 	template: `
 		<!-- So that we avoid showing other players infos before the start of the match -->
-		<div class="bgs-leaderboard">
-			<ng-container
-				*ngIf="{
-					bgsPlayers: bgsPlayers$ | async,
-					currentTurn: currentTurn$ | async,
-					lastOpponentCardId: lastOpponentCardId$ | async,
-					showLastOpponentIcon: showLastOpponentIcon$ | async
-				} as value"
-			>
+		<ng-container
+			*ngIf="{
+				bgsPlayers: bgsPlayers$ | async,
+				currentTurn: currentTurn$ | async,
+				lastOpponentCardId: lastOpponentCardId$ | async,
+				showLastOpponentIcon: showLastOpponentIcon$ | async
+			} as value"
+		>
+			<div class="bgs-leaderboard" *ngIf="inGame$ | async">
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of value.bgsPlayers; let i = index; trackBy: trackByFunction"
@@ -44,8 +45,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				</bgs-leaderboard-empty-card>
 				<div class="mouse-leave-fix top"></div>
 				<div class="mouse-leave-fix right"></div>
-			</ng-container>
-		</div>
+			</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +58,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
+	inGame$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
 	lastOpponentCardId$: Observable<string>;
 	currentTurn$: Observable<number>;
@@ -76,6 +78,17 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	ngAfterContentInit(): void {
+		this.inGame$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.store.listenBattlegrounds$(
+				([state]) => state?.inGame,
+				([state]) => state?.currentGame?.gameEnded,
+			),
+		).pipe(
+			this.mapData(
+				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
+			),
+		);
 		this.bgsPlayers$ = this.store
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(
