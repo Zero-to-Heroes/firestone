@@ -147,20 +147,21 @@ export const duelsTreasureRank = (cardId: string): number => {
 			return 3;
 
 		// Actives
-		case CardIds.ArchmageStaffTavernBrawl:
-		case CardIds.BookOfTheDeadTavernBrawl:
-		case CardIds.GrimmerPatron:
-		case CardIds.HyperblasterTavernBrawl:
 		case CardIds.AncientReflectionsTavernBrawl:
+		case CardIds.ArchmageStaffTavernBrawl:
+		case CardIds.BananaSplitTavernBrawl:
 		case CardIds.BagOfStuffingTavernBrawl:
 		case CardIds.BladeOfTheBurningSun:
-		case CardIds.GnomishArmyKnife:
-		case CardIds.BananaSplitTavernBrawl:
+		case CardIds.BookOfTheDeadTavernBrawl:
 		case CardIds.CanopicJarsTavernBrawl:
+		case CardIds.GnomishArmyKnife:
+		// case CardIds.GrimmerPatron:
+		case CardIds.HyperblasterTavernBrawl:
+		case CardIds.LocuuuustsTavernBrawl:
 		case CardIds.PhaorisBlade:
+		case CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl:
 		case CardIds.StaffOfScales:
 		case CardIds.WandOfDisintegrationTavernBrawl:
-		case CardIds.LocuuuustsTavernBrawl:
 			return 2;
 
 		// Actives Ultra Rare
