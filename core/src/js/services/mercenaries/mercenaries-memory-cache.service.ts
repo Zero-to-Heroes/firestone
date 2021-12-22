@@ -90,11 +90,11 @@ export class MercenariesMemoryCacheService {
 
 	private shouldFetchMercenariesMemoryInfo(newScene: SceneMode): boolean {
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
-			console.debug('[merc-memory] non relevant scene', newScene);
+			// console.debug('[merc-memory] non relevant scene', newScene);
 			return false;
 		}
 		if (newScene === SceneMode.GAMEPLAY && !MERCENARIES_SCENES.includes(this.previousScene)) {
-			console.debug('[merc-memory] not coming from lettuce scene', newScene, this.previousScene);
+			// console.debug('[merc-memory] not coming from lettuce scene', newScene, this.previousScene);
 			return false;
 		}
 		return true;
