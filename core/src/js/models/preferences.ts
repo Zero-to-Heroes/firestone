@@ -406,6 +406,7 @@ export class Preferences {
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 
 	readonly d0nkeySync: boolean = true;
+	readonly hearthstoneDecksSync: boolean = true;
 
 	readonly ftue: Ftue = new Ftue();
 

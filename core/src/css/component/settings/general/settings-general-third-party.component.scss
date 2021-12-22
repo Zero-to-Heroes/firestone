@@ -33,7 +33,7 @@
 		font-size: 14px;
 	}
 
-	a {
+	::ng-deep a {
 		display: inline;
 		font-size: 14px;
 		color: var(--inactive-link-color);
@@ -58,7 +58,7 @@
 
 		preference-toggle ::ng-deep {
 			p {
-				width: 300px;
+				width: 360px;
 			}
 		}
 

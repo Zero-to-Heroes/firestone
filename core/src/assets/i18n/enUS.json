@@ -148,5 +148,16 @@
 			"avg-position-your-tooltip": "Your value",
 			"avg-position-global-tooltip": "Global value"
 		}
+	},
+	"settings": {
+		"general": {
+			"third-party": {
+				"hsdecks": {
+					"pitch": "<a href=\"https://hearthstone-decks.net/\" target=\"_blank\">hearthstone-decks.net</a> shares Decks played at High Legend for all constructed modes, News & Articles.",
+					"next": "If you decide to sync to hearthstone-decks.net, Firestone will send them each game you play anonymously with some info about your games (Deck Code, Rank, Game Results)",
+					"pref-label": "Synchronize your replays to hearthstone-decks.net"
+				}
+			}
+		}
 	}
 }

@@ -130,6 +130,24 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					label="Synchronize your replays to d0nkey.top"
 				></preference-toggle>
 			</section>
+
+			<section class="vs">
+				<h2>
+					<img src="https://hearthstone-decks.net/wp-content/uploads/2021/12/Logo.png" class="icon" />
+					Hearthstone-decks
+				</h2>
+				<div class="pitch">
+					<p [innerHTML]="'settings.general.third-party.hsdecks.pitch' | owTranslate"></p>
+				</div>
+				<div class="what-text">
+					<p [innerHTML]="'settings.general.third-party.hsdecks.next' | owTranslate"></p>
+				</div>
+				<preference-toggle
+					class="enable-vs-button"
+					field="hearthstoneDecksSync"
+					[label]="'settings.general.third-party.hsdecks.pref-label' | owTranslate"
+				></preference-toggle>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -139,6 +157,7 @@ export class SettingsGeneralThirdPartyComponent
 	implements AfterContentInit, OnDestroy {
 	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
+	hsDecksUrl = ``;
 
 	constructor(
 		private prefs: PreferencesService,
