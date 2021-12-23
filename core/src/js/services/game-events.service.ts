@@ -139,7 +139,7 @@ export class GameEvents {
 		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				console.log(gameEvent.Type + ' event');
+				console.log(gameEvent.Type + ' event', gameEvent);
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
@@ -1140,6 +1140,7 @@ export class GameEvents {
 				);
 				break;
 			case 'SPECTATING':
+				console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.SPECTATING,
