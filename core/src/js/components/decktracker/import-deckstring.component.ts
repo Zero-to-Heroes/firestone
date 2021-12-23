@@ -1,17 +1,10 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	Optional,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Optional } from '@angular/core';
 import { decode } from 'deckstrings';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckstring-override-event';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -23,7 +16,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div
 			class="import-deckstring"
-			helpTooltip="Import a deck code from your clipboard"
+			[helpTooltip]="'decktracker.import.import-deckstring-tooltip' | owTranslate"
 			(mousedown)="importDeckstring()"
 			confirmationTooltip
 			[askConfirmation]="true"
@@ -42,24 +35,23 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class ImportDeckstringComponent implements AfterViewInit {
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		console.debug('set tooltip position in import', value);
 		this._tooltipPosition = value;
 	}
 
 	deckName: string;
 	_tooltipPosition: CardTooltipPositionType;
 
-	confirmationTitle = 'Override deck list?';
-	confirmationText = 'Override deck list?';
-	validButtonText = 'Override';
-	cancelButtonText = 'Cancel';
+	confirmationTitle = this.i18n.translateString('decktracker.import.confirmation-title');
+	confirmationText = this.i18n.translateString('decktracker.import.confirmation-title');
+	validButtonText = this.i18n.translateString('decktracker.import.button-text');
+	cancelButtonText = this.i18n.translateString('decktracker.import.cancel-text');
 	showOk = true;
 
 	private deckstring: string;
 
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly ow: OverwolfService) {}
+	constructor(private readonly i18n: LocalizationFacadeService, @Optional() private readonly ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
@@ -71,24 +63,31 @@ export class ImportDeckstringComponent implements AfterViewInit {
 
 		if (!deckstring) {
 			console.warn('invalid clipboard content', clipboardContent);
-			this.confirmationTitle = 'Invalid deck code';
-			this.confirmationText = `We couldn't recognize the deck code that was provided.`;
+			this.confirmationTitle = this.i18n.translateString('decktracker.import.invalid-deck-code-title');
+			this.confirmationText = this.i18n.translateString('decktracker.import.invalid-deck-code-text');
 			this.validButtonText = null;
-			this.cancelButtonText = 'Ok';
+			this.cancelButtonText = this.i18n.translateString('decktracker.import.invalid-deck-code-button-text');
 			this.showOk = false;
 		} else {
 			this.deckName = deckName;
 			this.deckstring = deckstring;
-			this.confirmationTitle = 'Override deck list?';
-			this.confirmationText = `Use ${this.deckName}?`;
-			this.validButtonText = 'Override';
-			this.cancelButtonText = 'Cancel';
+			this.confirmationTitle = this.i18n.translateString('decktracker.import.confirmation-title');
+			this.confirmationText = this.i18n.translateString('decktracker.import.use-deck-text', {
+				value: this.deckName,
+			});
+			this.validButtonText = this.i18n.translateString('decktracker.import.button-text');
+			this.cancelButtonText = this.i18n.translateString('decktracker.import.cancel-text');
 			this.showOk = true;
 		}
 	}
 
 	confirmOverride() {
-		this.deckUpdater.next(new DeckstringOverrideEvent(this.deckName ?? 'Unkown deck', this.deckstring));
+		this.deckUpdater.next(
+			new DeckstringOverrideEvent(
+				this.deckName ?? this.i18n.translateString('decktracker.deck-name.unknown-deck'),
+				this.deckstring,
+			),
+		);
 	}
 
 	private parseClipboardContent(clipboardContent: string): { deckstring: string; deckName: string } {

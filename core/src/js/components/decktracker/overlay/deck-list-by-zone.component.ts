@@ -5,6 +5,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'deck-list-by-zone',
@@ -77,6 +78,8 @@ export class DeckListByZoneComponent implements OnDestroy {
 	private _sortCardsByManaCostInOtherZone: boolean;
 	private _deckState: DeckState;
 
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+
 	trackZone(index, zone: DeckZone) {
 		return zone.id;
 	}
@@ -94,19 +97,41 @@ export class DeckListByZoneComponent implements OnDestroy {
 		const zones = [];
 
 		if (this._showGlobalEffectsZone && this._deckState.globalEffects.length > 0) {
-			zones.push(this.buildZone(this._deckState.globalEffects, 'global-effects', 'Global Effects', null, null));
+			zones.push(
+				this.buildZone(
+					this._deckState.globalEffects,
+					'global-effects',
+					this.i18n.translateString('decktracker.zones.global-effects'),
+					null,
+					null,
+				),
+			);
 		}
 
 		zones.push(
 			Object.assign(
-				this.buildZone(this._deckState.deck, 'deck', 'In deck', null, this._deckState.cardsLeftInDeck),
+				this.buildZone(
+					this._deckState.deck,
+					'deck',
+					this.i18n.translateString('decktracker.zones.in-deck'),
+					null,
+					this._deckState.cardsLeftInDeck,
+				),
 				{
 					showWarning: this._deckState.showDecklistWarning,
 				} as DeckZone,
 			),
 		);
 		zones.push(
-			this.buildZone(this._deckState.hand, 'hand', 'In hand', null, this._deckState.hand.length, null, 'in-hand'),
+			this.buildZone(
+				this._deckState.hand,
+				'hand',
+				this.i18n.translateString('decktracker.zones.in-hand'),
+				null,
+				this._deckState.hand.length,
+				null,
+				'in-hand',
+			),
 		);
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (this._deckState.dynamicZones.length === 0) {
@@ -115,7 +140,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 				this.buildZone(
 					otherZone,
 					'other',
-					'Other',
+					this.i18n.translateString('decktracker.zones.other'),
 					this._sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : null,
 					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but

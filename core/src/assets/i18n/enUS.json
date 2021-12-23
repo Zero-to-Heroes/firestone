@@ -138,8 +138,60 @@
 			},
 			"rating-graph": {
 				"empty-state-message": "Please make sure a unique game mode (Standard, Wild or Classic) is selected above, and check the Bronze / Legend filter."
+			},
+			"replays-recap": {
+				"header": "Last {{value}} replays",
+				"no-replays": "No replays"
+			},
+			"stats": {
+				"total-games-played": "Total games played",
+				"total-times-played": "Total time played",
+				"turns-to-win": "Turns to win",
+				"turns-to-lose": "Turns to lose",
+				"winrate": "Winrate",
+				"winrate-first": "Winrate (first)",
+				"winrate-coin": "Winrate (coin)"
 			}
 		}
+	},
+	"decktracker": {
+		"zones": {
+			"global-effects": "Global effects",
+			"in-deck": "In deck",
+			"in-hand": "In hand",
+			"other": "Other"
+		},
+		"cards-in-hand-tooltip": "Cards in hand",
+		"cards-left-in-deck-tooltip": "Cards left in deck",
+		"deck-name": {
+			"unnamed-deck": "Unnamed deck",
+			"unknown-deck": "Unknown deck",
+			"copy-deckstring-label": "Copy deck",
+			"copy-deckstring-confirmation": "Copied!"
+		},
+		"import": {
+			"import-deckstring-tooltip": "Import a deck code from your clipboard",
+			"confirmation-title": "Override deck list?",
+			"use-deck-text": "Use {{value}}?",
+			"button-text": "Override",
+			"cancel-text": "Cancel",
+			"invalid-deck-code-title": "Invalid deck code",
+			"invalid-deck-code-text": "We couldn't recognize the deck code that was provided.",
+			"invalid-deck-code-button-text": "Ok"
+		},
+		"stats": {
+			"deck-winrate": "Deck's winrate",
+			"deck-winrate-tooltip": "This deck's winrate in ranked since {{value}}",
+			"deck-winrate-vs-class": "vs {{value}}",
+			"deck-winrate-vs-class-tooltip": "This deck's winrate in ranked against {{opponent}} since {{date}}"
+		},
+
+		"card-burned": "Card burned",
+		"card-transformed": "Card transformed",
+		"card-discarded": "Card discarded",
+		"card-in-graveyard": "In graveyard",
+		"gift-created-by-single-card": "Created by <br/> {{value}}",
+		"gift-created-by-multiple-cards": "Created by <br/> multiple entities"
 	},
 	"battlegrounds": {
 		"hero-stats": {

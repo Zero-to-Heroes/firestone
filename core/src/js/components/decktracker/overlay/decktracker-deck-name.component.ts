@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
@@ -41,15 +42,23 @@ export class DeckTrackerDeckNameComponent {
 			return;
 		}
 
-		this.deckName = value.name || (value.hero ? value.hero.playerName || value.hero.name : 'Unnamed deck');
+		this.deckName =
+			value.name ||
+			(value.hero
+				? value.hero.playerName || value.hero.name
+				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 		this.deckstring = value.deckstring;
-		this.copyText = 'Copy deck';
+		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 		if (this.missingInitialDeckstring === undefined) {
 			this.missingInitialDeckstring = this.deckstring == null;
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		@Optional() private readonly ow: OverwolfService,
+		private i18n: LocalizationFacadeService,
+	) {}
 
 	async copyDeckstring() {
 		if (!this.ow?.isOwEnabled()) {
@@ -57,13 +66,13 @@ export class DeckTrackerDeckNameComponent {
 			return;
 		}
 		this.ow.placeOnClipboard(this.deckstring);
-		this.copyText = 'Copied!';
+		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
-			this.copyText = 'Copy deck';
+			this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

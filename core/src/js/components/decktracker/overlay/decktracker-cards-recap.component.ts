@@ -10,7 +10,11 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 	template: `
 		<div class="cards-recap">
 			<div class="recap cards-in-hand">
-				<div class="icon" helpTooltip="Cards in hand" [bindTooltipToGameWindow]="true">
+				<div
+					class="icon"
+					[helpTooltip]="'decktracker.cards-in-hand-tooltip' | owTranslate"
+					[bindTooltipToGameWindow]="true"
+				>
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#cards_in_hand" />
 					</svg>
@@ -18,7 +22,11 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 				<div class="count">{{ cardsInHand }}</div>
 			</div>
 			<div class="recap cards-in-deck">
-				<div class="icon" helpTooltip="Cards left in deck" [bindTooltipToGameWindow]="true">
+				<div
+					class="icon"
+					[helpTooltip]="'decktracker.cards-left-in-deck-tooltip' | owTranslate"
+					[bindTooltipToGameWindow]="true"
+				>
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#cards_in_deck" />
 					</svg>

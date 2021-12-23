@@ -37,7 +37,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[owTranslate]="'app.decktracker.deck-summary.winrate'"
 					[translateParams]="{ value: winRatePercentage }"
 				></div>
-				<!-- TODO translate: don't forget to format the date as well -->
 				<div
 					class="last-used"
 					[owTranslate]="'app.decktracker.deck-summary.last-used'"

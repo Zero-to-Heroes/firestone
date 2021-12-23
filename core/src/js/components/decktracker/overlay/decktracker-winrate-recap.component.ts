@@ -77,16 +77,21 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 		this.winrate = this._stats.winratePercent;
 		this.wins = this._stats.totalWins || 0;
 		this.losses = this._stats.totalLosses || 0;
-		const dateFrom = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit' }).format(
-			this._stats.dateFrom,
-		);
+		const dateFrom = new Intl.DateTimeFormat(this.i18n.formatCurrentLocale(), {
+			year: 'numeric',
+			month: 'short',
+			day: '2-digit',
+		}).format(this._stats.dateFrom);
 		if (this._type === 'deck') {
-			this.text = "Deck's winrate";
-			this.tooltip = "This deck's winrate in ranked since " + dateFrom;
+			this.text = this.i18n.translateString('decktracker.stats.deck-winrate');
+			this.tooltip = this.i18n.translateString('decktracker.stats.deck-winrate-tooltip', { value: dateFrom });
 		} else {
 			const readableClass = formatClass(this._stats.opponentClass, this.i18n);
-			this.text = 'VS. ' + readableClass;
-			this.tooltip = "This deck's winrate in ranked against " + readableClass + ' since ' + dateFrom;
+			this.text = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class', { value: readableClass });
+			this.text = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class-tooltip', {
+				opponent: readableClass,
+				date: dateFrom,
+			});
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

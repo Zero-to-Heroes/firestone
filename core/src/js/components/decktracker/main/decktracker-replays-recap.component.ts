@@ -13,10 +13,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="decktracker-replays-recap" *ngIf="replays$ | async as replays">
 			<div class="title" *ngIf="!!replays.length">
-				Last {{ replays.lenth }} replays
+				{{ 'app.decktracker.replays-recap.header' | owTranslate: { value: replays.length } }}
 				<replays-icon-toggle class="icon-toggle"></replays-icon-toggle>
 			</div>
-			<div class="title" *ngIf="!replays?.length">No replays</div>
+			<div
+				class="title"
+				*ngIf="!replays?.length"
+				[owTranslate]="'app.decktracker.replays-recap.no-replays'"
+			></div>
 			<ul class="list" scrollable>
 				<li *ngFor="let replay of replays">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>

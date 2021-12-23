@@ -46,9 +46,14 @@ import { uuid } from '../../../services/utils';
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
 			<div class="gradiant"></div>
 			<div class="card-name">
-				<span>{{ cardName || 'Unknown card' }}</span>
+				<span>{{ cardName }}</span>
 			</div>
-			<div class="icon-symbol" *ngIf="isBurned" [helpTooltip]="'Card burned'" [bindTooltipToGameWindow]="true">
+			<div
+				class="icon-symbol"
+				*ngIf="isBurned"
+				[helpTooltip]="'decktracker.card-burned' | owTranslate"
+				[bindTooltipToGameWindow]="true"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -57,7 +62,11 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol transformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
+			<div
+				class="icon-symbol transformed"
+				*ngIf="isTransformed"
+				[helpTooltip]="'decktracker.card-transformed' | owTranslate"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -84,7 +93,11 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol discard" *ngIf="isDiscarded" [helpTooltip]="'Card discarded'">
+			<div
+				class="icon-symbol discard"
+				*ngIf="isDiscarded"
+				[helpTooltip]="'decktracker.card-discarded' | owTranslate"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -93,7 +106,11 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
+			<div
+				class="icon-symbol graveyard"
+				*ngIf="isGraveyard"
+				[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -241,9 +258,11 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
-		this.cardName = !!this._card.cardName?.length
-			? this._card.cardName + this.buildSuffix(this._card)
-			: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName() ?? 'Unkown card';
+		this.cardName =
+			(!!this._card.cardName?.length
+				? this._card.cardName + this.buildSuffix(this._card)
+				: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName()) ??
+			this.i18n.getUnknownCardName();
 
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;
@@ -315,10 +334,12 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		if (this.creatorCardIds && this.creatorCardIds.length === 1) {
 			const creatorCard = this.cards.getCard(this.creatorCardIds[0]);
 			if (creatorCard) {
-				this.giftTooltip = `Created by <br /> ${creatorCard.name}`;
+				this.giftTooltip = this.i18n.translateString('decktracker.gift-created-by-single-card', {
+					value: creatorCard.name,
+				});
 			}
 		} else if (this.creatorCardIds && this.creatorCardIds.length > 1) {
-			this.giftTooltip = `Created by <br /> multiple entities`;
+			this.giftTooltip = this.i18n.translateString('decktracker.gift-created-by-multiple-cards');
 		}
 	}
 }

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'decktracker-stats-for-replays',
@@ -28,6 +29,8 @@ export class DecktrackerStatsForReplaysComponent {
 
 	stats: readonly InternalStat[];
 
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+
 	private _replays: readonly GameStat[];
 
 	private updateInfos() {
@@ -52,36 +55,36 @@ export class DecktrackerStatsForReplaysComponent {
 
 		this.stats = [
 			{
-				label: 'Total games played',
+				label: this.i18n.translateString('app.decktracker.stats.total-games-played'),
 				value: `${this._replays.length?.toLocaleString() ?? '0'}`,
 				class: 'games',
 			},
 			{
-				label: 'Total time played',
+				label: this.i18n.translateString('app.decktracker.stats.total-time-played'),
 				value: `${this.toAppropriateDurationFromSeconds(
 					this._replays.map((replay) => replay.gameDurationSeconds).reduce((a, b) => a + b, 0),
 				)}`,
 			},
 			{
-				label: 'Turns to win',
+				label: this.i18n.translateString('app.decktracker.stats.turns-to-win'),
 				value: `${isNaN(turnsToWin) ? '-' : turnsToWin.toFixed(1)}`,
 			},
 			{
-				label: 'Turns to lose',
+				label: this.i18n.translateString('app.decktracker.stats.turns-to-lose'),
 				value: `${isNaN(turnsToLose) ? '-' : turnsToLose.toFixed(1)}`,
 			},
 			{
-				label: 'Winrate',
+				label: this.i18n.translateString('app.decktracker.stats.winrate'),
 				value: `${isNaN(winrate) ? '-' : winrate.toFixed(1)}%`,
 				class: 'winrate ',
 			},
 			{
-				label: 'Winrate (first)',
+				label: this.i18n.translateString('app.decktracker.stats.winrate-first'),
 				value: `${isNaN(winrateFirst) ? '-' : winrateFirst.toFixed(1)}%`,
 				class: 'winrate ',
 			},
 			{
-				label: 'Winrate (coin)',
+				label: this.i18n.translateString('app.decktracker.stats.winrate-coin'),
 				value: `${isNaN(winrateCoin) ? '-' : winrateCoin.toFixed(1)}%`,
 				class: 'winrate ',
 			},

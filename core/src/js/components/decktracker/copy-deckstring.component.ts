@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -30,7 +31,11 @@ export class CopyDesckstringComponent {
 
 	private inputCopy: string;
 
-	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		@Optional() private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	async copyDeckstring() {
 		if (!this.ow?.isOwEnabled()) {
@@ -39,7 +44,7 @@ export class CopyDesckstringComponent {
 		}
 		this.ow.placeOnClipboard(this.deckstring);
 		this.inputCopy = this.title || this.copyText;
-		this.copyText = 'Copied!';
+		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
