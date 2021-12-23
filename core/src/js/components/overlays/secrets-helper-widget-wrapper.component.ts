@@ -30,8 +30,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
-		gameWidth / 2 - 252 - gameHeight * 0.3;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth / 2;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.05;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateSecretsHelperPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
