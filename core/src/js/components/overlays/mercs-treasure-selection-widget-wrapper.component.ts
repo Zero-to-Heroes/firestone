@@ -29,9 +29,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 export class MercsTreasureSelectionWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
-		0.25 * (dpi * gameHeight);
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.15;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0.25 * gameHeight;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();

@@ -28,9 +28,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
-		dpi * 0.5 * (gameWidth - gameHeight);
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => 0;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => 0.5 * (gameWidth - gameHeight);
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();

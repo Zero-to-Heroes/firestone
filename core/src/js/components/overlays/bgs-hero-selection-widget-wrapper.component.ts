@@ -29,8 +29,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
-	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
-		(dpi * gameHeight) / 3;
+	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight / 3;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
