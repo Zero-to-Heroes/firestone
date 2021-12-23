@@ -1,19 +1,9 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -52,20 +42,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	ngAfterContentInit(): void {
 		this.hand$ = this.store
 			.listenDeckState$((deckState) => deckState?.opponentDeck?.hand)
-			.pipe(
-				filter(([hand]) => !!hand?.length),
-				distinctUntilChanged(arraysEqual),
-				map(([hand]) => hand),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting hand in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([hand]) => hand));
 		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
 		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
 		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
