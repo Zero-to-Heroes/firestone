@@ -22,6 +22,7 @@ import {
 	effectiveCostEqual,
 	effectiveCostLess,
 	effectiveCostMore,
+	fel,
 	frenzy,
 	frost,
 	holy,
@@ -162,6 +163,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(spell, shadow);
 			case CardIds.FelfireInTheHole:
 				return and(inDeck, spell);
+			case CardIds.Felgorger:
+				return and(inDeck, spell, fel);
 			case CardIds.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
 			case CardIds.FungalFortunes:

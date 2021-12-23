@@ -96,6 +96,7 @@ export const spellSchool = (spellSchool: SpellSchool) => (handler: Handler): boo
 	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
 };
 export const shadow = spellSchool(SpellSchool.SHADOW);
+export const fel = spellSchool(SpellSchool.FEL);
 export const holy = spellSchool(SpellSchool.HOLY);
 export const frost = spellSchool(SpellSchool.FROST);
 
