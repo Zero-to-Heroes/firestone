@@ -146,7 +146,9 @@
 			"avg-position-label": "Average position:",
 			"avg-position-tooltip": "Average final position",
 			"avg-position-your-tooltip": "Your value",
-			"avg-position-global-tooltip": "Global value"
+			"avg-position-global-tooltip": "Global value",
+			"matches-played-label": "Matches played",
+			"matches-played-tooltip": "Total matches you played with this hero"
 		}
 	},
 	"settings": {
