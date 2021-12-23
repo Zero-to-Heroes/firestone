@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -34,6 +35,9 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
+
+	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 	windowWidth: number;
@@ -60,6 +64,10 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 				return displayFromPrefs && hasTreasures;
 			}),
 		);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 
 	protected async doResize(): Promise<void> {

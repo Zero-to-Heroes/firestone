@@ -30,7 +30,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				highlightedMinions: highlightedMinions$ | async
 			} as value"
 		>
-			<div class="board-container" *ngIf="inGame$ | async">
+			<div class="board-container" *ngIf="showWidget$ | async">
 				<ul class="board" *ngIf="minionCardIds$ | async as minionCardIds">
 					<bgs-tavern-minion
 						class="tavern-minion"
@@ -53,8 +53,11 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
 
-	inGame$: Observable<boolean>;
+	private visible: boolean;
+
+	showWidget$: Observable<boolean>;
 	minionCardIds$: Observable<readonly string[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMinions$: Observable<readonly string[]>;
@@ -74,7 +77,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	}
 
 	ngAfterContentInit(): void {
-		this.inGame$ = combineLatest(
+		this.showWidget$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
@@ -130,6 +133,10 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 
 	trackByMinion(index: number, minion: string) {

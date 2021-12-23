@@ -17,6 +17,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		prefService?: PreferencesService,
 	) => Promise<{ left: number; top: number }>;
 	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
+	protected abstract isWidgetVisible: () => boolean;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -34,6 +35,12 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	protected async reposition(cleanup: () => void = null) {
+		// console.debug('repositioning', this);
+		if (!this.isWidgetVisible()) {
+			// console.debug('widget is not visible');
+			return;
+		}
+
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
 		// console.debug('positionFromPrefs', positionFromPrefs);
@@ -50,6 +57,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		}
 		const widgetRect = this.getRect();
 		if (!widgetRect?.width) {
+			// console.debug('no widget, starting again');
 			setTimeout(() => this.reposition(), 100);
 			return;
 		}

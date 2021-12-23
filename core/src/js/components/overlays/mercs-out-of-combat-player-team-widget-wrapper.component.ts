@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -38,6 +39,9 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 		this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
+
+	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -73,5 +77,9 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 				return hasState && scenes.includes(currentScene);
 			}),
 		);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 }

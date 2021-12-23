@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -20,7 +21,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	template: `
 		<decktracker-overlay-player
 			class="widget"
-			*ngIf="showPlayerDecktracker$ | async"
+			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
@@ -37,8 +38,11 @@ export class DecktrackerPlayerWidgetWrapperComponent
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.decktrackerPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
 
-	showPlayerDecktracker$: Observable<boolean>;
+	private visible: boolean;
+
+	showWidget$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -55,7 +59,7 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
-		this.showPlayerDecktracker$ = combineLatest(
+		this.showWidget$ = combineLatest(
 			this.store.listen$(
 				([main, nav, pref]) => main.currentScene,
 				// Show from prefs
@@ -101,5 +105,9 @@ export class DecktrackerPlayerWidgetWrapperComponent
 				},
 			),
 		);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 }

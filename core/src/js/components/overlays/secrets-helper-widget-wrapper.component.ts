@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -35,6 +36,9 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateSecretsHelperPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
+
+	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -79,5 +83,9 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 				return !gameEnded && hasSecrets;
 			}),
 		);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 }

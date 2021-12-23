@@ -33,7 +33,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				showLastOpponentIcon: showLastOpponentIcon$ | async
 			} as value"
 		>
-			<div class="bgs-leaderboard" *ngIf="inGame$ | async">
+			<div class="bgs-leaderboard" *ngIf="showWidget$ | async">
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of value.bgsPlayers; let i = index; trackBy: trackByFunction"
@@ -57,8 +57,11 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected isWidgetVisible = () => this.visible;
 
-	inGame$: Observable<boolean>;
+	private visible: boolean;
+
+	showWidget$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
 	lastOpponentCardId$: Observable<string>;
 	currentTurn$: Observable<number>;
@@ -78,7 +81,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	ngAfterContentInit(): void {
-		this.inGame$ = combineLatest(
+		this.showWidget$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
@@ -137,6 +140,10 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 				tap((info) => cdLog('emitting showLastOpponentIcon in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
+			this.visible = show;
+			this.reposition();
+		});
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {
