@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
@@ -1324,7 +1325,7 @@ export class GameEvents {
 		if (
 			lastLineTimestamp &&
 			Date.now() - lastLineTimestamp > 5 * 60 * 1000 &&
-			!['scene_gameplay'].includes(await this.memoryService.getCurrentScene())
+			![SceneMode.GAMEPLAY].includes(await this.memoryService.getCurrentSceneFromMindVision())
 		) {
 			console.log(
 				'[game-events] [existing] last line is too old, not doing anything',

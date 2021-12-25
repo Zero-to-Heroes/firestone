@@ -206,12 +206,4 @@ export class MemoryInspectionService {
 	public async reset(): Promise<void> {
 		await this.mindVision.reset();
 	}
-
-	public async getCurrentScene(): Promise<string> {
-		return new Promise<string>(async (resolve) => {
-			const gameInfo = await this.ow.getGameEventsInfo();
-
-			resolve(gameInfo?.res?.game_info?.scene_state);
-		});
-	}
 }
