@@ -298,42 +298,6 @@ export class DevService {
 		// };
 	}
 
-	// private async processLogLines(logLines) {
-	// 	const plugin = await this.gameEventsPlugin.get();
-	// 	return new Promise<void>(resolve => {
-	// 		plugin.initRealtimeLogConversion(async () => {
-	// 			plugin.startDevMode();
-	// 			for (const data of logLines) {
-	// 				await this.sendLogLine(data);
-	// 			}
-	// 			plugin.stopDevMode();
-	// 			resolve();
-	// 		});
-	// 	});
-	// }
-
-	// private async sendLogLine(data: string) {
-	// 	return new Promise<void>(resolve => {
-	// 		setTimeout(() => {
-	// 			this.gameEvents.receiveLogLine(data);
-	// 			resolve();
-	// 		}, 1);
-	// 	});
-	// }
-
-	// private async loadArbitraryLogContent(content: string) {
-	// 	const plugin = await this.gameEventsPlugin.get();
-	// 	plugin.initRealtimeLogConversion(() => {
-	// 		plugin.startDevMode();
-	// 		const logLines = content.split('\n');
-	// 		plugin.realtimeLogProcessing(logLines, () => {
-	// 			console.debug('Jobs done');
-	// 			plugin.stopDevMode();
-	// 			this.deckService.reset();
-	// 		});
-	// 	});
-	// }
-
 	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
 		return cards.map((card) =>
 			card.update({
