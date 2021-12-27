@@ -16,7 +16,6 @@
             "main": "apps/firestone/src/main.ts",
             "polyfills": "apps/firestone/src/polyfills.ts",
             "tsConfig": "apps/firestone/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               "apps/firestone/src/favicon.ico",
               "apps/firestone/src/assets"
@@ -59,6 +58,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "firestone:build"
+          },
           "configurations": {
             "production": {
               "browserTarget": "firestone:build:production"
