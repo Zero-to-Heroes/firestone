@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@firestone/shared/data-access/api-runner": [
+        "libs/shared/data-access/api-runner/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

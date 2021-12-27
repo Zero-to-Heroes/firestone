@@ -1,34 +1,19 @@
 {
   "npmScope": "firestone",
-  "affected": {
-    "defaultBase": "master"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular",
-    "packageManager": "npm"
-  },
+  "affected": { "defaultBase": "master" },
+  "cli": { "defaultCollection": "@nrwl/angular", "packageManager": "npm" },
   "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     ".eslintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
+      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
   "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ]
+    "build": [{ "target": "build", "projects": "dependencies" }]
   },
   "generators": {
     "@nrwl/angular:application": {
@@ -42,9 +27,8 @@
       "linter": "eslint",
       "unitTestRunner": "jest"
     },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
+    "@nrwl/angular:component": { "style": "scss" }
   },
-  "defaultProject": "firestone"
+  "defaultProject": "firestone",
+  "projects": { "shared-data-access-api-runner": { "tags": [] } }
 }

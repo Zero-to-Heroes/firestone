@@ -124,6 +124,49 @@
       },
       "tags": [],
       "implicitDependencies": ["firestone"]
+    },
+    "shared-data-access-api-runner": {
+      "projectType": "library",
+      "root": "libs/shared/data-access/api-runner",
+      "sourceRoot": "libs/shared/data-access/api-runner/src",
+      "prefix": "lib",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/data-access/api-runner/src/**/*.ts",
+              "libs/shared/data-access/api-runner/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/data-access/api-runner"],
+          "options": {
+            "jestConfig": "libs/shared/data-access/api-runner/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
     }
   }
 }
