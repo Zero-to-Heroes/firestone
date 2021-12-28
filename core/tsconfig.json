@@ -21,6 +21,7 @@
 		"types": ["node", "jest"],
 		"paths": {
 			"@angular/*": ["../node_modules/@angular/*"],
+			"@core/*": ["./*"],
 			"@models/*": ["src/js/models/*"],
 			"@services/*": ["src/js/services/*"]
 		}
