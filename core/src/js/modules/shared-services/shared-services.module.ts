@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { SharedFeatureOverwolfModule } from '@core/../libs/shared/feature/overwolf/src';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';
@@ -18,7 +19,6 @@ import { GenericStorageService } from '../../services/generic-storage.service';
 import { HotkeyService } from '../../services/hotkey.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OwNotificationsService } from '../../services/notifications.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { MindVisionService } from '../../services/plugins/mind-vision/mind-vision.service';
 import { OwUtilsService } from '../../services/plugins/ow-utils.service';
@@ -27,7 +27,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 @NgModule({
-	imports: [BrowserModule],
+	imports: [BrowserModule, SharedFeatureOverwolfModule],
 	declarations: [],
 	entryComponents: [],
 	exports: [],
@@ -43,7 +43,6 @@ export class SharedServicesModule {
 				GenericStorageService,
 				LogsUploaderService,
 				MemoryInspectionService,
-				OverwolfService,
 				OwNotificationsService,
 				PreferencesService,
 				S3FileUploadService,

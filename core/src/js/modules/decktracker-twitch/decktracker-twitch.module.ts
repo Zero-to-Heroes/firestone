@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedFeatureOverwolfModule } from '@core/../libs/shared/feature/overwolf/src';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { init } from '@sentry/browser';
 import { AngularResizedEventModule } from 'angular-resize-event';
@@ -23,7 +24,6 @@ import { CardsHighlightService } from '../../services/decktracker/card-highlight
 import { Events } from '../../services/events.service';
 import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedModule } from '../shared/shared.module';
@@ -47,6 +47,7 @@ console.log('version is', process.env.APP_VERSION);
 		SharedDeckTrackerModule,
 		DragDropModule,
 		AngularResizedEventModule,
+		SharedFeatureOverwolfModule,
 	],
 	declarations: [
 		DeckTrackerOverlayStandaloneComponent,
@@ -62,7 +63,6 @@ console.log('version is', process.env.APP_VERSION);
 		Events,
 		AllCardsService,
 		BgsBattleSimulationService,
-		OverwolfService,
 		LocalizationStandaloneService,
 		CardsFacadeStandaloneService,
 		LocalStorageService,
