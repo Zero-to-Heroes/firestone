@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ChangeDetectionStrategy } from '@angular/compiler/src/core';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { loadAsync } from 'jszip';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
