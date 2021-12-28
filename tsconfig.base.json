@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@core/*": ["./core/*"],
       "@firestone/shared/data-access/api-runner": [
         "libs/shared/data-access/api-runner/src/index.ts"
       ],
