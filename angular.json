@@ -149,6 +149,31 @@
           }
         }
       }
+    },
+    "shared-feature-overwolf": {
+      "projectType": "library",
+      "root": "libs/shared/feature/overwolf",
+      "sourceRoot": "libs/shared/feature/overwolf/src",
+      "prefix": "lib",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/shared/feature/overwolf/src/**/*.ts",
+              "libs/shared/feature/overwolf/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/shared/feature/overwolf"],
+          "options": {
+            "jestConfig": "libs/shared/feature/overwolf/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -30,5 +30,8 @@
     "@nrwl/angular:component": { "style": "scss" }
   },
   "defaultProject": "firestone",
-  "projects": { "shared-data-access-api-runner": { "tags": [] } }
+  "projects": {
+    "shared-data-access-api-runner": { "tags": [] },
+    "shared-feature-overwolf": { "tags": [] }
+  }
 }
