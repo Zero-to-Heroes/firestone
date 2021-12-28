@@ -20,6 +20,7 @@
 		"typeRoots": ["node_modules/@types", "@overwolf/types"],
 		"types": ["node", "jest"],
 		"paths": {
+			"@angular/*": ["../node_modules/@angular/*"],
 			"@models/*": ["src/js/models/*"],
 			"@services/*": ["src/js/services/*"]
 		}
