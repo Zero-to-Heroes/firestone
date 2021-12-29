@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedDataAccessStorageModule } from '@core/../libs/shared/data-access/storage/src';
 import { SharedFeatureOverwolfModule } from '@core/../libs/shared/feature/overwolf/src';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { init } from '@sentry/browser';
@@ -22,7 +23,6 @@ import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-bat
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { Events } from '../../services/events.service';
-import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
@@ -48,6 +48,7 @@ console.log('version is', process.env.APP_VERSION);
 		DragDropModule,
 		AngularResizedEventModule,
 		SharedFeatureOverwolfModule,
+		SharedDataAccessStorageModule,
 	],
 	declarations: [
 		DeckTrackerOverlayStandaloneComponent,
@@ -65,7 +66,6 @@ console.log('version is', process.env.APP_VERSION);
 		BgsBattleSimulationService,
 		LocalizationStandaloneService,
 		CardsFacadeStandaloneService,
-		LocalStorageService,
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: AppUiStoreFacadeService, useFactory: () => null },

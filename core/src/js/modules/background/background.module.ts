@@ -13,6 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedDataAccessStorageModule } from '@core/../libs/shared/data-access/storage/src';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -412,7 +413,6 @@ import { GameEventsEmitterService } from '../../services/game-events-emitter.ser
 import { GameEvents } from '../../services/game-events.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
-import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LocalizationService } from '../../services/localization.service';
 import { LogListenerService } from '../../services/log-listener.service';
@@ -539,6 +539,7 @@ const components = [
 		OverlayModule,
 		PerfectScrollbarModule,
 		ColiseumComponentsModule,
+		SharedDataAccessStorageModule,
 		SharedDeckTrackerModule,
 		AngularResizedEventModule,
 	],
@@ -915,7 +916,6 @@ const components = [
 		CollaboratorsService,
 		UserService,
 		ApiRunner,
-		LocalStorageService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,
