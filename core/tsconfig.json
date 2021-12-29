@@ -22,6 +22,7 @@
 		"paths": {
 			"@angular/*": ["../node_modules/@angular/*"],
 			"@core/*": ["./*"],
+			"@firestone-hs/*": ["../node_modules/@firestone-hs/*"],
 			"@models/*": ["src/js/models/*"],
 			"@services/*": ["src/js/services/*"]
 		}
