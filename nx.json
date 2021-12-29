@@ -23,7 +23,8 @@
 	"defaultProject": "firestone",
 	"projects": {
 		"shared-data-access-api-runner": { "tags": [] },
+		"shared-data-access-storage": { "tags": [] },
 		"shared-feature-overwolf": { "tags": [] },
-		"shared-data-access-storage": { "tags": [] }
+		"shared-feature-preferences": { "tags": [] }
 	}
 }

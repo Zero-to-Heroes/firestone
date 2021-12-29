@@ -18,7 +18,8 @@
 			"@core/*": ["./core/*"],
 			"@firestone/shared/data-access/api-runner": ["libs/shared/data-access/api-runner/src/index.ts"],
 			"@firestone/shared/feature/overwolf": ["libs/shared/feature/overwolf/src/index.ts"],
-			"@firestone/shared/data-access/storage": ["libs/shared/data-access/storage/src/index.ts"]
+			"@firestone/shared/data-access/storage": ["libs/shared/data-access/storage/src/index.ts"],
+			"@firestone/shared/feature/preferences": ["libs/shared/feature/preferences/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

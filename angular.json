@@ -144,6 +144,31 @@
 				}
 			}
 		},
+		"shared-data-access-storage": {
+			"projectType": "library",
+			"root": "libs/shared/data-access/storage",
+			"sourceRoot": "libs/shared/data-access/storage/src",
+			"prefix": "lib",
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/shared/data-access/storage/src/**/*.ts",
+							"libs/shared/data-access/storage/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": ["coverage/libs/shared/data-access/storage"],
+					"options": {
+						"jestConfig": "libs/shared/data-access/storage/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
 		"shared-feature-overwolf": {
 			"projectType": "library",
 			"root": "libs/shared/feature/overwolf",
@@ -169,26 +194,26 @@
 				}
 			}
 		},
-		"shared-data-access-storage": {
+		"shared-feature-preferences": {
 			"projectType": "library",
-			"root": "libs/shared/data-access/storage",
-			"sourceRoot": "libs/shared/data-access/storage/src",
+			"root": "libs/shared/feature/preferences",
+			"sourceRoot": "libs/shared/feature/preferences/src",
 			"prefix": "lib",
 			"architect": {
 				"lint": {
 					"builder": "@nrwl/linter:eslint",
 					"options": {
 						"lintFilePatterns": [
-							"libs/shared/data-access/storage/src/**/*.ts",
-							"libs/shared/data-access/storage/src/**/*.html"
+							"libs/shared/feature/preferences/src/**/*.ts",
+							"libs/shared/feature/preferences/src/**/*.html"
 						]
 					}
 				},
 				"test": {
 					"builder": "@nrwl/jest:jest",
-					"outputs": ["coverage/libs/shared/data-access/storage"],
+					"outputs": ["coverage/libs/shared/feature/preferences"],
 					"options": {
-						"jestConfig": "libs/shared/data-access/storage/jest.config.js",
+						"jestConfig": "libs/shared/feature/preferences/jest.config.js",
 						"passWithNoTests": true
 					}
 				}
