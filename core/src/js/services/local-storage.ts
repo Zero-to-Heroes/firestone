@@ -1,1 +1,1 @@
-export { LocalStorageService } from '@core/../libs/shared/data-access/storage/src/index';
+export { LocalStorageService } from '@firestone/shared/data-access/storage';

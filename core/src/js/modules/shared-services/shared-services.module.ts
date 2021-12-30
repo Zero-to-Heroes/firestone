@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SharedFeatureOverwolfModule } from '@core/../libs/shared/feature/overwolf/src';
+import { SharedFeatureOverwolfModule } from '@firestone/shared/feature/overwolf';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';

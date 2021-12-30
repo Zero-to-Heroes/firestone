@@ -1,1 +1,1 @@
-export { ListenObject, OverwolfService } from '../../../../libs/shared/feature/overwolf/src/index';
+export { ListenObject, OverwolfService } from '@firestone/shared/feature/overwolf';

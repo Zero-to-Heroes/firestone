@@ -13,7 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedDataAccessStorageModule } from '@core/../libs/shared/data-access/storage/src';
+import { SharedDataAccessStorageModule } from '@firestone/shared/data-access/storage';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';

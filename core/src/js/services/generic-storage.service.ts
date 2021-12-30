@@ -1,1 +1,1 @@
-export { GenericStorageService } from '@core/../libs/shared/data-access/storage/src/index';
+export { GenericStorageService } from '@firestone/shared/data-access/storage';
