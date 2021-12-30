@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedFeatureOverwolfModule } from '@firestone/shared/feature/overwolf';
+import { SharedFeaturePreferencesModule } from '@firestone/shared/feature/preferences';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';
@@ -23,11 +24,10 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 import { MindVisionService } from '../../services/plugins/mind-vision/mind-vision.service';
 import { OwUtilsService } from '../../services/plugins/ow-utils.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 @NgModule({
-	imports: [BrowserModule, SharedFeatureOverwolfModule],
+	imports: [BrowserModule, SharedFeatureOverwolfModule, SharedFeaturePreferencesModule],
 	declarations: [],
 	entryComponents: [],
 	exports: [],
@@ -44,7 +44,6 @@ export class SharedServicesModule {
 				LogsUploaderService,
 				MemoryInspectionService,
 				OwNotificationsService,
-				PreferencesService,
 				S3FileUploadService,
 				SimpleIOService,
 
