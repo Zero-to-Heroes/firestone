@@ -22,7 +22,6 @@ import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { AngularResizedEventModule } from 'angular-resize-event';
-import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
@@ -259,7 +258,6 @@ import { MercenariesTeamListComponent } from '../../components/mercenaries/overl
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
-import { NotificationsComponent } from '../../components/notifications.component';
 import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
 import { BgsBattleSimulationWidgetWrapperComponent } from '../../components/overlays/bgs-battle-simulation-widget-wrapper.component';
 import { BgsBoardWidgetWrapperComponent } from '../../components/overlays/bgs-board-widget-wrapper.component';
@@ -495,7 +493,6 @@ const components = [
 	AppComponent,
 	MainWindowComponent,
 	LoadingComponent,
-	NotificationsComponent,
 	BattlegroundsComponent,
 	FullScreenOverlaysComponent,
 	FullScreenOverlaysClickthroughComponent,
@@ -535,7 +532,6 @@ const components = [
 		SharedModule,
 		ChartsModule,
 		NgxChartsModule,
-		SimpleNotificationsModule.forRoot(),
 		OverlayModule,
 		PerfectScrollbarModule,
 		ColiseumComponentsModule,

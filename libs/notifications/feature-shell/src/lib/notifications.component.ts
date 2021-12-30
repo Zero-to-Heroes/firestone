@@ -13,27 +13,26 @@ import {
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
 import { from, Observable, Subscription } from 'rxjs';
 import { concatMap, delayWhen, filter, map, pluck, tap, withLatestFrom } from 'rxjs/operators';
-import { DebugService } from '../services/debug.service';
-import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
-import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
-import { Message } from '../services/notifications.service';
-import { OverwolfService } from '../services/overwolf.service';
-import { PreferencesService } from '../services/preferences.service';
-import { ProcessingQueue } from '../services/processing-queue.service';
+import { ShowAchievementDetailsEvent } from '@core/src/js/services/mainwindow/store/events/achievements/show-achievement-details-event';
+import { ShowCardDetailsEvent } from '@core/src/js/services/mainwindow/store/events/collection/show-card-details-event';
+import { MainWindowStoreEvent } from '@core/src/js/services/mainwindow/store/events/main-window-store-event';
+import { Message } from '@core/src/js/services/notifications.service';
+import { OverwolfService } from '@core/src/js/services/overwolf.service';
+import { PreferencesService } from '@core/src/js/services/preferences.service';
+import { ProcessingQueue } from '@core/src/js/services/processing-queue.service';
 
 declare let amplitude;
 
 @Component({
 	selector: 'notifications',
 	styleUrls: [
-		'../../css/global/components-global.scss',
-		'../../css/component/notifications/notifications.component.scss',
-		'../../css/component/notifications/notifications-achievements.scss',
-		'../../css/component/notifications/notifications-decktracker.scss',
-		'../../css/component/notifications/notifications-replays.scss',
-		'../../css/component/notifications/notifications-general.scss',
-		'../../css/component/notifications/notifications-rewards.scss',
+		'../../../../../core/src/css/global/components-global.scss',
+		'../../../../../core/src/css/component/notifications/notifications.component.scss',
+		'../../../../../core/src/css/component/notifications/notifications-achievements.scss',
+		'../../../../../core/src/css/component/notifications/notifications-decktracker.scss',
+		'../../../../../core/src/css/component/notifications/notifications-replays.scss',
+		'../../../../../core/src/css/component/notifications/notifications-general.scss',
+		'../../../../../core/src/css/component/notifications/notifications-rewards.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
@@ -75,7 +74,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private notificationService: NotificationsService,
 		private cdr: ChangeDetectorRef,
-		private debugService: DebugService,
 		private ow: OverwolfService,
 		private elRef: ElementRef,
 		private prefs: PreferencesService,
@@ -105,6 +103,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async ngAfterViewInit() {
+		console.log('notifications component afterviewinit');
 		// this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
 			const messageObject: Message = JSON.parse(message.content);

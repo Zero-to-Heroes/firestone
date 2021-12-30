@@ -80,7 +80,7 @@
 				"mute": true
 			},
 			"NotificationsWindow": {
-				"file": "Files/notifications.html",
+				"file": "Files/notifications/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
