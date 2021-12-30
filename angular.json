@@ -128,7 +128,8 @@
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
-						"outputPath": "dist/apps/notifications",
+						"baseHref": "/Files/notifications/",
+						"outputPath": "core/dist/Files/notifications",
 						"index": "apps/notifications/src/index.html",
 						"main": "apps/notifications/src/main.ts",
 						"polyfills": "apps/notifications/src/polyfills.ts",
