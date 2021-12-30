@@ -13,8 +13,6 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedDataAccessApiRunnerModule } from '@firestone/shared/data-access/api-runner';
-import { SharedDataAccessStorageModule } from '@firestone/shared/data-access/storage';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -537,8 +535,6 @@ const components = [
 		ColiseumComponentsModule,
 		SharedDeckTrackerModule,
 		AngularResizedEventModule,
-		SharedDataAccessApiRunnerModule,
-		SharedDataAccessStorageModule,
 	],
 	declarations: [
 		...components,

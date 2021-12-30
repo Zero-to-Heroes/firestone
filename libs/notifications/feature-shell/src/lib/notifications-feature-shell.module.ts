@@ -13,5 +13,6 @@ import { NotificationsComponent } from './notifications.component';
 		SimpleNotificationsModule.forRoot(),
 	],
 	declarations: [NotificationsComponent],
+	exports: [NotificationsComponent],
 })
 export class NotificationsFeatureShellModule {}
