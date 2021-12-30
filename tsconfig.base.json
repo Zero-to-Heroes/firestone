@@ -16,6 +16,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@core/*": ["./core/*"],
+			"@firestone/notifications/feature-shell": ["libs/notifications/feature-shell/src/index.ts"],
 			"@firestone/shared/data-access/api-runner": ["libs/shared/data-access/api-runner/src/index.ts"],
 			"@firestone/shared/feature/overwolf": ["libs/shared/feature/overwolf/src/index.ts"],
 			"@firestone/shared/data-access/storage": ["libs/shared/data-access/storage/src/index.ts"],

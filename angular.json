@@ -119,6 +119,31 @@
 			"tags": [],
 			"implicitDependencies": ["firestone"]
 		},
+		"notifications-feature-shell": {
+			"projectType": "library",
+			"root": "libs/notifications/feature-shell",
+			"sourceRoot": "libs/notifications/feature-shell/src",
+			"prefix": "lib",
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": [
+							"libs/notifications/feature-shell/src/**/*.ts",
+							"libs/notifications/feature-shell/src/**/*.html"
+						]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": ["coverage/libs/notifications/feature-shell"],
+					"options": {
+						"jestConfig": "libs/notifications/feature-shell/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
 		"shared-data-access-api-runner": {
 			"projectType": "library",
 			"root": "libs/shared/data-access/api-runner",

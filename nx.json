@@ -22,6 +22,7 @@
 	},
 	"defaultProject": "firestone",
 	"projects": {
+		"notifications-feature-shell": { "tags": [] },
 		"shared-data-access-api-runner": { "tags": [] },
 		"shared-data-access-storage": { "tags": [] },
 		"shared-feature-overwolf": { "tags": [] },
