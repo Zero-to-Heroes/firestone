@@ -13,6 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedDataAccessApiRunnerModule } from '@firestone/shared/data-access/api-runner';
 import { SharedDataAccessStorageModule } from '@firestone/shared/data-access/storage';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
@@ -374,7 +375,6 @@ import { AchievementsNotificationService } from '../../services/achievement/achi
 import { RemoteAchievementsService } from '../../services/achievement/remote-achievements.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { AdService } from '../../services/ad.service';
-import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
@@ -539,9 +539,10 @@ const components = [
 		OverlayModule,
 		PerfectScrollbarModule,
 		ColiseumComponentsModule,
-		SharedDataAccessStorageModule,
 		SharedDeckTrackerModule,
 		AngularResizedEventModule,
+		SharedDataAccessApiRunnerModule,
+		SharedDataAccessStorageModule,
 	],
 	declarations: [
 		...components,
@@ -915,7 +916,6 @@ const components = [
 		StoreBootstrapService,
 		CollaboratorsService,
 		UserService,
-		ApiRunner,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

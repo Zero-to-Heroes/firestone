@@ -1,5 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { SharedDataAccessApiRunnerModule } from '@firestone/shared/data-access/api-runner';
+import { SharedDataAccessStorageModule } from '@firestone/shared/data-access/storage';
 import { SharedFeatureOverwolfModule } from '@firestone/shared/feature/overwolf';
 import { SharedFeaturePreferencesModule } from '@firestone/shared/feature/preferences';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
@@ -7,7 +9,6 @@ import { AchievementsRepository } from '../../services/achievement/achievements-
 import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
-import { ApiRunner } from '../../services/api-runner';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../services/collection/collection-storage.service';
@@ -16,7 +17,6 @@ import { DebugService } from '../../services/debug.service';
 import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
-import { GenericStorageService } from '../../services/generic-storage.service';
 import { HotkeyService } from '../../services/hotkey.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OwNotificationsService } from '../../services/notifications.service';
@@ -27,7 +27,13 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 @NgModule({
-	imports: [BrowserModule, SharedFeatureOverwolfModule, SharedFeaturePreferencesModule],
+	imports: [
+		BrowserModule,
+		SharedDataAccessApiRunnerModule,
+		SharedDataAccessStorageModule,
+		SharedFeatureOverwolfModule,
+		SharedFeaturePreferencesModule,
+	],
 	declarations: [],
 	entryComponents: [],
 	exports: [],
@@ -40,7 +46,6 @@ export class SharedServicesModule {
 				SetsService,
 				DebugService,
 				Events,
-				GenericStorageService,
 				LogsUploaderService,
 				MemoryInspectionService,
 				OwNotificationsService,
@@ -60,7 +65,6 @@ export class SharedServicesModule {
 				MindVisionService,
 				OwUtilsService,
 				HotkeyService,
-				ApiRunner,
 				CardsHighlightService,
 			],
 		};
