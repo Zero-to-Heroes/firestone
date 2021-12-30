@@ -220,7 +220,7 @@ export const getHeroPower = (heroCardId: string): string => {
 		case CardIds.MasterNguyen:
 			return CardIds.MasterNguyen_PowerOfTheStorm;
 		case CardIds.CarielRoame2:
-			return CardIds.ConvictionRank1_BlessedEnchantment2;
+			return CardIds.CarielRoame_ConvictionRank1;
 		case CardIds.Diablo:
 			return CardIds.Diablo_RealmOfTerror;
 		case CardIds.Sneed1:
