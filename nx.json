@@ -22,6 +22,8 @@
 	},
 	"defaultProject": "firestone",
 	"projects": {
+		"notifications": { "tags": [] },
+		"notifications-e2e": { "tags": [], "implicitDependencies": ["notifications"] },
 		"notifications-feature-shell": { "tags": [] },
 		"shared-data-access-api-runner": { "tags": [] },
 		"shared-data-access-storage": { "tags": [] },

@@ -119,6 +119,114 @@
 			"tags": [],
 			"implicitDependencies": ["firestone"]
 		},
+		"notifications": {
+			"projectType": "application",
+			"root": "apps/notifications",
+			"sourceRoot": "apps/notifications/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-devkit/build-angular:browser",
+					"options": {
+						"outputPath": "dist/apps/notifications",
+						"index": "apps/notifications/src/index.html",
+						"main": "apps/notifications/src/main.ts",
+						"polyfills": "apps/notifications/src/polyfills.ts",
+						"tsConfig": "apps/notifications/tsconfig.app.json",
+						"aot": true,
+						"assets": ["apps/notifications/src/favicon.ico", "apps/notifications/src/assets"],
+						"styles": ["apps/notifications/src/styles.css"],
+						"scripts": []
+					},
+					"configurations": {
+						"production": {
+							"fileReplacements": [
+								{
+									"replace": "apps/notifications/src/environments/environment.ts",
+									"with": "apps/notifications/src/environments/environment.prod.ts"
+								}
+							],
+							"optimization": true,
+							"outputHashing": "all",
+							"sourceMap": false,
+							"namedChunks": false,
+							"extractLicenses": true,
+							"vendorChunk": false,
+							"buildOptimizer": true,
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "2mb",
+									"maximumError": "5mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "6kb",
+									"maximumError": "10kb"
+								}
+							]
+						}
+					}
+				},
+				"serve": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"browserTarget": "notifications:build"
+					},
+					"configurations": {
+						"production": {
+							"browserTarget": "notifications:build:production"
+						}
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"browserTarget": "notifications:build"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/notifications/src/**/*.ts", "apps/notifications/src/**/*.html"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"outputs": ["coverage/apps/notifications"],
+					"options": {
+						"jestConfig": "apps/notifications/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
+		},
+		"notifications-e2e": {
+			"root": "apps/notifications-e2e",
+			"sourceRoot": "apps/notifications-e2e/src",
+			"projectType": "application",
+			"architect": {
+				"e2e": {
+					"builder": "@nrwl/cypress:cypress",
+					"options": {
+						"cypressConfig": "apps/notifications-e2e/cypress.json",
+						"tsConfig": "apps/notifications-e2e/tsconfig.e2e.json",
+						"devServerTarget": "notifications:serve"
+					},
+					"configurations": {
+						"production": {
+							"devServerTarget": "notifications:serve:production"
+						}
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/notifications-e2e/**/*.{js,ts}"]
+					}
+				}
+			}
+		},
 		"notifications-feature-shell": {
 			"projectType": "library",
 			"root": "libs/notifications/feature-shell",
@@ -252,7 +360,8 @@
 		"@nrwl/angular:application": {
 			"style": "css",
 			"linter": "eslint",
-			"unitTestRunner": "jest"
+			"unitTestRunner": "jest",
+			"e2eTestRunner": "cypress"
 		},
 		"@nrwl/angular:library": {
 			"style": "css",
