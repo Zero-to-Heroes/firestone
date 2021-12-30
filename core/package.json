@@ -25,7 +25,6 @@
 		"@sentry/browser": "^6.2.5",
 		"@sentry/integrations": "^6.2.5",
 		"angular-resize-event": "1.0.0",
-		"angular2-notifications": "9.0.0",
 		"aws-sdk": "^2.1030.0",
 		"chart.js": "^2.9.3",
 		"chartjs-plugin-datalabels": "^0.7.0",
