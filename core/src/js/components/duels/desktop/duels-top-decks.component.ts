@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -217,9 +217,10 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 			case 'all-time':
 				return true;
 			case 'last-patch':
+				// See bgs-ui-helper
 				return (
-					deck.buildNumber >= patch.number &&
-					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime()
+					deck.buildNumber >= patch.number ||
+					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
 				);
 			case 'past-seven':
 				return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);

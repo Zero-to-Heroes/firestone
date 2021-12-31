@@ -285,7 +285,11 @@ const isCorrectRunDate = (run: DuelsRun, timeFilter: DuelsTimeFilterType, patch:
 		case 'all-time':
 			return true;
 		case 'last-patch':
-			return run.buildNumberAtStart >= patch.number && run.creationTimestamp > new Date(patch.date).getTime();
+			// See bgs-ui-helper
+			return (
+				run.buildNumberAtStart >= patch.number ||
+				run.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+			);
 		case 'past-seven':
 			return new Date(run.creationTimestamp) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 		case 'past-three':

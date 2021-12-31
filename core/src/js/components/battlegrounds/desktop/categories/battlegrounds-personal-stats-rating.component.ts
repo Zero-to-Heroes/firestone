@@ -6,6 +6,7 @@ import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operator
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
+import { PatchInfo } from '../../../../models/patches';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
@@ -47,7 +48,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
-				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch?.number,
+				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
 			)
 			.pipe(
 				filter(
@@ -62,7 +63,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 							getMmrThreshold(mmrFilter <= 100 ? mmrFilter : 100, mmrPercentiles),
 							mmrGroupFilter,
 							currentBattlegroundsMetaPatch,
-						] as [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
+						] as [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
 				),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
 				map(([stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
@@ -78,7 +79,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 		timeFilter: BgsActiveTimeFilterType,
 		mmrFilter: number,
 		mmrGroupFilter: MmrGroupFilterType,
-		currentBattlegroundsMetaPatch: number,
+		currentBattlegroundsMetaPatch: PatchInfo,
 	): Value {
 		const data = [...stats].filter((stat) => +stat.playerRank >= mmrFilter).reverse();
 		if (!data.length) {
@@ -140,18 +141,18 @@ export class BattlegroundsPersonalStatsRatingComponent
 		}
 	}
 
-	private timeFilter(
-		stat: GameStat,
-		timeFilter: BgsActiveTimeFilterType,
-		currentBattlegroundsMetaPatch: number,
-	): boolean {
+	private timeFilter(stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: PatchInfo): boolean {
 		if (!timeFilter) {
 			return true;
 		}
 
 		switch (timeFilter) {
 			case 'last-patch':
-				return stat.buildNumber >= currentBattlegroundsMetaPatch;
+				// See bgs-ui-helper
+				return (
+					stat.buildNumber >= patch.number ||
+					stat.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+				);
 			case 'past-three':
 				return Date.now() - stat.creationTimestamp <= 3 * 24 * 60 * 60 * 1000;
 			case 'past-seven':
@@ -163,8 +164,8 @@ export class BattlegroundsPersonalStatsRatingComponent
 	}
 
 	private compare(
-		a: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
-		b: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
+		a: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
+		b: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
 	): boolean {
 		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
 			return false;

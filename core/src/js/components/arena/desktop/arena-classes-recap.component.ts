@@ -254,10 +254,11 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
+			// See bgs-ui-helper
 			case 'last-patch':
 				return (
-					firstMatch.buildNumber >= patch.number &&
-					firstMatch.creationTimestamp > new Date(patch.date).getTime()
+					firstMatch.buildNumber >= patch.number ||
+					firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
 				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;

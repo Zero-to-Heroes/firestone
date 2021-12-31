@@ -120,8 +120,10 @@ export class DecksStateBuilderService {
 				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 				return stat.creationTimestamp >= startOfMonthDate.getTime();
 			case 'last-patch':
+				// See bgs-ui-helper
 				return (
-					stat.buildNumber >= lastPatch.number && stat.creationTimestamp > new Date(lastPatch.date).getTime()
+					stat.buildNumber >= lastPatch.number ||
+					stat.creationTimestamp > new Date(lastPatch.date).getTime() + 24 * 60 * 60 * 1000
 				);
 			case 'past-30':
 				const past30Date = new Date(now - 30 * 24 * 60 * 60 * 1000);

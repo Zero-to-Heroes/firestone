@@ -29,7 +29,7 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType,
+	MercenariesStarterFilterType
 } from './mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';
@@ -409,17 +409,4 @@ export class Preferences {
 	readonly hearthstoneDecksSync: boolean = true;
 
 	readonly ftue: Ftue = new Ftue();
-
-	// Conversion for backwards compability. This can be removed after a while
-	public static updateTimeFilter(timeFilter: BgsActiveTimeFilterType): BgsActiveTimeFilterType {
-		switch (timeFilter) {
-			case 'all-time':
-			case 'last-patch':
-			case 'past-three':
-			case 'past-seven':
-				return timeFilter;
-			default:
-				return 'all-time';
-		}
-	}
 }

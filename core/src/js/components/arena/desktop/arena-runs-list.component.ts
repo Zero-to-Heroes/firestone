@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';
@@ -172,9 +172,10 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
 			case 'last-patch':
+				// See bgs-ui-helper
 				return (
-					firstMatch.buildNumber >= patch.number &&
-					firstMatch.creationTimestamp > new Date(patch.date).getTime()
+					firstMatch.buildNumber >= patch.number ||
+					firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
 				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;

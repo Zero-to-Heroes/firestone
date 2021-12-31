@@ -6,7 +6,6 @@ import { BgsHeroSortFilterType } from '../../models/mainwindow/battlegrounds/bgs
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
-import { Preferences } from '../../models/preferences';
 import { getHeroPower, normalizeHeroCardId } from '../battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../cards-facade.service';
 import { cutNumber, groupByFunction, sumOnArray } from '../utils';
@@ -23,20 +22,20 @@ export const buildHeroStats = (
 	if (!globalStats.heroStats?.length) {
 		return [];
 	}
-	const updatedTimeFilter: BgsActiveTimeFilterType = Preferences.updateTimeFilter(timeFilter);
 	// TODO: add tribe filters
 	const filteredGlobalStats = globalStats.heroStats
-		.filter((stat) => stat.date === updatedTimeFilter)
+		.filter((stat) => stat.date === timeFilter)
 		// Backward compatilibity
 		.filter((stat) => stat.mmrPercentile === rankFilter);
 	const groupedByHero = groupByFunction((stat: BgsGlobalHeroStat2) => stat.cardId)(filteredGlobalStats);
 	const totalMatches = sumOnArray(filteredGlobalStats, (stat) => stat.totalMatches);
 	const mmrThreshold: number = getMmrThreshold(rankFilter, globalStats.mmrPercentiles);
-	const bgMatches = filterBgsMatchStats(playerMatches, updatedTimeFilter, mmrThreshold, patch);
+	const bgMatches = filterBgsMatchStats(playerMatches, timeFilter, mmrThreshold, patch);
 	const heroStats: readonly BgsHeroStat[] = Object.keys(groupedByHero).map((heroCardId) =>
 		buildHeroStat(heroCardId, groupedByHero[heroCardId], bgMatches, totalMatches, allCards),
 	);
-	return [...heroStats].sort(buildSortingFunction(heroSortFilter));
+	const result = [...heroStats].sort(buildSortingFunction(heroSortFilter));
+	return result;
 };
 
 const filterBgsMatchStats = (
@@ -46,7 +45,7 @@ const filterBgsMatchStats = (
 	currentBattlegroundsMetaPatch: PatchInfo,
 ): readonly GameStat[] => {
 	return bgsMatchStats
-		.filter((stat) => filterType(stat, Preferences.updateTimeFilter(timeFilter), currentBattlegroundsMetaPatch))
+		.filter((stat) => filterType(stat, timeFilter, currentBattlegroundsMetaPatch))
 		.filter((stat) => filterRank(stat, mmrThreshold));
 };
 
@@ -317,16 +316,20 @@ const buildSortingFunction = (heroSortFilter: BgsHeroSortFilterType): ((a: BgsHe
 	}
 };
 
-const filterType = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, currentBattlegroundsMetaPatch: PatchInfo) => {
+const filterType = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: PatchInfo) => {
 	if (!timeFilter) {
 		return true;
 	}
 
 	switch (timeFilter) {
 		case 'last-patch':
-			return (
-				stat.buildNumber >= currentBattlegroundsMetaPatch.number &&
-				stat.creationTimestamp > new Date(currentBattlegroundsMetaPatch.date).getTime()
+			// The issue here is that sometimes the patch number in the client is not the official patch number
+			// (for some reason, the client stil logs the logs patch number)
+			// So using the patch number as a reference doesn't really work anymore
+			// Since the patch itself usually goes live in the evening, maybe we can just use the day after
+			// as the start for the patch period
+			return (stat.buildNumber >= patch.number ||
+				stat.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
 			);
 		case 'past-three':
 			return Date.now() - stat.creationTimestamp <= 3 * 24 * 60 * 60 * 1000;
