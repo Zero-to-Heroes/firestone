@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { PackInfo } from '../../models/collection/pack-info';
 import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -56,13 +57,13 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<ng-container *ngIf="{ bestPacks: bestPacks$ | async } as value">
 				<div
 					class="header best-packs-header"
-					*ngIf="bestPacks?.length"
+					*ngIf="value.bestPacks?.length"
 					helpTooltip="Best packs you opened with Firestone running"
 				>
-					Best {{ bestPacks.length }} opened packs
+					Best {{ value.bestPacks.length }} opened packs
 				</div>
-				<div class="best-packs-container" *ngIf="bestPacks?.length">
-					<div class="best-pack" *ngFor="let pack of bestPacks">
+				<div class="best-packs-container" *ngIf="value.bestPacks?.length">
+					<div class="best-pack" *ngFor="let pack of value.bestPacks">
 						<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
 						<pack-display class="display" [pack]="pack"></pack-display>
 					</div>
