@@ -8,7 +8,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -209,6 +209,12 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
 			if (!taskListEl) {
+				return;
+			}
+
+			const taskEls = this.el.nativeElement.querySelectorAll('.task');
+			if (taskEls?.length != this._tasks?.length) {
+				setTimeout(() => this.updateTaskListBottomPx(), 100);
 				return;
 			}
 
