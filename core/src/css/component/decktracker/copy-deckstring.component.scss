@@ -9,6 +9,8 @@
 .copy-deckstring {
 	--icon-color: var(--color-6);
 	--icon-color-secondary: var(--color-1);
+	max-width: 20px;
+	max-height: 20px;
 
 	svg {
 		height: 16px;
