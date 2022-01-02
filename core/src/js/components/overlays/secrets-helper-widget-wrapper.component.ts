@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
@@ -34,7 +34,7 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth / 2;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.05;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateSecretsHelperPosition(left, top);
-	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
+	protected positionExtractor = async (prefs: Preferences) => prefs.secretsHelperPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
 
