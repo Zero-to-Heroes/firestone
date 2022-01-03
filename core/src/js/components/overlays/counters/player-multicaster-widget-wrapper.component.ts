@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2
+	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';

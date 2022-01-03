@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2
+	Renderer2,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';

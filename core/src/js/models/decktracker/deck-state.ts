@@ -228,7 +228,9 @@ export class DeckState {
 			return true;
 		}
 
-		return this.getAllCardsInDeck().filter((card) => card.cardId).some((card) => card.cardId === CardIds.ElwynnBoar);
+		return this.getAllCardsInDeck()
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.ElwynnBoar);
 	}
 
 	public hasBolner() {

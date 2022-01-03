@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';

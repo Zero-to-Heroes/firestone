@@ -328,7 +328,8 @@ const filterType = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: 
 			// So using the patch number as a reference doesn't really work anymore
 			// Since the patch itself usually goes live in the evening, maybe we can just use the day after
 			// as the start for the patch period
-			return (stat.buildNumber >= patch.number ||
+			return (
+				stat.buildNumber >= patch.number ||
 				stat.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
 			);
 		case 'past-three':

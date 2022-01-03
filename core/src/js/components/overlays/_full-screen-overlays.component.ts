@@ -6,7 +6,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation
+	ViewEncapsulation,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';

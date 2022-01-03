@@ -29,7 +29,7 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType
+	MercenariesStarterFilterType,
 } from './mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';
