@@ -13,9 +13,10 @@
 .image {
 	width: 100%;
 	height: 100%;
-	// clip-path: ellipse(50% 50% at 50% 50%);
-	transform: scale(1.15);
-	clip-path: ellipse(42% 42% at 50% 50%);
+	transform: scale(1.25);
+	clip-path: ellipse(39% 39% at 50% 50%);
+	position: relative;
+	left: -1%;
 }
 
 .frame {
