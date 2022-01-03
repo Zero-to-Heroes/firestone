@@ -6,7 +6,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation,
+	ViewEncapsulation
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
@@ -65,6 +65,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
 			<player-bolner-widget-wrapper></player-bolner-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
+			<player-multicaster-widget-wrapper></player-multicaster-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>

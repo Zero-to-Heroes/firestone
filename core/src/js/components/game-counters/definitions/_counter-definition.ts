@@ -21,4 +21,5 @@ export type CounterType =
 	| 'libram'
 	| 'bolner'
 	| 'hero-power-damage'
+	| 'multicaster'
 	| 'elwynn-boar';

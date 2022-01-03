@@ -229,6 +229,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerMulticasterCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerMulticasterCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerHeroPowerDamageCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerHeroPowerDamageCounterWidgetPosition: { left: number; top: number };

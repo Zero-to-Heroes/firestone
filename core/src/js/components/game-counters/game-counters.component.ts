@@ -21,6 +21,7 @@ import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damage-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
+import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
@@ -76,10 +77,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)
 				.pipe(
-					tap((info) => console.debug('info', info)),
 					filter(([state]) => !!state),
 					map(([state]) => this.buildDefinition(state, this.activeCounter, this.side)),
-					tap((info) => console.debug('def', info)),
 					distinctUntilChanged(),
 					tap((filter) =>
 						setTimeout(() => {
@@ -138,6 +137,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElwynnBoarCounterDefinition.create(gameState, side);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
+			case 'multicaster':
+				return MulticasterCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'hero-power-damage':
 				return HeroPowerDamageCounterDefinition.create(gameState, side);
 			default:

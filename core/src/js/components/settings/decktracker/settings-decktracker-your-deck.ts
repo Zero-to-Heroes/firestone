@@ -138,6 +138,11 @@ import { Knob } from '../preference-slider.component';
 						label="Bolner Hammerbeak"
 						tooltip="When you have Bolner Hammerbeak in hand, show the first Battlecry card that was played this turn, if any"
 					></preference-toggle>
+					<preference-toggle
+						field="playerMulticasterCounter"
+						label="Multicaster"
+						tooltip="Show the spell schools of which you played a spell this game"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

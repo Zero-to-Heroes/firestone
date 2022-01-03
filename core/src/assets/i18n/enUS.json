@@ -26,6 +26,15 @@
 				"diamond": "Diamond",
 				"legend": "Legend"
 			}
+		},
+		"spellschool": {
+			"arcane": "Arcane",
+			"fire": "Fire",
+			"frost": "Frost",
+			"nature": "Nature",
+			"holy": "Holy",
+			"shadow": "Shadow",
+			"fel": "Fel"
 		}
 	},
 	"app": {
@@ -185,7 +194,12 @@
 			"deck-winrate-vs-class": "vs {{value}}",
 			"deck-winrate-vs-class-tooltip": "This deck's winrate in ranked against {{opponent}} since {{date}}"
 		},
-
+		"counter": {
+			"multicaster": {
+				"player": "You will draw {{cardsTotal}} cards from spell schools: {{schools}}",
+				"opponent": "Your opponent will draw {{cardsTotal}} cards from spell schools: {{schools}}"
+			}
+		},
 		"card-burned": "Card burned",
 		"card-transformed": "Card transformed",
 		"card-discarded": "Card discarded",
