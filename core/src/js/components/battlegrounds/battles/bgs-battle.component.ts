@@ -37,7 +37,11 @@ declare let amplitude;
 	template: `
 		<div class="bgs-battle {{ additionalClass }}" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
 			<div class="turn-label" *ngIf="turnNumber">
-				<div class="turn">Turn {{ turnNumber }}</div>
+				<div
+					class="turn"
+					[owTranslate]="'battlegrounds.battle.turn'"
+					[translateParams]="{ value: turnNumber }"
+				></div>
 				<div class="result {{ actualResult }}" *ngIf="actualResult">{{ actualResult }}</div>
 			</div>
 			<div class="battle-content">
@@ -58,16 +62,16 @@ declare let amplitude;
 						(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
 					></bgs-battle-side>
-					<div class="versus" *ngIf="!fullScreenMode">VS</div>
+					<div class="versus" *ngIf="!fullScreenMode" [owTranslate]="'battlegrounds.sim.versus'"></div>
 					<div class="simulations" *ngIf="fullScreenMode">
 						<div class="controls">
 							<div
 								class="button simulate"
 								(click)="simulateNewBattle()"
 								[helpTooltip]="tooltip"
-								[ngClass]="{ 'disabled': !isPremium }"
+								[owTranslate]="'battlegrounds.sim.simulate-button'"
 							>
-								{{ isPremium ? 'Simulate' : 'Subscribe' }}
+								Simulate
 							</div>
 						</div>
 						<div class="result new">
@@ -91,6 +95,7 @@ declare let amplitude;
 						(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
 					></bgs-battle-side>
 				</div>
+				<!-- TODO: translate -->
 				<div class="simulations" *ngIf="!fullScreenMode">
 					<div class="result actual" *ngIf="!hideActualBattle">
 						<div class="label">Actual</div>

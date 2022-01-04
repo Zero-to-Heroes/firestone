@@ -161,7 +161,8 @@
 				"winrate-first": "Winrate (first)",
 				"winrate-coin": "Winrate (coin)"
 			}
-		}
+		},
+		"battlegrounds": {}
 	},
 	"decktracker": {
 		"zones": {
@@ -208,6 +209,21 @@
 		"gift-created-by-multiple-cards": "Created by <br/> multiple entities"
 	},
 	"battlegrounds": {
+		"battle": {
+			"turn": "Turn {{value}}",
+			"result": {
+				"won": "won",
+				"tied": "tied",
+				"lost": "lost"
+			}
+		},
+		"sim": {
+			"add-minion-button-tooltip": "Click to add a minion",
+			"update-minion-button-tooltip": "Update minion",
+			"remove-minion-button-tooltip": "Remove minion",
+			"versus": "VS",
+			"simulate-button": "Simulate"
+		},
 		"hero-stats": {
 			"avg-position-label": "Average position:",
 			"avg-position-tooltip": "Average final position",

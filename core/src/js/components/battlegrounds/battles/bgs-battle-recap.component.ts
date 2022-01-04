@@ -6,6 +6,7 @@ import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face
 import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { defaultStartingHp } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
 declare let amplitude;
@@ -20,7 +21,11 @@ declare let amplitude;
 	template: `
 		<div class="bgs-battle-recap" [ngClass]="{ 'selectable': selectable }">
 			<div class="turn-label" *ngIf="turnNumber">
-				<div class="turn">Turn {{ turnNumber }}</div>
+				<div
+					class="turn"
+					[owTranslate]="'battlegrounds.battle.turn'"
+					[translateParams]="{ value: turnNumber }"
+				></div>
 				<div class="result {{ result }}" *ngIf="result">{{ result }}</div>
 			</div>
 			<div class="battle-content">
@@ -85,7 +90,7 @@ export class BgsBattleRecapComponent {
 		}
 
 		this.turnNumber = value.turn;
-		this.result = value.result;
+		this.result = this.i18n.translateString(`battlegrounds.battle.result.${value.result}`);
 
 		this.playerHeroCardId = value.playerCardId;
 		this.playerHealth = value.playerHpLeft;
@@ -125,5 +130,5 @@ export class BgsBattleRecapComponent {
 	opponentTavernTier: number;
 	opponentEntities: readonly Entity[];
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 }

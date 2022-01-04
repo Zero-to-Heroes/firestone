@@ -70,20 +70,21 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 						[useUpdateIcon]="true"
 						(click)="updateMinion(entity, i)"
 						*ngIf="closeOnMinion"
-						helpTooltip="Update minion"
+						[helpTooltip]="'battlegrounds.sim.update-minion-button-tooltip' | owTranslate"
 					></bgs-plus-button>
 					<bgs-minus-button
 						class="button remove"
 						(click)="removeMinion(entity, i)"
 						*ngIf="closeOnMinion"
 						helpTooltip="Remove minion"
+						[helpTooltip]="'battlegrounds.sim.remove-minion-button-tooltip' | owTranslate"
 					></bgs-minus-button>
 				</div>
 				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd">
 					<bgs-plus-button
 						class="change-icon"
 						(click)="addMinion()"
-						helpTooltip="Click to add a minion"
+						[helpTooltip]="'battlegrounds.sim.add-minion-button-tooltip' | owTranslate"
 					></bgs-plus-button>
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
@@ -139,17 +140,8 @@ export class BgsBattleSideComponent {
 		const movedElement: Entity = event.item.data;
 		const movedElementNewIndex = event.container.data;
 		const entitiesWithoutMovedElement: Entity[] = this.entities.filter((entity) => entity.id !== movedElement.id);
-		console.debug('preparing to drop', this.entities, entitiesWithoutMovedElement);
 		entitiesWithoutMovedElement.splice(movedElementNewIndex, 0, movedElement);
 		this.entities = entitiesWithoutMovedElement;
-		console.debug(
-			'entities',
-			this.entities,
-			movedElement,
-			movedElementNewIndex,
-			entitiesWithoutMovedElement,
-			event,
-		);
 		this.entitiesUpdated.next(this.entities);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -161,25 +153,20 @@ export class BgsBattleSideComponent {
 	}
 
 	onHeroPowerClick() {
-		console.debug('hero power click');
 		this.heroPowerChangeRequested.next();
 	}
 
 	addMinion() {
-		console.debug('adding', this.allowClickToAdd);
 		this.addMinionRequested.next(null);
 	}
 
 	updateMinion(entity: Entity, index: number) {
-		console.debug('updating', entity);
 		this.updateMinionRequested.next({
-			// entity: entity,
 			index: index,
 		});
 	}
 
 	removeMinion(entity: Entity, index: number) {
-		console.debug('clicked', entity);
 		this.removeMinionRequested.next({
 			index: index,
 		});
@@ -192,13 +179,11 @@ export class BgsBattleSideComponent {
 
 		this.heroCardId = this._player.player?.cardId;
 		this.heroPowerCardId = this._player.player?.heroPowerId;
-		console.debug('heroCardId', this.heroCardId, this._player);
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
-		//console.debug('built entities', this.entities, this._player.board);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
