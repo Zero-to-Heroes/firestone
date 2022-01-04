@@ -55,7 +55,7 @@ export class DecktrackerDeckSortDropdownComponent
 	ngAfterContentInit() {
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.decktracker.filters?.sort,
+				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
 				([main, nav]) => main.decktracker.patch,
 				([main, nav]) => nav.navigationDecktracker.currentView,
 			)

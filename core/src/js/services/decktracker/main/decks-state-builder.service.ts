@@ -4,7 +4,6 @@ import { GameFormat } from '@firestone-hs/reference-data';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
-import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -34,16 +33,16 @@ export class DecksStateBuilderService {
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
-		const decks: readonly DeckSummary[] = deckstrings
-			.map((deckstring) =>
-				this.buildDeckSummary(
-					deckstring,
-					this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch),
-					prefs,
-					statsByDeck[deckstring][0],
-				),
-			)
-			.sort(this.getSortFunction(filters.sort));
+		const decks: readonly DeckSummary[] = deckstrings.map((deckstring) =>
+			this.buildDeckSummary(
+				deckstring,
+				this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch),
+				prefs,
+				statsByDeck[deckstring][0],
+			),
+		);
+
+		// .sort(this.getSortFunction(filters.sort));
 
 		return decks;
 	}
@@ -86,32 +85,32 @@ export class DecksStateBuilderService {
 			);
 	}
 
-	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
-		switch (sort) {
-			case 'games-played':
-				return (a: DeckSummary, b: DeckSummary) => {
-					if (a.totalGames <= b.totalGames) {
-						return 1;
-					}
-					return -1;
-				};
-			case 'winrate':
-				return (a: DeckSummary, b: DeckSummary) => {
-					if (a.winRatePercentage <= b.winRatePercentage) {
-						return 1;
-					}
-					return -1;
-				};
-			case 'last-played':
-			default:
-				return (a: DeckSummary, b: DeckSummary) => {
-					if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
-						return 1;
-					}
-					return -1;
-				};
-		}
-	}
+	// private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
+	// 	switch (sort) {
+	// 		case 'games-played':
+	// 			return (a: DeckSummary, b: DeckSummary) => {
+	// 				if (a.totalGames <= b.totalGames) {
+	// 					return 1;
+	// 				}
+	// 				return -1;
+	// 			};
+	// 		case 'winrate':
+	// 			return (a: DeckSummary, b: DeckSummary) => {
+	// 				if (a.winRatePercentage <= b.winRatePercentage) {
+	// 					return 1;
+	// 				}
+	// 				return -1;
+	// 			};
+	// 		case 'last-played':
+	// 		default:
+	// 			return (a: DeckSummary, b: DeckSummary) => {
+	// 				if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
+	// 					return 1;
+	// 				}
+	// 				return -1;
+	// 			};
+	// 	}
+	// }
 
 	public static isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType, lastPatch: PatchInfo): boolean {
 		const now = Date.now();

@@ -1,5 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -41,7 +43,43 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 
 	ngAfterContentInit() {
 		this.decks$ = this.store
-			.listen$(([main, nav, prefs]) => main.decktracker.decks)
-			.pipe(this.mapData(([decks]) => decks?.filter((deck) => deck.totalGames > 0) ?? []));
+			.listen$(
+				([main, nav, prefs]) => main.decktracker.decks,
+				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
+			)
+			.pipe(
+				tap((info) => console.debug('updated filter', info)),
+				this.mapData(([decks, sort]) =>
+					(decks?.filter((deck) => deck.totalGames > 0) ?? []).sort(this.getSortFunction(sort)),
+				),
+				tap((info) => console.debug('after updated filter', info)),
+			);
+	}
+
+	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
+		switch (sort) {
+			case 'games-played':
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.totalGames <= b.totalGames) {
+						return 1;
+					}
+					return -1;
+				};
+			case 'winrate':
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.winRatePercentage <= b.winRatePercentage) {
+						return 1;
+					}
+					return -1;
+				};
+			case 'last-played':
+			default:
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
+						return 1;
+					}
+					return -1;
+				};
+		}
 	}
 }
