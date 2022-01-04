@@ -402,7 +402,11 @@ export const getAchievementsForHero = (
 	}
 
 	const searchName = `as ${heroName}`;
-	return (heroAchievements ?? []).filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
+	const result = (heroAchievements ?? []).filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
+	if (!result?.length) {
+		console.warn('Could not load achievements for hero', heroCardId, searchName, heroAchievements);
+	}
+	return result;
 };
 
 // Because inconsistencies

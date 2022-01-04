@@ -360,7 +360,7 @@ export class AppBootstrapService {
 	}
 
 	private async showFullScreenOverlaysWindow() {
-		console.log('[bootstrap] ready to show full screen overlays window');
+		// console.log('[bootstrap] ready to show full screen overlays window');
 		const overlaysWindow = await this.ow.obtainDeclaredWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
 		this.ow.restoreWindow(overlaysWindow.id);
 		const overlaysClickthroughWindow = await this.ow.obtainDeclaredWindow(

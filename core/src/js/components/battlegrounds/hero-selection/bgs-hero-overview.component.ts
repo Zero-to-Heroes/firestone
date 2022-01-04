@@ -94,6 +94,7 @@ export class BgsHeroOverviewComponent {
 		}
 
 		this.achievementsToDisplay = value
+			.filter((ach) => ach)
 			.map((ach) => ach.completionSteps)
 			.reduce((a, b) => a.concat(b), [])
 			.filter((step) => step)
@@ -111,6 +112,9 @@ export class BgsHeroOverviewComponent {
 				return 0;
 			})
 			.slice(0, 4);
+		if (!this.achievementsToDisplay?.length) {
+			console.warn('could not find any achievements to display', value?.length, value);
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
