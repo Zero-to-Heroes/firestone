@@ -32,15 +32,15 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.4.2',
+		version: '8.4.9',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		There are still some issues here and there with mercenaries (the replays don't show up immediately for instance, the replay viewer should probably be deactivated for Mercenaries games, etc.), and all of these will be fixed over the coming days. Have fun!
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					I just wanted to let you know that you're awesome. Keep it up!
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -79,6 +79,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a bug where Fish of N'Zoth and Snake would appear in the minions list.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a bug where filtering for "Last Patch" would not work.`,
+							},
+							{
+								type: 'ui',
+								text: `Fix image for Cariel's hero power.`,
+							},
 						],
 					},
 					{
@@ -86,11 +94,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add card highlights for Oracle of Elune and Razormane Battleguard.`,
+								text: `Add card highlights for Oracle of Elune, Felgorger and Razormane Battleguard.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a counter for Multicaster.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the C'Thun counter would not increment.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a bug where filtering for "Last Patch" would not work.`,
+							},
+							{
+								type: 'ui',
+								text: `Fix a white border sometimes showing in some counters (like Mordresh).`,
 							},
 						],
 					},
@@ -118,6 +138,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a visual bug where Maestra games would not be displayed with the correct class until restarting the app.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a bug where the "best packs" section was missing.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix pack images in pack history.`,
 							},
 						],
 					},

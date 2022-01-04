@@ -12,10 +12,11 @@ Just ping me (@sebastientromp) [on Discord](https://discord.gg/FhEHn8w).
 
 # How to install new releases
 
--   Install the version from https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&app_channel=beta.This will let you benefit from auto-updates for beta builds.
+-   Install the version from https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&app_channel=beta. This will let you benefit from auto-updates for beta builds.
 
 ## The manual way (no auto updates)
 
+-   Please consider using the method above instead, as I don't publish all intermediate beta versions on Github.
 -   First you need to install the official release at least once (you can't install the beta if you have never installed the official Firestone app). You can download it from there: https://www.firestoneapp.com
 -   Download the latest release from https://github.com/Zero-to-Heroes/firestone/releases (or, more likely, I will provide you with a direct link to the release to download). You're looking to download the `.opk` file, which is a zipped release that can be installed by Overwolf.
 -   Double click on the downloaded .opk file, and follow the instructions
