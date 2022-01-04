@@ -76,7 +76,7 @@
 					"legend": "Legend"
 				},
 				"rank-filter": {
-					"all": "All",
+					"all": "All ranks",
 					"silver": "Silver+",
 					"gold": "Gold+",
 					"platinum": "Platinum+",
@@ -154,7 +154,7 @@
 			},
 			"stats": {
 				"total-games-played": "Total games played",
-				"total-times-played": "Total time played",
+				"total-time-played": "Total time played",
 				"turns-to-win": "Turns to win",
 				"turns-to-lose": "Turns to lose",
 				"winrate": "Winrate",
