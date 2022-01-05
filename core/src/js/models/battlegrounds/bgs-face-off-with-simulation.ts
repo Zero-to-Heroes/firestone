@@ -3,7 +3,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { captureEvent } from '@sentry/browser';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
-import { uuid } from '../../services/utils';
+import { NonFunctionProperties, uuid } from '../../services/utils';
 import { BattleInfoMessage } from './battle-info-message.type';
 import { BgsGame } from './bgs-game';
 
@@ -22,7 +22,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		return Object.assign(new BgsFaceOffWithSimulation(), { id: uuid() }, base);
 	}
 
-	public update(base: BgsFaceOff): BgsFaceOffWithSimulation {
+	public update(base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>): BgsFaceOffWithSimulation {
 		return Object.assign(new BgsFaceOffWithSimulation(), this, base);
 	}
 

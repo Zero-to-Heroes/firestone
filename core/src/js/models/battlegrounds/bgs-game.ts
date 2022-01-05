@@ -110,25 +110,45 @@ export class BgsGame {
 			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);
 		console.debug('[bgs-next-opponent] updated face-offs', updatedFaceOffs, this.faceOffs);
+		const cleanedFaceOffs = this.removeOldSimulationDetails(updatedFaceOffs);
+		console.debug('[bgs-next-opponent] cleaned face-offs', cleanedFaceOffs);
 		return this.update({
-			faceOffs: updatedFaceOffs,
+			faceOffs: cleanedFaceOffs,
 		} as BgsGame);
 	}
 
-	// public updateActualBattleResult(result: string): BgsGame {
-	// 	const newBattleResultHistory: readonly BattleResultHistory[] = [
-	// 		...(this.battleResultHistory || []),
-	// 		{
-	// 			turn: this.currentTurn,
-	// 			simulationResult: this.battleResult,
-	// 			actualResult: result,
-	// 		},
-	// 	] as readonly BattleResultHistory[];
-	// 	// console.warn('updatedBattleHistory', result, this.battleResult, this.battleResultHistory);
-	// 	return Object.assign(new BgsGame(), this, {
-	// 		battleResultHistory: newBattleResultHistory,
-	// 	} as BgsGame);
-	// }
+	// Only include sim samples for the last game to reduce the memory footprint
+	private removeOldSimulationDetails(
+		faceOffs: readonly BgsFaceOffWithSimulation[],
+	): readonly BgsFaceOffWithSimulation[] {
+		if (!faceOffs?.length) {
+			return [];
+		}
+		let hasSamples = false;
+		const reversed = [...faceOffs].reverse();
+		const result = [];
+		for (const faceOff of reversed) {
+			result.push(
+				!hasSamples
+					? faceOff
+					: faceOff.update({
+							battleResult: {
+								...faceOff.battleResult,
+								outcomeSamples: undefined,
+							},
+					  }),
+			);
+
+			if (
+				!!faceOff.battleResult?.outcomeSamples?.lost?.length ||
+				!!faceOff.battleResult?.outcomeSamples?.won?.length ||
+				!!faceOff.battleResult?.outcomeSamples?.tied?.length
+			) {
+				hasSamples = true;
+			}
+		}
+		return result.reverse();
+	}
 
 	// Not all players finish their battles at the same time. So you might still be in battle, but
 	// another player might have already gone back to the tavern and levelled up for instance
