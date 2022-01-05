@@ -32,7 +32,7 @@ export class PlayerHeroPowerDamageWidgetWrapperComponent
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
-		this.activeCounter = 'hero-power-damage';
+		this.activeCounter = 'heroPowerDamage';
 	}
 
 	ngAfterContentInit(): void {

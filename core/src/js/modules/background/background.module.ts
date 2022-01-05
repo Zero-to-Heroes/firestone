@@ -271,12 +271,14 @@ import { OpponentCthunWidgetWrapperComponent } from '../../components/overlays/c
 import { OpponentElwynnBoarWidgetWrapperComponent } from '../../components/overlays/counters/opponent-elwynn-boar-widget-wrapper.component';
 import { OpponentFatigueWidgetWrapperComponent } from '../../components/overlays/counters/opponent-fatigue-widget-wrapper.component';
 import { OpponentGalakrondWidgetWrapperComponent } from '../../components/overlays/counters/opponent-galakrond-widget-wrapper.component';
+import { OpponentHeroPowerDamageWidgetWrapperComponent } from '../../components/overlays/counters/opponent-hero-power-damage-widget-wrapper.component';
 import { OpponentJadeWidgetWrapperComponent } from '../../components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentLibramWidgetWrapperComponent } from '../../components/overlays/counters/opponent-libram-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from '../../components/overlays/counters/opponent-pogo-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-watchpost-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBolnerWidgetWrapperComponent } from '../../components/overlays/counters/player-bolner-widget-wrapper.component';
+import { PlayerBrilliantMacawWidgetWrapperComponent } from '../../components/overlays/counters/player-brilliant-macaw-widget-wrapper.component';
 import { PlayerCthunWidgetWrapperComponent } from '../../components/overlays/counters/player-cthun-widget-wrapper.component';
 import { PlayerElementalWidgetWrapperComponent } from '../../components/overlays/counters/player-elemental-widget-wrapper.component';
 import { PlayerElwynnBoarWidgetWrapperComponent } from '../../components/overlays/counters/player-elwynn-boar-widget-wrapper.component';
@@ -832,6 +834,7 @@ const components = [
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
+		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,
@@ -840,6 +843,7 @@ const components = [
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
+		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentLibramWidgetWrapperComponent,

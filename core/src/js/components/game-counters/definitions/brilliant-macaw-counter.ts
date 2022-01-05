@@ -5,9 +5,9 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
-export class BolnerHammerbeakIndicator implements CounterDefinition {
-	readonly type = 'bolner';
-	readonly value: number;
+export class BrilliantMacawCounterDefinition implements CounterDefinition {
+	readonly type = 'brilliantMacaw';
+	readonly value: number | string;
 	readonly valueImg: string;
 	readonly image: string;
 	readonly cssClass: string;
@@ -19,24 +19,29 @@ export class BolnerHammerbeakIndicator implements CounterDefinition {
 		side: string,
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
-	): BolnerHammerbeakIndicator {
+	): BrilliantMacawCounterDefinition {
+		console.debug('building def for macaw', gameState);
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
 		}
 
-		const firstBattlecry: DeckCard = deck.firstBattlecryPlayedThisTurn(allCards);
-		if (!firstBattlecry) {
+		console.debug('getting last battlecry', deck);
+		const lastBattlecry: DeckCard = deck.lastBattlecryPlayedForMacaw(allCards);
+		if (!lastBattlecry) {
 			return null;
 		}
-
+		console.debug('got last battlecry', lastBattlecry);
+		const tooltip = i18n.translateString(`decktracker.counter.brilliant-macaw.${side}`, {
+			value: lastBattlecry.cardName,
+		});
 		return {
-			type: 'bolner',
+			type: 'brilliantMacaw',
 			value: null,
-			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.BolnerHammerbeak}.jpg`,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${firstBattlecry.cardId}.jpg`,
-			cssClass: 'bolner-counter',
-			tooltip: `${i18n.getCardName(firstBattlecry.cardId)} was the first battlecry card played this turn'`,
+			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.BrilliantMacaw}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastBattlecry.cardId}.jpg`,
+			cssClass: 'brilliant-macaw-counter',
+			tooltip: tooltip,
 			standardCounter: true,
 		};
 	}

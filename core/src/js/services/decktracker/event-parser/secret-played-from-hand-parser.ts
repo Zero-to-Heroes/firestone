@@ -77,6 +77,10 @@ export class SecretPlayedFromHandParser implements EventParser {
 				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+			cardsPlayedThisMatch:
+				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
+					? deck.cardsPlayedThisMatch
+					: ([...deck.cardsPlayedThisMatch, cardWithZone] as readonly DeckCard[]),
 			spellsPlayedThisMatch:
 				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
 					? deck.spellsPlayedThisMatch

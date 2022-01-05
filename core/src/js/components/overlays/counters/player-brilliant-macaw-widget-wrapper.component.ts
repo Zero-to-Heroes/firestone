@@ -13,12 +13,12 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 @Component({
-	selector: 'opponent-elwynn-boar-widget-wrapper',
+	selector: 'player-brilliant-macaw-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpponentElwynnBoarWidgetWrapperComponent
+export class PlayerBrilliantMacawWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
 	implements AfterContentInit {
 	constructor(
@@ -31,13 +31,14 @@ export class OpponentElwynnBoarWidgetWrapperComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
-		this.side = 'opponent';
-		this.activeCounter = 'elwynnBoar';
+		this.side = 'player';
+		this.activeCounter = 'brilliantMacaw';
 	}
 
 	ngAfterContentInit(): void {
-		this.prefExtractor = (prefs) => prefs.opponentElwynnBoarCounter;
-		this.deckStateExtractor = (state) => !!state.opponentDeck?.containsElwynnBoar();
+		this.prefExtractor = (prefs) => prefs.playerBrilliantMacawCounter;
+		this.deckStateExtractor = (state) =>
+			!!state?.playerDeck?.lastBattlecryPlayedForMacaw(this.allCards) && state.playerDeck.hasBrilliantMacaw();
 		super.ngAfterContentInit();
 	}
 }

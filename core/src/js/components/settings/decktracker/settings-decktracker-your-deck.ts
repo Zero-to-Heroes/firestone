@@ -139,6 +139,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When you have Bolner Hammerbeak in hand, show the first Battlecry card that was played this turn, if any"
 					></preference-toggle>
 					<preference-toggle
+						field="playerBrilliantMacawCounter"
+						[label]="'decktracker.counter.brilliant-macaw.settings-name' | owTranslate"
+						[tooltip]="'decktracker.counter.brilliant-macaw.settings-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="playerMulticasterCounter"
 						label="Multicaster"
 						tooltip="Show the spell schools of which you played a spell this game"

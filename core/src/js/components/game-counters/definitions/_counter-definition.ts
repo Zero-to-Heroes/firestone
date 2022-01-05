@@ -1,12 +1,14 @@
 export interface CounterDefinition {
 	readonly type: CounterType;
 	readonly value: number | string;
+	readonly valueImg?: string;
 	readonly image: string;
 	readonly cssClass: string;
 	readonly tooltip: string;
 	readonly standardCounter: boolean;
 }
 
+// Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| 'galakrond'
 	| 'pogo'
@@ -20,6 +22,7 @@ export type CounterType =
 	| 'watchpost'
 	| 'libram'
 	| 'bolner'
-	| 'hero-power-damage'
+	| 'brilliantMacaw'
+	| 'heroPowerDamage'
 	| 'multicaster'
-	| 'elwynn-boar';
+	| 'elwynnBoar';

@@ -32,7 +32,7 @@ export class PlayerElwynnBoarWidgetWrapperComponent
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
-		this.activeCounter = 'elwynn-boar';
+		this.activeCounter = 'elwynnBoar';
 	}
 
 	ngAfterContentInit(): void {

@@ -3,7 +3,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { CounterDefinition } from './_counter-definition';
 
 export class HeroPowerDamageCounterDefinition implements CounterDefinition {
-	readonly type = 'hero-power-damage';
+	readonly type = 'heroPowerDamage';
 	readonly value: number;
 	readonly image: string;
 	readonly cssClass: string;
@@ -18,7 +18,7 @@ export class HeroPowerDamageCounterDefinition implements CounterDefinition {
 
 		const heroPowerDamage = deck.heroPowerDamageThisMatch ?? 0;
 		return {
-			type: 'hero-power-damage',
+			type: 'heroPowerDamage',
 			value: heroPowerDamage,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MordreshFireEye}.jpg`,
 			cssClass: 'hero-power-damage-counter',

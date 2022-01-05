@@ -3,7 +3,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { CounterDefinition } from './_counter-definition';
 
 export class ElwynnBoarCounterDefinition implements CounterDefinition {
-	readonly type = 'elwynn-boar';
+	readonly type = 'elwynnBoar';
 	readonly value: number;
 	readonly image: string;
 	readonly cssClass: string;
@@ -18,7 +18,7 @@ export class ElwynnBoarCounterDefinition implements CounterDefinition {
 
 		const boarDeaths = deck.elwynnBoarsDeadThisMatch || 0;
 		return {
-			type: 'elwynn-boar',
+			type: 'elwynnBoar',
 			value: boarDeaths,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ElwynnBoar}.jpg`,
 			cssClass: 'elwynn-boar-counter',

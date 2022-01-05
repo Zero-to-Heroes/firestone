@@ -199,6 +199,12 @@
 			"multicaster": {
 				"player": "You will draw {{cardsTotal}} cards from spell schools: {{schools}}",
 				"opponent": "Your opponent will draw {{cardsTotal}} cards from spell schools: {{schools}}"
+			},
+			"brilliant-macaw": {
+				"player": "{{value}} was the last battlecry card you played",
+				"opponent": "{{value}} was the last battlecry card your opponent played",
+				"settings-name": "Brilliant Macaw",
+				"settings-tooltip": "When you have a Brilliant Macaw in hand, show the last Battlecry card that you played, if any"
 			}
 		},
 		"card-burned": "Card burned",
@@ -222,7 +228,11 @@
 			"update-minion-button-tooltip": "Update minion",
 			"remove-minion-button-tooltip": "Remove minion",
 			"versus": "VS",
-			"simulate-button": "Simulate"
+			"simulate-button": "Simulate",
+			"simulate-button-tooltip": "Simulate the battle with the new boards",
+			"reset-button": "Reset",
+			"actual": "Actual",
+			"simulated": "Simulated"
 		},
 		"hero-stats": {
 			"avg-position-label": "Average position:",

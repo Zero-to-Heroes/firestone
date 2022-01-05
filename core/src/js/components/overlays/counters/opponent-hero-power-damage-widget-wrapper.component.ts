@@ -13,12 +13,12 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 @Component({
-	selector: 'opponent-elwynn-boar-widget-wrapper',
+	selector: 'opponent-hero-power-damage-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpponentElwynnBoarWidgetWrapperComponent
+export class OpponentHeroPowerDamageWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
 	implements AfterContentInit {
 	constructor(
@@ -32,12 +32,13 @@ export class OpponentElwynnBoarWidgetWrapperComponent
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'opponent';
-		this.activeCounter = 'elwynnBoar';
+		this.activeCounter = 'heroPowerDamage';
 	}
 
 	ngAfterContentInit(): void {
-		this.prefExtractor = (prefs) => prefs.opponentElwynnBoarCounter;
-		this.deckStateExtractor = (state) => !!state.opponentDeck?.containsElwynnBoar();
+		this.prefExtractor = (prefs) => prefs.opponentHeroPowerDamageCounter;
+		this.deckStateExtractor = (state) =>
+			state?.opponentDeck?.heroPowerDamageThisMatch > 0 && state.opponentDeck.hero?.playerClass === 'mage';
 		super.ngAfterContentInit();
 	}
 }
