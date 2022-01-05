@@ -131,19 +131,6 @@ export class AppBootstrapService {
 			}
 		}
 
-		// Wait until DB has properly been upgraded when needed
-		if (!this.collectionDb.dbInit) {
-			setTimeout(() => {
-				this.doInit();
-			}, 200);
-			return;
-		}
-		if (!this.achievementsDb.dbInit) {
-			setTimeout(() => {
-				this.doInit();
-			}, 200);
-			return;
-		}
 		console.log('[bootstrap] app init starting');
 		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();

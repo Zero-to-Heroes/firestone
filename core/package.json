@@ -55,7 +55,6 @@
 		"@sentry/integrations": "^6.2.5",
 		"@types/reflect-metadata": "^0.1.0",
 		"angular-resize-event": "1.0.0",
-		"angular2-indexeddb": "1.2.3",
 		"angular2-notifications": "9.0.0",
 		"aws-sdk": "^2.1030.0",
 		"chart.js": "^2.9.3",
