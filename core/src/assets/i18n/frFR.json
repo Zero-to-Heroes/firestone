@@ -11,17 +11,41 @@
 			"shaman": "Chaman",
 			"warlock": "Démoniste",
 			"warrior": "Guerrier"
+		},
+		"format": {
+			"standard": "Standard",
+			"wild": "Libre",
+			"classic": "Classique"
+		},
+		"ranks": {
+			"constructed": {
+				"bronze": "Bronze",
+				"silver": "Argent",
+				"gold": "Or",
+				"platinum": "Platine",
+				"diamond": "Diamant",
+				"legend": "Légende"
+			}
+		},
+		"spellschool": {
+			"arcane": "Arcanes",
+			"fire": "Feu",
+			"frost": "Givre",
+			"nature": "Nature",
+			"holy": "Sacré",
+			"shadow": "Ombre",
+			"fel": "Fiel"
 		}
 	},
 	"app": {
 		"menu": {
 			"constructed-header": "Construit",
-			"battlegrounds-header": "Champs de Bataille",
+			"battlegrounds-header": "Champs de bataille",
 			"mercenaries-header": "Mercenaires",
 			"duels-header": "Duels",
 			"arena-header": "Arène",
 			"replays-header": "Replays",
-			"achievements-header": "Hauts Faits",
+			"achievements-header": "Hauts faits",
 			"collection-header": "Collection",
 			"stats-header": "Stats",
 			"go-premium-header": "Soutenez le développeur et enlevez la pub",
@@ -52,7 +76,7 @@
 					"legend": "Légende"
 				},
 				"rank-filter": {
-					"all": "Tous",
+					"all": "Tous les rangs",
 					"silver": "Argent+",
 					"gold": "Or+",
 					"platinum": "Platine+",
@@ -72,6 +96,150 @@
 					"past-30": "30 derniers jours",
 					"past-7": "7 derniers jours",
 					"past-1": "Dernier jour"
+				}
+			},
+			"matchup-info": {
+				"total-matches-header": "Nombre de parties",
+				"win-percent-header": "%Victoires",
+				"win-total-header": "Victoires",
+				"win-play-percent-header": "%Victoires 1er",
+				"win-play-total-header": "Victoires 1er",
+				"win-coin-percent-header": "%Victoires Pièce",
+				"win-coin-total-header": "Victoires Pièce",
+				"total-header": "Total",
+				"show-as-percent-button-label": "Afficher en %",
+				"reset-button-label": "Réinitialiser les stats",
+				"reset-button-tooltip": "Réinitialiser les stats de victoire/défaite du deck actuel. Les parties précédentes apparaîtront toujours dans l’onglet Replays.",
+				"reset-confirmation": "Vos stats de victoire/défaite ont été réinitialisées.",
+				"reset-are-you-sure": "Confirmer ?",
+				"delete-button-step-2": "Supprimer",
+				"delete-confirmation": "Ceci supprimera définitivement le deck de toutes vos stats et ne pourra pas être annulé.",
+				"delete-tooltip": "Supprimez votre deck. Cela ne peut pas être annulé. Si vous voulez juste le cacher, pensez à l'archiver à la place."
+			},
+			"deck-details": {
+				"copy-deck-code-button": "Copier le code du deck"
+			},
+			"deck-recap": {
+				"overall-stats-header": "Statistiques générales",
+				"watch-replays-button": "Regarder les replays",
+				"best-against": "Meilleur contre",
+				"winrate": "taux de victoires",
+				"games": "parties"
+			},
+			"deck-summary": {
+				"total-games": "{{value}} parties",
+				"winrate": "Taux de victoires de {{value}}%",
+				"last-used": "Dernière utilisation : {{value}}",
+				"archive-button-tooltip": "Archiver ce deck (vous pourrez le restaurer plus tard)",
+				"restore-button-tooltip": "Restaurer ce deck",
+				"default-deck-name": "Nom du deck"
+			},
+			"decks": {
+				"empty-state-title": "Rien ici pour le moment",
+				"empty-state-subtitle": "Jouez une partie classée pour commencer, ou vérifiez vos filtres ci-dessus :)"
+			},
+			"ladder-stats": {
+				"title-player": "Détail des classes jouées",
+				"title-opponent": "Détail des classes adverses"
+			},
+			"personal-stats-ranking": {
+				"header": "Évolution du rang / Parties"
+			},
+			"rating-graph": {
+				"empty-state-message": "Veuillez vérifier qu'un seul mode de jeu (Standard, Libre ou Classique) est sélectionné ci-dessus, et vérifiez le filtre Bronze / Légende."
+			},
+			"replays-recap": {
+				"header": "{{value}} derniers replays",
+				"no-replays": "Aucun replay"
+			},
+			"stats": {
+				"total-games-played": "Nombre total de parties",
+				"total-time-played": "Temps de jeu total",
+				"turns-to-win": "Tours pour gagner",
+				"turns-to-lose": "Tour pour perdre",
+				"winrate": "Taux de victoires",
+				"winrate-first": "Taux de victoires (premier)",
+				"winrate-coin": "Taux de victoires (La pièce)"
+			}
+		},
+		"battlegrounds": {}
+	},
+	"decktracker": {
+		"zones": {
+			"global-effects": "Effets globaux",
+			"in-deck": "Dans le deck",
+			"in-hand": "En main",
+			"other": "Autres"
+		},
+		"cards-in-hand-tooltip": "Cartes en main",
+		"cards-left-in-deck-tooltip": "Cartes restantes dans le deck",
+		"deck-name": {
+			"unnamed-deck": "Deck sans nom",
+			"unknown-deck": "Deck inconnu",
+			"copy-deckstring-label": "Copier le deck",
+			"copy-deckstring-confirmation": "Copié !"
+		},
+		"import": {
+			"import-deckstring-tooltip": "Importer un code de deck depuis votre presse-papiers",
+			"confirmation-title": "Remplacer le deck ?",
+			"use-deck-text": "Utiliser {{value}} ?",
+			"button-text": "Remplacer",
+			"cancel-text": "Annuler",
+			"invalid-deck-code-title": "Code de deck invalide",
+			"invalid-deck-code-text": "Le code de deck fourni n'a pas pu être reconnu.",
+			"invalid-deck-code-button-text": "OK"
+		},
+		"stats": {
+			"deck-winrate": "Taux de victoires du deck",
+			"deck-winrate-tooltip": "Taux de victoires de ce deck en Partie classée depuis {{value}}",
+			"deck-winrate-vs-class": "VS {{value}}",
+			"deck-winrate-vs-class-tooltip": "Taux de victoires de ce deck en Partie classée contre {{opponent}} depuis {{date}}"
+		},
+		"counter": {
+			"multicaster": {
+				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
+				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
+			}
+		},
+		"card-burned": "Carte brûlée",
+		"card-transformed": "Carte transformée",
+		"card-discarded": "Carte défaussée",
+		"card-in-graveyard": "Dans le cimetière",
+		"gift-created-by-single-card": "Créée par <br/> {{value}}",
+		"gift-created-by-multiple-cards": "Créée par <br/> plusieurs entités"
+	},
+	"battlegrounds": {
+		"battle": {
+			"turn": "Tour {{value}}",
+			"result": {
+				"won": "victoire",
+				"tied": "égalité",
+				"lost": "défaite"
+			}
+		},
+		"sim": {
+			"add-minion-button-tooltip": "Cliquez pour ajouter un serviteur",
+			"update-minion-button-tooltip": "Mettre à jour le serviteur",
+			"remove-minion-button-tooltip": "Enlever le serviteur",
+			"versus": "VS",
+			"simulate-button": "Simuler"
+		},
+		"hero-stats": {
+			"avg-position-label": "Position moyenne :",
+			"avg-position-tooltip": "Position finale moyenne",
+			"avg-position-your-tooltip": "Votre valeur",
+			"avg-position-global-tooltip": "Valeur globale",
+			"matches-played-label": "Parties jouées",
+			"matches-played-tooltip": "Total de parties jouées avec ce héros"
+		}
+	},
+	"settings": {
+		"general": {
+			"third-party": {
+				"hsdecks": {
+					"pitch": "<a href=\"https://hearthstone-decks.net/\" target=\"_blank\">hearthstone-decks.net</a> partage des decks joués dans les rangs élevés de Légende pour tous les modes construits, section News & Articles.",
+					"next": "Si vous décidez d'activer la synchronisation avec hearthstone-decks.net, Firestone leur enverra de façon anonyme chaque partie que vous jouez, avec quelques informations sur vos parties (code de deck, rang, résultats des parties).",
+					"pref-label": "Synchroniser vos replays avec hearthstone-decks.net"
 				}
 			}
 		}
