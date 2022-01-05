@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils';
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
@@ -70,9 +70,7 @@ declare let amplitude;
 								(click)="simulateNewBattle()"
 								[helpTooltip]="tooltip"
 								[owTranslate]="'battlegrounds.sim.simulate-button'"
-							>
-								Simulate
-							</div>
+							></div>
 						</div>
 						<div class="result new">
 							<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
@@ -98,26 +96,29 @@ declare let amplitude;
 				<!-- TODO: translate -->
 				<div class="simulations" *ngIf="!fullScreenMode">
 					<div class="result actual" *ngIf="!hideActualBattle">
-						<div class="label">Actual</div>
+						<div class="label" [owTranslate]="'battlegrounds.sim.actual'"></div>
 						<bgs-battle-status [showReplayLink]="true" [nextBattle]="actualBattle"></bgs-battle-status>
 					</div>
 					<div class="result new">
-						<div class="label">Simulated</div>
+						<div class="label" [owTranslate]="'battlegrounds.sim.simulated'"></div>
 						<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
 					</div>
 					<div class="controls">
-						<div class="button simulate" (click)="simulateNewBattle()" [helpTooltip]="tooltip">
-							Simulate
-						</div>
+						<div
+							class="button simulate"
+							(click)="simulateNewBattle()"
+							[helpTooltip]="tooltip"
+							[owTranslate]="'battlegrounds.sim.simulate-button'"
+						></div>
 						<div class="reset" (click)="resetBoards()">
 							<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-							<div class="text">Reset</div>
+							<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
 						</div>
 					</div>
 				</div>
 				<div class="button reset" *ngIf="fullScreenMode" (click)="resetBoards()">
 					<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-					<div class="text">Reset</div>
+					<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
 				</div>
 			</div>
 		</div>
@@ -135,7 +136,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this._faceOff = value;
 		if (!this._faceOff.battleInfo) {
-			console.debug('no battle info, filling in the details to allow early simulation');
 			this._faceOff = this._faceOff.update({
 				battleInfo: {
 					playerBoard: {
@@ -166,7 +166,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 					},
 				},
 			} as BgsFaceOffWithSimulation);
-			console.debug('no battle info, filling in the details to allow early simulation', this._faceOff, value);
 		}
 		this.updateInfo();
 	}
@@ -185,13 +184,9 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	opponent: BgsBoardInfo;
 	player: BgsBoardInfo;
 
-	isPremium: boolean;
 	tooltip: string;
 
 	newBattle: BgsFaceOffWithSimulation;
-
-	// private newOpponentEntities: readonly Entity[];
-	// private newPlayerEntities: readonly Entity[];
 
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -202,7 +197,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		private readonly simulationService: BgsBattleSimulationService,
 		private readonly prefs: PreferencesService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 	) {}
@@ -211,17 +206,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
 		this.sub$$ = this.overlayRef.backdropClick().subscribe(() => {
-			console.debug('background clicked');
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 
-		this.isPremium = true; //this.turnNumber <= 5 || !(await this.adService.shouldDisplayAds());
-		this.tooltip = this.isPremium
-			? 'Simulate the battle with the new boards'
-			: 'Click to subscribe and unlock this feature';
+		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -479,11 +470,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	// For now do it purely in the UI, let's see later on if we want to use the store
 	async simulateNewBattle() {
-		if (!this.isPremium) {
-			amplitude.getInstance().logEvent('subscription-click', { 'page': 'replays-resim' });
-			this.ow.openStore();
-			return;
-		}
 		amplitude.getInstance().logEvent('battle-resim');
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'waiting-for-result',
