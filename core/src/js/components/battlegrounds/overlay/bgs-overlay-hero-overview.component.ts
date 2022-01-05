@@ -73,7 +73,6 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => {
 				try {
-					console.debug('updating scale', scale);
 					// this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
 					const newScale = scale / 100;
 					const element = this.el.nativeElement.querySelector('.scalable');

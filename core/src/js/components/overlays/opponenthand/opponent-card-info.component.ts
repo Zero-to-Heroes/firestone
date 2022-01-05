@@ -59,7 +59,6 @@ export class OpponentCardInfoComponent extends AbstractSubscriptionComponent imp
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
-				console.debug('updating scale', scale);
 				const newScale = scale / 100;
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${newScale})`);

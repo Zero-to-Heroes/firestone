@@ -176,7 +176,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
-				console.debug('updating scale', scale);
 				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);
 				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
 				const newScale = scale / 100;

@@ -161,7 +161,6 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
-				console.debug('updating scale', scale);
 				this.el.nativeElement.style.setProperty('--secrets-helper-scale', scale / 100);
 				this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
 				const newScale = scale / 100;
