@@ -297,5 +297,8 @@ export class DeckTrackerOverlayRootComponent
 		this.active = toggled;
 		// Avoid artifacts when minimizing
 		this.showTooltips = this.active && this.showTooltipsFromPrefs;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
