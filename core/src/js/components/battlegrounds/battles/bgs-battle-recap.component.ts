@@ -90,7 +90,9 @@ export class BgsBattleRecapComponent {
 		}
 
 		this.turnNumber = value.turn;
-		this.result = this.i18n.translateString(`battlegrounds.battle.result.${value.result}`);
+		this.result = value.result
+			? this.i18n.translateString(`battlegrounds.battle.result.${value.result}`)
+			: undefined;
 
 		this.playerHeroCardId = value.playerCardId;
 		this.playerHealth = value.playerHpLeft;
