@@ -35,6 +35,54 @@
 			"holy": "Holy",
 			"shadow": "Shadow",
 			"fel": "Fel"
+		},
+		"tribe": {
+			"bloodelf": "Blood Elf",
+			"draenei": "Draenei",
+			"Dwarf": "Dwarf",
+			"gnome": "Gnome",
+			"goblin": "Goblin",
+			"goblin2": "Goblin",
+			"human": "Human",
+			"nightelf": "Nnight Elf",
+			"orc": "Orc",
+			"tauren": "Tauren",
+			"troll": "Troll",
+			"undead": "Undead",
+			"worgen": "Worgen",
+			"murloc": "Murloc",
+			"demon": "Demon",
+			"scourge": "Scourge",
+			"mech": "Mech",
+			"elemental": "Elemental",
+			"ogre": "Ogre",
+			"beast": "Beast",
+			"totem": "Totem",
+			"nerubian": "Nerubian",
+			"pirate": "Pirate",
+			"dragon": "Dragon",
+			"blank": "Blank",
+			"all": "All",
+			"egg": "Egg",
+			"quilboar": "Quilboar",
+			"centaur": "Centaur",
+			"furbolg": "Furbolg",
+			"highelf": "High Elf",
+			"treant": "Treant",
+			"owlkin": "Owlkin",
+			"halforc": "Half-Orc",
+			"lock": "Lock"
+		},
+		"hs-terms": {
+			"attack": "Attack",
+			"health": "Health",
+			"golden": "Golden",
+			"divine-shield": "Divine Shield",
+			"poisonous": "Poisonous",
+			"reborn": "Reborn",
+			"taunt": "Taunt",
+			"windfury": "Windfury",
+			"mega-windfury": "Mega Windfury"
 		}
 	},
 	"app": {
@@ -162,7 +210,18 @@
 				"winrate-coin": "Winrate (coin)"
 			}
 		},
-		"battlegrounds": {}
+		"battlegrounds": {
+			"filters": {
+				"tier": {
+					"all-tiers": "All tiers",
+					"tier": "Tier {{value}}"
+				},
+				"tribe": {
+					"all-tribes": "All tribes",
+					"no-tribe": "No tribe"
+				}
+			}
+		}
 	},
 	"decktracker": {
 		"zones": {
@@ -232,7 +291,29 @@
 			"simulate-button-tooltip": "Simulate the battle with the new boards",
 			"reset-button": "Reset",
 			"actual": "Actual",
-			"simulated": "Simulated"
+			"simulated": "Simulated",
+			"empty-state-title": "Nothing here yet",
+			"empty-state-subtitle": "Your first battle will show here after you face an opponent",
+			"battles-header": "All battles",
+			"turn-winrate-graph-title": "Avg. winrate by turn",
+			"hero-power-title": "Hero Power",
+			"hero-powers-header": "Hero Powers",
+			"hero-search-placeholder": "Search Hero / Hero power",
+			"select-button": "Select",
+			"select-hero-power-placeholder": "Select a hero power",
+			"select-hero-placeholder": "Select a hero power",
+			"hero-selection-title": "Hero",
+			"heroes-header": "Heroes",
+			"search-heroes-placeholder": "Search heroes",
+			"update-minion-title": "Update minion",
+			"summon-mechs": "Summon Mechs",
+			"summon-mechs-tooltip": "Gives the minion \"Deathrattle: summon two 1/1 mechs\"",
+			"summon-plants": "Summon Plants",
+			"summon-plants-tooltip": "Gives the minion \"Deathrattle: summon two 1/1 plants\"",
+			"sneed-deathrattle": "Sneed's DR",
+			"sneed-deathrattle-tooltip": "How many times has Sneed's Hero Power been used on this minion",
+			"minions-selection-title": "Minions",
+			"search-minion-placeholder": "Search minion"
 		},
 		"hero-stats": {
 			"avg-position-label": "Average position:",

@@ -41,8 +41,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 					</svg>
 				</i>
-				<span class="title">Nothing here yet</span>
-				<span class="subtitle">Your first battle will show here after you face an opponent</span>
+				<span class="title" [owTranslate]="'battlegrounds.sim.empty-state-title'"></span>
+				<span class="subtitle" [owTranslate]="'battlegrounds.sim.empty-state-subtitle'"></span>
 			</div>
 			<ng-container>
 				<div class="content" *ngIf="value.faceOffs?.length">
@@ -69,7 +69,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								></use>
 							</svg>
 						</button>
-						<div class="battles-header">All battles</div>
+						<div class="battles-header" [owTranslate]="'battlegrounds.sim.battles-header'"></div>
 					</ng-container>
 					<div class="battles-list" scrollable>
 						<bgs-battle-recap
@@ -84,7 +84,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 			</ng-container>
 			<div class="left">
-				<div class="header">Avg. winrate by turn</div>
+				<div class="header" [owTranslate]="'battlegrounds.sim.turn-winrate-graph-title'"></div>
 				<div class="left-info">
 					<bgs-winrate-chart
 						class="chart"
@@ -218,11 +218,6 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
-		console.debug('selecting battle?', faceOff);
-		// if (!faceOff?.battleInfo) {
-		// 	console.debug('no battle info');
-		// 	return;
-		// }
 		this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
 	}
 

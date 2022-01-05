@@ -11,6 +11,7 @@ import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsSimulatorMinionTierFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -43,10 +44,10 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private collator = new Intl.Collator('en-US');
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -55,11 +56,11 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: 'All tiers',
+				label: this.i18n.translateString('app.battlegrounds.filters.tier.all-tiers'),
 			} as IOption,
 			...tiers.map((tier) => ({
 				value: `${tier}`,
-				label: `Tier ${tier}`,
+				label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: tier }),
 			})),
 		] as readonly IOption[];
 	}

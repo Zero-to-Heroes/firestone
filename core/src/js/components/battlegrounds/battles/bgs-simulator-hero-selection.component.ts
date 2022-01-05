@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({
@@ -33,7 +34,7 @@ import { sortByProperties } from '../../../services/utils';
 				</svg>
 			</button>
 
-			<div class="title">Hero</div>
+			<div class="title" [owTranslate]="'battlegrounds.sim.hero-selection-title'"></div>
 			<div class="current-hero">
 				<div *ngIf="heroIcon" class="hero-portrait-frame">
 					<img class="icon" [src]="heroIcon" />
@@ -51,11 +52,15 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header">Heroes</div>
+				<div class="header" [owTranslate]="'battlegrounds.sim.heroes-header'"></div>
 				<div class="search">
 					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
-						<input [formControl]="searchForm" (mousedown)="onMouseDown($event)" placeholder="Search Hero" />
+						<input
+							[formControl]="searchForm"
+							(mousedown)="onMouseDown($event)"
+							[placeholder]="'battlegrounds.sim.search-heroes-placeholder' | owTranslate"
+						/>
 					</label>
 				</div>
 				<div class="heroes" scrollable>
@@ -75,7 +80,7 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()">Select</div>
+				<div class="button" (click)="validate()" [owTranslate]="'battlegrounds.sim.select-button'"></div>
 			</div>
 		</div>
 	`,
@@ -94,7 +99,7 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPower)?.text);
 		} else {
 			this.heroIcon = null;
-			this.heroName = 'Select a hero';
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-placeholder');
 			this.heroPowerText = null;
 		}
 
@@ -114,7 +119,11 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 
 	private subscription: Subscription;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		this.allHeroes$ = this.searchString.asObservable().pipe(
 			debounceTime(200),
 			distinctUntilChanged(),
@@ -155,7 +164,6 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 	}
 
 	selectHero(hero: Hero) {
-		console.debug('selected hero', hero);
 		this.currentHeroId = hero.id;
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
@@ -170,7 +178,6 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 	}
 
 	validate() {
-		console.debug('selecting hero');
 		this.applyHandler(this.currentHeroId);
 	}
 

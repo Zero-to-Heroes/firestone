@@ -224,10 +224,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {
-		console.debug('onEntitiesUpdated', side, newEntities);
-		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
-		console.debug('minionIndex', side, existingSide, this._faceOff);
 		side === 'player'
 			? this.simulationUpdater(this._faceOff, {
 					battleInfo: {
@@ -328,7 +324,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMinionAddRequested(side: 'player' | 'opponent') {
-		console.debug('onMinionAddRequested', side);
 		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
@@ -337,13 +332,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		};
-		const existingSide =
-			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
 		modalRef.instance.currentMinion = null;
 		modalRef.instance.entityId = this._faceOff.getNextEntityId();
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
-			console.debug('minionIndex', existingSide);
 			side === 'player'
 				? this.simulationUpdater(this._faceOff, {
 						battleInfo: {
@@ -373,7 +365,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMinionUpdateRequested(side: 'player' | 'opponent', event: { index: number }) {
-		console.debug('onMinionUpdateRequested', side, event);
 		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.closeHandler = () => {
@@ -389,15 +380,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
 			const minionIndex = event?.index;
-			console.debug(
-				'minionIndex',
-				minionIndex,
-				event,
-				existingSide,
-				...this._faceOff.battleInfo.opponentBoard.board.slice(0, minionIndex),
-				newEntity,
-				...this._faceOff.battleInfo.opponentBoard.board.slice(minionIndex + 1),
-			);
 			side === 'player'
 				? this.simulationUpdater(this._faceOff, {
 						battleInfo: {
@@ -429,20 +411,9 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMinionRemoveRequested(side: 'player' | 'opponent', event: { index: number }) {
-		console.debug('onMinionRemoveRequested', side, event);
 		const existingSide =
 			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
 		const minionIndex = event?.index ?? existingSide.board.length;
-		console.debug(
-			'minionIndex',
-			minionIndex,
-			side,
-			event,
-			existingSide,
-			this._faceOff,
-			[...this._faceOff.battleInfo.opponentBoard.board].splice(minionIndex, 1),
-		);
-
 		side === 'player'
 			? this.simulationUpdater(this._faceOff, {
 					battleInfo: {

@@ -34,7 +34,7 @@ import { sortByProperties } from '../../../services/utils';
 				</svg>
 			</button>
 
-			<div class="title">Hero Power</div>
+			<div class="title" [owTranslate]="'battlegrounds.sim.hero-power-title'"></div>
 			<div class="current-hero">
 				<div *ngIf="heroIcon" class="hero-portrait-frame">
 					<img class="icon" [src]="heroIcon" />
@@ -48,14 +48,14 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header">Hero Powers</div>
+				<div class="header" [owTranslate]="'battlegrounds.sim.hero-powers-header'"></div>
 				<div class="search">
 					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
 						<input
 							[formControl]="searchForm"
 							(mousedown)="onMouseDown($event)"
-							placeholder="Search Hero / Hero Power"
+							[placeholder]="'battlegrounds.sim.hero-search-placeholder' | owTranslate"
 						/>
 					</label>
 				</div>
@@ -72,7 +72,7 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()">Select</div>
+				<div class="button" (click)="validate()" [owTranslate]="'select-button'"></div>
 			</div>
 		</div>
 	`,
@@ -90,7 +90,7 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
 		} else {
 			this.heroIcon = null;
-			this.heroName = 'Select a hero power';
+			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
 			this.heroPowerText = null;
 		}
 
@@ -159,7 +159,6 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 	}
 
 	selectHero(hero: HeroPower) {
-		console.debug('selected hero power', hero);
 		this.currentHeroId = hero.id;
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
@@ -174,7 +173,6 @@ export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 	}
 
 	validate() {
-		console.debug('selecting hero power');
 		this.applyHandler(this.currentHeroId);
 	}
 

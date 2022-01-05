@@ -66,7 +66,6 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set tavernTier(value: number) {
 		this._tavernTier = value;
-		console.debug('setting tavern tier', this._tavernTier);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -76,7 +75,6 @@ export class BgsHeroPortraitSimulatorComponent {
 		this._heroPowerCardId = value;
 		if (value) {
 			this.heroPowerIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
-			console.debug('heroPowerIcon', this.heroPowerIcon, value);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

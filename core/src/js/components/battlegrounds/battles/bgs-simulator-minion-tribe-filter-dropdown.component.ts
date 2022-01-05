@@ -12,9 +12,9 @@ import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsSimulatorMinionTribeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { capitalizeFirstLetter } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -50,6 +50,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -61,20 +62,20 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: 'All tribes',
+				label: this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes'),
 			} as IOption,
 			...uniqueTribes
 				.map(
 					(tribe) =>
 						({
-							label: capitalizeFirstLetter(tribe),
+							label: this.i18n.translateString(`global.tribe.${tribe.toLowerCase()}`),
 							value: tribe,
 						} as IOption),
 				)
 				.sort((a, b) => this.collator.compare(a.label, b.label)),
 			{
 				value: 'blank',
-				label: 'No tribe',
+				label: this.i18n.translateString('app.battlegrounds.filters.tribe.no-tribe'),
 			} as IOption,
 		] as readonly IOption[];
 	}

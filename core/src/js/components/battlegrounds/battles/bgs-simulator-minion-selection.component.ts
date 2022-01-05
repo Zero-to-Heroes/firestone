@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</svg>
 			</button>
 
-			<div class="title">Update Minion</div>
+			<div class="title" [owTranslate]="'battlegrounds.sim.update-minion-title'"></div>
 			<div class="current-hero">
 				<div *ngIf="card" class="hero-portrait-frame">
 					<bgs-card-tooltip [config]="card" [visible]="true"></bgs-card-tooltip>
@@ -51,7 +51,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<div class="abilities" [ngClass]="{ 'disabled': !card }">
 					<div class="stats">
 						<div class="input attack">
-							<div class="label">Attack</div>
+							<div class="label" [owTranslate]="'global.hs-terms.attack'"></div>
 							<input
 								type="number"
 								[ngModel]="attack"
@@ -72,7 +72,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							</div>
 						</div>
 						<div class="input health">
-							<div class="label">Health</div>
+							<div class="label" [owTranslate]="'global.hs-terms.health'"></div>
 							<input
 								type="number"
 								[ngModel]="health"
@@ -95,55 +95,58 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					</div>
 					<div class="attributes">
 						<checkbox
-							[label]="'Golden'"
+							[label]="'global.hs-terms.golden' | owTranslate"
 							[value]="premium"
 							(valueChanged)="onPremiumChanged($event)"
 						></checkbox>
 						<checkbox
-							[label]="'Divine Shield'"
+							[label]="'global.hs-terms.divine-shield' | owTranslate"
 							[value]="divineShield"
 							(valueChanged)="onDivineShieldChanged($event)"
 						></checkbox>
 						<checkbox
-							[label]="'Poisonous'"
+							[label]="'global.hs-terms.poisonous' | owTranslate"
 							[value]="poisonous"
 							(valueChanged)="onPoisonousChanged($event)"
 						></checkbox>
 						<checkbox
-							[label]="'Reborn'"
+							[label]="'global.hs-terms.reborn' | owTranslate"
 							[value]="reborn"
 							(valueChanged)="onRebornChanged($event)"
 						></checkbox>
-						<checkbox [label]="'Taunt'" [value]="taunt" (valueChanged)="onTauntChanged($event)"></checkbox>
 						<checkbox
-							[label]="'Windfury'"
+							[label]="'global.hs-terms.taunt' | owTranslate"
+							[value]="taunt"
+							(valueChanged)="onTauntChanged($event)"
+						></checkbox>
+						<checkbox
+							[label]="'global.hs-terms.windfury' | owTranslate"
 							[value]="windfury"
 							(valueChanged)="onWindfuryChanged($event)"
 						></checkbox>
 						<checkbox
-							[label]="'Mega Windfury'"
+							[label]="'global.hs-terms.mega-windfury' | owTranslate"
 							[value]="megaWindfury"
 							(valueChanged)="onMegaWindfuryChanged($event)"
 						></checkbox>
 						<checkbox
-							[label]="'Summon Mechs'"
+							[label]="'battlegrounds.sim.summon-mechs' | owTranslate"
 							[value]="summonMechs"
 							(valueChanged)="onSummonMechsChanged($event)"
-							helpTooltip='Gives the minion "Deathrattle: summon two 1/1 mechs"'
+							[helpTooltip]="'battlegrounds.sim.summon-mechs-tooltip' | owTranslate"
 						></checkbox>
 						<checkbox
-							[label]="'Summon Plants'"
+							[label]="'battlegrounds.sim.summon-plants' | owTranslate"
 							[value]="summonPlants"
 							(valueChanged)="onSummonPlantsChanged($event)"
-							helpTooltip='Gives the minion "Deathrattle: summon two 1/1 plants"'
+							[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | owTranslate"
 						></checkbox>
 						<div class="input health">
 							<div
 								class="label"
-								helpTooltip="How many times has Sneed's Hero Power been used on this minion"
-							>
-								Sneed's DR
-							</div>
+								[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
+								[owTranslate]="'battlegrounds.sim.sneed-deathrattle'"
+							></div>
 							<input
 								type="number"
 								[ngModel]="sneeds"
@@ -167,7 +170,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header">Minions</div>
+				<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 				<div class="search">
 					<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
 					<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
@@ -176,7 +179,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<input
 							[formControl]="searchForm"
 							(mousedown)="preventDrag($event)"
-							placeholder="Search Minion"
+							[placeholder]="'battlegrounds.sim.search-minion-placeholder' | owTranslate"
 						/>
 					</label>
 				</div>
@@ -193,7 +196,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()" [ngClass]="{ 'disabled': !card }">Select</div>
+				<div
+					class="button"
+					(click)="validate()"
+					[ngClass]="{ 'disabled': !card }"
+					[owTranslate]="'battlegrounds.sim.select-button'"
+				></div>
 			</div>
 		</div>
 	`,
@@ -208,7 +216,6 @@ export class BgsSimulatorMinionSelectionComponent
 
 	@Input() set currentMinion(value: BoardEntity) {
 		this._entity = value;
-		console.debug('set', this._entity);
 		this.updateValues();
 	}
 
@@ -312,19 +319,15 @@ export class BgsSimulatorMinionSelectionComponent
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
 				: this.allCards.getCardFromDbfId(this.ref.battlegroundsPremiumDbfId).id;
-			console.debug('changed card id to premium', this.cardId);
 		} else {
 			this.cardId = this.ref.battlegroundsPremiumDbfId
 				? this.ref.id
 				: this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id;
-			console.debug('changed card id to normal', this.cardId, this.ref);
 		}
 		// Check if the user changed the stats of the base card. If not, we just use the stats
 		// from the premium card instead
 		const areStatsUpdated = this.attack !== this.ref.attack || this.health !== this.ref.health;
-		console.debug('stats updated?', areStatsUpdated, this.attack, this.health, this.ref);
 		this.ref = this.allCards.getCard(this.cardId);
-		console.debug('changed ref', this.ref, this.cardId);
 		if (!areStatsUpdated) {
 			this.attack = this.ref.attack;
 			this.health = this.ref.health;
@@ -444,7 +447,6 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	selectMinion(minion: Minion) {
-		console.debug('selected minion', minion);
 		this.cardId = minion.id;
 		this.ref = this.allCards.getCard(this.cardId);
 		this.premium = this.ref.battlegroundsNormalDbfId > 0;
@@ -465,7 +467,6 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	validate() {
-		console.debug('selecting minion');
 		this.applyHandler({
 			entityId: this.entityId,
 			cardId: this.cardId,
