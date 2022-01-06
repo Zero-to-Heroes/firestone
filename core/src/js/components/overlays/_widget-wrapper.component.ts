@@ -51,6 +51,10 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
 		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			console.warn('missing game info', gameInfo);
+			return;
+		}
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
