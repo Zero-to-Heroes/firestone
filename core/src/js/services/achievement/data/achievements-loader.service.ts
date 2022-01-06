@@ -11,7 +11,7 @@ const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achie
 export class AchievementsLoaderService {
 	public challengeModules: readonly Challenge[];
 
-	private achievements: readonly Achievement[];
+	private achievements: readonly Achievement[] = [];
 
 	constructor(private api: ApiRunner, private challengeBuilder: ChallengeBuilderService) {}
 

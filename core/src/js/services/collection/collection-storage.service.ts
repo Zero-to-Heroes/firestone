@@ -38,27 +38,27 @@ export class CollectionStorageService {
 	}
 
 	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
-		return this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_BGS_HERO_SKIN_IDS);
+		return this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_BGS_HERO_SKIN_IDS) ?? [];
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
 		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COLLECTION);
-		return fromStorage;
+		return fromStorage ?? [];
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
 		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARD_BACKS);
-		return fromStorage;
+		return fromStorage ?? [];
 	}
 
 	public async getPackInfos(): Promise<readonly PackInfo[]> {
 		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_PACK_INFOS);
-		return fromStorage;
+		return fromStorage ?? [];
 	}
 
 	public async getCoins(): Promise<readonly Coin[]> {
 		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COINS);
-		return fromStorage;
+		return fromStorage ?? [];
 	}
 
 	public async saveCardHistory(history: CardHistory): Promise<CardHistory> {
@@ -71,7 +71,7 @@ export class CollectionStorageService {
 
 	public async saveFullCardHistory(history: readonly CardHistory[]): Promise<readonly CardHistory[]> {
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, history);
-		return history;
+		return history ?? [];
 	}
 
 	public async countCardHistory(): Promise<number> {

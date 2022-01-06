@@ -52,7 +52,7 @@ export class AchievementsStorageService {
 
 	public async loadAllHistory(): Promise<readonly AchievementHistory[]> {
 		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
-		return fromStorage;
+		return fromStorage ?? [];
 	}
 
 	public async saveAllHistory(history: readonly AchievementHistory[]) {
