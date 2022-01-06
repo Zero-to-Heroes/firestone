@@ -118,7 +118,7 @@ export class EndGameListenerService {
 			return;
 		}
 		this.currentDeckstring = currentDeck.deckstring;
-		console.log('[manastorm-bridge] got local player info, adding deckstring', this.currentDeckstring);
+		console.log('[manastorm-bridge] got local player info, adding deckstring', this.currentDeckstring, currentDeck);
 		// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
 		this.currentDeckname = currentDeck?.name
 			?.normalize('NFKD')

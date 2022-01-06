@@ -45,18 +45,15 @@ export class RecomputeGameStatsProcessor implements Processor {
 			currentState.decktracker.patch,
 			prefs,
 		);
-		console.log('[recompute-game-stats-processor] decktracker');
 
 		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			currentState.replays,
 			newStatsState,
 		);
-		console.log('[recompute-game-stats-processor] newStatsState');
 
 		const duels: DuelsState = event.gameStat.isDuels()
 			? await this.duelsBuilder.updateState(currentState.duels, newGameStats)
 			: currentState.duels;
-		console.log('[recompute-game-stats-processor] duels');
 
 		return [
 			Object.assign(new MainWindowState(), currentState, {

@@ -243,7 +243,6 @@ export class DeckState {
 	}
 
 	public lastBattlecryPlayedForMacaw(allCards: CardsFacadeService): DeckCard {
-		console.debug('getting last card ', this.cardsPlayedThisMatch);
 		return (
 			this.cardsPlayedThisMatch
 				.filter((card) => {
