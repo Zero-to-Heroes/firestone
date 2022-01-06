@@ -19,10 +19,10 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
 	protected abstract isWidgetVisible: () => boolean;
 	protected bounds = {
-		left: 0,
-		top: 0,
-		right: 0,
-		bottom: 0,
+		left: -20,
+		top: -20,
+		right: -20,
+		bottom: -20,
 	};
 
 	constructor(
@@ -41,7 +41,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	protected async reposition(cleanup: () => void = null) {
-		// console.debug('repositioning', this);
+		console.debug('repositioning', this);
 		if (!this.isWidgetVisible()) {
 			// console.debug('widget is not visible');
 			return;
@@ -49,7 +49,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
-		// console.debug('positionFromPrefs', positionFromPrefs);
+		console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			console.warn('missing game info', gameInfo);
@@ -63,11 +63,11 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
-			// console.debug('built default position', positionFromPrefs);
+			console.debug('built default position', positionFromPrefs);
 		}
 		const widgetRect = this.getRect();
 		if (!widgetRect?.width) {
-			// console.debug('no widget, starting again');
+			console.debug('no widget, starting again');
 			setTimeout(() => this.reposition(), 100);
 			return;
 		}
@@ -82,6 +82,14 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				Math.max(this.bounds.top, positionFromPrefs.top),
 			),
 		};
+		console.debug(
+			'bound position from prefs',
+			boundPositionFromPrefs,
+			this.bounds,
+			gameHeight - widgetRect.height - this.bounds.bottom,
+			gameHeight,
+			widgetRect,
+		);
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');

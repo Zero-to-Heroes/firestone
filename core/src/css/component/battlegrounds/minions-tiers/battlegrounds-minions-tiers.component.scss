@@ -11,7 +11,6 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
-	padding: 10px;
 	justify-content: center;
 	align-items: flex-start;
 }
@@ -83,13 +82,7 @@
 	border-style: solid;
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 	border-image-slice: 1;
-	padding: 5px;
-	padding-left: 8px;
-	// So that it doesn't move around when showing / hiding the minions list
-	margin-left: 15px;
-	margin-right: 15px;
 	position: relative;
-	left: -15px;
 
 	.tier {
 		position: relative;
@@ -111,6 +104,7 @@
 			height: 140%;
 			top: -10px;
 			left: -7px;
+			z-index: 1;
 		}
 
 		&.selected,
@@ -136,6 +130,12 @@
 			color: white;
 			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
 				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			z-index: 2;
+		}
+
+		.icon {
+			position: relative;
+			top: 10%;
 		}
 	}
 }

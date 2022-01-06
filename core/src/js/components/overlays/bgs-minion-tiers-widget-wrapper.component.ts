@@ -37,6 +37,12 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected positionExtractor = async (prefs: Preferences) => prefs.bgsMinionsListPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
+	protected bounds = {
+		left: -80,
+		top: -20,
+		right: -80,
+		bottom: -20,
+	};
 
 	private visible: boolean;
 
