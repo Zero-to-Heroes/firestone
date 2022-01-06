@@ -1,7 +1,7 @@
+import { Race } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Preferences } from '../../../../models/preferences';
-import { VisualAchievement } from '../../../../models/visual-achievement';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsMatchStartEvent } from '../events/bgs-match-start-event';
@@ -34,6 +34,9 @@ export class BgsMatchStartParser implements EventParser {
 					panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
 					heroSelectionDone: false,
 					currentPanelId: 'bgs-hero-selection-overview',
+					highlightedMinions: [] as readonly string[],
+					highlightedTribes: [] as readonly Race[],
+					postMatchStats: undefined,
 				} as BattlegroundsState);
 			}
 
@@ -45,6 +48,9 @@ export class BgsMatchStartParser implements EventParser {
 				heroSelectionDone: false,
 				currentPanelId: 'bgs-hero-selection-overview',
 				spectating: event.spectating,
+				highlightedMinions: [] as readonly string[],
+				highlightedTribes: [] as readonly Race[],
+				postMatchStats: undefined,
 			} as BattlegroundsState);
 		}
 	}

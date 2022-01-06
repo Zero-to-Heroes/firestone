@@ -86,17 +86,19 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
 				([state]) => state?.currentGame?.gameEnded,
+				([state]) => state?.currentGame?.players?.length,
 			),
 		).pipe(
 			this.mapData(
-				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
+				([[currentScene], [inGame, gameEnded, playerCount]]) =>
+					currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded && playerCount === 8,
 			),
 		);
 		this.bgsPlayers$ = this.store
 			.listenBattlegrounds$(([state]) => state)
 			.pipe(
 				debounceTime(1000),
-				filter(([state]) => !!state.currentGame && state.currentGame.players?.length === 8),
+				filter(([state]) => !!state.currentGame),
 				map(([state]) =>
 					[...state.currentGame.players].sort(
 						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
