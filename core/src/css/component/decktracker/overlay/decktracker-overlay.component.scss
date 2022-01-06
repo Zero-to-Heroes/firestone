@@ -88,6 +88,8 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		// Avoid issues on small screens
+		max-height: 90vh;
 
 		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
 		// appearing on mouse over) while not showing a background
