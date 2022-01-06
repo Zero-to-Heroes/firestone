@@ -25,7 +25,7 @@ export class LocalizationService {
 		await this.store.initComplete();
 		this.translate = this.ow.getMainWindow().translateService;
 		this.store
-			.listen$(([main, nav, prefs]) => prefs.locale)
+			.listen$(([main, nav, prefs]) => prefs?.locale)
 			.pipe(map(([pref]) => pref))
 			.subscribe((pref) => {
 				this.locale = pref;

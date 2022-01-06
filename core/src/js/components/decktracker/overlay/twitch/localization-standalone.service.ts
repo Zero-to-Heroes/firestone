@@ -46,7 +46,6 @@ export class LocalizationStandaloneService {
 	// Because each localization has its own file, we always get the info from the root
 	public getCardName(cardId: string, defaultName: string = null): string {
 		const card = this.allCards.getCard(cardId);
-		// const loc = card.locales?.find((locale) => locale?.locale === this.locale);
 		return card?.name ?? defaultName;
 	}
 
