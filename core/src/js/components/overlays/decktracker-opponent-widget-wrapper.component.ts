@@ -39,6 +39,12 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	protected positionExtractor = async (prefs: Preferences) => prefs.opponentOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
+	protected bounds = {
+		left: -100,
+		right: -100,
+		top: -50,
+		bottom: -50,
+	};
 
 	private visible: boolean;
 

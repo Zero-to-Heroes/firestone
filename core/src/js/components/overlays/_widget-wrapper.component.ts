@@ -18,6 +18,12 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	) => Promise<{ left: number; top: number }>;
 	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
 	protected abstract isWidgetVisible: () => boolean;
+	protected bounds = {
+		left: 0,
+		top: 0,
+		right: 0,
+		bottom: 0,
+	};
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -63,8 +69,14 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		}
 		// Make sure the widget stays in bounds
 		const boundPositionFromPrefs = {
-			left: Math.min(gameWidth - widgetRect.width, Math.max(0, positionFromPrefs.left)),
-			top: Math.min(gameHeight - widgetRect.height, Math.max(0, positionFromPrefs.top)),
+			left: Math.min(
+				gameWidth - widgetRect.width - this.bounds.right,
+				Math.max(this.bounds.left, positionFromPrefs.left),
+			),
+			top: Math.min(
+				gameHeight - widgetRect.height - this.bounds.bottom,
+				Math.max(this.bounds.top, positionFromPrefs.top),
+			),
 		};
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
