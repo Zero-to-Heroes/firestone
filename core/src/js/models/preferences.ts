@@ -303,6 +303,7 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOpponentBoardScale = 101.6;
 	readonly bgsEnableMinionListOverlay: boolean = true;
+	readonly bgsEnableTurnNumbertOverlay: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;

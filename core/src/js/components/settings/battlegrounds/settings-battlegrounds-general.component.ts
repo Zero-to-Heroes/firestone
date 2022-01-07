@@ -138,6 +138,11 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the list of minions, grouped by tavern tier"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsEnableTurnNumbertOverlay"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[label]="'battlegrounds.turn-counter.settings-label' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowLastOpponentIconInOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
 					label="Last opponent icon"

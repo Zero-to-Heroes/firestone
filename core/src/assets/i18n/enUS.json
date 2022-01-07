@@ -442,6 +442,9 @@
 			"avg-position-global-tooltip": "Global value",
 			"matches-played-label": "Matches played",
 			"matches-played-tooltip": "Total matches you played with this hero"
+		},
+		"turn-counter": {
+			"settings-label": "Show turn counter"
 		}
 	},
 	"settings": {

@@ -38,9 +38,9 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
 	protected bounds = {
-		left: -80,
+		left: -150,
 		top: -20,
-		right: -80,
+		right: -150,
 		bottom: -20,
 	};
 
@@ -65,7 +65,7 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
 				([main, nav, prefs]) =>
-					(prefs.bgsEnableMinionListOverlay || prefs.bgsShowTribesHighlight) && prefs.bgsFullToggle,
+					(prefs.bgsEnableMinionListOverlay || prefs.bgsEnableTurnNumbertOverlay) && prefs.bgsFullToggle,
 			),
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,

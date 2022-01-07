@@ -13,14 +13,14 @@ import {
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -32,41 +32,43 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="battlegrounds-minions-tiers scalable" (mouseleave)="onTavernMouseLeave()">
-			<div class="tiers-container" *ngIf="showMinionsList$ | async">
+			<div class="tiers-container">
 				<ng-container *ngIf="{ tiers: tiers$ | async, currentTurn: currentTurn$ | async } as value">
-					<div class="logo-container" *ngIf="value.currentTurn">
+					<div class="logo-container" *ngIf="value.currentTurn && (showTurnNumber$ | async)">
 						<div class="background-main-part"></div>
 						<div class="background-second-part"></div>
 						<div class="turn-number">Turn {{ value.currentTurn }}</div>
 					</div>
-					<ul class="tiers">
-						<div
-							class="tier"
-							*ngFor="let currentTier of value.tiers; trackBy: trackByFn"
+					<ng-container *ngIf="showMinionsList$ | async">
+						<ul class="tiers">
+							<div
+								class="tier"
+								*ngFor="let currentTier of value.tiers; trackBy: trackByFn"
+								[ngClass]="{
+									'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+									'locked': isLocked(currentTier)
+								}"
+								(mouseover)="onTavernMouseOver(currentTier)"
+								(click)="onTavernClick(currentTier)"
+							>
+								<img class="icon" src="assets/images/bgs/star.png" />
+								<div class="number">{{ currentTier.tavernTier }}</div>
+							</div>
+						</ul>
+						<bgs-minions-list
+							*ngFor="let tier of value.tiers; trackBy: trackByFn"
+							class="minions-list"
 							[ngClass]="{
-								'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-								'locked': isLocked(currentTier)
+								'active':
+									tier.tavernTier === displayedTier?.tavernTier ||
+									tier.tavernTier === lockedTier?.tavernTier
 							}"
-							(mouseover)="onTavernMouseOver(currentTier)"
-							(click)="onTavernClick(currentTier)"
-						>
-							<img class="icon" src="assets/images/bgs/star.png" />
-							<div class="number">{{ currentTier.tavernTier }}</div>
-						</div>
-					</ul>
-					<bgs-minions-list
-						*ngFor="let tier of value.tiers; trackBy: trackByFn"
-						class="minions-list"
-						[ngClass]="{
-							'active':
-								tier.tavernTier === displayedTier?.tavernTier ||
-								tier.tavernTier === lockedTier?.tavernTier
-						}"
-						[cards]="tier.cards"
-						[showTribesHighlight]="showTribesHighlight$ | async"
-						[highlightedMinions]="highlightedMinions$ | async"
-						[highlightedTribes]="highlightedTribes$ | async"
-					></bgs-minions-list>
+							[cards]="tier.cards"
+							[showTribesHighlight]="showTribesHighlight$ | async"
+							[highlightedMinions]="highlightedMinions$ | async"
+							[highlightedTribes]="highlightedTribes$ | async"
+						></bgs-minions-list>
+					</ng-container>
 				</ng-container>
 			</div>
 		</div>
@@ -85,6 +87,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	currentTurn$: Observable<number>;
 	showTribesHighlight$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
+	showTurnNumber$: Observable<boolean>;
 
 	private enableMouseOver: boolean;
 
@@ -110,64 +113,29 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces)
 			.pipe(
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([races]) => {
+				this.mapData(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
 				}),
-				tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
-			.pipe(
-				map(([tribes]) => tribes),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting highlightedTribes in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([tribes]) => tribes));
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
-			.pipe(
-				map(([tribes]) => tribes),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting highlightedMinions in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([tribes]) => tribes));
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
-			.pipe(
-				map(([currentTurn]) => currentTurn),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting currentTurn in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentTurn]) => currentTurn));
 		this.showTribesHighlight$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
-			.pipe(
-				map(([info]) => info),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([info]) => info));
 		this.showMinionsList$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
-			.pipe(
-				map(([info]) => info),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting showMinionsList in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([info]) => info));
+		this.showTurnNumber$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableTurnNumbertOverlay)
+			.pipe(this.mapData(([info]) => info));
 		this.prefSubscription = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)
 			.pipe(
