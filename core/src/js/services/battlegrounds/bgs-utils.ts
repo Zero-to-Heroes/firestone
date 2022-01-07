@@ -1,4 +1,4 @@
-import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -527,4 +527,10 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 		// left (used to have Dire Wolf Alpha)
 		enchantments: minion.enchantments,
 	} as any);
+};
+
+export const isBattlegrounds = (gameType: GameType): boolean => {
+	return [GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY, GameType.GT_BATTLEGROUNDS_AI_VS_AI].includes(
+		gameType,
+	);
 };

@@ -455,7 +455,9 @@
 					"next": "If you decide to sync to hearthstone-decks.net, Firestone will send them each game you play anonymously with some info about your games (Deck Code, Rank, Game Results)",
 					"pref-label": "Synchronize your replays to hearthstone-decks.net"
 				}
-			}
+			},
+			"flash-window": "Flash HS window",
+			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
 		}
 	}
 }

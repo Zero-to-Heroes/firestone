@@ -2,9 +2,15 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
+import { isMercenaries } from '../../mercenaries/mercenaries-utils';
+import { OwUtilsService } from '../../plugins/ow-utils.service';
+import { PreferencesService } from '../../preferences.service';
 import { EventParser } from './event-parser';
 
 export class NewTurnParser implements EventParser {
+	constructor(private readonly owUtils: OwUtilsService, private readonly prefs: PreferencesService) {}
+
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.TURN_START;
 	}
@@ -18,6 +24,16 @@ export class NewTurnParser implements EventParser {
 		const isPlayerActive = currentState.playerDeck.isFirstPlayer
 			? gameEvent.additionalData.turnNumber % 2 === 1
 			: gameEvent.additionalData.turnNumber % 2 === 0;
+		if (
+			isPlayerActive &&
+			!isBattlegrounds(currentState.metadata.gameType) &&
+			!isMercenaries(currentState.metadata.gameType)
+		) {
+			const prefs = await this.prefs.getPreferences();
+			if (prefs.flashWindowOnYourTurn) {
+				this.owUtils.flashWindow();
+			}
+		}
 		const playerDeck = currentState.playerDeck.update({
 			isActivePlayer: isPlayerActive,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],

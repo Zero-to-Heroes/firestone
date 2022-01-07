@@ -19,6 +19,7 @@ import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
+import { OwUtilsService } from '../../plugins/ow-utils.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
@@ -128,6 +129,7 @@ export class BattlegroundsStoreService {
 		private init_BgsRunStatsService: BgsRunStatsService,
 		private readonly gameEventsService: GameEvents,
 		private readonly logsUploader: LogsUploaderService,
+		private readonly owUtils: OwUtilsService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -501,7 +503,7 @@ export class BattlegroundsStoreService {
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(this.prefs),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
-			new BgsHeroSelectionParser(this.memory),
+			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(this.gameEventsService),
@@ -519,7 +521,7 @@ export class BattlegroundsStoreService {
 			// new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
-			new BgsRecruitStartParser(this.prefs),
+			new BgsRecruitStartParser(this.owUtils, this.prefs),
 			new BgsGlobalInfoUpdatedParser(),
 			new BgsStartComputingPostMatchStatsParser(this.prefs),
 			new BgsInitMmrParser(this.memory),

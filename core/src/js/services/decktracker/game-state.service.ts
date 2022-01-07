@@ -16,6 +16,7 @@ import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { OwUtilsService } from '../plugins/ow-utils.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { uuid } from '../utils';
@@ -158,6 +159,7 @@ export class GameStateService {
 		private readonly deckHandler: DeckHandlerService,
 		private readonly memory: MemoryInspectionService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly owUtils: OwUtilsService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -493,7 +495,7 @@ export class GameStateService {
 			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
 			new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
 			new SecretDestroyedParser(this.helper),
-			new NewTurnParser(),
+			new NewTurnParser(this.owUtils, this.prefs),
 			new FirstPlayerParser(),
 			new CardStolenParser(this.helper, this.i18n),
 			new CardCreatorChangedParser(this.helper),

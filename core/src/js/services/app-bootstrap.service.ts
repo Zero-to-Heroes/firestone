@@ -41,6 +41,7 @@ import { MercenariesStoreService } from './mercenaries/mercenaries-store.service
 import { MercenariesOutOfCombatService } from './mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from './notifications.service';
 import { OverwolfService } from './overwolf.service';
+import { OwUtilsService } from './plugins/ow-utils.service';
 import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { RewardMonitorService } from './rewards/rewards-monitor';
@@ -104,6 +105,7 @@ export class AppBootstrapService {
 		private init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
 		private init_AppUiStoreService: AppUiStoreService,
 		private init_LocalizationService: LocalizationService,
+		private init_OWUtilsService: OwUtilsService,
 	) {}
 
 	public async init() {

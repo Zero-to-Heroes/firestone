@@ -55,6 +55,11 @@ import { Knob } from '../preference-slider.component';
 
 		<div class="title">Accessibility</div>
 		<div class="settings-group">
+			<preference-toggle
+				field="flashWindowOnYourTurn"
+				[label]="'settings.general.flash-window' | owTranslate"
+				[tooltip]="'settings.general.flash-window-tooltip' | owTranslate"
+			></preference-toggle>
 			<div class="subtitle" helpTooltip="A zoom level that will be applied to all windows">Zoom level</div>
 			<preference-slider
 				class="first-slider"

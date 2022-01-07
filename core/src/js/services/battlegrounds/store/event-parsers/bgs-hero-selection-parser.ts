@@ -3,19 +3,29 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
+import { OwUtilsService } from '../../../plugins/ow-utils.service';
+import { PreferencesService } from '../../../preferences.service';
 import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { BgsGlobalInfoUpdatedParser } from './bgs-global-info-updated-parser';
 import { EventParser } from './_event-parser';
 
 export class BgsHeroSelectionParser implements EventParser {
-	constructor(private readonly memoryService: MemoryInspectionService) {}
+	constructor(
+		private readonly memoryService: MemoryInspectionService,
+		private readonly owUtils: OwUtilsService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsHeroSelectionEvent';
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectionEvent): Promise<BattlegroundsState> {
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.flashWindowOnYourTurn) {
+			this.owUtils.flashWindow();
+		}
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo(10);
 		console.log('[bgs-game-init] retrieved bgs info', bgsInfo?.game?.AvailableRaces);
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);

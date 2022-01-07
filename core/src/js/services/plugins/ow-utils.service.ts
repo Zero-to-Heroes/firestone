@@ -9,7 +9,26 @@ export class OwUtilsService {
 	initialized = false;
 
 	constructor() {
+		console.log('[ow-utils] init starting');
 		this.initialize();
+		window['flashWindow'] = () => this.flashWindow();
+		console.log('[ow-utils] init done');
+	}
+
+	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			// console.log('[ow-utils] flashing window', windowName);
+			const plugin = await this.get();
+			try {
+				plugin.flashWindow(windowName, () => {
+					// console.log('[ow-utils] flashed window');
+					resolve();
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not flash window', e);
+				resolve();
+			}
+		});
 	}
 
 	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string, any]> {
