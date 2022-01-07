@@ -10,8 +10,7 @@ import { Race } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeName } from '../../services/battlegrounds/bgs-utils';
-import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../services/utils';
@@ -45,8 +44,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 	orientation$: Observable<'row' | 'column'>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
@@ -70,7 +68,7 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 		this.tooltip$ = this.bannedTribes$.pipe(
 			filter((bannedTribes) => !!bannedTribes?.length),
 			map((bannedTribes) => {
-				const tribeNames = bannedTribes.map((tribe) => getTribeName(tribe)).join(', ');
+				const tribeNames = bannedTribes.map((tribe) => getTribeName(tribe, this.i18n)).join(', ');
 				const exceptionCards = bannedTribes
 					.map((tribe) => this.getExceptions(tribe))
 					.reduce((a, b) => a.concat(b), []);

@@ -20,8 +20,10 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 			*ngIf="values$ | async as values"
 			[communityValues]="values.community"
 			[yourValues]="values.your"
-			communityTooltip="Average total stats (attack + health) on board at the beginning of each turn battle (top4 6000+ MMR)"
-			yourTooltip="Your values for this hero"
+			[communityTooltip]="
+				'app.battlegrounds.personal-stats.hero-details.warband-stats.community-tooltip' | owTranslate
+			"
+			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.warband-stats.your-tooltip' | owTranslate"
 		>
 		</graph-with-comparison-new>
 	`,

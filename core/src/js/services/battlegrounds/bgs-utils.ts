@@ -6,7 +6,7 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { capitalizeFirstLetter } from '../utils';
+import { LocalizationFacadeService } from '../localization-facade.service';
 
 export const NON_BUYABLE_MINION_IDS = [
 	CardIds.CuddlgamBattlegrounds,
@@ -18,7 +18,8 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.SnakeTrap_SnakeVanillaToken,
 ];
 
-export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe]?.toLowerCase());
+export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
+	i18n.translateString(`global.tribe.${Race[tribe]?.toLowerCase()}`);
 
 export const getTribeIcon = (tribe: string | Race): string => {
 	const referenceCardId = getReferenceTribeCardId(tribe);

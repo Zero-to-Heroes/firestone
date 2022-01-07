@@ -11,6 +11,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -51,6 +52,7 @@ export class BattlegroundsHeroFilterDropdownComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -58,7 +60,7 @@ export class BattlegroundsHeroFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: 'All heroes',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero.all'),
 			} as HeroFilterOption,
 			...this.allCards
 				.getCards()

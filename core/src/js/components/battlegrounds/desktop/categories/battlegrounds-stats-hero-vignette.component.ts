@@ -23,11 +23,17 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					<!-- <img [src]="icon" class="portrait" /> -->
 					<div class="stats">
 						<div class="item average-position">
-							<div class="label">Average position</div>
+							<div
+								class="label"
+								[owTranslate]="'app.battlegrounds.personal-stats.hero.average-position'"
+							></div>
 							<div class="value">{{ buildValue(averagePosition) }}</div>
 						</div>
 						<div class="item games-played">
-							<div class="label">Games played</div>
+							<div
+								class="label"
+								[owTranslate]="'app.battlegrounds.personal-stats.hero.games-played'"
+							></div>
 							<div class="value">{{ gamesPlayed }}</div>
 						</div>
 						<div
@@ -38,7 +44,11 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 								'missing': buildValue(netMmr) === '-'
 							}"
 						>
-							<div class="label" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
+							<div
+								class="label"
+								[owTranslate]="'app.battlegrounds.personal-stats.hero.net-mmr'"
+								[helpTooltip]="'app.battlegrounds.personal-stats.hero.net-mmr-tooltip' | owTranslate"
+							></div>
 							<div class="value">{{ buildValue(netMmr) }}</div>
 						</div>
 					</div>

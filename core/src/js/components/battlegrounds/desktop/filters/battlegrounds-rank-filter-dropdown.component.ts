@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -50,6 +51,7 @@ export class BattlegroundsRankFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -70,7 +72,7 @@ export class BattlegroundsRankFilterDropdownComponent
 							(percentile) =>
 								({
 									value: '' + percentile.percentile,
-									label: getBgsRankFilterLabelFor(percentile),
+									label: getBgsRankFilterLabelFor(percentile, this.i18n),
 								} as RankFilterOption),
 						),
 				),
@@ -124,22 +126,22 @@ interface RankFilterOption extends IOption {
 	value: string;
 }
 
-export const getBgsRankFilterLabelFor = (percentile: MmrPercentile): string => {
+export const getBgsRankFilterLabelFor = (percentile: MmrPercentile, i18n: LocalizationFacadeService): string => {
 	if (!percentile) {
-		return 'All ranks';
+		return i18n.translateString('app.battlegrounds.filters.rank.all');
 	}
 
 	switch (percentile.percentile) {
 		case 100:
-			return 'All ranks';
+			return i18n.translateString('app.battlegrounds.filters.rank.all');
 		case 50:
-			return `Top 50% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
 		case 25:
-			return `Top 25% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
 		case 10:
-			return `Top 10% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
 		case 1:
-			return `Top 1% (${getNiceMmrValue(percentile.mmr, 1)}+)`;
+			return i18n.translateString('app.battlegrounds.filters.rank.percentile', {
+				percentile: percentile.percentile,
+				mmr: getNiceMmrValue(percentile.mmr, 2),
+			});
 	}
 };
 

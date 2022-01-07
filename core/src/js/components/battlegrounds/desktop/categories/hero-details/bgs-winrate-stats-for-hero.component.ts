@@ -21,8 +21,10 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 			*ngIf="values$ | async as values"
 			[communityValues]="values.community"
 			[yourValues]="values.your"
-			communityTooltip="Average winrate (% chance to win a battle) per turn for this hero (top4 6000+ MMR)"
-			yourTooltip="Your values for this hero"
+			[communityTooltip]="
+				'app.battlegrounds.personal-stats.hero-details.winrate-stats.community-tooltip' | owTranslate
+			"
+			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.your-tooltip' | owTranslate"
 		>
 		</graph-with-comparison-new>
 	`,

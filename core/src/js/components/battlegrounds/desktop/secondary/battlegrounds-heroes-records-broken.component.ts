@@ -16,7 +16,7 @@ import { HeroStat } from './hero-stat';
 	],
 	template: `
 		<div class="battlegrounds-heroes-records-broken">
-			<div class="title">Best record heroes</div>
+			<div class="title" [owTranslate]="'app.battlegrounds.personal-stats.records.title'"></div>
 			<ul class="list">
 				<battlegrounds-hero-records-broken
 					*ngFor="let stat of (stats$ | async) || []; trackBy: trackByFn"

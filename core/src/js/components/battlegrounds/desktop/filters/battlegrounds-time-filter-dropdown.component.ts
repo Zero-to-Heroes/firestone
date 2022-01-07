@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -48,6 +49,7 @@ export class BattlegroundsTimeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -72,19 +74,19 @@ export class BattlegroundsTimeFilterDropdownComponent
 					const options: readonly TimeFilterOption[] = [
 						{
 							value: 'all-time',
-							label: getBgsTimeFilterLabelFor('all-time', selectedCategoryId),
+							label: getBgsTimeFilterLabelFor('all-time', selectedCategoryId, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
-							label: getBgsTimeFilterLabelFor('past-seven', selectedCategoryId),
+							label: getBgsTimeFilterLabelFor('past-seven', selectedCategoryId, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-three',
-							label: getBgsTimeFilterLabelFor('past-three', selectedCategoryId),
+							label: getBgsTimeFilterLabelFor('past-three', selectedCategoryId, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',
-							label: getBgsTimeFilterLabelFor('last-patch', selectedCategoryId),
+							label: getBgsTimeFilterLabelFor('last-patch', selectedCategoryId, this.i18n),
 							tooltip: formatPatch(patch),
 						} as TimeFilterOption,
 					];
@@ -130,16 +132,17 @@ interface TimeFilterOption extends IOption {
 export const getBgsTimeFilterLabelFor = (
 	filter: BgsActiveTimeFilterType,
 	selectedCategoryId: NavigationBattlegrounds['selectedCategoryId'],
+	i18n: LocalizationFacadeService,
 ): string => {
 	switch (filter) {
 		case 'past-seven':
-			return 'Past 7 days';
 		case 'past-three':
-			return 'Past 3 days';
 		case 'last-patch':
-			return 'Last patch';
+			return i18n.translateString(`app.battlegrounds.filters.time.${filter}`);
 		case 'all-time':
 		default:
-			return selectedCategoryId === 'bgs-category-personal-rating' ? 'Past 100 days' : 'Past 30 days';
+			return selectedCategoryId === 'bgs-category-personal-rating'
+				? i18n.translateString(`app.battlegrounds.filters.time.past-100`)
+				: i18n.translateString(`app.battlegrounds.filters.time.past-30`);
 	}
 };

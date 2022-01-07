@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
@@ -47,7 +48,11 @@ export class BattlegroundsPerfectGamesComponent
 	private displayedReplays: readonly GameStat[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -156,7 +161,7 @@ export class BattlegroundsPerfectGamesComponent
 	private groupReplays(replays: readonly GameStat[]): readonly GroupedReplays[] {
 		const groupingFunction = (replay: GameStat) => {
 			const date = new Date(replay.creationTimestamp);
-			return date.toLocaleDateString('en-US', {
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 				month: 'short',
 				day: '2-digit',
 				year: 'numeric',

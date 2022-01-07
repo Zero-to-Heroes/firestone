@@ -7,6 +7,7 @@ import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegro
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../../models/patches';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
@@ -21,11 +22,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-rating" *ngIf="value$ | async as value">
-			<div class="header">MMR / Matches</div>
+			<div class="header" [owTranslate]="'app.battlegrounds.personal-stats.rating.title'"></div>
 			<graph-with-single-value
 				[data]="value.data"
 				[labels]="value.labels"
-				emptyStateMessage="Start playing Battlegrounds to collect some information"
+				[emptyStateMessage]="'app.battlegrounds.personal-stats.rating.empty-state-message' | owTranslate"
 			></graph-with-single-value>
 		</div>
 	`,
@@ -36,7 +37,11 @@ export class BattlegroundsPersonalStatsRatingComponent
 	implements AfterContentInit {
 	value$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -122,7 +127,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 				data: [
 					{
 						data: values,
-						label: 'Rating',
+						label: this.i18n.translateString('app.battlegrounds.personal-stats.rating.axis-label'),
 					},
 				],
 				labels: labels,
@@ -133,7 +138,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 				data: [
 					{
 						data: data,
-						label: 'Rating',
+						label: this.i18n.translateString('app.battlegrounds.personal-stats.rating.axis-label'),
 					},
 				],
 				labels: Array.from(Array(data.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),

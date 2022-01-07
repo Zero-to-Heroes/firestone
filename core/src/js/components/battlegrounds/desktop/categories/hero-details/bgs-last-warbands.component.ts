@@ -7,6 +7,7 @@ import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operator
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
+import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
@@ -19,10 +20,15 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 	],
 	template: `
+		<!-- TODO translate -->
 		<div class="bgs-last-warbands">
 			<with-loading [isLoading]="false" [mainTitle]="null" [subtitle]="null" svgName="loading-spiral">
 				<ng-container *ngIf="boards$ | async as boards; else emptyState">
-					<div class="title">Last {{ boards?.length }} matches</div>
+					<div
+						class="title"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.last-warbands.title'"
+						[translateParams]="{ value: boards?.length }"
+					></div>
 					<div class="boards" scrollable>
 						<div class="board-container" *ngFor="let board of boards">
 							<div class="meta-info">
@@ -30,25 +36,41 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 								<div class="date">{{ board.date }}</div>
 								<div
 									class="damage dealt"
-									helpTooltip="Total damage dealt by each unit. The damage for units with the same name is aggregated, and not split per unit"
+									[helpTooltip]="
+										'app.battlegrounds.personal-stats.hero-details.last-warbands.damage-dealt-tooltip'
+											| owTranslate
+									"
 								>
 									<div class="damage-icon">
 										<svg class="svg-icon-fill">
 											<use xlink:href="assets/svg/sprite.svg#sword" />
 										</svg>
 									</div>
-									<div class="label">Dmg. dealt</div>
+									<div
+										class="label"
+										[owTranslate]="
+											'app.battlegrounds.personal-stats.hero-details.last-warbands.damage-dealt'
+										"
+									></div>
 								</div>
 								<div
 									class="damage received"
-									helpTooltip="Total damage received by each unit. The damage for units with the same name is aggregated, and not split per unit"
+									[helpTooltip]="
+										'app.battlegrounds.personal-stats.hero-details.last-warbands.damage-taken-tooltip'
+											| owTranslate
+									"
 								>
 									<div class="damage-icon">
 										<svg class="svg-icon-fill">
 											<use xlink:href="assets/svg/sprite.svg#sword" />
 										</svg>
 									</div>
-									<div class="label">Dmg. taken</div>
+									<div
+										class="label"
+										[owTranslate]="
+											'app.battlegrounds.personal-stats.hero-details.last-warbands.damage-taken'
+										"
+									></div>
 								</div>
 							</div>
 							<bgs-board
@@ -64,7 +86,10 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 				></ng-container>
 				<ng-template #emptyState>
 					<battlegrounds-empty-state
-						subtitle="Start playing Battlegrounds with this hero to collect some information"
+						[subtitle]="
+							'app.battlegrounds.personal-stats.hero-details.last-warbands.empty-state-message'
+								| owTranslate
+						"
 					></battlegrounds-empty-state>
 				</ng-template>
 			</with-loading>
@@ -80,6 +105,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -131,8 +157,11 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 		const review = gameStats.find((matchStat) => matchStat.reviewId === postMatch.reviewId);
 		const title =
 			review && review.additionalResult
-				? `Finished ${this.getFinishPlace(parseInt(review.additionalResult))}`
-				: `Last board`;
+				? this.i18n.translateString(
+						'app.battlegrounds.personal-stats.hero-details.last-warbands.finished-position',
+						{ value: this.getFinishPlace(parseInt(review.additionalResult)) },
+				  )
+				: this.i18n.translateString('app.battlegrounds.personal-stats.hero-details.last-warbands.last-board');
 		const normalizedIds = [
 			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
 		];
@@ -148,13 +177,15 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 			entities: boardEntities,
 			title: title,
 			minionStats: minionStats,
-			date: review ? this.formatDate(review.creationTimestamp) : 'Long ago',
+			date: review
+				? this.formatDate(review.creationTimestamp)
+				: this.i18n.translateString('app.battlegrounds.personal-stats.hero-details.last-warbands.long-ago'),
 		} as KnownBoard;
 		return result;
 	}
 
 	private formatDate(creationTimestamp: number): string {
-		return new Date(creationTimestamp).toLocaleString('en-us', {
+		return new Date(creationTimestamp).toLocaleString(this.i18n.formatCurrentLocale(), {
 			month: 'long',
 			day: 'numeric',
 		});
@@ -163,15 +194,17 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 	private getFinishPlace(finalPlace: number): string {
 		switch (finalPlace) {
 			case 1:
-				return '1st!!!!';
 			case 2:
-				return '2nd!!!';
 			case 3:
-				return '3rd!!';
 			case 4:
-				return '4th!';
+				return this.i18n.translateString(
+					`app.battlegrounds.personal-stats.hero-details.last-warbands.place-${finalPlace}`,
+				);
 			default:
-				return finalPlace + 'th';
+				return this.i18n.translateString(
+					`app.battlegrounds.personal-stats.hero-details.last-warbands.place-default`,
+					{ value: finalPlace },
+				);
 		}
 	}
 

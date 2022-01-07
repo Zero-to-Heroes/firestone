@@ -11,6 +11,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroSortFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -49,6 +50,7 @@ export class BattlegroundsHeroSortDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -59,19 +61,19 @@ export class BattlegroundsHeroSortDropdownComponent
 		this.options = [
 			{
 				value: 'average-position',
-				label: 'Average position',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.average-position'),
 			} as HeroSortFilterOption,
 			{
 				value: 'mmr',
-				label: 'Net MMR',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.mmr'),
 			} as HeroSortFilterOption,
 			{
 				value: 'games-played',
-				label: 'Games played',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.games-played'),
 			} as HeroSortFilterOption,
 			{
 				value: 'last-played',
-				label: 'Last played',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.last-played'),
 			} as HeroSortFilterOption,
 		] as readonly HeroSortFilterOption[];
 		this.filter$ = this.store

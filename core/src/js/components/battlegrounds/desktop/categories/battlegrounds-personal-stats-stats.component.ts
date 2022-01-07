@@ -21,121 +21,125 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						<use xlink:href="assets/svg/sprite.svg#new_record" />
 					</svg>
 				</div>
-				Record
+				{{ 'app.battlegrounds.personal-stats.records.columns.record' | owTranslate }}
 			</div>
 			<div class="filler"></div>
-			<div class="hero">Hero</div>
-			<div class="replay">Replay</div>
-			<div class="value">Score</div>
+			<div class="hero" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.hero'"></div>
+			<div class="replay" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.replay'"></div>
+			<div class="value" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.score'"></div>
 		</div>
 		<div class="stats-recap" scrollable *ngIf="value$ | async as stat">
 			<stat-cell
-				label="Total dmg dealt (minions)"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions' | owTranslate"
 				[value]="stat.totalMinionsDamageDealt.value"
 				[heroIcon]="stat.totalMinionsDamageDealt.hero"
 				[reviewId]="stat.totalMinionsDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Total dmg taken (minions)"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-taken-minions' | owTranslate"
 				[value]="stat.totalMinionsDamageTaken.value"
 				[heroIcon]="stat.totalMinionsDamageTaken.hero"
 				[reviewId]="stat.totalMinionsDamageTaken.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Total dmg dealt (hero)"
-				tooltipText="Doesn't include fights against the ghost"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero' | owTranslate"
+				[tooltipText]="
+					'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions-tooltip' | owTranslate
+				"
 				[value]="stat.totalHeroDamageDealt.value"
 				[heroIcon]="stat.totalHeroDamageDealt.hero"
 				[reviewId]="stat.totalHeroDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Max dmg dealt (hero)"
-				tooltipText="Doesn't include fights against the ghost"
+				[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
+				[tooltipText]="
+					'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-minions-tooltip' | owTranslate
+				"
 				[value]="stat.maxSingleTurnHeroDamageDealt.value"
 				[heroIcon]="stat.maxSingleTurnHeroDamageDealt.hero"
 				[reviewId]="stat.maxSingleTurnHeroDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Highest Win streak"
+				[label]="'app.battlegrounds.personal-stats.records.rows.win-streak' | owTranslate"
 				[value]="stat.winStreak.value"
 				[heroIcon]="stat.winStreak.hero"
 				[reviewId]="stat.winStreak.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Triples created"
+				[label]="'app.battlegrounds.personal-stats.records.rows.triples' | owTranslate"
 				[value]="stat.triples.value"
 				[heroIcon]="stat.triples.hero"
 				[reviewId]="stat.triples.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Max board stats"
+				[label]="'app.battlegrounds.personal-stats.records.rows.board-stats' | owTranslate"
 				[value]="stat.maxBoardStats.value"
 				[heroIcon]="stat.maxBoardStats.hero"
 				[reviewId]="stat.maxBoardStats.reviewId"
 				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
 			></stat-cell>
 			<stat-cell
-				label="Coins wasted"
+				[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
 				[value]="stat.coinsWasted.value"
 				[heroIcon]="stat.coinsWasted.hero"
 				[reviewId]="stat.coinsWasted.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Rerolls"
+				[label]="'app.battlegrounds.personal-stats.records.rows.rerolls' | owTranslate"
 				[value]="stat.rerolls.value"
 				[heroIcon]="stat.rerolls.hero"
 				[reviewId]="stat.rerolls.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Freezes"
+				[label]="'app.battlegrounds.personal-stats.records.rows.freezes' | owTranslate"
 				[value]="stat.freezes.value"
 				[heroIcon]="stat.freezes.hero"
 				[reviewId]="stat.freezes.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Hero Power used"
+				[label]="'app.battlegrounds.personal-stats.records.rows.hero-power' | owTranslate"
 				[value]="stat.heroPowers.value"
 				[heroIcon]="stat.heroPowers.hero"
 				[reviewId]="stat.heroPowers.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Minions bought"
+				[label]="'app.battlegrounds.personal-stats.records.rows.minions-bought' | owTranslate"
 				[value]="stat.minionsBought.value"
 				[heroIcon]="stat.minionsBought.hero"
 				[reviewId]="stat.minionsBought.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Minions sold"
+				[label]="'app.battlegrounds.personal-stats.records.rows.minions-sold' | owTranslate"
 				[value]="stat.minionsSold.value"
 				[heroIcon]="stat.minionsSold.hero"
 				[reviewId]="stat.minionsSold.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Enemy Minions killed"
+				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-minions-killed' | owTranslate"
 				[value]="stat.minionsKilled.value"
 				[heroIcon]="stat.minionsKilled.hero"
 				[reviewId]="stat.minionsKilled.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Enemy Heroes killed"
+				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-heroes-killed' | owTranslate"
 				[value]="stat.heroesKilled.value"
 				[heroIcon]="stat.heroesKilled.hero"
 				[reviewId]="stat.heroesKilled.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Battles going first"
+				[label]="'app.battlegrounds.personal-stats.records.rows.battles-going-first' | owTranslate"
 				[value]="stat.percentageOfBattlesGoingFirst.value?.toFixed(1) + '%'"
 				[heroIcon]="stat.percentageOfBattlesGoingFirst.hero"
 				[reviewId]="stat.percentageOfBattlesGoingFirst.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Battle luck"
+				[label]="'app.battlegrounds.personal-stats.records.rows.battle-luck' | owTranslate"
 				[value]="stat.battleLuck.value?.toFixed(1) + '%'"
 				[heroIcon]="stat.battleLuck.hero"
 				[reviewId]="stat.battleLuck.reviewId"
 			></stat-cell>
 			<stat-cell
-				label="Negative Battle luck"
+				[label]="'app.battlegrounds.personal-stats.records.rows.negative-battle-luck' | owTranslate"
 				[value]="stat.negativeBattleLuck.value?.toFixed(1) + '%'"
 				[heroIcon]="stat.negativeBattleLuck.hero"
 				[reviewId]="stat.negativeBattleLuck.reviewId"

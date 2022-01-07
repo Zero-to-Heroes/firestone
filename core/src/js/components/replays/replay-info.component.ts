@@ -17,6 +17,7 @@ import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../services/battlegrounds/bgs-utils';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { getHeroRole, isMercenaries, normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
@@ -246,6 +247,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	constructor(
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -336,7 +338,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 				.map((race) => ({
 					cardId: getReferenceTribeCardId(race),
 					icon: getTribeIcon(race),
-					tooltip: getTribeName(race),
+					tooltip: getTribeName(race, this.i18n),
 				}));
 			this.tribesTooltip = `Tribes available in this run: ${this.availableTribes
 				.map((tribe) => tribe.tooltip)

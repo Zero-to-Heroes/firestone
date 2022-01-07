@@ -4,6 +4,7 @@ import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs/internal/Observable';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
+import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
@@ -22,7 +23,7 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 				*ngIf="{ value: value$ | async } as obs"
 				[data]="obs.value.data"
 				[labels]="obs.value.labels"
-				emptyStateMessage="Start playing Battlegrounds with this hero to collect some information"
+				[emptyStateMessage]="'app.battlegrounds.personal-stats.hero-details.mmr.empty-state-message'"
 			></graph-with-single-value>
 		</div>
 	`,
@@ -31,7 +32,11 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -73,12 +78,11 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionCompone
 				{
 					data: finalResult,
 					lineTension: 0,
-					label: 'Rating',
+					label: this.i18n.translateString('app.battlegrounds.personal-stats.rating.axis-label'),
 				},
 			],
 			labels: Array.from(Array(finalResult.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),
 		};
-		console.debug('result', result);
 		return result;
 	}
 }

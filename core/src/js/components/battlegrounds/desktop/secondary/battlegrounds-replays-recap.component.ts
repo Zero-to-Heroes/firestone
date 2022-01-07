@@ -19,7 +19,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="battlegrounds-replays-recap" *ngIf="replays$ | async as replays">
-			<div class="title">Last {{ replays.length }} replays</div>
+			<div
+				class="title"
+				[owTranslate]="'app.decktracker.replays-recap.header'"
+				[translateParams]="{ value: replays.length }"
+			></div>
 			<ul class="list">
 				<li *ngFor="let replay of replays; trackBy: trackByFn">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>

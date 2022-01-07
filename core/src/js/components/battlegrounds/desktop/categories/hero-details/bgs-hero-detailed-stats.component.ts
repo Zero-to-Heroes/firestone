@@ -14,37 +14,55 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	],
 	template: `
 		<div class="bgs-hero-detailed-stats">
-			<div class="title">General stats</div>
+			<div class="title" [owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.title'"></div>
 			<div class="content" *ngIf="bgHeroStats$ | async as stats">
 				<div class="stat">
-					<div class="header">Games played</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.games-played'"
+					></div>
 					<div class="values">
 						<div class="my-value">{{ stats.playerGamesPlayed }}</div>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Avg. position</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.average-position'"
+					></div>
 					<div class="values">
 						<div class="my-value">{{ buildValue(stats.playerAveragePosition) }}</div>
 						<bgs-global-value [value]="buildValue(stats.averagePosition)"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Top 1</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.top-1'"
+					></div>
 					<div class="values">
 						<div class="my-value">{{ buildValue(stats.playerTop1, 1) }}%</div>
 						<bgs-global-value [value]="buildValue(stats.top1, 1) + '%'"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Top 4</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.top-4'"
+					></div>
 					<div class="values">
 						<div class="my-value">{{ buildValue(stats.playerTop4, 1) }}</div>
 						<bgs-global-value [value]="buildValue(stats.top4, 1) + '%'"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header" helpTooltip="Average MMR gain/loss per match">Avg. net MMR</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.net-mmr'"
+						[helpTooltip]="
+							'app.battlegrounds.personal-stats.hero-details.stats.net-mmr-tooltip' | owTranslate
+						"
+					></div>
 					<div class="values">
 						<div
 							class="my-value"
@@ -58,7 +76,13 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header" helpTooltip="Average MMR gain per match">Avg. MMR gain</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.avg-mmr-gain'"
+						[helpTooltip]="
+							'app.battlegrounds.personal-stats.hero-details.stats.avg-mmr-gain-tooltip' | owTranslate
+						"
+					></div>
 					<div class="values">
 						<div
 							class="my-value"
@@ -72,7 +96,13 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header" helpTooltip="Average MMR loss per match">Avg. MMR loss</div>
+					<div
+						class="header"
+						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.stats.avg-mmr-loss'"
+						[helpTooltip]="
+							'app.battlegrounds.personal-stats.hero-details.stats.avg-mmr-loss-tooltip' | owTranslate
+						"
+					></div>
 					<div class="values">
 						<div
 							class="my-value "

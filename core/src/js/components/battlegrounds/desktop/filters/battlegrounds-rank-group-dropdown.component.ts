@@ -11,6 +11,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsMmrGroupFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -49,6 +50,7 @@ export class BattlegroundsRankGroupDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -59,12 +61,12 @@ export class BattlegroundsRankGroupDropdownComponent
 		this.options = [
 			{
 				value: 'per-match',
-				label: 'Show each match',
+				label: this.i18n.translateString('app.battlegrounds.filters.rank-group.per-match'),
 			} as MmrGroupFilterOption,
 			{
 				value: 'per-day',
-				label: 'Group per day',
-				tooltip: 'Show the rating at the start of each day',
+				label: this.i18n.translateString('app.battlegrounds.filters.rank-group.per-day'),
+				tooltip: this.i18n.translateString('app.battlegrounds.filters.rank-group.per-day-tooltip'),
 			} as MmrGroupFilterOption,
 		] as readonly MmrGroupFilterOption[];
 		this.filter$ = this.store

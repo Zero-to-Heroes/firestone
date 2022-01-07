@@ -4,6 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
@@ -20,7 +21,10 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	template: `
 		<div class="battlegrounds-tier-list" *ngIf="stats$ | async as stats">
 			<div class="title">
-				Heroes Tier List ({{ stats.totalMatches.toLocaleString('en-US') }} matches)
+				{{
+					'app.battlegrounds.tier-list.header'
+						| owTranslate: { value: stats.totalMatches.toLocaleString('en-US') }
+				}}
 				<div class="info" [helpTooltip]="stats.tooltip" helpTooltipClasses="bgs-heroes-tier-list-tooltip">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#info" />
@@ -40,7 +44,11 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -114,9 +122,10 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 						<div class="content">
 							<div class="title">Built from ${totalMatches.toLocaleString('en-US')} matches filtering for:</div>
 							<ul class="filters">
-								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null)}</li>
+								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null, this.i18n)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(
 									info.mmrPercentiles.find((percentile) => percentile.percentile === info.rankFilter),
+									this.i18n,
 								)}</li>
 								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
 							</ul>
@@ -146,7 +155,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 			return 'All tribes';
 		}
 		return tribesFilter
-			.map((tribe) => getTribeName(tribe))
+			.map((tribe) => getTribeName(tribe, this.i18n))
 			.sort()
 			.join(', ');
 	}

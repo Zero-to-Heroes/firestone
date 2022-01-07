@@ -7,12 +7,12 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -51,6 +51,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -69,7 +70,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 							(tribe) =>
 								({
 									value: '' + tribe,
-									label: getTribeName(tribe),
+									label: getTribeName(tribe, this.i18n),
 								} as IOption),
 						)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
@@ -125,22 +126,3 @@ export class BattlegroundsTribesFilterDropdownComponent
 		this.stateUpdater.next(new BgsTribesFilterSelectedEvent((values ?? []).map((value) => +value as Race)));
 	}
 }
-
-export const getBgsRankFilterLabelFor = (percentile: MmrPercentile): string => {
-	switch (percentile.percentile) {
-		case 100:
-			return 'All ranks';
-		case 50:
-			return `Top 50% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
-		case 25:
-			return `Top 25% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
-		case 10:
-			return `Top 10% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
-		case 1:
-			return `Top 1% (${getNiceMmrValue(percentile.mmr, 1)}+)`;
-	}
-};
-
-const getNiceMmrValue = (mmr: number, significantDigit: number) => {
-	return Math.pow(10, significantDigit) * Math.round(mmr / Math.pow(10, significantDigit));
-};

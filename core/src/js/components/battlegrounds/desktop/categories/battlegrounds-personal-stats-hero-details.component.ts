@@ -13,6 +13,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -65,6 +66,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -89,10 +91,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
 			.pipe(
 				filter(([tab]) => !!tab),
-				map(([tab]) => tab),
-				distinctUntilChanged(),
-				tap((stat) => cdLog('emitting selected tab in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
+				this.mapData(([tab]) => tab),
 			);
 		this.player$ = combineLatest(
 			this.store.bgHeroStats$(),
@@ -133,16 +132,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 	}
 
 	getLabel(tab: BgsHeroStatsFilterId) {
-		switch (tab) {
-			case 'mmr':
-				return 'MMR';
-			case 'final-warbands':
-				return 'Last warbands';
-			case 'warband-stats':
-				return 'Warband stats';
-			case 'winrate-stats':
-				return 'Combat winrate';
-		}
+		return this.i18n.translateString(`app.battlegrounds.personal-stats.hero-details.tabs.${tab}`);
 	}
 
 	selectTab(tab: BgsHeroStatsFilterId) {

@@ -212,6 +212,31 @@
 		},
 		"battlegrounds": {
 			"filters": {
+				"hero": {
+					"all": "All heroes"
+				},
+				"hero-sort": {
+					"average-position": "Average position",
+					"mmr": "Net MMR",
+					"games-played": "Games played",
+					"last-played": "Last played"
+				},
+				"rank": {
+					"all": "All ranks",
+					"percentile": "Top {{percentile}}% ({{mmr}}+)"
+				},
+				"rank-group": {
+					"per-match": "Show each match",
+					"per-day": "Group per day",
+					"per-day-tooltip": "Show the rating at the start of each day"
+				},
+				"time": {
+					"past-seven": "Past 7 days",
+					"past-three": "Past 3 days",
+					"last-patch": "Last patch",
+					"past-100": "Past 100 days",
+					"past-30": "Past 30 days"
+				},
 				"tier": {
 					"all-tiers": "All tiers",
 					"tier": "Tier {{value}}"
@@ -220,6 +245,101 @@
 					"all-tribes": "All tribes",
 					"no-tribe": "No tribe"
 				}
+			},
+			"personal-stats": {
+				"hero": {
+					"average-position": "Average position",
+					"games-played": "Games played",
+					"net-mmr": "Net MMR",
+					"net-mmr-tooltip": "Average MMR gain/loss per match"
+				},
+				"hero-details": {
+					"tabs": {
+						"mmr": "MMR",
+						"final-warbands": "Last warbands",
+						"warband-stats": "Warband stats",
+						"winrate-stats": "Combat winrate"
+					},
+					"stats": {
+						"title": "General stats",
+						"games-played": "Games played",
+						"average-position": "Avg. position",
+						"top-1": "Top 1",
+						"top-4": "Top 4",
+						"net-mmr": "Avg. net MMR",
+						"net-mmr-tooltip": "Average MMR gain/loss per match",
+						"avg-mmr-gain": "Avg. MMR gain",
+						"avg-mmr-gain-tooltip": "Average MMR gain per match",
+						"avg-mmr-loss": "Avg. MMR loss",
+						"avg-mmr-loss-tooltip": "Average MMR loss per match"
+					},
+					"last-warbands": {
+						"title": "Last {{value}} matches",
+						"damage-dealt": "Dmg. dealt",
+						"damage-dealt-tooltip": "Total damage dealt by each unit. The damage for units with the same name is aggregated, and not split per unit",
+						"damage-taken": "Dmg. taken",
+						"damage-taken-tooltip": "Total damage received by each unit. The damage for units with the same name is aggregated, and not split per unit",
+						"empty-state-message": "Start playing Battlegrounds with this hero to collect some information",
+						"finished-position": "Finished {{value}}",
+						"last-board": "Last board",
+						"long-ago": "Long ago",
+						"place-1": "1st!!!!",
+						"place-2": "2nd!!!",
+						"place-3": "3rd!!",
+						"place-4": "4th!",
+						"place-default": "{{value}}th"
+					},
+					"warband-stats": {
+						"community-tooltip": "Average total stats (attack + health) on board at the beginning of each turn battle (top4 6000+ MMR)",
+						"your-tooltip": "Your values for this hero"
+					},
+					"winrate-stats": {
+						"community-tooltip": "Average winrate (% chance to win a battle) per turn for this hero (top4 6000+ MMR)",
+						"your-tooltip": "Your values for this hero"
+					},
+					"mmr": {
+						"empty-state-message": "Start playing Battlegrounds with this hero to collect some information"
+					}
+				},
+				"rating": {
+					"title": "MMR / Matches",
+					"empty-state-message": "Start playing Battlegrounds to collect some information",
+					"axis-label": "Rating"
+				},
+				"records": {
+					"title": "Best record heroes",
+					"columns": {
+						"record": "Record",
+						"hero": "Hero",
+						"replay": "Replay",
+						"score": "Score"
+					},
+					"rows": {
+						"total-dmg-dealt-minions": "Total dmg dealt (minions)",
+						"total-dmg-taken-minions": "Total dmg taken (minions)",
+						"total-dmg-dealt-hero": "Total dmg dealt (hero)",
+						"total-dmg-dealt-hero-tooltip": "Doesn't include fights against the ghost",
+						"max-dmg-dealt-hero": "Max dmg dealt (hero)",
+						"max-dmg-dealt-hero-tooltip": "Doesn't include fights against the ghost",
+						"win-streak": "Highest Win streak",
+						"triples": "Triples created",
+						"board-stats": "Max board stats",
+						"coins-wasted": "Coins wasted",
+						"rerolls": "Rerolls",
+						"freezes": "Freezes",
+						"hero-power": "Hero Power used",
+						"minions-bought": "Minions bought",
+						"minions-sold": "Minions sold",
+						"enemy-minions-killed": "Enemy Minions killed",
+						"enemy-heroes-killed": "Enemy Heroes killed",
+						"battles-going-first": "Battles going first",
+						"battle-luck": "Battle luck",
+						"negative-battle-luck": "Negative battle luck"
+					}
+				}
+			},
+			"tier-list": {
+				"header": "Heroes tier list ({{value}} matches) "
 			}
 		}
 	},
