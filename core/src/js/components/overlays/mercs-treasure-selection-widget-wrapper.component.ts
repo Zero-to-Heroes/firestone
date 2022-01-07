@@ -16,7 +16,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'mercs-treasure-selection-widget-wrapper',
-	styleUrls: [],
+	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
 	template: `
 		<mercenaries-out-of-combat-treasure-selection
 			class="widget"

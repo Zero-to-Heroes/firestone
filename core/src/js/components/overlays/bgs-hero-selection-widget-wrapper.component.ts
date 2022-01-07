@@ -17,7 +17,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'bgs-hero-selection-widget-wrapper',
-	styleUrls: [],
+	styleUrls: ['../../../css/component/overlays/background-widget.component.scss'],
 	template: `
 		<bgs-hero-selection-overlay
 			class="widget"

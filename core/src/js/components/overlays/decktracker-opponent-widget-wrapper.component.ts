@@ -17,7 +17,10 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
 	selector: 'decktracker-opponent-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
+	styleUrls: [
+		'../../../css/component/overlays/foreground-widget.component.scss',
+		'../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss',
+	],
 	template: `
 		<decktracker-overlay-opponent
 			class="widget"
