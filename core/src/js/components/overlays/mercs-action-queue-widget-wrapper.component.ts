@@ -38,6 +38,12 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 	protected positionExtractor = async (prefs: Preferences) => prefs.mercenariesActionsQueueOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
+	protected bounds = {
+		left: -50,
+		right: -50,
+		top: -50,
+		bottom: -50,
+	};
 
 	private visible: boolean;
 

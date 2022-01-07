@@ -40,6 +40,12 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 	protected positionExtractor = async (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
+	protected bounds = {
+		left: -100,
+		right: -100,
+		top: -50,
+		bottom: -50,
+	};
 
 	private visible: boolean;
 
