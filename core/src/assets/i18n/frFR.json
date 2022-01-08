@@ -128,8 +128,8 @@
 			},
 			"deck-summary": {
 				"total-games": "{{value}} parties",
-				"winrate": "Taux de victoires de {{value}}%",
-				"last-used": "Dernière utilisation : {{value}}",
+				"winrate": "{{value}}% victoires",
+				"last-used": "Vu le {{value}}",
 				"archive-button-tooltip": "Archiver ce deck (vous pourrez le restaurer plus tard)",
 				"restore-button-tooltip": "Restaurer ce deck",
 				"default-deck-name": "Nom du deck"
