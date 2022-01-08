@@ -83,6 +83,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.store.listenPrefs$((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
 				([state]) => state?.currentGame?.gameEnded,
@@ -90,8 +91,12 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 		).pipe(
 			this.mapData(
-				([[currentScene], [inGame, gameEnded, playerCount]]) =>
-					currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded && playerCount === 8,
+				([[currentScene], [bgsEnableOpponentBoardMouseOver], [inGame, gameEnded, playerCount]]) =>
+					bgsEnableOpponentBoardMouseOver &&
+					currentScene === SceneMode.GAMEPLAY &&
+					inGame &&
+					!gameEnded &&
+					playerCount === 8,
 			),
 		);
 		this.bgsPlayers$ = this.store
