@@ -7,8 +7,8 @@
 	width: 100%;
 }
 .cdk-overlay-container {
-	position: fixed;
-	z-index: 99999999999; // Above the ads
+	position: fixed !important;
+	z-index: 99999999999 !important; // Above the ads
 }
 .cdk-overlay-container:empty {
 	display: none;
