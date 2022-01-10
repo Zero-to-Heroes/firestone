@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.4.11',
+		version: '8.4.16',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,15 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a Brilliant Macaw widget that remembers the last Battlecry card that you played.`,
+								text: `Add an option to flash the Hearthstone icon in the taskbar when it's your turn (for non-Merc games).`,
 							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
 							{
-								type: 'feature',
-								text: `Add a counter for your opponent's Hero Power damage (only when they are Mage).`,
+								type: 'bug',
+								text: `Fix highlight not working anymore when selecting a treasure.`,
 							},
 						],
 					},
@@ -65,19 +70,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where the tracker could not be partially moved off-screen.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix Maestra games incorrectly being reported in stats until the next app restart.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue when minimizing / maximizing the tracker.`,
+								text: `Fix a bug where the option to not show the opponent's last board on mouse over would be ignored.`,
 							},
 						],
 					},
