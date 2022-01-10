@@ -225,7 +225,7 @@
 			"simulate-button": "Simuler"
 		},
 		"hero-stats": {
-			"avg-position-label": "Position moyenne :",
+			"avg-position-label": "Position moy. :",
 			"avg-position-tooltip": "Position finale moyenne",
 			"avg-position-your-tooltip": "Votre valeur",
 			"avg-position-global-tooltip": "Valeur globale",
