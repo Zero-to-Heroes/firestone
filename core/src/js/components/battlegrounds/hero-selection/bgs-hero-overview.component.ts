@@ -5,6 +5,7 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { defaultStartingHp } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
@@ -100,7 +101,11 @@ export class BgsHeroOverviewComponent {
 			.filter((step) => step)
 			.map((step) => ({
 				completed: !!step.numberOfCompletions,
-				text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
+				text: `${
+					!!step.numberOfCompletions
+						? this.i18n.translateString('battlegrounds.hero-selection.achievement-completed')
+						: this.i18n.translateString('battlegrounds.hero-selection.achievement-missing')
+				}: ${step.completedText}`,
 			}))
 			.sort((a, b) => {
 				if (a.completed) {
@@ -120,35 +125,7 @@ export class BgsHeroOverviewComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
-
-	getIcon(tribe: string): string {
-		let referenceCardId: string;
-		switch (tribe) {
-			case 'Mech':
-				referenceCardId = 'GVG_027';
-				break;
-			case 'Beast':
-				referenceCardId = 'BGS_021';
-				break;
-			case 'Demon':
-				referenceCardId = 'TB_BaconUps_060';
-				break;
-			case 'Dragon':
-				referenceCardId = 'BGS_036';
-				break;
-			case 'Murloc':
-				referenceCardId = 'BGS_030';
-				break;
-			case 'Pirate':
-				referenceCardId = 'BGS_080';
-				break;
-			default:
-				referenceCardId = 'BGS_009';
-				break;
-		}
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
-	}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	trackByFn(index, item: InternalAchievement) {
 		return index;

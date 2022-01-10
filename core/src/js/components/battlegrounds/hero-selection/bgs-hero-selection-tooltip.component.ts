@@ -46,41 +46,4 @@ export class BgsHeroSelectionTooltipComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef, private i18n: LocalizationFacadeService) {}
-
-	getIcon(tribe: string): string {
-		let referenceCardId: string;
-		switch (tribe) {
-			case 'Mech':
-				referenceCardId = 'GVG_027';
-				break;
-			case 'Beast':
-				referenceCardId = 'BGS_021';
-				break;
-			case 'Demon':
-				referenceCardId = 'TB_BaconUps_060';
-				break;
-			case 'Dragon':
-				referenceCardId = 'BGS_036';
-				break;
-			case 'Murloc':
-				referenceCardId = 'BGS_030';
-				break;
-			case 'Pirate':
-				referenceCardId = 'BGS_080';
-				break;
-			default:
-				referenceCardId = 'BGS_009';
-				break;
-		}
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
-	}
-
-	private getTribe(tribe: string): string {
-		if (tribe === 'mechanical') {
-			tribe = 'mech';
-		} else if (tribe === 'blank') {
-			tribe = 'no tribe';
-		}
-		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
-	}
 }

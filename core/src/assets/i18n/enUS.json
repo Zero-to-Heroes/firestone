@@ -427,7 +427,7 @@
 			"search-heroes-placeholder": "Search heroes",
 			"update-minion-title": "Update minion",
 			"summon-mechs": "Summon Mechs",
-			"summon-mechs-tooltip": "Gives the minion \"Deathrattle: summon two 1/1 mechs\"",
+			"summon-mechs-tooltip": "Gives the minion \"Deathrattle: summon three 1/1 mechs\"",
 			"summon-plants": "Summon Plants",
 			"summon-plants-tooltip": "Gives the minion \"Deathrattle: summon two 1/1 plants\"",
 			"sneed-deathrattle": "Sneed's DR",
@@ -445,6 +445,10 @@
 		},
 		"turn-counter": {
 			"settings-label": "Show turn counter"
+		},
+		"hero-selection": {
+			"achievement-completed": "Achievement completed",
+			"achievement-missing": "Achievement missing"
 		}
 	},
 	"settings": {

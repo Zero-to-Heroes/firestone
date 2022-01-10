@@ -20,7 +20,6 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 	],
 	template: `
-		<!-- TODO translate -->
 		<div class="bgs-last-warbands">
 			<with-loading [isLoading]="false" [mainTitle]="null" [subtitle]="null" svgName="loading-spiral">
 				<ng-container *ngIf="boards$ | async as boards; else emptyState">
