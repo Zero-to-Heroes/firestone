@@ -14,8 +14,10 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.ArgentBraggartBattlegrounds,
 	CardIds.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
 	CardIds.FishOfNzothBattlegrounds,
+	CardIds.CattlecarpOfNzothBattlegrounds,
 	CardIds.SnakeTrap_SnakeLegacyToken,
 	CardIds.SnakeTrap_SnakeVanillaToken,
+	CardIds.ImprovedSnakeTrap_SnakeToken,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
