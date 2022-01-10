@@ -26,7 +26,7 @@ declare let amplitude;
 					[owTranslate]="'battlegrounds.battle.turn'"
 					[translateParams]="{ value: turnNumber }"
 				></div>
-				<div class="result {{ result }}" *ngIf="result">{{ result }}</div>
+				<div class="result {{ result }}" *ngIf="result">{{ i18nResult }}</div>
 			</div>
 			<div class="battle-content">
 				<div class="group player">
@@ -90,7 +90,8 @@ export class BgsBattleRecapComponent {
 		}
 
 		this.turnNumber = value.turn;
-		this.result = value.result
+		this.result = value.result;
+		this.i18nResult = value.result
 			? this.i18n.translateString(`battlegrounds.battle.result.${value.result}`)
 			: undefined;
 
@@ -119,6 +120,7 @@ export class BgsBattleRecapComponent {
 
 	turnNumber: number;
 	result: string;
+	i18nResult: string;
 	selectable: boolean;
 	playerHeroCardId: string;
 	playerHealth: number;
