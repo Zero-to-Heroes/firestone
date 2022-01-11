@@ -420,7 +420,7 @@
 			"reposition-button-secondpass": "Second pass...",
 			"reposition-button-finalresult": "Final sims...",
 			"reposition-button-done": "Completed",
-			"reposition-button-tooltip": "(BETA) Find the best positioning for your board. Depending on the number of CPUs and the complexity of the boards, this can take a several minutes.",
+			"reposition-button-tooltip": "(BETA) Find the best positioning for your board. Depending on the number of CPUs and the complexity of the boards, this can take a several minutes, and will use a lot of CPU and RAM.",
 			"reposition-button-tooltip-firstpass": "Running a few (~50) simulations for each possible permutation to quickly eliminate the least promising ones",
 			"reposition-button-tooltip-secondpass": "Running a few hundreds (~250) simulations to get the most promising ones",
 			"reposition-button-tooltip-finalresult": "Running a full simulation on the most promising candidates. This is the longest step and can take several minutes",
