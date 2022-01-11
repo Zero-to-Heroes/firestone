@@ -42,6 +42,7 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter-selected-event';
 import { ArenaRewardsUpdatedEvent } from './events/arena/arena-rewards-updated-event';
 import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
+import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
@@ -165,6 +166,7 @@ import { ShowAchievementDetailsProcessor } from './processors/achievements/show-
 import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
 import { ArenaRewardsUpdatedProcessor } from './processors/arena/arena-rewards-updated-processor';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
+import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
@@ -618,7 +620,7 @@ export class MainWindowStoreService {
 			new ShowMatchStatsProcessor(this.prefs),
 
 			SelectMatchStatsTabEvent.eventName(),
-			new SelectMatchStatsTabProcessor(),
+			new SelectMatchStatsTabProcessor(this.prefs),
 
 			ChangeMatchStatsNumberOfTabsEvent.eventName(),
 			new ChangeMatchStatsNumberOfTabsProcessor(this.prefs),
@@ -714,6 +716,9 @@ export class MainWindowStoreService {
 
 			BgsSimulatorMinionTierFilterSelectedEvent.eventName(),
 			new BgsSimulatorMinionTierFilterSelectedProcessor(this.prefs),
+
+			BattlegroundsMainWindowSelectBattleEvent.eventName(),
+			new BattlegroundsMainWindowSelectBattleProcessor(),
 
 			// Mercenaries
 			MercenariesModeFilterSelectedEvent.eventName(),

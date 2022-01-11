@@ -50,4 +50,45 @@
 		padding: 15px;
 		// overflow: hidden;
 	}
+
+	::ng-deep bgs-battles-view {
+		bgs-battle-recap {
+			.bgs-battle-recap .battle-content {
+				.group .board.board.board {
+					margin-right: 0;
+				}
+				bgs-battle-status.results .damage-container.damage-container.damage-container {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1550px) {
+	.stats {
+		::ng-deep bgs-battles-view {
+			bgs-battle-recap {
+				.bgs-battle-recap .battle-content {
+					bgs-battle-status.results .damage-container.damage-container.damage-container:not(.lethal) {
+						display: flex;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1650px) {
+	.stats {
+		::ng-deep bgs-battles-view {
+			bgs-battle-recap {
+				.bgs-battle-recap .battle-content {
+					bgs-battle-status.results .damage-container.damage-container.damage-container {
+						display: flex;
+					}
+				}
+			}
+		}
+	}
 }

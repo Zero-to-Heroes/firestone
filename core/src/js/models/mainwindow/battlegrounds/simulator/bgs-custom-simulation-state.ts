@@ -1,4 +1,5 @@
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { NonFunctionProperties } from '../../../../services/utils';
 import { BgsFaceOffWithSimulation } from '../../../battlegrounds/bgs-face-off-with-simulation';
 
 export class BgsCustomSimulationState {
@@ -9,7 +10,7 @@ export class BgsCustomSimulationState {
 		this.faceOff = this.buildInitialFaceOff();
 	}
 
-	public update(base: BgsCustomSimulationState): BgsCustomSimulationState {
+	public update(base: Partial<NonFunctionProperties<BgsCustomSimulationState>>): BgsCustomSimulationState {
 		return Object.assign(new BgsCustomSimulationState(), this, base);
 	}
 

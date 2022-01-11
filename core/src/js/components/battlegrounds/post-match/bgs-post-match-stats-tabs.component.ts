@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -71,6 +72,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[invalidLimit]="1"
 				>
 				</bgs-chart-warband-composition>
+				<bgs-battles-view
+					class="stat"
+					*ngIf="selectedTab === 'battles'"
+					[faceOffs]="faceOffs"
+					[isMainWindow]="true"
+				></bgs-battles-view>
 			</ng-container>
 		</div>
 	`,
@@ -81,6 +88,7 @@ export class BgsPostMatchStatsTabsComponent
 	implements AfterContentInit, AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
 	tabs: readonly BgsStatsFilterId[];
+	faceOffs: readonly BgsFaceOffWithSimulation[];
 
 	heroStat$: Observable<BgsHeroStat>;
 
@@ -98,6 +106,18 @@ export class BgsPostMatchStatsTabsComponent
 		this._panel = value;
 		this.currentHeroId$$.next(value.player.cardId);
 		this.tabs = value.tabs;
+		this.faceOffs = (value.stats?.faceOffs ?? [])
+			.map((faceOff) => {
+				const battle = value.stats?.battleResultHistory?.find(
+					(battleResult) => battleResult.turn === faceOff.turn,
+				);
+				return {
+					...faceOff,
+					battleInfo: (battle as any)?.battleInfo,
+					battleResult: battle?.simulationResult,
+				} as BgsFaceOffWithSimulation;
+			})
+			.reverse();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -147,6 +167,8 @@ export class BgsPostMatchStatsTabsComponent
 				return 'Warband stats';
 			case 'winrate-per-turn':
 				return 'Winrate';
+			case 'battles':
+				return 'Battles';
 		}
 	}
 }

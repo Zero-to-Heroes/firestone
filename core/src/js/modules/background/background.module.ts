@@ -49,13 +49,7 @@ import { ArenaFiltersComponent } from '../../components/arena/desktop/filters/_a
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
-import { BgsBattleRecapComponent } from '../../components/battlegrounds/battles/bgs-battle-recap.component';
-import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/bgs-battle-side.component';
-import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
-import { BgsHeroPortraitSimulatorComponent } from '../../components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
-import { BgsMinusButtonComponent } from '../../components/battlegrounds/battles/bgs-minus-button.component';
-import { BgsPlusButtonComponent } from '../../components/battlegrounds/battles/bgs-plus-button.component';
 import { BgsSimulatorHeroPowerSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-selection.component';
@@ -564,12 +558,6 @@ const components = [
 		BgsBannedTribeComponent,
 		GraphWithSingleValueComponent,
 		BgsBattlesComponent,
-		BgsBattleComponent,
-		BgsBattleRecapComponent,
-		BgsBattleSideComponent,
-		BgsHeroPortraitSimulatorComponent,
-		BgsPlusButtonComponent,
-		BgsMinusButtonComponent,
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,

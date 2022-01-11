@@ -165,6 +165,7 @@ export class BgsGame {
 			turn: faceOff.turn,
 			actualResult: faceOff.result,
 			simulationResult: faceOff.battleResult,
+			battleInfo: faceOff.battleInfo,
 		}));
 	}
 

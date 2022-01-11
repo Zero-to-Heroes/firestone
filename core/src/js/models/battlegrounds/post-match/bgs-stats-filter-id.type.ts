@@ -3,4 +3,6 @@ export type BgsStatsFilterId =
 	| 'warband-total-stats-by-turn'
 	| 'warband-composition-by-turn'
 	| 'stats'
-	| 'winrate-per-turn';
+	| 'winrate-per-turn'
+	// For stats of past games
+	| 'battles';

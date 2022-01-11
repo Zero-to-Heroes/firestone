@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -17,6 +18,13 @@ import {
 	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
+import { BgsBattleRecapComponent } from '../../components/battlegrounds/battles/bgs-battle-recap.component';
+import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/bgs-battle-side.component';
+import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
+import { BgsBattlesViewComponent } from '../../components/battlegrounds/battles/bgs-battles-view.component';
+import { BgsHeroPortraitSimulatorComponent } from '../../components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
+import { BgsMinusButtonComponent } from '../../components/battlegrounds/battles/bgs-minus-button.component';
+import { BgsPlusButtonComponent } from '../../components/battlegrounds/battles/bgs-plus-button.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
@@ -122,6 +130,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 export function HttpLoaderFactory(http: HttpClient) {
 	return new TranslateHttpLoader(http, '/Files/assets/i18n/', '.json');
 }
+
+// Include everything that is needed for both Twitch and the standard app here
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -144,6 +154,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 				deps: [HttpClient],
 			},
 		}),
+		DragDropModule,
 	],
 	declarations: [
 		WindowWrapperComponent,
@@ -236,6 +247,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
+
+		BgsBattlesViewComponent,
+		BgsBattleComponent,
+		BgsBattleRecapComponent,
+		BgsBattleSideComponent,
+		BgsPlusButtonComponent,
+		BgsMinusButtonComponent,
+		BgsHeroPortraitSimulatorComponent,
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
@@ -355,6 +374,14 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
+
+		BgsBattlesViewComponent,
+		BgsBattleComponent,
+		BgsBattleRecapComponent,
+		BgsBattleSideComponent,
+		BgsPlusButtonComponent,
+		BgsMinusButtonComponent,
+		BgsHeroPortraitSimulatorComponent,
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
