@@ -11,7 +11,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { OverwolfService } from '../services/overwolf.service';
@@ -79,7 +79,7 @@ export class WindowWrapperComponent
 	];
 
 	private stateChangedListener: (message: any) => void;
-	private windowId: string;
+	private windowId = new BehaviorSubject<string>(null);
 
 	private zoom = 1;
 	private originalWidth = 0;
@@ -97,16 +97,21 @@ export class WindowWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.sub$$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.globalZoomLevel)
+		this.sub$$ = combineLatest(
+			this.windowId.asObservable(),
+			this.store.listen$(([main, nav, prefs]) => prefs.globalZoomLevel),
+		)
 			.pipe(
-				map(([zoom]) => zoom),
+				map(([windowId, [zoom]]) => ({
+					windowId,
+					zoom,
+				})),
 				takeUntil(this.destroyed$),
 			)
-			.subscribe(async (zoom) => {
+			.subscribe(async ({ windowId, zoom }) => {
 				const normalized = (zoom ?? 0) / 100;
 				this.zoom = normalized <= 1 ? 0 : normalized;
-				if (this.EXCLUDED_WINDOW_IDS.includes(this.windowId)) {
+				if (this.EXCLUDED_WINDOW_IDS.includes(windowId)) {
 					this.zoom = 0;
 				}
 				if (!this.originalHeight || !this.originalWidth) {
@@ -125,8 +130,8 @@ export class WindowWrapperComponent
 
 	async ngAfterViewInit() {
 		const currentWindow = await this.ow.getCurrentWindow();
-		this.windowId = currentWindow.id;
-		console.log('windowId', this.windowId);
+		this.windowId.next(currentWindow.id);
+		console.log('windowId', this.windowId.value);
 
 		this.stateChangedListener = this.ow.addStateChangedListener(currentWindow.name, (message) => {
 			if (message.window_state_ex === 'maximized') {
@@ -163,7 +168,7 @@ export class WindowWrapperComponent
 
 		event.preventDefault();
 		event.stopPropagation();
-		await this.ow.dragResize(this.windowId, edge);
+		await this.ow.dragResize(this.windowId.value, edge);
 		const window = await this.ow.getCurrentWindow();
 		this.originalWidth = window.width;
 		this.originalHeight = window.height;
@@ -179,7 +184,7 @@ export class WindowWrapperComponent
 			return;
 		}
 		await this.ow.changeWindowSize(
-			this.windowId,
+			this.windowId.value,
 			Math.max(this.originalWidth, this.zoom * this.originalWidth),
 			Math.max(this.originalHeight, this.zoom * this.originalHeight),
 		);
