@@ -31,68 +31,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		`../../../../css/component/battlegrounds/battles/bgs-battles.component.scss`,
 	],
 	template: `
-		<div
-			class="container"
+		<bgs-battles-view
 			*ngIf="{ selectedFaceOff: selectedFaceOff$ | async, faceOffs: faceOffs$ | async } as value"
+			[faceOffs]="value.faceOffs"
+			[selectedFaceOff]="value.selectedFaceOff"
+			[actualBattle]="actualBattle$ | async"
+			[battleResultHistory]="battleResultHistory$ | async"
 		>
-			<div class="content empty-state" *ngIf="!value.faceOffs?.length">
-				<i>
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
-					</svg>
-				</i>
-				<span class="title" [owTranslate]="'battlegrounds.sim.empty-state-title'"></span>
-				<span class="subtitle" [owTranslate]="'battlegrounds.sim.empty-state-subtitle'"></span>
-			</div>
-			<ng-container>
-				<div class="content" *ngIf="value.faceOffs?.length">
-					<ng-container *ngIf="value.selectedFaceOff">
-						<bgs-battle
-							class="battle"
-							[faceOff]="value.selectedFaceOff"
-							[hideActualBattle]="false"
-							[actualBattle]="actualBattle$ | async"
-							[clickToChange]="true"
-							[allowClickToAdd]="true"
-							[closeOnMinion]="true"
-							[fullScreenMode]="false"
-							[showTavernTier]="true"
-							[additionalClass]="'inline'"
-							[simulationUpdater]="simulationUpdater"
-							[simulationReset]="simulationReset"
-						></bgs-battle>
-						<button class="i-30 close-button" (mousedown)="closeBattle()">
-							<svg class="svg-icon-fill">
-								<use
-									xmlns:xlink="https://www.w3.org/1999/xlink"
-									xlink:href="assets/svg/sprite.svg#window-control_close"
-								></use>
-							</svg>
-						</button>
-						<div class="battles-header" [owTranslate]="'battlegrounds.sim.battles-header'"></div>
-					</ng-container>
-					<div class="battles-list" scrollable>
-						<bgs-battle-recap
-							*ngFor="let faceOff of value.faceOffs; trackBy: trackByFn"
-							[faceOff]="faceOff"
-							(click)="selectBattle(faceOff)"
-							[ngClass]="{
-								'highlighted': value.selectedFaceOff?.id && faceOff.id === value.selectedFaceOff.id
-							}"
-						></bgs-battle-recap>
-					</div>
-				</div>
-			</ng-container>
-			<div class="left">
-				<div class="header" [owTranslate]="'battlegrounds.sim.turn-winrate-graph-title'"></div>
-				<div class="left-info">
-					<bgs-winrate-chart
-						class="chart"
-						[battleResultHistory]="battleResultHistory$ | async"
-					></bgs-winrate-chart>
-				</div>
-			</div>
-		</div>
+		</bgs-battles-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
