@@ -16,6 +16,7 @@ import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-s
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
@@ -127,6 +128,7 @@ export class BgsPostMatchStatsTabsComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -156,19 +158,6 @@ export class BgsPostMatchStatsTabsComponent
 	}
 
 	getLabel(tab: BgsStatsFilterId): string {
-		switch (tab) {
-			case 'hp-by-turn':
-				return 'Health by turn';
-			case 'stats':
-				return 'Stats';
-			case 'warband-composition-by-turn':
-				return 'Compositions';
-			case 'warband-total-stats-by-turn':
-				return 'Warband stats';
-			case 'winrate-per-turn':
-				return 'Winrate';
-			case 'battles':
-				return 'Battles';
-		}
+		return this.i18n.translateString(`battlegrounds.post-match-stats.tabs.${tab}`);
 	}
 }

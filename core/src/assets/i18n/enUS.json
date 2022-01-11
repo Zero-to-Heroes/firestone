@@ -449,6 +449,16 @@
 		"hero-selection": {
 			"achievement-completed": "Achievement completed",
 			"achievement-missing": "Achievement missing"
+		},
+		"post-match-stats": {
+			"tabs": {
+				"hp-by-turn": "Health by turn",
+				"stats": "Stats",
+				"warband-composition-by-turn": "Compositions",
+				"warband-total-stats-by-turn": "Warband stats",
+				"winrate-per-turn": "Winrate",
+				"battles": "Battles"
+			}
 		}
 	},
 	"settings": {
