@@ -77,7 +77,7 @@ declare let amplitude;
 						<div class="result new">
 							<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
 						</div>
-						<div class="controls">
+						<div class="controls position">
 							<div
 								class="button best-position"
 								(click)="findBestPositioning()"
