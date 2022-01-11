@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -270,6 +270,7 @@ export class DeckTrackerOverlayRootComponent
 				this.mapData(([pref]) => pref),
 				filter((pref) => !!pref),
 				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
 			)
 			.subscribe((scale) => {
 				this.el.nativeElement.style.setProperty('--decktracker-scale', scale / 100);

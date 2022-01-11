@@ -72,11 +72,9 @@ export class PackHistoryComponent extends AbstractSubscriptionComponent implemen
 				this.mapData(([packs]) =>
 					(packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof'),
 				),
-				tap((info) => console.debug('filtered packs history', info)),
 			);
 		this.packHistory$ = combineLatest(filteredHistory$, this.displayedHistorySize.asObservable()).pipe(
 			this.mapData(([packs, displayedHistorySize]) => packs.slice(0, displayedHistorySize)),
-			tap((info) => console.debug('final packs history', info)),
 		);
 		this.totalHistoryLength$ = filteredHistory$.pipe(this.mapData((packs) => packs.length));
 	}

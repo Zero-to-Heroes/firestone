@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -48,11 +47,9 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
 			)
 			.pipe(
-				tap((info) => console.debug('updated filter', info)),
 				this.mapData(([decks, sort]) =>
 					(decks?.filter((deck) => deck.totalGames > 0) ?? []).sort(this.getSortFunction(sort)),
 				),
-				tap((info) => console.debug('after updated filter', info)),
 			);
 	}
 
