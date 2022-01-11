@@ -104,7 +104,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.DisksOfLegend:
 		case CardIds.DragonboneRitualTavernBrawl:
 		case CardIds.EerieStoneTavernBrawl:
-		case CardIds.ElixirOfVigor:
+		case CardIds.ElixirOfVigorTavernBrawl:
 		case CardIds.EmeraldGogglesTavernBrawl:
 		case CardIds.EnduranceTrainingTavernBrawl:
 		case CardIds.ExpeditedBurialTavernBrawl:
