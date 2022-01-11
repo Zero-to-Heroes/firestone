@@ -52,6 +52,10 @@
 	}
 
 	::ng-deep bgs-battles-view {
+		.left {
+			display: none;
+		}
+
 		bgs-battle-recap {
 			.bgs-battle-recap .battle-content {
 				.group .board.board.board {

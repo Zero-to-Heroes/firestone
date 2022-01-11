@@ -46,6 +46,9 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input() helpTooltipClasses: string;
 	@Input('helpTooltipShowArrow') showArrow = false;
 
+	@Input('helpTooltipOnlyShowOnClick') onlyShowOnClick = false;
+	@Input('helpTooltipClickTimeout') clickTimeout = 2000;
+
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -150,8 +153,8 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	@HostListener('mouseenter')
-	async onMouseEnter() {
-		if (!this._text) {
+	async onMouseEnter(override = false) {
+		if (!this._text || (!override && this.onlyShowOnClick)) {
 			return;
 		}
 
@@ -214,6 +217,12 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('click')
 	onMouseClick() {
+		if (this.onlyShowOnClick) {
+			this.onMouseEnter(true);
+			setTimeout(() => this.onMouseLeave(), this.clickTimeout);
+			return;
+		}
+
 		if (this.stayOpenOnClick) {
 			return;
 		}
@@ -231,6 +240,9 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		if (this.onlyShowOnClick) {
+			return;
+		}
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

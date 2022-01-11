@@ -1,0 +1,5 @@
+<svg width="13" height="16" viewBox="0 0 13 16" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<rect x="3.4" y="0.4" width="9.2" height="11.2" fill="var(--icon-color, currentcolor)" stroke="var(--icon-color-secondary, currentcolor)" stroke-width="0.8"/>
+	<rect x="0.4" y="4.4" width="9.2" height="11.2" fill="var(--icon-color, currentcolor)" stroke="var(--icon-color-secondary, currentcolor)" stroke-width="0.8"/>
+</svg>

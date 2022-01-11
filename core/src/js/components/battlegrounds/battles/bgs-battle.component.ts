@@ -20,6 +20,7 @@ import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils';
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
@@ -110,15 +111,47 @@ declare let amplitude;
 							[helpTooltip]="tooltip"
 							[owTranslate]="'battlegrounds.sim.simulate-button'"
 						></div>
-						<div class="reset" (click)="resetBoards()">
-							<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-							<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
+						<div class="side-buttons">
+							<div
+								class="export"
+								(click)="exportBoards()"
+								[helpTooltip]="exportConfirmationText"
+								[helpTooltipOnlyShowOnClick]="true"
+								[helpTooltipClickTimeout]="exportConfirmationTimeout"
+							>
+								<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
+								<div class="text" [owTranslate]="'battlegrounds.sim.export-button'"></div>
+							</div>
+							<div class="reset" (click)="resetBoards()">
+								<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
+								<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="button reset" *ngIf="fullScreenMode" (click)="resetBoards()">
-					<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-					<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
+				<div class="side-buttons" *ngIf="fullScreenMode">
+					<div
+						class="button import"
+						(click)="importBoards()"
+						[helpTooltip]="'battlegrounds.sim.import-button-tooltip' | owTranslate"
+					>
+						<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
+						<div class="text" [owTranslate]="'battlegrounds.sim.import-button'"></div>
+					</div>
+					<div
+						class="button export"
+						(click)="exportBoards()"
+						[helpTooltip]="exportConfirmationText"
+						[helpTooltipOnlyShowOnClick]="true"
+						[helpTooltipClickTimeout]="exportConfirmationTimeout"
+					>
+						<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
+						<div class="text" [owTranslate]="'battlegrounds.sim.export-button'"></div>
+					</div>
+					<div class="button reset" (click)="resetBoards()">
+						<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
+						<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -185,6 +218,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	player: BgsBoardInfo;
 
 	tooltip: string;
+	exportConfirmationText: string;
+	exportConfirmationTimeout = 4_000;
 
 	newBattle: BgsFaceOffWithSimulation;
 
@@ -200,6 +235,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly ow: OverwolfService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -439,6 +475,42 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		this.simulationReset(this._faceOff.id);
 	}
 
+	async importBoards() {
+		const code = await this.ow.getFromClipboard();
+		try {
+			const faceOffStr = atob(code);
+			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
+			this.simulationUpdater(null, faceOff);
+			amplitude.getInstance().logEvent('import-bgs-sim-code');
+		} catch (e) {
+			console.warn('could not import from clipboard', code, e);
+		}
+	}
+
+	exportBoards() {
+		amplitude.getInstance().logEvent('export-bgs-sim-code');
+		const sim: BgsFaceOffWithSimulation = {
+			...this._faceOff,
+			battleResult: undefined,
+			battleInfoStatus: undefined,
+			battleInfoMesage: undefined,
+		} as BgsFaceOffWithSimulation;
+		const code = btoa(JSON.stringify(sim));
+
+		this.ow.placeOnClipboard(code);
+		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.export-confirmation');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.exportConfirmationText = null;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, this.exportConfirmationTimeout);
+		amplitude.getInstance().logEvent('export-bgs-sim-code');
+	}
+
 	// For now do it purely in the UI, let's see later on if we want to use the store
 	async simulateNewBattle() {
 		amplitude.getInstance().logEvent('battle-resim');
@@ -514,5 +586,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		this.player = this._faceOff.battleInfo.playerBoard;
 		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

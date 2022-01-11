@@ -17,7 +17,7 @@ export class BgsCustomSimulationUpdateProcessor implements Processor {
 		console.debug('handling simulation update event', event);
 		const merged = BgsFaceOffWithSimulation.create(
 			deepmerge(
-				event.currentFaceOff as Partial<BgsFaceOffWithSimulation>,
+				(event.currentFaceOff as Partial<BgsFaceOffWithSimulation>) ?? new BgsFaceOffWithSimulation(),
 				event.partialUpdate as Partial<BgsFaceOffWithSimulation>,
 				{
 					arrayMerge: (destinationArray, sourceArray, options) => sourceArray,
