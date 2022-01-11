@@ -17,6 +17,7 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { BgsBattlePositioningService } from '../../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -75,6 +76,14 @@ declare let amplitude;
 						</div>
 						<div class="result new">
 							<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
+						</div>
+						<div class="controls">
+							<div
+								class="button best-position"
+								(click)="findBestPositioning()"
+								[helpTooltip]="'battlegrounds.sim.best-position-button-tooltip' | owTranslate"
+								[owTranslate]="'battlegrounds.sim.best-position-button'"
+							></div>
 						</div>
 					</div>
 					<bgs-battle-side
@@ -167,7 +176,11 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	@Input() simulationReset: (faceOffId: string) => void;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
+		console.debug('setting faceOff', value);
 		this._faceOff = value;
+		if (!this._faceOff) {
+			return;
+		}
 		if (!this._faceOff.battleInfo) {
 			this._faceOff = this._faceOff.update({
 				battleInfo: {
@@ -230,6 +243,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	constructor(
 		private readonly simulationService: BgsBattleSimulationService,
+		private readonly positioningService: BgsBattlePositioningService,
 		private readonly prefs: PreferencesService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
@@ -551,6 +565,51 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	async findBestPositioning() {
+		amplitude.getInstance().logEvent('battle-best-position');
+		this.newBattle = BgsFaceOffWithSimulation.create({
+			battleInfoStatus: 'waiting-for-result',
+			battleResult: null,
+		} as BgsFaceOffWithSimulation);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
+		const prefs = await this.prefs.getPreferences();
+		const battleInfo: BgsBattleInfo = {
+			playerBoard: {
+				player: this.player.player,
+				secrets: this.player.secrets,
+				board: this.player.board,
+			},
+			opponentBoard: {
+				player: this.opponent.player,
+				secrets: this.opponent.secrets,
+				board: this.opponent.board,
+			},
+			options: {
+				...this._faceOff.battleInfo.options,
+				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
+				maxAcceptableDuration: 6000,
+			},
+		};
+		// console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
+		const result = await this.positioningService.findBestPositioning(battleInfo, prefs);
+		// console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
+		this.simulationUpdater(
+			null,
+			BgsFaceOffWithSimulation.create({
+				battleInfoStatus: 'done',
+				battleInfo: result.battleInfo,
+				battleResult: result.result,
+			} as BgsFaceOffWithSimulation),
+		);
+		// this.newBattleStatus = 'done';
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private buildBoard(entities: readonly Entity[]): BoardEntity[] {

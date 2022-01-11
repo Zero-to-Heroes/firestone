@@ -35,6 +35,7 @@ const entry = {
 	mercenariesoutofcombattreasureselection: './src/js/modules/background/main.ts',
 	outofcardscallback: './src/js/modules/background/main.ts',
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
+	'bgsmultisimulation.worker': './src/js/workers/bgs-multi-sim.worker.ts',
 	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
 
@@ -57,6 +58,12 @@ module.exports = function (env, argv) {
 			raw: true,
 			entryOnly: true,
 			test: /bgsbattlesimulationworker/,
+		}),
+		new BannerPlugin({
+			banner: `var window = self;importScripts("./vendor.js");`,
+			raw: true,
+			entryOnly: true,
+			test: /bgsmultisimulationworker/,
 		}),
 		new BannerPlugin({
 			banner: `var window = self;importScripts("./vendor.js");`,

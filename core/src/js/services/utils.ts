@@ -190,6 +190,14 @@ export const pickRandom = <T>(array: readonly T[]): T => {
 	return array[Math.floor(Math.random() * array.length)];
 };
 
+export const chunk = <T>(array: T[], size: number): T[][] =>
+	array.reduce((acc, _, i) => {
+		if (i % size === 0) {
+			acc.push(array.slice(i, i + size));
+		}
+		return acc;
+	}, []);
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];

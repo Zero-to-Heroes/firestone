@@ -1,6 +1,6 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsCustomSimulationResetEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
 import { BgsCustomSimulationUpdateEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-event';
@@ -48,9 +48,8 @@ export class BattlegroundsSimulatorComponent
 			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
 			.pipe(
 				filter(([state]) => !!state),
-				map(([state]) => state.faceOff),
-				distinctUntilChanged(),
-				tap((faceOff) => console.debug('[cd] emitting in ', this.constructor.name, faceOff)),
+				this.mapData(([state]) => state.faceOff),
+				tap((faceOff) => console.debug('[cd] faceOff in ', this.constructor.name, faceOff)),
 				takeUntil(this.destroyed$),
 			);
 	}

@@ -373,6 +373,7 @@ import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
+import { BgsBattlePositioningService } from '../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-user-stats.service';
 import { BgsCustomSimulationService } from '../../services/battlegrounds/bgs-custom-simulation-service.service';
@@ -960,6 +961,7 @@ const components = [
 		BgsInitService,
 		BgsGlobalStatsService,
 		BgsBattleSimulationService,
+		BgsBattlePositioningService,
 		BgsRunStatsService,
 		BgsBestUserStatsService,
 		RealTimeStatsService,

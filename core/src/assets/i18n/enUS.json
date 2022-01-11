@@ -415,6 +415,8 @@
 			"export-confirmation": "Simulation code copied to the clipboard",
 			"import-button": "Import",
 			"import-button-tooltip": "Import a simulation code to populate the simulator",
+			"best-position-button": "Reposition",
+			"best-position-button-tooltip": "Find the best positioning for your board (beta)",
 			"actual": "Actual",
 			"simulated": "Simulated",
 			"empty-state-title": "Nothing here yet",

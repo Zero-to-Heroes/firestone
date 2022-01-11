@@ -126,7 +126,6 @@ export class BgsBattleSimulationService {
 			[...Array(numberOfWorkers).keys()].map((i) =>
 				this.simulateLocalBattleInstance(
 					battleInfo,
-					prefs,
 					Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
 				),
 			),
@@ -179,7 +178,6 @@ export class BgsBattleSimulationService {
 
 	public async simulateLocalBattleInstance(
 		battleInfo: BgsBattleInfo,
-		prefs: Preferences,
 		numberOfSims: number,
 	): Promise<SimulationResult> {
 		return new Promise<SimulationResult>((resolve) => {
