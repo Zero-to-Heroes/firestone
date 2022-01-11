@@ -337,15 +337,6 @@
 				display: flex;
 				align-items: center;
 
-				&.position {
-					padding-right: 0;
-					border-right: 0;
-					margin-right: 0;
-					padding-left: 30px;
-					margin-left: 30px;
-					border-left: 1px solid var(--color-2);
-				}
-
 				.button {
 					background: var(--color-2);
 					color: var(--color-5);
@@ -353,6 +344,23 @@
 
 					&:hover {
 						background: var(--color-1);
+					}
+				}
+
+				&.position {
+					padding-right: 0;
+					border-right: 0;
+					margin-right: 0;
+					padding-left: 30px;
+					margin-left: 30px;
+					border-left: 1px solid var(--color-2);
+
+					.button.busy {
+						opacity: 0.7;
+
+						&:hover {
+							background: var(--color-2);
+						}
 					}
 				}
 			}

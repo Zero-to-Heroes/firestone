@@ -17,7 +17,11 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsBattlePositioningService } from '../../../services/battlegrounds/bgs-battle-positioning.service';
+import {
+	BgsBattlePositioningService,
+	PermutationResult,
+	ProcessingStatus,
+} from '../../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -80,9 +84,10 @@ declare let amplitude;
 						<div class="controls position">
 							<div
 								class="button best-position"
+								[ngClass]="{ 'busy': processingReposition }"
 								(click)="findBestPositioning()"
-								[helpTooltip]="'battlegrounds.sim.best-position-button-tooltip' | owTranslate"
-								[owTranslate]="'battlegrounds.sim.best-position-button'"
+								[helpTooltip]="repositionButtonTooltipKey | owTranslate"
+								[owTranslate]="repositionButtonTextKey"
 							></div>
 						</div>
 					</div>
@@ -129,7 +134,12 @@ declare let amplitude;
 								[helpTooltipClickTimeout]="exportConfirmationTimeout"
 							>
 								<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
-								<div class="text" [owTranslate]="'battlegrounds.sim.export-button'"></div>
+								<div
+									class="text"
+									[owTranslate]="'battlegrounds.sim.export-button'"
+									[helpTooltip]="'battlegrounds.sim.export-button-tooltip' | owTranslate"
+									]
+								></div>
 							</div>
 							<div class="reset" (click)="resetBoards()">
 								<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
@@ -233,6 +243,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	tooltip: string;
 	exportConfirmationText: string;
 	exportConfirmationTimeout = 4_000;
+
+	repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+	repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
+	processingReposition = false;
 
 	newBattle: BgsFaceOffWithSimulation;
 
@@ -568,7 +582,12 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async findBestPositioning() {
-		amplitude.getInstance().logEvent('battle-best-position');
+		if (this.processingReposition) {
+			return;
+		}
+
+		this.processingReposition = true;
+		amplitude.getInstance().logEvent('battle-reposition');
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'waiting-for-result',
 			battleResult: null,
@@ -596,16 +615,45 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			},
 		};
 		// console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
-		const result = await this.positioningService.findBestPositioning(battleInfo, prefs);
-		// console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
-		this.simulationUpdater(
-			null,
-			BgsFaceOffWithSimulation.create({
-				battleInfoStatus: 'done',
-				battleInfo: result.battleInfo,
-				battleResult: result.result,
-			} as BgsFaceOffWithSimulation),
-		);
+		const it = this.positioningService.findBestPositioning(battleInfo, prefs);
+		while (true) {
+			const value = await it.next();
+			console.debug('got next value', value);
+			const status: ProcessingStatus = value.value[0];
+			const result: PermutationResult = value.value[1];
+			if (!!result) {
+				this.simulationUpdater(
+					null,
+					BgsFaceOffWithSimulation.create({
+						battleInfoStatus: 'done',
+						battleInfo: result.battleInfo,
+						battleResult: result.result,
+					} as BgsFaceOffWithSimulation),
+				);
+				this.processingReposition = false;
+				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+				break;
+			}
+			this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-${ProcessingStatus[
+				status
+			].toLowerCase()}`;
+			this.repositionButtonTooltipKey = `battlegrounds.sim.reposition-button-tooltip-${ProcessingStatus[
+				status
+			].toLowerCase()}`;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
+		// const result = await this.positioningService.findBestPositioning(battleInfo, prefs);
+		// // console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
+		// this.simulationUpdater(
+		// 	null,
+		// 	BgsFaceOffWithSimulation.create({
+		// 		battleInfoStatus: 'done',
+		// 		battleInfo: result.battleInfo,
+		// 		battleResult: result.result,
+		// 	} as BgsFaceOffWithSimulation),
+		// );
 		// this.newBattleStatus = 'done';
 		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();

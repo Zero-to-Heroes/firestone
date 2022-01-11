@@ -27,7 +27,22 @@ export class BgsBattlePositioningService {
 		console.log('CPU count', this.cpuCount);
 	}
 
-	public async findBestPositioning(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<PermutationResult> {
+	public findBestPositioning(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
+		const iterator: AsyncIterator<[ProcessingStatus, PermutationResult]> = this.findBestPositioningInternal(
+			battleInfo,
+			prefs,
+		);
+		return iterator;
+		// return new Observable((observer) => this.buildObservableFunction(observer, iterator));
+	}
+
+	private async *findBestPositioningInternal(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
 		const start = Date.now();
 		// Initialize the data
 		const initialBoard = battleInfo.playerBoard.board;
@@ -36,6 +51,7 @@ export class BgsBattlePositioningService {
 		const permutations: Permutation[] = permutator(initialBoard);
 		console.debug('permutations', Date.now() - start, permutations);
 
+		yield [ProcessingStatus.FIRSTPASS, null];
 		// Build a rough estimation of the permutations
 		const sortedPermutations: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
@@ -45,6 +61,8 @@ export class BgsBattlePositioningService {
 			50,
 		);
 		console.debug('first step', Date.now() - start, sortedPermutations.length, sortedPermutations);
+
+		yield [ProcessingStatus.SECONDPASS, null];
 		// Do it again, with more sims
 		const sortedPermutations2: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
@@ -56,6 +74,7 @@ export class BgsBattlePositioningService {
 		console.debug('second step', Date.now() - start, sortedPermutations2.length, sortedPermutations2);
 
 		// Build a full simulation for each of the finalists and keep the best one
+		yield [ProcessingStatus.FINALRESULT, null];
 		const topPermutationsResults: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
 			sortedPermutations2.map((p) => p.permutation),
@@ -76,7 +95,7 @@ export class BgsBattlePositioningService {
 			result: topPermutationsResults[0].result,
 		};
 		console.debug('result', Date.now() - start, result);
-		return result;
+		return [ProcessingStatus.DONE, result];
 	}
 
 	private async prunePermutations(
@@ -164,6 +183,21 @@ export class BgsBattlePositioningService {
 			});
 		});
 	}
+
+	// private buildObservableFunction<T>(observer: Subscriber<T>, iterator: AsyncIterator<T>) {
+	// 	try {
+	// 		const itValue = iterator.next();
+	// 		itValue.then((value) => {
+	// 			console.debug('calling next obersable', itValue, value.value);
+	// 			observer.next(value.value);
+	// 			if (!value.done) {
+	// 				setTimeout(() => this.buildObservableFunction(observer, iterator));
+	// 			}
+	// 		});
+	// 	} catch (e) {
+	// 		console.error('[game-parser] Exception in buildObservableFunction', e);
+	// 	}
+	// }
 }
 
 const permutator = <T>(inputArr: readonly T[]) => {
@@ -188,7 +222,7 @@ const permutator = <T>(inputArr: readonly T[]) => {
 type Permutation = BoardEntity[];
 type Chunk = Permutation[];
 
-interface PermutationResult {
+export interface PermutationResult {
 	readonly battleInfo: BgsBattleInfo;
 	readonly result: SimulationResult;
 }
@@ -196,4 +230,11 @@ interface PermutationResult {
 export interface InternalPermutationResult {
 	readonly permutation: Permutation;
 	readonly result: SimulationResult;
+}
+
+export enum ProcessingStatus {
+	FIRSTPASS,
+	SECONDPASS,
+	FINALRESULT,
+	DONE,
 }
