@@ -19,19 +19,24 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [`../../../../css/component/arena/desktop/arena-classes-recap.component.scss`],
 	template: `
 		<div class="arena-classes-recap">
-			<div class="header">Stats overview</div>
+			<div class="header" [owTranslate]="'app.arena.stats.title'"></div>
 			<div class="stats" *ngIf="stats$ | async as stats">
-				<duels-stat-cell class="stat-cell" label="Total runs" [value]="stats.totalRuns"> </duels-stat-cell>
 				<duels-stat-cell
 					class="stat-cell"
-					label="Avg. wins per run"
+					[label]="'app.arena.stats.total-runs' | owTranslate"
+					[value]="stats.totalRuns"
+				>
+				</duels-stat-cell>
+				<duels-stat-cell
+					class="stat-cell"
+					[label]="'app.arena.stats.wins-per-run' | owTranslate"
 					[value]="stats.averageWinsPerRun"
 					[decimals]="1"
 				>
 				</duels-stat-cell>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label">Most played classes</div>
+						<div class="label" [owTranslate]="'app.arena.stats.most-played-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.mostPlayedClasses?.length">
 							<li class="played-class" *ngFor="let mostPlayedClass of stats.mostPlayedClasses">
@@ -47,7 +52,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label">Best winrate classes</div>
+						<div class="label" [owTranslate]="'app.arena.stats.best-winrate-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.bestWinrateClasses?.length">
 							<li class="played-class" *ngFor="let theClass of stats.bestWinrateClasses">
@@ -59,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label">Most faced classes</div>
+						<div class="label" [owTranslate]="'app.arena.stats.most-faced-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.mostFacedClasses?.length">
 							<li class="played-class" *ngFor="let mostFacedClass of stats.mostFacedClasses">
@@ -71,7 +76,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label">Best winrate against</div>
+						<div class="label" [owTranslate]="'app.arena.stats.best-winrate-against'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.bestWinrateAgainstClasses?.length">
 							<li class="played-class" *ngFor="let mostFacedClass of stats.bestWinrateAgainstClasses">
@@ -161,9 +166,12 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 				totalRuns: runsForClass.length,
 				totalMatches: totalMatches,
 				winrate: winrate,
-				tooltip: `You played ${
-					runsForClass.length
-				} runs and ${totalMatches} matches with ${playerClass} with a ${winrate?.toFixed(1)}% winrate`,
+				tooltip: this.i18n.translateString('app.arena.stats.stat-tooltip', {
+					numberOfRuns: runsForClass.length,
+					totalMatches: totalMatches,
+					playerClass: playerClass,
+					winrate: winrate?.toFixed(1),
+				}),
 			};
 		});
 	}
@@ -189,9 +197,11 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${gamesForClass[0].opponentCardId}.jpg`,
 				totalMatches: gamesForClass.length,
 				winrate: winrate,
-				tooltip: `You faced ${opponentClass} ${gamesForClass.length} times with a ${winrate?.toFixed(
-					1,
-				)}% winrate`,
+				tooltip: this.i18n.translateString('app.arena.stats.faced-tooltip', {
+					opponentClass: opponentClass,
+					totalMatches: gamesForClass.length,
+					winrate: winrate?.toFixed(1),
+				}),
 			};
 		});
 	}

@@ -1,18 +1,14 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
+	Component, Input,
+	ViewRef
 } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'arena-run',
@@ -45,7 +41,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</div>
 			<div class="right-info">
 				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
-					<div class="text">{{ _isExpanded ? 'Minimize View' : 'View Run' }}</div>
+					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.arena.runs.minimize-run-button'"></div>
+					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.arena.runs.view-run-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
@@ -65,9 +62,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunComponent implements AfterViewInit {
+export class ArenaRunComponent {
 	@Input() set run(value: ArenaRun) {
-		console.debug('setting run', value);
 		this._run = value;
 		this.updateValues();
 	}
@@ -85,17 +81,12 @@ export class ArenaRunComponent implements AfterViewInit {
 	_isExpanded: boolean;
 
 	private _run: ArenaRun;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 
 	toggleShowMore() {
 		// Duels goes through a state event here, not sure why?
@@ -115,7 +106,7 @@ export class ArenaRunComponent implements AfterViewInit {
 
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
-		this.gameModeTooltip = `Arena ${this.wins} wins`;
+		this.gameModeTooltip = this.i18n.translateString('app.arena.runs.run-name', { value: this.wins });
 		this.gameModeImage = `assets/images/deck/ranks/arena/arena${this.wins}wins.png`;
 		this.rewards = this._run.rewards;
 

@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';
@@ -15,6 +15,7 @@ import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
@@ -32,7 +33,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<arena-run *ngFor="let run of groupedRun.runs; trackBy: trackByRun" [run]="run"></arena-run>
 					</ul>
 				</li>
-				<div class="loading" *ngIf="isLoading" (click)="onScroll()">Click to load more runs</div>
+				<div
+					class="loading"
+					*ngIf="isLoading"
+					(click)="onScroll()"
+					[owTranslate]="'app.arena.runs.load-runs-button'"
+				></div>
 			</infinite-scroll>
 			<arena-empty-state *ngIf="!allReplays?.length"></arena-empty-state>
 		</div>
@@ -48,7 +54,11 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	private displayedReplays: readonly ArenaRun[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -216,7 +226,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	private groupRuns(runs: readonly ArenaRun[]): readonly GroupedRun[] {
 		const groupingFunction = (run: ArenaRun) => {
 			const date = new Date(run.creationTimestamp);
-			return date.toLocaleDateString('en-US', {
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 				month: 'short',
 				day: '2-digit',
 				year: 'numeric',

@@ -4,7 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
+	EventEmitter
 } from '@angular/core';
 import { DeckTimeFilterType } from '@models/mainwindow/decktracker/deck-time-filter.type';
 import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
@@ -75,7 +75,7 @@ export class DecktrackerTimeFilterDropdownComponent
 						{
 							value: 'last-patch',
 							label: this.i18n.translateString('app.decktracker.filters.time-filter.last-patch'),
-							tooltip: formatPatch(patch),
+							tooltip: formatPatch(patch, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-30',

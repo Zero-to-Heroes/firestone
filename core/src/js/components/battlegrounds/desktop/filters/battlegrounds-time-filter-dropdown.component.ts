@@ -5,7 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -87,7 +87,7 @@ export class BattlegroundsTimeFilterDropdownComponent
 						{
 							value: 'last-patch',
 							label: getBgsTimeFilterLabelFor('last-patch', selectedCategoryId, this.i18n),
-							tooltip: formatPatch(patch),
+							tooltip: formatPatch(patch, this.i18n),
 						} as TimeFilterOption,
 					];
 					return {

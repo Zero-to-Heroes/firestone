@@ -1,5 +1,6 @@
 import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
+import { LocalizationFacadeService } from './localization-facade.service';
 
 export const groupByFunction = <T>(keyExtractor: (obj: T) => string | number) => (
 	array: readonly T[],
@@ -113,11 +114,15 @@ export const addDaysToDate = (timeStamp: number, days: number): Date => {
 	return newDate;
 };
 
-export const formatPatch = (input: PatchInfo): string => {
+export const formatPatch = (input: PatchInfo, i18n: LocalizationFacadeService): string => {
 	if (!input) {
 		return '';
 	}
-	return `Patch ${input.version}.${input.number} released on ${input.date.split('-').reverse().join('-')}`;
+	return i18n.translateString('global.patch', {
+		version: input.version,
+		number: input.number,
+		date: input.date.split('-').reverse().join('-'),
+	});
 };
 
 export const removeFromArray = <T>(array: T[], element: T) => {

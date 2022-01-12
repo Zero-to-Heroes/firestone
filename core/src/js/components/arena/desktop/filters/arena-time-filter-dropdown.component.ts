@@ -4,12 +4,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
+	EventEmitter
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -50,6 +51,7 @@ export class ArenaTimeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -69,26 +71,28 @@ export class ArenaTimeFilterDropdownComponent
 					const options: readonly TimeFilterOption[] = [
 						{
 							value: 'all-time',
-							label: 'Past 100 days',
+							label: this.i18n.translateString('app.arena.filters.time.past-100'),
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',
-							label: `Last patch`,
-							tooltip: formatPatch(patch),
+							label: this.i18n.translateString('app.arena.filters.time.last-patch'),
+							tooltip: formatPatch(patch, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
-							label: 'Past 7 days',
+							label: this.i18n.translateString('app.arena.filters.time.past-7'),
 						} as TimeFilterOption,
 						{
 							value: 'past-three',
-							label: 'Past 3 days',
+							label: this.i18n.translateString('app.arena.filters.time.past-3'),
 						} as TimeFilterOption,
 					] as readonly TimeFilterOption[];
 					return {
 						filter: filter,
 						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label ?? 'Past 100 days',
+						placeholder:
+							options.find((option) => option.value === filter)?.label ??
+							this.i18n.translateString('app.arena.filters.time.past-100'),
 						visible: true,
 					};
 				}),

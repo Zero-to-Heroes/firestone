@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'arena-empty-state',
@@ -16,6 +17,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaEmptyStateComponent {
-	@Input() title = 'Nothing here yet';
-	@Input() subtitle = 'Start playing Arena to receive information';
+	@Input() title = this.i18n.translateString('app.arena.empty-state.title');
+	@Input() subtitle = this.i18n.translateString('app.arena.empty-state.subtitle');
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

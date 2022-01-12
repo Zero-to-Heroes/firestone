@@ -4,7 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
+	EventEmitter
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
@@ -68,13 +68,15 @@ export class ArenaClassFilterDropdownComponent
 						(option) =>
 							({
 								value: option,
-								label: option === 'all' ? 'All classes' : formatClass(option, this.i18n),
+								label: formatClass(option, this.i18n),
 							} as ClassFilterOption),
 					);
 					return {
 						filter: filter,
 						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label ?? 'All classes',
+						placeholder:
+							options.find((option) => option.value === filter)?.label ??
+							this.i18n.translateString('global.class.all'),
 						visible: true,
 					};
 				}),

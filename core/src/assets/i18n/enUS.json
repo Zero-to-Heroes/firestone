@@ -1,6 +1,7 @@
 {
 	"global": {
 		"class": {
+			"all": "All classes",
 			"demonhunter": "Demon Hunter",
 			"druid": "Druid",
 			"hunter": "Hunter",
@@ -73,6 +74,7 @@
 			"halforc": "Half-Orc",
 			"lock": "Lock"
 		},
+		"patch": "Patch {{version}}.{{number}} released on {{date}}",
 		"hs-terms": {
 			"attack": "Attack",
 			"health": "Health",
@@ -99,6 +101,38 @@
 			"go-premium-header": "Support the dev and remove the ads",
 			"logged-in-as-header": "Logged in as {{value}}",
 			"not-logged-in-header": "Log in to save your progress online"
+		},
+		"arena": {
+			"filters": {
+				"time": {
+					"past-three": "Past 3 days",
+					"past-seven": "Past 7 days",
+					"last-patch": "Last patch",
+					"past-100": "Past 100 days",
+					"past-30": "Past 30 days"
+				}
+			},
+			"stats": {
+				"title": "Stats overview",
+				"total-runs": "Total runs",
+				"wins-per-run": "Avg. wins per run",
+				"most-played-classes": "Most played classes",
+				"best-winrate-classes": "Best winrate classes",
+				"most-faced-classes": "Most faced classes",
+				"best-winrate-against": "Best winrate against",
+				"stat-tooltip": "You played {{numberOfRuns}} runs and {{totalMatches}} matches with {{playerClass}} with a {{winrate}}% winrate",
+				"faced-tooltip": "You faced {{opponentClass}} {{totalMatches}} times with a {{winrate}}% winrate"
+			},
+			"runs": {
+				"view-run-button": "View run",
+				"minimize-run-button": "Minimize view",
+				"run-name": "Arena {{value}} wins",
+				"load-runs-button": "Click to load more runs"
+			},
+			"empty-state": {
+				"title": "Nothing here yet",
+				"subtitle": "Start playing Arena to receive information"
+			}
 		},
 		"decktracker": {
 			"menu": {

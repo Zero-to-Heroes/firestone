@@ -4,12 +4,13 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
+	EventEmitter
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -46,6 +47,7 @@ export class DuelsTimeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -70,7 +72,7 @@ export class DuelsTimeFilterDropdownComponent
 						{
 							value: 'last-patch',
 							label: `Last patch`,
-							tooltip: formatPatch(patch),
+							tooltip: formatPatch(patch, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
