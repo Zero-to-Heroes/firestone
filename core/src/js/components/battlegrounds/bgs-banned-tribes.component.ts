@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
@@ -72,9 +72,17 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				const exceptionCards = bannedTribes
 					.map((tribe) => this.getExceptions(tribe))
 					.reduce((a, b) => a.concat(b), []);
+				// TODO translate
 				const exceptions =
-					exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
-				const tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
+					exceptionCards && exceptionCards.length > 0
+						? this.i18n.translateString('battlegrounds.banned-tribes.exceptions', {
+								value: exceptionCards.join(', '),
+						  })
+						: '';
+				const tooltip = this.i18n.translateString('battlegrounds.banned-tribes.exceptions-tooltip', {
+					tribeNames: tribeNames,
+					exceptions: exceptions,
+				});
 				return tooltip;
 			}),
 			distinctUntilChanged(),

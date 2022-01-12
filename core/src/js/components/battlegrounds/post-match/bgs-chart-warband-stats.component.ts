@@ -12,13 +12,15 @@ import { areDeepEqual } from '../../../services/utils';
 	],
 	template: `
 		<graph-with-comparison-new
-			communityLabel="Average for hero"
-			yourLabel="Current run"
+			[communityLabel]="'battlegrounds.post-match-stats.warband-stats.community-label' | owTranslate"
+			[yourLabel]="'battlegrounds.post-match-stats.warband-stats.your-label' | owTranslate"
 			[yourValues]="yourValues"
 			[communityValues]="communityValues"
 			[showDeltaWithPrevious]="true"
-			communityTooltip="Average total stats (attack + health) on board at the beginning of each turn's battle (7000+ MMR)"
-			yourTooltip="Your values for this run"
+			[communityTooltip]="
+				'app.battlegrounds.personal-stats.hero-details.warband-stats.community-tooltip' | owTranslate
+			"
+			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.warband-stats.your-tooltip' | owTranslate"
 		>
 		</graph-with-comparison-new>
 	`,
@@ -45,7 +47,6 @@ export class BgsChartWarbandStatsComponent {
 		if (areDeepEqual(this.communityValues, communityValues)) {
 			return;
 		}
-		console.debug('setting heroStat', value.name, communityValues, this.communityValues, value);
 		this.communityValues = communityValues;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();

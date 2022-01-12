@@ -13,7 +13,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="hero-selection-tooltip" [ngClass]="{ 'hidden': !_visible }">
 			<img class="hero-power" [src]="heroPowerImage" />
 			<div class="infos">
-				<div class="name">{{ _hero.name }} ({{ totalMatches?.toLocaleString('en-US') || 0 }} matches)</div>
+				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 			</div>
 		</div>
@@ -25,11 +25,15 @@ export class BgsHeroSelectionTooltipComponent {
 	_visible = true;
 	heroPowerImage: string;
 	totalMatches: number;
+	totalMatchesText: string;
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
 		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
+		this.totalMatchesText = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
+			value: this.totalMatches?.toLocaleString(this.i18n.formatCurrentLocale()) || 0,
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

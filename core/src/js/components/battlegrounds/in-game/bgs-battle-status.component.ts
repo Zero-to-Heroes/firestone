@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional,
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 declare let amplitude: any;
@@ -21,17 +22,21 @@ declare let amplitude: any;
 				[helpTooltip]="_simulationMessage"
 			></div>
 			<div class="probas">
-				<div class="title">Your chance of:</div>
+				<div class="title" [owTranslate]="'battlegrounds.battle.chance-label'"></div>
 				<div class="proba-items">
 					<div class="win item">
-						<div class="label" helpTooltip="Your chances of winning the current battle">Win</div>
+						<div
+							class="label"
+							[helpTooltip]="'battlegrounds.battle.win-chance-tooltip' | owTranslate"
+							[owTranslate]="'battlegrounds.battle.win-chance-label'"
+						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultWin || '--' }}</div>
 							<div
 								class="replay-icon"
 								*ngIf="hasSimulationResult('win') && showReplayLink"
 								(click)="viewSimulationResult('win')"
-								helpTooltip="Open a simulation sample leading to this result in your browser"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -43,14 +48,18 @@ declare let amplitude: any;
 						</div>
 					</div>
 					<div class="tie item">
-						<div class="label" helpTooltip="Your chances of tying the current battle">Tie</div>
+						<div
+							class="label"
+							[helpTooltip]="'battlegrounds.battle.tie-chance-tooltip' | owTranslate"
+							[owTranslate]="'battlegrounds.battle.tie-chance-label'"
+						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultTie || '--' }}</div>
 							<div
 								class="replay-icon"
 								*ngIf="hasSimulationResult('tie') && showReplayLink"
 								(click)="viewSimulationResult('tie')"
-								helpTooltip="Open a simulation sample leading to this result in your browser"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -62,14 +71,18 @@ declare let amplitude: any;
 						</div>
 					</div>
 					<div class="lose item">
-						<div class="label" helpTooltip="Your chances of losing the current battle">Loss</div>
+						<div
+							class="label"
+							[helpTooltip]="'battlegrounds.battle.lose-chance-tooltip' | owTranslate"
+							[owTranslate]="'battlegrounds.battle.lose-chance-label'"
+						></div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultLose || '--' }}</div>
 							<div
 								class="replay-icon"
 								*ngIf="hasSimulationResult('loss') && showReplayLink"
 								(click)="viewSimulationResult('loss')"
-								helpTooltip="Open a simulation sample leading to this result in your browser"
+								[helpTooltip]="'battlegrounds.battle.sim-sample-link-tooltip' | owTranslate"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
 									<use xlink:href="assets/svg/sprite.svg#video" />
@@ -83,8 +96,8 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="damage-container">
-				<div class="title">Dmg</div>
-				<div class="damage dealt" helpTooltip="Average damage dealt">
+				<div class="title" [owTranslate]="'battlegrounds.battle.damage-title'"></div>
+				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.damage-dealt-tooltip' | owTranslate">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/sprite.svg#sword" />
@@ -92,7 +105,10 @@ declare let amplitude: any;
 					</div>
 					<div class="damage-value">{{ damageWon || '--' }}</div>
 				</div>
-				<div class="damage received" helpTooltip="Average damage received">
+				<div
+					class="damage received"
+					[helpTooltip]="'battlegrounds.battle.damage-received-tooltip' | owTranslate"
+				>
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/sprite.svg#sword" />
@@ -102,8 +118,8 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="damage-container lethal">
-				<div class="title">Lethal</div>
-				<div class="damage dealt" helpTooltip="% chance to kill the enemy hero">
+				<div class="title" [owTranslate]="'battlegrounds.battle.lethal-title'"></div>
+				<div class="damage dealt" [helpTooltip]="'battlegrounds.battle.lethal-dealt-tooltip' | owTranslate">
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
@@ -112,7 +128,10 @@ declare let amplitude: any;
 						{{ wonLethalChance || '--' }}
 					</div>
 				</div>
-				<div class="damage received" helpTooltip="% chance to die this battle">
+				<div
+					class="damage received"
+					[helpTooltip]="'battlegrounds.battle.lethal-received-tooltip' | owTranslate"
+				>
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
@@ -165,13 +184,29 @@ export class BgsBattleStatusComponent {
 
 		switch (this.battle?.battleInfoMesage) {
 			case 'scallywag':
-				this._simulationMessage = `This composition is not well supported, results may be off (reason: Scallywag + Baron / Khadgar)`;
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-pirate',
+						),
+					},
+				);
 				break;
 			case 'secret':
-				this._simulationMessage = `This composition is not well supported, results may be off (reason: Secrets)`;
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-secret',
+						),
+					},
+				);
 				break;
 			case 'error':
-				this._simulationMessage = `An unknown error occured, a bug report has automatically been sent out to the devs`;
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.bug',
+				);
 				break;
 			default:
 				this._simulationMessage = undefined;
@@ -239,12 +274,12 @@ export class BgsBattleStatusComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly bgsSim: BgsBattleSimulationService,
 	) {}
 
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
-		console.debug('viewing simulation result', category);
 		const simulationSample: GameSample = this.pickSimulationResult(category);
 
 		if (!simulationSample) {

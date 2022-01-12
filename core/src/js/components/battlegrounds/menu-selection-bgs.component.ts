@@ -4,7 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
+	EventEmitter
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
@@ -28,22 +28,26 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-hero-selection-overview' }"
 				(mousedown)="selectStage('bgs-hero-selection-overview')"
 			>
-				<span>Hero Selection</span>
+				<span [owTranslate]="'battlegrounds.menu.hero'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-next-opponent-overview' }"
 				(mousedown)="selectStage('bgs-next-opponent-overview')"
 			>
-				<span>Opponent</span>
+				<span [owTranslate]="'battlegrounds.menu.opponent'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-post-match-stats' }"
 				(mousedown)="selectStage('bgs-post-match-stats')"
 			>
-				<span>{{ !(matchOver$ | async) ? 'Live stats' : 'Post-Match Stats' }}</span>
+				<span>{{
+					!(matchOver$ | async)
+						? ('battlegrounds.menu.live-stats' | owTranslate)
+						: ('battlegrounds.menu.post-match-stats' | owTranslate)
+				}}</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
-				<span>Simulator</span>
+				<span [owTranslate]="'battlegrounds.menu.simulator'"></span>
 			</li>
 		</ul>
 	`,

@@ -19,10 +19,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="face-offs" scrollable>
 			<div class="header entry">
-				<div class="hero">Hero</div>
-				<div class="won">Won</div>
-				<div class="lost">Lost</div>
-				<div class="tied">Tied</div>
+				<div class="hero" [owTranslate]="'battlegrounds.in-game.face-offs.header.hero'"></div>
+				<div class="won" [owTranslate]="'battlegrounds.in-game.face-offs.header.won'"></div>
+				<div class="lost" [owTranslate]="'battlegrounds.in-game.face-offs.header.lost'"></div>
+				<div class="tied" [owTranslate]="'battlegrounds.in-game.face-offs.header.tied'"></div>
 			</div>
 			<ng-container
 				*ngIf="{

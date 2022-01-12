@@ -1,17 +1,14 @@
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
+	Component, Input, ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'bgs-opponent-overview-big',
@@ -47,7 +44,11 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 				<div class="upgrades">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
-						<div class="label">Turn {{ upgrade.turn }}</div>
+						<div
+							class="label"
+							[owTranslate]="'battlegrounds.battle.turn'"
+							[translateParams]="{ value: upgrade.turn }"
+						></div>
 					</div>
 				</div>
 			</div>
@@ -68,7 +69,7 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() currentTurn: number;
 	@Input() nextBattle: BgsFaceOffWithSimulation;
 	@Input() maxBoardHeight = 1;
-	@Input() tavernTitle = 'Tavern upgrades';
+	@Input() tavernTitle = this.i18n.translateString('battlegrounds.in-game.opponents.tavern-upgrade-title');
 	@Input() showTavernsIfEmpty = true;
 	@Input() showLastOpponentIcon: boolean;
 
@@ -92,7 +93,7 @@ export class BgsOpponentOverviewBigComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
 		return item.tavernTier;

@@ -5,7 +5,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
@@ -44,11 +44,15 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 				<div class="filler"></div>
 			</div>
 			<div class="tavern-upgrades" *ngIf="tavernUpgrades?.length">
-				<div class="title">Last upgrades</div>
+				<div class="title" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
 				<div class="upgrades">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
-						<div class="label">Turn {{ upgrade.turn }}</div>
+						<div
+							class="label"
+							[owTranslate]="'battlegrounds.battle.turn'"
+							[translateParams]="{ value: upgrade.turn }"
+						></div>
 					</div>
 				</div>
 			</div>
@@ -56,7 +60,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 			<div
 				class="last-opponent-icon"
 				*ngIf="showLastOpponentIcon"
-				helpTooltip="Was last round's opponent"
+				[helpTooltip]="'last-opponent-icon-tooltip' | owTranslate"
 				inlineSVG="assets/svg/last_opponent.svg"
 			></div>
 		</div>

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -10,18 +11,16 @@ import { groupByFunction } from '../../../services/utils';
 	],
 	template: `
 		<div class="triples-section">
-			<div class="title" *ngIf="tierTriples?.length">New triples</div>
+			<div
+				class="title"
+				*ngIf="tierTriples?.length"
+				[owTranslate]="'battlegrounds.in-game.opponents.triple-title'"
+			></div>
 			<div class="triple-tiers" *ngIf="tierTriples?.length">
 				<div
 					*ngFor="let triple of tierTriples || []; trackBy: trackByFn"
 					class="triple"
-					[helpTooltip]="
-						'Since last fight, this opponent got ' +
-						triple.quantity +
-						' tier ' +
-						getMinionTripleLevel(triple.minionTier) +
-						' minions as rewards for tripling'
-					"
+					[helpTooltip]="triple.tooltip"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
 					<tavern-level-icon
@@ -30,16 +29,20 @@ import { groupByFunction } from '../../../services/utils';
 					></tavern-level-icon>
 				</div>
 			</div>
-			<div class="subtitle" *ngIf="!tierTriples?.length">No new triple</div>
+			<div
+				class="subtitle"
+				*ngIf="!tierTriples?.length"
+				[owTranslate]="'battlegrounds.in-game.opponents.triple-empty-state'"
+			></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsTriplesComponent {
-	tierTriples: { minionTier: number; quantity: number }[];
+	tierTriples: { minionTier: number; quantity: number; tooltip: string }[];
 
-	allTriples: readonly BgsTriple[];
-	_boardTurn: number;
+	private _boardTurn: number;
+	private allTriples: readonly BgsTriple[];
 
 	@Input() set triples(value: readonly BgsTriple[]) {
 		this.allTriples = value;
@@ -67,11 +70,19 @@ export class BgsTriplesComponent {
 		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
 			triplesSinceLastBoard,
 		);
-		this.tierTriples = Object.keys(groupedByTier).map((minionTier) => ({
-			minionTier: parseInt(minionTier),
-			quantity: groupedByTier[minionTier].length as number,
-		}));
+		this.tierTriples = Object.keys(groupedByTier).map((minionTier) => {
+			const quantity = groupedByTier[minionTier].length;
+			const tier = parseInt(minionTier);
+			return {
+				minionTier: tier,
+				quantity: quantity,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.opponents.triple-tooltip', {
+					quantity: quantity,
+					tier: this.getMinionTripleLevel(tier),
+				}),
+			};
+		});
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

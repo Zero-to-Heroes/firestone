@@ -17,7 +17,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 	],
 	template: `
 		<div class="stats">
-			<div class="title">Finishes</div>
+			<div class="title" [owTranslate]="'battlegrounds.hero-stats.finishes-title'"></div>
 			<basic-bar-chart-2
 				class="placement-distribution"
 				[data]="placementChartData$ | async"
@@ -59,12 +59,9 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 			<div class="winrate">
 				<div
 					class="title"
-					[helpTooltip]="
-						'Battle winrate per turn (it gives you an indication of when this hero is the strongest)'
-					"
-				>
-					Winrate per turn
-				</div>
+					[helpTooltip]="'battlegrounds.hero-stats.turn-winrate-tooltip' | owTranslate"
+					[owTranslate]="'battlegrounds.hero-stats.turn-winrate'"
+				></div>
 				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="false"></bgs-winrate-chart>
 			</div>
 		</div>
@@ -154,33 +151,6 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 		);
 	}
 
-	getIcon(tribe: string): string {
-		let referenceCardId: string;
-		switch (tribe) {
-			case 'Mech':
-				referenceCardId = 'GVG_027';
-				break;
-			case 'Beast':
-				referenceCardId = 'BGS_021';
-				break;
-			case 'Demon':
-				referenceCardId = 'TB_BaconUps_060';
-				break;
-			case 'Dragon':
-				referenceCardId = 'BGS_036';
-				break;
-			case 'Murloc':
-				referenceCardId = 'BGS_030';
-				break;
-			case 'Pirate':
-				referenceCardId = 'BGS_080';
-				break;
-			default:
-				referenceCardId = 'BGS_009';
-				break;
-		}
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
-	}
 
 	buildPercents(value: number): string {
 		return value == null || isNaN(value) ? '-' : value.toFixed(1) + '%';

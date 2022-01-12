@@ -13,15 +13,17 @@ import { areDeepEqual } from '../../../services/utils';
 	template: `
 		<graph-with-comparison-new
 			[id]="id"
-			communityLabel="Average for hero"
-			yourLabel="Current run"
+			[communityLabel]="'battlegrounds.post-match-stats.warband-stats.community-label' | owTranslate"
+			[yourLabel]="'battlegrounds.post-match-stats.warband-stats.your-label' | owTranslate"
 			[yourValues]="yourValues"
 			[communityValues]="communityValues"
 			[maxYValue]="80"
 			[stepSize]="50"
 			[showYAxis]="showYAxis"
-			communityTooltip="Average winrate (the % chance to win a battle) for each run (7000+ MMR)"
-			yourTooltip="Your values for this run"
+			[communityTooltip]="
+				'app.battlegrounds.personal-stats.hero-details.winrate-stats.community-tooltip' | owTranslate
+			"
+			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.your-tooltip' | owTranslate"
 		>
 		</graph-with-comparison-new>
 	`,

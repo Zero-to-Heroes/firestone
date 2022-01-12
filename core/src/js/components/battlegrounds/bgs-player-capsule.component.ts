@@ -5,7 +5,7 @@ import {
 	ElementRef,
 	Input,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
@@ -39,7 +39,7 @@ import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
 				<div
 					class="last-opponent-icon"
 					*ngIf="showLastOpponentIcon"
-					helpTooltip="Was last round's opponent"
+					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
 			</div>

@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Renderer2,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -37,7 +37,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div class="logo-container" *ngIf="value.currentTurn && (showTurnNumber$ | async)">
 						<div class="background-main-part"></div>
 						<div class="background-second-part"></div>
-						<div class="turn-number">Turn {{ value.currentTurn }}</div>
+						<div
+							class="turn-number"
+							[owTranslate]="'battlegrounds.battle.turn'"
+							[translateParams]="{ value: value.currentTurn }"
+						></div>
 					</div>
 					<ng-container *ngIf="showMinionsList$ | async">
 						<ul class="tiers">

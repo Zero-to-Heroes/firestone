@@ -16,7 +16,10 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord }">
-			<div class="record-icon" helpTooltip="You broke your personal record!">
+			<div
+				class="record-icon"
+				[helpTooltip]="'app.battlegrounds.personal-stats.records.record-broken-tooltip' | owTranslate"
+			>
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#new_record" />
 				</svg>

@@ -11,9 +11,11 @@ import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 	],
 	template: `
 		<div class="tribes">
-			<div class="title" helpTooltip="Percentage of each tribe present in average in top 4 warbands (6000+ MMR)">
-				Top winning tribes
-			</div>
+			<div
+				class="title"
+				[helpTooltip]="'battlegrounds.hero-stats.winning-tribes-tooltip' | owTranslate"
+				[owTranslate]="'battlegrounds.hero-stats.winning-tribes'"
+			></div>
 			<div class="composition">
 				<div *ngFor="let tribe of tribes || []; trackBy: trackByTribeFn" class="tribe">
 					<div class="icon-container">

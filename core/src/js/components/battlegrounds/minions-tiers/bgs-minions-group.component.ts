@@ -7,16 +7,16 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { capitalizeFirstLetter } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -113,6 +113,7 @@ export class BattlegroundsMinionsGroupComponent
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -212,12 +213,7 @@ export class BattlegroundsMinionsGroupComponent
 	}
 
 	private buildTitle(tribe: Race): string {
-		switch (tribe) {
-			case Race.BLANK:
-				return 'No tribe';
-			default:
-				return capitalizeFirstLetter(Race[tribe].toLowerCase());
-		}
+		return this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`);
 	}
 }
 

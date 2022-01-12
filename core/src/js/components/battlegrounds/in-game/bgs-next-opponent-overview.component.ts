@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						[nextBattle]="nextBattle$ | async"
 					></bgs-opponent-overview-big>
 					<div class="other-opponents">
-						<div class="subtitle">Other opponents</div>
+						<div class="subtitle" [owTranslate]="'battlegrounds.in-game.opponents.title'"></div>
 						<div class="opponents" scrollable>
 							<bgs-opponent-overview
 								*ngFor="let opponent of otherOpponents$ | async; trackBy: trackByOpponentInfoFn"
@@ -53,14 +53,18 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 						</svg>
 					</i>
-					<span class="title">Nothing here yet</span>
-					<span class="subtitle">Pick a hero and wait for your opponents!</span>
-				</div></ng-template
-			>
+					<span class="title" [owTranslate]="'battlegrounds.in-game.opponents.empty-state-title'"></span>
+					<span
+						class="subtitle"
+						[owTranslate]="'battlegrounds.in-game.opponents.empty-state-subtitle'"
+					></span></div
+			></ng-template>
 			<div class="left">
-				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
-					Score Board
-				</div>
+				<div
+					class="title"
+					[helpTooltip]="'battlegrounds.in-game.opponents.score-board-tooltip' | owTranslate"
+					[owTranslate]="'battlegrounds.in-game.opponents.score-board-title'"
+				></div>
 				<bgs-hero-face-offs></bgs-hero-face-offs>
 			</div>
 		</div>

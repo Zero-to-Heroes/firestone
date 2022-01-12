@@ -39,7 +39,7 @@
 		"tribe": {
 			"bloodelf": "Blood Elf",
 			"draenei": "Draenei",
-			"Dwarf": "Dwarf",
+			"dwarf": "Dwarf",
 			"gnome": "Gnome",
 			"goblin": "Goblin",
 			"goblin2": "Goblin",
@@ -61,7 +61,7 @@
 			"nerubian": "Nerubian",
 			"pirate": "Pirate",
 			"dragon": "Dragon",
-			"blank": "Blank",
+			"blank": "No tribe",
 			"all": "All",
 			"egg": "Egg",
 			"quilboar": "Quilboar",
@@ -290,11 +290,11 @@
 						"place-default": "{{value}}th"
 					},
 					"warband-stats": {
-						"community-tooltip": "Average total stats (attack + health) on board at the beginning of each turn battle (top4 6000+ MMR)",
+						"community-tooltip": "Average total stats (attack + health) on board at the beginning of each turn battle",
 						"your-tooltip": "Your values for this hero"
 					},
 					"winrate-stats": {
-						"community-tooltip": "Average winrate (% chance to win a battle) per turn for this hero (top4 6000+ MMR)",
+						"community-tooltip": "Average winrate (% chance to win a battle) per turn for this hero",
 						"your-tooltip": "Your values for this hero"
 					},
 					"mmr": {
@@ -334,8 +334,11 @@
 						"enemy-heroes-killed": "Enemy Heroes killed",
 						"battles-going-first": "Battles going first",
 						"battle-luck": "Battle luck",
+						"battle-luck-explain-link": "What is this?",
+						"battle-luck-explain-link-tooltip": "An indicator that tells you how lucky you were in your battles during the run. Click for more info",
 						"negative-battle-luck": "Negative battle luck"
-					}
+					},
+					"record-broken-tooltip": "You broke your personal record!"
 				}
 			},
 			"tier-list": {
@@ -396,11 +399,31 @@
 	"battlegrounds": {
 		"battle": {
 			"turn": "Turn {{value}}",
+			"chance-label": "Your chance of:",
+			"win-chance-label": "Win",
+			"win-chance-tooltip": "Your chances of winning the current battle",
+			"tie-chance-label": "Tie",
+			"tie-chance-tooltip": "Your chances of tying the current battle",
+			"lose-chance-label": "Loss",
+			"lose-chance-tooltip": "Your chances of losing the current battle",
+			"damage-title": "Dmg",
+			"damage-dealt-tooltip": "Average damage dealt",
+			"damage-received-tooltip": "Average damage received",
+			"lethal-title": "Lethal",
+			"lethal-dealt-tooltip": "% chance to kill the enemy hero",
+			"lethal-received-tooltip": "% chance to die this battle",
+			"composition-not-supported": {
+				"general": "This composition is not well supported, results may be off (reason: {{value}})",
+				"reason-secret": "Secrets",
+				"reason-pirate": "Scallywag + Baron / Khadgar",
+				"bug": "An unknown error occured, a bug report has automatically been sent out to the devs"
+			},
 			"result": {
 				"won": "won",
 				"tied": "tied",
 				"lost": "lost"
-			}
+			},
+			"sim-sample-link-tooltip": "Open a simulation sample leading to this result in your browser"
 		},
 		"sim": {
 			"add-minion-button-tooltip": "Click to add a minion",
@@ -451,21 +474,56 @@
 			"search-minion-placeholder": "Search minion"
 		},
 		"hero-stats": {
+			"finishes-title": "Finishes",
 			"avg-position-label": "Average position:",
 			"avg-position-tooltip": "Average final position",
 			"avg-position-your-tooltip": "Your value",
 			"avg-position-global-tooltip": "Global value",
 			"matches-played-label": "Matches played",
-			"matches-played-tooltip": "Total matches you played with this hero"
+			"matches-played-tooltip": "Total matches you played with this hero",
+			"turn-winrate": "Winrate per turn",
+			"turn-winrate-tooltip": "Battle winrate per turn (it gives you an indication of when this hero is the strongest)",
+			"winning-tribes-title": "Top winning tribes",
+			"winning-tribes-title-tooltip": "Percentage of each tribe present in average in top 4 warbands"
 		},
 		"turn-counter": {
 			"settings-label": "Show turn counter"
 		},
 		"hero-selection": {
 			"achievement-completed": "Achievement completed",
-			"achievement-missing": "Achievement missing"
+			"achievement-missing": "Achievement missing",
+			"total-matches": "{{value}} matches"
+		},
+		"in-game": {
+			"face-offs": {
+				"header": {
+					"hero": "Hero",
+					"won": "Won",
+					"lost": "Lost",
+					"tied": "Tied"
+				}
+			},
+			"opponents": {
+				"title": "Other opponents",
+				"empty-state-title": "Nothing here yet",
+				"empty-state-subtitle": "Pick a hero and wait for your opponents!",
+				"score-board-title": "Score board",
+				"score-board-tooltip": "Recap of all the encounters you had with the other players",
+				"tavern-upgrade-title": "Tavern upgrades",
+				"tavern-last-upgrade-title": "Last upgrades",
+				"last-opponent-icon-tooltip": "Was last round's opponent",
+				"triple-title": "New triples",
+				"triple-tooltip": "Since last fight, this opponent got {{quantity}} tier {{tier}} minions as rewards for tripling",
+				"triple-empty-state": "No new triples"
+			},
+			"minions-list": {
+				"reset-button": "Reset"
+			}
 		},
 		"post-match-stats": {
+			"title": "Last match stats",
+			"final-board": "Your final board",
+			"current-board": "Your current board",
 			"tabs": {
 				"hp-by-turn": "Health by turn",
 				"stats": "Stats",
@@ -473,8 +531,45 @@
 				"warband-total-stats-by-turn": "Warband stats",
 				"winrate-per-turn": "Winrate",
 				"battles": "Battles"
+			},
+			"hp-graph": {
+				"legend-title": "Show:",
+				"player-health": "{{playerName}} health"
+			},
+			"composition": {
+				"blank-tribe": "No tribe / All",
+				"empty-state-title": "No information available",
+				"empty-state-subtitle": "Older games, or very long games, don't have the turn-by-turn composition stored."
+			},
+			"warband-stats": {
+				"community-label": "Average for hero",
+				"your-label": "Current run"
 			}
-		}
+		},
+		"overlay-button": {
+			"tooltip": "Click to show / hide the app window"
+		},
+		"banned-tribes": {
+			"exceptions": "Exceptions: {{value}}",
+			"exceptions-tooltip": "{{tribeNames}} won't appear in this run. {{exceptions}}"
+		},
+		"board": {
+			"seen-just-now": "Board as seen just now",
+			"seen-turns-ago": "Board as seen {{value}} turns ago",
+			"opponent-not-met": "You have not fought that player yet",
+			"last-board-empty": "Last board was empty",
+			"total-damage": "Total Dmg",
+			"stats-share-warning": "Multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)"
+		},
+		"menu": {
+			"hero-selection": "Hero selection",
+			"opponent": "Opponent",
+			"live-stats": "Live stats",
+			"post-match-stats": "Post-match stats",
+			"simulator": "Simulator"
+		},
+		"empty-state-title": "Nothing here yet",
+		"empty-state-subtitle": "Start playing Battlegrounds to receive information"
 	},
 	"settings": {
 		"general": {

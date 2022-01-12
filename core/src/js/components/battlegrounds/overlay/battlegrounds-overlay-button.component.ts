@@ -21,7 +21,7 @@ declare let amplitude;
 				class="battlegrounds-widget"
 				[ngClass]="{ 'big': big }"
 				(mouseup)="toggleOverlay()"
-				helpTooltip="Click to show / hide the app window"
+				[helpTooltip]="'battlegrounds.overlay-button.tooltip' | owTranslate"
 			>
 				<div class="icon idle"></div>
 				<div class="icon active"></div>

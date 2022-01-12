@@ -6,7 +6,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -46,7 +46,7 @@ import { areEqualDataSets } from './chart-utils';
 				</div>
 			</div>
 			<div class="toggles">
-				<div class="subtitle">Show me:</div>
+				<div class="subtitle" [owTranslate]="'battlegrounds.post-match-stats.hp-graph.legend-title'"></div>
 				<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="toggle position">
 					<input
 						type="checkbox"
@@ -248,7 +248,7 @@ export class BgsChartHpComponent {
 			}),
 			callbacks: {
 				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return 'Turn ' + item[0].label;
+					return this.i18n.translateString('battlegrounds.battle.turn', { value: item[0].label });
 				},
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					const sortWeight = (legendItem): number => {
@@ -269,7 +269,10 @@ export class BgsChartHpComponent {
 								return `<div></div>`;
 							}
 							const color = legendItem.color;
-							return `<div class="node" style="background: ${color}"></div> ${playerItem.value} health`;
+							return `<div class="node" style="background: ${color}"></div> ${this.i18n.translateString(
+								'battlegrounds.post-match-stats.hp-graph.player-health',
+								{ playerName: playerItem.value },
+							)}`;
 						});
 				},
 				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
@@ -382,17 +385,6 @@ export class BgsChartHpComponent {
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
-		console.debug(
-			'stats in HP chart',
-			Object.keys(hpOverTurn).map((heroCardId) => ({
-				cardId: heroCardId,
-				name: this.allCards.getCard(heroCardId).name,
-				hp: hpOverTurn[heroCardId][hpOverTurn[heroCardId].length - 1].value,
-				armor: hpOverTurn[heroCardId][hpOverTurn[heroCardId].length - 1].armor,
-			})),
-			hpOverTurn,
-			this._stats,
-		);
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerCardIds = [...playerOrder].sort();
@@ -406,7 +398,6 @@ export class BgsChartHpComponent {
 					?.filter((turnInfo) => turnInfo)
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
-		console.debug('built players', players, this._mainPlayerCardId);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
@@ -503,7 +494,6 @@ export class BgsChartHpComponent {
 		for (let i = 0; i <= max; i++) {
 			turns.push('' + i);
 		}
-		console.debug('turns', turns, max, value);
 		return turns;
 	}
 }

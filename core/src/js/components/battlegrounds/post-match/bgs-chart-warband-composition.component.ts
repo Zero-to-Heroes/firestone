@@ -6,7 +6,7 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
@@ -14,6 +14,7 @@ import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'bgs-chart-warband-composition',
@@ -26,39 +27,39 @@ import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-
 		<div class="legend" *ngIf="chartData?.length">
 			<div class="item beast" *ngIf="isTribe('beast')">
 				<div class="node"></div>
-				Beast
+				{{ 'global.tribe.beast' | owTranslate }}
 			</div>
 			<div class="item mech" *ngIf="isTribe('mech')">
 				<div class="node"></div>
-				Mech
+				{{ 'global.tribe.mech' | owTranslate }}
 			</div>
 			<div class="item dragon" *ngIf="isTribe('dragon')">
 				<div class="node"></div>
-				Dragon
+				{{ 'global.tribe.dragon' | owTranslate }}
 			</div>
 			<div class="item demon" *ngIf="isTribe('demon')">
 				<div class="node"></div>
-				Demon
+				{{ 'global.tribe.demon' | owTranslate }}
 			</div>
 			<div class="item murloc" *ngIf="isTribe('murloc')">
 				<div class="node"></div>
-				Murloc
+				{{ 'global.tribe.murloc' | owTranslate }}
 			</div>
 			<div class="item pirate" *ngIf="isTribe('pirate')">
 				<div class="node"></div>
-				Pirate
+				{{ 'global.tribe.pirate' | owTranslate }}
 			</div>
 			<div class="item elemental" *ngIf="isTribe('elemental')">
 				<div class="node"></div>
-				Elemental
+				{{ 'global.tribe.elemental' | owTranslate }}
 			</div>
 			<div class="item quilboar" *ngIf="isTribe('quilboar')">
 				<div class="node"></div>
-				Quilboar
+				{{ 'global.tribe.quilboar' | owTranslate }}
 			</div>
 			<div class="item blank">
 				<div class="node"></div>
-				No tribe / All
+				{{ 'battlegrounds.post-match-stats.composition.blank-tribe' | owTranslate }}
 			</div>
 		</div>
 		<div class="chart-container" *ngIf="chartData?.length">
@@ -96,9 +97,8 @@ import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-
 					<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 				</svg>
 			</i>
-			<span class="title">No information available</span>
-			<span class="subtitle"
-				>Older games, or very long games, don't have the turn-by-turn composition stored.
+			<span class="title" [owTranslate]="'battlegrounds.post-match-stats.composition.empty-state-title'"></span>
+			<span class="subtitle" [owTranslate]="'battlegrounds.post-match-stats.composition.empty-state-subtitle'">
 			</span>
 		</div>
 	`,
@@ -178,6 +178,7 @@ export class BgsChartWarbandCompositionComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly appRef: ApplicationRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	isTribe(tribe: string): boolean {
@@ -281,16 +282,16 @@ export class BgsChartWarbandCompositionComponent {
 			.map((history) => ({
 				name: history.turn,
 				series: [
-					this.buildSeries('Beast', 'beast', history),
-					this.buildSeries('Mech', 'mech', history),
-					this.buildSeries('Dragon', 'dragon', history),
-					this.buildSeries('Demon', 'demon', history),
-					this.buildSeries('Murloc', 'murloc', history),
-					this.buildSeries('Pirate', 'pirate', history),
-					this.buildSeries('Elemental', 'elemental', history),
-					this.buildSeries('Quilboar', 'quilboar', history),
-					this.buildSeries('All', 'all', history),
-					this.buildSeries('No tribe', null, history),
+					this.buildSeries(this.i18n.translateString('global.tribes.beast'), 'beast', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.mech'), 'mech', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.dragon'), 'dragon', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.demon'), 'demon', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.murloc'), 'murloc', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.pirate'), 'pirate', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.elemental'), 'elemental', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.quilboar'), 'quilboar', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.all'), 'all', history),
+					this.buildSeries(this.i18n.translateString('global.tribes.blank'), null, history),
 				],
 			}));
 	}

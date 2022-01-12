@@ -9,7 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -27,22 +27,23 @@ import { normalizeCardId } from './post-match/card-utils';
 			{{ customTitle }}
 		</div>
 		<div class="board-turn" *ngIf="!customTitle && _entities && !finalBoard && isNumber(currentTurn - boardTurn)">
-			Board as seen
-			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
+			{{
+				currentTurn - boardTurn === 0
+					? ('battlegrounds.board.seen-just-now' | owTransate)
+					: ('battlegrounds.board.seen-turns-ago' | owTranslate: { value: currentTurn - boardTurn })
+			}}
 		</div>
 		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">Your final board</div>
 		<div
 			class="board-turn empty"
 			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
-		>
-			You have not fought that player yet
-		</div>
+			[owTranslate]="'battlegrounds.board.opponent-not-met'"
+		></div>
 		<div
 			class="board-turn empty"
 			*ngIf="!customTitle && _entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)"
-		>
-			Last board was empty
-		</div>
+			[owTranslate]="'battlegrounds.board.last-board-empty'"
+		></div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0" [style.opacity]="boardReady ? 1 : 0">
 			<div class="minion-container" *ngFor="let entity of _entities; trackBy: trackByEntity">
 				<li>
@@ -64,12 +65,12 @@ import { normalizeCardId } from './post-match/card-utils';
 						class="header"
 						[helpTooltip]="
 							showTooltipWarning(entity)
-								? 'Multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
+								? ('battlegrounds.board.stats-share-warning' | owTranslate)
 								: null
 						"
 						*ngIf="!hideDamageHeader"
 					>
-						Total Dmg <span *ngIf="showTooltipWarning(entity)">*</span>
+						{{ 'battlegrounds.board.total-damage' | owTranslate }} <span *ngIf="showTooltipWarning(entity)">*</span>
 					</div>
 					<div class="values">
 						<div class="damage-dealt">{{ getDamageDealt(entity) }}</div>

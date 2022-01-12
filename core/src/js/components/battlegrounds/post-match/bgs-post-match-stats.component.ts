@@ -2,11 +2,9 @@ import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
+	Component, EventEmitter,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -71,7 +69,7 @@ import { normalizeCardId } from './card-utils';
 						[selectTabHandler]="selectTabHandler"
 						[tabIndex]="i"
 					></bgs-post-match-stats-tabs>
-					<div class="tabs-layout-selection" *ngIf="enableMultiGraphs || selectedTabs?.length > 1">
+					<!-- <div class="tabs-layout-selection" *ngIf="enableMultiGraphs || selectedTabs?.length > 1">
 						<div class="layout one" (click)="changeTabsNumberHandler(1)" helpTooltip="Show a single graph">
 							1
 						</div>
@@ -89,12 +87,12 @@ import { normalizeCardId } from './card-utils';
 						>
 							4
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
-				<div class="title">Last Match Stats</div>
+				<div class="title" [owTranslate]="'battlegrounds.post-match-stats.title'"></div>
 				<bgs-post-match-stats-recap
 					[stats]="_panel"
 					[reviewId]="reviewId"
@@ -130,17 +128,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() faceOffs: readonly BgsFaceOffWithSimulation[];
 	@Input() mmr: number;
 	@Input() set gameEnded(value: boolean) {
-		this.boardTitle = value ? 'Your final board' : 'Your current board';
+		this.boardTitle = value
+			? this.i18n.translateString('battlegrounds.post-match-stats.final-board')
+			: this.i18n.translateString('battlegrounds.post-match-stats.current-board');
 	}
-
-	// @Input() set game(value: BgsGame) {
-	// 	if (value === this._game) {
-	// 		return;
-	// 	}
-	// 	this._game = value;
-	// 	this.mmr = value ? value.mmrAtStart : undefined;
-	// 	this.boardTitle = this._game?.gameEnded ? 'Your final board' : 'Your current board';
-	// }
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
 		if (!value?.player || value === this._panel) {
@@ -174,7 +165,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	_game: BgsGame;
 
 	loadingElapsed = 0;
-	boardTitle = 'Your current board';
+	boardTitle = this.i18n.translateString('battlegrounds.post-match-stats.current-board');
 	icon: string;
 	health: number;
 	maxHealth: number;
@@ -191,7 +182,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
-		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,

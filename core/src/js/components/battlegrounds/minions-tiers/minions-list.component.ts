@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getEffectiveTribe, tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
@@ -35,7 +35,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				<div class="background-main-part"></div>
 				<div class="content">
 					<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
-					Reset
+					{{ 'battlegrounds.in-game.minions-list.reset-button' | owTranslate }}
 				</div>
 			</div>
 		</div>

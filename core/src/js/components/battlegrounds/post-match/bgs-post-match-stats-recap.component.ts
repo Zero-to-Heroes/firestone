@@ -15,92 +15,102 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 		<div class="stats-recap" scrollable>
 			<div class="entry face-offs" *ngIf="wins || losses || ties">
 				<div class="cell">
-					<div class="label">Won</div>
+					<div class="label" [owTranslate]="'battlegrounds.in-game.face-offs.header.won'"></div>
 					<div class="value">{{ wins }}</div>
 				</div>
 				<div class="cell">
-					<div class="label">Lost</div>
+					<div class="label" [owTranslate]="'battlegrounds.in-game.face-offs.header.lost'"></div>
 					<div class="value">{{ losses }}</div>
 				</div>
 				<div class="cell">
-					<div class="label">Tied</div>
+					<div class="label" [owTranslate]="'battlegrounds.in-game.face-offs.header.tied'"></div>
 					<div class="value">{{ ties }}</div>
 				</div>
 			</div>
 			<stat-cell
-				label="Total dmg dealt (minions)"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions' | owTranslate"
 				[value]="totalMinionsDamageDealt"
 				[isNewRecord]="isNewRecord('totalDamageDealtToMinions')"
 			></stat-cell>
 			<stat-cell
-				label="Total dmg taken (minions)"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-taken-minions' | owTranslate"
 				[value]="totalMinionsDamageTaken"
 				[isNewRecord]="isNewRecord('totalDamageTakenByMinions')"
 			></stat-cell>
 			<stat-cell
-				label="Total dmg dealt (hero)"
-				helpTooltip="Doesn't include fights against the ghost"
+				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero' | owTranslate"
+				[tooltipText]="
+					'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero-tooltip' | owTranslate
+				"
 				[value]="totalHeroDamageDealt"
 				[isNewRecord]="isNewRecord('totalDamageDealtToHeroes')"
 			></stat-cell>
 			<stat-cell
-				label="Max dmg dealt (hero)"
-				helpTooltip="Doesn't include fights against the ghost"
+				[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
+				[tooltipText]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate"
 				[value]="maxSingleTurnHeroDamageDealt"
 				[isNewRecord]="isNewRecord('maxDamageDealtToHero')"
 			></stat-cell>
 			<stat-cell
-				label="Highest Win streak"
+				[label]="'app.battlegrounds.personal-stats.records.rows.win-streak' | owTranslate"
 				[value]="winStreak"
 				[isNewRecord]="isNewRecord('highestWinStreak')"
 			></stat-cell>
 			<stat-cell
-				label="Triples created"
+				[label]="'app.battlegrounds.personal-stats.records.rows.triples' | owTranslate"
 				[value]="triples"
 				[isNewRecord]="isNewRecord('triplesCreated')"
 			></stat-cell>
 			<stat-cell
-				label="Max board stats"
+				[label]="'app.battlegrounds.personal-stats.records.rows.board-stats' | owTranslate"
 				[value]="maxBoardStats"
 				[isNewRecord]="isNewRecord('maxBoardStats')"
 				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
 			></stat-cell>
 			<stat-cell
-				label="Coins wasted"
+				[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
 				[value]="coinsWasted"
 				[isNewRecord]="isNewRecord('coinsWasted')"
 			></stat-cell>
-			<stat-cell label="Rerolls" [value]="rerolls" [isNewRecord]="isNewRecord('rerolls')"></stat-cell>
-			<stat-cell label="Freezes" [value]="freezes" [isNewRecord]="isNewRecord('freezes')"></stat-cell>
+			<stat-cell
+				[label]="'app.battlegrounds.personal-stats.records.rows.rerolls' | owTranslate"
+				[value]="rerolls"
+				[isNewRecord]="isNewRecord('rerolls')"
+			></stat-cell>
+			<stat-cell
+				[label]="'app.battlegrounds.personal-stats.records.rows.freezes' | owTranslate"
+				[value]="freezes"
+				[isNewRecord]="isNewRecord('freezes')"
+			></stat-cell>
 			<!-- hero power: only show if not a passive one -->
 			<stat-cell
 				*ngIf="heroPowers"
-				label="Hero Power used"
+				[label]="'app.battlegrounds.personal-stats.records.rows.hero-power' | owTranslate"
 				[value]="heroPowers"
 				[isNewRecord]="isNewRecord('heroPowerUsed')"
 			></stat-cell>
 			<stat-cell
-				label="Minions bought"
+				[label]="'app.battlegrounds.personal-stats.records.rows.minions-bought' | owTranslate"
 				[value]="minionsBought"
 				[isNewRecord]="isNewRecord('minionsBought')"
 			></stat-cell>
 			<stat-cell
-				label="Minions sold"
+				[label]="'app.battlegrounds.personal-stats.records.rows.minions-sold' | owTranslate"
 				[value]="minionsSold"
 				[isNewRecord]="isNewRecord('minionsSold')"
 			></stat-cell>
 			<stat-cell
-				label="Enemy Minions killed"
+				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-minions-killed' | owTranslate"
 				[value]="minionsKilled"
 				[isNewRecord]="isNewRecord('enemyMinionsKilled')"
 			></stat-cell>
 			<stat-cell
-				label="Enemy Heroes killed"
+				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-heroes-killed' | owTranslate"
 				[value]="heroesKilled"
 				[isNewRecord]="isNewRecord('enemyHeroesKilled')"
 			></stat-cell>
 			<stat-cell
-				label="Battles going first"
+				[label]="'app.battlegrounds.personal-stats.records.rows.battles-going-first' | owTranslate"
 				[value]="percentageOfBattlesGoingFirst?.toFixed(1) + '%'"
 				[isNewRecord]="isNewRecord('percentageOfBattlesGoingFirst')"
 			></stat-cell>
@@ -111,14 +121,17 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 					</svg>
 				</div>
 				<div class="label">
-					Battle luck
+					{{ 'app.battlegrounds.personal-stats.records.rows.battle-luck' | owTranslate }}
 					<a
 						class="explain-link"
 						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Battle-Luck-stat"
-						helpTooltip="An indicator that tells you how lucky you were in your battles during the run. Click for more info"
+						[helpTooltip]="
+							'app.battlegrounds.personal-stats.records.rows.battle-luck-explain-link-tooltip'
+								| owTranslate
+						"
+						[owTranslate]="'app.battlegrounds.personal-stats.records.rows.battle-luck-explain-link'"
 						target="_blank"
-						>What is this?</a
-					>
+					></a>
 				</div>
 				<div class="value">{{ luckFactor?.toFixed(1) }}%</div>
 			</div>

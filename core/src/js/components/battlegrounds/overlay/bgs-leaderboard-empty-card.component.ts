@@ -25,7 +25,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 				<div
 					class="last-opponent-icon"
 					*ngIf="isLastOpponent && showLastOpponentIcon"
-					helpTooltip="Was last round's opponent"
+					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
 			</div>
@@ -56,7 +56,6 @@ export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionCompon
 		if (this._previousPlayer === value) {
 			return;
 		}
-		console.debug('updating bgsPlayer', value, this._previousPlayer);
 		this._previousPlayer = value;
 		this.updateInfo();
 	}

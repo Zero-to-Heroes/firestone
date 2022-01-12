@@ -44,7 +44,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<stat-cell
 				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero' | owTranslate"
 				[tooltipText]="
-					'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions-tooltip' | owTranslate
+					'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero-tooltip' | owTranslate
 				"
 				[value]="stat.totalHeroDamageDealt.value"
 				[heroIcon]="stat.totalHeroDamageDealt.hero"
@@ -53,7 +53,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<stat-cell
 				[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
 				[tooltipText]="
-					'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-minions-tooltip' | owTranslate
+					'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate
 				"
 				[value]="stat.maxSingleTurnHeroDamageDealt.value"
 				[heroIcon]="stat.maxSingleTurnHeroDamageDealt.hero"
