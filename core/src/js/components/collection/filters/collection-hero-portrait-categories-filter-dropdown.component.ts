@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -32,24 +33,28 @@ export class CollectionHeroPortraitCategoriesFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 		this.options = [
 			{
 				value: 'collectible',
-				label: 'Constructed',
+				label: this.i18n.translateString('app.collection.filters.hero-portrait.collectible'),
 			} as IOption,
 			{
 				value: 'battlegrounds',
-				label: 'Battlegrounds',
+				label: this.i18n.translateString('app.collection.filters.hero-portrait.battlegrounds'),
 			} as IOption,
 			{
 				value: 'mercenaries',
-				label: 'Mercenaries',
+				label: this.i18n.translateString('app.collection.filters.hero-portrait.mercenaries'),
 			} as IOption,
 			{
 				value: 'book-of-mercs',
-				label: 'Book of Mercenaries',
+				label: this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs'),
 			} as IOption,
 		] as readonly IOption[];
 	}

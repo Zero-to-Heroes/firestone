@@ -6,11 +6,11 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardHistory } from '../../models/card-history';
-import { Events } from '../../services/events.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -38,10 +38,10 @@ declare let amplitude;
 				</i>
 			</span>
 			<span class="new" *ngIf="newCard && (!relevantCount || relevantCount === 1)">
-				<span>New</span>
+				<span [owTranslate]="'app.collection.card-history.new-copy'"></span>
 			</span>
 			<span class="new second" *ngIf="newCard && relevantCount > 1">
-				<span>Second</span>
+				<span [owTranslate]="'app.collection.card-history.second-copy'"></span>
 			</span>
 			<span class="date">{{ creationDate }}</span>
 		</div>
@@ -62,10 +62,10 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private events: Events,
-		private cards: CardsFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly cards: CardsFacadeService,
 	) {}
 
 	ngAfterViewInit() {
@@ -94,10 +94,10 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		const dbCard = this.cards.getCard(history.cardId);
 
 		this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
-		const name = dbCard && dbCard.name ? dbCard.name : 'Unknown card';
-		this.cardName = (history.isPremium ? 'Golden ' : '') + name;
+		const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
+		this.cardName = history.isPremium ? `${this.i18n.translateString('global.hs-terms.golden')} ${name}` : name;
 		this.dustValue = this.getDust(dbCard, history.isPremium);
-		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString('en-GB', {
+		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			day: '2-digit',
 			month: '2-digit',
 			year: '2-digit',

@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { IOption } from 'ng-select';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'collection-owned-filter',
@@ -27,11 +28,13 @@ export class OwnedFilterComponent implements AfterViewInit {
 	readonly FILTER_ALL = 'all';
 
 	cardsOwnedSelectOptions: IOption[] = [
-		{ label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN },
-		{ label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN },
-		{ label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL },
+		{ label: this.i18n.translateString('app.collection.filters.owned.pwn'), value: this.FILTER_OWN },
+		{ label: this.i18n.translateString('app.collection.filters.owned.dontown'), value: this.FILTER_DONT_OWN },
+		{ label: this.i18n.translateString('app.collection.filters.owned.all'), value: this.FILTER_ALL },
 	];
 	cardsOwnedActiveFilter = this.FILTER_ALL;
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	ngAfterViewInit() {
 		this.onOptionSelected.next(this.cardsOwnedSelectOptions.find((option) => option.value === this.FILTER_ALL));
@@ -40,19 +43,5 @@ export class OwnedFilterComponent implements AfterViewInit {
 	selectCardsOwnedFilter(option: IOption) {
 		this.cardsOwnedActiveFilter = option.value;
 		this.onOptionSelected.next(option);
-	}
-
-	private labelFor(filter: string) {
-		switch (filter) {
-			case this.FILTER_ALL:
-				return 'All';
-			case this.FILTER_OWN:
-				return 'Only the ones I have';
-			case this.FILTER_DONT_OWN:
-				return 'Only the ones I do not have';
-
-			default:
-				console.warn('unknown filter', filter);
-		}
 	}
 }

@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -32,20 +33,24 @@ export class CollectionHeroPortraitOwnedFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 		this.options = [
 			{
 				value: 'all',
-				label: 'All',
+				label: this.i18n.translateString('app.collection.filters.owned.all'),
 			} as IOption,
 			{
 				value: 'own',
-				label: 'Only the ones I have',
+				label: this.i18n.translateString('app.collection.filters.owned.own'),
 			} as IOption,
 			{
 				value: 'dontown',
-				label: 'Only the ones I do not have',
+				label: this.i18n.translateString('app.collection.filters.owned.dontown'),
 			} as IOption,
 		] as readonly IOption[];
 	}

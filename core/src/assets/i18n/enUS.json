@@ -134,6 +134,26 @@
 				"subtitle": "Start playing Arena to receive information"
 			}
 		},
+		"collection": {
+			"filters": {
+				"hero-portrait": {
+					"collectible": "Constructed",
+					"battlegrounds": "Battlegrounds",
+					"mercenaries": "Mercenaries",
+					"book-of-mercs": "Book of Mercenaries"
+				},
+				"owned": {
+					"all": "All",
+					"own": "Only the ones I have",
+					"dontown": "Only the ones I do not have"
+				}
+			},
+			"card-history": {
+				"new-copy": "New",
+				"second-copy": "Second",
+				"title": "My Card History"
+			}
+		},
 		"decktracker": {
 			"menu": {
 				"decks-header": "Decks",
@@ -616,6 +636,9 @@
 			},
 			"flash-window": "Flash HS window",
 			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
+		},
+		"collection": {
+			"history-show-only-new-cards": "Show only new cards"
 		}
 	}
 }

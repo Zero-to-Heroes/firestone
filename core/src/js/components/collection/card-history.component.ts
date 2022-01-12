@@ -18,11 +18,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="card-history">
 			<div class="history">
 				<div class="top-container">
-					<span class="title">My Card History</span>
+					<span class="title" [owTranslate]="'app.collection.card-history.title'"></span>
 					<section class="toggle-label">
 						<preference-toggle
 							field="collectionHistoryShowOnlyNewCards"
-							label="Show only new cards"
+							[label]="'settings.collection.history-show-only-new-cards' | owTranslate"
 						></preference-toggle>
 					</section>
 				</div>
