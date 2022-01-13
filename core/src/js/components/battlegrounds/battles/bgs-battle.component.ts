@@ -143,9 +143,8 @@ declare let amplitude;
 									class="text"
 									[owTranslate]="'battlegrounds.sim.export-button'"
 									[helpTooltip]="'battlegrounds.sim.export-button-tooltip' | owTranslate"
-									]
 								></div>
-							</div>
+							</div> 
 							<div class="reset" (click)="resetBoards()">
 								<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
 								<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>
