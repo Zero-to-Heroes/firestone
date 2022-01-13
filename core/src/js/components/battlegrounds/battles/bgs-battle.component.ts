@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
@@ -17,10 +17,11 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { ApiRunner } from '../../../services/api-runner';
 import {
 	BgsBattlePositioningService,
 	PermutationResult,
-	ProcessingStatus,
+	ProcessingStatus
 } from '../../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
@@ -264,6 +265,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		private readonly overlay: Overlay,
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly ow: OverwolfService,
+		private readonly api: ApiRunner,
 	) {}
 
 	async ngAfterViewInit() {
@@ -504,18 +506,29 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async importBoards() {
-		const code = await this.ow.getFromClipboard();
+		const fromClipboard = await this.ow.getFromClipboard();
 		try {
+			const shortCode = atob(fromClipboard);
+			console.debug('shortCode', shortCode);
+			const boardId = shortCode.split('simBoard')[1];
+			console.debug('boardId', boardId);
+			if (!boardId) {
+				return;
+			}
+			const url = `https://static-api.firestoneapp.com/retrieveBgsSimulationSample/${boardId}`;
+			console.debug('calling url', url);
+			const code = await this.api.get(url);
+			console.debug('code', code);
 			const faceOffStr = atob(code);
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
 			this.simulationUpdater(null, faceOff);
 			amplitude.getInstance().logEvent('import-bgs-sim-code');
 		} catch (e) {
-			console.warn('could not import from clipboard', code, e);
+			console.warn('could not import from clipboard', fromClipboard, e);
 		}
 	}
 
-	exportBoards() {
+	async exportBoards() {
 		amplitude.getInstance().logEvent('export-bgs-sim-code');
 		const sim: BgsFaceOffWithSimulation = {
 			...this._faceOff,
@@ -524,8 +537,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			battleInfoMesage: undefined,
 		} as BgsFaceOffWithSimulation;
 		const code = btoa(JSON.stringify(sim));
-
-		this.ow.placeOnClipboard(code);
+		console.debug('code', code);
+		const shortCode = await this.simulationService.getIdForSimulationSample(code as any);
+		console.debug('shortCode', shortCode);
+		this.ow.placeOnClipboard(btoa(`simBoard${shortCode}`));
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.export-confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -221,7 +221,8 @@
 				"http://*.twitch.tv",
 				"https://*.twitch.tv",
 				"https://*.outof.cards",
-				"https://*.firestoneapp.com"
+				"https://*.firestoneapp.com",
+				"https://*.pastebin.com"
 			]
 		},
 		"extra-objects": {

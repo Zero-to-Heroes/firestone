@@ -41,6 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						*ngIf="value.cardHistory && value.cardHistory.length < value.totalHistoryLength"
 						class="more-data-container"
 					>
+						<!-- TODO translate -->
 						<span class="more-data-text"
 							>You've viewed {{ value.cardHistory.length }} of {{ value.totalHistoryLength }} cards</span
 						>

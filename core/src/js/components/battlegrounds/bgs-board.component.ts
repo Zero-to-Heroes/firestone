@@ -29,7 +29,7 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn" *ngIf="!customTitle && _entities && !finalBoard && isNumber(currentTurn - boardTurn)">
 			{{
 				currentTurn - boardTurn === 0
-					? ('battlegrounds.board.seen-just-now' | owTransate)
+					? ('battlegrounds.board.seen-just-now' | owTranslate)
 					: ('battlegrounds.board.seen-turns-ago' | owTranslate: { value: currentTurn - boardTurn })
 			}}
 		</div>

@@ -34,7 +34,9 @@ export class ApiRunner {
 		});
 	}
 
+	// For JSON output
 	public async callGetApi<T>(url: string): Promise<T> {
+		console.debug('calling GET call', url);
 		return new Promise<T>((resolve, reject) => {
 			this.http.get(url).subscribe(
 				(result: any) => {
@@ -45,11 +47,20 @@ export class ApiRunner {
 					// Some users have a VPN / ISP config that prevents them from accessing our static
 					// data, so there's nothing we can do unless they contact us directly
 					if (!url.includes('.json')) {
-						console.error('Could not execute GET call', url);
+						console.error('Could not execute GET call', url, error);
 					}
 					resolve(null);
 				},
 			);
 		});
+	}
+
+	public async get(url: string): Promise<string> {
+		console.debug('calling GET', url);
+		return this.http
+			.get(url, {
+				responseType: 'text',
+			})
+			.toPromise();
 	}
 }
