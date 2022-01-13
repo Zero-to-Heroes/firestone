@@ -12,6 +12,8 @@ import { BgsBattleSimulationService } from './bgs-battle-simulation.service';
 @Injectable()
 export class BgsBattlePositioningService {
 	private cpuCount: number;
+	private cancelled: boolean;
+	private workers: Worker[] = [];
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -39,10 +41,27 @@ export class BgsBattlePositioningService {
 		// return new Observable((observer) => this.buildObservableFunction(observer, iterator));
 	}
 
+	public cancel() {
+		console.debug('cancelling?', this.cancelled);
+		if (this.cancelled) {
+			return;
+		}
+
+		console.log('cancelling process');
+		this.cancelled = true;
+		for (let i = this.workers.length - 1; i >= 0; i--) {
+			this.workers[i].terminate();
+		}
+		this.workers = [];
+		this.cancelled = false;
+		console.log('cancelled process');
+	}
+
 	private async *findBestPositioningInternal(
 		battleInfo: BgsBattleInfo,
 		prefs: Preferences,
 	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
+		this.cancelled = false;
 		const start = Date.now();
 		// Initialize the data
 		const initialBoard = battleInfo.playerBoard.board;
@@ -50,6 +69,9 @@ export class BgsBattlePositioningService {
 		// Build permutations of the main board
 		const permutations: Permutation[] = permutator(initialBoard);
 		console.debug('permutations', Date.now() - start, permutations);
+		if (this.cancelled) {
+			return [ProcessingStatus.CANCELLED, null];
+		}
 
 		yield [ProcessingStatus.FIRSTPASS, null];
 		// Build a rough estimation of the permutations
@@ -61,6 +83,9 @@ export class BgsBattlePositioningService {
 			50,
 		);
 		console.debug('first step', Date.now() - start, sortedPermutations.length, sortedPermutations);
+		if (this.cancelled) {
+			return [ProcessingStatus.CANCELLED, null];
+		}
 
 		yield [ProcessingStatus.SECONDPASS, null];
 		// Do it again, with more sims
@@ -72,6 +97,9 @@ export class BgsBattlePositioningService {
 			50,
 		);
 		console.debug('second step', Date.now() - start, sortedPermutations2.length, sortedPermutations2);
+		if (this.cancelled) {
+			return [ProcessingStatus.CANCELLED, null];
+		}
 
 		// Build a full simulation for each of the finalists and keep the best one
 		yield [ProcessingStatus.FINALRESULT, null];
@@ -83,6 +111,9 @@ export class BgsBattlePositioningService {
 			1,
 		);
 		console.debug('topPermutationsResults', Date.now() - start, topPermutationsResults);
+		if (this.cancelled) {
+			return [ProcessingStatus.CANCELLED, null];
+		}
 
 		const result = {
 			battleInfo: {
@@ -157,8 +188,10 @@ export class BgsBattlePositioningService {
 	): Promise<InternalPermutationResult[]> {
 		return new Promise<InternalPermutationResult[]>((resolve) => {
 			const worker = new Worker();
+			this.workers.push(worker);
 			worker.onmessage = (ev: MessageEvent) => {
 				worker.terminate();
+				this.workers.splice(this.workers.indexOf(worker), 1);
 				resolve(JSON.parse(ev.data));
 			};
 			const battleMessages = chunk.map(
@@ -183,21 +216,6 @@ export class BgsBattlePositioningService {
 			});
 		});
 	}
-
-	// private buildObservableFunction<T>(observer: Subscriber<T>, iterator: AsyncIterator<T>) {
-	// 	try {
-	// 		const itValue = iterator.next();
-	// 		itValue.then((value) => {
-	// 			console.debug('calling next obersable', itValue, value.value);
-	// 			observer.next(value.value);
-	// 			if (!value.done) {
-	// 				setTimeout(() => this.buildObservableFunction(observer, iterator));
-	// 			}
-	// 		});
-	// 	} catch (e) {
-	// 		console.error('[game-parser] Exception in buildObservableFunction', e);
-	// 	}
-	// }
 }
 
 const permutator = <T>(inputArr: readonly T[]) => {
@@ -237,4 +255,5 @@ export enum ProcessingStatus {
 	SECONDPASS,
 	FINALRESULT,
 	DONE,
+	CANCELLED,
 }

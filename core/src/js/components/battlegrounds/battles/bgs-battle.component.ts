@@ -82,10 +82,15 @@ declare let amplitude;
 						<div class="result new">
 							<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
 						</div>
-						<div class="controls position">
+						<div class="controls position" [ngClass]="{ 'busy': processingReposition }">
+							<div
+								class="button best-position cancel"
+								[owTranslate]="'battlegrounds.sim.reposition-button-cancel'" 
+								[helpTooltip]="'battlegrounds.sim.reposition-button-tooltip-cancel' | owTranslate"
+								(click)="cancelPositioning()"
+							></div> 
 							<div
 								class="button best-position"
-								[ngClass]="{ 'busy': processingReposition }"
 								(click)="findBestPositioning()"
 								[helpTooltip]="repositionButtonTooltipKey | owTranslate"
 								[owTranslate]="repositionButtonTextKey"
@@ -109,7 +114,6 @@ declare let amplitude;
 						(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
 					></bgs-battle-side>
 				</div>
-				<!-- TODO: translate -->
 				<div class="simulations" *ngIf="!fullScreenMode">
 					<div class="result actual" *ngIf="!hideActualBattle">
 						<div class="label" [owTranslate]="'battlegrounds.sim.actual'"></div>
@@ -596,8 +600,21 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	cancelPositioning() {
+		console.log('cancelling');
+		this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-cancelling`;
+		this.repositionButtonTooltipKey = `battlegrounds.sim.reposition-button-tooltip-cancelling`;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		this.positioningService.cancel();
+		this.processingReposition = false;
+		this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+	}
+
 	async findBestPositioning() {
 		if (this.processingReposition) {
+			this.cancelPositioning();
 			return;
 		}
 

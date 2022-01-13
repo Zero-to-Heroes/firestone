@@ -345,6 +345,10 @@
 					&:hover {
 						background: var(--color-1);
 					}
+
+					&.cancel {
+						display: none;
+					}
 				}
 
 				&.position {
@@ -355,11 +359,27 @@
 					margin-left: 30px;
 					border-left: 1px solid var(--color-2);
 
-					.button.busy {
+					.button {
+						margin-right: 0;
+					}
+				}
+
+				&.busy {
+					.button {
 						opacity: 0.7;
 
-						&:hover {
-							background: var(--color-2);
+						// &:hover {
+						// 	background: var(--color-2);
+						// }
+					}
+
+					&:hover {
+						.button.cancel {
+							display: flex;
+							opacity: 1;
+						}
+						.button:not(.cancel) {
+							display: none;
 						}
 					}
 				}

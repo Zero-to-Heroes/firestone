@@ -15,7 +15,7 @@ import { ChartsModule } from 'ng2-charts';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG,
+	PERFECT_SCROLLBAR_CONFIG
 } from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBattleRecapComponent } from '../../components/battlegrounds/battles/bgs-battle-recap.component';
@@ -119,6 +119,7 @@ import { RippleOnClickDirective } from '../../directives/ripple-on-click.directi
 import { RotateOnMouseOverDirective } from '../../directives/rotate-on-mouse-over.directive';
 import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
+import { ApiRunner } from '../../services/api-runner';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -408,6 +409,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 			provide: PERFECT_SCROLLBAR_CONFIG,
 			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
 		},
+		ApiRunner,
 	],
 })
 export class SharedModule {}
