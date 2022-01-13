@@ -489,6 +489,8 @@
 			"reset-button": "Reset",
 			"export-button": "Copy",
 			"export-button-tooltip": "Copy the simulation code to share it and reimport it in the simulator (it's quite big at the moment and doesn't fit in a tweet)",
+			"exporting": "Building simulation code, please wait",
+			"importing": "Importing boards, please wait",
 			"export-confirmation": "Simulation code copied to the clipboard",
 			"import-button": "Import",
 			"import-button-tooltip": "Import a simulation code to populate the simulator",

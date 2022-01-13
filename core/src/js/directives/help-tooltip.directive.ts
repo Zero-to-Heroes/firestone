@@ -11,7 +11,7 @@ import {
 	OnInit,
 	Optional,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
 import { OverwolfService } from '../services/overwolf.service';
@@ -154,9 +154,12 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	async onMouseEnter(override = false) {
+		console.debug('mouseenter?', this._text, override, this.onlyShowOnClick);
 		if (!this._text || (!override && this.onlyShowOnClick)) {
 			return;
 		}
+
+		console.debug('mouseenter');
 
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
@@ -217,9 +220,10 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('click')
 	onMouseClick() {
+		console.debug('click', this.onlyShowOnClick, this.clickTimeout);
 		if (this.onlyShowOnClick) {
 			this.onMouseEnter(true);
-			setTimeout(() => this.onMouseLeave(), this.clickTimeout);
+			setTimeout(() => this.onMouseLeave(true), this.clickTimeout);
 			return;
 		}
 
@@ -239,10 +243,11 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	@HostListener('mouseleave')
-	onMouseLeave() {
-		if (this.onlyShowOnClick) {
+	onMouseLeave(override = false) {
+		if (this.onlyShowOnClick && !override) {
 			return;
 		}
+		console.debug('mouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

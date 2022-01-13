@@ -85,10 +85,10 @@ declare let amplitude;
 						<div class="controls position" [ngClass]="{ 'busy': processingReposition }">
 							<div
 								class="button best-position cancel"
-								[owTranslate]="'battlegrounds.sim.reposition-button-cancel'" 
+								[owTranslate]="'battlegrounds.sim.reposition-button-cancel'"
 								[helpTooltip]="'battlegrounds.sim.reposition-button-tooltip-cancel' | owTranslate"
 								(click)="cancelPositioning()"
-							></div> 
+							></div>
 							<div
 								class="button best-position"
 								(click)="findBestPositioning()"
@@ -157,7 +157,9 @@ declare let amplitude;
 					<div
 						class="button import"
 						(click)="importBoards()"
-						[helpTooltip]="'battlegrounds.sim.import-button-tooltip' | owTranslate"
+						[helpTooltip]="importConfirmationText"
+						[helpTooltipOnlyShowOnClick]="true"
+						[helpTooltipClickTimeout]="importConfirmationTimeout"
 					>
 						<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
 						<div class="text" [owTranslate]="'battlegrounds.sim.import-button'"></div>
@@ -246,8 +248,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	player: BgsBoardInfo;
 
 	tooltip: string;
-	exportConfirmationText: string;
+	exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
 	exportConfirmationTimeout = 4_000;
+	importConfirmationText = this.i18n.translateString('battlegrounds.sim.importing');
+	importConfirmationTimeout = 4_000;
 
 	repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
 	repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
@@ -534,6 +538,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	async exportBoards() {
 		amplitude.getInstance().logEvent('export-bgs-sim-code');
+		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 		const sim: BgsFaceOffWithSimulation = {
 			...this._faceOff,
 			battleResult: undefined,
@@ -550,7 +558,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
-			this.exportConfirmationText = null;
+			this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
