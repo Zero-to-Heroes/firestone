@@ -5,6 +5,7 @@ import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/op
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -33,16 +34,16 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 
 	filterOptions: readonly IOption[] = [
 		{
-			label: 'Standard',
 			value: 'standard',
+			label: this.i18n.translateString('app.collection.filters.format.standard'),
 		} as IOption,
 		{
-			label: 'Wild',
 			value: 'wild',
+			label: this.i18n.translateString('app.collection.filters.format.wild'),
 		} as IOption,
 		{
-			label: 'All',
 			value: 'all',
+			label: this.i18n.translateString('app.collection.filters.format.all'),
 		} as IOption,
 	];
 	filterChangeFunction: (option: IOption) => MainWindowStoreEvent = (option: IOption) =>
@@ -53,7 +54,11 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 
 	private allSets$: Observable<readonly Set[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 

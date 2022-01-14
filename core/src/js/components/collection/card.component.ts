@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -70,7 +70,6 @@ export class CardComponent implements AfterViewInit {
 		if (!card) {
 			return;
 		}
-		console.debug('card', card.name, card);
 
 		this.ownedNonPremium = (this._card as SetCard).ownedNonPremium ?? 0;
 		this.showNonPremiumCount = this.ownedNonPremium > 0;

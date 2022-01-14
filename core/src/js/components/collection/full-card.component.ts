@@ -30,27 +30,27 @@ declare let amplitude;
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
 					<div class="card-info class">
-						<span class="sub-title">Class:</span>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.class'"></span>
 						<span class="value">{{ class }}</span>
 					</div>
 					<div class="card-info type">
-						<span class="sub-title">Type:</span>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.type'"></span>
 						<span class="value">{{ type }}</span>
 					</div>
 					<div class="card-info set" *ngIf="set">
-						<span class="sub-title">Set:</span>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.set'"></span>
 						<span class="value">{{ set }}</span>
 					</div>
 					<div class="card-info rarity" *ngIf="rarityd">
-						<span class="sub-title">Rarity:</span>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.rarity'"></span>
 						<span class="value">{{ rarity }}</span>
 					</div>
 					<div class="card-info flavor-text" *ngIf="flavor">
-						<span class="sub-title">Flavor Text:</span>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.flavor'"></span>
 						<p class="value" [innerHTML]="flavor"></p>
 					</div>
 					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
-						<div class="sub-title">Sounds:</div>
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.sounds-title'"></span>
 						<div class="audio-category" *ngFor="let category of audioCategories">
 							<span class="audio-category-title">{{ category.name }}</span>
 							<li class="sound" *ngFor="let sound of category.clips" (mousedown)="playSound(sound)">
@@ -93,7 +93,6 @@ export class FullCardComponent {
 			return;
 		}
 
-		console.debug('card', selectedCard);
 		this.previousClips = this.audioClips || [];
 		this.audioCategories = this.buildAudio(selectedCard);
 		this.audioClips = this.audioCategories
@@ -121,7 +120,7 @@ export class FullCardComponent {
 				? card.playerClass
 				: card.classes?.length
 				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-				: 'All classes';
+				: formatClass('all', this.i18n);
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
@@ -160,23 +159,23 @@ export class FullCardComponent {
 
 		const result = [
 			{
-				name: 'Basic',
+				name: this.i18n.translateString('app.collection.card-details.sounds.category.basic'),
 				clips: this.buildAudioClips(card.audio, 'basic'),
 			},
 			{
-				name: 'Spells',
+				name: this.i18n.translateString('app.collection.card-details.sounds.category.spell'),
 				clips: this.buildAudioClips(card.audio, 'spell'),
 			},
 			{
-				name: 'Emotes',
+				name: this.i18n.translateString('app.collection.card-details.sounds.category.emote'),
 				clips: this.buildAudioClips(card.audio, 'emote', 'emote'),
 			},
 			{
-				name: 'Events',
+				name: this.i18n.translateString('app.collection.card-details.sounds.category.event'),
 				clips: this.buildAudioClips(card.audio, 'emote', 'event'),
 			},
 			{
-				name: 'Errors',
+				name: this.i18n.translateString('app.collection.card-details.sounds.category.error'),
 				clips: this.buildAudioClips(card.audio, 'emote', 'error'),
 			},
 		];
@@ -187,7 +186,7 @@ export class FullCardComponent {
 		const otherAudio = { ...card.audio };
 		allMappedClips.forEach((key) => delete otherAudio[key]);
 		const otherCategory = {
-			name: 'Other',
+			name: this.i18n.translateString('app.collection.card-details.sounds.category.other'),
 			clips: this.buildAudioClips(otherAudio, null),
 		};
 
@@ -223,184 +222,184 @@ export class FullCardComponent {
 	// The order is important, as the first match is always returned
 	private readonly REGEXES = [
 		{
+			regex: /.*GREETINGS.*/g,
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.greetings'),
+			category: 'emote',
+		},
+		{
 			regex: /.*GREETINGS_RESPONSE.*/g,
-			value: 'Greetings Response',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.greetings-response'),
 			category: 'emote',
 		},
 		{
 			regex: /.*WELL_PLAYED.*/g,
-			value: 'Well played',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.well-played'),
 			category: 'emote',
 		},
 		{
 			regex: /.*OOPS.*/g,
-			value: 'Oops',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.oops'),
 			category: 'emote',
 		},
 		{
 			regex: /.*THREATEN.*/g,
-			value: 'Threaten',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.threaten'),
 			category: 'emote',
 		},
 		{
 			regex: /.*THANKS.*/g,
-			value: 'Thanks',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.thanks'),
 			category: 'emote',
 		},
 		{
 			regex: /.*SORRY.*/g,
-			value: 'Sorry',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.sorry'),
 			category: 'emote',
 		},
 		{
 			regex: /.*CONCEDE.*/g,
-			value: 'Concede',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.concede'),
 			category: 'emote',
 		},
 		{
 			regex: /.*START.*/g,
-			value: 'Start',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.start'),
 			category: 'emote',
 		},
 		{
 			regex: /.*TIMER.*/g,
-			value: 'Timer',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.timer'),
 			category: 'emote',
 		},
 		{
 			regex: /.*THINK1.*/g,
-			value: 'Think 1',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-1'),
 			category: 'emote',
 		},
 		{
 			regex: /.*THINK2.*/g,
-			value: 'Think 2',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-2'),
 			category: 'emote',
 		},
 		{
 			regex: /.*THINK3.*/g,
-			value: 'Think 3',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-3'),
 			category: 'emote',
 		},
 		{
 			regex: /.*LOW_CARDS.*/g,
-			value: 'Low Cards',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.low-cards'),
 			category: 'emote',
 		},
 		{
 			regex: /.*NO_CARDS.*/g,
-			value: 'No Cards',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.no-cards'),
 			category: 'emote',
 		},
 		{
 			regex: /.*WON.*/g,
-			value: 'Won',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.won'),
 			category: 'emote',
 		},
 		{
 			regex: /.*MIRROR_START.*/g,
-			value: 'Mirror Start',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.mirror-start'),
 			category: 'emote',
 		},
 		{
 			regex: /.*ERROR_NEED_WEAPON.*/g,
-			value: 'Error Need Weapon',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-need-weapon'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_NEED_MANA.*/g,
-			value: 'Error Need Mana',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-need-mana'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_MINION_ATTACKED.*/g,
-			value: 'Error Minion Attacked',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-minion-attacked'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_I_ATTACKED.*/g,
-			value: 'Error I Attacked',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-i-attacked'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_JUST_PLAYED.*/g,
-			value: 'Error Just Played',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-just-played'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_HAND_FULL.*/g,
-			value: 'Error Hand Full',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-hand-full'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_FULL_MINIONS.*/g,
-			value: 'Error Full Minions',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-full-minions'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_STEALTH.*/g,
-			value: 'Error Stealth',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-stealth'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_PLAY.*/g,
-			value: 'Error Play',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-play'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_TARGET.*/g,
-			value: 'Error Target',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-target'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_TAUNT.*/g,
-			value: 'Error Taunt',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-taunt'),
 			category: 'error',
 		},
 		{
 			regex: /.*ERROR_GENERIC.*/g,
-			value: 'Error Generic',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-generic'),
 			category: 'error',
 		},
 		{
 			regex: /.*EVENT_LUNAR_NEW_YEAR.*/g,
-			value: 'Lunar New Year',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.lunar-new-year'),
 			category: 'event',
 		},
 		{
 			regex: /.*WINTERVEIL_GREETINGS.*/g,
-			value: 'Winterveil Greetings',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.winterveil-greetings'),
 			category: 'event',
 		},
 		{
 			regex: /.*HAPPY_NEW_YEAR_20.*/g,
-			value: 'Happy New Year 20',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.happy-new-year-20'),
 			category: 'event',
 		},
 		{
 			regex: /.*FIRE_FESTIVAL.*/g,
-			value: 'Fire Festival',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.fire-festival'),
 			category: 'event',
 		},
 		{
 			regex: /.*PIRATE_DAY.*/g,
-			value: 'Pirate Day',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.pirate-day'),
 			category: 'event',
 		},
 		{
 			regex: /.*HALLOWS_END.*/g,
-			value: "Hallow's End",
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.hallows-end'),
 			category: 'event',
 		},
 		{
 			regex: /.*NOBLEGARDEN.*/g,
-			value: 'Noblegarden',
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.noblegarden'),
 			category: 'event',
-		},
-		{
-			regex: /.*GREETINGS.*/g,
-			value: 'Greetings',
-			category: 'emote',
 		},
 	];
 
@@ -412,11 +411,11 @@ export class FullCardComponent {
 		key = key.toUpperCase();
 		switch (key) {
 			case 'BASIC_PLAY':
-				return 'Play';
+				return this.i18n.translateString('app.collection.card-details.sounds.effect.play');
 			case 'BASIC_DEATH':
-				return 'Death';
+				return this.i18n.translateString('app.collection.card-details.sounds.effect.death');
 			case 'BASIC_ATTACK':
-				return 'Attack';
+				return this.i18n.translateString('app.collection.card-details.sounds.effect.attak');
 		}
 		for (const regex of this.REGEXES) {
 			// I have no idea why, but testing the regex once doesn't always work for some,
@@ -471,7 +470,6 @@ export class FullCardComponent {
 
 	private transformFlavor(flavor: string): string {
 		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '').replace(/<br>/g, ' ');
-		console.debug('flvor', flavor, result);
 		return result;
 	}
 }

@@ -18,6 +18,51 @@
 			"wild": "Wild",
 			"classic": "Classic"
 		},
+		"pack": {
+			"classic": "Classic",
+			"goblins-vs-gnomes": "Goblin vs Gnomes",
+			"the-grand-tournament": "The Grand Tournament",
+			"old-gods": "Whispers of the Old Gods",
+			"mean-streets": "Mean Streets of Gadgetzan",
+			"ungoro": "Return to Un'Goro",
+			"frozen-throne": "Knights of the Frozen Throne",
+			"golden-classic-pack": "Golden Classic",
+			"kobolds-and-catacombs": "Kobolds and Catacombs",
+			"witchwood": "The Witchwood",
+			"the-boomsday-project": "The Boomsday Project",
+			"rastakhans-rumble": "Rastakhan's Rumble",
+			"mammoth-bundle": "Year of the Mammoth",
+			"dalaran": "Rise of Shadows",
+			"uldum": "Saviors of Uldum",
+			"dragons": "Descend of Dragons",
+			"black-temple": "Ashes of Outland",
+			"scholomance": "Scholomance Academy",
+			"standard-hunter": "Standard Hunter",
+			"year-of-dragon": "Year of the Dragon",
+			"standard-mage": "Standard Mage",
+			"the-barrens": "Forged in the Barrens",
+			"stormwind": "United in Stormwind",
+			"golden-scholomance": "Golden Scholomance Academy",
+			"darkmoon-faire": "Madness at the Darkmoon Faire",
+			"lettuce": "Mercenaries",
+			"standard-druid": "Standard Druid",
+			"standard-paladin": "Standard Paladin",
+			"standard-warrior": "Standard Warrior",
+			"standard-priest": "Standard Priest",
+			"standard-rogue": "Standard Rogue",
+			"standard-shaman": "Standard Shaman",
+			"standard-warlock": "Standard Warlock",
+			"standard-demonhunter": "Standard Demon Hunter",
+			"golden-darkmoon-faire": "Golden Madness at the Darkmoon Faire",
+			"alterac-valley": "Fractured in Alterac Valley",
+			"golden-the-barrens": "Golden Forged in the Barrens",
+			"year-of-phoenix": "Year of the Phoenix",
+			"standard-bundle": "Standard",
+			"wild-pack": "Wild",
+			"golden-standard-bundle": "Golden Standard",
+			"golden-stormwind": "Golden United in Stormwind",
+			"golden-alterac-valley": "Golden Fractured in Alterac Valley"
+		},
 		"ranks": {
 			"constructed": {
 				"bronze": "Bronze",
@@ -135,6 +180,13 @@
 			}
 		},
 		"collection": {
+			"menu": {
+				"sets": "Cards",
+				"card-backs": "Card Backs",
+				"portraits": "Portraits",
+				"coins": "Coins",
+				"packs": "Packs"
+			},
 			"filters": {
 				"hero-portrait": {
 					"collectible": "Constructed",
@@ -145,13 +197,157 @@
 				"owned": {
 					"all": "All",
 					"own": "Only the ones I have",
-					"dontown": "Only the ones I do not have"
+					"dontown": "Only the ones I do not have",
+					"missingplayablecopies": "Only cards where I miss playable copies",
+					"goldenown": "Only golden cards I have",
+					"notpremiumnotcompleted": "Only cards with missing non-golden copies",
+					"notcompleted": "Only cards with missing copies"
+				},
+				"rarity": {
+					"all": "Any rarity",
+					"common": "Common",
+					"rare": "Rare",
+					"epic": "Epic",
+					"legendary": "Legendary"
 				}
 			},
 			"card-history": {
 				"new-copy": "New",
 				"second-copy": "Second",
-				"title": "My Card History"
+				"title": "My Card History",
+				"you-have-viewed": "You've viewed {{numberOfCards}} out of {{totalCards}} cards",
+				"load-more-button": "Load more",
+				"empty-state-title": "No history yet",
+				"empty-state-subtitle": "Open a pack to start one!"
+			},
+			"card-search": {
+				"search-box-placeholder": "Search card...",
+				"loading": "Loading more cards..."
+			},
+			"card-details": {
+				"class": "Class:",
+				"type": "Type:",
+				"set": "Set:",
+				"rarity": "Rarity:",
+				"flavor": "Flavor Text:",
+				"sounds-title": "Sounds:",
+				"sounds": {
+					"category": {
+						"basic": "Basic",
+						"spell": "Spells",
+						"emote": "Emotes",
+						"event": "Events",
+						"error": "Errors",
+						"other": "Other"
+					},
+					"effect": {
+						"play": "Play",
+						"death": "Death",
+						"attack": "Attack",
+						"greetings": "Greetings",
+						"greetings-response": "Greetings Response",
+						"well-played": "Well Played",
+						"oops": "Oops",
+						"threaten": "threaten",
+						"thanks": "Thanks",
+						"Sorry": "Sorry",
+						"concede": "Concede",
+						"start": "Start",
+						"timer": "Timer",
+						"think-1": "Think 1",
+						"think-2": "Think 2",
+						"think-3": "Think 3",
+						"low-cards": "Low Cards",
+						"no-cards": "No Cards",
+						"won": "Won",
+						"mirror-start": "Mirror Start",
+						"error-need-weapon": "Error Need Weapon",
+						"error-need-mana": "Error Need Mana",
+						"error-minion-attacked": "Error Minion Attacked",
+						"error-i-attacked": "Error I Attacked",
+						"error-just-played": "Error Just Played",
+						"error-hand-full": "Error Hand Full",
+						"error-full-minions": "Error Full Minions",
+						"error-stealth": "Error Stealth",
+						"error-play": "Error Play",
+						"error-target": "Error Target",
+						"error-taunt": "Error Taunt",
+						"error-generic": "Error Generic",
+						"lunar-new-year": "Lunar New Year",
+						"winterveil-greetings": "Winterveil Greetings",
+						"happy-new-year-20": "Happy New Year 20",
+						"fire-festival": "Fire Festival",
+						"pirate-day": "Pirate Day",
+						"hallows-end": "Hallow's End",
+						"noblegarden": "Noblegarden"
+					}
+				}
+			},
+			"pack-history": {
+				"title": "My Pack History",
+				"you-have-viewed": "You've viewed {{numberOfPacks}} out of {{totalPacks}} packs",
+				"load-more-button": "Load More",
+				"empty-state": {
+					"title": "No history yet",
+					"subtitle": "Open a pack to start one!"
+				}
+			},
+			"pack-stats": {
+				"title": "All-time packs ({{value}})",
+				"best-opened-packs-title": "Best {{value}} opened packs",
+				"best-opened-packs-title-tooltip": "Best packs you opened with Firestone running"
+			},
+			"set-stats": {
+				"title": "Set stats",
+				"packs-received": "Packs received",
+				"packs-received-tooltip": "All-time packs received, including the ones that are still unopened.",
+				"best-known-pack": "Best known pack",
+				"dust": "Dust",
+				"dust-tooltip": "You need {{value}} dust to complete the set",
+				"duplicate-dust": "Duplicate dust",
+				"duplicate-dust-tooltip": "You can gain {{value}} dust by disenchanting non-golden duplicate cards",
+				"golden-dust": "Golden Dust",
+				"golden-dust-tooltip": "You need {{value}} dust to complete the golden set",
+				"golden-duplicate-dust": "Golden Dupe dust",
+				"golden-duplicate-dust-tooltip": "You can gain {{value}} dust by disenchanting golden duplicate cards",
+				"commons": "Commons",
+				"commons-missing": "Missing Commons",
+				"rares": "Rares",
+				"rares-missing": "Missing Rares",
+				"epics": "Epics",
+				"epics-missing": "Missing Epics",
+				"legendaries": "Legendaries",
+				"legendaries-missing": "Missing Legendaries",
+				"golden-commons": "Golden Commons",
+				"golden-commons-missing": "Missing Golden Commons",
+				"golden-rares": "Golden Rares",
+				"golden-rares-missing": "Missing Golden Rares",
+				"golden-epics": "Golden Epics",
+				"golden-epics-missing": "Missing Golden Epics",
+				"golden-legendaries": "Golden Legendaries",
+				"golden-legendaries-missing": "Missing Golden Legendaries"
+			},
+			"empty-state": {
+				"no-missing-card-in-set": {
+					"title": "This set is complete and you have it all!",
+					"subtitle": "Keep up the good work."
+				},
+				"no-card-in-set": {
+					"title": "No cards from this set yet!",
+					"subtitle": "Don't worry, keep playing and get new packs."
+				},
+				"no-golden-card-in-set": {
+					"title": "No golden cards from this set yet!",
+					"subtitle": "Don't worry, keep playing and get these shiny friends."
+				},
+				"no-search-results": {
+					"title": "Oh No! Nothing Matches: \"{{value}}\"",
+					"subtitle": "Don't give up - check the spelling or try less specific terms."
+				},
+				"default": {
+					"title": "Nothing to show here",
+					"subtitle": "Please start Hearthstone to synchronize the collection."
+				}
 			}
 		},
 		"decktracker": {
@@ -644,7 +840,10 @@
 			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
 		},
 		"collection": {
-			"history-show-only-new-cards": "Show only new cards"
+			"history-show-only-new-cards": "Show only new cards",
+			"pack-stats-show-only-buyable-packs": "Only show main packs",
+			"pack-stats-show-only-buyable-packs-tooltip": "Show only the packs that can be bought in the shop, hiding all promotional / reward packs",
+			"set-show-golden-stats": "Show stats for golden"
 		}
 	}
 }

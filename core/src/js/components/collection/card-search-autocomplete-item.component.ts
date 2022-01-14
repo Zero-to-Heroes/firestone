@@ -12,7 +12,6 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class CardSearchAutocompleteItemComponent implements OnInit {
 	@Input() fullString: string;
 	@Input() searchString: string;

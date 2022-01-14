@@ -1,17 +1,9 @@
 import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
+	ChangeDetectionStrategy, Component, Input
 } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
-import { CardsFacadeService } from '@services/cards-facade.service';
-import { Events } from '../../services/events.service';
 import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../services/hs-utils';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../services/overwolf.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
 	selector: 'pack-history-item',
@@ -33,16 +25,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackHistoryItemComponent implements AfterViewInit {
+export class PackHistoryItemComponent {
 	@Input('historyItem') set historyItem(pack: PackResult) {
 		if (!pack) {
 			return;
 		}
 		const boosterId = pack.boosterId ?? getDefaultBoosterIdForSetId(pack.setId);
 		this.setIcon = `https://static.firestoneapp.com/cardPacks/256/${boosterId}.png?v=3`;
-		this.setName = boosterIdToBoosterName(boosterId);
+		this.setName = boosterIdToBoosterName(boosterId, this.i18n);
 		this.dustValue = getPackDustValue(pack);
-		this.creationDate = new Date(pack.creationDate).toLocaleDateString('en-GB', {
+		this.creationDate = new Date(pack.creationDate).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			day: '2-digit',
 			month: '2-digit',
 			year: '2-digit',
@@ -57,16 +49,5 @@ export class PackHistoryItemComponent implements AfterViewInit {
 	creationDate: string;
 	dustValue: number;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private events: Events,
-		private cards: CardsFacadeService,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

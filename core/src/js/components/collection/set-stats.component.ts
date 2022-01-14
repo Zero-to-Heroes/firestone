@@ -8,8 +8,9 @@ import {
 	dustForPremium,
 	dustToCraftFor,
 	dustToCraftForPremium,
-	getPackDustValue,
+	getPackDustValue
 } from '../../services/hs-utils';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -25,11 +26,11 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	template: `
 		<div class="set-stats">
 			<div class="top-container">
-				<div class="title">Set stats</div>
+				<div class="title" [owTranslate]="'app.collection.set-stats.title'"></div>
 				<section class="toggle-label">
 					<preference-toggle
 						field="collectionSetShowGoldenStats"
-						label="Show stats for golden"
+						[label]="'settings.collection.set-show-golden-stats' | owTranslate"
 					></preference-toggle>
 				</section>
 			</div>
@@ -44,12 +45,12 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 				<pie-chart [data]="pieChartData$ | async"></pie-chart>
 				<set-stat-cell
 					*ngIf="packsReceived$ | async as packsReceived"
-					[text]="'Packs received'"
+					[text]="'app.collection.set-stats.packs-received' | owTranslate"
 					[current]="packsReceived"
-					helpTooltip="All-time packs received, including the ones that are still unopened."
+					[helpTooltip]="'app.collection.set-stats.packs-received-tooltip' | owTranslate"
 				></set-stat-cell>
 				<div class="set-stat-cell">
-					<div class="text">Best known pack</div>
+					<div class="text" [owTranslate]="'app.collection.set-stats.best-known-pack'"></div>
 					<div class="value">
 						<div class="item">
 							<div class="dust">{{ bestKnownPackDust$ | async }}</div>
@@ -76,7 +77,11 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 
 	set$$ = new BehaviorSubject<Set>(null);
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -120,42 +125,42 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 	private buildPieChartData(set: Set): readonly InputPieChartData[] {
 		return [
 			{
-				label: 'Commons',
+				label: this.i18n.translateString('app.collection.set-stats.commons'),
 				data: this.getOwned(set, 'common'),
 				color: 'rgba(217, 195, 171, 1)',
 			},
 			{
-				label: 'Missing Commons',
+				label: this.i18n.translateString('app.collection.set-stats.commons-missing'),
 				data: this.getTotal(set, 'common') - this.getOwned(set, 'common'),
 				color: 'rgba(135, 121, 106, 1)',
 			},
 			{
-				label: 'Rares',
+				label: this.i18n.translateString('app.collection.set-stats.rares'),
 				data: this.getOwned(set, 'rare'),
 				color: 'rgba(64, 78, 211, 1)',
 			},
 			{
-				label: 'Missing Rares',
+				label: this.i18n.translateString('app.collection.set-stats.rares-missing'),
 				data: this.getTotal(set, 'rare') - this.getOwned(set, 'rare'),
 				color: 'rgba(40, 49, 130, 1)',
 			},
 			{
-				label: 'Epics',
+				label: this.i18n.translateString('app.collection.set-stats.epics'),
 				data: this.getOwned(set, 'epic'),
 				color: 'rgba(162, 118, 175, 1)',
 			},
 			{
-				label: 'Missing Epics',
+				label: this.i18n.translateString('app.collection.set-stats.epics-missing'),
 				data: this.getTotal(set, 'epic') - this.getOwned(set, 'epic'),
 				color: 'rgba(106, 78, 114, 1)',
 			},
 			{
-				label: 'Legendaries',
+				label: this.i18n.translateString('app.collection.set-stats.legendaries'),
 				data: this.getOwned(set, 'legendary'),
 				color: 'rgba(233, 169, 67, 1)',
 			},
 			{
-				label: 'Missing Legendaries',
+				label: this.i18n.translateString('app.collection.set-stats.legendaries-missing'),
 				data: this.getTotal(set, 'legendary') - this.getOwned(set, 'legendary'),
 				color: 'rgba(150, 107, 43, 1)',
 			},
@@ -165,42 +170,42 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 	private buildGoldenPieChartData(set: Set): readonly InputPieChartData[] {
 		return [
 			{
-				label: 'Golden Commons',
+				label: this.i18n.translateString('app.collection.set-stats.golden-commons'),
 				data: this.getOwned(set, 'common', true),
 				color: 'rgba(217, 195, 171, 1)',
 			},
 			{
-				label: 'Missing Golden Commons',
+				label: this.i18n.translateString('app.collection.set-stats.golden-commons-missing'),
 				data: this.getTotal(set, 'common', true) - this.getOwned(set, 'common', true),
 				color: 'rgba(135, 121, 106, 1)',
 			},
 			{
-				label: 'Golden Rares',
+				label: this.i18n.translateString('app.collection.set-stats.golden-rares'),
 				data: this.getOwned(set, 'rare', true),
 				color: 'rgba(64, 78, 211, 1)',
 			},
 			{
-				label: 'Missing Golden Rares',
+				label: this.i18n.translateString('app.collection.set-stats.golden-rares-missing'),
 				data: this.getTotal(set, 'rare', true) - this.getOwned(set, 'rare', true),
 				color: 'rgba(40, 49, 130, 1)',
 			},
 			{
-				label: 'Golden Epics',
+				label: this.i18n.translateString('app.collection.set-stats.golden-epics'),
 				data: this.getOwned(set, 'epic', true),
 				color: 'rgba(162, 118, 175, 1)',
 			},
 			{
-				label: 'Missing Golden Epics',
+				label: this.i18n.translateString('app.collection.set-stats.golden-epics-missing'),
 				data: this.getTotal(set, 'epic', true) - this.getOwned(set, 'epic', true),
 				color: 'rgba(106, 78, 114, 1)',
 			},
 			{
-				label: 'Golden Legendaries',
+				label: this.i18n.translateString('app.collection.set-stats.golden-legendaries'),
 				data: this.getOwned(set, 'legendary', true),
 				color: 'rgba(233, 169, 67, 1)',
 			},
 			{
-				label: 'Missing Golden Legendaries',
+				label: this.i18n.translateString('app.collection.set-stats.golden-legendaries-missing'),
 				data: this.getTotal(set, 'legendary', true) - this.getOwned(set, 'legendary', true),
 				color: 'rgba(150, 107, 43, 1)',
 			},
@@ -219,34 +224,38 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 			.reduce((a, b) => a + b, 0);
 		return [
 			{
-				text: 'Dust',
+				text: this.i18n.translateString('app.collection.set-stats.dust'),
 				current: currentDust,
 				total: totalDust,
-				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the set`,
+				tooltip: this.i18n.translateString('app.collection.set-stats.dust-tooltip', {
+					value: (totalDust - currentDust).toLocaleString(),
+				}),
 			},
 			{
-				text: 'Duplicate dust',
+				text: this.i18n.translateString('app.collection.set-stats.duplicate-dust'),
 				current: duplicateDust,
 				total: undefined,
-				tooltip: `You can gain ${duplicateDust.toLocaleString()} dust by disenchanting non-golden duplicate cards`,
+				tooltip: this.i18n.translateString('app.collection.set-stats.duplicate-dust-tooltip', {
+					value: duplicateDust.toLocaleString(),
+				}),
 			},
 			{
-				text: 'Common',
+				text: this.i18n.translateString('app.collection.set-stats.commons'),
 				current: this.getOwned(set, 'common'),
 				total: this.getTotal(set, 'common'),
 			},
 			{
-				text: 'Rare',
+				text: this.i18n.translateString('app.collection.set-stats.rares'),
 				current: this.getOwned(set, 'rare'),
 				total: this.getTotal(set, 'rare'),
 			},
 			{
-				text: 'Epic',
+				text: this.i18n.translateString('app.collection.set-stats.epics	'),
 				current: this.getOwned(set, 'epic'),
 				total: this.getTotal(set, 'epic'),
 			},
 			{
-				text: 'Legendary',
+				text: this.i18n.translateString('app.collection.set-stats.legendaries'),
 				current: this.getOwned(set, 'legendary'),
 				total: this.getTotal(set, 'legendary'),
 			},
@@ -265,34 +274,38 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 			.reduce((a, b) => a + b, 0);
 		return [
 			{
-				text: 'Golden Dust',
+				text: this.i18n.translateString('app.collection.set-stats.golden-dust'),
 				current: currentDust,
 				total: totalDust,
-				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the golden set`,
+				tooltip: this.i18n.translateString('app.collection.set-stats.golden-dust-tooltip', {
+					value: (totalDust - currentDust).toLocaleString(),
+				}),
 			},
 			{
-				text: 'Golden Dupe dust',
+				text: this.i18n.translateString('app.collection.set-stats.golden-duplicate-dust'),
 				current: duplicateDust,
 				total: undefined,
-				tooltip: `You can gain ${duplicateDust.toLocaleString()} dust by disenchanting golden duplicate cards`,
+				tooltip: this.i18n.translateString('app.collection.set-stats.duplicate-duplicate-dust-tooltip', {
+					value: duplicateDust.toLocaleString(),
+				}),
 			},
 			{
-				text: 'Golden Common',
+				text: this.i18n.translateString('app.collection.set-stats.golden-commons'),
 				current: this.getOwned(set, 'common', true),
 				total: this.getTotal(set, 'common', true),
 			},
 			{
-				text: 'Golden Rare',
+				text: this.i18n.translateString('app.collection.set-stats.golden-rares'),
 				current: this.getOwned(set, 'rare', true),
 				total: this.getTotal(set, 'rare', true),
 			},
 			{
-				text: 'Golden Epic',
+				text: this.i18n.translateString('app.collection.set-stats.golden-epics'),
 				current: this.getOwned(set, 'epic', true),
 				total: this.getTotal(set, 'epic', true),
 			},
 			{
-				text: 'Golden Legendary',
+				text: this.i18n.translateString('app.collection.set-stats.golden-legendaries'),
 				current: this.getOwned(set, 'legendary', true),
 				total: this.getTotal(set, 'legendary', true),
 			},

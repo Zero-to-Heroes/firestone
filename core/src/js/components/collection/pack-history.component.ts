@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { CardHistory } from '../../models/card-history';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -18,7 +17,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="pack-history">
 			<div class="history">
 				<div class="top-container">
-					<span class="title">My Pack History</span>
+					<span class="title" [owTranslate]="'app.collection.pack-history.title'"></span>
 				</div>
 				<ul
 					*ngIf="{
@@ -34,10 +33,19 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						*ngIf="value.packHistory && value.packHistory.length < value.totalHistoryLength"
 						class="more-data-container"
 					>
-						<span class="more-data-text"
-							>You've viewed {{ value.packHistory.length }} of {{ value.totalHistoryLength }} packs</span
-						>
-						<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
+						<span
+							class="more-data-text"
+							[owTranslate]="'app.collection.pack-history.you-have-viewed'"
+							[translateParams]="{
+								numberOfPacks: value.packHistory.length,
+								totalPacks: value.totalHistoryLength
+							}"
+						></span>
+						<button
+							class="load-more-button"
+							(mousedown)="loadMore()"
+							[owTranslate]="'app.collection.pack-history.load-more-button'"
+						></button>
 					</li>
 					<section *ngIf="!value.packHistory || value.packHistory.length === 0" class="empty-state">
 						<i class="i-60x78 pale-theme">
@@ -45,8 +53,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
 							</svg>
 						</i>
-						<span>No history yet</span>
-						<span>Open a pack to start one!</span>
+						<span [owTranslate]="'app.collection.pack-history.empty-state.title'"></span>
+						<span [owTranslate]="'app.collection.pack-history.empty-state.subtitle'"></span>
 					</section>
 				</ul>
 			</div>
@@ -68,7 +76,6 @@ export class PackHistoryComponent extends AbstractSubscriptionComponent implemen
 		const filteredHistory$ = this.store
 			.listen$(([main, nav, prefs]) => main.binder.packStats)
 			.pipe(
-				tap((info) => console.debug('packs history', info)),
 				this.mapData(([packs]) =>
 					(packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof'),
 				),

@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -192,7 +192,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 				return (portrait: ReferenceCard) => normalizeMercenariesCardId(portrait.id);
 			case 'book-of-mercs':
 				return (portrait: ReferenceCard) => {
-					console.debug('considering', portrait, /BOM_(\d+)_.*/g.exec(portrait.id));
 					const match = /BOM_(\d+)_.*/g.exec(portrait.id);
 					return match ? match[1] : '';
 				};
@@ -218,7 +217,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'book-of-mercs':
 				const match = /BOM_(\d+)_.*/g.exec(refPortrait.id);
 				const storyIndex = match ? match[1] : '';
-				console.debug('story index', storyIndex);
 				switch (+storyIndex) {
 					case 1:
 						return `${storyIndex.padStart(2, '0')} - Rokara's story`;

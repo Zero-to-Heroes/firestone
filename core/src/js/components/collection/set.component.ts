@@ -8,7 +8,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Set } from '../../models/set';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
@@ -97,7 +97,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 								<use xlink:href="assets/svg/sprite.svg#coming_soon" />
 							</svg>
 						</i>
-						<p>Coming soon!</p>
+						<p [owTranslate]="'app.collection.sets.coming-soon'"></p>
 					</div>
 				</div>
 				<div class="box-side extra-info" *ngIf="released">
@@ -107,12 +107,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 								<use xlink:href="assets/svg/sprite.svg#timer" />
 							</svg>
 						</i>
-						<span>Next guaranteed:</span>
+						<span [owTranslate]="'app.collection.sets.next-guaranteed'"></span>
 					</div>
 					<div class="progression epic">
 						<div class="progress-title">
 							<img src="assets/images/rarity/rarity-epic-small.png" />
-							<span>In {{ epicTimer }} packs</span>
+							<span
+								[owTranslate]="'app.collection.sets.in-packs'"
+								[translateParams]="{ value: epicTimer }"
+							></span>
 						</div>
 						<div class="progress-bar">
 							<div class="progress-bar-filled" [style.width.%]="epicFill"></div>
@@ -121,13 +124,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="progression legendary">
 						<div class="progress-title">
 							<img src="assets/images/rarity/rarity-legendary-small.png" />
-							<span>In {{ legendaryTimer }} packs</span>
+							<span
+								[owTranslate]="'app.collection.sets.in-packs'"
+								[translateParams]="{ value: legendaryTimer }"
+							></span>
 						</div>
 						<div class="progress-bar">
 							<div class="progress-bar-filled" [style.width.%]="legendaryFill"></div>
 						</div>
 					</div>
-					<button class="browse-set-button">Browse Set</button>
+					<button class="browse-set-button" [owTranslate]="'app.collection.sets.browse-set-button'"></button>
 				</div>
 			</div>
 		</div>
@@ -176,7 +182,7 @@ export class SetComponent implements AfterViewInit {
 	@Input() set cardSet(set: Set) {
 		this._cardSet = set;
 		this.released = set.allCards && set.allCards.length > 0;
-		if (['Classic', 'Core', 'Legacy', 'Demon Hunter Initiate'].indexOf(set.name) > -1) {
+		if (['classic', 'core', 'legacy', 'demon_hunter_initiate'].includes(set.id)) {
 			this._displayName = true;
 		}
 		this.epicTimer = set.pityTimer?.packsUntilGuaranteedEpic ?? CollectionManager.EPIC_PITY_TIMER;

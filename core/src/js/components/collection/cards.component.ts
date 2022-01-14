@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
@@ -16,6 +16,7 @@ import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -94,7 +95,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				>
 					<card-view [card]="card" [highRes]="highRes$ | async" [showCounts]="true">/</card-view>
 				</li>
-				<div class="loading" *ngIf="loading">Loading more cards...</div>
+				<div class="loading" *ngIf="loading" [owTranslate]="'app.collection.card-search.loading'"></div>
 			</infinite-scroll>
 			<collection-empty-state
 				[set]="_set"
@@ -138,37 +139,46 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 	readonly FILTER_ALL = 'all';
 
 	readonly raritySelectOptions: IOption[] = [
-		{ label: this.labelFor(this.RARITY_FILTER_ALL), value: this.RARITY_FILTER_ALL },
-		{ label: this.labelFor(this.RARITY_FILTER_COMMON), value: this.RARITY_FILTER_COMMON },
-		{ label: this.labelFor(this.RARITY_FILTER_RARE), value: this.RARITY_FILTER_RARE },
-		{ label: this.labelFor(this.RARITY_FILTER_EPIC), value: this.RARITY_FILTER_EPIC },
-		{ label: this.labelFor(this.RARITY_FILTER_LEGENDARY), value: this.RARITY_FILTER_LEGENDARY },
-	];
+		this.RARITY_FILTER_ALL,
+		this.RARITY_FILTER_COMMON,
+		this.RARITY_FILTER_RARE,
+		this.RARITY_FILTER_EPIC,
+		this.RARITY_FILTER_LEGENDARY,
+	].map((rarity) => ({
+		label: this.i18n.translateString(`app.collection.filters.rarity.${rarity}`),
+		value: rarity,
+	}));
 
 	readonly classSelectOptions: IOption[] = [
-		{ label: this.labelFor(this.CLASS_FILTER_ALL), value: this.CLASS_FILTER_ALL },
-		{ label: this.labelFor(this.CLASS_FILTER_NEUTRAL), value: this.CLASS_FILTER_NEUTRAL },
-		{ label: this.labelFor(this.CLASS_DEMON_HUNTER), value: this.CLASS_DEMON_HUNTER },
-		{ label: this.labelFor(this.CLASS_DRUID), value: this.CLASS_DRUID },
-		{ label: this.labelFor(this.CLASS_HUNTER), value: this.CLASS_HUNTER },
-		{ label: this.labelFor(this.CLASS_MAGE), value: this.CLASS_MAGE },
-		{ label: this.labelFor(this.CLASS_PALADIN), value: this.CLASS_PALADIN },
-		{ label: this.labelFor(this.CLASS_PRIEST), value: this.CLASS_PRIEST },
-		{ label: this.labelFor(this.CLASS_ROGUE), value: this.CLASS_ROGUE },
-		{ label: this.labelFor(this.CLASS_SHAMAN), value: this.CLASS_SHAMAN },
-		{ label: this.labelFor(this.CLASS_WARLOCK), value: this.CLASS_WARLOCK },
-		{ label: this.labelFor(this.CLASS_WARRIOR), value: this.CLASS_WARRIOR },
-	];
+		this.CLASS_FILTER_ALL,
+		this.CLASS_FILTER_NEUTRAL,
+		this.CLASS_DEMON_HUNTER,
+		this.CLASS_DRUID,
+		this.CLASS_HUNTER,
+		this.CLASS_MAGE,
+		this.CLASS_PALADIN,
+		this.CLASS_PRIEST,
+		this.CLASS_ROGUE,
+		this.CLASS_SHAMAN,
+		this.CLASS_WARLOCK,
+		this.CLASS_WARRIOR,
+	].map((playerClass) => ({
+		label: this.i18n.translateString(`global.class.${playerClass}`),
+		value: playerClass,
+	}));
 
 	readonly cardsOwnedSelectOptions: IOption[] = [
-		{ label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN },
-		{ label: this.labelFor(this.FILTER_MISSING_PLAYABLE_COPIES), value: this.FILTER_MISSING_PLAYABLE_COPIES },
-		{ label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN },
-		{ label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN },
-		{ label: this.labelFor(this.FILTER_NON_PREMIUM_NOT_COMPLETED), value: this.FILTER_NON_PREMIUM_NOT_COMPLETED },
-		{ label: this.labelFor(this.FILTER_NOT_COMPLETED), value: this.FILTER_NOT_COMPLETED },
-		{ label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL },
-	];
+		this.FILTER_OWN,
+		this.FILTER_MISSING_PLAYABLE_COPIES,
+		this.FILTER_GOLDEN_OWN,
+		this.FILTER_DONT_OWN,
+		this.FILTER_NON_PREMIUM_NOT_COMPLETED,
+		this.FILTER_NOT_COMPLETED,
+		this.FILTER_ALL,
+	].map((filter) => ({
+		label: this.i18n.translateString(`app.collection.filters.owned.${filter}`),
+		value: filter,
+	}));
 
 	readonly DEFAULT_CARD_WIDTH = 170;
 	readonly DEFAULT_CARD_HEIGHT = 240;
@@ -191,6 +201,7 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 
 	constructor(
 		private readonly elRef: ElementRef,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -393,64 +404,6 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium + card.ownedDiamond === 0;
 			default:
 				console.warn('unknown filter', this.cardsOwnedActiveFilter);
-		}
-	}
-
-	private labelFor(filter: string) {
-		switch (filter) {
-			case this.RARITY_FILTER_ALL:
-				return 'Any rarity';
-			case this.RARITY_FILTER_COMMON:
-				return 'Common';
-			case this.RARITY_FILTER_RARE:
-				return 'Rare';
-			case this.RARITY_FILTER_EPIC:
-				return 'Epic';
-			case this.RARITY_FILTER_LEGENDARY:
-				return 'Legendary';
-
-			case this.CLASS_FILTER_ALL:
-				return 'All classes';
-			case this.CLASS_FILTER_NEUTRAL:
-				return 'Neutral';
-			case this.CLASS_DRUID:
-				return 'Druid';
-			case this.CLASS_DEMON_HUNTER:
-				return 'Demon Hunter';
-			case this.CLASS_HUNTER:
-				return 'Hunter';
-			case this.CLASS_MAGE:
-				return 'Mage';
-			case this.CLASS_PALADIN:
-				return 'Paladin';
-			case this.CLASS_PRIEST:
-				return 'Priest';
-			case this.CLASS_ROGUE:
-				return 'Rogue';
-			case this.CLASS_SHAMAN:
-				return 'Shaman';
-			case this.CLASS_WARLOCK:
-				return 'Warlock';
-			case this.CLASS_WARRIOR:
-				return 'Warrior';
-
-			case this.FILTER_ALL:
-				return 'All existing cards';
-			case this.FILTER_MISSING_PLAYABLE_COPIES:
-				return 'Only cards where I miss playable copies';
-			case this.FILTER_OWN:
-				return 'Only cards I have';
-			case this.FILTER_GOLDEN_OWN:
-				return 'Only golden cards I have';
-			case this.FILTER_NON_PREMIUM_NOT_COMPLETED:
-				return 'Only cards with missing non-golden copies';
-			case this.FILTER_NOT_COMPLETED:
-				return 'Only cards with missing copies';
-			case this.FILTER_DONT_OWN:
-				return 'Only cards I do not have';
-
-			default:
-				console.warn('unknown filter', filter);
 		}
 	}
 }

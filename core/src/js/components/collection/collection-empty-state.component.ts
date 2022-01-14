@@ -16,8 +16,14 @@ import { Set } from '../../models/set';
 							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration" />
 						</svg>
 					</i>
-					<span class="title">This set is complete and you have it all!</span>
-					<span class="subtitle">Keep up the good work.</span>
+					<span
+						class="title"
+						[owTranslate]="'app.collection.empty-state.no-missing-card-in-set.title'"
+					></span>
+					<span
+						class="subtitle"
+						[owTranslate]="'app.collection.empty-state.no-missing-card-in-set.subtitle'"
+					></span>
 				</div>
 			</section>
 			<section class="empty-state no-card-in-set" *ngSwitchCase="NO_CARD_IN_SET">
@@ -27,8 +33,8 @@ import { Set } from '../../models/set';
 							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration" />
 						</svg>
 					</i>
-					<span class="title">No cards from this set yet!</span>
-					<span class="subtitle">Don't worry, keep playing and get new packs.</span>
+					<span class="title" [owTranslate]="'app.collection.empty-state.no-card-in-set.title'"></span>
+					<span class="subtitle" [owTranslate]="'app.collection.empty-state.no-card-in-set.subtitle'"></span>
 				</div>
 			</section>
 			<section class="empty-state no-golden-card-in-set" *ngSwitchCase="NO_GOLDEN_IN_SET">
@@ -38,8 +44,11 @@ import { Set } from '../../models/set';
 							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration" />
 						</svg>
 					</i>
-					<span class="title">No golden cards from this set yet!</span>
-					<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
+					<span class="title" [owTranslate]="'app.collection.empty-state.no-golden-card-in-set.title'"></span>
+					<span
+						class="subtitle"
+						[owTranslate]="'app.collection.empty-state.no-golden-card-in-set.subtitle'"
+					></span>
 				</div>
 			</section>
 			<section class="empty-state no-search-result" *ngSwitchCase="NO_SEARCH_RESULT">
@@ -49,8 +58,15 @@ import { Set } from '../../models/set';
 							<use xlink:href="assets/svg/sprite.svg#No_result_illustration" />
 						</svg>
 					</i>
-					<span class="title">Oh No! Nothing Matches: "{{ _searchString }}"</span>
-					<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
+					<span
+						class="title"
+						[owTranslate]="'app.collection.empty-state.no-search-results.title'"
+						[translateParams]="{ value: _searchString }"
+					></span>
+					<span
+						class="subtitle"
+						[owTranslate]="'app.collection.empty-state.no-search-results.subtitle'"
+					></span>
 				</div>
 			</section>
 			<section class="empty-state no-search-result" *ngSwitchCase="DEFAULT">
@@ -60,8 +76,8 @@ import { Set } from '../../models/set';
 							<use xlink:href="assets/svg/sprite.svg#No_result_illustration" />
 						</svg>
 					</i>
-					<span class="title">Nothing to show here</span>
-					<span class="subtitle">Please start Hearthstone to synchronize the collection.</span>
+					<span class="title" [owTranslate]="'app.collection.empty-state.default.title'"></span>
+					<span class="subtitle" [owTranslate]="'app.collection.empty-state.default.subtitle'"></span>
 				</div>
 			</section>
 		</ng-container>

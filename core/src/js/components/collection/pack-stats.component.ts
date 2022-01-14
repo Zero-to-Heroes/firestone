@@ -2,9 +2,9 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { PackInfo } from '../../models/collection/pack-info';
 import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sumOnArray } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -15,13 +15,13 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	template: `
 		<div class="pack-stats" scrollable>
 			<div class="header">
-				All-time packs ({{ totalPacks$ | async }})
+				{{ 'app.collection.pack-stats.title' | owTranslate: { value: totalPacks$ | async } }}
 				<preference-toggle
 					class="show-buyable-packs"
 					[ngClass]="{ 'active': showOnlyBuyablePacks$ | async }"
 					field="collectionShowOnlyBuyablePacks"
-					label="Only show main packs"
-					helpTooltip="Show only the packs that can be bought in the shop, hiding all promotional / reward packs"
+					[label]="'settings.collection.pack-stats-show-only-buyable-packs' | owTranslate"
+					[helpTooltip]="'settings.collection.pack-stats-show-only-buyable-packs-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
 			<div
@@ -58,10 +58,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<div
 					class="header best-packs-header"
 					*ngIf="value.bestPacks?.length"
-					helpTooltip="Best packs you opened with Firestone running"
-				>
-					Best {{ value.bestPacks.length }} opened packs
-				</div>
+					[helpTooltip]="'app.collection.pack-stats.best-opened-packs-title-tooltip' | owTranslate"
+					[owTranslate]="'app.collection.pack-stats.best-opened-packs-title'"
+					[translateParams]="{ value: value.bestPacks.length }"
+				></div>
 				<div class="best-packs-container" *ngIf="value.bestPacks?.length">
 					<div class="best-pack" *ngFor="let pack of value.bestPacks">
 						<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
@@ -85,7 +85,11 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -107,7 +111,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						packType: boosterId,
 						totalObtained: inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
 						unopened: 0,
-						name: boosterIdToBoosterName(boosterId),
+						name: boosterIdToBoosterName(boosterId, this.i18n),
 					}))
 					.filter((info) => info)
 					.reverse(),

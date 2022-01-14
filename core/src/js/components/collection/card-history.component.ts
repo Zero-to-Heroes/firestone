@@ -41,11 +41,19 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						*ngIf="value.cardHistory && value.cardHistory.length < value.totalHistoryLength"
 						class="more-data-container"
 					>
-						<!-- TODO translate -->
-						<span class="more-data-text"
-							>You've viewed {{ value.cardHistory.length }} of {{ value.totalHistoryLength }} cards</span
-						>
-						<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
+						<span
+							class="more-data-text"
+							[owTranslate]="'app.collection.card-history.you-have-viewed'"
+							[translateParams]="{
+								numberOfCards: value.cardHistory.length,
+								totalCards: value.totalHistoryLength
+							}"
+						></span>
+						<button
+							class="load-more-button"
+							(mousedown)="loadMore()"
+							[owTranslate]="'app.collection.card-history.load-more-button'"
+						></button>
 					</li>
 					<section *ngIf="!value.cardHistory || value.cardHistory.length === 0" class="empty-state">
 						<i class="i-60x78 pale-theme">
@@ -53,8 +61,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
 							</svg>
 						</i>
-						<span>No history yet</span>
-						<span>Open a pack to start one!</span>
+						<span [owTranslate]="'app.collection.card-history.empty-state-title'"></span>
+						<span [owTranslate]="'app.collection.card-history.empty-state-subtitle'"></span>
 					</section>
 				</ul>
 			</div>

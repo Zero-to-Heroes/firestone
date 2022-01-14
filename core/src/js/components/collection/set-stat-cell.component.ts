@@ -9,7 +9,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		`../../../css/component/collection/set-stat-cell.component.scss`,
 	],
 	template: `
-		<!-- TODO: add formatting for thousands -->
 		<div class="set-stat-cell">
 			<div class="text">{{ text }}</div>
 			<div class="value" [ngClass]="{ 'completed': current === total }">

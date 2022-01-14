@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -37,7 +37,7 @@ declare let amplitude;
 					(keypress)="filterKeyPress($event)"
 					(mousedown)="onMouseDown($event)"
 					(blur)="onFocusLost()"
-					placeholder="Search card..."
+					[placeholder]="'app.collection.card-search.search-box-placeholder' | owTranslate"
 				/>
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
