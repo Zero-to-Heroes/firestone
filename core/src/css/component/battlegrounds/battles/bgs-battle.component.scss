@@ -73,6 +73,11 @@
 			justify-content: center;
 			font-family: 'Open Sans', sans-serif;
 
+			svg {
+				max-width: 30px;
+				max-height: 30px;
+			}
+
 			&:hover {
 				background: var(--on-confirmation-button-background-color);
 				color: var(--on-confirmation-text-color);
@@ -246,6 +251,11 @@
 			.controls {
 				justify-content: space-between;
 
+				svg {
+					max-width: 30px;
+					max-height: 30px;
+				}
+
 				.simulate {
 					background: var(--color-2);
 					color: var(--color-5);
@@ -337,6 +347,11 @@
 				display: flex;
 				align-items: center;
 
+				svg {
+					max-width: 30px;
+					max-height: 30px;
+				}
+
 				.button {
 					background: var(--color-2);
 					color: var(--color-5);
@@ -421,6 +436,11 @@
 			align-items: center;
 			justify-content: center;
 			font-size: 12px;
+
+			svg {
+				max-width: 30px;
+				max-height: 30px;
+			}
 
 			.icon {
 				--icon-color: var(--default-title-color);
