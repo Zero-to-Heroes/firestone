@@ -151,7 +151,6 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 		);
 	}
 
-
 	buildPercents(value: number): string {
 		return value == null || isNaN(value) ? '-' : value.toFixed(1) + '%';
 	}

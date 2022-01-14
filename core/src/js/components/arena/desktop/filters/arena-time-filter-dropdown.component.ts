@@ -4,7 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter
+	EventEmitter,
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';

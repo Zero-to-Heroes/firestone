@@ -5,7 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';

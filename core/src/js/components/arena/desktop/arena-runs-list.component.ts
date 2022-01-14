@@ -5,7 +5,7 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { Subscription } from 'rxjs';

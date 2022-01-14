@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2
+	Renderer2,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';

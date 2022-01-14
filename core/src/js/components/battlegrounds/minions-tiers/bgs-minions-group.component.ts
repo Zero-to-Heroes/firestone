@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';

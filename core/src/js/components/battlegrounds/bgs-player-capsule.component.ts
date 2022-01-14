@@ -5,7 +5,7 @@ import {
 	ElementRef,
 	Input,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';

@@ -9,7 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -70,7 +70,8 @@ import { normalizeCardId } from './post-match/card-utils';
 						"
 						*ngIf="!hideDamageHeader"
 					>
-						{{ 'battlegrounds.board.total-damage' | owTranslate }} <span *ngIf="showTooltipWarning(entity)">*</span>
+						{{ 'battlegrounds.board.total-damage' | owTranslate }}
+						<span *ngIf="showTooltipWarning(entity)">*</span>
 					</div>
 					<div class="values">
 						<div class="damage-dealt">{{ getDamageDealt(entity) }}</div>

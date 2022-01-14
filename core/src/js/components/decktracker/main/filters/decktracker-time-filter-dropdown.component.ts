@@ -4,7 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter
+	EventEmitter,
 } from '@angular/core';
 import { DeckTimeFilterType } from '@models/mainwindow/decktracker/deck-time-filter.type';
 import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';

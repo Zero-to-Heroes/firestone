@@ -2,9 +2,10 @@ import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Component, EventEmitter,
+	Component,
+	EventEmitter,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';

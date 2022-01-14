@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getEffectiveTribe, tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';

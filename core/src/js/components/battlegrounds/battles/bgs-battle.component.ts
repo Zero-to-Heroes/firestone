@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
@@ -21,7 +21,7 @@ import { ApiRunner } from '../../../services/api-runner';
 import {
 	BgsBattlePositioningService,
 	PermutationResult,
-	ProcessingStatus
+	ProcessingStatus,
 } from '../../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
@@ -144,7 +144,7 @@ declare let amplitude;
 									[owTranslate]="'battlegrounds.sim.export-button'"
 									[helpTooltip]="'battlegrounds.sim.export-button-tooltip' | owTranslate"
 								></div>
-							</div> 
+							</div>
 							<div class="reset" (click)="resetBoards()">
 								<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
 								<div class="text" [owTranslate]="'battlegrounds.sim.reset-button'"></div>

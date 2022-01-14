@@ -6,7 +6,7 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';

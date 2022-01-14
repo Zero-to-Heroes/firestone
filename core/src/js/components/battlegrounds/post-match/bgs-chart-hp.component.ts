@@ -6,7 +6,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';

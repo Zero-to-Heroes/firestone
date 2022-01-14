@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardHistory } from '../../models/card-history';

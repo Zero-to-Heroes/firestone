@@ -52,9 +52,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			></stat-cell>
 			<stat-cell
 				[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
-				[tooltipText]="
-					'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate
-				"
+				[tooltipText]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate"
 				[value]="stat.maxSingleTurnHeroDamageDealt.value"
 				[heroIcon]="stat.maxSingleTurnHeroDamageDealt.hero"
 				[reviewId]="stat.maxSingleTurnHeroDamageDealt.reviewId"

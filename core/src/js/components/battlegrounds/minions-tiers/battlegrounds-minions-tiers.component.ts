@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Renderer2,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
