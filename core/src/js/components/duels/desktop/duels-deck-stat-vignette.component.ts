@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input,
+	Input
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
@@ -71,6 +71,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<svg class="dust-icon svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#dust" />
 					</svg>
+					<!-- TODO translate -->
 					<div
 						class="value"
 						*ngIf="dustCost"

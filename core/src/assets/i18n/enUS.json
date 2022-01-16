@@ -188,6 +188,11 @@
 				"packs": "Packs"
 			},
 			"filters": {
+				"format": {
+					"all": "All",
+					"standard": "Standard",
+					"wild": "Wild"
+				},
 				"hero-portrait": {
 					"collectible": "Constructed",
 					"battlegrounds": "Battlegrounds",
@@ -327,6 +332,12 @@
 				"golden-legendaries": "Golden Legendaries",
 				"golden-legendaries-missing": "Missing Golden Legendaries"
 			},
+			"sets": {
+				"coming-soon": "Coming soon!",
+				"next-guaranteed": "Next guaranteed",
+				"in-packs": "In {{value}} packs",
+				"browse-set-button": "Browse Set"
+			},
 			"empty-state": {
 				"no-missing-card-in-set": {
 					"title": "This set is complete and you have it all!",
@@ -349,6 +360,9 @@
 					"subtitle": "Please start Hearthstone to synchronize the collection."
 				}
 			}
+		},
+		"share": {
+			"title": "Share"
 		},
 		"decktracker": {
 			"menu": {

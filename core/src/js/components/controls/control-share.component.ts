@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		<button class="button-container">
 			<div class="icon" inlineSVG="assets/svg/social/share.svg"></div>
 			<div class="share-container">
-				<div class="header">Share</div>
+				<div class="header" [owTranslate]="'app.share.title'"></div>
 				<social-shares
 					class="social-shares"
 					[onSocialClick]="onSocialClick"
