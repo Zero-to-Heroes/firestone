@@ -5,6 +5,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { globalEffectTriggersEffects } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { modifyDeckForSpecialCardEffects } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -38,7 +39,13 @@ export class GlobalMinionEffectParser implements EventParser {
 			zone: null,
 		} as DeckCard);
 		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
-		const newPlayerDeck: DeckState = deck.update({
+		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
+			cardId,
+			deck,
+			this.allCards,
+			this.i18n,
+		);
+		const newPlayerDeck: DeckState = deckAfterSpecialCaseUpdate.update({
 			globalEffects: newGlobalEffects,
 		} as DeckState);
 		return currentState.update({

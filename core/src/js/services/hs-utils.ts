@@ -99,7 +99,7 @@ export const globalEffectCards = [
 	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.UpgradedPackMule,
-	CardIds.VanndarStormpike,
+	// CardIds.VanndarStormpike,
 	CardIds.Wildfire,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
@@ -113,6 +113,10 @@ export const globalEffectTriggers = [
 		// see how other minions/effects will be handled in the future
 		effectPrefab: 'DMF_GrandTotemAmikwe_Battlecry_DeckBoosh_Super.prefab',
 		cardId: CardIds.GrandTotemEysor,
+	},
+	{
+		effectPrefab: 'AVFX_VannderSpike_Trigger_DeckAE_Super',
+		cardId: CardIds.VanndarStormpike,
 	},
 ];
 

@@ -45,10 +45,23 @@ export const modifyDeckForSpecialCards = (
 			return handleScepterOfSummoning(deckState, allCards, i18n);
 		case CardIds.SkulkingGeist:
 			return handleSkulkingGeist(deckState, allCards, i18n);
-		case CardIds.VanndarStormpike:
-			return handleVanndarStormpike(deckState, allCards, i18n);
 		case CardIds.WyrmrestPurifier:
 			return handleWyrmrestPurifier(deckState, allCards, i18n);
+		default:
+			return deckState;
+	}
+};
+
+// Some cards don't trigger automatically when played
+export const modifyDeckForSpecialCardEffects = (
+	cardId: string,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	switch (cardId) {
+		case CardIds.VanndarStormpike:
+			return handleVanndarStormpike(deckState, allCards, i18n);
 		default:
 			return deckState;
 	}
