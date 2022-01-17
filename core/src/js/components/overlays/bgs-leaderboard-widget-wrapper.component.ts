@@ -7,12 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
+import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -83,6 +84,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.currentScene),
+			this.store.listenDeckState$((state) => state.metadata),
 			this.store.listenPrefs$((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
@@ -91,12 +93,14 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 		).pipe(
 			this.mapData(
-				([[currentScene], [bgsEnableOpponentBoardMouseOver], [inGame, gameEnded, playerCount]]) =>
+				([[currentScene], [metadata], [bgsEnableOpponentBoardMouseOver], [inGame, gameEnded, playerCount]]) =>
+					isBattlegrounds(metadata.gameType) &&
 					bgsEnableOpponentBoardMouseOver &&
 					currentScene === SceneMode.GAMEPLAY &&
 					inGame &&
 					!gameEnded &&
-					playerCount === 8,
+					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
+						(GameType.GT_BATTLEGROUNDS === metadata.gameType && playerCount === 8)),
 			),
 		);
 		this.bgsPlayers$ = this.store

@@ -1,7 +1,9 @@
+import { GameType } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
+import { GameState } from '../../../../models/decktracker/game-state';
 import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -14,7 +16,11 @@ export class BgsTurnStartParser implements EventParser {
 		return state && state.currentGame && gameEvent.type === 'BgsTurnStartEvent';
 	}
 
-	public async parse(currentState: BattlegroundsState, event: BgsTurnStartEvent): Promise<BattlegroundsState> {
+	public async parse(
+		currentState: BattlegroundsState,
+		event: BgsTurnStartEvent,
+		gameState: GameState,
+	): Promise<BattlegroundsState> {
 		const newPanelId = event.turnNumber === 1 ? 'bgs-next-opponent-overview' : currentState.currentPanelId;
 
 		const newCurrentTurn = Math.ceil(event.turnNumber / 2);
@@ -26,7 +32,10 @@ export class BgsTurnStartParser implements EventParser {
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
 		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
-		if (currentState.currentGame.players.length !== 8) {
+		if (
+			currentState.currentGame.players.length !== 8 &&
+			gameState?.metadata?.gameType === GameType.GT_BATTLEGROUNDS
+		) {
 			setTimeout(async () => {
 				const gameLogsKey = await this.logsUploader.uploadGameLogs();
 				console.error(
