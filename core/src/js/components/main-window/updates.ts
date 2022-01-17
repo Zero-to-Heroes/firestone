@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.4.16',
+		version: '8.5.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,19 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to flash the Hearthstone icon in the taskbar when it's your turn (for non-Merc games).`,
+								text: `Add the ability to resimulate past battles (only for the ones your play from now on)`,
 							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
 							{
-								type: 'bug',
-								text: `Fix highlight not working anymore when selecting a treasure.`,
+								type: 'feature',
+								text: `Add a way to easily export / import board states in the simulator, which will let you share specific states more easily with your friends or on Twitter.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a feature in the main window's BG simulator that lets you find the optimal positioning for a given board state. This is still in beta, and takes a while to compute (several minutes at least). Let me know what you think of it!`,
 							},
 						],
 					},
@@ -74,7 +73,50 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where the option to not show the opponent's last board on mouse over would be ignored.`,
+								text: `Fix some widgets not working on custom lobbies with fewer than 8 players.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Snake and Golden Fish of N'Zoth would appear in the minions list.`,
+							},
+							{
+								type: 'ui',
+								text: `Fix a display issue where the tooltip stats would not be properly positioning when mousing over a minion in the BG app.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the cost of minions in the deck would be reduced by Vanndar even if his battlecry didn't activate.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards revealed by a Joust would be flagged as burned. It now also flag the card as being a gift from the Joust card - not ideal, but the best I can do without adding a new processing layer (maybe in the future).`,
+							},
+							{
+								type: 'ui',
+								text: `Fix an issue where some counters' images (like Pogo's) would be too big`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where Elixir of Vigor would not properly appear in the stats following its nerf.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the "Zoom" setting would also be applied to the Settings window itself, sometimes resulting in an unusable settings window.`,
 							},
 						],
 					},
