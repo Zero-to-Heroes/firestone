@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsTreasureStatTypeFilterType } from '../../../../models/duels/duels-treasure-stat-type-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsTreasurePassiveTypeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -57,27 +59,27 @@ export class DuelsTreasurePassiveTypeFilterDropdownComponent
 		this.options = [
 			{
 				value: 'treasure-1',
-				label: 'Treasures Pool 1',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.treasure-1'),
 			} as TreasurePassiveTypeFilterOption,
 			{
 				value: 'treasure-2',
-				label: 'Treasures Pool 2',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.treasure-2'),
 			} as TreasurePassiveTypeFilterOption,
 			{
 				value: 'treasure-3',
-				label: 'Treasures Pool 2 Ultra Rares only',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.treasure-3'),
 			} as TreasurePassiveTypeFilterOption,
 			{
 				value: 'passive-1',
-				label: 'Passives Pool 1',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.passive-1'),
 			} as TreasurePassiveTypeFilterOption,
 			{
 				value: 'passive-2',
-				label: 'Passives Pool 2',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.passive-2'),
 			} as TreasurePassiveTypeFilterOption,
 			{
 				value: 'passive-3',
-				label: 'Passives Pool 2 Ultra Rares only',
+				label: this.i18n.translateString('app.duels.filters.treasure-pools.passive-3'),
 			} as TreasurePassiveTypeFilterOption,
 		] as readonly TreasurePassiveTypeFilterOption[];
 		this.filter$ = this.store

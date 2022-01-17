@@ -67,7 +67,7 @@ export class DuelsHeroPowerFilterDropdownComponent
 				map((heroPowerCardIds) => [
 					{
 						value: 'all',
-						label: 'All Hero Powers',
+						label: this.i18n.translateString('app.duels.filters.hero-power.all'),
 					},
 					...heroPowerCardIds
 						.sort((a, b) => {

@@ -61,7 +61,7 @@ export class DuelsClassFilterDropdownComponent
 			(option) =>
 				({
 					value: option,
-					label: option === 'all' ? 'All classes' : formatClass(option, this.i18n),
+					label: formatClass(option, this.i18n),
 				} as ClassFilterOption),
 		);
 		this.filter$ = this.store

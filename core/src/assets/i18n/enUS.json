@@ -18,6 +18,10 @@
 			"wild": "Wild",
 			"classic": "Classic"
 		},
+		"game-mode": {
+			"casual-duels": "Duels",
+			"heroic-duels": "Heroic Duels"
+		},
 		"pack": {
 			"classic": "Classic",
 			"goblins-vs-gnomes": "Goblin vs Gnomes",
@@ -508,6 +512,14 @@
 				"tribe": {
 					"all-tribes": "All tribes",
 					"no-tribe": "No tribe"
+				},
+				"signature-treasure": {
+					"all": "All Sig. Trasures"
+				},
+				"stat-type": {
+					"hero": "Heroes",
+					"hero-power": "Hero Powers",
+					"signature-treasure": "Signature Treasures"
 				}
 			},
 			"personal-stats": {
@@ -607,6 +619,66 @@
 			},
 			"tier-list": {
 				"header": "Heroes tier list ({{value}} matches) "
+			}
+		},
+		"duels": {
+			"filters": {
+				"dust": {
+					"all": "All decks",
+					"own": "Own all cards",
+					"dust": "{{value}} dust"
+				},
+				"game-mode": {
+					"all": "All modes",
+					"all-tooltip": "Community stats will only show data for Heroic Duels. Your own stats will show both Casual and Heroic.",
+					"casual": "Casual",
+					"casual-tooltip": "Community stats will only show data for Heroic Duels. Your own stats will only show Casual.",
+					"heroic": "Heroic"
+				},
+				"hero-power": {
+					"all": "All Hero Powers"
+				},
+				"hero-sort": {
+					"player-winrate": "Your winrate",
+					"global-winrate": "Global winrate",
+					"games-played": "Games played"
+				},
+				"time": {
+					"past-three": "Past 3 days",
+					"past-seven": "Past 7 days",
+					"last-patch": "Last patch",
+					"past-100": "Past 100 days"
+				},
+				"treasure-pools": {
+					"treasure-1": "Treasures Pool 1",
+					"treasure-2": "Treasures Pool 2",
+					"treasure-3": "Treasures Pool 2 Ultra Rares only",
+					"passive-1": "Passives Pool 1",
+					"passive-2": "Passives Pool 2",
+					"passive-3": "Passives Pool 2 Ultra Rares only"
+				},
+				"treasure-sort": {
+					"global-winrate": "Global winrate",
+					"global-pickrate": "Global pick rate",
+					"global-offering": "Global offering",
+					"player-pickrate": "Your pick rate"
+				}
+			},
+			"deck-stat": {
+				"dust-missing-tooltip": "Total dust required to craft the missing cards in this deck",
+				"no-dust-missing-tooltip": "You have all the cards",
+				"view-details-button": "View details"
+			},
+			"classes-recap": {
+				"title": "Stats overview",
+				"total-runs": "Total runs",
+				"avg-wins-per-run": "Avg. wins per run",
+				"most-played-classes": "Most played classes",
+				"best-winrate-classes": "Best winrate classes",
+				"most-faced-classes": "Most faced classes",
+				"best-winrate-against": "Best winrate against",
+				"stat-tooltip": "You played {{numberOfRuns}} runs and {{totalMatches}} matches with {{playerClass}} with a {{winrate}}% winrate",
+				"faced-tooltip": "You faced {{opponentClass}} {{totalMatches}} times with a {{winrate}}% winrate"
 			}
 		}
 	},
@@ -858,6 +930,11 @@
 			"pack-stats-show-only-buyable-packs": "Only show main packs",
 			"pack-stats-show-only-buyable-packs-tooltip": "Show only the packs that can be bought in the shop, hiding all promotional / reward packs",
 			"set-show-golden-stats": "Show stats for golden"
+		},
+		"duels": {
+			"personal-decks-show-hidden-decks": "Show archived",
+			"hide-stats-below-threshold": "Hide low data",
+			"hide-stats-below-threshold-tooltip": "Hide stats with fewer than {{value}} data points"
 		}
 	}
 }

@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsStatTypeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsStatTypeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -57,15 +59,15 @@ export class DuelsStatTypeFilterDropdownComponent
 		this.options = [
 			{
 				value: 'hero',
-				label: 'Heroes',
+				label: this.i18n.translateString('app.duels.filters.stat-type.hero'),
 			} as StatTypeFilterOption,
 			{
 				value: 'hero-power',
-				label: 'Hero Powers',
+				label: this.i18n.translateString('app.duels.filters.stat-type.hero-power'),
 			} as StatTypeFilterOption,
 			{
 				value: 'signature-treasure',
-				label: 'Signature Treasures',
+				label: this.i18n.translateString('app.duels.filters.stat-type.signature-treasure'),
 			} as StatTypeFilterOption,
 		] as readonly StatTypeFilterOption[];
 		this.filter$ = this.store

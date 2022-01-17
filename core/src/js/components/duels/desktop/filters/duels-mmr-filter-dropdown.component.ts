@@ -10,6 +10,7 @@ import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-mmr-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsMmrFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -106,15 +108,19 @@ export class DuelsMmrFilterDropdownComponent
 	private buildPercentileLabel(percentile: MmrPercentile): string {
 		switch (percentile.percentile) {
 			case 100:
-				return 'All ranks';
+				return this.i18n.translateString('app.battlegrounds.filters.rank.all');
 			case 50:
-				return `Top 50% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
 			case 25:
-				return `Top 25% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
 			case 10:
-				return `Top 10% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+				return this.i18n.translateString('app.battlegrounds.filters.rank.percentile', {
+					percentile: percentile.percentile,
+					mmr: this.getNiceMmrValue(percentile.mmr, 2),
+				});
 			case 1:
-				return `Top 1% (${this.getNiceMmrValue(percentile.mmr, 1)}+)`;
+				return this.i18n.translateString('app.battlegrounds.filters.rank.percentile', {
+					percentile: percentile.percentile,
+					mmr: this.getNiceMmrValue(percentile.mmr, 1),
+				});
 		}
 	}
 

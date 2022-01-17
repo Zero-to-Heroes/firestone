@@ -67,20 +67,20 @@ export class DuelsTimeFilterDropdownComponent
 					const options = [
 						{
 							value: 'all-time',
-							label: 'Past 100 days',
+							label: this.i18n.translateString('app.duels.filters.time.past-100'),
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',
-							label: `Last patch`,
+							label: this.i18n.translateString('app.duels.filters.time.last-patch'),
 							tooltip: formatPatch(patch, this.i18n),
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
-							label: 'Past 7 days',
+							label: this.i18n.translateString('app.duels.filters.time.past-seven'),
 						} as TimeFilterOption,
 						{
 							value: 'past-three',
-							label: 'Past 3 days',
+							label: this.i18n.translateString('app.duels.filters.time.past-three'),
 						} as TimeFilterOption,
 					] as readonly TimeFilterOption[];
 					return {

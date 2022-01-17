@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsLeaderboardGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-leaderboard-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -57,11 +59,11 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent
 		this.options = [
 			{
 				value: 'duels',
-				label: `Casual`,
+				label: this.i18n.translateString('app.duels.filters.game-mode.casual'),
 			} as GameModeFilterOption,
 			{
 				value: 'paid-duels',
-				label: `Heroic`,
+				label: this.i18n.translateString('app.duels.filters.game-mode.heroic'),
 			} as GameModeFilterOption,
 		] as readonly GameModeFilterOption[];
 		this.filter$ = this.store

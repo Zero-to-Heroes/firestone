@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroSortFilterType } from '../../../../models/duels/duels-hero-sort-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsHeroSortDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -57,15 +59,15 @@ export class DuelsHeroSortDropdownComponent
 		this.options = [
 			{
 				value: 'player-winrate',
-				label: 'Your winrate',
+				label: this.i18n.translateString('app.duels.filters.hero-sort.player-winrate'),
 			} as HeroSortFilterOption,
 			{
 				value: 'global-winrate',
-				label: 'Global winrate',
+				label: this.i18n.translateString('app.duels.filters.hero-sort.global-winrate'),
 			} as HeroSortFilterOption,
 			{
 				value: 'games-played',
-				label: 'Games played',
+				label: this.i18n.translateString('app.duels.filters.hero-sort.games-played'),
 			} as HeroSortFilterOption,
 		] as readonly HeroSortFilterOption[];
 		this.filter$ = this.store

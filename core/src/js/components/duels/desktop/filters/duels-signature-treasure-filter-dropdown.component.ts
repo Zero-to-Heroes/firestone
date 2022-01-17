@@ -67,7 +67,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 				map((signatureTreasureCardIds) => [
 					{
 						value: 'all',
-						label: 'All Sig. Treasures',
+						label: this.i18n.translateString('app.duels.filters.signature-treasure.all'),
 					},
 					...signatureTreasureCardIds
 						.sort((a, b) => {
@@ -158,7 +158,6 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 	}
 
 	onSelected(option: IOption) {
-		console.debug('selected', option);
 		this.stateUpdater.next(new DuelsSignatureTreasureFilterSelectedEvent(option.value));
 	}
 }

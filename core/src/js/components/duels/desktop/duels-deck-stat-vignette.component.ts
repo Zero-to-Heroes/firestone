@@ -1,14 +1,8 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { isPassive } from '../../../services/duels/duels-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -75,16 +69,22 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div
 						class="value"
 						*ngIf="dustCost"
-						helpTooltip="Total dust required to craft the missing cards in this deck"
+						[helpTooltip]="'app.duels.deck-stat.dust-missing-tooltip' | owTranslate"
 					>
 						{{ dustCost }}
 					</div>
-					<div class="value" *ngIf="dustCost === 0" helpTooltip="You have all the cards">0</div>
+					<div
+						class="value"
+						*ngIf="dustCost === 0"
+						[helpTooltip]="'app.duels.deck-stat.no-dust-missing-tooltip' | owTranslate"
+					>
+						0
+					</div>
 				</div>
 			</div>
 			<div class="right-info">
 				<div class="group view-deck" (click)="viewDetails()" *ngIf="deckstring">
-					<div class="text">View Details</div>
+					<div class="text" [owTranslate]="'app.duels.deck-stat.view-details-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
@@ -104,7 +104,10 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 			this._stat.gameMode === 'duels'
 				? 'assets/images/deck/ranks/casual_duels.png'
 				: 'assets/images/deck/ranks/heroic_duels.png';
-		this.gameModeTooltip = this._stat.gameMode === 'duels' ? 'Duels' : 'Heroic Duels';
+		this.gameModeTooltip =
+			this._stat.gameMode === 'duels'
+				? this.i18n.translateString('global.game-mode.casual-duels')
+				: this.i18n.translateString('global.game-mode.heroic-duels');
 		this.rankText = `${value.rating}`;
 
 		this.wins = this._stat.wins;
@@ -169,7 +172,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	ngAfterViewInit() {

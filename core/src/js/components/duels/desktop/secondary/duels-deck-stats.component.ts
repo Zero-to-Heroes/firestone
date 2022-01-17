@@ -13,6 +13,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/duels/desktop/secondary/duels-deck-stats.component.scss`,
 	],
 	template: `
+		<!-- TODO: translate -->
 		<div class="duels-deck-stats" *ngIf="deckInfo$ | async as deckInfo">
 			<div class="title">Deck stats</div>
 			<div class="info">

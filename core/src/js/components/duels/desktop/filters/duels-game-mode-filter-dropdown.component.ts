@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -48,6 +49,7 @@ export class DuelsGameModeFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -58,18 +60,17 @@ export class DuelsGameModeFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: 'All modes',
-				tooltip:
-					'Community stats are only available for Heroic. Your own stats will show both Casual and Heroic.',
+				label: this.i18n.translateString('app.duels.filters.game-mode.all'),
+				tooltip: this.i18n.translateString('app.duels.filters.game-mode.all-tooltip'),
 			} as GameModeFilterOption,
 			{
 				value: 'duels',
-				label: `Casual`,
-				tooltip: 'Community stats are only available for Heroic. Your own stats will only show Casual.',
+				label: this.i18n.translateString('app.duels.filters.game-mode.casual'),
+				tooltip: this.i18n.translateString('app.duels.filters.game-mode.casual-tooltip'),
 			} as GameModeFilterOption,
 			{
 				value: 'paid-duels',
-				label: `Heroic`,
+				label: this.i18n.translateString('app.duels.filters.game-mode.heroic'),
 			} as GameModeFilterOption,
 		] as readonly GameModeFilterOption[];
 		this.filter$ = this.store

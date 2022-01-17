@@ -9,6 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -48,15 +49,15 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				class="show-hidden-decks-link"
 				*ngIf="showHiddenDecksLink$ | async"
 				field="duelsPersonalDeckShowHiddenDecks"
-				label="Show archived"
+				[label]="'settings.duels.hide-stats-below-threshold' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
 			<preference-toggle
 				class="hide-below-threshold-link"
 				*ngIf="showHideBelowThresholdLink$ | async"
 				field="duelsHideStatsBelowThreshold"
-				label="Hide low data"
-				[helpTooltip]="'Hide stats with fewer than ' + threshold + ' data points'"
+				[label]="'settings.duels.hide-stats-below-threshold' | owTranslate"
+				[helpTooltip]="helpTooltip"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
 		</div>
@@ -69,10 +70,15 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 	showHiddenDecksLink$: Observable<boolean>;
 	showHideBelowThresholdLink$: Observable<boolean>;
 
+	helpTooltip = this.i18n.translateString('settings.duels.hide-stats-below-threshold-tooltip', {
+		value: this.threshold,
+	});
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {

@@ -9,6 +9,7 @@ import {
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTreasureSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -46,6 +47,7 @@ export class DuelsTreasuresSortDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -56,19 +58,19 @@ export class DuelsTreasuresSortDropdownComponent
 		this.options = [
 			{
 				value: 'global-winrate',
-				label: 'Global winrate',
+				label: this.i18n.translateString('app.duels.filters.treasure-sort.global-winrate'),
 			} as TreasureSortFilterOption,
 			{
 				value: 'global-pickrate',
-				label: 'Global pick rate',
+				label: this.i18n.translateString('app.duels.filters.treasure-sort.global-pickrate'),
 			} as TreasureSortFilterOption,
 			{
 				value: 'global-offering',
-				label: 'Global offering',
+				label: this.i18n.translateString('app.duels.filters.treasure-sort.global-offering'),
 			} as TreasureSortFilterOption,
 			{
 				value: 'player-pickrate',
-				label: 'Your pick rate',
+				label: this.i18n.translateString('app.duels.filters.treasure-sort.player-pickrate'),
 			} as TreasureSortFilterOption,
 		] as readonly TreasureSortFilterOption[];
 		this.filter$ = this.store

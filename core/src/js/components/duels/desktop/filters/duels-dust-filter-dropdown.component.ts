@@ -10,6 +10,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsTopDecksDustFilterType } from '../../../../models/duels/duels-top-decks-dust-filter.type';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksDustFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-dust-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -47,6 +48,7 @@ export class DuelsDustFilterDropdownComponent
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -57,31 +59,31 @@ export class DuelsDustFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: 'All decks',
+				label: this.i18n.translateString('app.duels.filters.dust.all'),
 			} as DustFilterOption,
 			{
 				value: '0',
-				label: 'Own all cards',
+				label: this.i18n.translateString('app.duels.filters.dust.own'),
 			} as DustFilterOption,
 			{
 				value: '40',
-				label: '40 dust',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 40 }),
 			} as DustFilterOption,
 			{
 				value: '100',
-				label: '100 dust',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 100 }),
 			} as DustFilterOption,
 			{
 				value: '200',
-				label: '200 dust',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 200 }),
 			} as DustFilterOption,
 			{
 				value: '500',
-				label: '500 dust',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 500 }),
 			} as DustFilterOption,
 			{
 				value: '1000',
-				label: '1000 dust',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 1000 }),
 			} as DustFilterOption,
 		] as readonly DustFilterOption[];
 		this.filter$ = this.store

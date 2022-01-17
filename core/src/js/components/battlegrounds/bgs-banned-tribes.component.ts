@@ -72,7 +72,6 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				const exceptionCards = bannedTribes
 					.map((tribe) => this.getExceptions(tribe))
 					.reduce((a, b) => a.concat(b), []);
-				// TODO translate
 				const exceptions =
 					exceptionCards && exceptionCards.length > 0
 						? this.i18n.translateString('battlegrounds.banned-tribes.exceptions', {
