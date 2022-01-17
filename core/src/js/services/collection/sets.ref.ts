@@ -1,4 +1,3 @@
-
 import { ReferenceSet } from '../../models/collection/reference-set';
 
 export const standardSets: readonly string[] = [

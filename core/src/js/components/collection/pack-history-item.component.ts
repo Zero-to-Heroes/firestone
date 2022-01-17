@@ -1,6 +1,4 @@
-import {
-	ChangeDetectionStrategy, Component, Input
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';

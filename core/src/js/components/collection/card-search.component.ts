@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';

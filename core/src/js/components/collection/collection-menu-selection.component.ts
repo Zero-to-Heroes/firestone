@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input
+	Input,
 } from '@angular/core';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store/events/collection/collection-select-current-tab-event';

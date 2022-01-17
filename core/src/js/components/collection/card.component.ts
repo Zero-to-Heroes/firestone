@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';

@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';

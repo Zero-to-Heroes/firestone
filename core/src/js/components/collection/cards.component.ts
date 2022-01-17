@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';

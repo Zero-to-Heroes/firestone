@@ -8,7 +8,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Set } from '../../models/set';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
