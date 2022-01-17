@@ -17,14 +17,19 @@
 		.card-stats {
 			top: 81%;
 
+			.stat {
+				width: 27%;
+				top: -25%;
+			}
+
 			.attack {
-				left: 0%;
+				left: 8%;
 			}
 
 			.health {
-				left: 35%;
-				width: 34%;
-				top: -15%;
+				left: 40%;
+				width: 32%;
+				top: -27%;
 			}
 
 			.stat-value {

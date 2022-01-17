@@ -104,12 +104,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-			// if (!(this.cdr as ViewRef)?.destroyed) {
-			// 	this.cdr.detectChanges();
-			// }
-		}
+		this.onMouseLeave();
 	}
 
 	@HostListener('mouseenter')
@@ -132,7 +127,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		// return;
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
