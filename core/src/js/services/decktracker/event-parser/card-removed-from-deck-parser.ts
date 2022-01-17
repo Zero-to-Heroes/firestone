@@ -31,12 +31,14 @@ export class CardRemovedFromDeckParser implements EventParser {
 			zone: 'SETASIDE',
 			milled: true,
 		} as DeckCard);
+		//console.debug('[debug]', 'update card', card, cardWithZone);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,
 		} as DeckState);
+		//console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

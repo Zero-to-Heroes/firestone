@@ -33,6 +33,7 @@ export class CardChangedInDeckParser implements EventParser {
 			deck.deckList.length === 0,
 			true,
 		);
+		//console.debug('[debug]', 'theCard', theCard);
 		if (!theCard) {
 			console.warn('could not find card in deck', cardId, entityId);
 			return currentState;
@@ -53,13 +54,13 @@ export class CardChangedInDeckParser implements EventParser {
 			cardName: this.i18n.getCardName(cardData.id),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
-			creatorCardId: gameEvent.additionalData?.creatorCardId,
-			lastAffectedByCardId: gameEvent.additionalData.lastInfluencedByCardId,
+			creatorCardId: gameEvent.additionalData?.creatorCardId ?? theCard.creatorCardId,
+			lastAffectedByCardId: gameEvent.additionalData.lastInfluencedByCardId ?? theCard.lastAffectedByCardId,
 			temporaryCard: false,
 		} as DeckCard);
-		//console.debug('newCard', newCard);
+		//console.debug('[debug]', 'newCard', newCard);
 		const deckWithNewCard: readonly DeckCard[] = this.helper.addSingleCardToZone(newDeck, newCard);
-		//console.debug('deckWithNewCard', deckWithNewCard);
+		//console.debug('[debug]', 'deckWithNewCard', deckWithNewCard);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: deckWithNewCard,

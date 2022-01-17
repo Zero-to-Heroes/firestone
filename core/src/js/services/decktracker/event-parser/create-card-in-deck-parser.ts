@@ -44,12 +44,14 @@ export class CreateCardInDeckParser implements EventParser {
 				? buildBonusDamage(deck.findCard(gameEvent.additionalData.creatorEntityId))
 				: null,
 		} as DeckCard);
+		//console.debug('[debug]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});
+		//console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
 
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
