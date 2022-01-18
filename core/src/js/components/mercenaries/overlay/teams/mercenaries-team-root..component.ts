@@ -126,11 +126,21 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		if (!value) {
 			return;
 		}
-		this._tasks = value;
-		this.updateTaskListBottomPx();
+		this._tasks = [];
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+
+		// Avoids the "Cannot read property 'destroyed' of null" error
+		// This might be caused by the "detectChanges" calls done in mapData. However if I remove them then
+		// some data is sometimes not updated, so I'm not sure what the correct approach should be
+		setTimeout(() => {
+			this._tasks = value;
+			this.updateTaskListBottomPx();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	showColorChart$: Observable<boolean>;
