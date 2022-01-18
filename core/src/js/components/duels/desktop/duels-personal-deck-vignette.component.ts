@@ -39,7 +39,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						(mousedown)="preventDrag($event)"
 						(keydown.enter)="doRename()"
 					/>
-					<button class="validate-rename-button" (click)="doRename()">Ok</button>
+					<button
+						class="validate-rename-button"
+						(click)="doRename()"
+						[owTranslate]="'app.duels.deck-stat.rename-confirm-button'"
+					></button>
 				</div>
 				<div class="deck-image">
 					<img class="skin" [src]="skin" />
@@ -47,32 +51,32 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 				<div class="stats">
 					<div class="item total-runs">
-						<span class="text">Number of runs</span>
+						<span class="text" [owTranslate]="'app.duels.deck-stat.number-of-runs'"></span>
 						<span class="value">{{ totalRuns }}</span>
 					</div>
 					<div class="item avg-wins">
-						<span class="text">Avg. wins per run</span>
+						<span class="text" [owTranslate]="'app.duels.deck-stat.average-wins-per-run'"></span>
 						<span class="value">{{ avgWins.toFixed(1) }}</span>
 					</div>
 				</div>
 			</div>
 			<button
 				class="close-button"
-				helpTooltip="Archive deck (you can restore it later)"
+				[helpTooltip]="'app.duels.deck-stat.archive-deck-tooltip' | owTranslate"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!renaming && !hidden"
 				inlineSVG="assets/svg/bin.svg"
 			></button>
 			<button
 				class="restore-button"
-				helpTooltip="Restore deck"
+				[helpTooltip]="'app.duels.deck-stat.restore-deck-tooltip' | owTranslate"
 				(mousedown)="restoreDeck($event)"
 				*ngIf="!renaming && hidden"
 				inlineSVG="assets/svg/restore.svg"
 			></button>
 			<button
 				class="rename-button"
-				helpTooltip="Rename deck"
+				[helpTooltip]="'app.duels.deck-stat.rename-deck-tooltip' | owTranslate"
 				*ngIf="!renaming"
 				(mousedown)="startDeckRename($event)"
 				inlineSVG="assets/svg/rename.svg"

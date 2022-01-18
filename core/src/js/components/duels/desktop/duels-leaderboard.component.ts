@@ -14,9 +14,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div class="duels-leaderboard">
 			<div class="duels-leaderboard-entry-container">
 				<li class="duels-leaderboard-entry header">
-					<div class="rank">Rank</div>
-					<div class="rating">Rating</div>
-					<div class="name">Name</div>
+					<div class="rank" [owTranslate]="'app.duels.leaderboard.rank' | owTranslate"></div>
+					<div class="rating" [owTranslate]="'app.duels.leaderboard.rating' | owTranslate"></div>
+					<div class="name" [owTranslate]="'app.duels.leaderboard.name' | owTranslate"></div>
 				</li>
 				<ul class="entries" scrollable>
 					<li

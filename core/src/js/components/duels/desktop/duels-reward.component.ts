@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { RewardType } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	selector: 'duels-reward',
@@ -23,7 +23,10 @@ export class DuelsRewardComponent {
 		this.svg = this.buildSvg(value);
 		this.amount = value.rewardAmount;
 		if (this.svg) {
-			this.tooltip = `${value.rewardAmount} ${this.buildName(value.rewardType)}`;
+			this.tooltip = this.i18n.translateString('app.global.reward.tooltip', {
+				amount: value.rewardAmount,
+				rewardType: this.buildName(value.rewardType),
+			});
 		}
 	}
 
@@ -31,7 +34,7 @@ export class DuelsRewardComponent {
 	amount: number;
 	tooltip: string;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	private buildSvg(reward: DuelsRewardsInfo | ArenaRewardInfo): string {
 		const rewardType = reward.rewardType;
@@ -52,13 +55,13 @@ export class DuelsRewardComponent {
 	private buildName(rewardType: RewardType): string {
 		switch (rewardType) {
 			case RewardType.ARCANE_DUST:
-				return 'dust';
+				return this.i18n.translateString('app.global.reward.dust');
 			case RewardType.BOOSTER_PACK:
-				return 'pack';
+				return this.i18n.translateString('app.global.reward.pack');
 			case RewardType.GOLD:
-				return 'gold';
+				return this.i18n.translateString('app.global.reward.gold');
 			case RewardType.CARD:
-				return 'golden card';
+				return this.i18n.translateString('app.global.reward.card');
 			default:
 				return null;
 		}

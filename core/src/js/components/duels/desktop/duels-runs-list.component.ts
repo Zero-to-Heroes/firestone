@@ -21,6 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'duels-runs-list',
 	styleUrls: [`../../../../css/component/duels/desktop/duels-runs-list.component.scss`],
 	template: `
+		<!-- TODO translate -->
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
 				<ng-container *ngIf="{ expandedRunIds: expandedRunIds$ | async } as value">

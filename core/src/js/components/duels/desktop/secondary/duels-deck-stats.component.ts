@@ -13,9 +13,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/duels/desktop/secondary/duels-deck-stats.component.scss`,
 	],
 	template: `
-		<!-- TODO: translate -->
 		<div class="duels-deck-stats" *ngIf="deckInfo$ | async as deckInfo">
-			<div class="title">Deck stats</div>
+			<div class="title" [owTranslate]="'app.duels.deck-stat.title'"></div>
 			<div class="info">
 				<div class="deck-image">
 					<img class="skin" [src]="deckInfo.deck.skin" />
@@ -26,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<copy-deckstring
 						class="copy-deckstring"
 						[deckstring]="deckInfo.deck.initialDeckList"
-						[copyText]="'Copy deck'"
+						[copyText]="'decktracker.deck-name.copy-deckstring-label' | owTranslate"
 					></copy-deckstring>
 				</div>
 			</div>
@@ -36,12 +35,12 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<div class="value">
 						{{ deckInfo.deck.winrate != null ? deckInfo.deck.winrate.toFixed(0) + '%' : '--' }}
 					</div>
-					<div class="label">Winrate</div>
+					<div class="label" [owTranslate]="'app.duels.deck-stat'"></div>
 				</div>
 				<div class="item runs">
 					<div class="icon" inlineSVG="assets/svg/star.svg"></div>
 					<div class="value">{{ deckInfo.deck.runs?.length }}</div>
-					<div class="label">Runs</div>
+					<div class="label" [owTranslate]="'app.duels.deck-stat'"></div>
 				</div>
 				<deck-mana-curve
 					class="recap mana-curve"

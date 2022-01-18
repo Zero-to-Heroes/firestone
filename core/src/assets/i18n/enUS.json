@@ -151,6 +151,15 @@
 			"logged-in-as-header": "Logged in as {{value}}",
 			"not-logged-in-header": "Log in to save your progress online"
 		},
+		"gobal": {
+			"reward": {
+				"tooltip": "{{amount}} {{rewardType}}",
+				"dust": "dust",
+				"pack": "pack",
+				"gold": "gold",
+				"card": "golden card"
+			}
+		},
 		"arena": {
 			"filters": {
 				"time": {
@@ -665,9 +674,58 @@
 				}
 			},
 			"deck-stat": {
+				"title": "Deck stats",
 				"dust-missing-tooltip": "Total dust required to craft the missing cards in this deck",
 				"no-dust-missing-tooltip": "You have all the cards",
-				"view-details-button": "View details"
+				"view-details-button": "View details",
+				"winrate": "Winrate",
+				"runs": "Runs",
+				"starter-deck": "Starter deck",
+				"final-deck": "Final deck",
+				"all-runs-with-deck": "All runs with \"{{deckName}}\"",
+				"run-details": "Run details",
+				"number-of-runs": "Number of runs",
+				"average-wins-per-run": "Avg. wins per run",
+				"archive-deck-tooltip": "Archive deck (you can restore it later)",
+				"restore-deck-tooltip": "Restore deck",
+				"rename-deck-tooltip": "Rename deck",
+				"rename-confirm-button": "Ok"
+			},
+			"hero-stat": {
+				"global-winrate": "Global winrate",
+				"your-winrate": "You winrate",
+				"games-played": "Games played",
+				"number-of-games-tooltip": "{{totalRuns}} runs recorded ({{popularity}} popularity)"
+			},
+			"run": {
+				"replays-title": "Replays for the same run",
+				"rating": "Rating",
+				"view-deck-button": "View deck",
+				"view-run-button": "View run",
+				"minimize-run-button": "Minimize view"
+			},
+			"stats": {
+				"tier-list-title": "Tier List",
+				"tier-list-title-tooltip": "The tiers are computed based on your current filters",
+				"tier-s-tooltip": "Must pick",
+				"tier-a-tooltip": "String pick",
+				"tier-b-tooltip": "Good pick",
+				"tier-c-tooltip": "Fair pick",
+				"tier-d-tooltip": "Preferably avoid",
+				"tier-e-tooltip": "Definitely avoid"
+			},
+			"leaderboard": {
+				"rank": "Rank",
+				"rating": "Rating",
+				"name": "Name"
+			},
+			"search": {
+				"hero": {
+					"placeholder": "Search hero..."
+				},
+				"treasure": {
+					"placeholder": "Search treasure..."
+				}
 			},
 			"classes-recap": {
 				"title": "Stats overview",
@@ -679,6 +737,10 @@
 				"best-winrate-against": "Best winrate against",
 				"stat-tooltip": "You played {{numberOfRuns}} runs and {{totalMatches}} matches with {{playerClass}} with a {{winrate}}% winrate",
 				"faced-tooltip": "You faced {{opponentClass}} {{totalMatches}} times with a {{winrate}}% winrate"
+			},
+			"empty-state": {
+				"title": "Nothing here yet",
+				"subtitle": "Start playing Duels to receive information"
 			}
 		}
 	},

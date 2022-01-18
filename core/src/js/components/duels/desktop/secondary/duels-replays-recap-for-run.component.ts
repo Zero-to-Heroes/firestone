@@ -13,7 +13,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="duels-replays-recap">
-			<div class="title">Replays for the same run</div>
+			<div class="title" [owTranslate]="'app.duels.run.replays-title'"></div>
 			<ul class="list">
 				<li *ngFor="let replay of replays$ | async">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import {
@@ -22,7 +23,11 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	],
 	template: `
 		<div class="duels-treasure-tier-list" *ngIf="tiers$ | async as tiers">
-			<div class="title" helpTooltip="The tiers are computed for your current filters">Tier List</div>
+			<div
+				class="title"
+				[helpTooltip]="'app.duels.stats.tier-list-tooltip-title' | owTranslate"
+				[owTranslate]="'app.duels.stats.tier-list-tooltip'"
+			></div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>
 		</div>
 	`,
@@ -33,6 +38,7 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
@@ -89,32 +95,32 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 					return [
 						{
 							label: 'S',
-							tooltip: 'Must pick',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-s-tooltip'),
 							items: this.filterItems(stats, 60, 101),
 						},
 						{
 							label: 'A',
-							tooltip: 'Strong pick',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-a-tooltip'),
 							items: this.filterItems(stats, 57, 60),
 						},
 						{
 							label: 'B',
-							tooltip: 'Good pick',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-b-tooltip'),
 							items: this.filterItems(stats, 54, 57),
 						},
 						{
 							label: 'C',
-							tooltip: 'Fair pick',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-c-tooltip'),
 							items: this.filterItems(stats, 50, 54),
 						},
 						{
 							label: 'D',
-							tooltip: 'Preferably avoid',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-d-tooltip'),
 							items: this.filterItems(stats, 45, 50),
 						},
 						{
 							label: 'E',
-							tooltip: 'Defnitely avoid',
+							tooltip: this.i18n.translateString('app.duels.stats.tier-e-tooltip'),
 							items: this.filterItems(stats, 0, 45),
 						},
 					].filter((tier) => tier.items?.length);

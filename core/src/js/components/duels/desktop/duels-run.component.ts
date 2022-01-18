@@ -13,6 +13,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DuelsToggleExpandedRunEvent } from '../../../services/mainwindow/store/events/duels/duels-toggle-expanded-run-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -70,16 +71,17 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					*ngIf="deltaRating != null"
 				>
 					<div class="value">{{ deltaRating }}</div>
-					<div class="text">Rating</div>
+					<div class="text" [owTranslate]="'app.duels.run.rating'"></div>
 				</div>
 			</div>
 			<div class="right-info">
 				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">
-					<div class="text">View deck</div>
+					<div class="text" [owTranslate]="'app.duels.run.view-deck-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
 				</div>
 				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
-					<div class="text">{{ _isExpanded ? 'Minimize View' : 'View Run' }}</div>
+					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.duels.run.minimize-run-button'"></div>
+					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.duels.run.view-run-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
@@ -156,6 +158,7 @@ export class DuelsRunComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
@@ -221,7 +224,10 @@ export class DuelsRunComponent implements AfterViewInit {
 			this._run.type === 'duels'
 				? 'assets/images/deck/ranks/casual_duels.png'
 				: 'assets/images/deck/ranks/heroic_duels.png';
-		this.gameModeTooltip = this._run.type === 'duels' ? 'Duels' : 'Heroic Duels';
+		this.gameModeTooltip =
+			this._run.type === 'duels'
+				? this.i18n.translateString('global.game-mode.casual-duels')
+				: this.i18n.translateString('global.game-mode.heroic-duels');
 		this.wins = this._run.wins;
 		this.losses = this._run.losses;
 		this.rating = this._run.ratingAtStart;

@@ -35,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<label for="initial">
 							<div class="icon unchecked" inlineSVG="assets/svg/radio_button.svg"></div>
 							<div class="icon checked" inlineSVG="assets/svg/radio_button_checked.svg"></div>
-							Starter deck
+							{{ 'app.duels.deck-stat.starter-deck' | owTranslate }}
 						</label>
 
 						<input
@@ -59,7 +59,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						>
 							<div class="icon unchecked" inlineSVG="assets/svg/radio_button.svg"></div>
 							<div class="icon checked" inlineSVG="assets/svg/radio_button_checked.svg"></div>
-							Final deck
+							{{ 'app.duels.deck-stat.final-deck' | owTranslate }}
 						</label>
 					</div>
 				</ng-container>
@@ -70,7 +70,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				></deck-list>
 			</div>
 			<div class="stats" scrollable *ngIf="deck.personal">
-				<div class="header">All runs with "{{ deck.deck.deckName }}"</div>
+				<div
+					class="header"
+					[owTranslate]="'app.duels.deck-stat.all-runs-with-deck'"
+					[translateParams]="{ deckName: deck.deck.deckName }"
+				></div>
 				<duels-runs-list
 					[deckstring]="deck.deck.initialDeckList"
 					[displayLoot]="false"
@@ -78,7 +82,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				></duels-runs-list>
 			</div>
 			<div class="stats" *ngIf="!deck.personal" scrollable>
-				<div class="header">Run details</div>
+				<div class="header" [owTranslate]="'app.duels.deck-stat.run-details'"></div>
 				<duels-run [run]="deck.run" [displayLoot]="true" [isExpanded]="true"></duels-run>
 			</div>
 		</div>
