@@ -94,7 +94,7 @@
 			"goblin": "Goblin",
 			"goblin2": "Goblin",
 			"human": "Human",
-			"nightelf": "Nnight Elf",
+			"nightelf": "Night Elf",
 			"orc": "Orc",
 			"tauren": "Tauren",
 			"troll": "Troll",
@@ -514,7 +514,7 @@
 					"no-tribe": "No tribe"
 				},
 				"signature-treasure": {
-					"all": "All Sig. Trasures"
+					"all": "All Sig. Treasures"
 				},
 				"stat-type": {
 					"hero": "Heroes",
