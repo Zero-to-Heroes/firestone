@@ -121,6 +121,9 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			tap((info) => cdLog('emitting showAds in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
+		this.currentTurn$ = this.store
+			.listenBattlegrounds$(([state, prefs]) => state?.currentGame?.currentTurn)
+			.pipe(this.mapData(([turn]) => turn));
 		const currentPanel$: Observable<BgsNextOpponentOverviewPanel> = this.store
 			.listenBattlegrounds$(
 				([state]) => state.panels,
