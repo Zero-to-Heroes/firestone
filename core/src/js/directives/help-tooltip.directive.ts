@@ -154,12 +154,9 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	async onMouseEnter(override = false) {
-		console.debug('mouseenter?', this._text, override, this.onlyShowOnClick);
 		if (!this._text || (!override && this.onlyShowOnClick)) {
 			return;
 		}
-
-		console.debug('mouseenter');
 
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
@@ -220,7 +217,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('click')
 	onMouseClick() {
-		console.debug('click', this.onlyShowOnClick, this.clickTimeout);
 		if (this.onlyShowOnClick) {
 			this.onMouseEnter(true);
 			setTimeout(() => this.onMouseLeave(true), this.clickTimeout);
@@ -247,7 +243,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (this.onlyShowOnClick && !override) {
 			return;
 		}
-		console.debug('mouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
