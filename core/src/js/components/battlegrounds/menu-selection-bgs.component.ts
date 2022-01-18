@@ -28,7 +28,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-hero-selection-overview' }"
 				(mousedown)="selectStage('bgs-hero-selection-overview')"
 			>
-				<span [owTranslate]="'battlegrounds.menu.hero'"></span>
+				<span [owTranslate]="'battlegrounds.menu.hero-selection'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-next-opponent-overview' }"
