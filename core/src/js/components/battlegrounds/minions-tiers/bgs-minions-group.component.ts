@@ -102,7 +102,7 @@ export class BattlegroundsMinionsGroupComponent
 
 	title: string;
 	highlighted: boolean;
-	minions: readonly Minion[];
+	minions: readonly Minion[] = [];
 	_group: BgsMinionsGroup;
 	_showTribesHighlight: boolean;
 
@@ -154,44 +154,51 @@ export class BattlegroundsMinionsGroupComponent
 			return;
 		}
 
-		this.title = this.buildTitle(this._group.tribe);
-		this.highlighted =
-			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
-		this.minions = this._group.minions
-			.map((minion) => {
-				const card = this.allCards.getCard(minion.id);
-				const result = {
-					cardId: minion.id,
-					displayedCardIds: this.buildAllCardIds(minion.id, this.showGoldenCards),
-					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
-					name: card.name,
-					highlighted: this._group.highlightedMinions.includes(minion.id),
-					techLevel: card.techLevel,
-				};
-				return result;
-			})
-			.sort((a, b) => {
-				if (a.techLevel < b.techLevel) {
-					return -1;
-				}
-				if (a.techLevel > b.techLevel) {
-					return 1;
-				}
-				if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
-					return -1;
-				}
-				if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
-					return 1;
-				}
-				// To keep sorting consistent
-				if (a.cardId < b.cardId) {
-					return -1;
-				}
-				if (a.cardId > b.cardId) {
-					return 1;
-				}
-				return 0;
-			});
+		this.minions = [];
+		// Otherwise I get a "cannot read property 'destroyed' of null"
+		setTimeout(() => {
+			this.title = this.buildTitle(this._group.tribe);
+			this.highlighted =
+				this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
+			this.minions = this._group.minions
+				.map((minion) => {
+					const card = this.allCards.getCard(minion.id);
+					const result = {
+						cardId: minion.id,
+						displayedCardIds: this.buildAllCardIds(minion.id, this.showGoldenCards),
+						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
+						name: card.name,
+						highlighted: this._group.highlightedMinions.includes(minion.id),
+						techLevel: card.techLevel,
+					};
+					return result;
+				})
+				.sort((a, b) => {
+					if (a.techLevel < b.techLevel) {
+						return -1;
+					}
+					if (a.techLevel > b.techLevel) {
+						return 1;
+					}
+					if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
+						return -1;
+					}
+					if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
+						return 1;
+					}
+					// To keep sorting consistent
+					if (a.cardId < b.cardId) {
+						return -1;
+					}
+					if (a.cardId > b.cardId) {
+						return 1;
+					}
+					return 0;
+				});
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	private buildAllCardIds(id: string, showGoldenCards: boolean): string {

@@ -41,7 +41,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	protected async reposition(cleanup: () => void = null) {
-		console.debug('repositioning', this);
 		if (!this.isWidgetVisible()) {
 			// console.debug('widget is not visible');
 			return;
