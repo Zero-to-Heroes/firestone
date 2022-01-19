@@ -66,8 +66,13 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		}
 		const widgetRect = this.getRect();
 		if (!widgetRect?.width) {
-			console.debug('no widget, starting again');
-			setTimeout(() => this.reposition(), 100);
+			console.debug(
+				'no widget, starting again',
+				this.constructor.name,
+				this.isWidgetVisible(),
+				this.isWidgetVisible,
+			);
+			setTimeout(() => this.reposition(), 500);
 			return;
 		}
 		// Make sure the widget stays in bounds
