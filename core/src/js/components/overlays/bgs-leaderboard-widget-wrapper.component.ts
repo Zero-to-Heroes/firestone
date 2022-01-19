@@ -52,9 +52,9 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => 0;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
-		(dpi * gameHeight) / 3;
+		dpi * gameHeight * 0.15;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.bgs-leaderboard')?.getBoundingClientRect();
