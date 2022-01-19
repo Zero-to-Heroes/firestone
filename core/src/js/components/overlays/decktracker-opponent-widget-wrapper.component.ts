@@ -93,23 +93,19 @@ export class DecktrackerOpponentWidgetWrapperComponent
 					displayFromGameMode,
 				]) => {
 					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
-						console.debug(closedByUser, gameStarted, isBgs, isMercs, displayFromGameMode, displayFromPrefs);
 						return false;
 					}
 
 					if (!decktrackerCloseOnGameEnd) {
-						console.debug(decktrackerCloseOnGameEnd, displayFromGameMode);
 						return displayFromGameMode;
 					}
 
 					// We explicitely don't check for null, so that if the memory updates are broken
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
-						console.debug(currentScene);
 						return false;
 					}
 
-					console.debug(gameEnded, totalCardsInZones);
 					return !gameEnded && totalCardsInZones > 0;
 				},
 			),
