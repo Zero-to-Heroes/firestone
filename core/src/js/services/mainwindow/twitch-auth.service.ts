@@ -194,7 +194,7 @@ export class TwitchAuthService {
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
 					this.hasLoggedInfoOnce = true;
 					console.error('no-format', '[twitch] Message sent to Twitch is too large');
-					console.debug('[twitch] message', data, newEvent);
+					console.log('no-format', '[twitch] message', data, newEvent);
 				}
 			},
 			(error) => {
