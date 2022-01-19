@@ -265,11 +265,16 @@ export class AppBootstrapService {
 		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
-		// const prefs = await this.prefs.getPreferences();
-		// this.ow.hideCollectionWindow(prefs);
+
+		// Don't open the loading window if the main window is open
+		const prefs = await this.prefs.getPreferences();
+		const collectionWindow = await this.ow.getCollectionWindow(prefs);
+		if (collectionWindow.isVisible) {
+			console.log('[bootstrap] collection window is open, not showing loading screen');
+			return;
+		}
 
 		const shouldShowAds = await this.ads.shouldDisplayAds();
-
 		if (shouldShowAds) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
