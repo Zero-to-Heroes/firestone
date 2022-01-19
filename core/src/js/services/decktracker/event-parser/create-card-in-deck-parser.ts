@@ -40,8 +40,8 @@ export class CreateCardInDeckParser implements EventParser {
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
-			bonusDamage: gameEvent.additionalData.creatorEntityId
-				? buildBonusDamage(deck.findCard(gameEvent.additionalData.creatorEntityId))
+			mainAttributeChange: gameEvent.additionalData.creatorEntityId
+				? buildAttributeChange(deck.findCard(gameEvent.additionalData.creatorEntityId))
 				: null,
 		} as DeckCard);
 		//console.debug('[debug]', 'adding card', card);
@@ -76,9 +76,9 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 }
 
-const buildBonusDamage = (card: DeckCard): number => {
+const buildAttributeChange = (card: DeckCard): number => {
 	if (card?.cardId === CardIds.Ignite) {
-		return 1 + (card.bonusDamage ?? 0);
+		return 1 + (card.mainAttributeChange ?? 0);
 	}
 	return null;
 };

@@ -187,7 +187,7 @@ export class DeckZoneComponent implements AfterViewInit {
 	}
 
 	private buildGroupingKey(card: VisualDeckCard, quantitiesLeftForCard: { [cardId: string]: number }): string {
-		const keyWithBonus = this._showStatsChange ? card.cardId + '_' + card.bonusDamage : card.cardId;
+		const keyWithBonus = this._showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
 		const keyWithGift = this._showGiftsSeparately
 			? keyWithBonus + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 			: keyWithBonus;

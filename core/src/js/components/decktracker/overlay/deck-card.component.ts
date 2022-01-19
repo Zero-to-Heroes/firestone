@@ -324,8 +324,8 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		if (!this._showStatsChange) {
 			return '';
 		}
-		if (_card.bonusDamage) {
-			return ` (+${_card.bonusDamage})`;
+		if (_card.mainAttributeChange) {
+			return ` (+${_card.mainAttributeChange})`;
 		}
 		return '';
 	}

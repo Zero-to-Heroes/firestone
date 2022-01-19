@@ -38,7 +38,7 @@ export class DeckCard {
 	readonly milled?: boolean;
 	// Store state for cards like Ignite. Similar state info will be added for attack / health (maybe
 	// other things too)
-	readonly bonusDamage?: number;
+	readonly mainAttributeChange?: number;
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {

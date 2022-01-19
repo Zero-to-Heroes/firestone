@@ -44,6 +44,7 @@ import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
 import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
+import { CardTradedParser } from './event-parser/card-traded-parser';
 import { ConstructedAchievementsProgressionParser } from './event-parser/constructed/constructed-achievements-progression-parser';
 import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
 import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
@@ -477,6 +478,7 @@ export class GameStateService {
 			new CardDrawParser(this.helper, this.allCards, this.i18n),
 			new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n),
 			new CardBackToDeckParser(this.helper, this.allCards, this.i18n),
+			new CardTradedParser(this.helper, this.allCards, this.i18n),
 			new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
 			new CardRemovedFromDeckParser(this.helper),
 			new CardRemovedFromHandParser(this.helper),

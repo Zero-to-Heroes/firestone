@@ -653,6 +653,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'TRADE_CARD':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.TRADE_CARD, gameEvent, {
+						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
+					}),
+				);
+				break;
 			case 'CARD_REMOVED_FROM_DECK':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
 				break;
