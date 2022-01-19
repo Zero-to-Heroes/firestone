@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
@@ -402,36 +402,43 @@ export class GameStateService {
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
+		if (!playerFromTracker) {
+			return playerDeckWithDynamicZones;
+		}
+
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		const newBoard: readonly DeckCard[] = playerDeckWithZonesOrdered.board.map((card) => {
-			const entity = playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId);
+			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({
 				...card,
 				dormant: this.hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
-		const totalAttackOnBoard = newBoard
-			.map((card) => playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId))
+		const numberOfVoidtouchedAttendants =
+			newBoard.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant).length || 0;
+		const entitiesOnBoardThatCanAttack = newBoard
+			.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
 			.filter((entity) => this.canAttack(entity, stateWithMetaInfos.isActivePlayer))
-			.map((entity) => this.windfuryMultiplier(entity) * (entity.attack > 0 ? entity.attack : 0))
+			.filter((entity) => entity.attack > 0);
+		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
+			.map((entity) => this.windfuryMultiplier(entity) * (numberOfVoidtouchedAttendants + entity.attack))
 			.reduce((a, b) => a + b, 0);
+		const baseHeroAttack = stateWithMetaInfos.isActivePlayer
+			? Math.max(playerFromTracker?.Hero?.attack || 0, 0)
+			: Math.max(playerFromTracker?.Weapon?.attack || 0, 0);
 		const heroAttack =
-			this.windfuryMultiplier(playerFromTracker?.Hero) *
-			(this.canAttack(playerFromTracker?.Hero, stateWithMetaInfos.isActivePlayer)
-				? Math.max(playerFromTracker?.Hero?.attack, 0) +
-				  (stateWithMetaInfos.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
-				: 0);
-		return playerDeckWithZonesOrdered && playerFromTracker
-			? playerDeckWithZonesOrdered.update({
-					board: newBoard,
-					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
-					totalAttackOnBoard: {
-						board: totalAttackOnBoard,
-						hero: heroAttack,
-					} as AttackOnBoard,
-			  } as DeckState)
-			: playerDeckWithZonesOrdered;
+			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, stateWithMetaInfos.isActivePlayer)
+				? this.windfuryMultiplier(playerFromTracker.Hero) * (numberOfVoidtouchedAttendants + baseHeroAttack)
+				: 0;
+		return playerDeckWithZonesOrdered.update({
+			board: newBoard,
+			cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
+			totalAttackOnBoard: {
+				board: totalAttackOnBoard,
+				hero: heroAttack,
+			} as AttackOnBoard,
+		} as DeckState);
 	}
 
 	private windfuryMultiplier(entity): number {
