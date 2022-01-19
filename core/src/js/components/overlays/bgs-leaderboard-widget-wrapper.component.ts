@@ -57,7 +57,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 		(dpi * gameHeight) / 3;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected getRect = () => this.el.nativeElement.querySelector('.bgs-leaderboard')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
 
 	private visible: boolean;
@@ -163,14 +163,12 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 	protected async doResize(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		console.debug('resizing window', gameInfo);
 		if (!gameInfo) {
 			return;
 		}
 		const gameHeight = gameInfo.height;
 		this.windowWidth = gameHeight * 1.12;
 		this.windowHeight = gameHeight * 0.4;
-		console.debug('new size', this.windowWidth, this.windowHeight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

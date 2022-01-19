@@ -49,10 +49,10 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number, dpi: number) => gameHeight * 0.15;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number, dpi: number) =>
-		(dpi * gameHeight) / 3;
+		dpi * gameHeight * 0.3;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
-	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
+	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
 	protected isWidgetVisible = () => this.visible;
 
 	private visible: boolean;
@@ -145,14 +145,12 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 
 	protected async doResize(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		console.debug('resizing window', gameInfo);
 		if (!gameInfo) {
 			return;
 		}
 		const gameHeight = gameInfo.height;
 		this.windowWidth = gameHeight * 1.12;
 		this.windowHeight = gameHeight * 0.4;
-		console.debug('new size', this.windowWidth, this.windowHeight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
