@@ -16,24 +16,24 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-classes-recap.component.scss`],
 	template: `
 		<div class="duels-classes-recap">
-			<div class="header" [owTranslate]="'app.duels.filters.classes-recap.title'"></div>
+			<div class="header" [owTranslate]="'app.duels.classes-recap.title'"></div>
 			<div class="stats" *ngIf="stat$ | async as stat">
 				<duels-stat-cell
 					class="stat-cell"
-					[label]="'app.duels.filters.classes-recap.total-runs' | owTranslate"
+					[label]="'app.duels.classes-recap.total-runs' | owTranslate"
 					[value]="stat.totalRuns"
 				>
 				</duels-stat-cell>
 				<duels-stat-cell
 					class="stat-cell"
-					[label]="'app.duels.filters.classes-recap.avg-wins-per-run' | owTranslate"
+					[label]="'app.duels.classes-recap.avg-wins-per-run' | owTranslate"
 					[value]="stat.averageWinsPerRun"
 					[decimals]="1"
 				>
 				</duels-stat-cell>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label" [owTranslate]="'app.duels.filters.classes-recap.most-played-classes'"></div>
+						<div class="label" [owTranslate]="'app.duels.classes-recap.most-played-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value">
 							<li class="played-class" *ngFor="let mostPlayedClass of stat.mostPlayedClasses">
@@ -48,7 +48,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label" [owTranslate]="'app.duels.filters.classes-recap.best-winrate-classes'"></div>
+						<div class="label" [owTranslate]="'app.duels.classes-recap.best-winrate-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value">
 							<li class="played-class" *ngFor="let theClass of stat.bestWinrateClasses">
@@ -59,7 +59,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label" [owTranslate]="'app.duels.filters.classes-recap.most-faced-classes'"></div>
+						<div class="label" [owTranslate]="'app.duels.classes-recap.most-faced-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value">
 							<li class="played-class" *ngFor="let mostFacedClass of stat.mostFacedClasses">
@@ -70,7 +70,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
-						<div class="label" [owTranslate]="'app.duels.filters.classes-recap.best-winrate-against'"></div>
+						<div class="label" [owTranslate]="'app.duels.classes-recap.best-winrate-against'"></div>
 						<div class="filler"></div>
 						<ul class="value">
 							<li class="played-class" *ngFor="let mostFacedClass of stat.bestWinrateAgainstClasses">

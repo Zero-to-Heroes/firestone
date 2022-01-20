@@ -35,12 +35,12 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<div class="value">
 						{{ deckInfo.deck.winrate != null ? deckInfo.deck.winrate.toFixed(0) + '%' : '--' }}
 					</div>
-					<div class="label" [owTranslate]="'app.duels.deck-stat'"></div>
+					<div class="label" [owTranslate]="'app.duels.deck-stat.winrate'"></div>
 				</div>
 				<div class="item runs">
 					<div class="icon" inlineSVG="assets/svg/star.svg"></div>
 					<div class="value">{{ deckInfo.deck.runs?.length }}</div>
-					<div class="label" [owTranslate]="'app.duels.deck-stat'"></div>
+					<div class="label" [owTranslate]="'app.duels.deck-stat.runs'"></div>
 				</div>
 				<deck-mana-curve
 					class="recap mana-curve"
