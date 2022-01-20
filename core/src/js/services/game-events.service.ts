@@ -282,6 +282,8 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.SUB_SPELL_START, gameEvent, {
 						prefabId: gameEvent.Value.PrefabId,
+						parentEntityId: gameEvent.Value.ParentEntityId,
+						parentCardId: gameEvent.Value.ParentCardId,
 					}),
 				);
 				break;

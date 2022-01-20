@@ -53,6 +53,7 @@ import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parse
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CthunParser } from './event-parser/cthun-parser';
 import { CthunRevealedParser } from './event-parser/cthun-revealed-parser';
+import { CustomEffectsParser } from './event-parser/custom-effects-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
@@ -529,7 +530,8 @@ export class GameStateService {
 			new PogoPlayedParser(),
 			new JadeGolemParser(),
 			new CthunParser(),
-			new CardBuffedInHandParser(this.helper, this.allCards),
+			new CardBuffedInHandParser(this.helper),
+			new CustomEffectsParser(this.helper),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
 			new EntityUpdateParser(this.helper, this.i18n),
