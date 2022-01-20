@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DebugService } from '../../services/debug.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare let amplitude: any;
@@ -65,9 +66,8 @@ declare let amplitude: any;
 					</svg>
 				</i>
 				<div class="sub-title" *ngIf="!loading">
-					<span>Hit</span>
+					<span [owTranslate]="'loading.hotkey'"></span>
 					<hotkey></hotkey>
-					<span>to view the app</span>
 				</div>
 			</section>
 			<ads [parentComponent]="'loading-window'"></ads>
@@ -77,14 +77,19 @@ declare let amplitude: any;
 	encapsulation: ViewEncapsulation.None, // TODO: clean this
 })
 export class LoadingComponent implements AfterViewInit, OnDestroy {
-	title = 'Getting ready';
+	title = this.i18n.translateString('loading.getting-ready');
 	loading = true;
 	thisWindowId: string;
 
 	private stateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
 
-	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly debugService: DebugService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	async ngAfterViewInit() {
 		// this.cdr.detach();
@@ -92,7 +97,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		this.positionWindow();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
 			if (message.id === 'ready') {
-				this.title = 'Your abilities are ready!';
+				this.title = this.i18n.translateString('loading.ready');
 				this.loading = false;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();

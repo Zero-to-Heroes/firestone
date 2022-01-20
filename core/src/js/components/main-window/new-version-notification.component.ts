@@ -27,7 +27,11 @@ import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './
 		<div class="new-version" *ngIf="showNewVersion">
 			<div class="backdrop"></div>
 			<div class="element">
-				<section class="title">New Firestone version: {{ version }}</section>
+				<section
+					class="title"
+					[owTranslate]="'new-version.title'"
+					[translateParams]="{ value: version }"
+				></section>
 				<section class="sections" scrollable>
 					<section *ngFor="let section of groupedUpdates.sections" class="section {{ section.type }}">
 						<div class="header">{{ section.header }}</div>
@@ -68,13 +72,13 @@ import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './
 									<use xlink:href="assets/svg/sprite.svg#checked_box" />
 								</svg>
 							</i>
-							<p>Don't show again</p>
+							<p [owTranslate]="'new-version.dont-show-again'"></p>
 						</label>
-						<div class="secondary">| You can change that in the settings</div>
+						<div class="secondary">| {{ 'new-version.dont-show-again-secondary' | owTranslate }}</div>
 					</div>
 
 					<button class="confirm" (mousedown)="confirm()">
-						<span>Got it</span>
+						<span [owTranslate]="'new-version.confirm-button'"></span>
 					</button>
 				</section>
 				<button class="close-button" (click)="confirm()">

@@ -1,4 +1,5 @@
 import { GameState } from '../../../models/decktracker/game-state';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class FatigueCounterDefinition implements CounterDefinition {
@@ -9,7 +10,7 @@ export class FatigueCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(gameState: GameState, side: string): FatigueCounterDefinition {
+	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): FatigueCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
@@ -21,7 +22,7 @@ export class FatigueCounterDefinition implements CounterDefinition {
 			value: fatigue,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/FATIGUE.jpg`,
 			cssClass: 'fatigue-counter',
-			tooltip: `${side === 'player' ? 'Your ' : 'Your opponent '} current fatigue damage is ${fatigue}`,
+			tooltip: i18n.translateString(`counters.fatigue.${side}`, { value: fatigue }),
 			standardCounter: true,
 		};
 	}

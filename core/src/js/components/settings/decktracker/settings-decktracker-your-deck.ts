@@ -140,8 +140,8 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="playerBrilliantMacawCounter"
-						[label]="'decktracker.counter.brilliant-macaw.settings-name' | owTranslate"
-						[tooltip]="'decktracker.counter.brilliant-macaw.settings-tooltip' | owTranslate"
+						[label]="'counters.brilliant-macaw.settings-name' | owTranslate"
+						[tooltip]="'counters.brilliant-macaw.settings-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="playerMulticasterCounter"

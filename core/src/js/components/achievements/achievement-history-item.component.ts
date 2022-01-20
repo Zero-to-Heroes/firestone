@@ -36,6 +36,7 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 		}
 		this.achievementId = history.achievementId;
 		this.achievementName = history.displayName;
+		// TODO translate
 		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString('en-GB', {
 			day: '2-digit',
 			month: '2-digit',

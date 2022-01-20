@@ -20,19 +20,16 @@ export class BrilliantMacawCounterDefinition implements CounterDefinition {
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): BrilliantMacawCounterDefinition {
-		console.debug('building def for macaw', gameState);
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
 		}
 
-		console.debug('getting last battlecry', deck);
 		const lastBattlecry: DeckCard = deck.lastBattlecryPlayedForMacaw(allCards);
 		if (!lastBattlecry) {
 			return null;
 		}
-		console.debug('got last battlecry', lastBattlecry);
-		const tooltip = i18n.translateString(`decktracker.counter.brilliant-macaw.${side}`, {
+		const tooltip = i18n.translateString(`counters.brilliant-macaw.${side}`, {
 			value: lastBattlecry.cardName,
 		});
 		return {

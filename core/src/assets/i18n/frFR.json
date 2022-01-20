@@ -368,6 +368,18 @@
 		"share": {
 			"title": "Partager"
 		},
+		"counters": {
+			"multicaster": {
+				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
+				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
+			},
+			"brilliant-macaw": {
+				"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
+				"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
+				"settings-name": "Ara brillant",
+				"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
+			}
+		},
 		"decktracker": {
 			"menu": {
 				"decks-header": "Decks",
@@ -712,18 +724,6 @@
 			"deck-winrate-tooltip": "Taux de victoires de ce deck en Partie classée depuis {{value}}",
 			"deck-winrate-vs-class": "VS {{value}}",
 			"deck-winrate-vs-class-tooltip": "Taux de victoires de ce deck en Partie classée contre {{opponent}} depuis le {{date}}"
-		},
-		"counter": {
-			"multicaster": {
-				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
-				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
-			},
-			"brilliant-macaw": {
-				"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
-				"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
-				"settings-name": "Ara brillant",
-				"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
-			}
 		},
 		"card-burned": "Carte brûlée",
 		"card-transformed": "Carte transformée",

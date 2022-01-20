@@ -36,7 +36,7 @@ export class BolnerHammerbeakIndicator implements CounterDefinition {
 			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.BolnerHammerbeak}.jpg`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${firstBattlecry.cardId}.jpg`,
 			cssClass: 'bolner-counter',
-			tooltip: `${i18n.getCardName(firstBattlecry.cardId)} was the first battlecry card played this turn'`,
+			tooltip: i18n.translateString(`counters.bolner`, { value: i18n.getCardName(firstBattlecry.cardId) }),
 			standardCounter: true,
 		};
 	}

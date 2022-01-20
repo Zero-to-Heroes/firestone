@@ -702,7 +702,8 @@
 				"rating": "Rating",
 				"view-deck-button": "View deck",
 				"view-run-button": "View run",
-				"minimize-run-button": "Minimize view"
+				"minimize-run-button": "Minimize view",
+				"load-more-button": "Loading more runs..."
 			},
 			"stats": {
 				"tier-list-title": "Tier List",
@@ -744,6 +745,112 @@
 			}
 		}
 	},
+	"counters": {
+		"attack": {
+			"you": "You have {{value}} total attack from board and hero",
+			"opponent": "Your opponent has {{value}} total attack from board and hero"
+		},
+		"pogo": {
+			"you": "You have played {{value}} Pogo-Hoppers",
+			"opponent": "Your opponent has played {{value}} Pogo-Hoppers"
+		},
+		"bolner": "{{value}} was the first battlecry card played this turn",
+		"multicaster": {
+			"player": "You will draw {{cardsTotal}} cards from spell schools: {{schools}}",
+			"opponent": "Your opponent will draw {{cardsTotal}} cards from spell schools: {{schools}}"
+		},
+		"brilliant-macaw": {
+			"player": "{{value}} was the last battlecry card you played",
+			"opponent": "{{value}} was the last battlecry card your opponent played",
+			"settings-name": "Brilliant Macaw",
+			"settings-tooltip": "When you have a Brilliant Macaw in hand, show the last Battlecry card that you played, if any"
+		},
+		"cthun": {
+			"player": "Your C'Thun is a {{value}}/{{value}}",
+			"opponent": "Your opponent's C'Thun is a {{value}}/{{value}}"
+		},
+		"elemental": {
+			"player": "You have played {{lastTurn}} elementals last turn, and {{thisTurn}} elementals this turn",
+			"opponent": "Your opponent has played {{lastTurn}} elementals last turn, and {{thisTurn}} elementals this turn"
+		},
+		"elwynn-boar": {
+			"player": "{{value}} boards have died for you",
+			"opponent": "{{value}} boards have died for your opponent"
+		},
+		"fatigue": {
+			"player": "Your current fatigue damage is {{value}}",
+			"opponent": "Your opponent's current fatigue damage is {{value}}"
+		},
+		"galakrond": {
+			"player": "You have invoked Galakrond {{value}} times",
+			"opponent": "Your opponent has invoked Galakrond {{value}} times"
+		},
+		"hero-power-damage": {
+			"player": "Your hero power has dealt {{value}} damage this game",
+			"opponent": "Your opponent's hero power has dealt {{value}} damage this game"
+		},
+		"jade": {
+			"player": "Your Jade Golem size is {{value}}",
+			"opponent": "Your opponent's Jade Golem size is {{value}}"
+		},
+		"libram": {
+			"player": "You have played {{value}} librams this game",
+			"opponent": "Your opponent has played {{value}} librams this game"
+		},
+		"spell": {
+			"player": "You have played {{value}} spells this game",
+			"opponent": "Your opponent has played {{value}} spells this game"
+		},
+		"watchpost": {
+			"player": "You have played {{value}} watchposts this game",
+			"opponent": "Your opponent has played {{value}} watchposts this game"
+		}
+	},
+	"loading": {
+		"hotkey": "To view the app, hit",
+		"getting-ready": "Getting ready",
+		"ready": "Your abilities are ready!"
+	},
+	"ftue": {
+		"title": "Welcome to Firestone",
+		"subtitle": "How about a quick tour?",
+		"start-button": "Let's start",
+		"skip-button": "Skip",
+		"previous-button": "Previous",
+		"steps": {
+			"decktracker": {
+				"title": "Deck Tracker",
+				"text": "Track your cards in game and your deck stats."
+			},
+			"battlegrounds": {
+				"title": "Battlegrounds",
+				"text": "Our in game helper will appear once you start a game! We will accompany you along your game from hero selection to post match."
+			},
+			"duels": {
+				"title": "Duels",
+				"text": "Check global and personal stats, and see a selection of succesful decks for both Casual and Heroic Duels."
+			},
+			"arena": {
+				"title": "Arena",
+				"text": "Check your latest Arena runs and rewards."
+			},
+			"replays": {
+				"title": "Replays",
+				"text": "Here you can find all your past games, broken into step by step actions."
+			},
+			"achievements": {
+				"title": "Achievements",
+				"text": "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished."
+			}
+		}
+	},
+	"new-version": {
+		"title": "New version version: {{value}}",
+		"dont-show-again": "Don't show again",
+		"dont-show-again-secondary": "You can change that in the settings",
+		"confirm-button": "Got it"
+	},
+	"mercenaries": {},
 	"decktracker": {
 		"zones": {
 			"global-effects": "Global effects",
@@ -774,18 +881,6 @@
 			"deck-winrate-tooltip": "This deck's winrate in ranked since {{value}}",
 			"deck-winrate-vs-class": "vs {{value}}",
 			"deck-winrate-vs-class-tooltip": "This deck's winrate in ranked against {{opponent}} since {{date}}"
-		},
-		"counter": {
-			"multicaster": {
-				"player": "You will draw {{cardsTotal}} cards from spell schools: {{schools}}",
-				"opponent": "Your opponent will draw {{cardsTotal}} cards from spell schools: {{schools}}"
-			},
-			"brilliant-macaw": {
-				"player": "{{value}} was the last battlecry card you played",
-				"opponent": "{{value}} was the last battlecry card your opponent played",
-				"settings-name": "Brilliant Macaw",
-				"settings-tooltip": "When you have a Brilliant Macaw in hand, show the last Battlecry card that you played, if any"
-			}
 		},
 		"card-burned": "Card burned",
 		"card-transformed": "Card transformed",

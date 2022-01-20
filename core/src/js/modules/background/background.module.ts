@@ -193,7 +193,6 @@ import { DuelsTreasurePassiveTypeFilterDropdownComponent } from '../../component
 import { DuelsTreasuresSortDropdownComponent } from '../../components/duels/desktop/filters/duels-treasures-sort-dropdown.component';
 import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/_duels-filters.component';
 import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
-import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
 	DuelsStatCellComponent,
@@ -702,7 +701,7 @@ const components = [
 		DuelsEmptyStateComponent,
 		DuelsRunsListComponent,
 		DuelsRunComponent,
-		LootInfoComponent,
+		// LootInfoComponent,
 		LootBundleComponent,
 		DuelsHeroStatsComponent,
 		DuelsHeroStatVignetteComponent,

@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class ElwynnBoarCounterDefinition implements CounterDefinition {
@@ -10,7 +11,7 @@ export class ElwynnBoarCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(gameState: GameState, side: string): ElwynnBoarCounterDefinition {
+	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): ElwynnBoarCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
@@ -22,7 +23,7 @@ export class ElwynnBoarCounterDefinition implements CounterDefinition {
 			value: boarDeaths,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ElwynnBoar}.jpg`,
 			cssClass: 'elwynn-boar-counter',
-			tooltip: `${boarDeaths} boars have died for ${side === 'player' ? 'you' : 'your opponent'}`,
+			tooltip: i18n.translateString(`counters.elwynn-boar.${side}`, { value: boarDeaths }),
 			standardCounter: true,
 		};
 	}

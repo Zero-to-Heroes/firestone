@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { CurrentAppType } from '../../../models/mainwindow/current-app.type';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { NextFtueEvent } from '../../../services/mainwindow/store/events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from '../../../services/mainwindow/store/events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from '../../../services/mainwindow/store/events/ftue/skip-ftue-event';
@@ -17,11 +18,16 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div class="ftue">
 			<div class="backdrop"></div>
 			<div class="element" *ngIf="isHome">
-				<div class="title">Welcome to Firestone</div>
-				<div class="text">How about a quick tour?</div>
+				<div class="title" [owTranslate]="'ftue.title'"></div>
+				<div class="text" [owTranslate]="'ftue.subtitle'"></div>
 				<div class="icon home" [inlineSVG]="'assets/svg/ftue/general.svg'"></div>
-				<button class="get-started" (click)="next()" growOnClick>Let's start</button>
-				<div class="skip-ftue ftue-nav-link" (click)="skip()" growOnClick>Skip</div>
+				<button class="get-started" (click)="next()" growOnClick [owTranslate]="'ftue.start-button'"></button>
+				<div
+					class="skip-ftue ftue-nav-link"
+					(click)="skip()"
+					growOnClick
+					[owTranslate]="'ftue.skip-button'"
+				></div>
 			</div>
 			<div class="element" *ngIf="!isHome">
 				<div class="steps">
@@ -39,9 +45,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						[ngClass]="{ 'active': i === currentIndex }"
 					></div>
 				</div>
-				<div class="previous-ftue ftue-nav-link" (click)="previous()" *ngIf="currentIndex > 0" growOnClick>
-					Previous
-				</div>
+				<div
+					class="previous-ftue ftue-nav-link"
+					(click)="previous()"
+					*ngIf="currentIndex > 0"
+					growOnClick
+					[owTranslate]="'ftue.previous-button'"
+				></div>
 				<div class="next-ftue ftue-nav-link" (click)="next()" growOnClick>
 					{{ currentIndex === ftueSteps.length - 1 ? 'Done' : 'Next' }}
 				</div>
@@ -56,53 +66,50 @@ export class FtueComponent implements AfterViewInit {
 	ftueSteps: FtueStep[] = [
 		{
 			id: 'decktracker',
-			title: 'Deck Tracker',
-			text: 'Track your cards in game and your deck stats',
+			title: this.i18n.translateString('ftue.steps.decktracker.title'),
+			text: this.i18n.translateString('ftue.steps.decktracker.text'),
 			icon: `assets/svg/ftue/decktracker.svg`,
 			progressIndex: 0,
 		},
 		{
 			id: 'battlegrounds',
-			title: 'Battlegrounds',
-			text:
-				'Our in game helper will appear once you start a game! We will accompany you along your game from hero selection to post match.',
+			title: this.i18n.translateString('ftue.steps.battlegrounds.title'),
+			text: this.i18n.translateString('ftue.steps.battlegrounds.text'),
 			icon: `assets/svg/ftue/battlegrounds.svg`,
 			progressIndex: 1,
 		},
 		{
 			id: 'duels',
-			title: 'Duels',
-			text:
-				'Check global and personal stats, and see a selection of succesful decks for both Casual and Heroic Duels',
+			title: this.i18n.translateString('ftue.steps.duels.title'),
+			text: this.i18n.translateString('ftue.steps.duels.text'),
 			icon: `assets/svg/ftue/duels.svg`,
 			progressIndex: 2,
 		},
 		{
 			id: 'arena',
-			title: 'Arena',
-			text: 'Check your latest Arena runs and rewards',
+			title: this.i18n.translateString('ftue.steps.arena.title'),
+			text: this.i18n.translateString('ftue.steps.arena.text'),
 			icon: `assets/svg/whatsnew/arena.svg`,
 			progressIndex: 3,
 		},
 		{
 			id: 'replays',
-			title: 'Replays',
-			text: 'Here you can find all your past games, broken into step by step actions',
+			title: this.i18n.translateString('ftue.steps.replays.title'),
+			text: this.i18n.translateString('ftue.steps.replays.text'),
 			icon: `assets/svg/ftue/replays.svg`,
 			progressIndex: 4,
 		},
 		{
 			id: 'achievements',
-			title: 'Achievements',
-			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
+			title: this.i18n.translateString('ftue.steps.achievements.title'),
+			text: this.i18n.translateString('ftue.steps.achievements.text'),
 			icon: `assets/svg/ftue/achievements.svg`,
 			progressIndex: 5,
 		},
 		{
 			id: 'collection',
-			title: 'Collection',
-			text:
-				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
+			title: this.i18n.translateString('ftue.steps.collection.title'),
+			text: this.i18n.translateString('ftue.steps.collection.text'),
 			icon: `assets/svg/ftue/collection.svg`,
 			progressIndex: 6,
 		},
@@ -116,7 +123,7 @@ export class FtueComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

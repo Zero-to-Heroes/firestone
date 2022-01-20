@@ -96,27 +96,27 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {
 		switch (activeCounter) {
 			case 'galakrond':
-				return GalakrondCounterDefinition.create(gameState, side);
+				return GalakrondCounterDefinition.create(gameState, side, this.i18n);
 			case 'jadeGolem':
-				return JadeCounterDefinition.create(gameState, side);
+				return JadeCounterDefinition.create(gameState, side, this.i18n);
 			case 'cthun':
-				return CthunCounterDefinition.create(gameState, side);
+				return CthunCounterDefinition.create(gameState, side, this.i18n);
 			case 'fatigue':
-				return FatigueCounterDefinition.create(gameState, side);
+				return FatigueCounterDefinition.create(gameState, side, this.i18n);
 			case 'attack':
-				return AttackCounterDefinition.create(gameState, side);
+				return AttackCounterDefinition.create(gameState, side, this.i18n);
 			case 'pogo':
-				return PogoCounterDefinition.create(gameState, side);
+				return PogoCounterDefinition.create(gameState, side, this.i18n);
 			case 'spells':
-				return SpellCounterDefinition.create(gameState, side);
+				return SpellCounterDefinition.create(gameState, side, this.i18n);
 			case 'elemental':
-				return ElementalCounterDefinition.create(gameState, side);
+				return ElementalCounterDefinition.create(gameState, side, this.i18n);
 			case 'watchpost':
-				return WatchpostCounterDefinition.create(gameState, side);
+				return WatchpostCounterDefinition.create(gameState, side, this.i18n);
 			case 'libram':
-				return LibramCounterDefinition.create(gameState, side);
+				return LibramCounterDefinition.create(gameState, side, this.i18n);
 			case 'elwynnBoar':
-				return ElwynnBoarCounterDefinition.create(gameState, side);
+				return ElwynnBoarCounterDefinition.create(gameState, side, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
@@ -124,7 +124,7 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 			case 'multicaster':
 				return MulticasterCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'heroPowerDamage':
-				return HeroPowerDamageCounterDefinition.create(gameState, side);
+				return HeroPowerDamageCounterDefinition.create(gameState, side, this.i18n);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}
@@ -137,7 +137,7 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	): CounterDefinition {
 		switch (activeCounter) {
 			case 'bgsPogo':
-				return BgsPogoCounterDefinition.create(gameState, side);
+				return BgsPogoCounterDefinition.create(gameState, side, this.i18n);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 		}

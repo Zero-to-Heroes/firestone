@@ -1,5 +1,6 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { getGalakrondCardFor } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class GalakrondCounterDefinition implements CounterDefinition {
@@ -10,7 +11,7 @@ export class GalakrondCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(gameState: GameState, side: string): GalakrondCounterDefinition {
+	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): GalakrondCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
@@ -23,7 +24,7 @@ export class GalakrondCounterDefinition implements CounterDefinition {
 			value: invokeCount,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${galakrondCard}.jpg`,
 			cssClass: 'galakrond-counter',
-			tooltip: `${side === 'player' ? 'You have' : 'Your opponent has'} invoked Galakrond ${invokeCount} times'`,
+			tooltip: i18n.translateString(`counters.galakrond.${side}`, { value: invokeCount }),
 			standardCounter: true,
 		};
 	}

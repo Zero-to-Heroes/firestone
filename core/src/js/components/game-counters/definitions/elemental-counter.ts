@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class ElementalCounterDefinition implements CounterDefinition {
@@ -10,7 +11,7 @@ export class ElementalCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = true;
 
-	static create(gameState: GameState, side: string): ElementalCounterDefinition {
+	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): ElementalCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
@@ -21,13 +22,12 @@ export class ElementalCounterDefinition implements CounterDefinition {
 		return {
 			type: 'elemental',
 			value: `${elementalsPlayedLastTurn}/${elementalsPlayedThisTurn}`,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ManaCyclone}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.GrandFinale}.jpg`,
 			cssClass: 'spell-counter',
-			tooltip: `${
-				side === 'player' ? 'You have' : 'Your opponent has'
-			} played ${elementalsPlayedLastTurn} elemental${
-				elementalsPlayedLastTurn > 1 ? 's' : ''
-			} last turn, and ${elementalsPlayedThisTurn} elemental${elementalsPlayedThisTurn > 1 ? 's' : ''} this turn`,
+			tooltip: i18n.translateString(`counters.elemental.${side}`, {
+				lastTurn: elementalsPlayedLastTurn,
+				thisTurn: elementalsPlayedThisTurn,
+			}),
 			standardCounter: true,
 		};
 	}

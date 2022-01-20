@@ -1,4 +1,5 @@
 import { GameState } from '../../../models/decktracker/game-state';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CounterDefinition } from './_counter-definition';
 
 export class AttackCounterDefinition implements CounterDefinition {
@@ -9,7 +10,7 @@ export class AttackCounterDefinition implements CounterDefinition {
 	readonly tooltip: string;
 	readonly standardCounter = false;
 
-	static create(gameState: GameState, side: string): AttackCounterDefinition {
+	static create(gameState: GameState, side: string, i18n: LocalizationFacadeService): AttackCounterDefinition {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		if (!deck) {
 			return null;
@@ -21,9 +22,7 @@ export class AttackCounterDefinition implements CounterDefinition {
 			value: totalAttackOnBoard,
 			image: 'assets/svg/attack.svg',
 			cssClass: 'attack-counter',
-			tooltip: `${
-				side === 'player' ? 'You have' : 'Your opponent has'
-			} ${totalAttackOnBoard} total attack from board and hero`,
+			tooltip: i18n.translateString(`counters.attack.${side}`, { value: totalAttackOnBoard }),
 			standardCounter: false,
 		};
 	}
