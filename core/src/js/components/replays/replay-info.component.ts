@@ -6,6 +6,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ScenarioId } from '@firestone-hs/reference-data';
@@ -346,24 +347,33 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			this.bgsPerfectGame = this.result === 'Perfect!';
 			this.finalWarband = this.buildFinalWarband();
 		}
-
-		const isDuelsInfo = (value: any): value is RunStep =>
-			(this.replayInfo as RunStep).treasureCardId !== undefined ||
-			(this.replayInfo as RunStep).lootCardIds !== undefined;
-		if (isDuelsInfo(this.replayInfo)) {
-			if (this.replayInfo.treasureCardId) {
-				this.treasure = {
-					cardId: this.replayInfo.treasureCardId,
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.replayInfo.treasureCardId}.jpg`,
-				};
-			}
-			if (this.replayInfo.lootCardIds?.length) {
-				this.loots = this.replayInfo.lootCardIds.map((loot) => ({
-					cardId: loot,
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
-				}));
-			}
+		this.loots = [];
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
+
+		setTimeout(() => {
+			const isDuelsInfo = (value: any): value is RunStep =>
+				(this.replayInfo as RunStep).treasureCardId !== undefined ||
+				(this.replayInfo as RunStep).lootCardIds !== undefined;
+			if (isDuelsInfo(this.replayInfo)) {
+				if (this.replayInfo.treasureCardId) {
+					this.treasure = {
+						cardId: this.replayInfo.treasureCardId,
+						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.replayInfo.treasureCardId}.jpg`,
+					};
+				}
+				if (this.replayInfo.lootCardIds?.length) {
+					this.loots = this.replayInfo.lootCardIds.map((loot) => ({
+						cardId: loot,
+						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
+					}));
+				}
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
+		});
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {
