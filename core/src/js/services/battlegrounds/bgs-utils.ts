@@ -400,16 +400,177 @@ export const getAchievementsForHero = (
 ): readonly VisualAchievement[] => {
 	const dbHero = allCards.getCard(heroCardId);
 	const heroName = formatHeroNameForAchievements(dbHero);
+	const sectionId = getAchievementSectionIdFromHeroCardId(heroCardId, heroName);
+	if (!!sectionId) {
+		console.debug(
+			'achievements',
+			sectionId,
+			heroAchievements,
+			(heroAchievements ?? []).filter((ach) => ach.hsSectionId === sectionId),
+		);
+		return (heroAchievements ?? []).filter((ach) => ach.hsSectionId === sectionId);
+	}
+
 	if (!heroName) {
 		return [];
 	}
-
 	const searchName = `as ${heroName}`;
 	const result = (heroAchievements ?? []).filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
 	if (!result?.length) {
 		console.warn('Could not load achievements for hero', heroCardId, searchName, heroAchievements);
 	}
 	return result;
+};
+
+const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: string): number => {
+	switch (heroCardId) {
+		case CardIds.EdwinVancleefBattlegrounds:
+			return 227;
+		case CardIds.GalakrondBattlegrounds:
+			return 231;
+		case CardIds.IllidanStormrageBattlegrounds:
+			return 234;
+		case CardIds.RagnarosTheFirelordBattlegrounds:
+			return 254;
+		case CardIds.TheRatKingBattlegrounds:
+			return 266;
+		case CardIds.QueenWagtoggleBattlegrounds:
+			return 253;
+		case CardIds.GeorgeTheFallenBattlegrounds:
+			return 232;
+		case CardIds.AFKayBattlegrounds:
+			return 215;
+		case CardIds.MillificentManastormBattlegrounds:
+			return 244;
+		case CardIds.PatchesThePirateBattlegrounds:
+			return 250;
+		case CardIds.TheGreatAkazamzarakBattlegrounds:
+			return 264;
+		case CardIds.TheLichKingBattlegrounds:
+			return 265;
+		case CardIds.ShudderwockBattlegrounds:
+			return 257;
+		case CardIds.LichBazhialBattlegrounds:
+			return 238;
+		case CardIds.SindragosaBattlegrounds:
+			return 259;
+		case CardIds.InfiniteTokiBattlegrounds:
+			return 235;
+		case CardIds.TheCuratorBattlegrounds:
+			return 263;
+		case CardIds.PatchwerkBattlegrounds:
+			return 251;
+		case CardIds.YoggSaronHopesEndBattlegrounds:
+			return 269;
+		case CardIds.DancinDerylBattlegrounds:
+			return 225;
+		case CardIds.LordJaraxxusBattlegrounds:
+			return 240;
+		case CardIds.KingMuklaBattlegrounds:
+			return 246;
+		case CardIds.PyramadBattlegrounds:
+			return 252;
+		case CardIds.SirFinleyMrrggltonBattlegrounds:
+			return 260;
+		case CardIds.RenoJacksonBattlegrounds:
+			return 256;
+		case CardIds.EliseStarseekerBattlegrounds:
+			return 228;
+		case CardIds.DinotamerBrannBattlegrounds:
+			return 220;
+		case CardIds.ArchVillainRafaamBattlegrounds:
+			return 219;
+		case CardIds.MillhouseManastormBattlegrounds:
+			return 243;
+		case CardIds.TessGreymaneBattlegrounds:
+			return 262;
+		case CardIds.DeathwingBattlegrounds:
+			return 226;
+		case CardIds.YseraBattlegrounds:
+			return 270;
+		case CardIds.FungalmancerFlurglBattlegrounds:
+			return 230;
+		case CardIds.AlexstraszaBattlegrounds:
+			return 217;
+		case CardIds.NozdormuBattlegrounds:
+			return 248;
+		case CardIds.MalygosBattlegrounds:
+			return 242;
+		case CardIds.ArannaStarseekerBattlegrounds:
+		case CardIds.ArannaStarseeker_ArannaUnleashedTokenBattlegrounds:
+			return 218;
+		case CardIds.KaelthasSunstriderBattlegrounds:
+			return 237;
+		case CardIds.MaievShadowsongBattlegrounds:
+			return 241;
+		case CardIds.CaptainEudoraBattlegrounds:
+			return 222;
+		case CardIds.CaptainHooktuskBattlegrounds:
+			return 223;
+		case CardIds.SkycapnKraggBattlegrounds:
+			return 261;
+		case CardIds.MrBigglesworthBattlegrounds:
+			return 245;
+		case CardIds.JandiceBarovBattlegrounds:
+			return 236;
+		case CardIds.LordBarovBattlegrounds:
+			return 239;
+		case CardIds.ForestWardenOmuBattlegrounds:
+			return 229;
+		case CardIds.ChenvaalaBattlegrounds:
+			return 224;
+		case CardIds.RakanishuBattlegrounds:
+			return 255;
+		case CardIds.AlakirBattlegrounds:
+			return 216;
+		case CardIds.ZephrysTheGreatBattlegrounds:
+			return 271;
+		case CardIds.SilasDarkmoonBattlegrounds:
+			return 258;
+		case CardIds.CthunBattlegrounds:
+			return 221;
+		case CardIds.NzothBattlegrounds:
+			return 247;
+		case CardIds.YshaarjBattlegrounds:
+			return 268;
+		case CardIds.TickatusBattlegrounds:
+			return 267;
+		case CardIds.GreyboughBattlegrounds:
+			return 233;
+		case CardIds.OverlordSaurfang2:
+			return 249;
+		case CardIds.DeathSpeakerBlackthorn2:
+			return 275;
+		case CardIds.Voljin2:
+			return 276;
+		case CardIds.Xyrella2:
+			return 274;
+		case CardIds.MutanusTheDevourer2:
+			return 281;
+		case CardIds.GuffRunetotem2:
+			return 282;
+		case CardIds.KurtrusAshfallen2:
+			return 307;
+		case CardIds.Galewing:
+			return 321;
+		case CardIds.TradePrinceGallywixBattlegrounds:
+			return 308;
+		case CardIds.MasterNguyen:
+			return 326;
+		case CardIds.CarielRoame2:
+			return 325;
+		case CardIds.Sneed1:
+			return 366;
+		case CardIds.CookieTheCook2:
+			return 367;
+		case CardIds.TamsinRoame2:
+			return 369;
+		case CardIds.ScabbsCutterbutter2:
+			return 371;
+		default:
+			console.error('missing achievements section for ', heroCardId);
+			return null;
+	}
 };
 
 // Because inconsistencies

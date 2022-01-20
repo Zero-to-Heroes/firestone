@@ -1,6 +1,9 @@
 import { RawRequirement } from './raw-requirement';
 
 export interface RawAchievement {
+	readonly hsAchievementId: number;
+	readonly hsSectionId: number;
+	readonly hsRewardTrackXp: number;
 	readonly id: string;
 	readonly type: string;
 	// The name of the achievement in the achievements view

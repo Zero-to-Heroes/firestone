@@ -3,6 +3,9 @@ import { Achievement } from './achievement';
 import { AchievementStatus } from './achievement/achievement-status.type';
 
 export class VisualAchievement {
+	readonly hsAchievementId: number;
+	readonly hsSectionId: number;
+	readonly hsRewardTrackXp: number;
 	readonly id: string;
 	readonly name: string;
 	readonly type: string;

@@ -1,4 +1,7 @@
 export class Achievement {
+	readonly hsAchievementId: number;
+	readonly hsSectionId: number;
+	readonly hsRewardTrackXp: number;
 	readonly id: string;
 	readonly type: string;
 	readonly name: string;
