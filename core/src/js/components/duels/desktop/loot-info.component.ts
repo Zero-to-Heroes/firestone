@@ -1,41 +1,41 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Input } from '@angular/core';
 import { BundleType, DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Option } from './option';
 
-@Component({
-	selector: 'loot-info',
-	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/duels/desktop/loot-info.component.scss`],
-	template: `
-		<div class="loot-info {{ bundleType }}">
-			<div class="treasure-loot" *ngIf="bundleType === 'treasure'">
-				<div class="text">Treasures</div>
-				<div class="options">
-					<div
-						class="option"
-						*ngFor="let option of options"
-						[cardTooltip]="option.cardId"
-						[ngClass]="{ 'picked': option.isPicked }"
-					>
-						<img class="option-image" [src]="option.optionImage" />
-					</div>
-				</div>
-			</div>
-			<div class="loot" *ngIf="bundleType === 'loot'">
-				<div class="text">Loot</div>
-				<div class="bundles">
-					<loot-bundle
-						class="option"
-						*ngFor="let option of options; let i = index"
-						[option]="option"
-						[ngClass]="{ 'picked': option.isPicked }"
-					>
-					</loot-bundle>
-				</div>
-			</div>
-		</div>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-})
+// @Component({
+// 	selector: 'loot-info',
+// 	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/duels/desktop/loot-info.component.scss`],
+// 	template: `
+// 		<div class="loot-info {{ bundleType }}">
+// 			<div class="treasure-loot" *ngIf="bundleType === 'treasure'">
+// 				<div class="text">Treasures</div>
+// 				<div class="options">
+// 					<div
+// 						class="option"
+// 						*ngFor="let option of options"
+// 						[cardTooltip]="option.cardId"
+// 						[ngClass]="{ 'picked': option.isPicked }"
+// 					>
+// 						<img class="option-image" [src]="option.optionImage" />
+// 					</div>
+// 				</div>
+// 			</div>
+// 			<div class="loot" *ngIf="bundleType === 'loot'">
+// 				<div class="text">Loot</div>
+// 				<div class="bundles">
+// 					<loot-bundle
+// 						class="option"
+// 						*ngFor="let option of options; let i = index"
+// 						[option]="option"
+// 						[ngClass]="{ 'picked': option.isPicked }"
+// 					>
+// 					</loot-bundle>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	`,
+// 	changeDetection: ChangeDetectionStrategy.OnPush,
+// })
 export class LootInfoComponent {
 	@Input() set loot(value: DuelsRunInfo) {
 		this.bundleType = value.bundleType;

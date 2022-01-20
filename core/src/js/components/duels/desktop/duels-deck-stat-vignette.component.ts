@@ -65,7 +65,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<svg class="dust-icon svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#dust" />
 					</svg>
-					<!-- TODO translate -->
 					<div
 						class="value"
 						*ngIf="dustCost"

@@ -11,6 +11,7 @@ import {
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
@@ -41,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						</ul>
 					</li>
 				</ng-container>
-				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
+				<div class="loading" *ngIf="isLoading" [owTranslate]="'app.duels.run.load-more-button'"></div>
 			</infinite-scroll>
 			<duels-empty-state *ngIf="!allRuns?.length"></duels-empty-state>
 		</div>
@@ -69,7 +70,11 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 	private displayedRuns: readonly DuelsRun[] = [];
 	private runsIterator: IterableIterator<void>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -158,7 +163,7 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 	private groupRuns(runs: readonly DuelsRun[]): readonly GroupedRun[] {
 		const groupingFunction = (run: DuelsRun) => {
 			const date = new Date(run.creationTimestamp);
-			return date.toLocaleDateString('en-US', {
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 				month: 'short',
 				day: '2-digit',
 				year: 'numeric',

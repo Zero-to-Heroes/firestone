@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					*ngFor="let stat of displayedGroupedDecks"
 					[groupedDecks]="stat"
 				></duels-grouped-top-decks>
-				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
+				<div class="loading" *ngIf="isLoading" [owTranslate]="'app.duels.run.load-more-button'"></div>
 			</infinite-scroll>
 			<duels-empty-state *ngIf="!allDecks?.length"></duels-empty-state>
 		</div>
