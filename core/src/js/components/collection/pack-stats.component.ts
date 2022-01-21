@@ -39,11 +39,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						[style.width.px]="cardWidth"
 						[style.height.px]="cardHeight"
 						[helpTooltip]="
-							'You received ' +
-							pack.totalObtained +
-							' ' +
-							pack.name +
-							' packs since you started playing Hearthstone'
+							'app.collection.pack-stats.pack-stat-tooltip'
+								| owTranslate: { totalPacks: pack.totalObtained, packName: pack.name }
 						"
 					>
 						<img

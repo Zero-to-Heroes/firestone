@@ -313,7 +313,8 @@
 			"pack-stats": {
 				"title": "All-time packs ({{value}})",
 				"best-opened-packs-title": "Best {{value}} opened packs",
-				"best-opened-packs-title-tooltip": "Best packs you opened with Firestone running"
+				"best-opened-packs-title-tooltip": "Best packs you opened with Firestone running",
+				"pack-stat-tooltip": "You received {{totalPacks}} {{packName}} packs since you started playing Hearthstone"
 			},
 			"set-stats": {
 				"title": "Set stats",
