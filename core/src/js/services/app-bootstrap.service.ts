@@ -269,13 +269,8 @@ export class AppBootstrapService {
 		// Don't open the loading window if the main window is open
 		const prefs = await this.prefs.getPreferences();
 		const collectionWindow = await this.ow.getCollectionWindow(prefs);
-		if (collectionWindow.isVisible) {
-			console.log('[bootstrap] collection window is open, not showing loading screen');
-			return;
-		}
-
 		const shouldShowAds = await this.ads.shouldDisplayAds();
-		if (shouldShowAds) {
+		if (shouldShowAds && !collectionWindow.isVisible) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
 			console.log('[bootstrap] final restore for loadingwindow done', result);
