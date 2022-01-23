@@ -653,6 +653,9 @@
 				"hero-power": {
 					"all": "All Hero Powers"
 				},
+				"signature-treasure": {
+					"all": "All Signature Treasures"
+				},
 				"hero-sort": {
 					"player-winrate": "Your winrate",
 					"global-winrate": "Global winrate",
