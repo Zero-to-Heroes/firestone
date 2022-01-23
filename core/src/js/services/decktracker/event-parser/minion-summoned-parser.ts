@@ -30,7 +30,7 @@ export class MinionSummonedParser implements EventParser {
 			entityId: entityId,
 			cardName: this.i18n.getCardName(cardId, dbCard.name),
 			manaCost: dbCard.cost,
-			rarity: dbCard.rarity,
+			rarity: dbCard.rarity?.toLowerCase(),
 			creatorCardId: creatorCardId,
 			zone: 'PLAY',
 			temporaryCard: false,

@@ -265,7 +265,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 			this.i18n.getUnknownCardName();
 
 		this.numberOfCopies = this._card.totalQuantity;
-		this.rarity = this._card.rarity;
+		this.rarity = this._card.rarity?.toLowerCase();
 		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;
 		this.updateGiftTooltip();

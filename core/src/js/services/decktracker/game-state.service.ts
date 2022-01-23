@@ -495,7 +495,7 @@ export class GameStateService {
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
 			new BgsHeroSelectedCardParser(this.helper),
-			new CardRecruitedParser(this.helper),
+			new CardRecruitedParser(this.helper, this.allCards, this.i18n),
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
 			new CardRevealedParser(this.helper, this.allCards, this.i18n),
