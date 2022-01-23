@@ -77,8 +77,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				></div>
 				<duels-runs-list
 					[deckstring]="deck.deck.initialDeckList"
-					[displayLoot]="false"
-					[displayShortLoot]="true"
+					[displayLoot]="true"
+					[displayShortLoot]="false"
 				></duels-runs-list>
 			</div>
 			<div class="stats" *ngIf="!deck.personal" scrollable>

@@ -99,9 +99,7 @@
 		::ng-deep duels-runs-list,
 		::ng-deep duels-run {
 			.rewards,
-			.view-deck,
-			.loot,
-			.treasure {
+			.view-deck {
 				display: none;
 			}
 		}
@@ -114,11 +112,6 @@
 				.rewards,
 				.view-deck {
 					display: none;
-				}
-
-				.loot,
-				.treasure {
-					display: inherit;
 				}
 			}
 
