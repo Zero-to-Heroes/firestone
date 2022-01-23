@@ -638,6 +638,11 @@
 					"own": "Own all cards",
 					"dust": "{{value}} dust"
 				},
+				"stat-type": {
+					"hero": "Hero",
+					"hero-power": "Hero Power",
+					"signature-treasure": "Signature Treasure"
+				},
 				"game-mode": {
 					"all": "All modes",
 					"all-tooltip": "Community stats will only show data for Heroic Duels. Your own stats will show both Casual and Heroic.",

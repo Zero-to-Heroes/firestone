@@ -250,7 +250,7 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 				total: this.getTotal(set, 'rare'),
 			},
 			{
-				text: this.i18n.translateString('app.collection.set-stats.epics	'),
+				text: this.i18n.translateString('app.collection.set-stats.epics'),
 				current: this.getOwned(set, 'epic'),
 				total: this.getTotal(set, 'epic'),
 			},
