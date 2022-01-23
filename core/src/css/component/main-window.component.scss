@@ -65,6 +65,7 @@
 	z-index: 400;
 	flex-shrink: 0;
 	border: none;
+	// This is needed because otherwise it interferes with the navigation
 	pointer-events: none;
 
 	.before-main-divider {

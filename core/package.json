@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "8.5.4",
+	"version": "8.5.5",
 	"scripts": {
 		"lint": "node --max_old_space_size=10000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=10000 ./node_modules/jest/bin/jest.js --colors",
@@ -59,7 +59,7 @@
 		"aws-sdk": "^2.1030.0",
 		"chart.js": "^2.9.3",
 		"chartjs-plugin-datalabels": "^0.7.0",
-		"cross-fetch": "^3.0.6",
+		"cross-fetch": "^3.1.5",
 		"deckstrings": "^2.2.1",
 		"deepmerge": "^4.2.2",
 		"dist": "^0.1.2",
