@@ -54,8 +54,8 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 	@Input() set deckstring(value: string) {
 		this.deckstring$.next(value);
 	}
-	@Input() displayLoot: boolean;
-	@Input() displayShortLoot: boolean;
+	@Input() displayLoot = true;
+	@Input() displayShortLoot = false;
 
 	expandedRunIds$: Observable<readonly string[]>;
 

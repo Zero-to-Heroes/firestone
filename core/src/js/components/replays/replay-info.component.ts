@@ -200,9 +200,15 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	}
 	@Input() set displayLoot(value: boolean) {
 		this._displayLoot = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 	@Input() set displayShortLoot(value: boolean) {
 		this._displayShortLoot = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	finalWarband: KnownBoard;
