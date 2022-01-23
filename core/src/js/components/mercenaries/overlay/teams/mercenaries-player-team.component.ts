@@ -1,6 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
@@ -21,11 +22,14 @@ import { Task } from './mercenaries-team-root..component';
 			[side]="'player'"
 			[showTasksExtractor]="showTasksExtractor"
 			[scaleExtractor]="scaleExtractor"
+			[tooltipPosition]="tooltipPosition"
 		></mercenaries-team-root>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@Input() tooltipPosition: CardTooltipPositionType = 'left';
+
 	teamExtractor = (state: MercenariesBattleState) => state.playerTeam;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	scaleExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayScale;

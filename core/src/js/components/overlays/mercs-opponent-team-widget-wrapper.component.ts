@@ -5,9 +5,11 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -25,6 +27,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
+			[tooltipPosition]="tooltipPosition"
 		></mercenaries-opponent-team>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +50,8 @@ export class MercsOpponentTeamWidgetWrapperComponent
 	};
 
 	private visible: boolean;
+
+	tooltipPosition: CardTooltipPositionType = 'left';
 
 	showWidget$: Observable<boolean>;
 
@@ -78,5 +83,18 @@ export class MercsOpponentTeamWidgetWrapperComponent
 			this.visible = show;
 			this.reposition();
 		});
+	}
+
+	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number }> {
+		const newPosition = await super.reposition(cleanup);
+		if (!newPosition) {
+			return;
+		}
+
+		this.tooltipPosition = newPosition.left < 400 ? 'right' : 'left';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		return newPosition;
 	}
 }

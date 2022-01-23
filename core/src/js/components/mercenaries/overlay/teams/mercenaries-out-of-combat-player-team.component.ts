@@ -1,7 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MemoryMercenariesMap } from '../../../../models/memory/memory-mercenaries-info';
 import {
 	BattleAbility,
@@ -30,12 +31,15 @@ import { Task } from './mercenaries-team-root..component';
 		[side]="'out-of-combat-player'"
 		[showTasksExtractor]="showTasksExtractor"
 		[scaleExtractor]="scaleExtractor"
+		[tooltipPosition]="tooltipPosition"
 	></mercenaries-team-root>`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOutOfCombatPlayerTeamComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit {
+	@Input() tooltipPosition: CardTooltipPositionType = 'left';
+
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	scaleExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayScale;
 

@@ -31,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<sortable-label class="level" [name]="'Lvl'" [sort]="sort" [criteria]="'level'"> </sortable-label>
 				<sortable-label class="role" [name]="'Role'" [sort]="sort" [criteria]="'role'"> </sortable-label>
 				<sortable-label class="name" [name]="'Name'" [sort]="sort" [criteria]="'name'"> </sortable-label>
-				<sortable-label class="xp" [name]="'Xp'" [sort]="sort" [criteria]="'xp-in-level'"> </sortable-label>
+				<sortable-label class="xp" [name]="'XP'" [sort]="sort" [criteria]="'xp-in-level'"> </sortable-label>
 				<sortable-label
 					class="coins left"
 					[name]="'Coins Left'"
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</sortable-label>
 				<sortable-label
 					class="tasks"
-					[name]="'Completed tasks'"
+					[name]="'Completed Tasks'"
 					[sort]="sort"
 					[criteria]="'task-progress'"
 					helpTooltip="Tasks completed. Ctrl + click on the current task to manually go to the next task. Alt + click to go back one step."

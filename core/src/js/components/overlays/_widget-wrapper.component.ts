@@ -40,7 +40,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		this.reposition();
 	}
 
-	protected async reposition(cleanup: () => void = null) {
+	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
 		if (!this.isWidgetVisible()) {
 			// console.debug('widget is not visible');
 			return;
@@ -100,6 +100,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		if (cleanup) {
 			cleanup();
 		}
+		return boundPositionFromPrefs;
 	}
 
 	startDragging() {

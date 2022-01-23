@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
@@ -142,6 +143,8 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			}
 		});
 	}
+
+	@Input() tooltipPosition: CardTooltipPositionType = 'left';
 
 	showColorChart$: Observable<boolean>;
 	showTasks$: Observable<boolean>;
