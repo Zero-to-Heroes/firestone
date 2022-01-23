@@ -73,9 +73,9 @@
 			justify-content: center;
 			font-family: 'Open Sans', sans-serif;
 
-			svg {
-				max-width: 30px;
-				max-height: 30px;
+			::ng-deep svg {
+				max-width: 20px;
+				max-height: 20px;
 			}
 
 			&:hover {
@@ -251,9 +251,9 @@
 			.controls {
 				justify-content: space-between;
 
-				svg {
-					max-width: 30px;
-					max-height: 30px;
+				::ng-deep svg {
+					max-width: 20px;
+					max-height: 20px;
 				}
 
 				.simulate {
@@ -347,9 +347,9 @@
 				display: flex;
 				align-items: center;
 
-				svg {
-					max-width: 30px;
-					max-height: 30px;
+				::ng-deep svg {
+					max-width: 20px;
+					max-height: 20px;
 				}
 
 				.button {
@@ -437,9 +437,9 @@
 			justify-content: center;
 			font-size: 12px;
 
-			svg {
-				max-width: 30px;
-				max-height: 30px;
+			::ng-deep svg {
+				max-width: 20px;
+				max-height: 20px;
 			}
 
 			.icon {
