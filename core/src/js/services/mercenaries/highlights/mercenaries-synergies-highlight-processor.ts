@@ -123,6 +123,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 			return fel;
+		case CardIds.FireballVolley1Lettuce:
+		case CardIds.FireballVolley2Lettuce:
+		case CardIds.FireballVolley3Lettuce:
+		case CardIds.FireballVolley4Lettuce:
+		case CardIds.FireballVolley5Lettuce:
+			return fire;
 		case CardIds.FireLance1Lettuce:
 		case CardIds.FireLance2Lettuce:
 		case CardIds.FireLance3Lettuce:
