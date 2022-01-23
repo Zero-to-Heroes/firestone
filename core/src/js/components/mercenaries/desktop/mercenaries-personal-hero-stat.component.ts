@@ -145,6 +145,7 @@ export class MercenariesPersonalHeroStatComponent {
 		if (areDeepEqual(this._stat, value)) {
 			return;
 		}
+		console.debug('setting stat', value.name, value);
 		this._stat = value;
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;
@@ -179,32 +180,39 @@ export class MercenariesPersonalHeroStatComponent {
 				this.currentTaskTooltip = value.currentTaskDescription;
 			}
 		}
-
-		this.abilities = value.abilities.map((info) => {
-			return {
-				cardId: info.cardId,
-				owned: info.owned,
-				speed: info.speed,
-				cooldown: info.cooldown,
-				tier: info.tier,
-				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
-			};
-		});
-		this.equipments = value.equipments.map((info) => {
-			return {
-				cardId: info.cardId,
-				owned: info.owned,
-				equipped: info.isEquipped,
-				tier: info.tier,
-				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
-			};
-		});
-
 		this.coinsNeededTooltip = this.buildCoinsNeededTooltip(value);
 		this.coinsToFarmTooltip = this.buildCoinsToFarmTooltip(value, this.totalCoinsToFarm);
+
+		this.abilities = [];
+		this.equipments = [];
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}
+
+		setTimeout(() => {
+			this.abilities = value.abilities.map((info) => {
+				return {
+					cardId: info.cardId,
+					owned: info.owned,
+					speed: info.speed,
+					cooldown: info.cooldown,
+					tier: info.tier,
+					artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
+				};
+			});
+			this.equipments = value.equipments.map((info) => {
+				return {
+					cardId: info.cardId,
+					owned: info.owned,
+					equipped: info.isEquipped,
+					tier: info.tier,
+					artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
+				};
+			});
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr?.detectChanges();
+			}
+		});
 	}
 
 	cardId: string;
