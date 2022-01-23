@@ -34,7 +34,7 @@
 
 .last-opponent-icon {
 	width: 28px;
-	height: 28px;
+	height: 28px; // 15% works with higher DPI, test this on normal DPI
 	position: absolute;
 	top: 30px;
 	left: -20px;
