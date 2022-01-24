@@ -5,7 +5,7 @@
 .hero-selection-tooltip {
 	display: flex;
 	background: var(--color-4);
-	height: 420px;
+	height: 460px;
 	width: 500px;
 	align-items: center;
 	padding: 10px;
@@ -60,5 +60,26 @@
 				}
 			}
 		}
+	}
+}
+
+.hero-selection-tooltip.hero-selection-overlay {
+	width: 300px;
+	top: -50px;
+
+	.hero-power {
+		display: none;
+	}
+
+	.infos {
+		width: 100%;
+	}
+
+	&.left {
+		right: 225px;
+	}
+
+	&.right {
+		left: 225px;
 	}
 }

@@ -31,6 +31,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[hero]="hero"
 				[achievements]="hero?.achievements"
 				[hideEmptyState]="true"
+				[heroTooltipPosition]="hero.tooltipPosition"
+				[tooltipAdditionalClass]="hero.tooltipClass"
 			></bgs-hero-overview>
 		</div>
 	`,
@@ -104,19 +106,27 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 			),
 			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
 				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
-				const heroOverviews = selectionOptions.map((cardId) => {
+				const heroOverviews = selectionOptions.map((cardId, index) => {
 					const normalized = normalizeHeroCardId(cardId, true);
 					const existingStat = stats.find((overview) => overview.id === normalized);
 					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
+					const tooltipPosition =
+						selectionOptions.length === 4 && index <= 1
+							? 'right'
+							: selectionOptions.length === 2 && index === 0
+							? 'right'
+							: 'left';
 					return {
 						...statWithDefault,
 						id: cardId,
 						name: this.allCards.getCard(cardId)?.name,
 						baseCardId: normalized,
 						achievements: achievementsForHero,
+						tooltipPosition: tooltipPosition,
+						tooltipClass: `hero-selection-overlay ${tooltipPosition}`,
 					};
 				});
 				if (heroOverviews.length === 2) {

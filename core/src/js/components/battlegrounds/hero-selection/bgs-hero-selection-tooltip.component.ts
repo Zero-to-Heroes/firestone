@@ -10,8 +10,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component.scss`,
 	],
 	template: `
-		<div class="hero-selection-tooltip" [ngClass]="{ 'hidden': !_visible }">
-			<img class="hero-power" [src]="heroPowerImage" />
+		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ 'hidden': !_visible }">
+			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage" />
 			<div class="infos">
 				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
@@ -23,9 +23,17 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
 	_visible = true;
+	_cssClass: string;
 	heroPowerImage: string;
 	totalMatches: number;
 	totalMatchesText: string;
+
+	@Input() set cssClass(value: string) {
+		this._cssClass = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;

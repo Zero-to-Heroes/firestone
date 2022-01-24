@@ -25,7 +25,8 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 				cachedComponentTooltip
 				[componentType]="componentType"
 				[componentInput]="_hero"
-				componentTooltipPosition="top"
+				[componentTooltipPosition]="heroTooltipPosition"
+				[componentTooltipCssClass]="tooltipAdditionalClass"
 			></div>
 			<div class="portrait-container">
 				<bgs-hero-portrait
@@ -66,6 +67,8 @@ export class BgsHeroOverviewComponent {
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
 
 	@Input() hideEmptyState: boolean;
+	@Input() heroTooltipPosition = 'right';
+	@Input() tooltipAdditionalClass: string;
 
 	_hero: BgsHeroStat;
 	player: BgsPlayer;

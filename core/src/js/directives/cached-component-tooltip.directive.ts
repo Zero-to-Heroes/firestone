@@ -37,7 +37,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 	}
 
-	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' = 'right';
+	@Input('componentTooltipCssClass') cssClass: string;
+
+	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'auto' = 'right';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -105,6 +107,8 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 			// Pass content to tooltip component instance
 			this.tooltipRef.instance.config = this._componentInput;
+			this.tooltipRef.instance.cssClass = this.cssClass;
+			console.debug('setting css class', this.cssClass, this.tooltipRef.instance);
 		}
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
@@ -168,8 +172,23 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 					},
 				];
 			case 'right':
+				return [
+					{
+						originX: 'end',
+						originY: 'center',
+						overlayX: 'start',
+						overlayY: 'center',
+					},
+				];
+			case 'auto':
 			default:
 				return [
+					{
+						originX: 'start',
+						originY: 'center',
+						overlayX: 'end',
+						overlayY: 'center',
+					},
 					{
 						originX: 'end',
 						originY: 'center',
