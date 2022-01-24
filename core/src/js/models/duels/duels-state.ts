@@ -2,6 +2,7 @@ import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
 import { DuelsGroupedDecks } from './duels-grouped-decks';
@@ -26,11 +27,11 @@ export class DuelsState {
 	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
 	readonly currentDuelsMetaPatch: PatchInfo;
 
-	public static create(base: DuelsState): DuelsState {
+	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);
 	}
 
-	public update(base: DuelsState): DuelsState {
+	public update(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), this, base);
 	}
 

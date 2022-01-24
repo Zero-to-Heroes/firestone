@@ -17,20 +17,20 @@ import { groupByFunction } from '../utils';
 
 export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[],
-	timeFilter: DuelsTimeFilterType,
+	// timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	heroPowerFilter: 'all' | string,
 	signatureTreasureFilter: 'all' | string,
 	statType: DuelsStatTypeFilterType,
-	mmrFilter: 100 | 50 | 25 | 10 | 1,
+	// mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
 	return (
 		heroStats
-			.filter((stat) => stat.date === timeFilter)
+			// .filter((stat) => stat.date === timeFilter)
 			// For backward compatibility
-			.filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
+			// .filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
 			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
@@ -66,12 +66,12 @@ export const filterDuelsHeroStats = (
 
 export const filterDuelsTreasureStats = (
 	treasures: readonly DuelsTreasureStat[],
-	timeFilter: DuelsTimeFilterType,
+	// timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	heroPowerFilter: 'all' | string,
 	sigTreasureFilter: 'all' | string,
 	statType: DuelsTreasureStatTypeFilterType,
-	mmrFilter: 100 | 50 | 25 | 10 | 1,
+	// mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsTreasureStat[] => {
@@ -83,8 +83,8 @@ export const filterDuelsTreasureStats = (
 		.filter((stat) => !!stat)
 		// Avoid generating errors when the API hasn't properly formatted the data yet
 		.filter((stat) => !(+stat.treasureCardId > 0))
-		.filter((stat) => stat.date === timeFilter)
-		.filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
+		// .filter((stat) => stat.date === timeFilter)
+		// .filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
 		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
 		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
 		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))

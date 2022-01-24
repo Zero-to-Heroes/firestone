@@ -84,12 +84,12 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent imple
 						[
 							filterDuelsHeroStats(
 								duelStats,
-								timeFilter,
+								// timeFilter,
 								classFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
 								statType,
-								mmrFilter,
+								// mmrFilter,
 								this.allCards,
 								heroSearchString,
 							),

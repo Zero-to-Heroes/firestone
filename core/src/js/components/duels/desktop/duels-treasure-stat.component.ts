@@ -83,12 +83,12 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 						[
 							filterDuelsTreasureStats(
 								duelStats,
-								timeFilter,
+								// timeFilter,
 								classFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
 								statType,
-								mmrFilter,
+								// mmrFilter,
 								this.allCards,
 								treasureSearchString,
 							),

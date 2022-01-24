@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
-import { DeckStat, DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -40,6 +40,10 @@ import { getDuelsHeroCardId, getDuelsModeName } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
+const DUELS_GLOBAL_STATS_URL_SPLIT =
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json?v=20';
+const DUELS_GLOBAL_STATS_DECKS =
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
 
@@ -100,13 +104,36 @@ export class DuelsStateBuilderService {
 	}
 
 	public async loadGlobalStats(): Promise<DuelsStat> {
-		const result: DuelsStat = await this.api.callGetApi(DUELS_GLOBAL_STATS_URL);
+		const prefs = await this.prefs.getPreferences();
+		const result: DuelsStat = await this.api.callGetApi(
+			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + prefs.duelsActiveMmrFilter).replace(
+				'%date%',
+				prefs.duelsActiveTimeFilter,
+			),
+		);
 		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
+		console.debug('[duels-state-builder] loaded global stats', result);
+
+		// const temp: DuelsStat = await this.api.callGetApi(DUELS_GLOBAL_STATS_URL);
+		// console.debug(
+		// 	'[duels-state-builder] old stats',
+		// 	temp,
+		// 	temp.heroes
+		// 		.filter((stat) => stat.mmrPercentile === prefs.duelsActiveMmrFilter)
+		// 		.filter((stat) => stat.date === prefs.duelsActiveTimeFilter),
+		// );
+		return result;
+	}
+
+	public async loadTopDecks(): Promise<DuelsStatDecks> {
+		const result: DuelsStatDecks = await this.api.callGetApi(DUELS_GLOBAL_STATS_DECKS);
+		console.log('[duels-state-builder] loaded global stats deck', result?.decks?.length);
 		return result;
 	}
 
 	public initState(
 		globalStats: DuelsStat,
+		globalStatsDecks: DuelsStatDecks,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		leaderboard: DuelsLeaderboard,
@@ -114,7 +141,7 @@ export class DuelsStateBuilderService {
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
-			globalStats?.decks ?? [],
+			globalStatsDecks?.decks ?? [],
 			collectionState,
 		);
 		return DuelsState.create({

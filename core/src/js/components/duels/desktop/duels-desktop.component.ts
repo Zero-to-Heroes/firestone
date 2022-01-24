@@ -100,13 +100,7 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 	ngAfterContentInit() {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.duels.loading)
-			.pipe(
-				map(([loading]) => loading),
-				distinctUntilChanged(),
-				// startWith(true),
-				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([loading]) => loading));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.menuDisplayType)
 			.pipe(

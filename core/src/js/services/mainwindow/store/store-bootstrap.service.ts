@@ -107,7 +107,7 @@ export class StoreBootstrapService {
 			],
 			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
-			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsLeaderboard],
+			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsGlobalStatsDecks, duelsLeaderboard],
 			[arenaRewards],
 			[mercenariesGlobalStats, mercenariesReferenceData, mercenariesCollection],
 		] = await Promise.all([
@@ -126,7 +126,12 @@ export class StoreBootstrapService {
 				this.gameStatsLoader.retrieveArchetypesConfig(),
 				this.gameStatsLoader.retrieveArchetypesStats(),
 			]),
-			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats(), this.duels.loadLeaderboard()]),
+			Promise.all([
+				this.duels.loadRuns(),
+				this.duels.loadGlobalStats(),
+				this.duels.loadTopDecks(),
+				this.duels.loadLeaderboard(),
+			]),
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([
 				this.mercenariesService.loadGlobalStats(),
@@ -193,6 +198,7 @@ export class StoreBootstrapService {
 			: null;
 		const duelsStats: DuelsState = this.duels.initState(
 			duelsGlobalStats,
+			duelsGlobalStatsDecks,
 			duelsRunInfo,
 			duelsRewardsInfo,
 			duelsLeaderboard,
