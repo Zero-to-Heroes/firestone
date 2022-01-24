@@ -23,8 +23,8 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 		<div class="duels-hero-tier-list" *ngIf="tiers$ | async as tiers">
 			<div
 				class="title"
-				[helpTooltip]="'app.duels.stats.tier-list-tooltip-title' | owTranslate"
-				[owTranslate]="'app.duels.stats.tier-list-tooltip'"
+				[owTranslate]="'app.duels.stats.tier-list-title'"
+				[helpTooltip]="'app.duels.stats.tier-list-title-tooltip' | owTranslate"
 			></div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>
 		</div>
@@ -85,12 +85,12 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 						[
 							filterDuelsHeroStats(
 								duelStats,
-								timeFilter,
+								// timeFilter,
 								classFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
 								statType,
-								mmrFilter,
+								// mmrFilter,
 								this.allCards,
 								null,
 							),
