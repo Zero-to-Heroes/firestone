@@ -146,7 +146,11 @@ export const buildMercenariesTasksList = (
 					return null;
 				}
 
-				const task = [...taskChain.tasks].sort((a, b) => a.id - b.id)[visitor.TaskChainProgress];
+				if (taskChain.mercenaryVisitorId === 1938) {
+					console.debug('story task chain', taskChain, referenceData, visitor);
+				}
+
+				const task = taskChain.tasks[visitor.TaskChainProgress];
 				if (!task) {
 					console.warn('empty task', visitor, taskChain);
 					return null;
