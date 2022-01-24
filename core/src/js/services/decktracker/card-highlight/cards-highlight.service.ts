@@ -117,6 +117,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildSelector(cardId: string, card: DeckCard): (handler: Handler, deckState?: DeckState) => boolean {
 		switch (cardId) {
+			case CardIds.AllianceBannerman:
+				return and(inDeck, minion);
 			case CardIds.AmuletOfUndying:
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.ArcaneBrilliance:
