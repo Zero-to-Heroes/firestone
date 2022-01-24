@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.5.1',
+		version: '8.5.7',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,19 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'mercenaries',
 						details: [
 							{
-								type: 'feature',
-								text: `Add the ability to resimulate past battles (only for the ones your play from now on)`,
+								type: 'bug',
+								text: `Fix an issue where the mercenaries page would partially break after receiving coins for any merc.`,
 							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
 							{
-								type: 'feature',
-								text: `Add a way to easily export / import board states in the simulator, which will let you share specific states more easily with your friends or on Twitter.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a feature in the main window's BG simulator that lets you find the optimal positioning for a given board state. This is still in beta, and takes a while to compute (several minutes at least). Let me know what you think of it!`,
+								type: 'bug',
+								text: `Fix an issue where hotkeys would stop working if Firestone was started before Hearthstone.`,
 							},
 						],
 					},
@@ -73,15 +74,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix some widgets not working on custom lobbies with fewer than 8 players.`,
+								text: `Fix an issue with the leaderboard mouse over (and minions pinning) when the Windows zoom is set at > 100%.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Snake and Golden Fish of N'Zoth would appear in the minions list.`,
-							},
-							{
-								type: 'ui',
-								text: `Fix a display issue where the tooltip stats would not be properly positioning when mousing over a minion in the BG app.`,
+								text: `Fix an issue where hero achievements would not show up when using the app in non-English.`,
 							},
 						],
 					},
@@ -89,16 +86,29 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the cost of minions in the deck would be reduced by Vanndar even if his battlecry didn't activate.`,
+								type: 'feature',
+								text: `Flag cost reduction of cards in hand caused by Runed Mithril Rod.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where cards revealed by a Joust would be flagged as burned. It now also flag the card as being a gift from the Joust card - not ideal, but the best I can do without adding a new processing layer (maybe in the future).`,
+								text: `Fix an issue where cards recruited from the deck (with or without the Recruit keyword) would not have the correct rarity.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Add synergy highlight for Fireball Volley.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the tasks list would always show up at the left side of the widget, even when the widget was placed at the left side of the screen.`,
 							},
 							{
 								type: 'ui',
-								text: `Fix an issue where some counters' images (like Pogo's) would be too big`,
+								text: `Put the current level of abilities / equipments at the top of the image, instead of in the center, to try and improve the legibility. Let me know what you think :)`,
 							},
 						],
 					},
@@ -107,7 +117,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where Elixir of Vigor would not properly appear in the stats following its nerf.`,
+								text: `Fix an issue where treasures and passives would not show up in run details.`,
 							},
 						],
 					},
@@ -116,7 +126,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the "Zoom" setting would also be applied to the Settings window itself, sometimes resulting in an unusable settings window.`,
+								text: `Fix a few incorrect string labels caused by typos during the internationalization process.`,
 							},
 						],
 					},
