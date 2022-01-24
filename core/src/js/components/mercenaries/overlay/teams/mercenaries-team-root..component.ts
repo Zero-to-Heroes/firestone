@@ -69,7 +69,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 										</div>
 										<div class="task-content">
 											<div class="header">
-												Task {{ task.taskChainProgress + 1 }}: {{ task.title }}
+												{{
+													task.title.startsWith('Story')
+														? task.title
+														: 'Task ' + (task.taskChainProgress + 1) + ': ' + task.title
+												}}
 											</div>
 											<div class="description">{{ task.description }}</div>
 											<div class="progress">
