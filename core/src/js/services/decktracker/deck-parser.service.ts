@@ -297,6 +297,7 @@ export class DeckParserService {
 			ScenarioId.STANDARD_1_VS_1_GAME,
 			ScenarioId.WIZARD_DUELS,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
+			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,
 		];
 		return loggingSCenarios.includes(scenarioId);
 	}

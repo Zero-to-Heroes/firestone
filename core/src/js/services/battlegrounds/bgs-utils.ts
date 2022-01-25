@@ -234,6 +234,14 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.TamsinRoame_FragrantPhylactery;
 		case CardIds.ScabbsCutterbutter2:
 			return CardIds.ScabbsCutterbutter_ISpy;
+		case CardIds.Brukan11:
+			return CardIds.Brukan_EmbraceTheElements;
+		case CardIds.Drekthar4:
+			return CardIds.Drekthar_LeadTheFrostwolves;
+		case CardIds.VanndarStormpike2:
+			return CardIds.VanndarStormpike_LeadTheStormpikes;
+		case CardIds.TavishStormpike2:
+			return CardIds.TavishStormpike_Deadeye;
 
 		case '':
 			return null; // new heroes
@@ -288,6 +296,7 @@ export const getAllCardsInGame = (
 		.getCards()
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) => !card.mechanics.includes(GameTag[GameTag.BUDDY]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
 		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
