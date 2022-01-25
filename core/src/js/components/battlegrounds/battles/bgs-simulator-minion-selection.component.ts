@@ -12,7 +12,7 @@ import { FormControl } from '@angular/forms';
 import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
@@ -185,7 +185,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 				<div class="heroes" scrollable>
 					<div
-						*ngFor="let minion of allMinions$ | async"
+						*ngFor="let minion of allMinions"
 						class="hero-portrait-frame"
 						[ngClass]="{ 'selected': minion.id === _currentMinion?.id }"
 						(click)="selectMinion(minion)"
@@ -213,7 +213,6 @@ export class BgsSimulatorMinionSelectionComponent
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;
-
 	@Input() set currentMinion(value: BoardEntity) {
 		this._entity = value;
 		this.updateValues();
@@ -223,7 +222,8 @@ export class BgsSimulatorMinionSelectionComponent
 
 	card: Entity;
 
-	allMinions$: Observable<readonly Minion[]>;
+	// allMinions$: Observable<readonly Minion[]>;
+	allMinions: readonly Minion[] = [];
 
 	cardId: string;
 	premium: boolean;
@@ -252,59 +252,85 @@ export class BgsSimulatorMinionSelectionComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+		this.cdr.detach();
 	}
 
 	ngAfterContentInit(): void {
-		this.allMinions$ = combineLatest(
+		combineLatest(
 			this.searchString.asObservable(),
 			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTribeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveSimulatorMinionTierFilter,
 			),
-		).pipe(
-			debounceTime(200),
-			map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([searchString, tribeFilter, tierFilter]) =>
-				this.allCards
-					.getCards()
-					.filter(
-						(card) =>
-							(card.battlegroundsPremiumDbfId && card.techLevel) ||
-							TOKEN_CARD_IDS.includes(card.id as CardIds),
-					)
-					.filter(
-						(card) =>
-							!tribeFilter ||
-							tribeFilter === 'all' ||
-							getEffectiveTribe(card, true).toLowerCase() === tribeFilter,
-					)
-					.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
-					.filter(
-						(card) =>
-							!searchString?.length ||
-							card.name.toLowerCase().includes(searchString.toLowerCase()) ||
-							card.text?.toLowerCase().includes(searchString.toLowerCase()),
-					)
-					.map((card) => ({
-						id: card.id,
-						icon: this.i18n.getCardImage(card.id, { isBgs: true }),
-						name: card.name,
-						tier: card.techLevel ?? 0,
-					}))
-					.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name])),
-			),
-			// startWith([]),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			// tap((heroes) => console.debug('minions', heroes)),
-			takeUntil(this.destroyed$),
-		);
+		)
+			.pipe(
+				tap((info) => console.debug('gaaa', info)),
+				debounceTime(200),
+				map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				map(([searchString, tribeFilter, tierFilter]) => {
+					const result = this.allCards
+						.getCards()
+						.filter(
+							(card) =>
+								(card.battlegroundsPremiumDbfId && card.techLevel) ||
+								TOKEN_CARD_IDS.includes(card.id as CardIds),
+						)
+						.filter(
+							(card) =>
+								!tribeFilter ||
+								tribeFilter === 'all' ||
+								getEffectiveTribe(card, true).toLowerCase() === tribeFilter,
+						)
+						.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
+						.filter(
+							(card) =>
+								!searchString?.length ||
+								card.name.toLowerCase().includes(searchString.toLowerCase()) ||
+								card.text?.toLowerCase().includes(searchString.toLowerCase()),
+						)
+						.map((card) => ({
+							id: card.id,
+							icon: this.i18n.getCardImage(card.id, { isBgs: true }),
+							name: card.name,
+							tier: card.techLevel ?? 0,
+						}))
+						.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name]));
+					console.debug('search', result);
+					return result;
+				}),
+				// startWith([]),
+				// FIXME
+				// tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				// tap((filter) => this.cdr.detectChanges()),
+				// tap((heroes) => console.debug('minions', heroes)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((minions) => {
+				this.allMinions = [];
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+				setTimeout(() => {
+					this.allMinions = minions;
+					console.debug('minions', this.allMinions);
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				});
+			});
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
 			.subscribe((data) => {
 				this.searchString.next(data);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
 			});
+		// To bind the async pipes
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
