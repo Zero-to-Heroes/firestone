@@ -1092,9 +1092,35 @@
 			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
 		},
 		"decktracker": {
-			"overlay": {
+			"global": {
 				"minions-play-order": "Minions play order",
-				"minions-play-order-tooltip": "Show the play order of each minion on board, to help you track deathrattle resolve orders (or anything that relies on the order in which minions arrived on the board)"
+				"minions-play-order-tooltip": "Show the play order of each minion on board, to help you track deathrattle resolve orders (or anything that relies on the order in which minions arrived on the board)",
+				"show-title-bar": "Show title bar",
+				"show-title-bar-tooltip": "Show/hide the deck name and cards left in hand and deck",
+				"show-control-bar": "Show control bar",
+				"show-control-bar-tooltip": "Show/hide the bar with the logo and the control buttons",
+				"show-tooltips-on-hover": "Show card tooltips",
+				"show-rarity-color": "Show rarity colors",
+				"show-rarity-color-tooltip": "Color the mana cost of cards in the tracker based on the card's rarity",
+				"show-deck-winrate": "Show deck winrate",
+				"show-deck-winrate-tooltip": "Show the deck overall Ranked winrate above the tracker, if we have data (in either Standard or Wild, based on the current game mode)",
+				"show-matchup-winrate": "Show matchup winrate",
+				"show-matchup-winrate-tooltip": "Show the deck overall Ranked winrate against the opponent's class above the tracker, if we have data (in either Standard or Wild, based on the current game mode)",
+				"show-gifts-separately": "Show gifts separately",
+				"show-gifts-separately-tooltip": "Display cards that have been created in their own lines (one line for each different creator)",
+				"show-stats-change": "Show stats change",
+				"show-stats-change-tooltip": "Show stats changed for some cards in the decklist (e.g. Ignite, Blacksmithing Hammer)",
+				"show-cost-reduction": "Update cost in deck",
+				"show-cost-reduction-tooltip": "Update the mana cost of cards in the deck when their cost has been modified by an effect (e.g. Incanter's Flow)",
+				"highlight-related-cards": "Highlight related cards",
+				"highlight-related-cards-tooltip": "When active, related cards will be highlighted on your decklist when mousing over specific cards (for instance, mousing over Double Jump in your decklist will highlight all Outcast cards in your deck)",
+				"close-tracker-on-end": "Close tracker on game end",
+				"close-tracker-on-end-tooltip": "Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually",
+				"close-tracker-on-end-advanced": "Got it, Firestone won't close the tracker when the match ends",
+				"reset-button": "Reset positions",
+				"reset-button-confirm": "Are you sure?",
+				"reset-button-tooltip": "Reset the decktracker positions. This can solve an issue where your tracker doesn't show up anymore on screen",
+				"reset-button-confirmation": "Decktracker positions have been reset, and will be applied in your next match."
 			}
 		},
 		"collection": {
