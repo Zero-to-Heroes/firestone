@@ -104,6 +104,7 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerPosition: { left: number; top: number };
 
+	readonly decktrackerShowMinionPlayOrderOnBoard: boolean = true;
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;

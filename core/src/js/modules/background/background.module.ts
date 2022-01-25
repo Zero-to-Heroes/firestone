@@ -258,6 +258,7 @@ import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/overlay
 import { BgsLeaderboardWidgetWrapperComponent } from '../../components/overlays/bgs-leaderboard-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
+import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
 import { OpponentCthunWidgetWrapperComponent } from '../../components/overlays/counters/opponent-cthun-widget-wrapper.component';
@@ -291,6 +292,7 @@ import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overla
 import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
 import { MercsPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-player-team-widget-wrapper.component';
 import { MercsTreasureSelectionWidgetWrapperComponent } from '../../components/overlays/mercs-treasure-selection-widget-wrapper.component';
+import { MinionOnBoardOverlayComponent } from '../../components/overlays/minions-on-board/minion-on-board-overlay.component';
 import { OpponentHandWidgetWrapperComponent } from '../../components/overlays/opponent-hand-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
@@ -793,6 +795,8 @@ const components = [
 		DecktrackerOpponentWidgetWrapperComponent,
 		SecretsHelperWidgetWrapperComponent,
 		OpponentHandWidgetWrapperComponent,
+		ConstructedBoardWidgetWrapperComponent,
+		MinionOnBoardOverlayComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,

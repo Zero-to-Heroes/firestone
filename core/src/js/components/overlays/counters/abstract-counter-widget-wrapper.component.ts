@@ -39,7 +39,7 @@ export const templateBase = `
 export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
 	showWidget$: Observable<boolean>;
 	activeCounter: CounterType;
-	side: string;
+	side: 'player' | 'opponent';
 
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
 		gameWidth * 0.5 + 150 + Math.random() * 150;

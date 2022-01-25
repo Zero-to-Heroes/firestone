@@ -40,6 +40,7 @@ export class CardRecruitedParser implements EventParser {
 			zone: 'PLAY',
 			temporaryCard: false,
 			rarity: card.rarity ?? dbCard.rarity?.toLowerCase(),
+			playTiming: GameState.playTiming++,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);

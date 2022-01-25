@@ -1091,6 +1091,12 @@
 			"flash-window": "Flash HS window",
 			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
 		},
+		"decktracker": {
+			"overlay": {
+				"minions-play-order": "Minions play order",
+				"minions-play-order-tooltip": "Show the play order of each minion on board, to help you track deathrattle resolve orders (or anything that relies on the order in which minions arrived on the board)"
+			}
+		},
 		"collection": {
 			"history-show-only-new-cards": "Show only new cards",
 			"pack-stats-show-only-buyable-packs": "Only show main packs",

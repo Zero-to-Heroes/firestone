@@ -82,6 +82,7 @@ export class CardBackToDeckParser implements EventParser {
 				cardName: this.i18n.getCardName(dbCard.id),
 				manaCost: dbCard.cost,
 				rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
+				playTiming: null,
 			} as DeckCard)
 		);
 	}

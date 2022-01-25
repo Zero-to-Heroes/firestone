@@ -2,7 +2,7 @@ import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { COUNTERSPELLS, globalEffectCards } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -77,6 +77,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				manaCost: card.manaCost ?? refCard?.cost,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
+				playTiming: isOnBoard ? GameState.playTiming++ : null,
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
@@ -86,6 +87,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,
 				temporaryCard: false,
+				playTiming: isOnBoard ? GameState.playTiming++ : null,
 			} as DeckCard);
 
 		const isCardCountered =
@@ -132,9 +134,6 @@ export class CardPlayedFromHandParser implements EventParser {
 			cardsPlayedThisTurn: isCardCountered
 				? deck.cardsPlayedThisTurn
 				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
-			cardsPlayedThisMatch: isCardCountered
-				? deck.cardsPlayedThisMatch
-				: ([...deck.cardsPlayedThisMatch, cardWithZone] as readonly DeckCard[]),
 			globalEffects: newGlobalEffects,
 			spellsPlayedThisMatch:
 				!isCardCountered && refCard?.type === 'Spell'
@@ -150,8 +149,18 @@ export class CardPlayedFromHandParser implements EventParser {
 			? newPlayerDeck
 			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards, this.i18n);
 
-		return Object.assign(new GameState(), currentState, {
+		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
+			cardsPlayedThisMatch: isCardCountered
+				? currentState.cardsPlayedThisMatch
+				: ([
+						...currentState.cardsPlayedThisMatch,
+						{
+							entityId: cardWithZone.entityId,
+							cardId: cardWithZone.cardId,
+							side: isPlayer ? 'player' : 'opponent',
+						},
+				  ] as readonly ShortCard[]),
 		});
 	}
 

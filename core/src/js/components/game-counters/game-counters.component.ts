@@ -93,7 +93,11 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 		}
 	}
 
-	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {
+	private buildDefinition(
+		gameState: GameState,
+		activeCounter: CounterType,
+		side: 'player' | 'opponent',
+	): CounterDefinition {
 		switch (activeCounter) {
 			case 'galakrond':
 				return GalakrondCounterDefinition.create(gameState, side, this.i18n);

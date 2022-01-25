@@ -27,6 +27,7 @@ export class WeaponEquippedParser implements EventParser {
 			rarity: dbCard.rarity,
 			zone: 'PLAY',
 			temporaryCard: false,
+			playTiming: GameState.playTiming++,
 		} as DeckCard);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			weapon: card,

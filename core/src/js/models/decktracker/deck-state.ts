@@ -87,7 +87,7 @@ export class DeckState {
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
-	readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
+	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 
@@ -240,20 +240,6 @@ export class DeckState {
 
 	public hasBrilliantMacaw() {
 		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
-	}
-
-	public lastBattlecryPlayedForMacaw(allCards: CardsFacadeService): DeckCard {
-		return (
-			this.cardsPlayedThisMatch
-				.filter((card) => {
-					const ref = allCards.getCard(card.cardId);
-					return !!ref.mechanics?.length && ref.mechanics.includes('BATTLECRY');
-				})
-				// Because we want to know what card the macaw copies, so if we play two macaws in a row we still
-				// want the info
-				.filter((card) => card.cardId !== CardIds.BrilliantMacaw)
-				.pop()
-		);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

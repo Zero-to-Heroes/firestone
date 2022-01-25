@@ -162,7 +162,6 @@ export class TwitchAuthService {
 			spellsPlayedThisMatch: undefined,
 			dynamicZones: undefined,
 			cardsPlayedThisTurn: undefined,
-			cardsPlayedThisMatch: undefined,
 			cardsPlayedFromInitialDeck: undefined,
 		} as DeckState;
 	}

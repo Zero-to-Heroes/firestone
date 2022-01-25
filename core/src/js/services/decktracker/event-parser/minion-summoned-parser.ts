@@ -34,6 +34,7 @@ export class MinionSummonedParser implements EventParser {
 			creatorCardId: creatorCardId,
 			zone: 'PLAY',
 			temporaryCard: false,
+			playTiming: GameState.playTiming++,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, card);

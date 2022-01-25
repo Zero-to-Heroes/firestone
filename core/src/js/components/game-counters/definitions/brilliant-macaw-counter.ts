@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -16,7 +15,7 @@ export class BrilliantMacawCounterDefinition implements CounterDefinition {
 
 	static create(
 		gameState: GameState,
-		side: string,
+		side: 'player' | 'opponent',
 		allCards: CardsFacadeService,
 		i18n: LocalizationFacadeService,
 	): BrilliantMacawCounterDefinition {
@@ -25,18 +24,18 @@ export class BrilliantMacawCounterDefinition implements CounterDefinition {
 			return null;
 		}
 
-		const lastBattlecry: DeckCard = deck.lastBattlecryPlayedForMacaw(allCards);
-		if (!lastBattlecry) {
+		const lastBattlecryCardId: string = gameState.lastBattlecryPlayedForMacaw(allCards, side);
+		if (!lastBattlecryCardId) {
 			return null;
 		}
 		const tooltip = i18n.translateString(`counters.brilliant-macaw.${side}`, {
-			value: lastBattlecry.cardName,
+			value: allCards.getCard(lastBattlecryCardId).name,
 		});
 		return {
 			type: 'brilliantMacaw',
 			value: null,
 			valueImg: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.BrilliantMacaw}.jpg`,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastBattlecry.cardId}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastBattlecryCardId}.jpg`,
 			cssClass: 'brilliant-macaw-counter',
 			tooltip: tooltip,
 			standardCounter: true,

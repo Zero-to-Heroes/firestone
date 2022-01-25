@@ -73,6 +73,11 @@ import { Knob } from '../preference-slider.component';
 						messageWhenToggleValue="Got it, Firestone won't close the tracker when the match ends"
 						[valueToDisplayMessageOn]="false"
 					></preference-toggle>
+					<preference-toggle
+						field="decktrackerShowMinionPlayOrderOnBoard"
+						[label]="'settings.decktracker.overlay.minions-play-order' | owTranslate"
+						[tooltip]="'settings.decktracker.overlay.minions-play-order-tooltip' | owTranslate"
+					></preference-toggle>
 				</div>
 			</div>
 

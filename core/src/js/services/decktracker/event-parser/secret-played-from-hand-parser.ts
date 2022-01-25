@@ -2,7 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { SecretConfigService } from '../secret-config.service';
@@ -77,18 +77,24 @@ export class SecretPlayedFromHandParser implements EventParser {
 				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
-			cardsPlayedThisMatch:
-				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
-					? deck.cardsPlayedThisMatch
-					: ([...deck.cardsPlayedThisMatch, cardWithZone] as readonly DeckCard[]),
 			spellsPlayedThisMatch:
 				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
 					? deck.spellsPlayedThisMatch
 					: [...deck.spellsPlayedThisMatch, cardWithZone],
 		} as DeckState);
 
-		return Object.assign(new GameState(), currentState, {
+		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			cardsPlayedThisMatch: isCardCountered
+				? currentState.cardsPlayedThisMatch
+				: ([
+						...currentState.cardsPlayedThisMatch,
+						{
+							entityId: cardWithZone.entityId,
+							cardId: cardWithZone.cardId,
+							side: isPlayer ? 'player' : 'opponent',
+						},
+				  ] as readonly ShortCard[]),
 		});
 	}
 

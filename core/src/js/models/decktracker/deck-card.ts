@@ -39,6 +39,7 @@ export class DeckCard {
 	// Store state for cards like Ignite. Similar state info will be added for attack / health (maybe
 	// other things too)
 	readonly mainAttributeChange?: number;
+	readonly playTiming?: number;
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
