@@ -13,7 +13,7 @@ import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -264,7 +264,6 @@ export class BgsSimulatorMinionSelectionComponent
 			),
 		)
 			.pipe(
-				tap((info) => console.debug('gaaa', info)),
 				debounceTime(200),
 				map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -296,7 +295,6 @@ export class BgsSimulatorMinionSelectionComponent
 							tier: card.techLevel ?? 0,
 						}))
 						.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name]));
-					console.debug('search', result);
 					return result;
 				}),
 				// startWith([]),
@@ -313,7 +311,6 @@ export class BgsSimulatorMinionSelectionComponent
 				}
 				setTimeout(() => {
 					this.allMinions = minions;
-					console.debug('minions', this.allMinions);
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
