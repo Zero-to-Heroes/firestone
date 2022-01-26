@@ -72,7 +72,7 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="controls">
-				<div class="button" (click)="validate()" [owTranslate]="'select-button'"></div>
+				<div class="button" (click)="validate()" [owTranslate]="'battlegrounds.sim.select-button'"></div>
 			</div>
 		</div>
 	`,
