@@ -21,7 +21,6 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// TODO: merge this with the settings control button?
 export class ControlBugComponent implements AfterViewInit {
 	private settingsEventBus: EventEmitter<[string, string]>;
 

@@ -57,7 +57,6 @@ export class MercenariesHeroSearchComponent
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([heroSearchString]) => {
-				// TODO: force change detectiopn here?
 				this.searchString = heroSearchString;
 			});
 		this.searchFormSub$$ = this.searchForm.valueChanges

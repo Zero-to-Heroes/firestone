@@ -67,7 +67,6 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 					</div>
 				</div>
 			</div>
-			<!-- TODO: equipment stats -->
 			<div class="equipment-overview"></div>
 			<div class="benches-overview" *ngIf="!!stats.benches?.length">
 				<div class="title">Benches</div>

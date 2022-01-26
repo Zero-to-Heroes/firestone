@@ -62,19 +62,16 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 				filter(([replays, category]) => !!replays?.length && !!category),
 				map(([replays, category]) => {
 					const heroId = (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;
-					return (
-						replays
-							.filter((replay) => replay.gameMode === 'battlegrounds')
-							.filter((replay) => replay.playerRank != null)
-							.filter(
-								(replay) =>
-									!heroId ||
-									normalizeHeroCardId(heroId, true, this.allCards) ===
-										normalizeHeroCardId(replay.playerCardId, true, this.allCards),
-							)
-							// TODO: how to allow this to be a parameter?
-							.slice(0, 10)
-					);
+					return replays
+						.filter((replay) => replay.gameMode === 'battlegrounds')
+						.filter((replay) => replay.playerRank != null)
+						.filter(
+							(replay) =>
+								!heroId ||
+								normalizeHeroCardId(heroId, true, this.allCards) ===
+									normalizeHeroCardId(replay.playerCardId, true, this.allCards),
+						)
+						.slice(0, 10);
 				}),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting replays in ', this.constructor.name, info)),

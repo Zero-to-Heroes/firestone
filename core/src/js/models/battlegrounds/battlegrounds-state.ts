@@ -1,5 +1,4 @@
 import { Race } from '@firestone-hs/reference-data';
-import { VisualAchievement } from '../visual-achievement';
 import { BgsGame } from './bgs-game';
 import { BgsPanel } from './bgs-panel';
 import { BgsPanelId } from './bgs-panel-id.type';
@@ -16,7 +15,7 @@ export class BattlegroundsState {
 	readonly currentGame: BgsGame;
 	// readonly gameEnded: boolean; // Flag useful mostly for twitch to know when to hide the overlay
 	readonly forceOpen: boolean;
-	// TODO: maybe move this elsewhere, so as not to send it everytime we emit the BattlegroundsState?
+	// Maybe move this elsewhere, so as not to send it everytime we emit the BattlegroundsState?
 	// It is a pretty big object
 	// On the other hand, it changes frequently, maybe as often as the state itself, so I'm not sure
 	readonly postMatchStats: BgsPostMatchStats;

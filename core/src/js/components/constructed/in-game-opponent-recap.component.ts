@@ -51,7 +51,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 								{{ archetype.name }} ({{ archetype.archetypeProbability.toFixed(0) }}%)
 							</div>
 							<div class="warning" *ngIf="archetype.approximate" [helpTooltip]="archetype.missingCards">
-								Some played cards are not in this list. TODO: show which ones
+								Some played cards are not in this list.
 							</div>
 							<deck-list
 								class="full-list"
@@ -153,7 +153,6 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		return null;
 		// const format = formatFormat(state.metadata.formatType);
 		// const configForFormat = state.archetypesConfig.filter((conf) => conf.gameFormat === format);
-		// // TODO: use prefs to filter on the right time period
 		// const stats: readonly ArchetypeResults[] = state.archetypesStats.lastPatch.filter(
 		// 	(stat) => stat.gameFormat === format,
 		// );

@@ -35,7 +35,6 @@ import { groupByFunction } from '../../../services/utils';
 						</svg>
 					</div>
 				</div>
-				<!-- TODO: collapse caret -->
 				<i class="collapse-caret {{ open ? 'open' : 'close' }}">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#collapse_caret" />

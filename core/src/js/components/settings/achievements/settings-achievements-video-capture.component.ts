@@ -112,7 +112,7 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 	};
 
 	settingsForm = new FormGroup({
-		videoQuality: new FormControl('low'), // TODO: update with actual settings
+		videoQuality: new FormControl('low'),
 	});
 
 	resolution: number;

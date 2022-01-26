@@ -177,17 +177,6 @@ export class BattlegroundsContentComponent
 				tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
 				takeUntil(this.destroyed$),
 			);
-		// this.currentGame$ = this.store
-		// 	.listenBattlegrounds$(([state]) => state.currentGame)
-		// 	.pipe(
-		// 		debounceTime(1000),
-		// 		// TODO: narrow down the model to avoid having too many refreshes
-		// 		map(([currentGame]) => currentGame),
-		// 		// FIXME
-		// 		tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-		// 		tap((info) => cdLog('emitting currentGame in ', this.constructor.name, info)),
-		// 		takeUntil(this.destroyed$),
-		// 	);
 	}
 
 	async ngAfterViewInit() {

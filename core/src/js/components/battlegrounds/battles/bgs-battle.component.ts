@@ -719,8 +719,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private buildEntity(entity: Entity): BoardEntity {
-		// TODO: enchantments
-		// console.error('still needs to build enchantments');
 		return {
 			entityId: entity.id,
 			cardId: entity.cardID,

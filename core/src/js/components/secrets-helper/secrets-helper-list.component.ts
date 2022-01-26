@@ -125,7 +125,6 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 					cardClass: dbCard.cardClass,
 				} as VisualDeckCard);
 			});
-		// TODO: add an optional filter step based on user preference to see or not the ruled out secrets
 
 		return reducedOptions;
 	}

@@ -217,7 +217,7 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 			30 * inflationFactor,
 			40 * inflationFactor,
 			50 * inflationFactor,
-			50 * inflationFactor + lowestLegendRank - 500, // TODO: what if lowest legend is better than 500?
+			50 * inflationFactor + lowestLegendRank - 500,
 			50 * inflationFactor + lowestLegendRank - 100,
 			50 * inflationFactor + lowestLegendRank - 10,
 		];
