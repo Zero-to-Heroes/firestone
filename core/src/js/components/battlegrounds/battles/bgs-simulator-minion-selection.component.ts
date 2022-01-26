@@ -275,6 +275,7 @@ export class BgsSimulatorMinionSelectionComponent
 								(card.battlegroundsPremiumDbfId && card.techLevel) ||
 								TOKEN_CARD_IDS.includes(card.id as CardIds),
 						)
+						.filter((card) => !EXCLUDED_CARD_IDS.includes(card.id as CardIds))
 						.filter(
 							(card) =>
 								!tribeFilter ||
@@ -286,7 +287,8 @@ export class BgsSimulatorMinionSelectionComponent
 							(card) =>
 								!searchString?.length ||
 								card.name.toLowerCase().includes(searchString.toLowerCase()) ||
-								card.text?.toLowerCase().includes(searchString.toLowerCase()),
+								card.text?.toLowerCase().includes(searchString.toLowerCase()) ||
+								card.mechanics?.some((m) => m.toLowerCase().includes(searchString.toLowerCase())),
 						)
 						.map((card) => ({
 							id: card.id,
@@ -574,3 +576,5 @@ const TOKEN_CARD_IDS = [
 	CardIds.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
 	CardIds.Menagerist_AmalgamTokenBattlegrounds,
 ];
+
+const EXCLUDED_CARD_IDS = [CardIds.CattlecarpOfNzothBattlegrounds];
