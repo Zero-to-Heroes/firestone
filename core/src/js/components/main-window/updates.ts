@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.5.7',
+		version: '8.6.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,42 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'mercenaries',
+						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the mercenaries page would partially break after receiving coins for any merc.`,
+								type: 'content',
+								text: `Update app for patch 22.2. More details below :)`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where hotkeys would stop working if Firestone was started before Hearthstone.`,
+								type: 'feature',
+								text: `The simulator now supports the new Buddies. The abililty to add them to custom boards will be added soon.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `Add support for Vanndar and Drek'Thar. In the Hero tab, they appear as different hero for each allied class.`,
+							},
+							{
+								type: 'misc',
+								text: `Duel stats are now only loaded for the specific Time and MMR filters you've selected. This means that the initial load should be faster, and they will take less space in memory. The downside is that when you change these, you might have a small delay until the stats are reloaded.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an option (turned on by default) to show the order in which minions on board came into play. This can be particularly useful if you're trying to figure out the order in which deathrattles will trigger for instance.`,
 							},
 						],
 					},
@@ -74,11 +96,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue with the leaderboard mouse over (and minions pinning) when the Windows zoom is set at > 100%.`,
+								text: `Fix an issue where sometimes no minion would appear in the Simulator search results after entering a search term.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where hero achievements would not show up when using the app in non-English.`,
+								type: 'ui',
+								text: `Improve the display of the hero selection tooltip. It now is smaller and aligned with the game's own tooltip.`,
 							},
 						],
 					},
@@ -87,28 +109,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Flag cost reduction of cards in hand caused by Runed Mithril Rod.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards recruited from the deck (with or without the Recruit keyword) would not have the correct rarity.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add synergy highlight for Fireball Volley.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the tasks list would always show up at the left side of the widget, even when the widget was placed at the left side of the screen.`,
-							},
-							{
-								type: 'ui',
-								text: `Put the current level of abilities / equipments at the top of the image, instead of in the center, to try and improve the legibility. Let me know what you think :)`,
+								text: `Add card highlights for Alliance Bannerman.`,
 							},
 						],
 					},
@@ -116,17 +117,21 @@ export const updates: readonly Update[] = [
 						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where treasures and passives would not show up in run details.`,
+								type: 'feature',
+								text: `The Hero filter now lets you select a specific hero instead of a class.`,
+							},
+							{
+								type: 'feature',
+								text: `The Hero / Hero power / Signature treasure filters now don't show options that are incompatible with other choices (e.g. if you select Mindrender Illucia as a hero, it won't show you Rattlegore's Signature Traasures).`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'mercenaries',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a few incorrect string labels caused by typos during the internationalization process.`,
+								text: `Fix an issue where some tasks (especially Story ones) would not be in the proper order.`,
 							},
 						],
 					},
