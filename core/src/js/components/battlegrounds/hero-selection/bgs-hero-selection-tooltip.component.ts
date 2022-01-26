@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { getBuddy } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -11,6 +13,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	],
 	template: `
 		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ 'hidden': !_visible }">
+			<img class="buddy" [src]="buddyImage" *ngIf="buddyImage" />
 			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage" />
 			<div class="infos">
 				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
@@ -25,6 +28,7 @@ export class BgsHeroSelectionTooltipComponent {
 	_visible = true;
 	_cssClass: string;
 	heroPowerImage: string;
+	buddyImage: string;
 	totalMatches: number;
 	totalMatchesText: string;
 
@@ -39,6 +43,7 @@ export class BgsHeroSelectionTooltipComponent {
 		this._hero = value;
 		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
+		this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds));
 		this.totalMatchesText = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
 			value: this.totalMatches?.toLocaleString(this.i18n.formatCurrentLocale()) || 0,
 		});

@@ -6,7 +6,7 @@
 	display: flex;
 	background: var(--color-4);
 	height: 460px;
-	width: 500px;
+	width: 750px;
 	align-items: center;
 	padding: 10px;
 	position: relative;
@@ -22,7 +22,8 @@
 		display: none;
 	}
 
-	.hero-power {
+	.hero-power,
+	.buddy {
 		width: 210px;
 		margin-right: 20px;
 	}
@@ -67,7 +68,8 @@
 	width: 300px;
 	top: -50px;
 
-	.hero-power {
+	.hero-power,
+	.buddy {
 		display: none;
 	}
 
