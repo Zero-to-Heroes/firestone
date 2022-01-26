@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { formatClass } from '../../../services/hs-utils';
@@ -68,8 +69,12 @@ export class DuelsHeroStatVignetteComponent {
 		const card = value.cardId ? this.cards.getCard(value.cardId) : null;
 		this._stat = value;
 		this.cardId = value.cardId;
-		this.name = card?.name;
 		this.playerClassLoc = formatClass(card?.playerClass, this.i18n);
+		this.name =
+			value.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) ??
+			value.cardId.startsWith(CardIds.DrektharTavernBrawl)
+				? `${this.playerClassLoc} ${card?.name}`
+				: card?.name;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.playerWinrate = value.playerWinrate;
 		this.globalWinrate = value.globalWinrate;

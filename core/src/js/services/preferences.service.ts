@@ -4,8 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { DuelsClassFilterType } from '../models/duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from '../models/duels/duels-game-mode-filter.type';
+import { DuelsHeroFilterType } from '../models/duels/duels-hero-filter.type';
 import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../models/duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from '../models/duels/duels-time-filter.type';
@@ -465,9 +465,9 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsTopDecksClassFilter(value: DuelsClassFilterType) {
+	public async updateDuelsHeroFilter(value: DuelsHeroFilterType) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveTopDecksClassFilter: value };
+		const newPrefs: Preferences = { ...prefs, duelsActiveHeroFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

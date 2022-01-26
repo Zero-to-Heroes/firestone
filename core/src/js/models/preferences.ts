@@ -5,8 +5,8 @@ import { ArenaClassFilterType } from './arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from './arena/arena-time-filter.type';
 import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from './collection/filter-types';
-import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
+import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
@@ -341,7 +341,7 @@ export class Preferences {
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
-	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
+	readonly duelsActiveHeroFilter: DuelsHeroFilterType = 'all';
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveHeroPowerFilter: 'all' | string = 'all';

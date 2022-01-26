@@ -1,8 +1,9 @@
 import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
+import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { DuelsClassFilterType } from '../../models/duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from '../../models/duels/duels-game-mode-filter.type';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
+import { DuelsHeroFilterType } from '../../models/duels/duels-hero-filter.type';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat, DuelsHeroPlayerStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
@@ -12,26 +13,21 @@ import { DuelsTreasureStatTypeFilterType } from '../../models/duels/duels-treasu
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
 import { CardsFacadeService } from '../cards-facade.service';
-import { duelsTreasureRank, getDuelsHeroCardId, isPassive } from '../duels/duels-utils';
+import { duelsTreasureRank, isPassive } from '../duels/duels-utils';
 import { groupByFunction } from '../utils';
 
 export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[],
-	// timeFilter: DuelsTimeFilterType,
-	classFilter: DuelsClassFilterType,
+	heroFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	signatureTreasureFilter: 'all' | string,
 	statType: DuelsStatTypeFilterType,
-	// mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
 	return (
 		heroStats
-			// .filter((stat) => stat.date === timeFilter)
-			// For backward compatibility
-			// .filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
-			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
+			.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter))
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
@@ -47,11 +43,12 @@ export const filterDuelsHeroStats = (
 			)
 			// TODO: update for Vanndar
 			.filter((stat) => {
+				console.debug('considering stat', stat);
 				if (!searchString?.length) {
 					return true;
 				}
 
-				let cardId = getDuelsHeroCardId(stat.playerClass);
+				let cardId = normalizeDuelsHeroCardId(stat.heroPowerCardId);
 				if (statType === 'hero-power') {
 					cardId = stat.heroPowerCardId;
 				} else if (statType === 'signature-treasure') {
@@ -67,12 +64,10 @@ export const filterDuelsHeroStats = (
 
 export const filterDuelsTreasureStats = (
 	treasures: readonly DuelsTreasureStat[],
-	// timeFilter: DuelsTimeFilterType,
-	classFilter: DuelsClassFilterType,
+	heroFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	sigTreasureFilter: 'all' | string,
 	statType: DuelsTreasureStatTypeFilterType,
-	// mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsTreasureStat[] => {
@@ -84,9 +79,7 @@ export const filterDuelsTreasureStats = (
 		.filter((stat) => !!stat)
 		// Avoid generating errors when the API hasn't properly formatted the data yet
 		.filter((stat) => !(+stat.treasureCardId > 0))
-		// .filter((stat) => stat.date === timeFilter)
-		// .filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
-		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
+		.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter))
 		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
 		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
 		.filter((stat) => isCorrectType(stat, statType, allCards))
@@ -100,6 +93,11 @@ export const filterDuelsTreasureStats = (
 	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
 	if (!result.length) {
 		console.log('no treasure to show', treasures?.length);
+		console.debug(
+			'treasures',
+			heroFilter,
+			treasures.filter((stat) => !!stat).filter((stat) => !(+stat.treasureCardId > 0)),
+		);
 	}
 	return result;
 };
@@ -107,7 +105,7 @@ export const filterDuelsTreasureStats = (
 export const filterDuelsRuns = (
 	runs: readonly DuelsRun[],
 	timeFilter: DuelsTimeFilterType,
-	classFilter: DuelsClassFilterType,
+	heroFilter: DuelsHeroFilterType,
 	gameMode: DuelsGameModeFilterType,
 	patch: PatchInfo,
 	mmrFilter: number,
@@ -123,7 +121,7 @@ export const filterDuelsRuns = (
 		.filter((run) => run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
-		.filter((run) => (classFilter === 'all' ? true : run.heroCardId === getDuelsHeroCardId(classFilter)))
+		.filter((run) => (heroFilter === 'all' ? true : run.heroCardId === normalizeDuelsHeroCardId(heroFilter)))
 		.filter((stat) =>
 			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
@@ -159,7 +157,7 @@ export const buildDuelsHeroTreasurePlayerStats = (
 		}
 		const validRuns = playerRuns.filter((run) => isRelevantRun(run, key));
 		return {
-			heroClass: group[0].playerClass,
+			hero: group[0].hero,
 			periodStart: null,
 			cardId: key,
 			globalPopularity: (100 * totalRunsForGroup) / totalRuns,
@@ -199,7 +197,7 @@ export const buildDuelsHeroPlayerStats = (
 		}
 		const validRuns = runs.filter((run) => isRelevantRunForHeroStat(run, statType, key));
 		return {
-			heroClass: group[0].playerClass,
+			hero: group[0].hero,
 			periodStart: null,
 			cardId: key,
 			globalPopularity: (100 * totalRunsForGroup) / totalRuns,
@@ -224,7 +222,7 @@ export const getCurrentDeck = (
 	topDecks: readonly DuelsGroupedDecks[],
 	deckId: number,
 	timeFilter: DuelsTimeFilterType,
-	classFilter: DuelsClassFilterType,
+	heroFilter: DuelsHeroFilterType,
 	gameMode: DuelsGameModeFilterType,
 	patch: PatchInfo,
 	mmrFilter: number,
@@ -235,7 +233,7 @@ export const getCurrentDeck = (
 		if (!deck) {
 			return null;
 		}
-		const runs = filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, patch, mmrFilter);
+		const runs = filterDuelsRuns(deck.runs, timeFilter, heroFilter, gameMode, patch, mmrFilter);
 		return {
 			personal: true,
 			run: null,
@@ -325,7 +323,7 @@ const isRelevantRunForHeroStat = (run: DuelsRun, statType: string, key: string):
 const getGroupingKeyForHeroStat = (statType: DuelsStatTypeFilterType) => {
 	switch (statType) {
 		case 'hero':
-			return (stat: DuelsHeroStat) => getDuelsHeroCardId(stat.playerClass);
+			return (stat: DuelsHeroStat) => stat.hero;
 		case 'hero-power':
 			return (stat: DuelsHeroStat) => stat.heroPowerCardId;
 		case 'signature-treasure':

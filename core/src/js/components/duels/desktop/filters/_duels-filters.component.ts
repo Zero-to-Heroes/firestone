@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			></duels-treasure-passive-type-filter-dropdown>
 			<duels-mmr-filter-dropdown class="filter mmr-filter"></duels-mmr-filter-dropdown>
 			<duels-time-filter-dropdown class="filter time-filter"></duels-time-filter-dropdown>
-			<duels-class-filter-dropdown class="filter class-filter"></duels-class-filter-dropdown>
+			<duels-hero-filter-dropdown class="filter class-filter"></duels-hero-filter-dropdown>
 			<duels-hero-power-filter-dropdown class="filter hero-power-filter"></duels-hero-power-filter-dropdown>
 			<duels-signature-treasure-filter-dropdown
 				class="filter signature-treasure-filter"

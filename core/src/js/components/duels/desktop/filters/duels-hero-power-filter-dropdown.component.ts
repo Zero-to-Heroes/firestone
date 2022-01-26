@@ -6,6 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -59,64 +60,86 @@ export class DuelsHeroPowerFilterDropdownComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.options$ = this.store
-			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
-			.pipe(
-				filter(([stats]) => !!stats?.length),
-				map(([stats]) => [...new Set(stats.map((stat) => stat.heroPowerCardId))]),
-				map((heroPowerCardIds) => [
-					{
-						value: 'all',
-						label: this.i18n.translateString('app.duels.filters.hero-power.all'),
-					},
-					...heroPowerCardIds
-						.sort((a, b) => {
-							const aCard = this.allCards.getCard(a);
-							const bCard = this.allCards.getCard(b);
-							if (!aCard || !bCard) {
-								return 0;
-							}
-
-							const aName = aCard.name.toLowerCase();
-							const bName = bCard.name.toLowerCase();
-							if (aName < bName) {
-								return -1;
-							}
-							if (aName > bName) {
-								return 1;
-							}
+		this.options$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes),
+			this.store.listenPrefs$(
+				(prefs) => prefs.duelsActiveHeroFilter,
+				(prefs) => prefs.duelsActiveSignatureTreasureFilter,
+			),
+		).pipe(
+			filter(([[stats], [heroFilter, signatureFilter]]) => !!stats?.length),
+			map(([[stats], [heroFilter, signatureFilter]]) => {
+				const uniqueHeroPowers = [...new Set(stats.map((stat) => stat.heroPowerCardId))];
+				// Only show the hero powers that are relevant with the other filters
+				return uniqueHeroPowers
+					.filter((heroPower) =>
+						heroFilter === 'all'
+							? true
+							: duelsHeroConfigs
+									.find((conf) => conf.hero === heroFilter)
+									?.heroPowers?.includes(heroPower as CardIds),
+					)
+					.filter((heroPower) =>
+						signatureFilter === 'all'
+							? true
+							: duelsHeroConfigs
+									.find((conf) => conf.signatureTreasures?.includes(signatureFilter as CardIds))
+									?.heroPowers?.includes(heroPower as CardIds),
+					);
+			}),
+			map((heroPowerCardIds) => [
+				{
+					value: 'all',
+					label: this.i18n.translateString('app.duels.filters.hero-power.all'),
+				},
+				...heroPowerCardIds
+					.sort((a, b) => {
+						const aCard = this.allCards.getCard(a);
+						const bCard = this.allCards.getCard(b);
+						if (!aCard || !bCard) {
 							return 0;
-						})
-						.sort((a, b) => {
-							const aCard = this.allCards.getCard(a);
-							const bCard = this.allCards.getCard(b);
-							if (!aCard || !bCard) {
-								return 0;
-							}
+						}
 
-							const aClassName = aCard.playerClass.toLowerCase();
-							const bClassName = bCard.playerClass.toLowerCase();
-							if (aClassName < bClassName) {
-								return -1;
-							}
-							if (aClassName > bClassName) {
-								return 1;
-							}
+						const aName = aCard.name.toLowerCase();
+						const bName = bCard.name.toLowerCase();
+						if (aName < bName) {
+							return -1;
+						}
+						if (aName > bName) {
+							return 1;
+						}
+						return 0;
+					})
+					.sort((a, b) => {
+						const aCard = this.allCards.getCard(a);
+						const bCard = this.allCards.getCard(b);
+						if (!aCard || !bCard) {
 							return 0;
-						})
-						.map((heroPowerCardId) => {
-							const card = this.allCards.getCard(heroPowerCardId);
-							return {
-								value: heroPowerCardId,
-								label: `${card?.name ?? heroPowerCardId} (${formatClass(card.playerClass, this.i18n)})`,
-							};
-						}),
-				]),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting hero power options in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+						}
+
+						const aClassName = aCard.playerClass.toLowerCase();
+						const bClassName = bCard.playerClass.toLowerCase();
+						if (aClassName < bClassName) {
+							return -1;
+						}
+						if (aClassName > bClassName) {
+							return 1;
+						}
+						return 0;
+					})
+					.map((heroPowerCardId) => {
+						const card = this.allCards.getCard(heroPowerCardId);
+						return {
+							value: heroPowerCardId,
+							label: `${card?.name ?? heroPowerCardId} (${formatClass(card.playerClass, this.i18n)})`,
+						};
+					}),
+			]),
+			// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting hero power options in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
+		);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(

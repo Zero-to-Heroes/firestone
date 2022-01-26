@@ -1,15 +1,15 @@
-import { DuelsClassFilterType } from '../../../../../models/duels/duels-class-filter.type';
+import { DuelsHeroFilterType } from '../../../../../models/duels/duels-hero-filter.type';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
-export class DuelsTopDecksClassFilterSelectedEvent implements MainWindowStoreEvent {
+export class DuelsTopDecksHeroFilterSelectedEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
-		return 'DuelsTopDecksClassFilterSelectedEvent';
+		return 'DuelsTopDecksHeroFilterSelectedEvent';
 	}
 
-	constructor(public readonly value: DuelsClassFilterType) {}
+	constructor(public readonly value: DuelsHeroFilterType) {}
 
 	public eventName(): string {
-		return 'DuelsTopDecksClassFilterSelectedEvent';
+		return 'DuelsTopDecksHeroFilterSelectedEvent';
 	}
 
 	public isNavigationEvent(): boolean {

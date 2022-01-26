@@ -6,6 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -59,67 +60,88 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options$ = this.store
-			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
-			.pipe(
-				filter(([stats]) => !!stats?.length),
-				map(([stats]) => [...new Set(stats.map((stat) => stat.signatureTreasureCardId))]),
-				map((signatureTreasureCardIds) => [
-					{
-						value: 'all',
-						label: this.i18n.translateString('app.duels.filters.signature-treasure.all'),
-					},
-					...signatureTreasureCardIds
-						.sort((a, b) => {
-							const aCard = this.allCards.getCard(a);
-							const bCard = this.allCards.getCard(b);
-							if (!aCard || !bCard) {
-								return 0;
-							}
-
-							const aName = aCard.name.toLowerCase();
-							const bName = bCard.name.toLowerCase();
-							if (aName < bName) {
-								return -1;
-							}
-							if (aName > bName) {
-								return 1;
-							}
+		this.options$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes),
+			this.store.listenPrefs$(
+				(prefs) => prefs.duelsActiveHeroFilter,
+				(prefs) => prefs.duelsActiveHeroPowerFilter,
+			),
+		).pipe(
+			filter(([[stats], [heroFilter, heroPowerFilter]]) => !!stats?.length),
+			map(([[stats], [heroFilter, heroPowerFilter]]) => {
+				const uniqueSignatureTreasures = [...new Set(stats.map((stat) => stat.signatureTreasureCardId))];
+				return uniqueSignatureTreasures
+					.filter((sig) =>
+						heroFilter === 'all'
+							? true
+							: duelsHeroConfigs
+									.find((conf) => conf.hero === heroFilter)
+									?.signatureTreasures?.includes(sig as CardIds),
+					)
+					.filter((sig) =>
+						heroPowerFilter === 'all'
+							? true
+							: duelsHeroConfigs
+									.find((conf) => conf.heroPowers?.includes(heroPowerFilter as CardIds))
+									?.signatureTreasures?.includes(sig as CardIds),
+					);
+			}),
+			map((signatureTreasureCardIds) => [
+				{
+					value: 'all',
+					label: this.i18n.translateString('app.duels.filters.signature-treasure.all'),
+				},
+				...signatureTreasureCardIds
+					.sort((a, b) => {
+						const aCard = this.allCards.getCard(a);
+						const bCard = this.allCards.getCard(b);
+						if (!aCard || !bCard) {
 							return 0;
-						})
-						.sort((a, b) => {
-							const aCard = this.allCards.getCard(a);
-							const bCard = this.allCards.getCard(b);
-							if (!aCard || !bCard) {
-								return 0;
-							}
+						}
 
-							const aClassName = aCard.playerClass.toLowerCase();
-							const bClassName = bCard.playerClass.toLowerCase();
-							if (aClassName < bClassName) {
-								return -1;
-							}
-							if (aClassName > bClassName) {
-								return 1;
-							}
+						const aName = aCard.name.toLowerCase();
+						const bName = bCard.name.toLowerCase();
+						if (aName < bName) {
+							return -1;
+						}
+						if (aName > bName) {
+							return 1;
+						}
+						return 0;
+					})
+					.sort((a, b) => {
+						const aCard = this.allCards.getCard(a);
+						const bCard = this.allCards.getCard(b);
+						if (!aCard || !bCard) {
 							return 0;
-						})
-						.map((signatureTreasureCardId) => {
-							const card = this.allCards.getCard(signatureTreasureCardId);
-							return {
-								value: signatureTreasureCardId,
-								label: `${card?.name ?? signatureTreasureCardId} (${formatClass(
-									card.playerClass,
-									this.i18n,
-								)})`,
-							};
-						}),
-				]),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting signature treasure options in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+						}
+
+						const aClassName = aCard.playerClass.toLowerCase();
+						const bClassName = bCard.playerClass.toLowerCase();
+						if (aClassName < bClassName) {
+							return -1;
+						}
+						if (aClassName > bClassName) {
+							return 1;
+						}
+						return 0;
+					})
+					.map((signatureTreasureCardId) => {
+						const card = this.allCards.getCard(signatureTreasureCardId);
+						return {
+							value: signatureTreasureCardId,
+							label: `${card?.name ?? signatureTreasureCardId} (${formatClass(
+								card.playerClass,
+								this.i18n,
+							)})`,
+						};
+					}),
+			]),
+			// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting signature treasure options in ', this.constructor.name, filter)),
+			takeUntil(this.destroyed$),
+		);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(

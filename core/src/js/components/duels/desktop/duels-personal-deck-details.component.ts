@@ -130,7 +130,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)

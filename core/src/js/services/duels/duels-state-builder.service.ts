@@ -36,12 +36,12 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
-import { getDuelsHeroCardId, getDuelsModeName } from './duels-utils';
+import { getDuelsModeName } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
 const DUELS_GLOBAL_STATS_URL_SPLIT =
-	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json?v=20';
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json?v=21';
 const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
@@ -437,7 +437,7 @@ export class DuelsStateBuilderService {
 				const dustCost = this.buildDustCost(deck, collectionState);
 				return {
 					...stat,
-					heroCardId: stat.heroCardId || getDuelsHeroCardId(stat.playerClass),
+					heroCardId: stat.heroCardId,
 					dustCost: dustCost,
 				} as DuelsDeckStat;
 			})

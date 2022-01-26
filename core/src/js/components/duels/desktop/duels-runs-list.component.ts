@@ -22,7 +22,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'duels-runs-list',
 	styleUrls: [`../../../../css/component/duels/desktop/duels-runs-list.component.scss`],
 	template: `
-		<!-- TODO translate -->
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
 				<ng-container *ngIf="{ expandedRunIds: expandedRunIds$ | async } as value">
@@ -87,7 +86,7 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 				.listen$(
 					([main, nav]) => main.duels.runs,
 					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+					([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
 					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 					// TODO: MMR filter

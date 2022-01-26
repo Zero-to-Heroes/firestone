@@ -57,7 +57,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 // Deprecated
 export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: any) {
-		// TODO: stat per class
 		if (!value || value === this._stat) {
 			return;
 		}

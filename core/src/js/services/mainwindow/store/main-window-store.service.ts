@@ -103,7 +103,7 @@ import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-s
 import { DuelsToggleExpandedRunEvent } from './events/duels/duels-toggle-expanded-run-event';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from './events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
-import { DuelsTopDecksClassFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
+import { DuelsTopDecksHeroFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSearchEvent } from './events/duels/duels-treasure-search-event';
@@ -228,7 +228,7 @@ import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-
 import { DuelsToggleExpandedRunProcessor } from './processors/duels/duels-toggle-expanded-run-processor';
 import { DuelsToggleShowHiddenPersonalDecksProcessor } from './processors/duels/duels-toggle-show-hidden-personal-decks-processor';
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
-import { DuelsTopDecksClassFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
+import { DuelsHeroFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSearchProcessor } from './processors/duels/duels-treasure-search-processor';
@@ -805,8 +805,8 @@ export class MainWindowStoreService {
 			DuelsTreasurePassiveTypeFilterSelectedEvent.eventName(),
 			new DuelsTreasurePassiveTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
-			DuelsTopDecksClassFilterSelectedEvent.eventName(),
-			new DuelsTopDecksClassFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+			DuelsTopDecksHeroFilterSelectedEvent.eventName(),
+			new DuelsHeroFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsTopDecksDustFilterSelectedEvent.eventName(),
 			new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),

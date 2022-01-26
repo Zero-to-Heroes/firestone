@@ -179,9 +179,9 @@ import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.comp
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
-import { DuelsClassFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-class-filter-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
+import { DuelsHeroFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-filter-dropdown.component';
 import { DuelsHeroPowerFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-power-filter-dropdown.component';
 import { DuelsHeroSortDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-sort-dropdown.component';
 import { DuelsLeaderboardGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
@@ -735,7 +735,7 @@ const components = [
 		DuelsTreasurePassiveTypeFilterDropdownComponent,
 		DuelsHeroSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
-		DuelsClassFilterDropdownComponent,
+		DuelsHeroFilterDropdownComponent,
 		DuelsDustFilterDropdownComponent,
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,

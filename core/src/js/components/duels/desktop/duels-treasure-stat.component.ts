@@ -55,7 +55,7 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
@@ -83,12 +83,10 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 						[
 							filterDuelsTreasureStats(
 								duelStats,
-								// timeFilter,
 								classFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
 								statType,
-								// mmrFilter,
 								this.allCards,
 								treasureSearchString,
 							),

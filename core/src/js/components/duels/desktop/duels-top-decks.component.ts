@@ -7,10 +7,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { Subscription } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
+import { DuelsHeroFilterType } from '../../../models/duels/duels-hero-filter.type';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
@@ -58,7 +59,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -161,7 +162,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 	private applyFilters(
 		grouped: DuelsGroupedDecks,
 		mmrFilter: number,
-		classFilter: DuelsClassFilterType,
+		heroFilter: DuelsHeroFilterType,
 		heroPowerFilter: 'all' | string,
 		sigTreasureFilter: 'all' | string,
 		timeFilter: DuelsTimeFilterType,
@@ -172,7 +173,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 			...grouped,
 			decks: grouped.decks
 				.filter((deck) => this.mmrFilter(deck, mmrFilter))
-				.filter((deck) => this.classFilter(deck, classFilter))
+				.filter((deck) => this.heroFilter(deck, heroFilter))
 				.filter((deck) => this.heroPowerFilter(deck, heroPowerFilter))
 				.filter((deck) => this.sigTreasureFilter(deck, sigTreasureFilter))
 				.filter((deck) => this.timeFilter(deck, timeFilter, patch))
@@ -184,8 +185,8 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 		return !filter || deck.rating >= filter;
 	}
 
-	private classFilter(deck: DuelsDeckStat, filter: DuelsClassFilterType): boolean {
-		return !filter || filter === 'all' || deck.playerClass === filter;
+	private heroFilter(deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean {
+		return !filter || filter === 'all' || deck.heroCardId === normalizeDuelsHeroCardId(filter);
 	}
 
 	private heroPowerFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {

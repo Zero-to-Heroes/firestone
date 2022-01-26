@@ -49,17 +49,15 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent imple
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
 				([main, nav]) => nav.navigationDuels.heroSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
@@ -67,36 +65,32 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent imple
 				map(
 					([
 						duelStats,
-						mmrPercentiles,
 						runs,
 						heroSearchString,
 						statType,
 						gameMode,
 						heroSorting,
 						timeFilter,
-						classFilter,
+						heroFilter,
 						heroPowerFilter,
 						sigTreasureFilter,
-						mmrFilter,
 						hideThreshold,
 						patch,
 					]) =>
 						[
 							filterDuelsHeroStats(
 								duelStats,
-								// timeFilter,
-								classFilter,
+								heroFilter,
 								heroPowerFilter,
 								sigTreasureFilter,
 								statType,
-								// mmrFilter,
 								this.allCards,
 								heroSearchString,
 							),
 							filterDuelsRuns(
 								runs,
 								timeFilter,
-								classFilter,
+								heroFilter,
 								gameMode,
 								patch,
 								0,

@@ -66,7 +66,6 @@ export class DuelsTreasureSearchComponent
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([searchString]) => {
-				// TODO: force change detectiopn here?
 				this.searchString = searchString;
 			});
 	}

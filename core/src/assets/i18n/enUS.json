@@ -11,7 +11,8 @@
 			"rogue": "Rogue",
 			"shaman": "Shaman",
 			"warlock": "Warlock",
-			"warrior": "Warrior"
+			"warrior": "Warrior",
+			"neutral": "Neutral"
 		},
 		"format": {
 			"standard": "Standard",
@@ -649,6 +650,9 @@
 					"casual": "Casual",
 					"casual-tooltip": "Community stats will only show data for Heroic Duels. Your own stats will only show Casual.",
 					"heroic": "Heroic"
+				},
+				"hero": {
+					"all": "All Heroes"
 				},
 				"hero-power": {
 					"all": "All Hero Powers"
