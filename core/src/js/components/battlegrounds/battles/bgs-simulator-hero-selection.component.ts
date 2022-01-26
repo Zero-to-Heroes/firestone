@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -8,12 +9,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'bgs-simulator-hero-selection',
@@ -65,7 +68,7 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 				<div class="heroes" scrollable>
 					<div
-						*ngFor="let hero of allHeroes$ | async"
+						*ngFor="let hero of allHeroes"
 						class="hero-portrait-frame"
 						[ngClass]="{ 'selected': hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
@@ -86,7 +89,9 @@ import { sortByProperties } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
+export class BgsSimulatorHeroSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
@@ -110,7 +115,7 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 
 	searchForm = new FormControl();
 
-	allHeroes$: Observable<readonly Hero[]>;
+	allHeroes: readonly Hero[];
 	currentHeroId: string;
 	heroIcon: string;
 	heroName: string;
@@ -121,45 +126,71 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
 	) {
-		this.allHeroes$ = this.searchString.asObservable().pipe(
-			debounceTime(200),
-			distinctUntilChanged(),
-			map((searchString) =>
-				this.allCards
-					.getCards()
-					.filter((card) => card.battlegroundsHero)
-					.filter(
-						(card) => !searchString?.length || card.name.toLowerCase().includes(searchString.toLowerCase()),
-					)
-					.map((card) => ({
-						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
-						name: card.name,
-						heroPower: {
-							id: getHeroPower(card.id),
-							text: this.sanitizeText(allCards.getCard(getHeroPower(card.id))?.text),
-						},
-					}))
-					.sort(sortByProperties((hero: Hero) => [hero.name])),
-			),
-			// startWith([]),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((heroes) => console.debug('heroes', heroes)),
-		);
+		super(store, cdr);
+		this.cdr.detach();
+	}
+
+	ngAfterContentInit(): void {
+		this.searchString
+			.asObservable()
+			.pipe(
+				debounceTime(200),
+				distinctUntilChanged(),
+				map((searchString) =>
+					this.allCards
+						.getCards()
+						.filter((card) => card.battlegroundsHero)
+						.filter(
+							(card) =>
+								!searchString?.length || card.name.toLowerCase().includes(searchString.toLowerCase()),
+						)
+						.map((card) => ({
+							id: card.id,
+							icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
+							name: card.name,
+							heroPower: {
+								id: getHeroPower(card.id),
+								text: this.sanitizeText(this.allCards.getCard(getHeroPower(card.id))?.text),
+							},
+						}))
+						.sort(sortByProperties((hero: Hero) => [hero.name])),
+				),
+				// startWith([]),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((heroes) => console.debug('heroes', heroes)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((heroes) => {
+				this.allHeroes = [];
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+				setTimeout(() => {
+					this.allHeroes = heroes;
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				});
+			});
 		this.subscription = this.searchForm.valueChanges
-			.pipe(debounceTime(200))
-			.pipe(distinctUntilChanged())
+			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
 			.subscribe((data) => {
 				this.searchString.next(data);
 			});
+		// To bind the async pipes
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.subscription.unsubscribe();
 	}
 
