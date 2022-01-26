@@ -268,6 +268,7 @@ export class BattlegroundsStoreService {
 							hero: gameEvent.additionalData.playerBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.playerBoard.heroPowerUsed,
+							heroPowerInfo: gameEvent.additionalData.playerBoard.heroPowerInfo,
 						},
 						{
 							heroCardId: gameEvent.additionalData.opponentBoard.cardId,
@@ -276,6 +277,7 @@ export class BattlegroundsStoreService {
 							hero: gameEvent.additionalData.opponentBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.opponentBoard.heroPowerUsed,
+							heroPowerInfo: gameEvent.additionalData.opponentBoard.heroPowerInfo,
 						},
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,

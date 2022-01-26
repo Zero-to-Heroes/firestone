@@ -1,3 +1,4 @@
+// TODO: rename to DuelsHeroFilter to include Vanndar & co
 export type DuelsClassFilterType =
 	| 'all'
 	| 'demonhunter'

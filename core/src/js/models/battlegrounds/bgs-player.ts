@@ -97,6 +97,7 @@ export class BgsPlayer implements IBgsPlayer {
 			friendly: true,
 			frenzyApplied: false,
 			definitelyDead: false,
+			immuneWhenAttackCharges: 0,
 		};
 	}
 

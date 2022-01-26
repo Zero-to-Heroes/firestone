@@ -1,4 +1,11 @@
-import { allDuelsTreasureCardIds, CardIds } from '@firestone-hs/reference-data';
+import {
+	allDuelsTreasureCardIds,
+	CardIds,
+	duelsActivePool2,
+	duelsActivePool2UltraRare,
+	duelsPassivePool2,
+	duelsPassivePool2UltraRare,
+} from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 
 const PASSIVES = [];
@@ -66,6 +73,19 @@ const SIGNATURE_TREASURES = [
 	CardIds.HornsOfFlameTavernBrawlToken,
 	CardIds.SoulstoneTrapTavernBrawlToken,
 	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
+
+	CardIds.ValorousDisplayTavernBrawlToken,
+	CardIds.ElementalChaosTavernBrawlToken,
+	CardIds.PactOfTheLichTavernBrawlToken,
+	CardIds.MagisterUnchainedTavernBrawlToken,
+	CardIds.GiftOfTheHeartTavernBrawlToken,
+	CardIds.ForTheHordeTavernBrawlToken,
+	CardIds.ForgeInLightTavernBrawlToken,
+	CardIds.SpymastersGambitTavernBrawlToken,
+	CardIds.StalkersSuppliesTavernBrawlToken,
+	CardIds.RendingAmbushTavernBrawlToken,
+	CardIds.DevoutBlessingsTavernBrawlToken,
+	CardIds.ForTheAllianceTavernBrawlToken,
 ];
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
@@ -89,95 +109,18 @@ export const duelsTreasureRank = (cardId: string): number => {
 	if (!allDuelsTreasureCardIds.includes(cardId as CardIds)) {
 		console.error('Incorrect config for duels card IDs?', cardId);
 	}
-	switch (cardId) {
-		// Passives
-		case CardIds.AvengingArmamentsTavernBrawl:
-		// case CardIds.AllTogetherNowTavernBrawl:
-		case CardIds.BattleStanceTavernBrawl:
-		case CardIds.BattleTotem2:
-		// case CardIds.BookOfWonders:
-		// case CardIds.Caltrops:
-		// case CardIds.CannibalismTavernBrawl:
-		case CardIds.BronzeSignetTavernBrawl:
-		case CardIds.CloakOfEmeraldDreamsTavernBrawl:
-		case CardIds.CorruptedFelstoneTavernBrawl:
-		case CardIds.DisksOfLegend:
-		case CardIds.DragonboneRitualTavernBrawl:
-		case CardIds.EerieStoneTavernBrawl:
-		case CardIds.ElixirOfVigorTavernBrawl:
-		case CardIds.EmeraldGogglesTavernBrawl:
-		case CardIds.EnduranceTrainingTavernBrawl:
-		case CardIds.ExpeditedBurialTavernBrawl:
-		case CardIds.FlameWavesTavernBrawl:
-		// case CardIds.FromTheSwampTavernBrawl:
-		case CardIds.GlacialDownpourTavernBrawl:
-		case CardIds.HagathasEmbrace:
-		case CardIds.IdolsOfEluneTavernBrawl:
-		case CardIds.ImpCredibleTrousersTavernBrawl:
-		case CardIds.IronRootsTavernBrawl:
-		case CardIds.KhadgarsScryingOrb:
-		case CardIds.LegendaryLootTavernBrawl:
-		case CardIds.MantleOfIgnitionTavernBrawl:
-		case CardIds.MeekMasteryTavernBrawl:
-		case CardIds.MummyMagic:
-		case CardIds.OoopsAllSpellsTavernBrawl:
-		case CardIds.OrbOfRevelationTavernBrawl:
-		case CardIds.RallyTheTroopsTavernBrawl:
-		case CardIds.RingOfBlackIceTavernBrawl:
-		case CardIds.RunicHelmTavernBrawl:
-		case CardIds.ScepterOfSummoning:
-		case CardIds.SpecialDeliveryTavernBrawl:
-		case CardIds.SpreadingSaplingsTavernBrawl:
-		// case CardIds.StarvingTavernBrawl:
-		case CardIds.TotemOfTheDead2:
-		case CardIds.UnlockedPotential:
-			return 2;
-
-		// Passives Ultra Rare
-		case CardIds.BandOfBeesTavernBrawl:
-		case CardIds.CapturedFlag:
-		case CardIds.DeathlyDeathTavernBrawl:
-		case CardIds.DoubleTime:
-		case CardIds.GreedyGainsTavernBrawl:
-		case CardIds.ManastormTavernBrawl:
-		case CardIds.OrbOfRevelationTavernBrawl:
-		case CardIds.PartyReplacementTavernBrawl:
-		case CardIds.RobeOfTheMagi:
-		case CardIds.Stargazing:
-			return 3;
-
-		// Actives
-		case CardIds.AncientReflectionsTavernBrawl:
-		case CardIds.ArchmageStaffTavernBrawl:
-		case CardIds.BananaSplitTavernBrawl:
-		case CardIds.BagOfStuffingTavernBrawl:
-		case CardIds.BladeOfTheBurningSun:
-		case CardIds.BookOfTheDeadTavernBrawl:
-		case CardIds.CanopicJarsTavernBrawl:
-		case CardIds.GnomishArmyKnife:
-		// case CardIds.GrimmerPatron:
-		case CardIds.HyperblasterTavernBrawl:
-		case CardIds.LocuuuustsTavernBrawl:
-		case CardIds.PhaorisBlade:
-		case CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl:
-		case CardIds.StaffOfScales:
-		case CardIds.WandOfDisintegrationTavernBrawl:
-			return 2;
-
-		// Actives Ultra Rare
-		case CardIds.ChaosTheoryTavernBrawl:
-		case CardIds.OverpoweredTavernBrawl:
-		case CardIds.DreamgroveRing:
-		case CardIds.EmbersOfRagnarosTavernBrawl:
-		case CardIds.WaxRager:
-		case CardIds.WishTavernBrawl:
-			return 3;
-
-		default:
-			return 1;
+	if (duelsPassivePool2.includes(cardId as CardIds) || duelsActivePool2.includes(cardId as CardIds)) {
+		return 2;
+	} else if (
+		duelsPassivePool2UltraRare.includes(cardId as CardIds) ||
+		duelsActivePool2UltraRare.includes(cardId as CardIds)
+	) {
+		return 3;
 	}
+	return 1;
 };
 
+// TODO: probably change this method to use the hero instead of the class
 export const getDuelsHeroCardId = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'demonhunter':

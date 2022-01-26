@@ -208,6 +208,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							tavernTier: this._faceOff.playerTavern ?? 6,
 							heroPowerId: null,
 							heroPowerUsed: true,
+							heroPowerInfo: 0,
 						},
 					},
 					opponentBoard: {
@@ -218,13 +219,17 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							tavernTier: this._faceOff.opponentTavern ?? 6,
 							heroPowerId: null,
 							heroPowerUsed: true,
+							heroPowerInfo: 0,
 						},
 					},
 					options: {
 						numberOfSimulations: 8000,
 						maxAcceptableDuration: 6000,
+					},
+					gameState: {
 						// No restrictions on tribes yet
 						validTribes: undefined,
+						currentTurn: 0,
 					},
 				},
 			} as BgsFaceOffWithSimulation);
@@ -593,6 +598,11 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
 				maxAcceptableDuration: 6000,
 			},
+			gameState: {
+				// No restrictions on tribes yet
+				validTribes: undefined,
+				currentTurn: 0,
+			},
 		};
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
@@ -651,6 +661,11 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				...this._faceOff.battleInfo.options,
 				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
 				maxAcceptableDuration: 6000,
+			},
+			gameState: {
+				// No restrictions on tribes yet
+				validTribes: undefined,
+				currentTurn: 0,
 			},
 		};
 		// console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
@@ -720,6 +735,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			taunt: entity.getTag(GameTag.TAUNT) === 1,
 			enchantments: entity['enchantments'],
 			definitelyDead: false,
+			immuneWhenAttackCharges: 0,
 		};
 	}
 

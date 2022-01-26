@@ -249,7 +249,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.Drekthar1:
 				return and(inDeck, minion, effectiveCostMore(card.getEffectiveManaCost() - 1));
-			case CardIds.VanndarStormpike:
+			case CardIds.VanndarStormpike1:
 				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
 			case CardIds.VitalitySurge:
 				return and(inDeck, minion);

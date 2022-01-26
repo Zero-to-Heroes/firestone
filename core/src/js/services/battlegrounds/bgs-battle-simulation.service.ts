@@ -51,7 +51,7 @@ export class BgsBattleSimulationService {
 		}
 	}
 
-	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[]) {
+	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[], currentTurn: number) {
 		const prefs = await this.prefs?.getPreferences();
 		if (!prefs.bgsEnableSimulation || !prefs.bgsFullToggle) {
 			console.log('[bgs-simulation] simulation turned off');
@@ -59,11 +59,14 @@ export class BgsBattleSimulationService {
 		}
 		const options: BgsBattleOptions = {
 			...battleInfo.options,
-			validTribes: races,
 		} as BgsBattleOptions;
 		const battleInfoInput: BgsBattleInfo = {
 			...battleInfo,
 			options,
+			gameState: {
+				validTribes: races,
+				currentTurn: currentTurn,
+			},
 		};
 		console.log(
 			'no-format',

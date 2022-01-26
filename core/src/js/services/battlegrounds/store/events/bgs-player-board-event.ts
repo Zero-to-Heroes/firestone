@@ -13,4 +13,5 @@ export interface PlayerBoard {
 	readonly hero: any;
 	readonly heroPowerCardId: string;
 	readonly heroPowerUsed: boolean;
+	readonly heroPowerInfo: number;
 }

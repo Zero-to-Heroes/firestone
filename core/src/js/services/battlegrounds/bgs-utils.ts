@@ -296,7 +296,7 @@ export const getAllCardsInGame = (
 		.getCards()
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
-		.filter((card) => !card.mechanics.includes(GameTag[GameTag.BUDDY]))
+		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
 		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
@@ -428,6 +428,7 @@ export const getAchievementsForHero = (
 	if (!result?.length) {
 		console.warn('Could not load achievements for hero', heroCardId, searchName, heroAchievements);
 	}
+	console.debug('achievements without section id', result);
 	return result;
 };
 
@@ -576,6 +577,16 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 369;
 		case CardIds.ScabbsCutterbutter2:
 			return 371;
+		case CardIds.Brukan11:
+			return 372;
+		case CardIds.Drekthar4:
+			// There is also a 376 for Duels, don't mix them up!
+			return 373;
+		case CardIds.VanndarStormpike2:
+			// There is also a 375 for Duels, don't mix them up!
+			return 374;
+		case CardIds.TavishStormpike2:
+			return 370;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;
@@ -641,6 +652,12 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'secret',
 			};
+		} else if (hasStreetMagician(boardInfo)) {
+			//console.debug('not supported');
+			return {
+				isSupported: false,
+				reason: 'secret',
+			};
 		}
 		return {
 			isSupported: true,
@@ -664,6 +681,13 @@ const hasBaron = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare2) ||
 		hasMinionOnBoard(boardInfo, CardIds.BaronRivendareBattlegrounds)
+	);
+};
+
+const hasStreetMagician = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.StreetMagicianBattlegrounds1) ||
+		hasMinionOnBoard(boardInfo, CardIds.StreetMagicianBattlegrounds2)
 	);
 };
 

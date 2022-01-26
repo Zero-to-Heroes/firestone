@@ -119,7 +119,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			.pipe(
 				this.mapData(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
-					return this.buildTiers(cardsInGame);
+					const result = this.buildTiers(cardsInGame);
+					console.warn('minions', result, cardsInGame);
+					return result;
 				}),
 			);
 		this.highlightedTribes$ = this.store

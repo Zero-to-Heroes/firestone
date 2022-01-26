@@ -83,6 +83,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			playerBoard: bgsPlayer,
 			opponentBoard: bgsOpponent,
 			options: null,
+			gameState: {
+				currentTurn: currentState.currentGame.currentTurn,
+				validTribes: currentState.currentGame.availableRaces,
+			},
 		};
 		const isSupported = isSupportedScenario(battleInfo);
 		if (!event.opponentBoard?.heroCardId || !normalizeHeroCardId(event.opponentBoard?.heroCardId)) {
@@ -104,7 +108,11 @@ export class BgsPlayerBoardParser implements EventParser {
 			currentGame: newGame,
 		} as BattlegroundsState);
 
-		this.simulation.startBgsBattleSimulation(battleInfo, result?.currentGame?.availableRaces ?? []);
+		this.simulation.startBgsBattleSimulation(
+			battleInfo,
+			result?.currentGame?.availableRaces ?? [],
+			result.currentGame?.currentTurn ?? 0,
+		);
 		return result;
 	}
 
@@ -137,6 +145,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				nonGhostCardId: player.getNormalizedHeroCardId(),
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
+				heroPowerInfo: playerBoard.heroPowerInfo,
 			},
 			board: bgsBoard,
 			secrets: secrets,

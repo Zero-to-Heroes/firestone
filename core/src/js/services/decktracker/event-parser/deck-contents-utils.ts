@@ -39,7 +39,7 @@ export const modifyDeckForSpecialCards = (
 			return handleHemet(deckState, allCards, i18n);
 		case CardIds.LadyPrestor1:
 			return handleLadyPrestor(deckState, allCards, i18n);
-		case CardIds.OoopsAllSpellsTavernBrawl:
+		case CardIds.OopsAllSpellsTavernBrawl:
 			return handleOoopsAllSpells(deckState, allCards, i18n);
 		case CardIds.ScepterOfSummoning:
 			return handleScepterOfSummoning(deckState, allCards, i18n);
@@ -60,7 +60,7 @@ export const modifyDeckForSpecialCardEffects = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	switch (cardId) {
-		case CardIds.VanndarStormpike:
+		case CardIds.VanndarStormpike1:
 			return handleVanndarStormpike(deckState, allCards, i18n);
 		default:
 			return deckState;

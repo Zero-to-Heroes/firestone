@@ -1015,6 +1015,7 @@ export class GameEvents {
 								hero: gameEvent.Value.PlayerBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
+								heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
 							},
 							opponentBoard: {
 								cardId: gameEvent.Value.OpponentBoard.CardId,
@@ -1023,6 +1024,7 @@ export class GameEvents {
 								hero: gameEvent.Value.OpponentBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
+								heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
 							},
 						},
 					} as GameEvent),

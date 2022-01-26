@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '2021-12-08-16-52';
+export const CARDS_VERSION = '2022-01-25-20-36';
 
 export const classes = [
 	'demonhunter',
@@ -116,7 +116,7 @@ export const globalEffectTriggers = [
 	},
 	{
 		effectPrefab: 'AVFX_VannderSpike_Trigger_DeckAE_Super',
-		cardId: CardIds.VanndarStormpike,
+		cardId: CardIds.VanndarStormpike1,
 	},
 ];
 
@@ -198,7 +198,8 @@ export const publicCardCreators = [
 	CardIds.BuildASnowman_BuildASnowbruteToken,
 	CardIds.BuildASnowman_BuildASnowgreToken,
 	CardIds.CagematchCustodian,
-	CardIds.CallPet,
+	CardIds.CallPet1,
+	CardIds.CallPet2,
 	CardIds.CallToAdventure,
 	CardIds.CaptainsParrotLegacy,
 	CardIds.CaptainsParrotVanilla,

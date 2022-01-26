@@ -37,6 +37,7 @@ export class BgsCustomSimulationState {
 						tavernTier: 6,
 						heroPowerId: null,
 						heroPowerUsed: true,
+						heroPowerInfo: 0,
 					},
 				},
 				opponentBoard: {
@@ -47,13 +48,17 @@ export class BgsCustomSimulationState {
 						tavernTier: 6,
 						heroPowerId: null,
 						heroPowerUsed: true,
+						heroPowerInfo: 0,
 					},
 				},
 				options: {
 					numberOfSimulations: 8000,
 					maxAcceptableDuration: 6000,
+				},
+				gameState: {
 					// No restrictions on tribes yet
 					validTribes: undefined,
+					currentTurn: 0,
 				},
 			},
 		} as BgsFaceOffWithSimulation);

@@ -45,6 +45,7 @@ export const filterDuelsHeroStats = (
 					? true
 					: stat.signatureTreasureCardId === signatureTreasureFilter,
 			)
+			// TODO: update for Vanndar
 			.filter((stat) => {
 				if (!searchString?.length) {
 					return true;
