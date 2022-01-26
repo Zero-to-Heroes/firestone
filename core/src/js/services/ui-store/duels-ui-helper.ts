@@ -96,7 +96,13 @@ export const filterDuelsTreasureStats = (
 		console.debug(
 			'treasures',
 			heroFilter,
-			treasures.filter((stat) => !!stat).filter((stat) => !(+stat.treasureCardId > 0)),
+			heroPowerFilter,
+			sigTreasureFilter,
+			treasures,
+			treasures
+				.filter((stat) => !!stat)
+				.filter((stat) => !(+stat.treasureCardId > 0))
+				.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter)),
 		);
 	}
 	return result;
@@ -121,7 +127,7 @@ export const filterDuelsRuns = (
 		.filter((run) => run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
-		.filter((run) => (heroFilter === 'all' ? true : run.heroCardId === normalizeDuelsHeroCardId(heroFilter)))
+		.filter((run) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(run.heroCardId) === heroFilter))
 		.filter((stat) =>
 			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)

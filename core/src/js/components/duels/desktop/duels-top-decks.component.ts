@@ -186,7 +186,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 	}
 
 	private heroFilter(deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean {
-		return !filter || filter === 'all' || deck.heroCardId === normalizeDuelsHeroCardId(filter);
+		return !filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === filter;
 	}
 
 	private heroPowerFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
