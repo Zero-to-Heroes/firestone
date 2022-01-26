@@ -368,18 +368,6 @@
 		"share": {
 			"title": "Partager"
 		},
-		"counters": {
-			"multicaster": {
-				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
-				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
-			},
-			"brilliant-macaw": {
-				"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
-				"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
-				"settings-name": "Ara brillant",
-				"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
-			}
-		},
 		"decktracker": {
 			"menu": {
 				"decks-header": "Decks",
@@ -720,10 +708,22 @@
 			"invalid-deck-code-button-text": "OK"
 		},
 		"stats": {
-			"deck-winrate": "Taux de victoires du deck",
+			"deck-winrate": "% victoire",
 			"deck-winrate-tooltip": "Taux de victoires de ce deck en Partie classée depuis {{value}}",
 			"deck-winrate-vs-class": "VS {{value}}",
 			"deck-winrate-vs-class-tooltip": "Taux de victoires de ce deck en Partie classée contre {{opponent}} depuis le {{date}}"
+		},
+		"counter": {
+			"multicaster": {
+				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
+				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
+			},
+			"brilliant-macaw": {
+				"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
+				"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
+				"settings-name": "Ara brillant",
+				"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
+			}
 		},
 		"card-burned": "Carte brûlée",
 		"card-transformed": "Carte transformée",
@@ -897,7 +897,7 @@
 		},
 		"board": {
 			"seen-just-now": "Troupe de guerre vue à l’instant",
-			"seen-turns-ago": "Troupe de guerre vue il y a {{value}}",
+			"seen-turns-ago": "Troupe de guerre vue il y a {{value}} tours",
 			"opponent-not-met": "Vous n’avez pas encore combattu cet adversaire",
 			"last-board-empty": "La dernière troupe de guerre était vide",
 			"total-damage": "Dégâts totaux",
@@ -926,7 +926,7 @@
 			"flash-window-tooltip": "Faire clignoter la fenêtre HS à votre tour, ou quand la phase de recrutement commence en Champs de bataille"
 		},
 		"collection": {
-			"history-show-only-new-cards": "N’afficher que les nouvelles cartes",
+			"history-show-only-new-cards": "Uniquement nouvelles",
 			"pack-stats-show-only-buyable-packs": "Afficher uniquement les paquets principaux",
 			"pack-stats-show-only-buyable-packs-tooltip": "Afficher uniquement les paquets qui peuvent être achetés dans la boutique, masquant tous les paquets promotionnels/récompenses",
 			"set-show-golden-stats": "Afficher les stats pour les cartes dorées"
