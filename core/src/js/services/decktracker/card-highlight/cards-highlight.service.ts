@@ -30,6 +30,7 @@ import {
 	inGraveyard,
 	inHand,
 	inOther,
+	legendary,
 	mech,
 	minion,
 	not,
@@ -141,6 +142,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.BarakKodobane1:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
+			case CardIds.BladeOfQuickeningTavernBrawlToken:
+				return and(inDeck, outcast);
 			case CardIds.BloodreaverGuldan:
 				return and(inGraveyard, minion, demon);
 			case CardIds.BookOfSpecters:
@@ -157,6 +160,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DeadRinger:
 				return and(inDeck, minion, deathrattle);
+			case CardIds.DevoutBlessingsTavernBrawlToken:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DoubleJump:
 				return and(inDeck, outcast);
 			case CardIds.DunBaldarBunker:
@@ -201,6 +206,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(inDeck, beast);
+			case CardIds.MagisterUnchainedTavernBrawlToken:
+				return and(inDeck, spell);
 			case CardIds.NzothGodOfTheDeep:
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
 			case CardIds.NzothTheCorruptor:
@@ -221,6 +228,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion, beast);
 			case CardIds.RingmasterWhatley:
 				return and(inDeck, minion, or(dragon, mech, pirate));
+			case CardIds.RoyalGreatswordTavernBrawlToken:
+				return and(inDeck, minion, legendary);
 			case CardIds.ScavengersIngenuity:
 				return and(inDeck, beast);
 			case CardIds.SelectiveBreederCore:

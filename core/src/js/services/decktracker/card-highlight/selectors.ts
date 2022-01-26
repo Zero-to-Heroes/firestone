@@ -1,4 +1,4 @@
-import { CardClass, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardType, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler } from './cards-highlight.service';
 
@@ -123,3 +123,8 @@ export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean =
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
 };
 export const rogue = cardClass(CardClass.ROGUE);
+
+export const rarity = (rarity: RarityTYpe) => (handler: Handler): boolean => {
+	return handler.referenceCardProvider()?.rarity?.toLowerCase() === rarity?.toLowerCase();
+};
+export const legendary = rarity('Legendary');
