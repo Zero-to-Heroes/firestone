@@ -95,7 +95,9 @@ export class CardHistoryItemComponent implements AfterViewInit {
 
 		this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
 		const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
-		this.cardName = history.isPremium ? `${this.i18n.translateString('global.hs-terms.golden')} ${name}` : name;
+		this.cardName = history.isPremium
+			? this.i18n.translateString('app.collection.card-history.golden-card', { cardName: name })
+			: name;
 		this.dustValue = this.getDust(dbCard, history.isPremium);
 		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			day: '2-digit',

@@ -415,7 +415,7 @@ export class FullCardComponent {
 			case 'BASIC_DEATH':
 				return this.i18n.translateString('app.collection.card-details.sounds.effect.death');
 			case 'BASIC_ATTACK':
-				return this.i18n.translateString('app.collection.card-details.sounds.effect.attak');
+				return this.i18n.translateString('app.collection.card-details.sounds.effect.attack');
 		}
 		for (const regex of this.REGEXES) {
 			// I have no idea why, but testing the regex once doesn't always work for some,

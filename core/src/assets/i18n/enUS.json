@@ -237,7 +237,8 @@
 				"you-have-viewed": "You've viewed {{numberOfCards}} out of {{totalCards}} cards",
 				"load-more-button": "Load more",
 				"empty-state-title": "No history yet",
-				"empty-state-subtitle": "Open a pack to start one!"
+				"empty-state-subtitle": "Open a pack to start one!",
+				"golden-card": "Golden {{cardName}}"
 			},
 			"card-search": {
 				"search-box-placeholder": "Search card...",
@@ -269,7 +270,7 @@
 						"oops": "Oops",
 						"threaten": "threaten",
 						"thanks": "Thanks",
-						"Sorry": "Sorry",
+						"sorry": "Sorry",
 						"concede": "Concede",
 						"start": "Start",
 						"timer": "Timer",
