@@ -11,7 +11,8 @@
 			"rogue": "Voleur",
 			"shaman": "Chaman",
 			"warlock": "Démoniste",
-			"warrior": "Guerrier"
+			"warrior": "Guerrier",
+			"neutral": "Neutre"
 		},
 		"format": {
 			"standard": "Standard",
@@ -151,6 +152,15 @@
 			"logged-in-as-header": "Connecté en tant que {{value}}",
 			"not-logged-in-header": "Connectez-vous pour enregistrer votre progression en ligne"
 		},
+		"gobal": {
+			"reward": {
+				"tooltip": "{{amount}} {{rewardType}}",
+				"dust": "poussière",
+				"pack": "paquet",
+				"gold": "or",
+				"card": "carte dorée"
+			}
+		},
 		"arena": {
 			"filters": {
 				"time": {
@@ -227,7 +237,8 @@
 				"you-have-viewed": "Vous avez consulté {{numberOfCards}} cartes sur {{totalCards}}",
 				"load-more-button": "Afficher plus",
 				"empty-state-title": "Pas encore d’historique",
-				"empty-state-subtitle": "Ouvez un paquet pour en commencer un !"
+				"empty-state-subtitle": "Ouvrez un paquet pour en commencer un !",
+				"golden-card": "{{cardName}} dorée"
 			},
 			"card-search": {
 				"search-box-placeholder": "Rechercher une carte...",
@@ -259,7 +270,7 @@
 						"oops": "Oups",
 						"threaten": "Menace",
 						"thanks": "Merci",
-						"Sorry": "Désolé",
+						"sorry": "Désolé",
 						"concede": "Capituler",
 						"start": "Entrée",
 						"timer": "Temps",
@@ -298,13 +309,14 @@
 				"load-more-button": "Charger plus",
 				"empty-state": {
 					"title": "Pas encore d’historique",
-					"subtitle": "Ouvez un paquet pour en commencer un !"
+					"subtitle": "Ouvrez un paquet pour en commencer un !"
 				}
 			},
 			"pack-stats": {
 				"title": "Paquets depuis toujours ({{value}})",
 				"best-opened-packs-title": "{{value}} meilleurs paquets ouverts",
-				"best-opened-packs-title-tooltip": "Meilleurs paquets que vous avez ouverts avec Firestone ouvert"
+				"best-opened-packs-title-tooltip": "Meilleurs paquets que vous avez ouverts avec Firestone ouvert",
+				"pack-stat-tooltip": "Vous avez reçu {{totalPacks}} paquets {{packName}} depuis que vous avez commencé à jouer à Hearthstone"
 			},
 			"set-stats": {
 				"title": "Stats de l’ensemble",
@@ -628,6 +640,11 @@
 					"own": "Posséder toutes les cartes",
 					"dust": "{{value}} poussières"
 				},
+				"stat-type": {
+					"hero": "Héros",
+					"hero-power": "Pouvoir héroïque",
+					"signature-treasure": "Trésor signature"
+				},
 				"game-mode": {
 					"all": "Tous les modes",
 					"all-tooltip": "Les stats de la communauté ne montreront les données que pour les duels héroïques. Vos propres stats afficheront à la fois les duels non classés et héroïques.",
@@ -635,8 +652,14 @@
 					"casual-tooltip": "Les stats de la communauté ne montreront les données que pour les duels héroïques. Vos propres stats afficheront n’afficheront que les duels non classés.",
 					"heroic": "Héroïque"
 				},
+				"hero": {
+					"all": "Tous les héros"
+				},
 				"hero-power": {
 					"all": "Tous les pouvoirs héroïques"
+				},
+				"signature-treasure": {
+					"all": "Tous les trésors signatures"
 				},
 				"hero-sort": {
 					"player-winrate": "Votre taux de victoires",
@@ -665,9 +688,59 @@
 				}
 			},
 			"deck-stat": {
+				"title": "Stats du deck",
 				"dust-missing-tooltip": "Poussière totale requise pour fabriquer les cartes manquantes dans ce deck",
 				"no-dust-missing-tooltip": "Vous possédez toutes les cartes",
-				"view-details-button": "Afficher les détails"
+				"view-details-button": "Afficher les détails",
+				"winrate": "Taux de victoires",
+				"runs": "Virées",
+				"starter-deck": "Deck de départ",
+				"final-deck": "Deck final",
+				"all-runs-with-deck": "Toutes les virées avec « {{deckName}} »",
+				"run-details": "Détails de la virée",
+				"number-of-runs": "Nombre de virées",
+				"average-wins-per-run": "Nb de victoires moy.",
+				"archive-deck-tooltip": "Archiver ce deck (vous pourrez le restaurer plus tard)",
+				"restore-deck-tooltip": "Restaurer ce deck",
+				"rename-deck-tooltip": "Renommer ce deck",
+				"rename-confirm-button": "OK"
+			},
+			"hero-stat": {
+				"global-winrate": "Taux de victoires global",
+				"your-winrate": "Votre taux de victoires",
+				"games-played": "Parties jouées",
+				"number-of-games-tooltip": "{{totalRuns}} virées enregistrées ({{popularity}} popularité)"
+			},
+			"run": {
+				"replays-title": "Replays pour la même virée",
+				"rating": "Cote",
+				"view-deck-button": "Voir le deck",
+				"view-run-button": "Voir la virée",
+				"minimize-run-button": "Minimiser",
+				"load-more-button": "Chargement de plus de virées..."
+			},
+			"stats": {
+				"tier-list-title": "Tierlist",
+				"tier-list-title-tooltip": "Les niveaux sont calculés en fonction de vos filtres actuels",
+				"tier-s-tooltip": "Le plus choisi",
+				"tier-a-tooltip": "Très bon choix",
+				"tier-b-tooltip": "Bon choix",
+				"tier-c-tooltip": "Choix correct",
+				"tier-d-tooltip": "À éviter",
+				"tier-e-tooltip": "Toujours éviter"
+			},
+			"leaderboard": {
+				"rank": "Rang",
+				"rating": "Cote",
+				"name": "Nom"
+			},
+			"search": {
+				"hero": {
+					"placeholder": "Rechercher un héros..."
+				},
+				"treasure": {
+					"placeholder": "Rechercher un trésor..."
+				}
 			},
 			"classes-recap": {
 				"title": "Aperçu des stats",
@@ -679,9 +752,119 @@
 				"best-winrate-against": "Meilleur taux de victoires contre",
 				"stat-tooltip": "Vous avez fait {{numberOfRuns}} virées et {{totalMatches}} parties en {{playerClass}} avec un taux de victoires de {{winrate}} %",
 				"faced-tooltip": "Vous avez rencontré un {{opponentClass}} {{totalMatches}} fois avec un taux de victoires de {{winrate}} %"
+			},
+			"empty-state": {
+				"title": "Rien ici pour le moment",
+				"subtitle": "Commencez à jouer à Duels pour recevoir des informations"
 			}
 		}
 	},
+	"counters": {
+		"attack": {
+			"you": "Votre plateau et votre héros ont un total de {{value}} ATQ",
+			"opponent": "Le plateau et le héros de votre adversaire ont un total de {{value}} ATQ"
+		},
+		"pogo": {
+			"you": "Vous avez joué {{value}} lapins-échasseurs",
+			"opponent": "Votre adversaire a joué {{value}} lapins-échasseurs"
+		},
+		"bolner": "{{value}} est le premier Cri de guerre joué pendant ce tour",
+		"multicaster": {
+			"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
+			"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
+		},
+		"brilliant-macaw": {
+			"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
+			"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
+			"settings-name": "Ara brillant",
+			"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
+		},
+		"cthun": {
+			"player": "Votre C’Thun a {{value}}/{{value}}",
+			"opponent": "Le C’Thun de votre adversaire a {{value}}/{{value}}"
+		},
+		"elemental": {
+			"player": "Vous avez joué {{lastTurn}} Élémentaires au tour précédent, et {{thisTurn}} Élémentaires pendant ce tour",
+			"opponent": "Votre adversaire a joué {{lastTurn}} Élémentaires au tour précédent, et {{thisTurn}} Élémentaires pendant ce tour"
+		},
+		"elwynn-boar": {
+			"player": "{{value}} de vos sangliers d’Elwynn sont morts",
+			"opponent": "{{value}} des sangliers d’Elwynn de votre adversaire sont morts"
+		},
+		"fatigue": {
+			"player": "Vos dégâts de fatigue actuels sont de {{value}}",
+			"opponent": "Vos dégâts de fatigue actuels de votre adversaire sont de {{value}}"
+		},
+		"galakrond": {
+			"player": "Vous avez conjuré Galakrond {{value}} fois",
+			"opponent": "Votre adversaire a conjuré Galakrond {{value}} fois"
+		},
+		"hero-power-damage": {
+			"player": "Votre pouvoir héroïque a infligé {{value}} dégâts pendant cette partie",
+			"opponent": "Le pouvoir héroïque de votre adversaire a infligé {{value}} dégâts pendant cette partie"
+		},
+		"jade": {
+			"player": "Votre prochain golem de jade aura {{value}}/{{value}}",
+			"opponent": "Le prochain golem de jade de votre adversaire aura {{value}}/{{value}}"
+		},
+		"libram": {
+			"player": "Vous avez joué {{value}} librams pendant cette partie",
+			"opponent": "Votre adversaire a joué {{value}} librams pendant cette partie"
+		},
+		"spell": {
+			"player": "Vous avez lancé {{value}} sorts pendant cette partie",
+			"opponent": "Votre adversaire a lancé {{value}} sorts pendant cette partie"
+		},
+		"watchpost": {
+			"player": "Vous avez joué {{value}} postes pendant cette partie",
+			"opponent": "Votre adversaire a joué {{value}} postes pendant cette partie"
+		}
+	},
+	"loading": {
+		"hotkey": "Pour voir l’application, appuyez sur",
+		"getting-ready": "Préparation",
+		"ready": "Prêt à l’action !"
+	},
+	"ftue": {
+		"title": "Bienvenue dans Firestone",
+		"subtitle": "Que diriez-vous d’une visite rapide ?",
+		"start-button": "Commençons",
+		"skip-button": "Passer",
+		"previous-button": "Précédent",
+		"steps": {
+			"decktracker": {
+				"title": "Decktracker",
+				"text": "Suivez vos cartes en jeu et les statistiques de vos decks."
+			},
+			"battlegrounds": {
+				"title": "Champs de bataille",
+				"text": "Notre aide en jeu apparaîtra une fois que vous commencerez une partie ! Nous vous accompagnerons tout au long de votre partie de la sélection de héros à l'après-match."
+			},
+			"duels": {
+				"title": "Duels",
+				"text": "Obtenez des statistiques globales et personnelles, ainsi qu’une sélection de decks à succès pour les duels non classés et héroïques."
+			},
+			"arena": {
+				"title": "Arène",
+				"text": "Consultez vos dernières virées d'arène et vos récompenses."
+			},
+			"replays": {
+				"title": "Replays",
+				"text": "Vous pouvez trouver ici vos dernières parties, divisées en actions étape par étape."
+			},
+			"achievements": {
+				"title": "Hauts faits",
+				"text": "Défiez-vous tout au long du jeu. Vous trouverez ici tous les exploits que vous avez accomplis."
+			}
+		}
+	},
+	"new-version": {
+		"title": "Nouvelle version : {{value}}",
+		"dont-show-again": "Ne plus afficher",
+		"dont-show-again-secondary": "Vous pourrez le modifier plus tard dans les paramètres",
+		"confirm-button": "Confirmer"
+	},
+	"mercenaries": {},
 	"decktracker": {
 		"zones": {
 			"global-effects": "Effets globaux",
@@ -712,18 +895,6 @@
 			"deck-winrate-tooltip": "Taux de victoires de ce deck en Partie classée depuis {{value}}",
 			"deck-winrate-vs-class": "VS {{value}}",
 			"deck-winrate-vs-class-tooltip": "Taux de victoires de ce deck en Partie classée contre {{opponent}} depuis le {{date}}"
-		},
-		"counter": {
-			"multicaster": {
-				"player": "Vous piocherez {{cardsTotal}} cartes des écoles de magie : {{schools}}",
-				"opponent": "Votre adversaire piochera {{cardsTotal}} cartes des écoles de magie : {{schools}}"
-			},
-			"brilliant-macaw": {
-				"player": "La dernière carte avec Cri de guerre que vous avez jouée est {{value}}",
-				"opponent": "La dernière carte avec Cri de guerre que votre adversaire a jouée est {{value}}",
-				"settings-name": "Ara brillant",
-				"settings-tooltip": "Quand vous avez un Ara brillant en main, affiche la dernière carte avec Cri de guerre que vous avez jouée, s’il y en a une"
-			}
 		},
 		"card-burned": "Carte brûlée",
 		"card-transformed": "Carte transformée",
@@ -924,6 +1095,38 @@
 			},
 			"flash-window": "Faire clignoter la fenêtre HS",
 			"flash-window-tooltip": "Faire clignoter la fenêtre HS à votre tour, ou quand la phase de recrutement commence en Champs de bataille"
+		},
+		"decktracker": {
+			"global": {
+				"minions-play-order": "Ordre d’apparition des serviteurs",
+				"minions-play-order-tooltip": "Afficher l’ordre d’apparition de chaque serviteur sur le champ de bataille, pour vous aider à suivre l’ordre de résolution des Râles d’agonie (ou tout ce qui dépend de l’ordre dans lequel les serviteurs sont arrivés sur le champ de bataille)",
+				"show-title-bar": "Afficher le titre",
+				"show-title-bar-tooltip": "Afficher/masquer le nom du deck et les cartes restantes dans la main et le deck",
+				"show-control-bar": "Afficher la barre de contrôle",
+				"show-control-bar-tooltip": "Afficher/masquer la barre avec le logo et les boutons de contrôle",
+				"show-tooltips-on-hover": "Afficher les infobulles des cartes",
+				"show-rarity-color": "Afficher les couleurs de rareté",
+				"show-rarity-color-tooltip": "Colorier le coût en mana des cartes dans le tracker en fonction de la rareté de la carte",
+				"show-deck-winrate": "Afficher le taux de victoires du deck",
+				"show-deck-winrate-tooltip": "Afficher le taux de victoires global du deck au-dessus du tracker, si nous avons des données (en mode Standard ou Libre, basé sur le format actuel)",
+				"show-matchup-winrate": "Afficher le taux de victoires du matchup",
+				"show-matchup-winrate-tooltip": "Afficher le taux de victoires du deck contre la classe de l’adversaire au-dessus du tracker, si nous avons des données (en mode Standard ou Libre, basé sur le format actuel)",
+				"show-gifts-separately": "Afficher les cadeaux séparément",
+				"show-gifts-separately-tooltip": "Afficher les cartes qui ont été créées dans leurs propres lignes (une ligne pour chaque créatrice différente)",
+				"show-stats-change": "Afficher les changements de stats",
+				"show-stats-change-tooltip": "Afficher les stats modifiées pour certaines cartes dans la liste (ex : Enflammer, Marteau de forgeron)",
+				"show-cost-reduction": "Mettre à jour le coût dans le deck",
+				"show-cost-reduction-tooltip": "Mettre à jour le coût en mana des cartes dans le deck quand leur coût a été modifié par un effet (ex : Flux de l’incantateur)",
+				"highlight-related-cards": "Faire briller les cartes liées",
+				"highlight-related-cards-tooltip": "Lorsque cette option est activée, les cartes liées dans votre liste de cartes sont en surbrillance quand vous passez la souris sur des cartes spécifiques (ex : passer la sourir sur Double saut dans votre liste de cartes mettra en surbrillance les cartes avec Marginal de votre deck)",
+				"close-tracker-on-end": "Fermer le tracker à la fin de la partie",
+				"close-tracker-on-end-tooltip": "Fermer automatiquement le tracker lorsque la partie se termine. Si désactivé, le tracker doit être fermé manuellement",
+				"close-tracker-on-end-advanced": "D’accord, Firestone ne fermera pas le tracker à la fin de la partie",
+				"reset-button": "Réinitialiser les positions",
+				"reset-button-confirm": "Confirmer ?",
+				"reset-button-tooltip": "Réinitialiser la position du decktracker. Cela peut résoudre un problème où votre tracker ne s’affiche plus à l’écran",
+				"reset-button-confirmation": "Les positions du decktracker ont été réinitialisées, et seront appliquées lors de votre prochaine partie."
+			}
 		},
 		"collection": {
 			"history-show-only-new-cards": "Uniquement nouvelles",
