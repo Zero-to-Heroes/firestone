@@ -31,8 +31,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[hero]="hero"
 				[achievements]="hero?.achievements"
 				[hideEmptyState]="true"
-				[heroTooltipPosition]="hero.tooltipPosition"
-				[tooltipAdditionalClass]="hero.tooltipClass"
+				[heroTooltipPosition]="hero?.tooltipPosition"
+				[tooltipAdditionalClass]="hero?.tooltipClass"
 			></bgs-hero-overview>
 		</div>
 	`,

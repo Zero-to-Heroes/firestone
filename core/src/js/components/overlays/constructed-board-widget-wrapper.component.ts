@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { ShortCard } from '../../models/decktracker/game-state';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -116,13 +116,11 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 					const top = this.buildBoard(opponentBoard, 'opponent');
 					const bottom = this.buildBoard(playerBoard, 'player');
 					const allPlayIndices = [...top, ...bottom].map((c) => c.playOrder).sort((n1, n2) => n1 - n2);
-					console.debug('boards info', top, bottom, allPlayIndices, opponentBoard, playerBoard);
 					return {
 						top: top.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
 						bottom: bottom.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
 					} as BoardOverlay;
 				}),
-				tap((info) => console.debug('board minions info', info)),
 			);
 	}
 

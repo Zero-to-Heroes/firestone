@@ -77,10 +77,11 @@
 		width: 100%;
 	}
 
+	// Position it to the other side of the hero
+	// Doesn't work because there isn't enough room to the right/left
 	&.left {
 		left: 375px;
 	}
-
 	&.right {
 		right: 375px;
 	}
