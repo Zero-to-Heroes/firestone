@@ -144,6 +144,26 @@ export class OverwolfService {
 		});
 	}
 
+	public addHotKeyHoldListener(hotkey: string, onDown, onUp): (message: any) => void {
+		// overwolf.settings.registerHotKey(hotkey, callback);
+		const callback = (hotkeyHold) => {
+			console.debug('hold', hotkeyHold);
+			if (hotkeyHold?.name === hotkey) {
+				if (hotkeyHold.state === 'down') {
+					onDown();
+				} else if (hotkeyHold.state === 'up') {
+					onUp();
+				}
+			}
+		};
+		overwolf.settings.hotkeys.onHold.addListener(callback);
+		return callback;
+	}
+
+	public removeHotKeyHoldListener(listener: (message: any) => void) {
+		overwolf.settings.hotkeys.onHold.removeListener(listener);
+	}
+
 	public addHotkeyChangedListener(callback: (message: any) => void): (message: any) => void {
 		const listener = (message) => {
 			callback(message);

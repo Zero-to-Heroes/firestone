@@ -10,11 +10,10 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 			'getBattlegroundsMatchWithPlayers',
 			(forceReset?: boolean) => mindVision.getBattlegroundsInfo(forceReset),
 			(battlegroundsInfo) => false,
-			(battlegroundsInfo) =>
-				Object.assign(new BattlegroundsInfo(), {
-					rating: battlegroundsInfo.Rating,
-					game: battlegroundsInfo.Game,
-				} as BattlegroundsInfo),
+			(battlegroundsInfo) => ({
+				Rating: battlegroundsInfo.Rating,
+				Game: battlegroundsInfo.Game,
+			}),
 			2,
 			1000,
 			// (battlegroundsInfo) => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,

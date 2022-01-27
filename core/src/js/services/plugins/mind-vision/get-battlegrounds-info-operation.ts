@@ -10,11 +10,10 @@ export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<Bat
 			'getBattlegroundsInfo',
 			() => mindVision.getBattlegroundsInfo(),
 			(battlegroundsInfo) => battlegroundsInfo.Rating == -1,
-			(battlegroundsInfo) =>
-				Object.assign(new BattlegroundsInfo(), {
-					rating: battlegroundsInfo.Rating,
-					game: battlegroundsInfo.Game,
-				} as BattlegroundsInfo),
+			(battlegroundsInfo) => ({
+				Rating: battlegroundsInfo.Rating,
+				Game: battlegroundsInfo.Game,
+			}),
 			5,
 			2000,
 		);

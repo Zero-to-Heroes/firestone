@@ -1,6 +1,18 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
+import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
@@ -28,13 +40,37 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[helpTooltip]="'battlegrounds.in-game.opponents.last-opponent-icon-tooltip' | owTranslate"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
+
+				<div class="short-recap" [ngClass]="{ 'active': showLiveInfo$ | async }">
+					<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
+					<div class="triples">
+						<img class="icon" [src]="triplesImage" />
+						<div class="value">{{ triples }}</div>
+					</div>
+					<div class="win-streak">
+						<img class="icon" [src]="winStreakImage" />
+						<div class="value">{{ winStreak }}</div>
+					</div>
+					<div class="tribes">
+						<img class="icon" [src]="tribeImage" />
+						<div class="value">{{ tribeCount }}</div>
+					</div>
+					<div class="damage" [ngClass]="{ 'debuff': debuff }">
+						<img class="icon" [src]="damageImage" />
+						<div class="value">{{ damage }}</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsLeaderboardEmptyCardComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, OnDestroy {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
+	showLiveInfo$: Observable<boolean>;
+	showLiveInfo = new BehaviorSubject<boolean>(false);
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -77,7 +113,25 @@ export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionCompon
 	_lastOpponentCardId: string;
 	isLastOpponent: boolean;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	tavernTier: number;
+	triples: number;
+	triplesImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_triple.png';
+	winStreak: number;
+	winStreakImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_winstreak.png';
+	tribeCount: number;
+	tribeImage: string;
+	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
+	damage: number;
+	debuff: boolean;
+
+	private callbackHandle;
+
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -87,6 +141,27 @@ export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionCompon
 			this.componentClass = value ? null : 'bottom';
 			this.updateInfo();
 		});
+		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(this.mapData((info) => info));
+		this.callbackHandle = this.ow.addHotKeyHoldListener(
+			'live-info',
+			() => this.onTabDown(),
+			() => this.onTabUp(),
+		);
+	}
+
+	ngOnDestroy(): void {
+		super.ngOnDestroy();
+		if (this.callbackHandle) {
+			this.ow.removeHotKeyHoldListener(this.callbackHandle);
+		}
+	}
+
+	private onTabDown() {
+		this.showLiveInfo.next(true);
+	}
+
+	private onTabUp() {
+		this.showLiveInfo.next(false);
 	}
 
 	private updateInfo() {
@@ -112,6 +187,18 @@ export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionCompon
 			isLastOpponent: this.isLastOpponent,
 			additionalClasses: this.componentClass,
 		};
+		this.tavernTier = this._previousPlayer.getCurrentTavernTier();
+		this.triples = this._previousPlayer.totalTriples ?? 0;
+		this.winStreak = this._previousPlayer.currentWinStreak ?? 0;
+		const tribe = this._previousPlayer.getLastKnownComposition()?.tribe;
+		// The game doesn't show any count when it's mixed minions
+		this.tribeCount = tribe === 'mixed' ? null : this._previousPlayer.getLastKnownComposition()?.count ?? 0;
+		this.tribeImage = getTribeIcon(tribe);
+		this.damage = this._previousPlayer.getLastKnownBattleHistory()?.damage ?? 0;
+		if (this.winStreak === 0 && this.damage > 0) {
+			this.damage = -this.damage;
+		}
+		this.debuff = this.damage < 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

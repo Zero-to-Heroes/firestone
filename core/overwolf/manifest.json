@@ -249,6 +249,13 @@
 				"title": "Show/hide battlegrounds window",
 				"action-type": "custom",
 				"default": "Alt+B"
+			},
+			"live-info": {
+				"title": "Show live information (only BG for now)",
+				"action-type": "custom",
+				"default": "Tab",
+				"passthrough": true,
+				"hold": true
 			}
 		},
 		"process_name": "Firestone",

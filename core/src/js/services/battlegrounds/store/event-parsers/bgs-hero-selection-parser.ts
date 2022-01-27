@@ -27,8 +27,8 @@ export class BgsHeroSelectionParser implements EventParser {
 			this.owUtils.flashWindow();
 		}
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo(10);
-		console.log('[bgs-game-init] retrieved bgs info', bgsInfo?.game?.AvailableRaces);
-		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);
+		console.log('[bgs-game-init] retrieved bgs info', bgsInfo?.Game?.AvailableRaces);
+		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.Game?.AvailableRaces);
 		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = await this.buildHeroSelectionPanel(
 			currentState,
 			event.heroCardIds,

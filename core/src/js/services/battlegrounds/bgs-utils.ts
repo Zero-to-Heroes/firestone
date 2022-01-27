@@ -30,45 +30,46 @@ export const getTribeIcon = (tribe: string | Race): string => {
 
 export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	let referenceCardId: string;
+	tribe = (tribe as string)?.padStart ? (tribe as string).toLowerCase() : tribe;
 	switch (tribe) {
-		case 'Mech':
+		case 'mech':
 		case Race.MECH:
 			referenceCardId = CardIds.MicroMummy;
 			break;
-		case 'Beast':
+		case 'beast':
 		case Race.BEAST:
 			referenceCardId = CardIds.Alleycat;
 			break;
-		case 'Demon':
+		case 'demon':
 		case Race.DEMON:
 			referenceCardId = CardIds.WrathWeaver;
 			break;
-		case 'Dragon':
+		case 'dragon':
 		case Race.DRAGON:
 			referenceCardId = CardIds.RedWhelp;
 			break;
-		case 'Murloc':
+		case 'murloc':
 		case Race.MURLOC:
 			referenceCardId = CardIds.MurlocTidehunterCore;
 			break;
-		case 'Pirate':
+		case 'pirate':
 		case Race.PIRATE:
 			referenceCardId = CardIds.Scallywag;
 			break;
-		case 'Elemental':
+		case 'elemental':
 		case Race.ELEMENTAL:
 			referenceCardId = CardIds.Sellemental;
 			break;
-		case 'Quilboar':
+		case 'quilboar':
 		case Race.QUILBOAR:
 			referenceCardId = CardIds.SunBaconRelaxer;
 			break;
-		case 'All':
+		case 'all':
 		case Race.ALL:
 			referenceCardId = CardIds.Amalgadon;
 			break;
 		default:
-			referenceCardId = CardIds.ZappSlywick;
+			referenceCardId = CardIds.AcolyteOfCthun;
 			break;
 	}
 	return referenceCardId;
@@ -594,7 +595,7 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 };
 
 export const getBuddy = (heroCardId: CardIds): CardIds => {
-	switch (heroCardId) {
+	switch (normalizeHeroCardId(heroCardId)) {
 		case CardIds.AFKayBattlegrounds:
 			return CardIds.SnackVendorBattlegrounds1;
 		case CardIds.AlakirBattlegrounds:
@@ -747,7 +748,7 @@ export const getBuddy = (heroCardId: CardIds): CardIds => {
 		case CardIds.ZephrysTheGreatBattlegrounds:
 			return CardIds.PhyreszBattlegrounds1;
 		default:
-			console.error('missing achievements section for ', heroCardId);
+			console.error('missing buddy section for ', heroCardId);
 			return null;
 	}
 };

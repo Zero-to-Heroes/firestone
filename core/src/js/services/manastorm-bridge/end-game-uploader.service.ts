@@ -150,11 +150,25 @@ export class EndGameUploaderService {
 
 		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
-			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
-			playerRank = battlegroundsInfo?.rating ?? this.bgsStore?.state?.currentGame?.mmrAtStart;
-			newPlayerRank = battlegroundsInfo?.newRating ?? params.bgsNewRating;
+			console.log(
+				'[manastorm-bridge] memory battlegroundsInfo',
+				battlegroundsInfo?.Rating,
+				battlegroundsInfo?.NewRating,
+				battlegroundsInfo,
+			);
+			console.log(
+				'[manastorm-bridge] mmr info',
+				this.bgsStore?.state?.currentGame?.mmrAtStart,
+				params.bgsNewRating,
+			);
+			// Rely on the MMR at start instead of the memory info, as if the info comes too late
+			// (there are sometimes quite big lags after a game, for some reason) it will already
+			// have the new rating
+			playerRank = this.bgsStore?.state?.currentGame?.mmrAtStart ?? battlegroundsInfo?.Rating;
+			// Some issues with bgsNewRating + spectate?
+			newPlayerRank = battlegroundsInfo?.NewRating ?? params.bgsNewRating;
 			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
-				battlegroundsInfo?.game?.AvailableRaces,
+				battlegroundsInfo?.Game?.AvailableRaces,
 			);
 			availableRaces = availableRaces ?? this.bgsStore?.state?.currentGame?.availableRaces;
 			bannedRaces = bannedRaces ?? this.bgsStore?.state?.currentGame?.bannedRaces;

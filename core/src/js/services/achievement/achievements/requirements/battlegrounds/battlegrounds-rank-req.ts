@@ -52,7 +52,7 @@ export class BattlegroundsRankReq implements Requirement {
 			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
 
 			if (battlegroundsInfo) {
-				this.rankAtReset = battlegroundsInfo.rating;
+				this.rankAtReset = battlegroundsInfo.Rating;
 			}
 		} else {
 			this.rankAtReset = undefined;
@@ -67,8 +67,8 @@ export class BattlegroundsRankReq implements Requirement {
 		const battlegroundsInfo: BattlegroundsInfo = await this.getRank();
 		this.isValid =
 			battlegroundsInfo &&
-			battlegroundsInfo.rating >= this.targetRank &&
-			(!this.rankAtReset || battlegroundsInfo.rating !== this.rankAtReset);
+			battlegroundsInfo.Rating >= this.targetRank &&
+			(!this.rankAtReset || battlegroundsInfo.Rating !== this.rankAtReset);
 	}
 
 	private async getRank() {
@@ -79,7 +79,7 @@ export class BattlegroundsRankReq implements Requirement {
 
 	private async getRankInternal(callback): Promise<void> {
 		const rank = await this.memoryInspection.getBattlegroundsInfo();
-		if (!rank || this.rankAtReset === rank.rating) {
+		if (!rank || this.rankAtReset === rank.Rating) {
 			setTimeout(() => this.getRankInternal(callback), 1000);
 			return;
 		}

@@ -1,8 +1,10 @@
 import { Race } from '@firestone-hs/reference-data';
+import { MemoryBgGame, MemoryBgPlayer } from '../../../../models/battlegrounds-info';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { BgsBattleHistory } from '../../../../models/battlegrounds/in-game/bgs-battle-history';
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { normalizeHeroCardId } from '../../bgs-utils';
@@ -19,42 +21,34 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsGlobalInfoUpdatedEvent,
 	): Promise<BattlegroundsState> {
-		const players = event.info?.game?.Players;
-		if (!players || players.length === 0) {
+		const game: MemoryBgGame = event.info?.Game;
+		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
+		const playersFromMemory = game?.Players;
+		if (!playersFromMemory || playersFromMemory.length === 0) {
 			console.log('no players, returning');
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
 			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
 			.map((player) => {
-				const playerFromMemory = players.find(
+				const playerFromMemory = playersFromMemory.find(
 					(mem) => normalizeHeroCardId(mem.CardId) === normalizeHeroCardId(player.cardId),
 				);
 				if (!playerFromMemory) {
 					return player;
 				}
 				// Damage is not always present, since we don't want to spoil the battle result too early
-				const newDamage = (playerFromMemory.Damage as number) || player.damageTaken;
-
-				const newWinStreak = (playerFromMemory.WinStreak as number) || 0;
-				const newHighestWinStreak = Math.max(
-					player.highestWinStreak || 0,
-					(playerFromMemory.WinStreak as number) || 0,
-				);
-				const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
-				const newCompositionHistory = player.compositionHistory.find((history) => history.turn === turn)
-					? player.compositionHistory
-					: ([
-							...player.compositionHistory,
-							{
-								turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
-								tribe:
-									playerFromMemory.BoardCompositionRace === 0
-										? 'mixed'
-										: Race[playerFromMemory.BoardCompositionRace],
-								count: playerFromMemory.BoardCompositionCount,
-							} as BgsComposition,
-					  ] as readonly BgsComposition[]);
+				const newDamage = Math.max(0, playerFromMemory.Damage ?? 0) || player.damageTaken;
+				const newWinStreak = Math.max(0, playerFromMemory.WinStreak ?? 0);
+				const newHighestWinStreak = Math.max(player.highestWinStreak || 0, playerFromMemory.WinStreak ?? 0);
+				const newCompositionHistory: readonly BgsComposition[] = [
+					...player.compositionHistory.filter((h) => h && h.turn !== turn),
+					this.buildNewBgsComposition(currentState, playerFromMemory),
+				];
+				const newBattleHistory: readonly BgsBattleHistory[] = [
+					...player.battleHistory.filter((h) => h && h.turn !== turn),
+					this.buildNewBgsBattleHistory(currentState, playerFromMemory),
+				];
 				return player.update({
 					displayedCardId: playerFromMemory.CardId,
 					damageTaken: newDamage,
@@ -62,9 +56,11 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					currentWinStreak: newWinStreak,
 					highestWinStreak: newHighestWinStreak,
 					compositionHistory: newCompositionHistory,
+					battleHistory: newBattleHistory,
+					totalTriples: Math.max(0, playerFromMemory.TriplesCount ?? 0),
 				} as BgsPlayer);
 			});
-		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(event.info?.game?.AvailableRaces);
+		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(event.info?.Game?.AvailableRaces);
 		const newGame = currentState.currentGame.update({
 			players: newPlayers,
 			bannedRaces: bannedRaces && bannedRaces.length > 0 ? bannedRaces : currentState.currentGame.bannedRaces,
@@ -85,6 +81,30 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			currentGame: newGame,
 			panels: panels,
 		} as BattlegroundsState);
+	}
+
+	private buildNewBgsComposition(currentState: BattlegroundsState, playerFromMemory: MemoryBgPlayer): BgsComposition {
+		return {
+			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
+			tribe: playerFromMemory.BoardCompositionRace === 0 ? 'mixed' : Race[playerFromMemory.BoardCompositionRace],
+			count: playerFromMemory.BoardCompositionCount,
+		};
+	}
+
+	private buildNewBgsBattleHistory(
+		currentState: BattlegroundsState,
+		playerFromMemory: MemoryBgPlayer,
+	): BgsBattleHistory {
+		if (!playerFromMemory?.Battles?.length) {
+			return null;
+		}
+		const latestBattle = playerFromMemory.Battles[playerFromMemory.Battles.length - 1];
+		return {
+			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
+			opponentCardId: latestBattle.OpponentCardId,
+			damage: latestBattle.Damage,
+			isDefeated: latestBattle.IsDefeated,
+		};
 	}
 
 	private addTribeInfoToPostMatchPanel(

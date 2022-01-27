@@ -2,9 +2,12 @@ import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-par
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
+import { BgsBattleHistory } from './in-game/bgs-battle-history';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsComposition } from './in-game/bgs-composition';
+import { BgsDamage } from './in-game/bgs-damage';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
+import { BgsTribe } from './in-game/bgs-tribe';
 import { BgsTriple } from './in-game/bgs-triple';
 
 export class BgsPlayer implements IBgsPlayer {
@@ -16,8 +19,12 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly isMainPlayer: boolean = false;
 	readonly tavernUpgradeHistory: readonly BgsTavernUpgrade[] = [];
 	readonly tripleHistory: readonly BgsTriple[] = [];
+	readonly totalTriples: number; // Coming from memory
 	readonly compositionHistory: readonly BgsComposition[] = [];
+	readonly battleHistory: readonly BgsBattleHistory[] = [];
 	readonly boardHistory: readonly BgsBoard[];
+	readonly damageHistory: readonly BgsDamage[] = [];
+	readonly tribeHistory: readonly BgsTribe[] = [];
 	readonly initialHealth: number;
 	readonly damageTaken: number = 0;
 	readonly leaderboardPlace: number;
@@ -52,6 +59,14 @@ export class BgsPlayer implements IBgsPlayer {
 				: this.tavernUpgradeHistory[this.tavernUpgradeHistory.length - 1].tavernTier;
 
 		return result;
+	}
+
+	public getLastKnownBattleHistory(): BgsBattleHistory {
+		return !this.battleHistory?.length ? null : this.battleHistory[this.battleHistory.length - 1];
+	}
+
+	public getLastKnownComposition(): BgsComposition {
+		return !this.compositionHistory?.length ? null : this.compositionHistory[this.compositionHistory.length - 1];
 	}
 
 	public getLastKnownBoardState(): readonly Entity[] {
