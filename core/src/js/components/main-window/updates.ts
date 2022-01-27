@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.6.3',
+		version: '8.6.5',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,42 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `Update app for patch 22.2. More details below :)`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `The simulator now supports the new Buddies. The abililty to add them to custom boards will be added soon.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `Add support for Vanndar and Drek'Thar. In the Hero tab, they appear as different hero for each allied class.`,
-							},
-							{
-								type: 'misc',
-								text: `Duel stats are now only loaded for the specific Time and MMR filters you've selected. This means that the initial load should be faster, and they will take less space in memory. The downside is that when you change these, you might have a small delay until the stats are reloaded.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option (turned on by default) to show the order in which minions on board came into play. This can be particularly useful if you're trying to figure out the order in which deathrattles will trigger for instance.`,
+								text: `Show a summary of all opponents by pressing Tab while in-game.`,
 							},
 						],
 					},
@@ -96,42 +65,20 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where sometimes no minion would appear in the Simulator search results after entering a search term.`,
+								text: `Fix a simulator issue where Illidan's buddy was coded backwards, and would grant immune to the defender instead.`,
 							},
-							{
-								type: 'ui',
-								text: `Improve the display of the hero selection tooltip. It now is smaller and aligned with the game's own tooltip.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add card highlights for Alliance Bannerman.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `The Hero filter now lets you select a specific hero instead of a class.`,
-							},
-							{
-								type: 'feature',
-								text: `The Hero / Hero power / Signature treasure filters now don't show options that are incompatible with other choices (e.g. if you select Mindrender Illucia as a hero, it won't show you Rattlegore's Signature Traasures).`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where some tasks (especially Story ones) would not be in the proper order.`,
+								text: `Fix an issue where sometimes minion search (in the simulator) would fail to find anything.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'ui',
+								text: `Rework a bit the "bug report" page and add a few useful links.`,
 							},
 						],
 					},
