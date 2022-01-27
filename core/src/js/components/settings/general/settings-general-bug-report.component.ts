@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -16,35 +17,49 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 	],
 	template: `
 		<div class="general-bug-report">
-			<div class="title">Send feedback / Report a bug</div>
-			<div class="note">
-				Don't forget to check out
+			<div class="title" [owTranslate]="'settings.general.bug-report.title'"></div>
+			<p class="note">
+				{{ 'settings.general.bug-report.simulator-bug-text' | owTranslate }}
+				<a
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/How-to-report-a-simulator-bug"
+					target="_blank"
+					(mousedown)="preventMiddleClick($event)"
+					(click)="preventMiddleClick($event)"
+					(auxclick)="preventMiddleClick($event)"
+					>{{ 'settings.general.bug-report.link-text' | owTranslate }}</a
+				>
+			</p>
+			<p class="note">
+				{{ 'settings.general.bug-report.general-bug-text' | owTranslate }}
 				<a
 					href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting"
 					target="_blank"
 					(mousedown)="preventMiddleClick($event)"
 					(click)="preventMiddleClick($event)"
 					(auxclick)="preventMiddleClick($event)"
-					>the FAQ</a
+					>{{ 'settings.general.bug-report.link-text' | owTranslate }}</a
 				>
-				as well!
-			</div>
+			</p>
 			<input
-				class="email"
+				class="email form-start"
 				[(ngModel)]="email"
 				(mousedown)="preventDrag($event)"
-				placeholder="Your email (optional)"
+				[placeholder]="'settings.general.bug-report.email-placeholder' | owTranslate"
 			/>
 			<textarea
 				class="body"
 				[ngModel]="body"
 				(ngModelChange)="onBodyChange($event)"
 				(mousedown)="preventDrag($event)"
-				placeholder="Your message. If you're reporting a bug, please try to describe what you were doing when the bug occurred, and what happened that caused you to report this bug."
+				[placeholder]="'settings.general.bug-report.message-placeholder' | owTranslate"
 			></textarea>
 			<div class="button-group">
 				<div class="status" *ngIf="status" [innerHTML]="status | safe"></div>
-				<button (mousedown)="submit()" [ngClass]="{ 'disabled': buttonDisabled || !body }">Send</button>
+				<button
+					(mousedown)="submit()"
+					[ngClass]="{ 'disabled': buttonDisabled || !body }"
+					[owTranslate]="'settings.general.bug-report.send-button'"
+				></button>
 			</div>
 		</div>
 	`,
@@ -57,11 +72,12 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 	buttonDisabled: boolean;
 
 	constructor(
-		private logService: LogsUploaderService,
-		private ow: OverwolfService,
-		private cdr: ChangeDetectorRef,
-		private http: HttpClient,
-		private prefs: PreferencesService,
+		private readonly logService: LogsUploaderService,
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly http: HttpClient,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	ngAfterViewInit() {
@@ -80,7 +96,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			return;
 		}
 		this.buttonDisabled = true;
-		this.status = 'Uploading log files';
+		this.status = this.i18n.translateString('settings.general.bug-report.status-uploading-logs');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -98,7 +114,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 				appLogsKey: appLogs,
 				gameLogsKey: gameLogs,
 			};
-			this.status = 'Log files uploaded, sending feedback';
+			this.status = this.i18n.translateString('settings.general.bug-report.status-sending-feedback');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -106,7 +122,10 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 
 			this.prefs.setContactEmail(this.email);
 
-			this.status = `Feedback sent. Thank you for reaching out! Stay up-to-date on <a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a> or <a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`;
+			this.status = this.i18n.translateString('settings.general.bug-report.status-done', {
+				discordLink: `<a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`,
+				twitterLink: `<a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a>`,
+			});
 			this.buttonDisabled = false;
 			this.body = null;
 			// this.email = null;

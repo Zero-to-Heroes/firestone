@@ -8,6 +8,15 @@
 	background: rgba(255, 255, 255, 0.08);
 	padding: 15px;
 
+	.title {
+		margin-bottom: 10px;
+		font-size: 16px;
+	}
+
+	.form-start {
+		margin-top: 30px;
+	}
+
 	input,
 	input:focus,
 	input:active,
@@ -108,22 +117,23 @@
 	}
 
 	.note {
-		display: flex;
 		font-family: Open Sans;
 		font-style: normal;
 		font-weight: 400;
 		line-height: normal;
-		font-size: 12px;
+		font-size: 13px;
 		color: #d9c3ab;
 		align-items: center;
 		margin-bottom: 10px;
 
-		a {
+		::ng-deep a {
 			margin-top: 0;
 			margin-left: 5px;
 			margin-right: 5px;
 			color: #d9c3ab;
 			text-decoration: underline;
+			display: inline;
+			font-size: 13px;
 
 			&:hover {
 				color: #ffb948;

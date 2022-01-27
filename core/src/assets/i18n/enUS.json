@@ -707,7 +707,7 @@
 			},
 			"hero-stat": {
 				"global-winrate": "Global winrate",
-				"your-winrate": "You winrate",
+				"your-winrate": "Your winrate",
 				"games-played": "Games played",
 				"number-of-games-tooltip": "{{totalRuns}} runs recorded ({{popularity}} popularity)"
 			},
@@ -723,7 +723,7 @@
 				"tier-list-title": "Tier List",
 				"tier-list-title-tooltip": "The tiers are computed based on your current filters",
 				"tier-s-tooltip": "Must pick",
-				"tier-a-tooltip": "String pick",
+				"tier-a-tooltip": "Strong pick",
 				"tier-b-tooltip": "Good pick",
 				"tier-c-tooltip": "Fair pick",
 				"tier-d-tooltip": "Preferably avoid",
@@ -788,8 +788,8 @@
 			"opponent": "Your opponent has played {{lastTurn}} elementals last turn, and {{thisTurn}} elementals this turn"
 		},
 		"elwynn-boar": {
-			"player": "{{value}} boards have died for you",
-			"opponent": "{{value}} boards have died for your opponent"
+			"player": "{{value}} boars have died for you",
+			"opponent": "{{value}} boars have died for your opponent"
 		},
 		"fatigue": {
 			"player": "Your current fatigue damage is {{value}}",
@@ -859,7 +859,7 @@
 		}
 	},
 	"new-version": {
-		"title": "New version version: {{value}}",
+		"title": "New version: {{value}}",
 		"dont-show-again": "Don't show again",
 		"dont-show-again-secondary": "You can change that in the settings",
 		"confirm-button": "Got it"
@@ -1094,7 +1094,19 @@
 				}
 			},
 			"flash-window": "Flash HS window",
-			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG"
+			"flash-window-tooltip": "Flash HS window on your turn, or when the Recruit phase starts in BG",
+			"bug-report": {
+				"title": "Send feedback / Report a bug",
+				"simulator-bug-text": "If you want to report a bug with the simulator (and want to help me as much as possible), please check the how-to",
+				"general-bug-text": "For other big issues (app not working), there are some helpful troubleshooting steps",
+				"link-text": "here",
+				"email-placeholder": "Your email (optional)",
+				"message-placeholder": "Your message. If you're reporting a bug, please try to describe what you were doing when the bug occurred, and what happened that caused you to report this bug.",
+				"send-button": "Send",
+				"status-uploading-logs": "Uploading log files",
+				"status-sending-feedback": "Log files uploaded, sending feedback",
+				"status-done": "Feedback sent. Thank you for reaching out! Stay up-to-date on by joining us on {{discordLink}} or on {{twitterLink}}"
+			}
 		},
 		"decktracker": {
 			"global": {
