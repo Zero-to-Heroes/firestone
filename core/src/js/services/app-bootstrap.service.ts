@@ -279,8 +279,9 @@ export class AppBootstrapService {
 			}, AppBootstrapService.LOADING_SCREEN_DURATION);
 		} else {
 			this.currentState = 'READY';
-			this.notifs.emitNewNotification({
-				content: `
+			if (!shouldShowAds) {
+				this.notifs.emitNewNotification({
+					content: `
 					<div class="general-message-container general-theme">
 						<div class="firestone-icon">
 							<svg class="svg-icon-fill">
@@ -299,8 +300,9 @@ export class AppBootstrapService {
 							</svg>
 						</button>
 					</div>`,
-				notificationId: `app-ready`,
-			});
+					notificationId: `app-ready`,
+				});
+			}
 		}
 	}
 
