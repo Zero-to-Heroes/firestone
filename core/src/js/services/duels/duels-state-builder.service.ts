@@ -15,7 +15,7 @@ import {
 	HeroPowerDuelsDeckStatInfo,
 	LootDuelsDeckStatInfo,
 	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo,
+	TreasureDuelsDeckStatInfo
 } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
@@ -105,11 +105,9 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsStat> {
 		const prefs = await this.prefs.getPreferences();
+		const mmr = (prefs.duelsActiveMmrFilter as any) === 'all' ? 100 : prefs.duelsActiveMmrFilter;
 		const result: DuelsStat = await this.api.callGetApi(
-			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + prefs.duelsActiveMmrFilter).replace(
-				'%date%',
-				prefs.duelsActiveTimeFilter,
-			),
+			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmr).replace('%date%', prefs.duelsActiveTimeFilter),
 		);
 		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
 		console.debug('[duels-state-builder] loaded global stats', result);
