@@ -111,7 +111,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 export class CardsComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
 
-	readonly RARITY_FILTER_ALL = 'rarity-all';
+	readonly RARITY_FILTER_ALL = 'all';
 	readonly RARITY_FILTER_COMMON = 'common';
 	readonly RARITY_FILTER_RARE = 'rare';
 	readonly RARITY_FILTER_EPIC = 'epic';
