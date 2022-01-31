@@ -120,7 +120,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				this.mapData(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					const result = this.buildTiers(cardsInGame);
-					console.warn('minions', result, cardsInGame);
 					return result;
 				}),
 			);
