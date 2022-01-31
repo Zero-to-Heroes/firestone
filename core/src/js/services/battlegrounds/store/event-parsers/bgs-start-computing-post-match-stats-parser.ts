@@ -18,7 +18,7 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 	): Promise<BattlegroundsState> {
 		// const prefs: Preferences = await this.prefs.getPreferences();
 		return currentState.update({
-			currentPanelId: 'bgs-post-match-stats',
+			// currentPanelId: 'bgs-post-match-stats',
 			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
