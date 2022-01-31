@@ -855,6 +855,10 @@
 			"achievements": {
 				"title": "Achievements",
 				"text": "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished."
+			},
+			"collection": {
+				"title": "Collection",
+				"text": "Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)."
 			}
 		}
 	},
