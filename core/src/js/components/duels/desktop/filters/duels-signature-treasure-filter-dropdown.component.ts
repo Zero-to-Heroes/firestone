@@ -33,9 +33,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			*ngIf="filter$ | async as value"
 			class="duels-signature-treasure-filter-dropdown"
 			[options]="options$ | async"
-			[filter]="value.filter"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
+			[filter]="value?.filter"
+			[placeholder]="value?.placeholder"
+			[visible]="value?.visible"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown>
 	`,

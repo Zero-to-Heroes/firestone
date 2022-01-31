@@ -91,12 +91,13 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 						timeFilter,
 						dustFilter,
 						patch,
-					]) =>
-						topDecks
+					]) => {
+						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+						const result = topDecks
 							.map((deck) =>
 								this.applyFilters(
 									deck,
-									getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter),
+									trueMmrFilter,
 									classFilter,
 									heroPowerFilter,
 									sigTreasureFilter,
@@ -105,7 +106,22 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 									patch,
 								),
 							)
-							.filter((group) => group.decks.length > 0),
+							.filter((group) => group.decks.length > 0);
+						if (!result?.length) {
+							console.log(
+								'[duels-top-decks] no results',
+								topDecks?.length,
+								trueMmrFilter,
+								classFilter,
+								heroPowerFilter,
+								sigTreasureFilter,
+								timeFilter,
+								dustFilter,
+								patch,
+							);
+						}
+						return result;
+					},
 				),
 				tap((stat) => cdLog('emitting top decks in ', this.constructor.name, stat)),
 				takeUntil(this.destroyed$),

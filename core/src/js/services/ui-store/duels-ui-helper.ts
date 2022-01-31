@@ -258,10 +258,8 @@ export const getDuelsMmrFilterNumber = (
 	mmrPercentiles: readonly MmrPercentile[],
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 ) => {
-	return (
-		mmrPercentiles.find((p) => p.percentile === +mmrFilter)?.mmr ??
-		mmrPercentiles.find((p) => p.percentile === 100).mmr
-	);
+	return (mmrPercentiles.find((p) => p.percentile === mmrFilter) ?? mmrPercentiles.find((p) => p.percentile === 100))
+		?.mmr;
 };
 
 const isCorrectType = (
