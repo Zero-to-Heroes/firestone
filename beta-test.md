@@ -12,6 +12,7 @@ Just ping me (@sebastientromp) [on Discord](https://discord.gg/FhEHn8w).
 
 # How to install new releases
 
+-   Uninstall your current version first. If you want to keep your stats, first make sure that you have created an account, are logged in (look at the icon at the bottom left of the main window), and have played at least one match since you logged in.
 -   Install the version from https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&app_channel=beta. This will let you benefit from auto-updates for beta builds.
 
 ## The manual way (no auto updates)
