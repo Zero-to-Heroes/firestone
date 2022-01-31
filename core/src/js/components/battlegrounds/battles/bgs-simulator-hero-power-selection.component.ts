@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { CardIds } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
@@ -48,6 +49,27 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<div class="description">
 					<div class="name">{{ heroName }}</div>
 					<div class="hero-power">{{ heroPowerText }}</div>
+					<div class="input attack" *ngIf="showHeroPowerInfo">
+						<div class="label">{{ heroPowerInfoLabel }}</div>
+						<input
+							type="number"
+							[ngModel]="heroPowerInfo"
+							(ngModelChange)="onHeroPowerInfoChanged($event)"
+							(mousedown)="preventDrag($event)"
+						/>
+						<div class="buttons">
+							<button
+								class="arrow up"
+								inlineSVG="assets/svg/arrow.svg"
+								(click)="incrementheroPowerInfo()"
+							></button>
+							<button
+								class="arrow down"
+								inlineSVG="assets/svg/arrow.svg"
+								(click)="decrementheroPowerInfo()"
+							></button>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="hero-selection">
@@ -85,7 +107,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy {
 	@Input() closeHandler: () => void;
-	@Input() applyHandler: (newHeroCardId: string) => void;
+	@Input() applyHandler: (newHeroCardId: string, heroPowerInfo: number) => void;
 
 	@Input() set currentHero(heroPowerCardId: string) {
 		this.currentHeroId = heroPowerCardId;
@@ -98,7 +120,25 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			this.heroName = this.i18n.translateString('battlegrounds.sim.select-hero-power-placeholder');
 			this.heroPowerText = null;
 		}
+		const isTavishHp = [
+			CardIds.AimLeftToken,
+			CardIds.AimRightToken,
+			CardIds.AimLowToken,
+			CardIds.AimHighToken,
+		].includes(heroPowerCardId as CardIds);
+		// this.heroPowerInfo = undefined;
+		this.showHeroPowerInfo = isTavishHp;
+		this.heroPowerInfoLabel = isTavishHp
+			? this.i18n.translateString('battlegrounds.sim.hero-power-info-tavish')
+			: null;
 
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set heroPowerData(value: number) {
+		this.heroPowerInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -112,6 +152,9 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	heroName: string;
 	heroPowerText: string;
 	searchString = new BehaviorSubject<string>(null);
+	showHeroPowerInfo: boolean;
+	heroPowerInfo: number;
+	heroPowerInfoLabel: string;
 
 	private subscription: Subscription;
 
@@ -202,9 +245,46 @@ export class BgsSimulatorHeroPowerSelectionComponent
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
 		this.heroPowerText = hero.text;
+		this.heroPowerInfo = undefined;
+		const isTavishHp = [
+			CardIds.AimLeftToken,
+			CardIds.AimRightToken,
+			CardIds.AimLowToken,
+			CardIds.AimHighToken,
+		].includes(hero.id as CardIds);
+		this.showHeroPowerInfo = isTavishHp;
+		this.heroPowerInfo = 0;
+		this.heroPowerInfoLabel = isTavishHp
+			? this.i18n.translateString('battlegrounds.sim.hero-power-info-tavish')
+			: null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onHeroPowerInfoChanged(value: number) {
+		this.heroPowerInfo = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	incrementHeroPowerInfo() {
+		this.heroPowerInfo++;
+	}
+
+	decrementHeroPowerInfo() {
+		if (this.heroPowerInfo <= 0) {
+			return;
+		}
+		this.heroPowerInfo--;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
 	}
 
 	close() {
@@ -212,7 +292,8 @@ export class BgsSimulatorHeroPowerSelectionComponent
 	}
 
 	validate() {
-		this.applyHandler(this.currentHeroId);
+		console.log('validating', this.currentHeroId, this.heroPowerInfo);
+		this.applyHandler(this.currentHeroId, this.heroPowerInfo);
 	}
 
 	onMouseDown(event: Event) {
