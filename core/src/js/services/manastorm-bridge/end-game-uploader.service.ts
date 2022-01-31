@@ -61,16 +61,7 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
-		params?: {
-			hasPrizes: boolean;
-			bgsNewRating: number;
-			duelsInfo: {
-				wins: number;
-				losses: number;
-				rating: number;
-				paidRating: number;
-			};
-		},
+		params?: UploadParams,
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
@@ -79,7 +70,6 @@ export class EndGameUploaderService {
 			deckstring,
 			deckName,
 			buildNumber,
-			// scenarioId,
 			params,
 		);
 		await this.replayUploadService.uploadGame(game);
@@ -91,17 +81,7 @@ export class EndGameUploaderService {
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
-		// scenarioId: number,
-		params?: {
-			hasPrizes: boolean;
-			bgsNewRating: number;
-			duelsInfo: {
-				wins: number;
-				losses: number;
-				rating: number;
-				paidRating: number;
-			};
-		},
+		params?: UploadParams,
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
@@ -151,22 +131,30 @@ export class EndGameUploaderService {
 		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
 			console.log(
-				'[manastorm-bridge] memory battlegroundsInfo',
+				'[manastorm-bridge]',
+				currentReviewId,
+				'memory battlegroundsInfo',
 				battlegroundsInfo?.Rating,
 				battlegroundsInfo?.NewRating,
 				battlegroundsInfo,
 			);
 			console.log(
-				'[manastorm-bridge] mmr info',
+				'[manastorm-bridge]',
+				currentReviewId,
+				'mmr info',
 				this.bgsStore?.state?.currentGame?.mmrAtStart,
-				params.bgsNewRating,
+				params.bgsInfo?.currentRating,
+				params.bgsInfo?.newRating,
 			);
 			// Rely on the MMR at start instead of the memory info, as if the info comes too late
 			// (there are sometimes quite big lags after a game, for some reason) it will already
 			// have the new rating
-			playerRank = this.bgsStore?.state?.currentGame?.mmrAtStart ?? battlegroundsInfo?.Rating;
+			playerRank =
+				params.bgsInfo?.currentRating ??
+				this.bgsStore?.state?.currentGame?.mmrAtStart ??
+				battlegroundsInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
-			newPlayerRank = battlegroundsInfo?.NewRating ?? params.bgsNewRating;
+			newPlayerRank = battlegroundsInfo?.NewRating ?? params.bgsInfo?.newRating;
 			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				battlegroundsInfo?.Game?.AvailableRaces,
 			);
@@ -176,7 +164,7 @@ export class EndGameUploaderService {
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
-			game.hasBgsPrizes = params.hasPrizes;
+			game.hasBgsPrizes = params.bgsInfo.hasPrizes;
 		} else if (isMercenaries(game.gameMode)) {
 			// Looks like we can assume the mapId is unique for a given player
 			game.runId = isMercenariesPvE(game.gameMode)
@@ -505,4 +493,18 @@ export class EndGameUploaderService {
 		}
 		return duelsInfo.LastRatingChange + initialRank;
 	}
+}
+
+export interface UploadParams {
+	bgsInfo: {
+		hasPrizes: boolean;
+		newRating: number;
+		currentRating: number;
+	};
+	duelsInfo: {
+		wins: number;
+		losses: number;
+		rating: number;
+		paidRating: number;
+	};
 }

@@ -3,6 +3,7 @@ import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
+import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -20,6 +21,7 @@ export class EndGameListenerService {
 	private currentScenarioId: number;
 	private currentGameMode: number;
 	private bgsHasPrizes: boolean;
+	private bgsCurrentRating: number;
 	private bgsNewRating: number;
 
 	constructor(
@@ -29,6 +31,7 @@ export class EndGameListenerService {
 		private endGameUploader: EndGameUploaderService,
 		private gameState: GameStateService,
 		private duelsMonitor: DungeonLootParserService,
+		private bgsStore: BattlegroundsStoreService,
 	) {
 		this.init();
 	}
@@ -59,6 +62,15 @@ export class EndGameListenerService {
 					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
 					this.currentGameMode = gameEvent.additionalData.metaData.GameType;
 					break;
+				case GameEvent.BATTLEGROUNDS_HERO_SELECTED:
+					this.bgsCurrentRating = this.bgsStore.state?.currentGame?.mmrAtStart;
+					console.debug(
+						'[manastorm-bridge]',
+						await this.gameState.getCurrentReviewId(),
+						'bgsCurrentRating',
+						this.bgsCurrentRating,
+					);
+					break;
 				case GameEvent.GAME_SETTINGS:
 					this.bgsHasPrizes = (gameEvent as GameSettingsEvent).additionalData?.battlegroundsPrizes;
 					console.debug('[manastorm-bridge] bgsHasPrizes', this.bgsHasPrizes);
@@ -83,8 +95,11 @@ export class EndGameListenerService {
 						this.currentBuildNumber,
 						this.currentScenarioId,
 						{
-							hasPrizes: this.bgsHasPrizes,
-							bgsNewRating: this.bgsNewRating,
+							bgsInfo: {
+								hasPrizes: this.bgsHasPrizes,
+								currentRating: this.bgsCurrentRating,
+								newRating: this.bgsNewRating,
+							},
 							duelsInfo: {
 								wins: this.duelsMonitor.currentDuelsWins,
 								losses: this.duelsMonitor.currentDuelsLosses,
