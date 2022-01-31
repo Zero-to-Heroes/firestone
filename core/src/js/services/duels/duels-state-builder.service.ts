@@ -15,7 +15,7 @@ import {
 	HeroPowerDuelsDeckStatInfo,
 	LootDuelsDeckStatInfo,
 	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo
+	TreasureDuelsDeckStatInfo,
 } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
