@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.6.5',
+		version: '8.6.6',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'duels',
 						details: [
 							{
-								type: 'feature',
-								text: `Show a summary of all opponents by pressing Tab while in-game.`,
+								type: 'bug',
+								text: `Fix an issue that would cause some tabs to appear empty until the MMR filter was changed.`,
 							},
 						],
 					},
@@ -64,12 +64,21 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix a simulator issue where Illidan's buddy was coded backwards, and would grant immune to the defender instead.`,
+								type: 'feature',
+								text: `Add support for Tavish's Hero Power in the simulator.`,
 							},
 							{
+								type: 'feature',
+								text: `The app now won't automatically switch to the Post-match stats tab when a game completes. That behavior made strange in the past, but now you might be already monitoring the stats live, or might be in the midst of playing with the simulator when the game ends, and forcibly changing the active tab is just annoying.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
 								type: 'bug',
-								text: `Fix an issue where sometimes minion search (in the simulator) would fail to find anything.`,
+								text: `Fix an issue where secrets created by Rinling's Rifle would not appear in the Other zone.`,
 							},
 						],
 					},
@@ -77,8 +86,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'ui',
-								text: `Rework a bit the "bug report" page and add a few useful links.`,
+								type: 'bug',
+								text: `Fix a a few text missing issues.`,
 							},
 						],
 					},
