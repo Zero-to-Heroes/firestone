@@ -761,11 +761,11 @@
 	},
 	"counters": {
 		"attack": {
-			"you": "You have {{value}} total attack from board and hero",
+			"player": "You have {{value}} total attack from board and hero",
 			"opponent": "Your opponent has {{value}} total attack from board and hero"
 		},
 		"pogo": {
-			"you": "You have played {{value}} Pogo-Hoppers",
+			"player": "You have played {{value}} Pogo-Hoppers",
 			"opponent": "Your opponent has played {{value}} Pogo-Hoppers"
 		},
 		"bolner": "{{value}} was the first battlecry card played this turn",
