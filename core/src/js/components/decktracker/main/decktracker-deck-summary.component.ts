@@ -72,7 +72,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this._deck = value;
 		this.deckName = value.deckName || this.i18n.translateString('app.decktracker.deck-summary.default-deck-name');
 		this.format = value.format;
-		this.deckNameTooltip = `${this.deckName} (${this.i18n.translateString('app.global.format.' + this.format)})`;
+		this.deckNameTooltip = `${this.deckName} (${this.i18n.translateString('global.format.' + this.format)})`;
 		this.totalGames = value.totalGames;
 		this.winRatePercentage =
 			value.winRatePercentage != null

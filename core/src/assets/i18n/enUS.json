@@ -152,7 +152,7 @@
 			"logged-in-as-header": "Logged in as {{value}}",
 			"not-logged-in-header": "Log in to save your progress online"
 		},
-		"gobal": {
+		"global": {
 			"reward": {
 				"tooltip": "{{amount}} {{rewardType}}",
 				"dust": "dust",
