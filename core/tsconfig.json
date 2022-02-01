@@ -14,13 +14,15 @@
 		"allowSyntheticDefaultImports": true,
 		"resolveJsonModule": true,
 		"inlineSources": true,
-		"sourceRoot": "/",
 		"lib": ["dom", "ES2019"],
+		"sourceRoot": "/",
 		"baseUrl": ".",
 		"typeRoots": ["node_modules/@types", "@overwolf/types"],
 		"types": ["node", "jest"],
 		"paths": {
 			"@models/*": ["src/js/models/*"],
+			"@components/*": ["src/js/components/*"],
+			"@directives/*": ["src/js/directives/*"],
 			"@services/*": ["src/js/services/*"]
 		}
 	},

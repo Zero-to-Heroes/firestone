@@ -9,11 +9,11 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { OverwolfService } from '@services/overwolf.service';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 // https://github.com/valor-software/ng2-charts/issues/424
 @Component({
