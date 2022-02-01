@@ -119,6 +119,9 @@ export class AppBootstrapService {
 	private async doInit() {
 		// this language will be used as a fallback when a translation isn't found in the current language
 		this.translate.setDefaultLang('enUS');
+		// Load the locales first, otherwise some windows will be displayed with missing text
+		const prefs = await this.prefs.getPreferences();
+		await this.translate.use(prefs.locale).toPromise();
 		window['translateService'] = this.translate;
 
 		if (!this.loadingWindowShown) {
@@ -174,11 +177,9 @@ export class AppBootstrapService {
 			}
 		});
 		// const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		const prefs = await this.prefs.getPreferences();
 		await this.ow.hideCollectionWindow(prefs);
 
 		// the lang to use, if the lang isn't available, it will use the current loader to get them
-		await this.translate.use(prefs.locale).toPromise();
 		console.log(
 			'using locale for app',
 			prefs.locale,
