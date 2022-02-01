@@ -286,6 +286,7 @@ export class Preferences {
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
 	readonly bgsShowHeroSelectionTooltip = true;
+	readonly bgsShowNextOpponentRecapSeparately = true;
 	readonly bgsHideSimResultsOnRecruit = true;
 	readonly bgsShowSimResultsOnlyOnRecruit = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;

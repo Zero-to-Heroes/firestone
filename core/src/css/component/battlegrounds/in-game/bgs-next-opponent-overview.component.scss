@@ -9,6 +9,15 @@
 			height: calc(100% + 25px);
 		}
 	}
+
+	&.no-opp-recap {
+		.content {
+			padding-top: 0;
+		}
+		.left {
+			margin-top: 50px;
+		}
+	}
 }
 
 .left {

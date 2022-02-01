@@ -1022,7 +1022,7 @@
 				}
 			},
 			"opponents": {
-				"title": "Other opponents",
+				"title": "All heroes",
 				"empty-state-title": "Nothing here yet",
 				"empty-state-subtitle": "Pick a hero and wait for your opponents!",
 				"score-board-title": "Score board",

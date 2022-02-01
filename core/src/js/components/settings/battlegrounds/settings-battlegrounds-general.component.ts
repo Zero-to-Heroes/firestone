@@ -85,6 +85,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When turned on, a window with stats on the heroes offered is shown"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowNextOpponentRecapSeparately"
+						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						label="Show next opp recap"
+						tooltip="On the second-screen BG window, shows your next opponent's info at the top in a bigger space, in addition to being in the list with all the others below."
+					></preference-toggle>
+					<preference-toggle
 						field="bgsShowHeroSelectionAchievements"
 						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
 						label="Show achievements"

@@ -19,7 +19,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
 	],
 	template: `
-		<div class="container" [ngClass]="{ 'no-ads': !(showAds$ | async) }">
+		<div
+			class="container"
+			*ngIf="{
+				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async
+			} as value2"
+			[ngClass]="{ 'no-ads': !(showAds$ | async), 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
+		>
 			<div class="content" *ngIf="opponents$ | async as opponents; else emptyState">
 				<ng-container
 					*ngIf="{
@@ -28,7 +34,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					} as value"
 				>
 					<bgs-opponent-overview-big
-						[opponent]="opponents[0]"
+						*ngIf="value2.showNextOpponentRecapSeparately"
+						[opponent]="nextOpponent$ | async"
 						[currentTurn]="value.currentTurn"
 						[enableSimulation]="enableSimulation$ | async"
 						[nextBattle]="nextBattle$ | async"
@@ -37,7 +44,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="subtitle" [owTranslate]="'battlegrounds.in-game.opponents.title'"></div>
 						<div class="opponents" scrollable>
 							<bgs-opponent-overview
-								*ngFor="let opponent of otherOpponents$ | async; trackBy: trackByOpponentInfoFn"
+								*ngFor="let opponent of opponents; trackBy: trackByOpponentInfoFn"
 								[opponent]="opponent"
 								[currentTurn]="value.currentTurn"
 								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId)"
@@ -73,10 +80,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableSimulation$: Observable<boolean>;
+	showNextOpponentRecapSeparately$: Observable<boolean>;
 	showAds$: Observable<boolean>;
 	nextOpponentCardId$: Observable<string>;
 	opponents$: Observable<readonly BgsPlayer[]>;
-	otherOpponents$: Observable<readonly BgsPlayer[]>;
+	nextOpponent$: Observable<BgsPlayer>;
 	currentTurn$: Observable<number>;
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	lastOpponentCardId$: Observable<string>;
@@ -108,6 +116,9 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				tap((info) => cdLog('emitting enableSimulation in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
+			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
+		);
 		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(
 			distinctUntilChanged(),
 			// FIXME
@@ -195,34 +206,27 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				tap((info) => cdLog('emitting nextBattle in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		combineLatest(
-			this.nextOpponentCardId$,
-			this.store.listenBattlegrounds$(([state]) => state.currentGame),
-		)
+		this.store
+			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				debounceTime(1000),
-				filter(([nextOpponentCardId, [game]]) => !!game),
-				map(([nextOpponentCardId, [game]]) =>
-					game.players
-						.filter((player) => !player.isMainPlayer)
-						.sort((a, b) => {
-							if (a.leaderboardPlace < b.leaderboardPlace) {
-								return -1;
-							}
-							if (b.leaderboardPlace < a.leaderboardPlace) {
-								return 1;
-							}
-							if (a.damageTaken < b.damageTaken) {
-								return -1;
-							}
-							if (b.damageTaken < a.damageTaken) {
-								return 1;
-							}
-							return 0;
-						})
-						.sort((a, b) =>
-							a.cardId === nextOpponentCardId ? -1 : b.cardId === nextOpponentCardId ? 1 : 0,
-						),
+				filter(([game]) => !!game),
+				map(([game]) =>
+					[...game.players].sort((a, b) => {
+						if (a.leaderboardPlace < b.leaderboardPlace) {
+							return -1;
+						}
+						if (b.leaderboardPlace < a.leaderboardPlace) {
+							return 1;
+						}
+						if (a.damageTaken < b.damageTaken) {
+							return -1;
+						}
+						if (b.damageTaken < a.damageTaken) {
+							return 1;
+						}
+						return 0;
+					}),
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
@@ -238,8 +242,8 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			)
 			.subscribe((opponents) => this.opponentsSubject$$.next(opponents));
 		this.opponents$ = this.opponentsSubject$$.asObservable();
-		this.otherOpponents$ = this.opponentsSubject$$.asObservable().pipe(
-			map((opponents) => opponents.slice(1)),
+		this.nextOpponent$ = combineLatest(this.nextOpponentCardId$, this.opponentsSubject$$.asObservable()).pipe(
+			map(([nextOpponentCardId, opponents]) => opponents.find((opp) => opp.cardId === nextOpponentCardId)),
 			// distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			// FIXME
 			tap((filter) =>

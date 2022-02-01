@@ -7,7 +7,7 @@ import {
 	HostListener,
 	OnDestroy,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				class="content-container"
 				*ngIf="{ currentPanelId: currentPanelId$ | async, currentPanel: currentPanel$ | async } as value"
 			>
-				<div class="title">{{ value.currentPanel?.name }}</div>
+				<div class="title" *ngIf="showTitle$ | async">{{ value.currentPanel?.name }}</div>
 				<ng-container>
 					<bgs-hero-selection-overview *ngIf="value.currentPanelId === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
@@ -84,6 +84,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 export class BattlegroundsContentComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy {
+	showTitle$: Observable<boolean>;
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
 	reviewId$: Observable<string>;
@@ -132,6 +133,15 @@ export class BattlegroundsContentComponent
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.showTitle$ = combineLatest(
+			this.listenForBasicPref$((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
+			this.currentPanelId$,
+		).pipe(
+			this.mapData(
+				([showNextOpponentRecapSeparately, currentPanelId]) =>
+					showNextOpponentRecapSeparately || currentPanelId !== 'bgs-next-opponent-overview',
+			),
+		);
 		this.reviewId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
