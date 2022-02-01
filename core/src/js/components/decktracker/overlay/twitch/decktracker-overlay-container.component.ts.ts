@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
@@ -61,6 +62,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly http: HttpClient,
 		private readonly i18n: LocalizationStandaloneService,
+		private readonly translate: TranslateService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -68,6 +70,9 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
 		}
+		this.translate.setDefaultLang('enUS');
+		// TODO: use prefs
+		await this.translate.use('enUS').toPromise();
 		this.twitch = (window as any).Twitch.ext;
 		this.twitch.onAuthorized(async (auth) => {
 			this.localeInit = false;
@@ -119,7 +124,6 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			}
 		});
 		console.log('init done');
-		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
