@@ -18,6 +18,7 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.SnakeTrap_SnakeLegacyToken,
 	CardIds.SnakeTrap_SnakeVanillaToken,
 	CardIds.ImprovedSnakeTrap_SnakeToken,
+	CardIds.ElementEarth_StoneElementalToken,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
