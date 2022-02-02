@@ -95,8 +95,6 @@ import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds
 import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
-import { BattlegroundsMinionsGroupComponent } from '../../components/battlegrounds/minions-tiers/bgs-minions-group.component';
-import { BattlegroundsMinionsListComponent } from '../../components/battlegrounds/minions-tiers/minions-list.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
 import { BgsHeroSelectionOverlayComponent } from '../../components/battlegrounds/overlay/bgs-hero-selection-overlay.component';
 import { BgsTavernMinionComponent } from '../../components/battlegrounds/overlay/bgs-tavern-minion.component';
@@ -555,8 +553,6 @@ const components = [
 		MenuSelectionBgsComponent,
 		BgsHeroFaceOffsComponent,
 		BgsTavernMinionComponent,
-		BattlegroundsMinionsListComponent,
-		BattlegroundsMinionsGroupComponent,
 		BgsBannedTribeComponent,
 		GraphWithSingleValueComponent,
 		BgsBattlesComponent,

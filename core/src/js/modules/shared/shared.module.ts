@@ -5,6 +5,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
+import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
+import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -249,6 +252,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
 
+		BattlegroundsMinionsTiersViewOverlayComponent,
+		BattlegroundsMinionsListComponent,
+		BattlegroundsMinionsGroupComponent,
+
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
 		BgsBattleRecapComponent,
@@ -375,6 +382,10 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
+
+		BattlegroundsMinionsTiersViewOverlayComponent,
+		BattlegroundsMinionsListComponent,
+		BattlegroundsMinionsGroupComponent,
 
 		BgsBattlesViewComponent,
 		BgsBattleComponent,
