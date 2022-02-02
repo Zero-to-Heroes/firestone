@@ -56,6 +56,7 @@ import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 							[showTribesHighlight]="showTribesHighlight"
 							[highlightedMinions]="highlightedMinions"
 							[highlightedTribes]="highlightedTribes"
+							[showGoldenCards]="showGoldenCards"
 						></bgs-minions-list>
 					</ng-container>
 				</ng-container>
@@ -74,6 +75,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 	@Input() showMinionsList: boolean;
 	@Input() showTurnNumber: boolean;
 	@Input() enableMouseOver: boolean;
+	@Input() showGoldenCards: boolean;
 
 	displayedTier: Tier;
 	lockedTier: Tier;

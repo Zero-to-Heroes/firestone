@@ -1,5 +1,4 @@
 import {
-	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -16,8 +15,6 @@ import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegro
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
 @Component({
@@ -53,7 +50,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 			<ul class="minions">
 				<li
 					class="minion"
-					*ngFor="let minion of minions"
+					*ngFor="let minion of minions; trackBy: trackByFn"
 					[cardTooltip]="minion.displayedCardIds"
 					[cardTooltipBgs]="true"
 					(click)="clickMinion(minion)"
@@ -83,9 +80,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsGroupComponent
-	extends AbstractSubscriptionComponent
-	implements AfterViewInit, AfterContentInit {
+export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	@Output() minionClick: EventEmitter<string> = new EventEmitter<string>();
 
 	@Input() set group(value: BgsMinionsGroup) {
@@ -96,8 +91,14 @@ export class BattlegroundsMinionsGroupComponent
 	@Input() set showTribesHighlight(value: boolean) {
 		this._showTribesHighlight = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr?.detectChanges();
 		}
+	}
+
+	@Input() set showGoldenCards(value: boolean) {
+		this._showGoldenCards = value;
+		console.log('showGoldenCards', value);
+		this.updateInfos();
 	}
 
 	title: string;
@@ -106,7 +107,7 @@ export class BattlegroundsMinionsGroupComponent
 	_group: BgsMinionsGroup;
 	_showTribesHighlight: boolean;
 
-	private showGoldenCards = true;
+	private _showGoldenCards = true;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -114,21 +115,11 @@ export class BattlegroundsMinionsGroupComponent
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-	) {
-		super(store, cdr);
-	}
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-	}
-
-	ngAfterContentInit() {
-		this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowGoldenCard).subscribe((pref) => {
-			this.showGoldenCards = pref;
-			this.updateInfos();
-		});
+		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
 	}
 
 	highlightMinion(minion: Minion) {
@@ -149,56 +140,64 @@ export class BattlegroundsMinionsGroupComponent
 		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(this._group.tribe));
 	}
 
+	trackByFn(index: number, minion: Minion) {
+		return minion.cardId;
+	}
+
 	private updateInfos() {
 		if (!this._group?.minions?.length) {
 			return;
 		}
 
-		this.minions = [];
-		// Otherwise I get a "cannot read property 'destroyed' of null"
-		setTimeout(() => {
-			this.title = this.buildTitle(this._group.tribe);
-			this.highlighted =
-				this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
-			this.minions = this._group.minions
-				.map((minion) => {
-					const card = this.allCards.getCard(minion.id);
-					const result = {
-						cardId: minion.id,
-						displayedCardIds: this.buildAllCardIds(minion.id, this.showGoldenCards),
-						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
-						name: card.name,
-						highlighted: this._group.highlightedMinions.includes(minion.id),
-						techLevel: card.techLevel,
-					};
-					return result;
-				})
-				.sort((a, b) => {
-					if (a.techLevel < b.techLevel) {
-						return -1;
-					}
-					if (a.techLevel > b.techLevel) {
-						return 1;
-					}
-					if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
-						return -1;
-					}
-					if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
-						return 1;
-					}
-					// To keep sorting consistent
-					if (a.cardId < b.cardId) {
-						return -1;
-					}
-					if (a.cardId > b.cardId) {
-						return 1;
-					}
-					return 0;
-				});
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this.minions = [];
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr?.detectChanges();
+		// }
+		// // Otherwise I get a "cannot read property 'destroyed' of null"
+		// Doesn't happen with a trackByFn?
+		// setTimeout(() => {
+		this.title = this.buildTitle(this._group.tribe);
+		this.highlighted =
+			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
+		this.minions = this._group.minions
+			.map((minion) => {
+				const card = this.allCards.getCard(minion.id);
+				const result = {
+					cardId: minion.id,
+					displayedCardIds: this.buildAllCardIds(minion.id, this._showGoldenCards),
+					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
+					name: card.name,
+					highlighted: this._group.highlightedMinions.includes(minion.id),
+					techLevel: card.techLevel,
+				};
+				return result;
+			})
+			.sort((a, b) => {
+				if (a.techLevel < b.techLevel) {
+					return -1;
+				}
+				if (a.techLevel > b.techLevel) {
+					return 1;
+				}
+				if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
+					return -1;
+				}
+				if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
+					return 1;
+				}
+				// To keep sorting consistent
+				if (a.cardId < b.cardId) {
+					return -1;
+				}
+				if (a.cardId > b.cardId) {
+					return 1;
+				}
+				return 0;
+			});
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
+		// });
 	}
 
 	private buildAllCardIds(id: string, showGoldenCards: boolean): string {

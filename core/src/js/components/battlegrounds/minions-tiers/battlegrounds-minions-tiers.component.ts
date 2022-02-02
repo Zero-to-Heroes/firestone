@@ -34,6 +34,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[highlightedMinions]="highlightedMinions$ | async"
 				[highlightedTribes]="highlightedTribes$ | async"
 				[enableMouseOver]="enableMouseOver$ | async"
+				[showGoldenCards]="showGoldenCards$ | async"
+				[showTurnNumber]="showTurnNumber$ | async"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -53,9 +55,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showMinionsList$: Observable<boolean>;
 	showTurnNumber$: Observable<boolean>;
 	enableMouseOver$: Observable<boolean>;
-
-	displayedTier: Tier;
-	lockedTier: Tier;
+	showGoldenCards$: Observable<boolean>;
 
 	constructor(
 		private readonly init_DebugService: DebugService,
@@ -91,6 +91,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.showMinionsList$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
 		this.showTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableTurnNumbertOverlay);
 		this.enableMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListMouseOver);
+		this.showGoldenCards$ = this.listenForBasicPref$((prefs) => prefs.bgsMinionListShowGoldenCard);
 		this.listenForBasicPref$((prefs) => prefs.bgsMinionsListScale).subscribe((scale) => {
 			// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
 			const element = this.el.nativeElement.querySelector('.scalable');

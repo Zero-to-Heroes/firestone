@@ -29,6 +29,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				*ngFor="let group of groups"
 				[group]="group"
 				[showTribesHighlight]="_showTribesHighlight"
+				[showGoldenCards]="_showGoldenCards"
 			></bgs-minions-group>
 			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="_showTribesHighlight">
 				<div class="background-second-part"></div>
@@ -65,10 +66,18 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 		}
 	}
 
+	@Input() set showGoldenCards(value: boolean) {
+		this._showGoldenCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_cards: readonly ReferenceCard[];
 	_highlightedMinions: readonly string[];
 	_highlightedTribes: readonly Race[];
 	_showTribesHighlight: boolean;
+	_showGoldenCards: boolean;
 	groups: readonly BgsMinionsGroup[];
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
@@ -76,7 +85,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
-		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
+		this.battlegroundsUpdater = (await this.ow.getMainWindow())?.battlegroundsUpdater;
 	}
 
 	resetHighlights() {
@@ -88,14 +97,26 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 			return;
 		}
 
-		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(this._cards);
-		this.groups = Object.keys(groupedByTribe)
-			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
-			.map((tribeString) => ({
-				tribe: Race[tribeString],
-				minions: groupedByTribe[tribeString],
-				highlightedMinions: this._highlightedMinions || [],
-				highlightedTribes: this._highlightedTribes || [],
-			}));
+		this.groups = [];
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
+		setTimeout(() => {
+			const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(
+				this._cards,
+			);
+			this.groups = Object.keys(groupedByTribe)
+				.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
+				.map((tribeString) => ({
+					tribe: Race[tribeString],
+					minions: groupedByTribe[tribeString],
+					highlightedMinions: this._highlightedMinions || [],
+					highlightedTribes: this._highlightedTribes || [],
+				}));
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 }
