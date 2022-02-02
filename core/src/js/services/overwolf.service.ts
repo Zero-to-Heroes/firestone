@@ -33,7 +33,7 @@ export class OverwolfService {
 	}
 
 	public getMainWindow(): any {
-		return overwolf.windows.getMainWindow();
+		return overwolf?.windows?.getMainWindow();
 	}
 
 	public getCollectionWindow(prefs: Preferences) {

@@ -12,7 +12,7 @@ export class TwitchPreferencesService {
 
 	public async init(): Promise<void> {
 		const prefsStr = localStorage.getItem('firestone-twitch-preferences');
-		const prefs = prefsStr ? JSON.parse(prefsStr) : new TwitchPreferences();
+		const prefs = prefsStr ? Object.assign(new TwitchPreferences(), JSON.parse(prefsStr)) : new TwitchPreferences();
 		this.prefs.next(prefs);
 	}
 

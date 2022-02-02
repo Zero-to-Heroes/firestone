@@ -7,6 +7,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	z-index: 2;
 }
 
 .twitch-config-widget {
@@ -20,6 +21,7 @@
 	position: relative;
 	left: calc(-100%);
 	transition: 0.25s;
+	background-size: 100% 100%;
 
 	&:hover {
 		left: 0;
@@ -65,6 +67,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		background-size: cover;
 
 		.text {
 			transform: rotate(90deg);

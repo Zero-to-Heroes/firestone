@@ -1,3 +1,4 @@
+import { Race } from '@firestone-hs/reference-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
@@ -8,6 +9,7 @@ export interface TwitchBgsState {
 	readonly gameEnded: boolean;
 	readonly inGame: boolean;
 	readonly currentBattle?: TwitchBgsCurrentBattle;
+	readonly availableRaces: readonly Race[];
 }
 
 export interface TwitchBgsCurrentBattle {

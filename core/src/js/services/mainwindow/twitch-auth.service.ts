@@ -132,6 +132,7 @@ export class TwitchAuthService {
 					currentTurn: bgsState.currentGame?.currentTurn,
 					inGame: bgsState.inGame,
 					gameEnded: bgsState.currentGame?.gameEnded,
+					availableRaces: bgsState.currentGame?.availableRaces,
 			  }
 			: null;
 

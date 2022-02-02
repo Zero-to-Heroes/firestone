@@ -20,6 +20,18 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 					[value]="prefs.showHeroCards"
 					(valueChanged)="onShowHeroCardsChanged(prefs, $event)"
 				></checkbox>
+				<checkbox
+					[label]="'twitch.show-minions-list' | owTranslate"
+					[labelTooltip]="'twitch.show-minions-list-tooltip' | owTranslate"
+					[value]="prefs.showMinionsList"
+					(valueChanged)="onShowMinionsListChanged(prefs, $event)"
+				></checkbox>
+				<checkbox
+					[label]="'twitch.show-minions-list-golden-cards' | owTranslate"
+					[labelTooltip]="'twitch.show-minions-list-golden-cards-tooltip' | owTranslate"
+					[value]="prefs.showMinionsListGoldenCards"
+					(valueChanged)="onShowMinionsListGoldenCardsChanged(prefs, $event)"
+				></checkbox>
 			</div>
 			<div class="side-text">
 				<div class="text" [owTranslate]="'twitch.settings-side-text'"></div>
@@ -42,8 +54,20 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	}
 
 	onShowHeroCardsChanged(prefs: TwitchPreferences, value: boolean) {
-		const newPrefs = { ...prefs, showHeroCards: value };
-		console.log('changing hero cards pref', newPrefs);
+		const newPrefs: TwitchPreferences = { ...prefs, showHeroCards: value };
+		console.log('changing showHeroCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowMinionsListChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, showMinionsList: value };
+		console.log('changing showMinionsList pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowMinionsListGoldenCardsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, showMinionsListGoldenCards: value };
+		console.log('changing showMinionsListGoldenCards pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

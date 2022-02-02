@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, HostListener, Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
 import { arraysEqual } from '@services/utils';
 import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable()
 export abstract class AbstractSubscriptionTwitchComponent implements OnDestroy {
@@ -25,13 +25,13 @@ export abstract class AbstractSubscriptionTwitchComponent implements OnDestroy {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(extractor),
 			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
-			// tap((filter) =>
-			// 	setTimeout(() => {
-			// 		if (!(this.cdr as ViewRef)?.destroyed) {
-			// 			this.cdr.detectChanges();
-			// 		}
-			// 	}, 0),
-			// ),
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr?.detectChanges();
+					}
+				}, 0),
+			),
 			takeUntil(this.destroyed$),
 		);
 	}

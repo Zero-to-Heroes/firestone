@@ -83,6 +83,6 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 	}
 
 	ngAfterContentInit(): void {
-		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs.showHeroCards));
+		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
 	}
 }

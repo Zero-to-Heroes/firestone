@@ -1,7 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ViewRef,
+} from '@angular/core';
+import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { TranslateService } from '@ngx-translate/core';
 import { inflate } from 'pako';
+import { from, Observable } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import fakeBgsState from './bgsState.json';
@@ -12,6 +22,8 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 // const EBS_URL = 'https://localhost:8081/deck';
 
+declare let overwolf;
+declare let amplitude;
 @Component({
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
@@ -28,26 +40,28 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				[bgsState]="bgsState"
 				[overlayLeftOffset]="horizontalOffset"
 			></state-mouse-over>
-			<decktracker-overlay-standalone
-				*ngIf="showDecktracker"
-				[gameState]="gameState"
-				(dragStart)="onDragStart()"
-				(dragEnd)="onDragEnd()"
-			>
+			<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
 			</decktracker-overlay-standalone>
 			<bgs-simulation-overlay-standalone
 				*ngIf="bgsState?.inGame && !bgsState?.gameEnded"
 				[bgsState]="bgsBattleState"
-				(dragStart)="onDragStart()"
-				(dragEnd)="onDragEnd()"
 			>
 			</bgs-simulation-overlay-standalone>
 			<twitch-config-widget> </twitch-config-widget>
+			<battlegrounds-minions-tiers-twitch
+				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showMinionsList$ | async)"
+				[availableRaces]="bgsState?.availableRaces"
+				[currentTurn]="bgsState?.currentTurn"
+			></battlegrounds-minions-tiers-twitch>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
+export class DeckTrackerOverlayContainerComponent
+	extends AbstractSubscriptionTwitchComponent
+	implements AfterViewInit, AfterContentInit {
+	showMinionsList$: Observable<boolean>;
+
 	gameState: GameState;
 	bgsState: TwitchBgsState;
 	bgsBattleState: TwitchBgsCurrentBattle;
@@ -60,20 +74,28 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	private localeInit: boolean;
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly http: HttpClient,
 		private readonly i18n: LocalizationStandaloneService,
 		private readonly translate: TranslateService,
-	) {}
+		private readonly prefs: TwitchPreferencesService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.showMinionsList$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.showMinionsList),
+		);
+	}
 
 	async ngAfterViewInit() {
 		if (!(window as any).Twitch) {
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
 		}
+
 		this.translate.setDefaultLang('enUS');
-		// TODO: use prefs
-		await this.translate.use('enUS').toPromise();
 		this.twitch = (window as any).Twitch.ext;
 		this.twitch.onAuthorized(async (auth) => {
 			this.localeInit = false;
@@ -86,6 +108,8 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			console.log('mapped to HS locale', language);
 			await this.i18n.setLocale(language);
 			console.log('finished setting up locale', language, this.i18n);
+			// TODO: use prefs
+			await this.translate.use(language).toPromise();
 			this.localeInit = true;
 			// this.fetchInitialState();
 			this.twitch.listen('broadcast', async (target, contentType, event) => {
@@ -124,19 +148,8 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 				}
 			}
 		});
+		await this.addDebugGameState();
 		console.log('init done');
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	onDragStart() {
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	onDragEnd() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -175,7 +188,11 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		}
 	}
 
-	private addDebugGameState() {
+	private async addDebugGameState() {
+		await this.i18n.setLocale('enUS');
+		console.log('finished setting up locale', 'enUS', this.i18n);
+		// TODO: use prefs
+		await this.translate.use('enUS').toPromise();
 		this.gameState = fakeState as any;
 		this.bgsState = fakeBgsState as any;
 		console.log('loaded fake state', this.gameState, this.bgsState);

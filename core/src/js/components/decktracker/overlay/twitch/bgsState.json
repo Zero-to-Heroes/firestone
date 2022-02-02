@@ -1743,5 +1743,6 @@
 		"status": "done"
 	},
 	"currentTurn": 14,
-	"inGame": true
+	"inGame": true,
+	"availableRaces": [14, 15, 17, 18, 20]
 }

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { AllCardsService } from '@firestone-hs/reference-data';
@@ -58,6 +59,7 @@ console.log('version is', process.env.APP_VERSION);
 		EmptyCardComponent,
 		StateMouseOverComponent,
 		TwitchConfigWidgetComponent,
+		BattlegroundsMinionsTiersTwitchOverlayComponent,
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
