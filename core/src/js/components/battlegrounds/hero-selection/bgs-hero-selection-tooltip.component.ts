@@ -43,7 +43,9 @@ export class BgsHeroSelectionTooltipComponent {
 		this._hero = value;
 		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
-		this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds));
+		this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds), {
+			isBgs: true,
+		});
 		this.totalMatchesText = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
 			value: this.totalMatches?.toLocaleString(this.i18n.formatCurrentLocale()) || 0,
 		});
