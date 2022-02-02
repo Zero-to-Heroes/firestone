@@ -42,6 +42,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				(dragEnd)="onDragEnd()"
 			>
 			</bgs-simulation-overlay-standalone>
+			<twitch-config-widget> </twitch-config-widget>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

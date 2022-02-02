@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardIds } from '@firestone-hs/reference-data';
 import { getBuddy, getHeroPower } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { from, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 
 @Component({
@@ -25,7 +28,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 				[showTavernsIfEmpty]="false"
 			></bgs-opponent-overview-big>
 		</div>
-		<div class="cards">
+		<div class="cards" *ngIf="showHeroCards$ | async">
 			<img class="card normal" [src]="heroPowerImage" />
 			<img class="card buddy normal" [src]="buddyCardImage" />
 			<img class="card buddy golden" [src]="buddyCardGoldenImage" />
@@ -33,7 +36,9 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchBgsHeroOverviewComponent {
+export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchComponent implements AfterContentInit {
+	showHeroCards$: Observable<boolean>;
+
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	showLogo = true;
@@ -69,8 +74,15 @@ export class TwitchBgsHeroOverviewComponent {
 	}
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+		private readonly prefs: TwitchPreferencesService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs.showHeroCards));
+	}
 }

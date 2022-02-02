@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { init } from '@sentry/browser';
 import { AngularResizedEventModule } from 'angular-resize-event';
@@ -55,6 +57,7 @@ console.log('version is', process.env.APP_VERSION);
 		BgsSimulationOverlayStandaloneComponent,
 		EmptyCardComponent,
 		StateMouseOverComponent,
+		TwitchConfigWidgetComponent,
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
@@ -66,6 +69,7 @@ console.log('version is', process.env.APP_VERSION);
 		LocalizationStandaloneService,
 		CardsFacadeStandaloneService,
 		LocalStorageService,
+		TwitchPreferencesService,
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: AppUiStoreFacadeService, useFactory: () => null },

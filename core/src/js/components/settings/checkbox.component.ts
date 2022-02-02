@@ -19,7 +19,7 @@ import { uuid } from '../../services/utils';
 	template: `
 		<div class="checkbox">
 			<input type="checkbox" name="checkbox-{{ uniqueId }}" id="checkbox-{{ uniqueId }}" />
-			<label for="checkbox-{{ uniqueId }}" (mousedown)="toggleValue()">
+			<label for="checkbox-{{ uniqueId }}" (mousedown)="toggleValue()" [helpTooltip]="labelTooltip">
 				<i class="unselected" *ngIf="!value">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
@@ -40,6 +40,7 @@ export class CheckboxComponent {
 	@Output() valueChanged = new EventEmitter<boolean>();
 
 	@Input() label: string;
+	@Input() labelTooltip: string;
 	@Input() value: boolean;
 
 	uniqueId: string;
