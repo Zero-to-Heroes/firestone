@@ -110,6 +110,7 @@ export class AppBootstrapService {
 
 	public async init() {
 		console.log('[bootstrap] in init');
+		window['translateService'] = this.translate;
 		await sleep(1);
 		this.init_AppUiStoreService.start();
 		this.init_LocalizationService.start();
@@ -122,7 +123,9 @@ export class AppBootstrapService {
 		// Load the locales first, otherwise some windows will be displayed with missing text
 		const prefs = await this.prefs.getPreferences();
 		await this.translate.use(prefs.locale).toPromise();
-		window['translateService'] = this.translate;
+
+		// Do it after the localization has been initialized
+		this.store.populateStore();
 
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');

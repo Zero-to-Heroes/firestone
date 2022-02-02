@@ -354,7 +354,7 @@ export class MainWindowStoreService {
 			}
 		});
 
-		this.populateStore();
+		// this.populateStore();
 		this.listenForSocialAccountLoginUpdates();
 	}
 
@@ -869,7 +869,7 @@ export class MainWindowStoreService {
 		);
 	}
 
-	private populateStore(onlyGameData = false) {
+	public populateStore(onlyGameData = false) {
 		if (!onlyGameData) {
 			console.log('sending populate store event');
 			this.storeBootstrap.initStore();
