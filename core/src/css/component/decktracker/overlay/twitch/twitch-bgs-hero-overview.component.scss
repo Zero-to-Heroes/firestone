@@ -4,6 +4,13 @@
 	height: auto;
 }
 
+.container {
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	transform-origin: top left;
+}
+
 .bgs-hero-overview-tooltip {
 	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
@@ -70,6 +77,7 @@
 	justify-content: center;
 	// So that the tooltip positioning manages to properly center it
 	height: 290px;
+	z-index: 9;
 
 	.card {
 		width: 220px;

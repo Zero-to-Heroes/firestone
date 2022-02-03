@@ -83,6 +83,8 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		from(this.prefs.prefs.asObservable())
 			.pipe(this.mapData((prefs) => prefs?.minionsListScale))
 			.subscribe((scale) => {
+				// A scale of 100 looks too big on Twitch
+				scale = scale * 0.8;
 				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);

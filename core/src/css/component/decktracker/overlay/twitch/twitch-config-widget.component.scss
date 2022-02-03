@@ -7,21 +7,23 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	z-index: 2;
+	pointer-events: none;
 }
 
 .twitch-config-widget {
 	display: flex;
-	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
-		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
-	border-image-slice: 1;
+	background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
+	// background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+	// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
+	// border-image-slice: 1;
+	// background-size: 100% 100%;
 	color: var(--default-text-color);
 	font-family: Open Sans;
 	min-height: 100px;
 	position: relative;
 	left: calc(-100%);
 	transition: 0.25s;
-	background-size: 100% 100%;
+	pointer-events: all;
 
 	&:hover {
 		left: 0;
@@ -89,9 +91,12 @@
 		position: absolute;
 		right: 0;
 		top: 0;
-		background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
-			url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
-		border-image-slice: 1;
+		background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
+		border-left: 1px solid var(--default-title-color);
+		// background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
+		// border-image-slice: 1;
+		// background-size: cover;
 		height: 100%;
 		width: 20px;
 		right: -20px;
@@ -99,7 +104,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-size: cover;
 
 		.text {
 			transform: rotate(90deg);

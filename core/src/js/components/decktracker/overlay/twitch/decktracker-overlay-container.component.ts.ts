@@ -24,12 +24,13 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 
 declare let overwolf;
 declare let amplitude;
+
 @Component({
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
 		`../../../../../css/themes/battlegrounds-theme.scss`,
+		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
 		// '../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
@@ -47,12 +48,12 @@ declare let amplitude;
 				[bgsState]="bgsBattleState"
 			>
 			</bgs-simulation-overlay-standalone>
-			<twitch-config-widget> </twitch-config-widget>
 			<battlegrounds-minions-tiers-twitch
 				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showMinionsList$ | async)"
 				[availableRaces]="bgsState?.availableRaces"
 				[currentTurn]="bgsState?.currentTurn"
 			></battlegrounds-minions-tiers-twitch>
+			<twitch-config-widget></twitch-config-widget>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

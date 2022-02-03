@@ -1,5 +1,4 @@
 import {
-	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -27,25 +26,27 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-bgs-hero-overview.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-theme bgs-hero-overview-tooltip {{ leaderboardPositionClass }} scalable">
-			<bgs-opponent-overview-big
-				[opponent]="_opponent"
-				[enableSimulation]="false"
-				[maxBoardHeight]="-1"
-				[currentTurn]="currentTurn"
-				tavernTitle="Latest upgrade"
-				[showTavernsIfEmpty]="false"
-			></bgs-opponent-overview-big>
-		</div>
-		<div class="cards" *ngIf="showHeroCards$ | async">
-			<img class="card normal" [src]="heroPowerImage" />
-			<img class="card buddy normal" [src]="buddyCardImage" />
-			<img class="card buddy golden" [src]="buddyCardGoldenImage" />
+		<div class="battlegrounds-theme container scalable">
+			<div class="bgs-hero-overview-tooltip {{ leaderboardPositionClass }}">
+				<bgs-opponent-overview-big
+					[opponent]="_opponent"
+					[enableSimulation]="false"
+					[maxBoardHeight]="-1"
+					[currentTurn]="currentTurn"
+					tavernTitle="Latest upgrade"
+					[showTavernsIfEmpty]="false"
+				></bgs-opponent-overview-big>
+			</div>
+			<div class="cards" *ngIf="showHeroCards$ | async">
+				<img class="card normal" [src]="heroPowerImage" />
+				<img class="card buddy normal" [src]="buddyCardImage" />
+				<img class="card buddy golden" [src]="buddyCardGoldenImage" />
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchComponent implements AfterContentInit {
+export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchComponent {
 	showHeroCards$: Observable<boolean>;
 
 	_opponent: BgsPlayer;
@@ -91,9 +92,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
-	}
-
-	ngAfterContentInit(): void {
+		console.debug('constructor');
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
 		from(this.prefs.prefs.asObservable())
 			.pipe(this.mapData((prefs) => prefs?.heroBoardScale))
@@ -101,6 +100,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				console.log('updated scale', scale);
 			});
 	}
 }

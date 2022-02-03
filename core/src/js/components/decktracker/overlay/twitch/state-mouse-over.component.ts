@@ -13,7 +13,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
 			<ul class="bgs-leaderboard" *ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded">
 				<leaderboard-empty-card
-					*ngFor="let bgsPlayer of bgsPlayers; let i = index"
+					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
 				>
@@ -132,6 +132,10 @@ export class StateMouseOverComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	trackByLeaderboard(index: number, player: TwitchBgsPlayer) {
+		return player.cardId;
+	}
 
 	handRotation(i: number) {
 		const totalCards = this.bottomHandCards.length;
