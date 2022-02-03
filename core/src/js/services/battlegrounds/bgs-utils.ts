@@ -77,7 +77,8 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 };
 
 export const getHeroPower = (heroCardId: string): string => {
-	switch (heroCardId) {
+	const normalized = normalizeHeroCardId(heroCardId);
+	switch (normalized) {
 		case 'TB_BaconShop_HERO_01':
 			return 'TB_BaconShop_HP_001';
 		case 'TB_BaconShop_HERO_02':
