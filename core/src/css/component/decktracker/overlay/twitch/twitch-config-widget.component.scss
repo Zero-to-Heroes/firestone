@@ -33,12 +33,35 @@
 		padding: 10px 20px;
 		font-size: 14px;
 
+		.group {
+			display: flex;
+			flex-direction: column;
+
+			&:not(:last-child) {
+				margin-bottom: 5px;
+			}
+		}
+
+		.item {
+			margin-bottom: 10px;
+		}
+
 		.indented {
 			margin-left: 40px;
 		}
 
 		checkbox ::ng-deep {
+			display: flex;
+			align-items: center;
+
+			.checkbox {
+				display: flex;
+				align-items: center;
+			}
+
 			label {
+				margin-bottom: 0;
+
 				i {
 					margin-right: 6px;
 					--icon-color: var(--color-2);

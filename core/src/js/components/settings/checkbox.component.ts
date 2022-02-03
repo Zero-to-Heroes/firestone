@@ -17,7 +17,7 @@ import { uuid } from '../../services/utils';
 		`../../../css/component/settings/checkbox.component.scss`,
 	],
 	template: `
-		<div class="checkbox">
+		<div class="checkbox" [ngClass]="{ 'disabled': disabled }">
 			<input type="checkbox" name="checkbox-{{ uniqueId }}" id="checkbox-{{ uniqueId }}" />
 			<label for="checkbox-{{ uniqueId }}" (mousedown)="toggleValue()" [helpTooltip]="labelTooltip">
 				<i class="unselected" *ngIf="!value">
@@ -42,6 +42,7 @@ export class CheckboxComponent {
 	@Input() label: string;
 	@Input() labelTooltip: string;
 	@Input() value: boolean;
+	@Input() disabled: boolean;
 
 	uniqueId: string;
 

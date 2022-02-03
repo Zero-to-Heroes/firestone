@@ -14,61 +14,67 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 	template: `
 		<div class="twitch-config-widget">
 			<div class="settings" *ngIf="prefs$ | async as prefs">
-				<checkbox
-					[label]="'twitch.show-hero-cards-help' | owTranslate"
-					[labelTooltip]="'twitch.show-hero-cards-help-tooltip' | owTranslate"
-					[value]="prefs.showHeroCards"
-					(valueChanged)="onShowHeroCardsChanged(prefs, $event)"
-				></checkbox>
-				<checkbox
-					[label]="'twitch.show-minions-list' | owTranslate"
-					[labelTooltip]="'twitch.show-minions-list-tooltip' | owTranslate"
-					[value]="prefs.showMinionsList"
-					(valueChanged)="onShowMinionsListChanged(prefs, $event)"
-				></checkbox>
-				<checkbox
-					[label]="'twitch.show-minions-list-golden-cards' | owTranslate"
-					[labelTooltip]="'twitch.show-minions-list-golden-cards-tooltip' | owTranslate"
-					[value]="prefs.showMinionsListGoldenCards"
-					(valueChanged)="onShowMinionsListGoldenCardsChanged(prefs, $event)"
-				></checkbox>
-				<checkbox
-					[label]="'twitch.show-battle-simulator' | owTranslate"
-					[value]="prefs.showBattleSimulator"
-					(valueChanged)="onShowBattleSimulatorChanged(prefs, $event)"
-				></checkbox>
-				<numeric-input
-					class="input sim-size indented"
-					[label]="'twitch.battle-simulator-size' | owTranslate"
-					[value]="prefs.battleSimScale"
-					[disabled]="!prefs.showBattleSimulator"
-					[minValue]="10"
-					[incrementStep]="5"
-					(valueChange)="onBattleSimScaleChanged(prefs, $event)"
-				></numeric-input>
-
-				<!-- <div class="input sim-size indented" [ngClass]="{ 'disabled': !prefs.showBattleSimulator }">
-					<div class="label" [owTranslate]="'twitch.battle-simulator-size'"></div>
-					<input
-						type="number"
-						[ngModel]="prefs.battleSimScale"
-						(ngModelChange)="onBattleSimScaleChanged(prefs, $event)"
-						(mousedown)="preventDrag($event)"
-						(dblclick)="$event.target.select()"
-					/>
-					<div class="buttons">
-						<button
-							class="arrow up"
-							inlineSVG="assets/svg/arrow.svg"
-							(click)="incrementBattleSimScale(prefs)"
-						></button>
-						<button
-							class="arrow down"
-							inlineSVG="assets/svg/arrow.svg"
-							(click)="decrementBattleSimScale(prefs)"
-						></button>
-					</div>
-				</div> -->
+				<div class="group">
+					<checkbox
+						class="item"
+						[label]="'twitch.show-hero-cards-help' | owTranslate"
+						[labelTooltip]="'twitch.show-hero-cards-help-tooltip' | owTranslate"
+						[value]="prefs.showHeroCards"
+						(valueChanged)="onShowHeroCardsChanged(prefs, $event)"
+					></checkbox>
+					<numeric-input
+						class="item input board-size"
+						[label]="'twitch.last-board-size' | owTranslate"
+						[labelTooltip]="'twitch.last-board-size-tooltip' | owTranslate"
+						[value]="prefs.heroBoardScale"
+						[minValue]="10"
+						[incrementStep]="5"
+						(valueChange)="onHeroBoardScaleChanged(prefs, $event)"
+					></numeric-input>
+				</div>
+				<div class="group">
+					<checkbox
+						class="item"
+						[label]="'twitch.show-minions-list' | owTranslate"
+						[labelTooltip]="'twitch.show-minions-list-tooltip' | owTranslate"
+						[value]="prefs.showMinionsList"
+						(valueChanged)="onShowMinionsListChanged(prefs, $event)"
+					></checkbox>
+					<checkbox
+						class="item indented"
+						[label]="'twitch.show-minions-list-golden-cards' | owTranslate"
+						[labelTooltip]="'twitch.show-minions-list-golden-cards-tooltip' | owTranslate"
+						[disabled]="!prefs.showMinionsList"
+						[value]="prefs.showMinionsListGoldenCards"
+						(valueChanged)="onShowMinionsListGoldenCardsChanged(prefs, $event)"
+					></checkbox>
+					<numeric-input
+						class="item input minions-list-size indented"
+						[label]="'twitch.minions-list-size' | owTranslate"
+						[value]="prefs.minionsListScale"
+						[disabled]="!prefs.showMinionsList"
+						[minValue]="10"
+						[incrementStep]="5"
+						(valueChange)="onMinionsListScaleChanged(prefs, $event)"
+					></numeric-input>
+				</div>
+				<div class="group">
+					<checkbox
+						class="item"
+						[label]="'twitch.show-battle-simulator' | owTranslate"
+						[value]="prefs.showBattleSimulator"
+						(valueChanged)="onShowBattleSimulatorChanged(prefs, $event)"
+					></checkbox>
+					<numeric-input
+						class="item input sim-size indented"
+						[label]="'twitch.battle-simulator-size' | owTranslate"
+						[value]="prefs.battleSimScale"
+						[disabled]="!prefs.showBattleSimulator"
+						[minValue]="10"
+						[incrementStep]="5"
+						(valueChange)="onBattleSimScaleChanged(prefs, $event)"
+					></numeric-input>
+				</div>
 			</div>
 			<div class="side-text">
 				<div class="text" [owTranslate]="'twitch.settings-side-text'"></div>
@@ -125,15 +131,15 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 		this.prefs.savePrefs(newPrefs);
 	}
 
-	incrementBattleSimScale(prefs: TwitchPreferences) {
-		const newPrefs: TwitchPreferences = { ...prefs, battleSimScale: prefs.battleSimScale + 5 };
-		console.log('incrementing battleSimScale pref', newPrefs);
+	onMinionsListScaleChanged(prefs: TwitchPreferences, value: number) {
+		const newPrefs: TwitchPreferences = { ...prefs, minionsListScale: value };
+		console.log('changing minionsListScale pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 
-	decrementBattleSimScale(prefs: TwitchPreferences) {
-		const newPrefs: TwitchPreferences = { ...prefs, battleSimScale: prefs.battleSimScale - 5 };
-		console.log('incrementing battleSimScale pref', newPrefs);
+	onHeroBoardScaleChanged(prefs: TwitchPreferences, value: number) {
+		const newPrefs: TwitchPreferences = { ...prefs, heroBoardScale: value };
+		console.log('changing heroBoardScale pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

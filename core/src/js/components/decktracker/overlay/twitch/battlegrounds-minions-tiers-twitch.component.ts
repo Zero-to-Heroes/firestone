@@ -3,8 +3,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	Input,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
@@ -14,7 +16,6 @@ import { getAllCardsInGame } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-twitch',
@@ -58,9 +59,11 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	}
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: TwitchPreferencesService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
 	}
@@ -69,19 +72,21 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		this.tiers$ = this._availableRaces.asObservable().pipe(
 			this.mapData((races) => {
 				const cardsInGame = getAllCardsInGame(races, this.allCards);
-				console.log('cardsInGame', cardsInGame, this.allCards);
 				const result = this.buildTiers(cardsInGame);
-				console.log('result', result);
 				return result;
 			}),
 		);
-		this.currentTurn$ = this._currentTurn.asObservable().pipe(
-			tap((info) => console.debug('currentTurn', info)),
-			this.mapData((currentTurn) => currentTurn),
-		);
+		this.currentTurn$ = this._currentTurn.asObservable().pipe(this.mapData((currentTurn) => currentTurn));
 		this.showGoldenCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsListGoldenCards),
 		);
+		from(this.prefs.prefs.asObservable())
+			.pipe(this.mapData((prefs) => prefs?.minionsListScale))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
 	}
 
 	startDragging() {

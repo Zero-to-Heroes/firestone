@@ -1,4 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { CardIds } from '@firestone-hs/reference-data';
@@ -18,7 +27,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-bgs-hero-overview.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-theme bgs-hero-overview-tooltip {{ leaderboardPositionClass }}">
+		<div class="battlegrounds-theme bgs-hero-overview-tooltip {{ leaderboardPositionClass }} scalable">
 			<bgs-opponent-overview-big
 				[opponent]="_opponent"
 				[enableSimulation]="false"
@@ -74,15 +83,24 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 	}
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: TwitchPreferencesService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
+		from(this.prefs.prefs.asObservable())
+			.pipe(this.mapData((prefs) => prefs?.heroBoardScale))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
 	}
 }

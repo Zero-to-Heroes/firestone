@@ -8,6 +8,9 @@
 	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
 	border-image-slice: 1;
+	min-height: 110px;
+	height: 110px;
+	flex-shrink: 0;
 
 	&.position-8 {
 		margin-top: -140px;
@@ -22,12 +25,40 @@
 		margin-top: -50px;
 	}
 
-	::ng-deep bgs-board {
-		.card-on-board .main-card .card-art {
-			clip-path: ellipse(46% 39% at 50% 50%);
-			top: 0;
-			left: 0;
-			object-fit: cover;
+	::ng-deep .opponent-overview {
+		bgs-board {
+			.card-on-board .main-card .card-art {
+				clip-path: ellipse(46% 39% at 50% 50%);
+				top: 0;
+				left: 0;
+				object-fit: cover;
+			}
+		}
+
+		.player-overview .player-info {
+			.bottom-info {
+				height: 100%;
+			}
+
+			.triple-tiers {
+				flex-grow: 1;
+				align-items: center;
+			}
+
+			.tavern-upgrades {
+				.title {
+					margin-bottom: 0;
+				}
+				.upgrades {
+					flex-grow: 1;
+					align-items: center;
+					display: flex;
+
+					.tavern-upgrade {
+						margin: 0;
+					}
+				}
+			}
 		}
 	}
 }

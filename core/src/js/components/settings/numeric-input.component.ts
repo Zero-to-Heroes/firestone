@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	],
 	template: `
 		<div class="numeric-input" [ngClass]="{ 'disabled': disabled }">
-			<div class="label" [innerHTML]="label"></div>
+			<div class="label" [innerHTML]="label" [helpTooltip]="labelTooltip"></div>
 			<input
 				type="number"
 				[ngModel]="value"
@@ -33,6 +33,7 @@ export class NumericInputComponent {
 	@Input() disabled: boolean;
 	@Input() incrementStep = 1;
 	@Input() minValue: number;
+	@Input() labelTooltip: string;
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
