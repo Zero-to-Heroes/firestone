@@ -117,7 +117,7 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 	readonly RARITY_FILTER_EPIC = 'epic';
 	readonly RARITY_FILTER_LEGENDARY = 'legendary';
 
-	readonly CLASS_FILTER_ALL = 'class-all';
+	readonly CLASS_FILTER_ALL = 'all';
 	readonly CLASS_FILTER_NEUTRAL = 'neutral';
 	readonly CLASS_DEMON_HUNTER = 'demonhunter';
 	readonly CLASS_DRUID = 'druid';
