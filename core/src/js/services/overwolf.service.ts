@@ -26,14 +26,14 @@ export class OverwolfService {
 
 	public isOwEnabled(): boolean {
 		try {
-			return overwolf && overwolf.windows;
+			return typeof overwolf !== 'undefined' && overwolf && overwolf.windows;
 		} catch (e) {
 			return false;
 		}
 	}
 
 	public getMainWindow(): any {
-		return overwolf?.windows?.getMainWindow();
+		return this.isOwEnabled() ? overwolf.windows.getMainWindow() : null;
 	}
 
 	public getCollectionWindow(prefs: Preferences) {
