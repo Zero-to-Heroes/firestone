@@ -43,7 +43,7 @@ declare let amplitude;
 			<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
 			</decktracker-overlay-standalone>
 			<bgs-simulation-overlay-standalone
-				*ngIf="bgsState?.inGame && !bgsState?.gameEnded"
+				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
 				[bgsState]="bgsBattleState"
 			>
 			</bgs-simulation-overlay-standalone>
@@ -61,6 +61,7 @@ export class DeckTrackerOverlayContainerComponent
 	extends AbstractSubscriptionTwitchComponent
 	implements AfterViewInit, AfterContentInit {
 	showMinionsList$: Observable<boolean>;
+	showBattleSimulator$: Observable<boolean>;
 
 	gameState: GameState;
 	bgsState: TwitchBgsState;
@@ -86,6 +87,9 @@ export class DeckTrackerOverlayContainerComponent
 	ngAfterContentInit(): void {
 		this.showMinionsList$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsList),
+		);
+		this.showBattleSimulator$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.showBattleSimulator),
 		);
 	}
 

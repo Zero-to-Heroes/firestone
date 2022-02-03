@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
+import { NumericInputComponent } from '@components/settings/numeric-input.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -202,6 +203,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		PreferenceToggleComponent,
 		CheckboxComponent,
+		NumericInputComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,
@@ -333,6 +335,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 		PreferenceToggleComponent,
 		CheckboxComponent,
+		NumericInputComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,

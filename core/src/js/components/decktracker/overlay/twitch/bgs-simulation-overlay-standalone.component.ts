@@ -1,12 +1,18 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	Input,
 	Output,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { from } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 
@@ -26,14 +32,16 @@ import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 		>
-			<div class="battlegrounds-theme simulation-overlay">
+			<div class="simulation-overlay scalable">
 				<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="false"></bgs-battle-status>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulationOverlayStandaloneComponent {
+export class BgsSimulationOverlayStandaloneComponent
+	extends AbstractSubscriptionTwitchComponent
+	implements AfterContentInit {
 	nextBattle: BgsFaceOffWithSimulation;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
@@ -49,7 +57,24 @@ export class BgsSimulationOverlayStandaloneComponent {
 		} as BgsFaceOffWithSimulation);
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: TwitchPreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit() {
+		from(this.prefs.prefs.asObservable())
+			.pipe(this.mapData((prefs) => prefs?.battleSimScale))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			});
+	}
 
 	startDragging() {
 		this.dragStart.next();
