@@ -28,6 +28,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				></bgs-board>
 				<div class="bottom-info">
 					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
+					<bgs-buddies [buddies]="buddies"></bgs-buddies>
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
@@ -58,6 +59,7 @@ export class BgsOpponentOverviewBigComponent {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
+	buddies: readonly number[];
 
 	@Input() rating: number;
 	@Input() debug: boolean;
@@ -83,6 +85,7 @@ export class BgsOpponentOverviewBigComponent {
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
+		this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

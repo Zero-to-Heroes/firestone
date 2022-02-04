@@ -22,7 +22,7 @@
 
 		::ng-deep bgs-board {
 			flex-shrink: 0;
-			height: calc(100% - 70px);
+			height: calc(100% - 80px);
 
 			.board {
 				margin-bottom: 0px;
@@ -38,8 +38,23 @@
 	.bottom-info {
 		display: flex;
 		position: relative;
-		top: 10px;
+		// top: 10px;
 		height: 70px;
+
+		bgs-buddies {
+			margin-left: 15px;
+			margin-right: 15px;
+
+			::ng-deep {
+				.buddies-container {
+					border-right: none;
+				}
+
+				.title {
+					display: none;
+				}
+			}
+		}
 
 		.triples-section {
 			display: flex;
