@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
@@ -133,7 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json');
+	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=2');
 }
 
 // Include everything that is needed for both Twitch and the standard app here
@@ -238,6 +239,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
+		BgsBuddiesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,
@@ -370,6 +372,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
+		BgsBuddiesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,

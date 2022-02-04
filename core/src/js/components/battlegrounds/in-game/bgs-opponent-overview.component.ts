@@ -1,13 +1,6 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
@@ -43,9 +36,9 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 				></bgs-board>
 				<div class="filler"></div>
 			</div>
-			<div class="tavern-upgrades" *ngIf="tavernUpgrades?.length">
+			<div class="tavern-upgrades">
 				<div class="title" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
-				<div class="upgrades">
+				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 						<div
@@ -55,7 +48,13 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 						></div>
 					</div>
 				</div>
+				<div
+					class="subtitle"
+					*ngIf="!tavernUpgrades?.length"
+					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
+				></div>
 			</div>
+			<bgs-buddies [buddies]="buddies"></bgs-buddies>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
 				class="last-opponent-icon"
@@ -79,6 +78,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	debug = false;
+	buddies: readonly number[];
 
 	@Input() showLastOpponentIcon: boolean;
 
@@ -106,11 +106,12 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
+		this.buddies = value.buddyTurns;
 	}
 
 	private _opponent: BgsPlayer;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	ngAfterViewInit() {
 		if (this.debug) {

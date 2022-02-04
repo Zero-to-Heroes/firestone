@@ -159,7 +159,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			overflow: hidden;
-			justify-content: flex-end;
+			justify-content: flex-start;
 
 			.upgrades {
 				display: flex;
@@ -185,6 +185,13 @@
 		}
 	}
 
+	bgs-buddies {
+		display: none;
+		width: 170px;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
 	.last-opponent-icon {
 		width: 28px;
 		height: 28px;
@@ -204,6 +211,14 @@
 		}
 		.filler {
 			display: none;
+		}
+	}
+}
+
+@media (min-width: 1550px) {
+	.opponent-overview {
+		bgs-buddies {
+			display: flex;
 		}
 	}
 }

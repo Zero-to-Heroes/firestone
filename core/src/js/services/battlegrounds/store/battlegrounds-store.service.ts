@@ -1,5 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
+import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
@@ -245,6 +247,10 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE) {
 				this.battlegroundsUpdater.next(
 					new BgsTavernUpgradeEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.tavernLevel),
+				);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BUDDY_GAINED) {
+				this.battlegroundsUpdater.next(
+					new BgsBuddyGainedEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.totalBuddies),
 				);
 			} else if (
 				gameEvent.type === GameEvent.DAMAGE &&
@@ -506,6 +512,7 @@ export class BattlegroundsStoreService {
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(this.gameEventsService),
+			new BgsBuddyGainedParser(this.gameEventsService),
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService),
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),

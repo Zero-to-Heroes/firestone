@@ -1,6 +1,7 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { NonFunctionProperties } from '@services/utils';
 import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
 import { BgsBoard } from './in-game/bgs-board';
@@ -30,13 +31,15 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly leaderboardPlace: number;
 	readonly currentWinStreak: number;
 	readonly highestWinStreak: number;
+	// Most recent last
+	readonly buddyTurns: readonly number[] = [];
 
-	public static create(base: BgsPlayer): BgsPlayer {
+	public static create(base: Partial<NonFunctionProperties<BgsPlayer>>): BgsPlayer {
 		const startingHealth = base.cardId === CardIds.PatchwerkBattlegrounds ? 55 : 40;
 		return Object.assign(new BgsPlayer(), { initialHealth: startingHealth }, base);
 	}
 
-	public update(base: BgsPlayer) {
+	public update(base: Partial<NonFunctionProperties<BgsPlayer>>) {
 		return Object.assign(new BgsPlayer(), this, base);
 	}
 

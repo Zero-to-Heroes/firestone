@@ -1054,6 +1054,17 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_BUDDY_GAINED':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_BUDDY_GAINED,
+						additionalData: {
+							cardId: gameEvent.Value.CardId,
+							totalBuddies: gameEvent.Value.TotalBuddies,
+						},
+					} as GameEvent),
+				);
+				break;
 			case 'WINNER':
 				console.log(gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
 				this.gameEventsEmitter.allEvents.next(
