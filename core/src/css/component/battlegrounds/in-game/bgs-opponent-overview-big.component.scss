@@ -53,6 +53,10 @@
 				.title {
 					display: none;
 				}
+
+				.buddies .buddy:not(:first-child) {
+					display: none;
+				}
 			}
 		}
 

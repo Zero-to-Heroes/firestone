@@ -28,7 +28,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				></bgs-board>
 				<div class="bottom-info">
 					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
-					<bgs-buddies [buddies]="buddies"></bgs-buddies>
+					<bgs-buddies
+						[buddies]="buddies"
+						[title]="buddiesTitle"
+						*ngIf="showBuddiesIfEmpty || buddies?.length"
+					></bgs-buddies>
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
@@ -68,7 +72,9 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() nextBattle: BgsFaceOffWithSimulation;
 	@Input() maxBoardHeight = 1;
 	@Input() tavernTitle = this.i18n.translateString('battlegrounds.in-game.opponents.tavern-upgrade-title');
+	@Input() buddiesTitle: string;
 	@Input() showTavernsIfEmpty = true;
+	@Input() showBuddiesIfEmpty = true;
 	@Input() showLastOpponentIcon: boolean;
 
 	@Input() set opponent(value: BgsPlayer) {

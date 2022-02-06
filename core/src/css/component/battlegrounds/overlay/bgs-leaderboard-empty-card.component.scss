@@ -93,6 +93,17 @@
 				clip-path: ellipse(35% 35% at 50% 50%);
 			}
 		}
+
+		.buddy {
+			.icon {
+			}
+
+			&.missing {
+				.icon {
+					opacity: 0.3;
+				}
+			}
+		}
 	}
 }
 

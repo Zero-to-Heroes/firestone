@@ -29,7 +29,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[maxBoardHeight]="-1"
 				[currentTurn]="currentTurn"
 				tavernTitle="Latest upgrade"
+				buddiesTitle="Latest buddy"
 				[showTavernsIfEmpty]="false"
+				[showBuddiesIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"
 			></bgs-opponent-overview-big>
 		</div>
