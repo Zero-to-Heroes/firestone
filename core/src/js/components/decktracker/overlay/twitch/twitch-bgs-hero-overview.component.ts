@@ -35,6 +35,8 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 					[currentTurn]="currentTurn"
 					tavernTitle="Latest upgrade"
 					[showTavernsIfEmpty]="false"
+					buddiesTitle="Latest buddy"
+					[showBuddiesIfEmpty]="false"
 				></bgs-opponent-overview-big>
 			</div>
 			<div class="cards" *ngIf="showHeroCards$ | async">
