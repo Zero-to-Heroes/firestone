@@ -27,9 +27,7 @@ export class LocalizationService {
 		this.store
 			.listen$(([main, nav, prefs]) => prefs?.locale)
 			.pipe(map(([pref]) => pref))
-			.subscribe((pref) => {
-				this.locale = pref;
-			});
+			.subscribe((pref) => this.setLocale(pref));
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.collectionUseHighResImages)
 			.pipe(map(([pref]) => pref))
@@ -37,6 +35,10 @@ export class LocalizationService {
 				this.useHighResImages = pref;
 			});
 		window['localizationService'] = this;
+	}
+
+	public setLocale(locale: string) {
+		this.locale = locale;
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {

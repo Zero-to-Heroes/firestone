@@ -65,7 +65,7 @@ export class LocalizationStandaloneService {
 		return `Unknown ${capitalizeEachWord(race)}`;
 	}
 
-	public translateString(key: string): string {
-		return this.translate.instant(key);
+	public translateString(key: string, params: any = null): string {
+		return this.translate.instant(key, params);
 	}
 }

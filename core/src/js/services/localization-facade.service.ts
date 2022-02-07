@@ -10,6 +10,10 @@ export class LocalizationFacadeService {
 		this.init();
 	}
 
+	public async setLocale(locale: string) {
+		this.service.setLocale(locale);
+	}
+
 	public init() {
 		this.service = this.ow.getMainWindow().localizationService;
 		if (!this.service) {

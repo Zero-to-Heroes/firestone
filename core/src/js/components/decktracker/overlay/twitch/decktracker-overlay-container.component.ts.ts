@@ -10,13 +10,13 @@ import {
 import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { TranslateService } from '@ngx-translate/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { from, Observable } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
-import { LocalizationStandaloneService } from './localization-standalone.service';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
@@ -77,7 +77,7 @@ export class DeckTrackerOverlayContainerComponent
 
 	constructor(
 		private readonly http: HttpClient,
-		private readonly i18n: LocalizationStandaloneService,
+		private readonly i18n: LocalizationFacadeService,
 		private readonly translate: TranslateService,
 		private readonly prefs: TwitchPreferencesService,
 		protected readonly cdr: ChangeDetectorRef,
