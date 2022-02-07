@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.6.6',
+		version: '8.7.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add information about when each player got their buddies.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue that would cause some tabs to appear empty until the MMR filter was changed.`,
+								text: `Fix a sim issue when facing Tavish.`,
 							},
 						],
 					},
@@ -65,29 +69,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add support for Tavish's Hero Power in the simulator.`,
+								text: `Show the buddies for each hero when mousing over their portrait in the tier list.`,
 							},
 							{
 								type: 'feature',
-								text: `The app now won't automatically switch to the Post-match stats tab when a game completes. That behavior made strange in the past, but now you might be already monitoring the stats live, or might be in the midst of playing with the simulator when the game ends, and forcibly changing the active tab is just annoying.`,
+								text: `Add an option to remove the "next opponent" box from the opponents tab in the BG window.`,
 							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where secrets created by Rinling's Rifle would not appear in the Other zone.`,
+								text: `Fix a sim issue when handling deathrattle spawns in-between windfury attacks.`,
 							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix a a few text missing issues.`,
+								text: `Fix a sim issue where the sequencing of multiple start of combat effects would be wrong.`,
+							},
+							{
+								type: 'bug',
+								text: `Remove Stone Elemental from the minions list.`,
 							},
 						],
 					},
