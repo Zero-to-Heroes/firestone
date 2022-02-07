@@ -105,7 +105,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsStat> {
 		const prefs = await this.prefs.getPreferences();
-		const mmr = (prefs.duelsActiveMmrFilter as any) === 'all' ? 100 : prefs.duelsActiveMmrFilter;
+		const mmr = (prefs.duelsActiveMmrFilter as any) === 'all' ? 100 : Math.min(100, prefs.duelsActiveMmrFilter);
 		const result: DuelsStat = await this.api.callGetApi(
 			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmr).replace('%date%', prefs.duelsActiveTimeFilter),
 		);
