@@ -21,6 +21,7 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 })
 export class RankImageComponent {
 	@Input() set stat(value: GameStat) {
+		console.debug('setting value', value);
 		this.playerRank = value.playerRank;
 		const rankImage = value.buildPlayerRankImage();
 		this.playerRankImage = rankImage.frameImage;

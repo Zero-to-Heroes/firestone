@@ -1,0 +1,164 @@
+.current-session-widget {
+	display: flex;
+	flex-direction: column;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: var(--window-background-image);
+	width: 300px;
+	color: var(--color-2);
+
+	.controls {
+		display: flex;
+		height: 25px;
+		margin-bottom: 1px solid var(--color-3);
+
+		.mode,
+		.display,
+		.reset {
+			border-right: 1px solid var(--color-3);
+		}
+
+		.mode,
+		.display {
+			padding: 0 10px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-grow: 1;
+		}
+
+		.buttons {
+			display: flex;
+
+			.button {
+				position: relative;
+				width: var(--size, 30px);
+				height: var(--size, 30px);
+				--icon-color: var(--control-button-color);
+				color: var(--control-button-color);
+				background-color: trasnparent;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex: 0 0 auto;
+				cursor: default;
+
+				svg {
+					width: 100%;
+					height: 100%;
+					flex: 0 0 auto;
+					pointer-events: none;
+					user-select: none;
+				}
+
+				&:hover {
+					background: var(--on-close-button-background-color); // #2F0D0D;
+					color: var(--on-close-button-color); //#CCA2B3;
+					--icon-color: var(--on-close-button-color); //#CCA2B3;
+				}
+			}
+		}
+
+		.reset,
+		.close {
+			svg {
+				max-width: 25px;
+				max-height: 25px;
+			}
+		}
+	}
+
+	.summary {
+		display: flex;
+		height: 40px;
+		padding: 0 10px;
+
+		.games {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.rank {
+			display: flex;
+			width: 100px;
+			align-items: center;
+
+			.current {
+				width: 35px;
+				height: 35px;
+			}
+
+			.delta {
+				font-size: 20px;
+				color: var(--default-title-color);
+				margin-left: 10px;
+
+				&.positive {
+					color: #61ff47;
+
+					&::before {
+						content: '+';
+					}
+				}
+
+				&.negative {
+					color: #ff4747;
+				}
+			}
+		}
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		margin-top: 5px;
+
+		.grouped,
+		.details {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.group {
+			display: flex;
+			padding-left: 10px;
+			padding-right: 10px;
+			height: 40px;
+			align-items: center;
+
+			.category {
+				width: 60px;
+				flex-shrink: 0;
+				color: var(--color-1);
+			}
+
+			.value {
+				width: 40px;
+				flex-shrink: 0;
+				color: var(--default-title-color);
+			}
+
+			.group-details {
+				display: flex;
+				overflow: hidden;
+
+				::ng-deep .group-detail {
+					margin-right: 5px;
+
+					.icon {
+						width: 30px;
+						height: 30px;
+						clip-path: circle(10px at 50% 50%);
+						transform: scale(1.5);
+					}
+				}
+			}
+		}
+	}
+}

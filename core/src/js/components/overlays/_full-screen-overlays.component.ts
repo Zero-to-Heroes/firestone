@@ -33,6 +33,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	],
 	template: `
 		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
+			<!-- Global -->
+			<current-session-widget-wrapper></current-session-widget-wrapper>
+
 			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>

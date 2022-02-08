@@ -13,6 +13,8 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
+import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -569,6 +571,8 @@ const components = [
 		InGameOpponentRecapComponent,
 		ConstructedMenuSelectionComponent,
 
+		CurrentSessionWidgetComponent,
+
 		GenericCountersComponent,
 
 		OpponentHandOverlayComponent,
@@ -792,6 +796,7 @@ const components = [
 		SecretsHelperWidgetWrapperComponent,
 		OpponentHandWidgetWrapperComponent,
 		ConstructedBoardWidgetWrapperComponent,
+		CurrentSessionWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
