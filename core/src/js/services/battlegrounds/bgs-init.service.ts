@@ -15,7 +15,6 @@ import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
-import { FeatureFlags } from '../feature-flags';
 import { OverwolfService } from '../overwolf.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -120,9 +119,6 @@ export class BgsInitService {
 	}
 
 	private buildSimulatorCategory(): BattlegroundsCategory {
-		if (!FeatureFlags.ENABLE_BGS_FULL_SIMULATOR) {
-			return null;
-		}
 		return BattlegroundsSimulatorCategory.create({
 			enabled: true,
 		} as BattlegroundsSimulatorCategory);

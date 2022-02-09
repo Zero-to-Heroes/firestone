@@ -28,7 +28,6 @@ import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
-import { FeatureFlags } from '../feature-flags';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
@@ -245,18 +244,14 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-leaderboard',
+				name: 'Leaderboard',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
 		];
-		if (FeatureFlags.ENABLE_DUELS_LEADERBOARD) {
-			result.push(
-				DuelsCategory.create({
-					id: 'duels-leaderboard',
-					name: 'Leaderboard',
-					enabled: true,
-					icon: undefined,
-					categories: null,
-				} as DuelsCategory),
-			);
-		}
 		return result;
 	}
 

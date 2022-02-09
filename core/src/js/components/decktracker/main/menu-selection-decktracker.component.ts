@@ -9,7 +9,6 @@ import {
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -34,7 +33,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<li
 				[ngClass]="{ 'selected': selectedTab === 'ladder-ranking' }"
 				(mousedown)="selectStage('ladder-ranking')"
-				*ngIf="enableGraph"
 			>
 				<span [owTranslate]="'app.decktracker.menu.ranking-header'"></span>
 			</li>
@@ -45,8 +43,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class MenuSelectionDecktrackerComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
-	enableGraph = FeatureFlags.ENABLE_CONSTRUCTED_RANKING_GRAPH;
-
 	selectedTab$: Observable<string>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

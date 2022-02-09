@@ -13,7 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
-import { FeatureFlags } from '../services/feature-flags';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -48,11 +47,7 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.battlegrounds-header'"></div>
 				</div>
 			</li>
-			<li
-				[ngClass]="{ 'selected': selectedModule === 'mercenaries' }"
-				(mousedown)="selectModule('mercenaries')"
-				*ngIf="enableMercenariesTab"
-			>
+			<li [ngClass]="{ 'selected': selectedModule === 'mercenaries' }" (mousedown)="selectModule('mercenaries')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
@@ -102,11 +97,7 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.collection-header'"></div>
 				</div>
 			</li>
-			<li
-				[ngClass]="{ 'selected': selectedModule === 'stats' }"
-				(mousedown)="selectModule('stats')"
-				*ngIf="enableStatsTab"
-			>
+			<li [ngClass]="{ 'selected': selectedModule === 'stats' }" (mousedown)="selectModule('stats')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/stats.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
@@ -145,9 +136,6 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
-	enableStatsTab = FeatureFlags.ENABLE_STATS_TAB;
-	enableMercenariesTab = FeatureFlags.ENABLE_MERCENARIES_TAB;
-
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
 
