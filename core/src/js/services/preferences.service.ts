@@ -627,10 +627,7 @@ export class PreferencesService {
 			return result;
 		}
 
-		const resultWithDate: Preferences = {
-			...result,
-			lastUpdateDate: result.lastUpdateDate ? new Date(result.lastUpdateDate) : null,
-		};
+		const resultWithDate: Preferences = Preferences.deserialize(result);
 		this.currentSyncDate = resultWithDate.lastUpdateDate;
 		this.lastSyncPrefs = resultWithDate;
 		console.debug('[preferences] remote prefs', result, resultWithDate);

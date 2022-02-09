@@ -1,4 +1,4 @@
-import { CardIds, GameTag, GameType, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, Race, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
@@ -891,4 +891,8 @@ export const isBattlegrounds = (gameType: GameType): boolean => {
 	return [GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY, GameType.GT_BATTLEGROUNDS_AI_VS_AI].includes(
 		gameType,
 	);
+};
+
+export const isBattlegroundsScene = (scene: SceneMode): boolean => {
+	return [SceneMode.BACON].includes(scene);
 };

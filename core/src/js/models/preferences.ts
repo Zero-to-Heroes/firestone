@@ -38,6 +38,14 @@ import { Ftue } from './preferences/ftue';
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
 
 export class Preferences {
+	public static deserialize(input: Preferences): Preferences {
+		return {
+			...input,
+			lastUpdateDate: input.lastUpdateDate ? new Date(input.lastUpdateDate) : null,
+			currentSessionStartDate: input.currentSessionStartDate ? new Date(input.currentSessionStartDate) : null,
+		};
+	}
+
 	readonly lastUpdateDate: Date;
 	readonly id: number = 1;
 
@@ -57,7 +65,7 @@ export class Preferences {
 
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
-	readonly showCurrentSessionWidget: boolean = true;
+	readonly showCurrentSessionWidgetBgs: boolean = false;
 	readonly currentSessionStartDate: Date = null;
 	readonly sessionWidgetGrouping: SessionWidgetGroupingType = 'grouped';
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

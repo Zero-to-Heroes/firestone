@@ -37,7 +37,15 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	@Input('componentTooltipPosition') set position(
-		value: 'bottom' | 'right' | 'left' | 'top' | 'global-top-center' | 'global-top-left' | 'global-bottom-left',
+		value:
+			| 'bottom'
+			| 'right'
+			| 'left'
+			| 'top'
+			| 'auto'
+			| 'global-top-center'
+			| 'global-top-left'
+			| 'global-bottom-left',
 	) {
 		if (value === this._position) {
 			return;
@@ -53,7 +61,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		| 'top'
 		| 'global-top-center'
 		| 'global-top-left'
-		| 'global-bottom-left' = 'right';
+		| 'global-bottom-left'
+		| 'auto' = 'right';
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -166,6 +175,46 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 				];
 			case 'bottom':
 				return [
+					{
+						originX: 'center',
+						originY: 'bottom',
+						overlayX: 'center',
+						overlayY: 'top',
+					},
+				];
+			case 'auto':
+			default:
+				return [
+					{
+						originX: 'center',
+						originY: 'top',
+						overlayX: 'center',
+						overlayY: 'bottom',
+					},
+					{
+						originX: 'end',
+						originY: 'top',
+						overlayX: 'start',
+						overlayY: 'bottom',
+					},
+					{
+						originX: 'start',
+						originY: 'top',
+						overlayX: 'end',
+						overlayY: 'bottom',
+					},
+					{
+						originX: 'start',
+						originY: 'center',
+						overlayX: 'end',
+						overlayY: 'center',
+					},
+					{
+						originX: 'end',
+						originY: 'center',
+						overlayX: 'start',
+						overlayY: 'center',
+					},
 					{
 						originX: 'center',
 						originY: 'bottom',

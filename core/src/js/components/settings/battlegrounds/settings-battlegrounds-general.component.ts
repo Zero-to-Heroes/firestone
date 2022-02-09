@@ -166,6 +166,11 @@ import { Knob } from '../preference-slider.component';
 					label="Battle Simulation overlay"
 					tooltip="Also show the current battle simulation results as an overlay on top of the game"
 				></preference-toggle>
+				<preference-toggle
+					field="showCurrentSessionWidgetBgs"
+					[label]="'settings.battlegrounds.session-widget-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget-label-tooltip' | owTranslate"
+				></preference-toggle>
 				<!-- <preference-toggle
 					field="playerBgsPogoCounter"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"

@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
+import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
@@ -563,6 +564,7 @@ const components = [
 		BgsSimulatorMinionSelectionComponent,
 		BattlegroundsSimulatorMinionTribeFilterDropdownComponent,
 		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
+		CurrentSessionBgsBoardTooltipComponent,
 
 		ConstructedComponent,
 		ConstructedContentComponent,
@@ -901,6 +903,7 @@ const components = [
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
+		CurrentSessionBgsBoardTooltipComponent,
 		...components,
 	],
 	providers: [

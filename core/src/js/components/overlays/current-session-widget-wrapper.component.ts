@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FeatureFlags } from '@services/feature-flags';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -60,9 +60,9 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	ngAfterContentInit(): void {
-		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidget)).pipe(
-			// tap((info) => console.debug('info', info)),
-			this.mapData(([[displayFromPrefs]]) => displayFromPrefs && FeatureFlags.ENABLE_SESSION_WIDGET),
+		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
+			tap((info) => console.debug('showWidget?', info)),
+			this.mapData(([[displayBgs]]) => displayBgs && FeatureFlags.ENABLE_SESSION_WIDGET),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
 			this.visible = show;

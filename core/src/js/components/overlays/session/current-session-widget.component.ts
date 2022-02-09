@@ -1,25 +1,36 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { GameType } from '@firestone-hs/reference-data';
+import { Entity } from '@firestone-hs/replay-parser';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { Preferences } from '@models/preferences';
 import { SessionWidgetGroupingType } from '@models/session/types';
-import { isBattlegrounds } from '@services/battlegrounds/bgs-utils';
+import { isBattlegrounds, isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, from, Observable } from 'rxjs';
 
 @Component({
 	selector: 'current-session-widget',
-	styleUrls: ['../../../../css/component/overlays/session/current-session-widget.component.scss'],
+	styleUrls: [
+		`../../../../css/themes/battlegrounds-theme.scss`,
+		'../../../../css/component/overlays/session/current-session-widget.component.scss',
+	],
 	template: `
-		<div class="current-session-widget" *ngIf="showWidget$ | async">
+		<div class="current-session-widget battlegrounds-theme" *ngIf="showWidget$ | async">
 			<div class="controls">
-				<div class="mode">{{ currentDisplayedMode$ | async }}</div>
-				<div class="display">{{ currentGroupingLabel$ | async }}</div>
+				<!-- <div class="mode">{{ currentDisplayedMode$ | async }}</div> -->
+				<!-- <div class="display" [helpTooltip]="''">{{ currentGroupingLabel$ | async }}</div> -->
+				<div
+					class="title"
+					[owTranslate]="'session.title'"
+					[helpTooltip]="'session.title-tooltip' | owTranslate"
+				></div>
 				<div class="buttons">
 					<div
 						class="button reset"
@@ -36,7 +47,7 @@ import { combineLatest, Observable } from 'rxjs';
 				</div>
 			</div>
 			<div class="summary">
-				<div class="games">{{ totalGamesLabel$ | async }}</div>
+				<div class="games" [helpTooltip]="gamesTooltip$ | async">{{ totalGamesLabel$ | async }}</div>
 				<div class="rank">
 					<div class="current">
 						<rank-image
@@ -65,15 +76,26 @@ import { combineLatest, Observable } from 'rxjs';
 					<div class="grouped" *ngIf="currentGrouping === 'grouped'">
 						<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
 							<div class="category">{{ group.categoryLabel }}</div>
-							<div class="value">{{ group.value }}</div>
-							<div class="group-details">
-								<div
-									class="group-detail"
-									*ngFor="let detail of group.details; trackBy: trackByDetailFn"
-									[innerHTML]="detail.content"
-									[helpTooltip]="detail.tooltip"
-								></div>
-							</div>
+							<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
+							<ng-container [ngSwitch]="currentMode">
+								<!-- BG details -->
+								<div class="group-details" *ngSwitchCase="'battlegrounds'">
+									<div class="background"></div>
+									<div
+										class="group-detail battlegrounds"
+										*ngFor="let detail of group.details; trackBy: trackByDetailFn"
+										componentTooltip
+										[componentType]="componentType"
+										[componentInput]="detail.boardEntities"
+										componentTooltipPosition="auto"
+									>
+										<bgs-hero-portrait
+											class="portrait"
+											[heroCardId]="detail.cardId"
+										></bgs-hero-portrait>
+									</div>
+								</div>
+							</ng-container>
 						</div>
 					</div>
 					<div class="details" *ngIf="currentGrouping === 'list'">Not available for now</div>
@@ -84,7 +106,10 @@ import { combineLatest, Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	componentType: ComponentType<any> = CurrentSessionBgsBoardTooltipComponent;
+
 	showWidget$: Observable<boolean>;
+	friendlyGameType$: Observable<'battlegrounds'>;
 	currentDisplayedMode$: Observable<string>;
 	currentGrouping$: Observable<SessionWidgetGroupingType>;
 	currentGroupingLabel$: Observable<string>;
@@ -92,6 +117,9 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	lastGame$: Observable<GameStat>;
 	deltaRank$: Observable<number>;
 	groups$: Observable<readonly Group[]>;
+	gamesTooltip$: Observable<string>;
+
+	currentMode = 'battlegrounds';
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -104,32 +132,51 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 
 	ngAfterContentInit(): void {
 		const currentGameType$ = this.store
-			.listenDeckState$((state) => state?.metadata?.gameType ?? GameType.GT_BATTLEGROUNDS)
+			.listenDeckState$((state) => state?.metadata?.gameType)
 			.pipe(this.mapData(([gameType]) => gameType));
-		this.showWidget$ = currentGameType$.pipe(this.mapData((gameType) => isBattlegrounds(gameType)));
-		this.currentDisplayedMode$ = currentGameType$.pipe(
-			this.mapData((gameType) => this.getDisplayModeKey(gameType)),
+		this.friendlyGameType$ = currentGameType$.pipe(this.mapData((gameType) => this.toFriendlyGameType(gameType)));
+		this.showWidget$ = combineLatest(
+			currentGameType$,
+			this.store.listen$(([main]) => main.currentScene),
+		).pipe(
+			this.mapData(([gameType, [currentScene]]) =>
+				this.currentMode === 'battlegrounds'
+					? isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)
+					: false,
+			),
 		);
+		this.currentDisplayedMode$ = from(this.getDisplayModeKey(this.currentMode));
 		this.currentGrouping$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetGrouping);
 		this.currentGroupingLabel$ = this.currentGrouping$.pipe(
 			this.mapData((grouping) => this.getGroupingKey(grouping)),
 		);
+		this.gamesTooltip$ = this.store
+			.listenPrefs$((prefs) => prefs.currentSessionStartDate)
+			.pipe(
+				this.mapData(([currentSessionStartDate]) =>
+					this.i18n.translateString('session.summary.total-games-tooltip', {
+						value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+							month: 'short',
+							day: '2-digit',
+							year: 'numeric',
+						}),
+					}),
+				),
+			);
 
 		const lastGames$: Observable<readonly GameStat[]> = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.currentSessionStartDate),
 			this.store.listen$(([main, nav, prefs]) => main.stats.gameStats?.stats),
-			currentGameType$,
 		).pipe(
-			this.mapData(([[sessionStartDate], [stats], gameType]) =>
+			this.mapData(([[sessionStartDate], [stats]]) => {
 				// Newest game first
-				stats
-					.filter((stat) => this.gameModeFilter(stat, gameType))
-					.filter((stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime()),
-			),
+				return stats
+					.filter((stat) => this.gameModeFilter(stat, this.currentMode))
+					.filter((stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime());
+			}),
 		);
 		this.totalGamesLabel$ = lastGames$.pipe(
 			this.mapData((games) => {
-				console.debug('totalGamesLabel', games);
 				return this.i18n.translateString('session.summary.total-games', { value: games.length });
 			}),
 		);
@@ -175,10 +222,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		this.groups$ = combineLatest(lastGames$, currentGameType$).pipe(
 			this.mapData(([games, currentGameType]) => {
-				if (isBattlegrounds(currentGameType)) {
-					return this.buildBgsGroups(games);
-				}
-				return null;
+				return this.buildBgsGroups(games);
 			}),
 		);
 	}
@@ -199,7 +243,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	}
 
 	reset() {
-		console.log('resetting session widget');
 		this.store.send(
 			new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
 				...prefs,
@@ -209,11 +252,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	}
 
 	close() {
-		console.log('closing session widget');
+		// TODO: only flip the flag of the current mode
 		this.store.send(
 			new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
 				...prefs,
-				showCurrentSessionWidget: false,
+				showCurrentSessionWidgetBgs: false,
 			})),
 		);
 	}
@@ -227,22 +270,29 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		}
 	}
 
-	private getDisplayModeKey(gameType: GameType): string {
+	private getDisplayModeKey(gameType: string): string {
 		switch (gameType) {
-			case GameType.GT_BATTLEGROUNDS:
-			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
-			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
-				return this.i18n.translateString('session.display-mode.battlegrounds');
+			case 'battlegrounds':
 			default:
-				return this.i18n.translateString('session.display-mode.unknown');
+				return this.i18n.translateString('session.display-mode.battlegrounds');
+			// return this.i18n.translateString('session.display-mode.unknown');
 		}
 	}
 
-	private gameModeFilter(stat: GameStat, gameType: GameType): boolean {
+	private toFriendlyGameType(gameType: GameType): 'battlegrounds' | null {
 		switch (gameType) {
 			case GameType.GT_BATTLEGROUNDS:
 			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+				return 'battlegrounds';
+			default:
+				return null;
+		}
+	}
+
+	private gameModeFilter(stat: GameStat, gameType: string): boolean {
+		switch (gameType) {
+			case 'battlegrounds':
 				return stat.gameMode === 'battlegrounds';
 			default:
 				return false;
@@ -255,28 +305,31 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		const groupedByPosition = groupByFunction((game: GameStat) => game.additionalResult)(gamesWithFinalPosition);
 		const allPositions: readonly number[] = [...Array(8).keys()].map((key) => key + 1);
-		return allPositions.map((position) => {
+		const result = allPositions.map((position) => {
 			const gamesForPosition = groupedByPosition[position] ?? [];
 			return {
 				category: `${position}`,
 				categoryLabel: this.i18n.translateString(`session.groups.battlegrounds.category.${position}`),
 				value: gamesForPosition.length,
+				valueTooltip: this.i18n.translateString(`session.groups.battlegrounds.value-tooltip`),
 				details: this.buildBgsDetails(gamesForPosition),
 			};
 		});
+		return result;
 	}
 
-	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly Detail[] {
-		return gamesForPosition.slice(0, 5).map((game) => {
+	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly BgsDetail[] {
+		return gamesForPosition.slice(0, 7).map((game: GameStat, index) => {
+			const bgsBoard = !!game.postMatchStats?.boardHistory?.length
+				? game.postMatchStats.boardHistory[game.postMatchStats.boardHistory.length - 1]
+				: null;
 			return {
 				id: game.reviewId,
-				content: `
-					<div class="session-widget-detail-content">
-						<img class="icon" src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${game.playerCardId}.jpg" />
-					</div>
-				`,
+				cardId: game.playerCardId,
 				tooltip: this.allCards.getCard(game.playerCardId).name,
-			};
+				// boardEntities: bgsBoard?.board,
+				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
+			} as BgsDetail;
 		});
 	}
 }
@@ -285,11 +338,16 @@ interface Group {
 	readonly category: string;
 	readonly categoryLabel: string;
 	readonly value: number;
+	readonly valueTooltip: string;
 	readonly details: readonly Detail[];
 }
 
 interface Detail {
 	readonly id: string;
-	readonly content: string; // HTML content
+	readonly cardId: string;
 	readonly tooltip: string;
+}
+
+interface BgsDetail extends Detail {
+	readonly boardEntities: readonly Entity[];
 }

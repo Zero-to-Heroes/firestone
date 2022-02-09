@@ -4,18 +4,20 @@
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-image: var(--window-background-image);
-	width: 300px;
+	width: 225px;
 	color: var(--color-2);
+	padding-bottom: 10px;
 
 	.controls {
 		display: flex;
 		height: 25px;
 		margin-bottom: 1px solid var(--color-3);
 
-		.mode,
-		.display,
-		.reset {
-			border-right: 1px solid var(--color-3);
+		.title {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-grow: 1;
 		}
 
 		.mode,
@@ -29,6 +31,7 @@
 			align-items: center;
 			justify-content: center;
 			flex-grow: 1;
+			border-right: 1px solid var(--color-3);
 		}
 
 		.buttons {
@@ -131,6 +134,7 @@
 			padding-right: 10px;
 			height: 40px;
 			align-items: center;
+			position: relative;
 
 			.category {
 				width: 60px;
@@ -147,15 +151,55 @@
 			.group-details {
 				display: flex;
 				overflow: hidden;
+				position: relative;
+				height: 100%;
 
-				::ng-deep .group-detail {
+				.background {
+					background: var(--color-9);
+					z-index: -1;
+					position: absolute;
+					left: 0;
+					right: 0;
+					width: 100%;
+					height: 100%;
+				}
+
+				.group-detail {
 					margin-right: 5px;
+					display: flex;
+					position: relative;
+					top: 3px;
+					opacity: 0.8;
+
+					&.battlegrounds {
+						bgs-hero-portrait {
+							width: 30px;
+						}
+					}
+
+					&:hover {
+						opacity: 1;
+					}
 
 					.icon {
 						width: 30px;
 						height: 30px;
 						clip-path: circle(10px at 50% 50%);
 						transform: scale(1.5);
+					}
+
+					&:nth-child(n + 5) {
+						display: none;
+					}
+				}
+			}
+
+			&:hover {
+				.group-details {
+					overflow: visible;
+
+					.group-detail:nth-child(n + 5) {
+						display: flex;
 					}
 				}
 			}

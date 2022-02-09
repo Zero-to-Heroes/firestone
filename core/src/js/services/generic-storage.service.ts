@@ -20,10 +20,7 @@ export class GenericStorageService {
 	public async getUserPreferences(): Promise<Preferences> {
 		const strPrefs = localStorage.getItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES);
 		const result = !!strPrefs ? Object.assign(new Preferences(), JSON.parse(strPrefs)) : new Preferences();
-		const resultWithDate: Preferences = {
-			...result,
-			lastUpdateDate: result.lastUpdateDate ? new Date(result.lastUpdateDate) : null,
-		};
+		const resultWithDate: Preferences = Preferences.deserialize(result);
 		return resultWithDate;
 	}
 }

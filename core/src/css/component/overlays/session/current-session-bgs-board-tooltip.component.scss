@@ -1,0 +1,15 @@
+.board-tooltip {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-image: var(--window-background-image);
+	padding: 15px;
+
+	::ng-deep bgs-board {
+		.board-turn {
+			display: none;
+		}
+		.minion-container {
+			margin-right: 10px;
+		}
+	}
+}

@@ -9,7 +9,8 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { Observable } from 'rxjs';
+import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
+import { combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -104,20 +105,24 @@ export class FullScreenOverlaysComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.activeTheme$ = this.store
-			.listenDeckState$((deckState) => deckState.metadata?.gameType)
-			.pipe(
-				this.mapData(([gameType]) => {
-					switch (gameType) {
-						case GameType.GT_BATTLEGROUNDS:
-						case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
-						case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+		this.activeTheme$ = combineLatest(
+			this.store.listenDeckState$((deckState) => deckState.metadata?.gameType),
+			this.store.listen$(([main]) => main.currentScene),
+		).pipe(
+			this.mapData(([[gameType], [currentScene]]) => {
+				switch (gameType) {
+					case GameType.GT_BATTLEGROUNDS:
+					case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
+					case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+						return 'battlegrounds';
+					default:
+						if (isBattlegroundsScene(currentScene)) {
 							return 'battlegrounds';
-						default:
-							return 'decktracker';
-					}
-				}),
-			);
+						}
+						return 'decktracker';
+				}
+			}),
+		);
 	}
 
 	async ngAfterViewInit() {
