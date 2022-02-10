@@ -40,9 +40,15 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		this.reposition();
 	}
 
+	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
+		if (this.repositioning) {
+			return;
+		}
+		this.repositioning = true;
 		if (!this.isWidgetVisible()) {
 			// console.debug('widget is not visible');
+			this.repositioning = false;
 			return;
 		}
 
@@ -52,6 +58,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			console.warn('missing game info', gameInfo);
+			this.repositioning = false;
 			return;
 		}
 		const gameWidth = gameInfo.width;
@@ -72,6 +79,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				this.isWidgetVisible(),
 				this.isWidgetVisible,
 			);
+			this.repositioning = false;
 			setTimeout(() => this.reposition(), 500);
 			return;
 		}
@@ -100,6 +108,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		if (cleanup) {
 			cleanup();
 		}
+		this.repositioning = false;
 		return boundPositionFromPrefs;
 	}
 
