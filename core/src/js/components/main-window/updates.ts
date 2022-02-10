@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.7.0',
+		version: '8.8.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -50,11 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add information about when each player got their buddies.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue when facing Tavish.`,
+								text: `Add a "current session" widget that recaps your latest placements, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
 							},
 						],
 					},
@@ -68,24 +64,16 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Show the buddies for each hero when mousing over their portrait in the tier list.`,
-							},
-							{
-								type: 'feature',
-								text: `Add an option to remove the "next opponent" box from the opponents tab in the BG window.`,
+								type: 'bug',
+								text: `Fix a sim issue where "attack immediately" minions would mess up the attack order.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue when handling deathrattle spawns in-between windfury attacks.`,
+								text: `Fix a sim issue where Tavish's "Aim Low" and "Aim Right" would always pick the left-most minion in case of health ties.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where the sequencing of multiple start of combat effects would be wrong.`,
-							},
-							{
-								type: 'bug',
-								text: `Remove Stone Elemental from the minions list.`,
+								text: `Fix a sim issue where Tamsin hero power would always be supposed to be used, even when that was not the case`,
 							},
 						],
 					},
