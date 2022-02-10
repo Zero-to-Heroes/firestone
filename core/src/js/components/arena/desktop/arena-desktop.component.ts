@@ -23,7 +23,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
-								*ngFor="let cat of categories$ | async"
+								*ngFor="let cat of categories$ | async; trackBy: trackByFn"
 								[ngClass]="{ 'selected': cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
@@ -95,5 +95,9 @@ export class ArenaDesktopComponent extends AbstractSubscriptionComponent impleme
 	selectCategory(categoryId: ArenaCategoryType) {
 		// Only one category for now
 		// this.stateUpdater.next(new ArenaSelectCategoryEvent(categoryId));
+	}
+
+	trackByFn(index: number, item: ArenaCategory) {
+		return item.id;
 	}
 }

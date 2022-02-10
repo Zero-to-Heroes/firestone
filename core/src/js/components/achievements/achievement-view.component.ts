@@ -25,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					</div>
 					<div class="completion-progress">
 						<achievement-completion-step
-							*ngFor="let completionStep of achievement.completionSteps"
+							*ngFor="let completionStep of achievement.completionSteps; trackBy: trackByFn"
 							[step]="completionStep"
 						>
 						</achievement-completion-step>
@@ -66,6 +66,10 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
 			),
 		);
+	}
+
+	trackByFn(index: number, item: CompletionStep) {
+		return item.id;
 	}
 
 	private buildAchievementText(

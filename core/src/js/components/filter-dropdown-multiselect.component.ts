@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 				"
 			>
 				<div class="choices">
-					<div class="option" *ngFor="let option of value.workingOptions">
+					<div class="option" *ngFor="let option of value.workingOptions; trackBy: trackByFn">
 						<checkbox
 							[label]="option.label"
 							[value]="option.selected"
@@ -227,6 +227,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		const value = this.tempSelected$.value;
 		this.onOptionSelected.next(value);
 		this.toggle();
+	}
+
+	trackByFn(index: number, item: InternalOption) {
+		return item.value;
 	}
 
 	private buildIcons(options: IOption[]): string {

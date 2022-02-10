@@ -39,7 +39,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="label" [owTranslate]="'app.arena.stats.most-played-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.mostPlayedClasses?.length">
-							<li class="played-class" *ngFor="let mostPlayedClass of stats.mostPlayedClasses">
+							<li
+								class="played-class"
+								*ngFor="let mostPlayedClass of stats.mostPlayedClasses; trackBy: trackByMostPlayedClass"
+							>
 								<img
 									[src]="mostPlayedClass.icon"
 									class="icon"
@@ -55,7 +58,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="label" [owTranslate]="'app.arena.stats.best-winrate-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.bestWinrateClasses?.length">
-							<li class="played-class" *ngFor="let theClass of stats.bestWinrateClasses">
+							<li
+								class="played-class"
+								*ngFor="let theClass of stats.bestWinrateClasses; trackBy: trackByMostPlayedClass"
+							>
 								<img [src]="theClass.icon" class="icon" [helpTooltip]="theClass.tooltip" />
 							</li>
 						</ul>
@@ -67,7 +73,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="label" [owTranslate]="'app.arena.stats.most-faced-classes'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.mostFacedClasses?.length">
-							<li class="played-class" *ngFor="let mostFacedClass of stats.mostFacedClasses">
+							<li
+								class="played-class"
+								*ngFor="let mostFacedClass of stats.mostFacedClasses; trackBy: trackByMostFacedClass"
+							>
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
@@ -79,7 +88,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="label" [owTranslate]="'app.arena.stats.best-winrate-against'"></div>
 						<div class="filler"></div>
 						<ul class="value" *ngIf="stats.bestWinrateAgainstClasses?.length">
-							<li class="played-class" *ngFor="let mostFacedClass of stats.bestWinrateAgainstClasses">
+							<li
+								class="played-class"
+								*ngFor="
+									let mostFacedClass of stats.bestWinrateAgainstClasses;
+									trackBy: trackByMostFacedClass
+								"
+							>
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
@@ -141,6 +156,14 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 				tap((info) => cdLog('emitting arena classes recap in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+	}
+
+	trackByMostPlayedClass(index: number, item: MostPlayedClass) {
+		return item.icon;
+	}
+
+	trackByMostFacedClass(index: number, item: MostFacedClass) {
+		return item.icon;
 	}
 
 	private buildPlayerClass(

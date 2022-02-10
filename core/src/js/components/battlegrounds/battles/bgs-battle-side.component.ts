@@ -45,7 +45,7 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 				<!-- See https://stackoverflow.com/questions/65726138/how-can-i-use-angular-material-drag-n-drop-with-flex-layout -->
 				<div
 					class="minion-container"
-					*ngFor="let entity of entities; let i = index"
+					*ngFor="let entity of entities; let i = index; trackBy: trackByFn"
 					cdkDropList
 					cdkDropListOrientation="horizontal"
 					[cdkDropListData]="i"

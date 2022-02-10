@@ -31,7 +31,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 
 				<div class="group rewards" *ngIf="rewards?.length">
-					<duels-reward *ngFor="let reward of rewards" [reward]="reward"></duels-reward>
+					<duels-reward
+						*ngFor="let reward of rewards; trackBy: trackByRewardFn"
+						[reward]="reward"
+					></duels-reward>
 				</div>
 			</div>
 			<div class="right-info">
@@ -44,7 +47,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		</div>
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
-				<li *ngFor="let step of steps">
+				<li *ngFor="let step of steps; trackBy: trackByStepFn">
 					<replay-info
 						[replay]="step"
 						[displayCoin]="false"
@@ -89,6 +92,14 @@ export class ArenaRunComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	trackByRewardFn(index: number, item: ArenaRewardInfo) {
+		return item.reviewId + '-' + item.rewardType + '-' + item.rewardAmount + '-' + item.rewardBoosterId;
+	}
+
+	trackByStepFn(index: number, item: GameStat) {
+		return item.reviewId;
 	}
 
 	private updateValues() {

@@ -96,7 +96,6 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 					this.displayedReplays = [];
 					this.displayedGroupedReplays = [];
 					this.gamesIterator = this.buildIterator(arenaRuns, timeFilter, heroFilter, patch, 8);
-
 					this.onScroll();
 				});
 			});

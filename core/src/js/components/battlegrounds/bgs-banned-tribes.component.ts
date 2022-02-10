@@ -32,7 +32,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				[helpTooltip]="tooltip$ | async"
 				helpTooltipPosition="bottom"
 			>
-				<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
+				<bgs-banned-tribe *ngFor="let tribe of bannedTribes; trackBy: trackByFn" [tribe]="tribe">{{
+					tribe
+				}}</bgs-banned-tribe>
 			</div>
 		</div>
 	`,
@@ -108,6 +110,10 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 			});
+	}
+
+	trackByFn(index: number, item: Race) {
+		return item;
 	}
 
 	private getExceptions(value: Race): string[] {

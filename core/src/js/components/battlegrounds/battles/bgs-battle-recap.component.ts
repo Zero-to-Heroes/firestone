@@ -42,7 +42,7 @@ declare let amplitude;
 					<div class="board">
 						<div
 							class="minion-container"
-							*ngFor="let entity of playerEntities; let i = index"
+							*ngFor="let entity of playerEntities; let i = index; trackBy: trackByEntityFn"
 							cachedComponentTooltip
 							[componentType]="componentType"
 							[componentInput]="entity"
@@ -57,7 +57,7 @@ declare let amplitude;
 					<div class="board">
 						<div
 							class="minion-container"
-							*ngFor="let entity of opponentEntities; let i = index"
+							*ngFor="let entity of opponentEntities; let i = index; trackBy: trackByEntityFn"
 							cachedComponentTooltip
 							[componentType]="componentType"
 							[componentInput]="entity"
@@ -135,4 +135,8 @@ export class BgsBattleRecapComponent {
 	opponentEntities: readonly Entity[];
 
 	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+
+	trackByEntityFn(index: number, entity: Entity) {
+		return entity.id;
+	}
 }

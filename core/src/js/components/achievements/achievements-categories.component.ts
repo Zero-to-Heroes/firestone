@@ -15,7 +15,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="achievements-categories" scrollable>
 			<ul class="categories">
 				<achievement-category
-					*ngFor="let category of categories$ | async"
+					*ngFor="let category of categories$ | async; trackBy: trackByFn"
 					class="item"
 					[category]="category"
 					(mousedown)="selectCategory(category)"
@@ -51,7 +51,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionCompone
 		this.store.send(new SelectAchievementCategoryEvent(category.id));
 	}
 
-	trackById(index: number, value: VisualAchievementCategory) {
+	trackByFn(index: number, value: VisualAchievementCategory) {
 		return value.id;
 	}
 }

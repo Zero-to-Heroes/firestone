@@ -9,7 +9,8 @@ This leads to a clunky user experience (where the whole component refreshes), bu
 
 For a simple example, see `bgs-simulator-minion-selection.component.ts`, in `ngAfterContentInit()`.
 
-Update: it looks like that adding a trackBy function improves the situation. I have not been able to test this extensively yet, but it looks like it helps at least in some cases.
+Update (2022/02/10): it looks like that adding a trackBy function improves the situation. I have not been able to test this extensively yet, but it looks like it helps at least in some cases.
+Update (2022/02/10): looks like that's not the case (I tried that in the `bgs-simulator-minion-selection` component, and still got the exception)
 
 # Having to call `detectChanges()` in the first place
 
