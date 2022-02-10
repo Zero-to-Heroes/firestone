@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									[ngClass]="{ 'visible': showTaskList$ | async }"
 									[style.bottom.px]="taskListBottomPx"
 								>
-									<div class="task" *ngFor="let task of _tasks">
+									<div class="task" *ngFor="let task of _tasks; trackBy: trackByTaskFn">
 										<div
 											class="portrait"
 											*ngIf="task.mercenaryCardId"
@@ -131,21 +131,21 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		if (!value) {
 			return;
 		}
-		this._tasks = [];
+		// this._tasks = [];
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
+
+		// // Avoids the "Cannot read property 'destroyed' of null" error
+		// // This might be caused by the "detectChanges" calls done in mapData. However if I remove them then
+		// // some data is sometimes not updated, so I'm not sure what the correct approach should be
+		// setTimeout(() => {
+		this._tasks = value;
+		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-
-		// Avoids the "Cannot read property 'destroyed' of null" error
-		// This might be caused by the "detectChanges" calls done in mapData. However if I remove them then
-		// some data is sometimes not updated, so I'm not sure what the correct approach should be
-		setTimeout(() => {
-			this._tasks = value;
-			this.updateTaskListBottomPx();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// });
 	}
 
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
@@ -219,6 +219,10 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
+	}
+
+	trackByTaskFn(index: number, task: Task) {
+		return task.description;
 	}
 
 	private updateTaskListBottomPx() {

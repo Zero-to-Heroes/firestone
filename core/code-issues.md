@@ -9,6 +9,8 @@ This leads to a clunky user experience (where the whole component refreshes), bu
 
 For a simple example, see `bgs-simulator-minion-selection.component.ts`, in `ngAfterContentInit()`.
 
+Update: it looks like that adding a trackBy function improves the situation. I have not been able to test this extensively yet, but it looks like it helps at least in some cases.
+
 # Having to call `detectChanges()` in the first place
 
 If you look at how Observables from the store are handled, including `AbstractSubscriptionComponent::mapData()`, you'll see that `detectChanges()` is called all the time.
