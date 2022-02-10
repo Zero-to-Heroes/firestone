@@ -188,10 +188,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		this.deltaRank$ = combineLatest(lastGames$, currentGameType$).pipe(
 			this.mapData(([games, currentGameType]) => {
-				if (!isBattlegrounds(currentGameType)) {
-					return null;
-				}
-
 				let startingRank: number = null;
 				for (const game of [...games].reverse()) {
 					if (game.playerRank != null && !isNaN(parseInt(game.playerRank))) {
