@@ -456,26 +456,32 @@ import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
+declare let overwolf: any;
+
 console.log('version is ' + process.env.APP_VERSION);
 console.log('environment is ' + process.env.NODE_ENV);
 console.log('is local test? ' + process.env.LOCAL_TEST);
 
-init({
-	dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
-	enabled: process.env.NODE_ENV === 'production',
-	release: process.env.APP_VERSION,
-	attachStacktrace: true,
-	sampleRate: 0.1,
-	integrations: [
-		new Integrations.GlobalHandlers({
-			onerror: true,
-			onunhandledrejection: true,
-		}),
-		new ExtraErrorData(),
-		new CaptureConsole({
-			levels: ['error'],
-		}),
-	],
+overwolf.settings.getExtensionSettings((settings) => {
+	const sampleRate = settings?.settings?.channel === 'beta' ? 1 : 0.1;
+	console.log('init Sentry with sampleRate', sampleRate, settings?.settings?.channel, settings);
+	init({
+		dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
+		enabled: process.env.NODE_ENV === 'production',
+		release: process.env.APP_VERSION,
+		attachStacktrace: true,
+		sampleRate: sampleRate,
+		integrations: [
+			new Integrations.GlobalHandlers({
+				onerror: true,
+				onunhandledrejection: true,
+			}),
+			new ExtraErrorData(),
+			new CaptureConsole({
+				levels: ['error'],
+			}),
+		],
+	});
 });
 
 if (process.env.LOCAL_TEST) {
