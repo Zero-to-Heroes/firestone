@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { GetSelectedDeckIdOperation } from '@services/plugins/mind-vision/get-selected-deck-id-operation';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
@@ -66,6 +67,7 @@ export class MemoryInspectionService {
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
+	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVision, this.ow);
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
@@ -157,6 +159,12 @@ export class MemoryInspectionService {
 			result = await this.getActiveDeckOperation.call(numberOfRetries, true, selectedDeckId);
 			console.debug('[mind-vision] [getActiveDeck]', 'after force reset', result);
 		}
+		return result;
+	}
+
+	public async getSelectedDeckId(): Promise<number> {
+		const result = await this.getSelectedDeckIdOperation.call();
+		console.debug('[mind-vision] [getSelectedDeckId]', result);
 		return result;
 	}
 

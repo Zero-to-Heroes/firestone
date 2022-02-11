@@ -118,6 +118,7 @@ export class DeckParserService {
 			this.isDeckLogged(metadata.scenarioId),
 			metadata.scenarioId,
 			ARENAS,
+			this.currentScene,
 		);
 		let deckInfo: DeckInfo;
 		if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
@@ -126,6 +127,10 @@ export class DeckParserService {
 		} else if (this.isDeckLogged(metadata.scenarioId)) {
 			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
 			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType);
+		} else if (metadata.gameType === GameType.GT_TAVERNBRAWL) {
+			console.log('[deck-parser] trying to read tavern brawl previous deck from logs', metadata.scenarioId);
+			// This could work, because it looks like that the deck is named "Brawl Deck" in all languages
+			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType, 'Brawl Deck');
 		} else {
 			console.warn('[deck-parser] could not read any deck from memory');
 			deckInfo = null;
@@ -226,6 +231,7 @@ export class DeckParserService {
 		this.currentNonGamePlayScene =
 			this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
 		console.log('[deck-parser] initial scene', this.currentNonGamePlayScene);
+		this.selectedDeckId = await this.memory.getSelectedDeckId();
 	}
 
 	private isDuelsInfo(activeDeck: DeckInfoFromMemory | DuelsInfo): activeDeck is DuelsInfo {
@@ -305,6 +311,7 @@ export class DeckParserService {
 	private async readDeckFromLogFile(
 		scenarioId: number,
 		gameType: GameType,
+		targetDeckName: string = null,
 		fileName = 'Decks.log',
 	): Promise<DeckInfo> {
 		const gameInfo = await this.ow.getRunningGameInfo();
@@ -323,24 +330,6 @@ export class DeckParserService {
 
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
-			// const isLastSectionDeckSelectLine =
-			// 	// This won't work for non-English versions
-			// 	lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
-			// 	lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
-			// 	lines[lines.length - 4].indexOf('Starting Arena Game With Deck:') !== -1 ||
-			// 	(await this.isDuelsDeck(lines[lines.length - 4])) ||
-			// 	(await this.isDuelsDeck(lines[lines.length - 3]));
-			// if (!isLastSectionDeckSelectLine) {
-			// 	console.log(
-			// 		'[deck-parser] not a deck selection',
-			// 		lines[lines.length - 4],
-			// 		lines[lines.length - 3],
-			// 		lines[lines.length - 2],
-			// 		lines[lines.length - 1],
-			// 	);
-			// 	return;
-			// }
-
 			const deckNameLogLine = (await this.isDuelsDeck(lines[lines.length - 4]))
 				? lines[lines.length - 4]
 				: lines[lines.length - 3];
@@ -352,6 +341,10 @@ export class DeckParserService {
 			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
 				? this.handler.normalizeDeckstring(match[1])
 				: undefined;
+			if (targetDeckName && deckName !== targetDeckName) {
+				console.log('[deck-parser] deck name does not match', deckName, targetDeckName);
+				return null;
+			}
 			if (!deckstring) {
 				return null;
 			}
@@ -363,7 +356,6 @@ export class DeckParserService {
 				gameType: gameType,
 				deck: !!deckstring ? decode(deckstring) : undefined,
 			} as DeckInfo;
-			console.log('[deck-parser] finished reading previous deck from logs');
 		}
 	}
 

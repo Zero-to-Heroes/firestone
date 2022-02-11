@@ -278,6 +278,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getSelectedDeckId(forceReset: boolean): Promise<number> {
+		return new Promise<number>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getSelectedDeckId(forceReset, (activeDeck) => {
+					resolve(activeDeck);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getSelectedDeckId', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getWhizbangDeck(deckId: number): Promise<any> {
 		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
