@@ -216,6 +216,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, effectiveCostLess(3));
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
+			case CardIds.PetCollector:
+				return and(inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
 			case CardIds.Rally:
@@ -234,6 +236,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.SelectiveBreederCore:
 				return and(inDeck, beast);
+			case CardIds.Smokescreen:
+				return and(inDeck, deathrattle);
 			case CardIds.SpiritGuide:
 				return and(inDeck, spell, or(shadow, holy));
 			case CardIds.SpringTheTrap:
