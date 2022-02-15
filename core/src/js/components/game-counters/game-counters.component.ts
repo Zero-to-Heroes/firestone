@@ -23,6 +23,7 @@ import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
@@ -129,6 +130,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MulticasterCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(gameState, side, this.i18n);
+			case 'si7Counter':
+				return Si7CounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}

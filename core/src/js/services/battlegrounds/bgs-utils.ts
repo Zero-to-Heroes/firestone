@@ -245,6 +245,12 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.VanndarStormpike_LeadTheStormpikes;
 		case CardIds.TavishStormpike2:
 			return CardIds.TavishStormpike_Deadeye;
+		case CardIds.VardenDawngraspBattlegrounds:
+			return CardIds.TwiceAsNice;
+		case CardIds.RokaraBattlegrounds:
+			return CardIds.GloryOfCombat;
+		case CardIds.OnyxiaBattlegrounds:
+			return CardIds.Broodmother;
 
 		case '':
 			return null; // new heroes
@@ -590,6 +596,12 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 374;
 		case CardIds.TavishStormpike2:
 			return 370;
+		case CardIds.VardenDawngraspBattlegrounds:
+			return TODO;
+		case CardIds.RokaraBattlegrounds:
+			return TODO;
+		case CardIds.OnyxiaBattlegrounds:
+			return TODO;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;
@@ -749,6 +761,12 @@ export const getBuddy = (heroCardId: CardIds): CardIds => {
 			return CardIds.BabyYshaarjBattlegrounds1;
 		case CardIds.ZephrysTheGreatBattlegrounds:
 			return CardIds.PhyreszBattlegrounds1;
+		case CardIds.VardenDawngraspBattlegrounds:
+			return CardIds.VardensAquarrior;
+		case CardIds.RokaraBattlegrounds:
+			return CardIds.IcesnarlTheMighty;
+		case CardIds.OnyxiaBattlegrounds:
+			return CardIds.ManyWhelpsBattlegrounds;
 		default:
 			console.error('missing buddy section for ', heroCardId);
 			return null;

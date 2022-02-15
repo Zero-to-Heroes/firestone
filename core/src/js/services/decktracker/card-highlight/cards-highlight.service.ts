@@ -47,7 +47,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
-	weapon,
+	weapon
 } from './selectors';
 
 // We don't want a shared service with a facade here, as we don't want any communitication between
@@ -194,6 +194,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 				return and(demon, inGraveyard, minion);
+			case CardIds.KazakusanNew:
+				return and(inDeck, minion, not(dragon));
 			case CardIds.KnightOfAnointment:
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra1:

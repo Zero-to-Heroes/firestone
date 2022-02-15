@@ -11,9 +11,15 @@ export const standardSets: readonly string[] = [
 	'stormwind',
 	'deadmines',
 	'alterac_valley',
+	'onyxias_lair',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'onyxias_lair',
+		name: `Onyxia's Lair`,
+		launchDate: new Date('2022-02-15'),
+	},
 	{
 		id: 'alterac_valley',
 		name: 'Fractured in Alterac Valley',

@@ -214,6 +214,8 @@ export class SetsService {
 				return 'the_barrens';
 			case 'deadmines':
 				return 'stormwind';
+			case 'onyxias_lair':
+				return 'alterac_valley';
 		}
 		return setId;
 	}

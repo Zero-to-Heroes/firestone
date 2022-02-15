@@ -25,4 +25,5 @@ export type CounterType =
 	| 'brilliantMacaw'
 	| 'heroPowerDamage'
 	| 'multicaster'
+	| 'si7Counter'
 	| 'elwynnBoar';

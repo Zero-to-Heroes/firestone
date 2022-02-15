@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.8.0',
+		version: '8.8.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Update for patch 22.4.`,
+							},
+						],
+					},
+					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a "current session" widget that recaps your latest placements, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
+								text: `BETA: Add a "current session" widget that recaps your latest placements, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
 							},
 						],
 					},
@@ -74,6 +83,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a sim issue where Tamsin hero power would always be supposed to be used, even when that was not the case`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a display issue in the simulator when the Firestone zoon is > 100%.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add tentative support for Tavern Brawl where you build your own deck (it won't work if you paste a deck from a third party website that has a custom name for the deck).`,
 							},
 						],
 					},

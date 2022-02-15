@@ -190,6 +190,7 @@ export const publicCardCreators = [
 	CardIds.AxeBerserker,
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane1,
+	CardIds.BattleVicar,
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
 	CardIds.BrightEyedScout,
@@ -214,6 +215,7 @@ export const publicCardCreators = [
 	CardIds.CursedCastaway,
 	CardIds.DeadRinger,
 	CardIds.DeepwaterEvoker,
+	CardIds.DragonbaneShot,
 	CardIds.DivingGryphon,
 	CardIds.DunBaldarBunker,
 	CardIds.ElementalAllies,
@@ -242,6 +244,7 @@ export const publicCardCreators = [
 	CardIds.Guidance1,
 	CardIds.HarborScamp,
 	CardIds.HeraldOfLokholar,
+	CardIds.HornOfWrathion,
 	CardIds.HowlingCommander,
 	CardIds.Hullbreaker,
 	CardIds.IceFishing,
@@ -272,6 +275,7 @@ export const publicCardCreators = [
 	CardIds.PrimordialProtector1,
 	CardIds.PrismaticLens,
 	CardIds.RaidingParty,
+	CardIds.RaidNegociator,
 	CardIds.RaidTheDocks,
 	CardIds.RamCommander,
 	CardIds.RavenFamiliar1,
@@ -314,6 +318,7 @@ export const publicCardCreators = [
 	CardIds.ThistleTea,
 	CardIds.ThriveInTheShadowsCore,
 	CardIds.TolvirWarden,
+	CardIds.ToothOfNefarian,
 	CardIds.TownCrier1,
 	CardIds.Ursatron,
 	CardIds.UtgardeGrapplesniper,
@@ -532,6 +537,9 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'stormwind':
 		case 'deadmines':
 			return BoosterType.STORMWIND;
+		case 'alterac_valley':
+		case 'onyxias_lair':
+			return BoosterType.ALTERAC_VALLEY;
 		default:
 			console.warn('no default booster type for set id', setId);
 			return null;
