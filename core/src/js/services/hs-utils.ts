@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '2022-01-25-20-36';
+export const CARDS_VERSION = '2022-02-16-00-04';
 
 export const classes = [
 	'demonhunter',
@@ -275,7 +275,7 @@ export const publicCardCreators = [
 	CardIds.PrimordialProtector1,
 	CardIds.PrismaticLens,
 	CardIds.RaidingParty,
-	CardIds.RaidNegociator,
+	CardIds.RaidNegotiator,
 	CardIds.RaidTheDocks,
 	CardIds.RamCommander,
 	CardIds.RavenFamiliar1,

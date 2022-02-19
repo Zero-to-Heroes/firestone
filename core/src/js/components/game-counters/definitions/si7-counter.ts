@@ -25,8 +25,8 @@ export class Si7CounterDefinition implements CounterDefinition {
 
 		const correctSi7Locale = getSi7Locale(i18n.formatCurrentLocale());
 		const si7CardsPlayed = gameState.cardsPlayedThisMatch
-			.filter(c => c.side === side)
-			.filter(c => allCards.getCard(c.cardId).name?.toLowerCase()?.includes(correctSi7Locale.toLowerCase()));
+			.filter((c) => c.side === side)
+			.filter((c) => allCards.getCard(c.cardId).name?.toLowerCase()?.includes(correctSi7Locale.toLowerCase()));
 		return {
 			type: 'si7Counter',
 			value: si7CardsPlayed.length,
@@ -42,20 +42,20 @@ const getSi7Locale = (locale: string): string => {
 	switch (locale) {
 		case 'esES':
 		case 'esMX':
-			return 'IV:7'
+			return 'IV:7';
 		case 'itIT':
-			return 'IR:7'
+			return 'IR:7';
 		case 'plPL':
-			return 'WW:7'
+			return 'WW:7';
 		case 'ptBR':
-			return 'AVIN'
+			return 'AVIN';
 		case 'ruRU':
-			return 'ШРУ'
+			return 'ШРУ';
 		case 'zhCN':
-			return '军情七处'
+			return '军情七处';
 		case 'zhTW':
-			return '軍情七處'
+			return '軍情七處';
 		default:
-			return 'SI:7'
+			return 'SI:7';
 	}
-}
+};

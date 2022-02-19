@@ -47,7 +47,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
-	weapon
+	weapon,
 } from './selectors';
 
 // We don't want a shared service with a facade here, as we don't want any communitication between
@@ -194,7 +194,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 				return and(demon, inGraveyard, minion);
-			case CardIds.KazakusanNew:
+			case CardIds.Kazakusan1:
 				return and(inDeck, minion, not(dragon));
 			case CardIds.KnightOfAnointment:
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
@@ -268,7 +268,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
 			case CardIds.VitalitySurge:
 				return and(inDeck, minion);
-			case CardIds.WingCommanderIchman:
+			case CardIds.WingCommanderIchman1:
 				return and(inDeck, minion, beast);
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
