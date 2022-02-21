@@ -153,7 +153,7 @@ export class DeckTrackerOverlayContainerComponent
 				}
 			}
 		});
-		await this.addDebugGameState();
+		// await this.addDebugGameState();
 		console.log('init done');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
