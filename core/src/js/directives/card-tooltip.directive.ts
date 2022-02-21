@@ -175,6 +175,8 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	private hideTimeout;
+
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.onMouseLeave();
@@ -182,6 +184,10 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (this.hideTimeout) {
+			clearTimeout(this.hideTimeout);
+		}
+
 		if (this._position === 'none') {
 			return;
 		}
@@ -215,10 +221,21 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+
+		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
+		// on screen.
+		// So we add a timeout to hide the card automatically after a while
+		this.hideTimeout = setTimeout(() => {
+			this.onMouseLeave();
+		}, 15_000);
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		if (this.hideTimeout) {
+			clearTimeout(this.hideTimeout);
+		}
+
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
