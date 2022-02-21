@@ -486,7 +486,7 @@ export class MindVisionService {
 			});
 			const plugin = await this.get();
 			plugin.onGlobalEvent.addListener((first: string, second: string) => {
-				console.log('[mind-vision] received global event', first, second);
+				console.log('no-format', '[mind-vision] received global event', first, second);
 				if (first === 'mindvision-instantiate-error') {
 					this.notifyError(
 						'Memory reading error',
@@ -496,7 +496,7 @@ export class MindVisionService {
 				}
 			});
 		} catch (e) {
-			console.warn('[mind-vision]Could not load plugin, retrying', e);
+			console.warn('[mind-vision] Could not load plugin, retrying', e);
 			this.initializing = false;
 			this.initialized = false;
 			setTimeout(() => this.initialize(), 2000);
