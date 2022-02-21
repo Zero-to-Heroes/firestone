@@ -71,41 +71,43 @@ export class MindVisionService {
 	private retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
 
 	private async listenForUpdates() {
-		const plugin = await this.get();
-		try {
-			console.log('[mind-vision] getting ready to listen for updates', this.memoryUpdateListener == null);
-			if (this.memoryUpdateListener) {
-				plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-			}
-
-			console.log('[mind-vision] adding updates listener');
-			this.memoryUpdateListener = async (changes: string | 'reset') => {
-				console.log('[mind-vision] memory update', changes);
-				const changesToBroadcast: MemoryUpdate | 'reset' = JSON.parse(changes);
-				// Happens when the plugin is reset, we need to resubscribe
-				if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
-					console.log('[mind-vision] resetting memory update?', this.retriesLeft);
-					if (this.retriesLeft >= 0) {
-						this.retriesLeft--;
-						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-						this.memoryUpdateListener = null;
-						await this.resetListening();
-						await this.listenForUpdates();
-					} else {
-						console.error('[mind-vision] stopping after 5 resets');
-					}
-					return;
+		return new Promise<void>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				console.log('[mind-vision] getting ready to listen for updates', this.memoryUpdateListener == null);
+				if (this.memoryUpdateListener) {
+					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 				}
-				this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
-				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
-			};
-			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
-			plugin.listenForUpdates((result) => {
-				console.log('[mind-vision] listenForUpdates callback result: ', result);
-			});
-		} catch (e) {
-			console.error('[mind-vision] could not listenForUpdates', e);
-		}
+
+				console.log('[mind-vision] adding updates listener');
+				this.memoryUpdateListener = async (changes: string | 'reset') => {
+					console.log('[mind-vision] memory update', changes);
+					const changesToBroadcast: MemoryUpdate | 'reset' = JSON.parse(changes);
+					// Happens when the plugin is reset, we need to resubscribe
+					if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
+						console.log('[mind-vision] resetting memory update?', this.retriesLeft);
+						if (this.retriesLeft >= 0) {
+							this.retriesLeft--;
+							await this.performResetListening(plugin);
+						} else {
+							console.error('[mind-vision] stopping after 5 resets');
+						}
+						resolve();
+						return;
+					}
+					this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
+					this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
+				};
+				plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
+				plugin.listenForUpdates((result) => {
+					console.log('[mind-vision] listenForUpdates callback result: ', result);
+					resolve();
+				});
+			} catch (e) {
+				console.error('[mind-vision] could not listenForUpdates', e);
+				resolve();
+			}
+		});
 	}
 
 	public async getMemoryChanges(): Promise<MemoryUpdate> {
@@ -485,8 +487,11 @@ export class MindVisionService {
 				this.initializing = false;
 			});
 			const plugin = await this.get();
-			plugin.onGlobalEvent.addListener((first: string, second: string) => {
+			plugin.onGlobalEvent.addListener(async (first: string, second: string) => {
 				console.log('no-format', '[mind-vision] received global event', first, second);
+				if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
+					await this.performResetListening(plugin);
+				}
 				if (first === 'mindvision-instantiate-error') {
 					this.notifyError(
 						'Memory reading error',
@@ -501,6 +506,26 @@ export class MindVisionService {
 			this.initialized = false;
 			setTimeout(() => this.initialize(), 2000);
 		}
+	}
+
+	private resetting = false;
+
+	private async performResetListening(plugin) {
+		if (this.resetting) {
+			return;
+		}
+		console.log('[mind-vision] resetting starting');
+		this.resetting = true;
+		plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+		this.memoryUpdateListener = null;
+		await this.resetListening();
+		await this.listenForUpdates();
+		this.resetting = false;
+		console.log('[mind-vision] resetting done');
+	}
+
+	private hasRootMemoryReadingError(message: string): boolean {
+		return message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
 	}
 
 	private notifyError(title: string, text: string, code: string) {
