@@ -19,6 +19,10 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.SnakeTrap_SnakeVanillaToken,
 	CardIds.ImprovedSnakeTrap_SnakeToken,
 	CardIds.ElementEarth_StoneElementalToken,
+
+	// Temp until a new cards.json is deployed
+	CardIds.ArchdruidHamuul,
+	CardIds.ArchdruidHamuulBattlegrounds,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
