@@ -154,13 +154,15 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			.listenPrefs$((prefs) => prefs.currentSessionStartDate)
 			.pipe(
 				this.mapData(([currentSessionStartDate]) =>
-					this.i18n.translateString('session.summary.total-games-tooltip', {
-						value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-							month: 'short',
-							day: '2-digit',
-							year: 'numeric',
-						}),
-					}),
+					currentSessionStartDate
+						? this.i18n.translateString('session.summary.total-games-tooltip', {
+								value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+									month: 'short',
+									day: '2-digit',
+									year: 'numeric',
+								}),
+						  })
+						: this.i18n.translateString('session.summary.total-games-tooltip-all-time'),
 				),
 			);
 
