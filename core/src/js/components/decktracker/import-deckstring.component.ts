@@ -72,9 +72,11 @@ export class ImportDeckstringComponent implements AfterViewInit {
 			this.deckName = deckName;
 			this.deckstring = deckstring;
 			this.confirmationTitle = this.i18n.translateString('decktracker.import.confirmation-title');
-			this.confirmationText = this.i18n.translateString('decktracker.import.use-deck-text', {
-				value: this.deckName,
-			});
+			this.confirmationText = this.deckName
+				? this.i18n.translateString('decktracker.import.use-deck-text', {
+						value: this.deckName,
+				  })
+				: this.i18n.translateString('decktracker.import.use-deck-text-default');
 			this.validButtonText = this.i18n.translateString('decktracker.import.button-text');
 			this.cancelButtonText = this.i18n.translateString('decktracker.import.cancel-text');
 			this.showOk = true;
