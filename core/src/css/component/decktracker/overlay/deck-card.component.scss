@@ -79,6 +79,7 @@
 		justify-content: center;
 		z-index: 1;
 		background: #303352;
+		flex-shrink: 0;
 
 		span {
 			font-family: Sumana;
@@ -164,6 +165,7 @@
 		justify-content: center;
 		padding: 1px;
 		z-index: 1;
+		flex-shrink: 0;
 
 		.inner-border {
 			height: 100%;
