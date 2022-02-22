@@ -8,6 +8,7 @@ import {
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckDefinition, decode, encode } from 'deckstrings';
@@ -300,6 +301,7 @@ export class DeckParserService {
 		const loggingSCenarios: readonly number[] = [
 			...PRACTICE_ALL,
 			...ARENAS,
+			...SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 			ScenarioId.STANDARD_1_VS_1_GAME,
 			ScenarioId.WIZARD_DUELS,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
