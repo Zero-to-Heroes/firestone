@@ -14,7 +14,7 @@ import { Knob } from '../preference-slider.component';
 	],
 	template: `
 		<div class="decktracker-appearance" scrollable>
-			<div class="title">Activate / Deactivate features</div>
+			<div class="title" [owTranslate]="'settings.decktracker.global.title'"></div>
 			<div class="settings-group">
 				<div class="subgroup">
 					<preference-toggle
@@ -83,7 +83,6 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
-
 			<div class="reset-container">
 				<button
 					(mousedown)="reset()"

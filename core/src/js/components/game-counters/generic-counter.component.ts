@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+} from '@angular/core';
+import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'generic-counter',
@@ -13,7 +23,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		'../../../css/component/game-counters/pogo-counter.component.scss',
 	],
 	template: `
-		<div *ngIf="standardCounter" class="counter generic-counter {{ counterClass }}" [helpTooltip]="helpTooltipText">
+		<div
+			*ngIf="standardCounter"
+			class="counter generic-counter scalable  {{ counterClass }}"
+			[helpTooltip]="helpTooltipText"
+		>
 			<img class="image" [src]="image" />
 			<div class="frame"></div>
 			<div class="value" *ngIf="value != null">{{ value }}</div>
@@ -33,11 +47,27 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericCountersComponent {
+export class GenericCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() value: number;
 	@Input() valueImg: string;
 	@Input() image: string;
 	@Input() helpTooltipText: string;
 	@Input() counterClass: string;
 	@Input() standardCounter: boolean;
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.listenForBasicPref$((prefs) => prefs.countersScale).subscribe((scale) => {
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+		});
+	}
 }

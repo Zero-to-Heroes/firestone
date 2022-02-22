@@ -150,6 +150,7 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
+
 			<div class="title">Tracker's size & opacity</div>
 			<div class="settings-group">
 				<div class="subtitle">Your deck</div>
@@ -170,6 +171,20 @@ import { Knob } from '../preference-slider.component';
 					[min]="40"
 					[max]="100"
 					[showCurrentValue]="true"
+				>
+				</preference-slider>
+			</div>
+
+			<div class="title" [owTranslate]="'settings.decktracker.global.counters-size'"></div>
+			<div class="settings-group">
+				<preference-slider
+					class="first-slider"
+					[field]="'countersScale'"
+					[enabled]="true"
+					[min]="60"
+					[max]="140"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
 			</div>

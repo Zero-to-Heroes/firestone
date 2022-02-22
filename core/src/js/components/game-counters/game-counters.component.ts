@@ -6,7 +6,6 @@ import { GameState } from '../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { AttackCounterDefinition } from './definitions/attack-counter';
@@ -61,12 +60,11 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	definition$: Observable<CounterDefinition>;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
 		// this.isBgs = this.activeCounter.includes('bgs');
@@ -74,7 +72,6 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	ngAfterContentInit() {
-		// For some reason, declaring this in ngAfterViewInit doesn't work - the obevrsable is never subscribed
 		if (!this.activeCounter?.includes('bgs')) {
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)

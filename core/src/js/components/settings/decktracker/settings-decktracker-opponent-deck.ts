@@ -217,6 +217,20 @@ import { Knob } from '../preference-slider.component';
 				>
 				</preference-slider>
 			</div>
+
+			<div class="title" [owTranslate]="'settings.decktracker.global.counters-size'"></div>
+			<div class="settings-group">
+				<preference-slider
+					class="first-slider"
+					[field]="'countersScale'"
+					[enabled]="true"
+					[min]="60"
+					[max]="140"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuffInHand

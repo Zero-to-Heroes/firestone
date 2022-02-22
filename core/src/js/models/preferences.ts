@@ -183,6 +183,9 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly secretsHelperWidgetPosition: { left: number; top: number };
 
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly countersScale: number = 100;
+
 	readonly playerGalakrondCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
