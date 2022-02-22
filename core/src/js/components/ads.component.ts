@@ -69,9 +69,11 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 
 	private adRef;
 	private adInit = false;
+	private owAdsReady = false;
 	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
 	private displayImpressionListener: (message: any) => void;
+	private owAdsReadyListener: (message: any) => void;
 	private refreshTimer;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -123,6 +125,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.adRef?.removeEventListener(this.impressionListener);
 		this.adRef?.removeEventListener(this.displayImpressionListener);
+		this.adRef?.removeEventListener(this.owAdsReadyListener);
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
@@ -176,6 +179,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 				const window = await this.ow.getCurrentWindow();
 				if (window.isVisible) {
 					console.log('[ads] first time init ads, creating OwAd');
+					this.owAdsReady = false;
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 
 					this.impressionListener = async (data) => {
@@ -199,7 +203,12 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 							}
 						}
 					};
+					this.owAdsReadyListener = async (data) => {
+						// console.log('[ads] owAdsReady', data);
+						this.owAdsReady = true;
+					};
 					this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
+					this.adRef.addEventListener('ow_internal_rendered', this.owAdsReadyListener);
 
 					console.log('[ads] init OwAd');
 					if (!(this.cdr as ViewRef)?.destroyed) {
@@ -212,8 +221,12 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 				}, 1000);
 				return;
 			}
-			console.log('[ads] refreshed ads');
-			this.adRef.refreshAd();
+			if (this.owAdsReady) {
+				console.log('[ads] refreshed ads');
+				this.adRef.refreshAd();
+			} else {
+				console.log('[ads] ads not ready yet, not refreshing ads');
+			}
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
