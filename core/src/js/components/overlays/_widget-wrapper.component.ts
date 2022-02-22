@@ -54,7 +54,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		const prefs = await this.prefs.getPreferences();
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
-		console.debug('positionFromPrefs', positionFromPrefs);
+		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			console.warn('missing game info', gameInfo);
@@ -69,16 +69,16 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
-			console.debug('built default position', positionFromPrefs);
+			// console.debug('built default position', positionFromPrefs);
 		}
 		const widgetRect = this.getRect();
 		if (!widgetRect?.width) {
-			console.debug(
-				'no widget, starting again',
-				this.constructor.name,
-				this.isWidgetVisible(),
-				this.isWidgetVisible,
-			);
+			// console.debug(
+			// 	'no widget, starting again',
+			// 	this.constructor.name,
+			// 	this.isWidgetVisible(),
+			// 	this.isWidgetVisible,
+			// );
 			this.repositioning = false;
 			setTimeout(() => this.reposition(), 500);
 			return;
