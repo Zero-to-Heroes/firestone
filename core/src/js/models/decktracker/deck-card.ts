@@ -1,4 +1,5 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@services/utils';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
@@ -53,7 +54,7 @@ export class DeckCard {
 		// Protected to force call to static factory
 	}
 
-	public update(newCard: DeckCard): DeckCard {
+	public update(newCard: Partial<NonFunctionProperties<DeckCard>>): DeckCard {
 		if (newCard?.cardId && !newCard?.cardName) {
 			console.warn('updating deck card without name', newCard, new Error().stack);
 		}

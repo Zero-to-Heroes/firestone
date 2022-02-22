@@ -28,7 +28,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		//console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -42,6 +42,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			isPlayer ||
 			cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 			publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
+		// console.debug('[receive-card-in-hand] isCardInfoPublic', isCardInfoPublic);
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
@@ -50,7 +51,9 @@ export class ReceiveCardInHandParser implements EventParser {
 		// If a C'Thun piece was set aside, we know its data when getting the card back to hand, so we want to hide it
 		const otherCardWithObfuscation =
 			isCardInfoPublic || !otherCard
-				? otherCard
+				? otherCard?.update({
+						creatorCardId: creatorCardId,
+				  })
 				: otherCard.update({
 						creatorCardId: undefined,
 						cardId: undefined,
@@ -78,6 +81,13 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
+		// console.debug(
+		// 	'[receive-card-in-hand] cardWithDefault',
+		// 	cardWithDefault,
+		// 	creatorCardId,
+		// 	otherCard,
+		// 	otherCardWithObfuscation,
+		// );
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
