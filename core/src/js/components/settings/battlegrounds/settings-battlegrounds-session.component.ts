@@ -49,6 +49,38 @@ import { Knob } from '../preference-slider.component';
 					[field]="'sessionWidgetNumberOfMatchesToShow'"
 				></preference-numeric-input>
 			</div>
+
+			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget-size-title'"></div>
+			<div class="settings-group">
+				<preference-slider
+					class="minions-list-size-slider"
+					field="sessionWidgetScale"
+					[enabled]="value.showCurrentSessionWidgetBgs"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="60"
+					[max]="140"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
+
+			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget-opacity-title'"></div>
+			<div class="settings-group">
+				<preference-slider
+					class="minions-list-size-slider"
+					field="sessionWidgetOpacity"
+					[enabled]="value.showCurrentSessionWidgetBgs"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="0"
+					[max]="100"
+					[snapSensitivity]="5"
+					[knobs]="opacityKnobs"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,23 +89,28 @@ export class SettingsBattlegroundsSessionComponent extends AbstractSubscriptionC
 	showCurrentSessionWidgetBgs$: Observable<boolean>;
 	sessionWidgetShowMatches$: Observable<boolean>;
 
-	numberOfSimsKnobs: readonly Knob[] = [
-		{
-			absoluteValue: 2500,
-		},
-	];
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
 			label: 'Small',
 		},
 		{
-			percentageValue: 18,
+			percentageValue: 50,
 			label: 'Medium',
 		},
 		{
 			percentageValue: 100,
 			label: 'Large',
+		},
+	];
+	opacityKnobs: readonly Knob[] = [
+		{
+			percentageValue: 0,
+			label: 'Transparent',
+		},
+		{
+			percentageValue: 100,
+			label: 'Opaque',
 		},
 	];
 

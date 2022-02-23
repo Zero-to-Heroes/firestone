@@ -69,6 +69,8 @@ export class Preferences {
 	readonly sessionWidgetShowGroup: boolean = true;
 	readonly sessionWidgetShowMatches: boolean = true;
 	readonly sessionWidgetNumberOfMatchesToShow: number = 5;
+	readonly sessionWidgetScale: number = 100;
+	readonly sessionWidgetOpacity: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly currentSessionWidgetScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

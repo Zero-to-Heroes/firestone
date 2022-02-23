@@ -1,5 +1,12 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Renderer2,
+} from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { GameType } from '@firestone-hs/reference-data';
@@ -21,91 +28,96 @@ import { combineLatest, from, Observable } from 'rxjs';
 		'../../../../css/component/overlays/session/current-session-widget.component.scss',
 	],
 	template: `
-		<div class="current-session-widget battlegrounds-theme" *ngIf="showWidget$ | async">
-			<div class="background"></div>
-			<div class="controls">
-				<!-- <div class="mode">{{ currentDisplayedMode$ | async }}</div> -->
-				<!-- <div class="display" [helpTooltip]="''">{{ currentGroupingLabel$ | async }}</div> -->
-				<div
-					class="title"
-					[owTranslate]="'session.title'"
-					[helpTooltip]="'session.title-tooltip' | owTranslate"
-				></div>
-				<div class="buttons">
-					<control-settings [settingsApp]="'battlegrounds'" [settingsSection]="'session'"></control-settings>
+		<div class="current-session-widget battlegrounds-theme scalable" *ngIf="showWidget$ | async">
+			<ng-container *ngIf="{ opacity: opacity$ | async } as value">
+				<div class="background" [style.opacity]="value.opacity"></div>
+				<div class="controls">
+					<!-- <div class="mode">{{ currentDisplayedMode$ | async }}</div> -->
+					<!-- <div class="display" [helpTooltip]="''">{{ currentGroupingLabel$ | async }}</div> -->
 					<div
-						class="button reset"
-						[helpTooltip]="'session.buttons.reset-tooltip' | owTranslate"
-						inlineSVG="assets/svg/restore.svg"
-						(click)="reset()"
+						class="title"
+						[owTranslate]="'session.title'"
+						[helpTooltip]="'session.title-tooltip' | owTranslate"
 					></div>
-
-					<div
-						class="button close"
-						[helpTooltip]="'session.buttons.close-tooltip' | owTranslate"
-						inlineSVG="assets/svg/close.svg"
-						(click)="close()"
-					></div>
-				</div>
-			</div>
-			<div class="summary">
-				<div class="games" [helpTooltip]="gamesTooltip$ | async">{{ totalGamesLabel$ | async }}</div>
-				<div class="rank">
-					<div class="current">
-						<rank-image
-							*ngIf="lastGame$ | async as lastGame"
-							class="player-rank"
-							[stat]="lastGame"
-							[gameMode]="lastGame.gameMode"
-						></rank-image>
-					</div>
-					<ng-container *ngIf="deltaRank$ | async as deltaRank">
+					<div class="buttons">
+						<control-settings
+							[settingsApp]="'battlegrounds'"
+							[settingsSection]="'session'"
+						></control-settings>
 						<div
-							class="delta"
-							*ngIf="deltaRank != null"
-							[ngClass]="{
-								'positive': deltaRank > 0,
-								'negative': deltaRank < 0
-							}"
-						>
-							{{ buildValue(deltaRank, 0) }}
-						</div>
-					</ng-container>
+							class="button reset"
+							[helpTooltip]="'session.buttons.reset-tooltip' | owTranslate"
+							inlineSVG="assets/svg/restore.svg"
+							(click)="reset()"
+						></div>
+
+						<div
+							class="button close"
+							[helpTooltip]="'session.buttons.close-tooltip' | owTranslate"
+							inlineSVG="assets/svg/close.svg"
+							(click)="close()"
+						></div>
+					</div>
 				</div>
-			</div>
-			<div class="content">
-				<div class="grouped" *ngIf="showGroups$ | async">
-					<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
-						<div class="category">{{ group.categoryLabel }}</div>
-						<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
-						<ng-container [ngSwitch]="currentMode">
-							<!-- BG details -->
-							<!-- When other modes are supported, extract this to specific components -->
-							<div class="group-details" *ngSwitchCase="'battlegrounds'">
-								<div class="background"></div>
-								<div
-									class="group-detail battlegrounds"
-									*ngFor="let detail of group.details; trackBy: trackByDetailFn"
-									componentTooltip
-									[componentType]="componentType"
-									[componentInput]="detail.boardEntities"
-									componentTooltipPosition="auto"
-								>
-									<bgs-hero-portrait
-										class="portrait"
-										[heroCardId]="detail.cardId"
-									></bgs-hero-portrait>
-								</div>
+				<div class="summary">
+					<div class="games" [helpTooltip]="gamesTooltip$ | async">{{ totalGamesLabel$ | async }}</div>
+					<div class="rank">
+						<div class="current">
+							<rank-image
+								*ngIf="lastGame$ | async as lastGame"
+								class="player-rank"
+								[stat]="lastGame"
+								[gameMode]="lastGame.gameMode"
+							></rank-image>
+						</div>
+						<ng-container *ngIf="deltaRank$ | async as deltaRank">
+							<div
+								class="delta"
+								*ngIf="deltaRank != null"
+								[ngClass]="{
+									'positive': deltaRank > 0,
+									'negative': deltaRank < 0
+								}"
+							>
+								{{ buildValue(deltaRank, 0) }}
 							</div>
 						</ng-container>
 					</div>
 				</div>
-				<div class="details" *ngIf="showMatches$ | async">
-					<div class="detail" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
-						<replay-info [replay]="match"></replay-info>
+				<div class="content">
+					<div class="grouped" *ngIf="showGroups$ | async">
+						<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
+							<div class="category">{{ group.categoryLabel }}</div>
+							<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
+							<ng-container [ngSwitch]="currentMode">
+								<!-- BG details -->
+								<!-- When other modes are supported, extract this to specific components -->
+								<div class="group-details" *ngSwitchCase="'battlegrounds'">
+									<div class="background" [style.opacity]="value.opacity"></div>
+									<div
+										class="group-detail battlegrounds"
+										*ngFor="let detail of group.details; trackBy: trackByDetailFn"
+										componentTooltip
+										[componentType]="componentType"
+										[componentInput]="detail.boardEntities"
+										componentTooltipPosition="auto"
+									>
+										<bgs-hero-portrait
+											class="portrait"
+											[heroCardId]="detail.cardId"
+										></bgs-hero-portrait>
+									</div>
+								</div>
+							</ng-container>
+						</div>
+					</div>
+					<div class="details" *ngIf="showMatches$ | async">
+						<div class="detail" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
+							<replay-info [replay]="match"></replay-info>
+						</div>
 					</div>
 				</div>
-			</div>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -126,6 +138,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	groups$: Observable<readonly Group[]>;
 	matches$: Observable<readonly GameStat[]>;
 	gamesTooltip$: Observable<string>;
+	opacity$: Observable<number>;
 
 	currentMode = 'battlegrounds';
 
@@ -134,6 +147,8 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {
 		super(store, cdr);
 	}
@@ -156,6 +171,9 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		this.currentDisplayedMode$ = from(this.getDisplayModeKey(this.currentMode));
 		this.showGroups$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowGroup);
 		this.showMatches$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowMatches);
+		this.opacity$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetOpacity).pipe(
+			this.mapData((opacity) => Math.max(0.01, opacity / 100)),
+		);
 		// this.currentGroupingLabel$ = this.currentGrouping$.pipe(
 		// 	this.mapData((grouping) => this.getGroupingKey(grouping)),
 		// );
@@ -241,6 +259,16 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.buildBgsMatches(games, sessionWidgetNumberOfMatchesToShow);
 			}),
 		);
+		this.store
+			.listen$(([main, nav, prefs]) => prefs.sessionWidgetScale)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((scale) => {
+				// this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', scale / 100);
+				const element = this.el.nativeElement.querySelector('.scalable');
+				if (element) {
+					this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+				}
+			});
 	}
 
 	buildValue(value: number, decimals = 2): string {
