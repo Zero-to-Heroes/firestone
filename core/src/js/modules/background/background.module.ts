@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
+import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
+import { SettingsBattlegroundsSessionComponent } from '@components/settings/battlegrounds/settings-battlegrounds-session.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -891,6 +893,8 @@ const components = [
 
 		SettingsBattlegroundsComponent,
 		SettingsBattlegroundsGeneralComponent,
+		SettingsBattlegroundsOverlayComponent,
+		SettingsBattlegroundsSessionComponent,
 		SettingsBattlegroundsMenuComponent,
 
 		SettingsMercenariesComponent,

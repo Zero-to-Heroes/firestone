@@ -2,7 +2,9 @@
 	display: flex;
 	width: 100%;
 
-	settings-battlegrounds-general {
+	settings-battlegrounds-general,
+	settings-battlegrounds-overlay,
+	settings-battlegrounds-session {
 		flex-grow: 1;
 	}
 }

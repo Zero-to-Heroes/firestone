@@ -1,5 +1,4 @@
 import { Race } from '@firestone-hs/reference-data';
-import { SessionWidgetGroupingType } from '@models/session/types';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { ArenaClassFilterType } from './arena/arena-class-filter.type';
@@ -67,7 +66,8 @@ export class Preferences {
 
 	readonly showCurrentSessionWidgetBgs: boolean = false;
 	readonly currentSessionStartDate: Date = null;
-	readonly sessionWidgetGrouping: SessionWidgetGroupingType = 'grouped';
+	readonly sessionWidgetShowGroup: boolean = true;
+	readonly sessionWidgetShowMatches: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly currentSessionWidgetScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

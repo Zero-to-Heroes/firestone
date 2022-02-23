@@ -6,7 +6,6 @@ import { GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { Preferences } from '@models/preferences';
-import { SessionWidgetGroupingType } from '@models/session/types';
 import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -72,34 +71,49 @@ import { combineLatest, from, Observable } from 'rxjs';
 				</div>
 			</div>
 			<div class="content">
-				<ng-container *ngIf="currentGrouping$ | async as currentGrouping">
-					<div class="grouped" *ngIf="currentGrouping === 'grouped'">
-						<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
-							<div class="category">{{ group.categoryLabel }}</div>
-							<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
-							<ng-container [ngSwitch]="currentMode">
-								<!-- BG details -->
-								<div class="group-details" *ngSwitchCase="'battlegrounds'">
-									<div class="background"></div>
-									<div
-										class="group-detail battlegrounds"
-										*ngFor="let detail of group.details; trackBy: trackByDetailFn"
-										componentTooltip
-										[componentType]="componentType"
-										[componentInput]="detail.boardEntities"
-										componentTooltipPosition="auto"
-									>
-										<bgs-hero-portrait
-											class="portrait"
-											[heroCardId]="detail.cardId"
-										></bgs-hero-portrait>
-									</div>
+				<div class="grouped" *ngIf="showGroup$ | async">
+					<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
+						<div class="category">{{ group.categoryLabel }}</div>
+						<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
+						<ng-container [ngSwitch]="currentMode">
+							<!-- BG details -->
+							<!-- When other modes are supported, extract this to specific components -->
+							<div class="group-details" *ngSwitchCase="'battlegrounds'">
+								<div class="background"></div>
+								<div
+									class="group-detail battlegrounds"
+									*ngFor="let detail of group.details; trackBy: trackByDetailFn"
+									componentTooltip
+									[componentType]="componentType"
+									[componentInput]="detail.boardEntities"
+									componentTooltipPosition="auto"
+								>
+									<bgs-hero-portrait
+										class="portrait"
+										[heroCardId]="detail.cardId"
+									></bgs-hero-portrait>
 								</div>
-							</ng-container>
-						</div>
+							</div>
+						</ng-container>
 					</div>
-					<div class="details" *ngIf="currentGrouping === 'list'">Not available for now</div>
-				</ng-container>
+				</div>
+				<div class="details" *ngIf="showMatches$ | async">
+					<div class="group" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
+						<ng-container [ngSwitch]="currentMode">
+							<!-- BG details -->
+							<!-- When other modes are supported, extract this to specific components -->
+							<div class="match-details" *ngSwitchCase="'battlegrounds'">
+								<div class="background"></div>
+								<div
+									class="match-detail battlegrounds"
+									*ngFor="let detail of match.details; trackBy: trackByDetailFn"
+								>
+									<replay-info [replay]="detail"></replay-info>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -111,12 +125,15 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	showWidget$: Observable<boolean>;
 	friendlyGameType$: Observable<'battlegrounds'>;
 	currentDisplayedMode$: Observable<string>;
-	currentGrouping$: Observable<SessionWidgetGroupingType>;
-	currentGroupingLabel$: Observable<string>;
+	showGroups$: Observable<boolean>;
+	showMatches$: Observable<boolean>;
+	// currentGrouping$: Observable<SessionWidgetGroupingType>;
+	// currentGroupingLabel$: Observable<string>;
 	totalGamesLabel$: Observable<string>;
 	lastGame$: Observable<GameStat>;
 	deltaRank$: Observable<number>;
 	groups$: Observable<readonly Group[]>;
+	matches$: Observable<readonly GameStat[]>;
 	gamesTooltip$: Observable<string>;
 
 	currentMode = 'battlegrounds';
@@ -146,10 +163,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			),
 		);
 		this.currentDisplayedMode$ = from(this.getDisplayModeKey(this.currentMode));
-		this.currentGrouping$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetGrouping);
-		this.currentGroupingLabel$ = this.currentGrouping$.pipe(
-			this.mapData((grouping) => this.getGroupingKey(grouping)),
-		);
+		this.showGroups$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowGroup);
+		this.showMatches$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowMatches);
+		// this.currentGroupingLabel$ = this.currentGrouping$.pipe(
+		// 	this.mapData((grouping) => this.getGroupingKey(grouping)),
+		// );
 		this.gamesTooltip$ = this.store
 			.listenPrefs$((prefs) => prefs.currentSessionStartDate)
 			.pipe(
@@ -223,6 +241,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.buildBgsGroups(games);
 			}),
 		);
+		this.matches$ = combineLatest(lastGames$, currentGameType$).pipe(
+			this.mapData(([games, currentGameType]) => {
+				return this.buildBgsMatches(games);
+			}),
+		);
 	}
 
 	buildValue(value: number, decimals = 2): string {
@@ -257,15 +280,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				showCurrentSessionWidgetBgs: false,
 			})),
 		);
-	}
-
-	private getGroupingKey(grouping: SessionWidgetGroupingType): string {
-		switch (grouping) {
-			case 'grouped':
-				return this.i18n.translateString('session.grouping.grouped');
-			case 'list':
-				return this.i18n.translateString('session.grouping.list');
-		}
 	}
 
 	private getDisplayModeKey(gameType: string): string {
@@ -314,6 +328,13 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			};
 		});
 		return result;
+	}
+
+	private buildBgsMatches(games: readonly GameStat[]): readonly GameStat[] {
+		const gamesWithFinalPosition = games.filter(
+			(game) => game.additionalResult && !isNaN(parseInt(game.additionalResult)),
+		);
+		return gamesWithFinalPosition.slice(0, 5);
 	}
 
 	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly BgsDetail[] {

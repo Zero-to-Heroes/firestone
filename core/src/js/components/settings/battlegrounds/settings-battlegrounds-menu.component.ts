@@ -9,7 +9,13 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="battlegrounds-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'general' }" (mousedown)="selectMenu('general')">
-				<span>General</span>
+				<span [owTranslate]="'settings.battlegrounds.menu.general'"></span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'overlay' }" (mousedown)="selectMenu('overlay')">
+				<span [owTranslate]="'settings.battlegrounds.menu.overlay'"></span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'session' }" (mousedown)="selectMenu('session')">
+				<span [owTranslate]="'settings.battlegrounds.menu.session'"></span>
 			</li>
 		</ul>
 	`,
