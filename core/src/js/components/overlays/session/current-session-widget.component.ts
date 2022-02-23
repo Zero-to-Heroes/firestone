@@ -7,7 +7,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { Preferences } from '@models/preferences';
 import { SessionWidgetGroupingType } from '@models/session/types';
-import { isBattlegrounds, isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
+import { isBattlegrounds, isBattlegroundsScene, normalizeHeroCardId } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
@@ -323,7 +323,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				: null;
 			return {
 				id: game.reviewId,
-				cardId: game.playerCardId,
+				cardId: normalizeHeroCardId(game.playerCardId),
 				tooltip: this.allCards.getCard(game.playerCardId).name,
 				// boardEntities: bgsBoard?.board,
 				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
