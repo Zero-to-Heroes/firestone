@@ -1,12 +1,20 @@
 .current-session-widget {
 	display: flex;
 	flex-direction: column;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-image: var(--window-background-image);
 	width: 225px;
 	color: var(--color-2);
 	padding-bottom: 10px;
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-image: var(--window-background-image);
+	}
 
 	.controls {
 		display: flex;

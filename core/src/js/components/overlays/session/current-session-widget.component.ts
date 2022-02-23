@@ -22,6 +22,7 @@ import { combineLatest, from, Observable } from 'rxjs';
 	],
 	template: `
 		<div class="current-session-widget battlegrounds-theme" *ngIf="showWidget$ | async">
+			<div class="background"></div>
 			<div class="controls">
 				<!-- <div class="mode">{{ currentDisplayedMode$ | async }}</div> -->
 				<!-- <div class="display" [helpTooltip]="''">{{ currentGroupingLabel$ | async }}</div> -->
@@ -231,9 +232,13 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.buildBgsGroups(games);
 			}),
 		);
-		this.matches$ = combineLatest(lastGames$, currentGameType$).pipe(
-			this.mapData(([games, currentGameType]) => {
-				return this.buildBgsMatches(games);
+		this.matches$ = combineLatest(
+			lastGames$,
+			currentGameType$,
+			this.listenForBasicPref$((prefs) => prefs.sessionWidgetNumberOfMatchesToShow),
+		).pipe(
+			this.mapData(([games, currentGameType, sessionWidgetNumberOfMatchesToShow]) => {
+				return this.buildBgsMatches(games, sessionWidgetNumberOfMatchesToShow);
 			}),
 		);
 	}
@@ -324,11 +329,14 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		return result;
 	}
 
-	private buildBgsMatches(games: readonly GameStat[]): readonly GameStat[] {
+	private buildBgsMatches(
+		games: readonly GameStat[],
+		sessionWidgetNumberOfMatchesToShow: number,
+	): readonly GameStat[] {
 		const gamesWithFinalPosition = games.filter(
 			(game) => game.additionalResult && !isNaN(parseInt(game.additionalResult)),
 		);
-		return gamesWithFinalPosition.slice(0, 5);
+		return gamesWithFinalPosition.slice(0, sessionWidgetNumberOfMatchesToShow);
 	}
 
 	private buildBgsDetails(gamesForPosition: readonly GameStat[]): readonly BgsDetail[] {

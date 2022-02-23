@@ -1,0 +1,14 @@
+.numeric-input {
+	font-size: 14px;
+	margin-top: 10px;
+	display: flex;
+
+	&::ng-deep {
+		.label {
+			width: 250px;
+		}
+		.buttons {
+			--color-2: var(--default-title-color);
+		}
+	}
+}

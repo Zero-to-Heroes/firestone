@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { PreferencesService } from '@services/preferences.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -17,7 +18,8 @@ import { Knob } from '../preference-slider.component';
 		<div
 			class="battlegrounds-general"
 			*ngIf="{
-				showCurrentSessionWidgetBgs: showCurrentSessionWidgetBgs$ | async
+				showCurrentSessionWidgetBgs: showCurrentSessionWidgetBgs$ | async,
+				sessionWidgetShowMatches: sessionWidgetShowMatches$ | async
 			} as value"
 			scrollable
 		>
@@ -40,6 +42,12 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.battlegrounds.session-widget-show-matches' | owTranslate"
 					[tooltip]="'settings.battlegrounds.session-widget-show-matches-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-numeric-input
+					[disabled]="!value.showCurrentSessionWidgetBgs || !value.sessionWidgetShowMatches"
+					[label]="'settings.battlegrounds.session-widget-number-of-matches' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget-number-of-matches-tooltip' | owTranslate"
+					[field]="'sessionWidgetNumberOfMatchesToShow'"
+				></preference-numeric-input>
 			</div>
 		</div>
 	`,
@@ -47,6 +55,7 @@ import { Knob } from '../preference-slider.component';
 })
 export class SettingsBattlegroundsSessionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showCurrentSessionWidgetBgs$: Observable<boolean>;
+	sessionWidgetShowMatches$: Observable<boolean>;
 
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
@@ -68,11 +77,16 @@ export class SettingsBattlegroundsSessionComponent extends AbstractSubscriptionC
 		},
 	];
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
 		this.showCurrentSessionWidgetBgs$ = this.listenForBasicPref$((prefs) => prefs.showCurrentSessionWidgetBgs);
+		this.sessionWidgetShowMatches$ = this.listenForBasicPref$((prefs) => prefs.sessionWidgetShowMatches);
 	}
 }

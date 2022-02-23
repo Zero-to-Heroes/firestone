@@ -68,6 +68,7 @@ export class Preferences {
 	readonly currentSessionStartDate: Date = null;
 	readonly sessionWidgetShowGroup: boolean = true;
 	readonly sessionWidgetShowMatches: boolean = true;
+	readonly sessionWidgetNumberOfMatchesToShow: number = 5;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly currentSessionWidgetScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
