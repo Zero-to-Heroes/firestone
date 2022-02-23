@@ -31,12 +31,14 @@ import { combineLatest, from, Observable } from 'rxjs';
 					[helpTooltip]="'session.title-tooltip' | owTranslate"
 				></div>
 				<div class="buttons">
+					<control-settings [settingsApp]="'battlegrounds'" [settingsSection]="'session'"></control-settings>
 					<div
 						class="button reset"
 						[helpTooltip]="'session.buttons.reset-tooltip' | owTranslate"
 						inlineSVG="assets/svg/restore.svg"
 						(click)="reset()"
 					></div>
+
 					<div
 						class="button close"
 						[helpTooltip]="'session.buttons.close-tooltip' | owTranslate"
@@ -71,7 +73,7 @@ import { combineLatest, from, Observable } from 'rxjs';
 				</div>
 			</div>
 			<div class="content">
-				<div class="grouped" *ngIf="showGroup$ | async">
+				<div class="grouped" *ngIf="showGroups$ | async">
 					<div class="group" *ngFor="let group of groups$ | async; trackBy: trackByGroupFn">
 						<div class="category">{{ group.categoryLabel }}</div>
 						<div class="value" [helpTooltip]="group.valueTooltip">{{ group.value }}</div>
@@ -98,20 +100,8 @@ import { combineLatest, from, Observable } from 'rxjs';
 					</div>
 				</div>
 				<div class="details" *ngIf="showMatches$ | async">
-					<div class="group" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
-						<ng-container [ngSwitch]="currentMode">
-							<!-- BG details -->
-							<!-- When other modes are supported, extract this to specific components -->
-							<div class="match-details" *ngSwitchCase="'battlegrounds'">
-								<div class="background"></div>
-								<div
-									class="match-detail battlegrounds"
-									*ngFor="let detail of match.details; trackBy: trackByDetailFn"
-								>
-									<replay-info [replay]="detail"></replay-info>
-								</div>
-							</div>
-						</ng-container>
+					<div class="detail" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
+						<replay-info [replay]="match"></replay-info>
 					</div>
 				</div>
 			</div>
@@ -261,6 +251,10 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 
 	trackByDetailFn(index: number, item: Detail) {
 		return item.id;
+	}
+
+	trackByMatchFn(index: number, item: GameStat) {
+		return item.reviewId;
 	}
 
 	reset() {

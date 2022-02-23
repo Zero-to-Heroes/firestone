@@ -82,6 +82,8 @@ export class GameStatsUpdaterService {
 			gameDurationSeconds: durationInSeconds,
 			gameDurationTurns: durationInTurns,
 			runId: game.runId,
+			bgsAvailableTribes: game.availableTribes,
+			bgsBannedTribes: game.bannedTribes,
 			// xpGained: game.xpGained,
 		} as GameStat);
 

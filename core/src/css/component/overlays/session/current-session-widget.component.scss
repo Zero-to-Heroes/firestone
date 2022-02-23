@@ -58,6 +58,10 @@
 					user-select: none;
 				}
 
+				&.reset {
+					padding: 3px;
+				}
+
 				&:hover {
 					background: var(--on-close-button-background-color); // #2F0D0D;
 					color: var(--on-close-button-color); //#CCA2B3;
@@ -79,6 +83,7 @@
 		display: flex;
 		height: 40px;
 		padding: 0 10px;
+		margin-top: 10px;
 
 		.games {
 			flex-grow: 1;
@@ -126,6 +131,22 @@
 		.details {
 			display: flex;
 			flex-direction: column;
+		}
+
+		.grouped {
+			&:after {
+				content: '';
+				padding: 0 10px;
+				border-bottom: 1px solid var(--color-1);
+				padding-bottom: 10px;
+				margin: 0 10px 10px 10px;
+			}
+
+			&:last-child {
+				&:after {
+					display: none;
+				}
+			}
 		}
 
 		.group {
@@ -200,6 +221,68 @@
 
 					.group-detail:nth-child(n + 5) {
 						display: flex;
+					}
+				}
+			}
+		}
+
+		.details {
+			.detail {
+				::ng-deep replay-info {
+					.replay-info {
+						background: none;
+						padding: 0 10px;
+					}
+					.result-color-code,
+					.mode,
+					// .tribes, 
+					.warband,
+					.right-info,
+					.mmr .text {
+						display: none;
+					}
+					.player-images,
+					.result,
+					.mmr,
+					.tribes {
+						border-right: none;
+						padding-right: 0;
+					}
+					.player-images {
+						width: 27px;
+					}
+					.result {
+						width: 30px;
+						margin-right: 0;
+					}
+					.mmr {
+						width: 30px;
+						margin-right: 0;
+					}
+					.tribes {
+						order: 1;
+						.tribe {
+							margin-right: -6px;
+							width: 27px;
+							height: 27px;
+						}
+					}
+				}
+
+				&:hover {
+					::ng-deep replay-info {
+						// .replay-info {
+						// }
+						.warband {
+							background: var(--color-9);
+							display: flex;
+							order: 2;
+							border-right: none;
+
+							bgs-board {
+								top: 0;
+							}
+						}
 					}
 				}
 			}
