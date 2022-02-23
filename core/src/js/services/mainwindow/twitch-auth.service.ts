@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import {
@@ -45,6 +46,7 @@ export class TwitchAuthService {
 		private http: HttpClient,
 		private notificationService: OwNotificationsService,
 		private store: AppUiStoreFacadeService,
+		private allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -117,6 +119,7 @@ export class TwitchAuthService {
 			currentTurn: deckEvent.state.currentTurn,
 			gameStarted: deckEvent.state.gameStarted,
 			gameEnded: deckEvent.state.gameEnded,
+			cardsPlayedThisMatch: undefined,
 		});
 
 		const latestBattle = bgsState?.currentGame?.lastFaceOff();
@@ -147,36 +150,48 @@ export class TwitchAuthService {
 	private cleanDeck(deckState: DeckState, isBattlegrounds: boolean, isMercenaries: boolean): DeckState {
 		if (isBattlegrounds || isMercenaries) {
 			return {
-				hand: this.cleanZone(deckState.hand),
-				board: this.cleanZone(deckState.board),
-				heroPower: deckState.heroPower,
+				hand: this.cleanZone(deckState.hand, isBattlegrounds),
+				board: this.cleanZone(deckState.board, isBattlegrounds),
+				heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
 			} as DeckState;
 		}
-		return {
+		const result = {
 			...deckState,
-			hand: this.cleanZone(deckState.hand),
-			board: this.cleanZone(deckState.board),
-			deck: this.cleanZone(deckState.deck),
-			otherZone: this.cleanZone(deckState.otherZone),
-			deckList: this.cleanZone(deckState.deckList),
-			secrets: undefined,
-			spellsPlayedThisMatch: undefined,
-			dynamicZones: undefined,
-			cardsPlayedThisTurn: undefined,
-			cardsPlayedFromInitialDeck: undefined,
-		} as DeckState;
+			hand: this.cleanZone(deckState.hand, isBattlegrounds),
+			board: this.cleanZone(deckState.board, isBattlegrounds),
+			deck: this.cleanZone(deckState.deck, isBattlegrounds),
+			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
+			deckList: this.cleanZone(deckState.deckList, isBattlegrounds),
+		};
+		delete result.secrets;
+		delete result.spellsPlayedThisMatch;
+		delete result.dynamicZones;
+		delete result.cardsPlayedThisTurn;
+		delete result.cardsPlayedFromInitialDeck;
+		return result as DeckState;
 	}
 
-	private cleanZone(zone: readonly DeckCard[]): readonly DeckCard[] {
-		return zone.map(
-			(card) =>
-				({
-					...card,
-					// So that we localize the card name, even if that means we lose some info
-					cardName: undefined,
-					metaInfo: undefined,
-				} as DeckCard),
-		);
+	private cleanZone(zone: readonly DeckCard[], isBattlegrounds: boolean): readonly DeckCard[] {
+		return zone.map((card) => this.cleanCard(card, isBattlegrounds)).filter((card) => !!card);
+	}
+
+	private cleanCard(card: DeckCard, isBattlegrounds: boolean): DeckCard {
+		if (!card || card.zone === 'SETASIDE') {
+			return null;
+		}
+
+		const newCard = { ...card };
+		delete newCard.cardName;
+		delete newCard.metaInfo;
+		delete newCard.temporaryCard;
+		delete newCard.dormant;
+		if (isBattlegrounds) {
+			delete newCard.creatorCardId;
+			delete newCard.zone;
+			delete newCard.playTiming;
+			delete newCard.zone;
+		}
+		return newCard as DeckCard;
 	}
 
 	private hasLoggedInfoOnce = false;
@@ -245,35 +260,38 @@ export class TwitchAuthService {
 		return {
 			id: entity.id,
 			cardID: entity.cardID,
-			tags: entity.tags.filter((tag) => this.isSerializableTag(tag)).toJS(),
+			tags: entity.tags.filter((value, key) => this.isSerializableTag(key)).toJS(),
 		};
 	}
 
-	private isSerializableTag(tag): boolean {
-		return true;
-		// Will activate that later on, when message size becomes an issue once more
-		const isSerializable = [
-			GameTag.PREMIUM,
-			GameTag.DAMAGE,
-			GameTag.HEALTH,
+	private isSerializableTag(tag: string): boolean {
+		const serializableTags = [
 			GameTag.ATK,
-			GameTag.COST,
-			GameTag.WINDFURY,
-			GameTag.TAUNT,
-			GameTag.DIVINE_SHIELD,
-			GameTag.CLASS,
-			GameTag.CARDTYPE,
 			GameTag.CARDRACE,
+			GameTag.CARDTYPE,
+			GameTag.CLASS,
+			GameTag.CONTROLLER,
+			GameTag.COST,
+			GameTag.DAMAGE,
 			GameTag.DEATHRATTLE,
-			GameTag.ZONE_POSITION,
-			GameTag.POISONOUS,
+			GameTag.DIVINE_SHIELD,
+			GameTag.ELITE,
+			GameTag.ENTITY_ID,
+			GameTag.EXHAUSTED,
+			GameTag.HEALTH,
 			GameTag.LIFESTEAL,
-			GameTag.REBORN,
 			GameTag.MEGA_WINDFURY,
+			GameTag.POISONOUS,
+			GameTag.PREMIUM,
+			GameTag.REBORN,
+			GameTag.TAG_SCRIPT_DATA_NUM_1,
+			GameTag.TAG_SCRIPT_DATA_NUM_2,
+			GameTag.TAUNT,
 			GameTag.TECH_LEVEL,
-			GameTag.TECH_LEVEL_MANA_GEM,
-		].includes(tag);
-		return isSerializable;
+			GameTag.WINDFURY,
+			GameTag.ZONE_POSITION,
+		];
+		return serializableTags.map((tag) => GameTag[tag]).includes(tag);
 	}
 
 	public buildLoginUrl(): string {
