@@ -111,11 +111,13 @@ import { combineLatest, from, Observable } from 'rxjs';
 							</ng-container>
 						</div>
 					</div>
-					<div class="details" *ngIf="showMatches$ | async">
-						<div class="detail" *ngFor="let match of matches$ | async; trackBy: trackByMatchFn">
-							<replay-info [replay]="match"></replay-info>
+					<ng-container *ngIf="{ showMatches: showMatches$ | async, matches: matches$ | async } as value">
+						<div class="details" *ngIf="value.showMatches && value.matches?.length">
+							<div class="detail" *ngFor="let match of value.matches; trackBy: trackByMatchFn">
+								<replay-info [replay]="match"></replay-info>
+							</div>
 						</div>
-					</div>
+					</ng-container>
 				</div>
 			</ng-container>
 		</div>
