@@ -1,5 +1,5 @@
 import {
-	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -47,7 +47,7 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class GenericCountersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	@Input() value: number;
 	@Input() valueImg: string;
 	@Input() image: string;
@@ -64,10 +64,12 @@ export class GenericCountersComponent extends AbstractSubscriptionComponent impl
 		super(store, cdr);
 	}
 
-	ngAfterContentInit(): void {
+	ngAfterViewInit(): void {
 		this.listenForBasicPref$((prefs) => prefs.countersScale).subscribe((scale) => {
 			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			if (element) {
+				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
+			}
 		});
 	}
 }
