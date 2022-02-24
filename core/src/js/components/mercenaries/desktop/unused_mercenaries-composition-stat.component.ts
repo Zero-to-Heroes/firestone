@@ -12,6 +12,7 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './merce
 		`../../../../css/component/mercenaries/desktop/mercenaries-composition-stat.component.scss`,
 	],
 	template: `
+		<!-- Unused -->
 		<div class="mercenaries-composition-stat" [ngClass]="{ 'show-merc-names': _showMercNames }" (click)="select()">
 			<div class="heroes-container " [ngClass]="{ 'starter': !!starterHeroes?.length }">
 				<div class="portrait" *ngFor="let hero of starterHeroes" [cardTooltip]="hero.cardId">

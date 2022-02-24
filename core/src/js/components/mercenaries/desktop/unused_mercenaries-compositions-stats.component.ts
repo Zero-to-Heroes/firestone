@@ -21,6 +21,7 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-compositions-stats.component.scss`,
 	],
 	template: `
+		<!-- Unused -->
 		<div
 			class="mercenaries-compositions-stats"
 			*ngIf="{ showMercNames: showMercNames$ | async } as value"

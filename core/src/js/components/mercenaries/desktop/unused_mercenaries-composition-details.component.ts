@@ -30,6 +30,7 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-composition-details.component.scss`,
 	],
 	template: `
+		<!-- Component is unused for now -->
 		<div class="mercenaries-composition-details" *ngIf="compositionStat$ | async as stats">
 			<div class="overview">
 				<div class="info">
