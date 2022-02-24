@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MercenariesHeroSelectedEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-selected-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { capitalizeFirstLetter } from '../../../services/utils';
 import { MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -30,7 +30,7 @@ import { MercenaryInfo } from './mercenary-info';
 			</div>
 			<div class="stats">
 				<div class="item winrate">
-					<div class="label">Global winrate</div>
+					<div class="label" [owTranslate]="'mercenaries.hero-stats.global-winrate'"></div>
 					<div class="values">
 						<div class="value player">{{ buildPercents(globalWinrate) }}</div>
 					</div>
@@ -60,13 +60,14 @@ export class MercenariesMetaHeroStatComponent {
 	@Input() set stat(value: MercenaryInfo) {
 		// console.debug('set value', value.name, value);
 		this.cardId = value.id;
-		this.role = capitalizeFirstLetter(value.role);
+		this.role = this.i18n.translateString(`global.role.${value.role}`);
 		this.name = value.name;
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 		this.frameUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${value.role}.png?v=2`;
-		this.numberOfGamesTooltip = `${value.globalTotalMatches.toLocaleString()} matches recorded (${this.buildPercents(
-			value.globalPopularity,
-		)} popularity)`;
+		this.numberOfGamesTooltip = this.i18n.translateString('mercenaries.hero-stats.number-of-games-tooltip', {
+			totalMatches: value.globalTotalMatches.toLocaleString(),
+			popularity: this.buildPercents(value.globalPopularity),
+		});
 		this.globalWinrate = value.globalWinrate;
 		this.playerWinrate = value.playerWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches;
@@ -85,7 +86,11 @@ export class MercenariesMetaHeroStatComponent {
 	playerWinrate: number;
 	playerGamesPlayed: number;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	select() {
 		return;

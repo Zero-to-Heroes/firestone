@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -35,7 +36,11 @@ export class MercenariesPvpMmrFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -107,15 +112,19 @@ export class MercenariesPvpMmrFilterDropdownComponent
 	private buildPercentileLabel(percentile: MmrPercentile): string {
 		switch (percentile.percentile) {
 			case 100:
-				return 'All ranks';
+				return this.i18n.translateString('app.battlegrounds.filters.rank.all');
 			case 50:
-				return `Top 50% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
 			case 25:
-				return `Top 25% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
 			case 10:
-				return `Top 10% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+				return this.i18n.translateString('app.battlegrounds.filters.rank.percentile', {
+					percentile: percentile.percentile,
+					mmr: this.getNiceMmrValue(percentile.mmr, 2),
+				});
 			case 1:
-				return `Top 1% (${this.getNiceMmrValue(percentile.mmr, 1)}+)`;
+				return this.i18n.translateString('app.battlegrounds.filters.rank.percentile', {
+					percentile: percentile.percentile,
+					mmr: this.getNiceMmrValue(percentile.mmr, 1),
+				});
 		}
 	}
 

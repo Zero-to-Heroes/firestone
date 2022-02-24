@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -24,7 +25,7 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	private achievementId: string;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -36,8 +37,7 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 		}
 		this.achievementId = history.achievementId;
 		this.achievementName = history.displayName;
-		// TODO translate
-		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString('en-GB', {
+		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			day: '2-digit',
 			month: '2-digit',
 			year: '2-digit',

@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -35,25 +36,22 @@ export class MercenariesFullyUpgradedFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		this.options = [
-			{
-				value: 'all',
-				label: 'All mercs',
-			} as FilterOption,
-			{
-				value: 'upgraded',
-				label: 'Fully upgraded',
-			} as FilterOption,
-			{
-				value: 'non-upgraded',
-				label: 'Not fully upgraded',
-			} as FilterOption,
-		] as readonly FilterOption[];
+		this.options = ['all', 'upgraded', 'non-upgraded'].map(
+			(filter) =>
+				({
+					value: filter,
+					label: this.i18n.translateString(`mercenaries.filters.fully-upgraded.${filter}`),
+				} as FilterOption),
+		);
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.globalStats,

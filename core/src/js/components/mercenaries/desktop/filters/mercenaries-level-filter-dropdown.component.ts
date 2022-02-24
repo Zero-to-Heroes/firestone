@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -33,33 +34,22 @@ export class MercenariesHeroLevelFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		this.options = [
-			{
-				value: '0',
-				label: 'All levels',
-			} as FilterOption,
-			{
-				value: '1',
-				label: 'Levels 1-4',
-			} as FilterOption,
-			{
-				value: '5',
-				label: 'Levels 5-14',
-			} as FilterOption,
-			{
-				value: '15',
-				label: 'Levels 15-29',
-			} as FilterOption,
-			{
-				value: '30',
-				label: 'Level 30',
-			} as FilterOption,
-		] as readonly FilterOption[];
+		this.options = ['0', '1', '5', '15', '30'].map(
+			(filter) =>
+				({
+					value: filter,
+					label: this.i18n.translateString(`mercenaries.filters.hero-level.level-${filter}`),
+				} as FilterOption),
+		);
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.globalStats,

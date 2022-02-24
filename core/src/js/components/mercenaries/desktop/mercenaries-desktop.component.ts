@@ -6,6 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
@@ -89,9 +90,10 @@ export class MercenariesDesktopComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -138,19 +140,7 @@ export class MercenariesDesktopComponent
 	}
 
 	getCatName(categoryId: MercenariesCategoryId) {
-		switch (categoryId) {
-			case 'mercenaries-personal-hero-stats':
-				return 'Progression';
-			case 'mercenaries-my-teams':
-				return 'My PvP Teams';
-			case 'mercenaries-hero-stats':
-				return 'PvP Heroes';
-			case 'mercenaries-compositions-stats':
-				return 'PvP Teams';
-			default:
-				console.error('Missing category id <-> name mapping', categoryId);
-				return null;
-		}
+		return this.i18n.translateString('mercenaries.menu.mercenaries-compositions-stats');
 	}
 
 	selectCategory(categoryId: MercenariesCategoryId) {

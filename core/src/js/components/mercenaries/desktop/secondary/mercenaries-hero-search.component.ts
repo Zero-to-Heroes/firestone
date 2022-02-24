@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					[formControl]="searchForm"
 					(mousedown)="onMouseDown($event)"
 					[(ngModel)]="searchString"
-					placeholder="Search hero..."
+					[placeholder]="'mercenaries.search.hero-search-placeholder' | owTranslate"
 				/>
 			</label>
 		</div>

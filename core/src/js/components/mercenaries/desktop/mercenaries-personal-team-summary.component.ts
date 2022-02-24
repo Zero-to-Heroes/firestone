@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesHideTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hide-team-summary-event';
@@ -34,13 +35,26 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 				</div>
 			</div>
 			<div class="stats">
-				<div class="text total-games">{{ totalGames }} games</div>
-				<div class="text win-rate" *ngIf="winRatePercentage != null">{{ winRatePercentage }}% win rate</div>
-				<div class="last-used">Last used: {{ lastUsed }}</div>
+				<div
+					class="text total-games"
+					[owTranslate]="'mercenaries.teams.games'"
+					[translateParams]="{ value: totalGames }"
+				></div>
+				<div
+					class="text win-rate"
+					*ngIf="winRatePercentage != null"
+					[owTranslate]="'mercenaries.teams.winrate'"
+					[translateParams]="{ value: winRatePercentage }"
+				></div>
+				<div
+					class="last-used"
+					[owTranslate]="'mercenaries.teams.last-used'"
+					[translateParams]="{ value: lastUsed }"
+				></div>
 			</div>
 			<button
 				class="close-button"
-				helpTooltip="Archive team (you can restore it later)"
+				[helpTooltip]="'mercenaries.teams.archive-button-tooltip' | owTranslate"
 				(mousedown)="hideTeam($event)"
 				*ngIf="!hidden"
 			>
@@ -48,7 +62,12 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#bin"></use>
 				</svg>
 			</button>
-			<button class="restore-button" helpTooltip="Restore team" (mousedown)="restoreTeam($event)" *ngIf="hidden">
+			<button
+				class="restore-button"
+				[helpTooltip]="'mercenaries.teams.restore-button-tooltip' | owTranslate"
+				(mousedown)="restoreTeam($event)"
+				*ngIf="hidden"
+			>
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
 				</svg>
@@ -64,13 +83,14 @@ export class MercenariesPersonalTeamSummaryComponent {
 		const gamesForTeam = value.games;
 		// Because we can't pass non ISU-8859-1 to AWS S3 metadata, so the deck name has to be encoded
 		this.teamName = decodeURIComponent(
-			gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName ?? 'Unnamed Team',
+			gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName ??
+				this.i18n.translateString('mercenaries.teams.unnamed-team'),
 		);
 		this.teamNameTooltip = `${this.teamName}`;
 		this.totalGames = gamesForTeam.length;
 		const totalWins = gamesForTeam.filter((stat) => stat.result === 'won').length;
 		this.winRatePercentage = !!gamesForTeam.length
-			? parseFloat('' + (100 * totalWins) / gamesForTeam.length).toLocaleString('en-US', {
+			? parseFloat('' + (100 * totalWins) / gamesForTeam.length).toLocaleString(this.i18n.formatCurrentLocale(), {
 					minimumIntegerDigits: 1,
 					maximumFractionDigits: 2,
 			  })
@@ -119,7 +139,11 @@ export class MercenariesPersonalTeamSummaryComponent {
 	winRatePercentage: string;
 	lastUsed: string;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	hideTeam(event: MouseEvent) {
 		this.store.send(new MercenariesHideTeamSummaryEvent(this.teamId));
@@ -135,7 +159,7 @@ export class MercenariesPersonalTeamSummaryComponent {
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
 		const date = new Date(lastUsedTimestamp);
-		return date.toLocaleDateString('en-US', {
+		return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 			month: 'short',
 			day: '2-digit',
 			year: 'numeric',

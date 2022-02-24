@@ -110,7 +110,6 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 						],
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('filtering', info)),
 				map(
 					([
 						globalStats,
@@ -157,7 +156,6 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 					},
 				),
 				map(([heroStats, roleFilter, heroSearchString, referenceData]) => {
-					console.debug('heroStats', heroStats);
 					const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(heroStats);
 					// const gameStatsByHero = groupByFunction((stat: GameStat) =>
 					// 	normalizeMercenariesCardId(stat.playerCardId),

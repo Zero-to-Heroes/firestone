@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesViewMercDetailsEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-view-merc-details-event';
@@ -34,11 +35,12 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 			<div class="name" [helpTooltip]="name">{{ name }}</div>
 
+			<!-- TODO translate -->
 			<div class="xp">
 				<progress-bar
 					[current]="xpInCurrentLevel"
 					[total]="xpNeededForLevel"
-					[fullTotalLabel]="'Max level!'"
+					[fullTotalLabel]="'mercenaries.hero-stats.max-level' | owTranslate"
 					[fullTotalTooltip]="fullTotalTooltip"
 				></progress-bar>
 			</div>
@@ -162,18 +164,19 @@ export class MercenariesPersonalHeroStatComponent {
 
 		this.xpInCurrentLevel = value.xpInCurrentLevel;
 		this.xpNeededForLevel = value.xpNeededForLevel + value.xpInCurrentLevel;
-		this.fullTotalTooltip = `${value.totalXp.toLocaleString('en-US')} XP`;
+		this.fullTotalTooltip = this.i18n.translateString('mercenaries.hero-stats.xp-tooltip', {
+			value: value.totalXp.toLocaleString(this.i18n.formatCurrentLocale()),
+		});
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
 		this.totalCoinsNeeded = value.totalCoinsNeeded;
 		this.totalCoinsToFarm = value.totalCoinsToFarm;
 
 		this.currentTaskLabel = '???';
-		this.currentTaskTooltip =
-			'The task can only be updated once a visitor for this mercenary visits your village while the app is running.';
+		this.currentTaskTooltip = this.i18n.translateString('mercenaries.hero-stats.current-task-tooltip');
 		if (value.currentTask != null) {
 			if (value.currentTask >= value.totalTasks) {
-				this.currentTaskLabel = `Maxed!`;
+				this.currentTaskLabel = this.i18n.translateString('mercenaries.hero-stats.maxed');
 				this.currentTaskTooltip = null;
 			} else {
 				this.currentTaskLabel = `${value.currentTask}/${value.totalTasks}`;
@@ -245,7 +248,11 @@ export class MercenariesPersonalHeroStatComponent {
 	private mercenaryId: number;
 	private _stat: PersonalHeroStat;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	buildPercents(value: number): string {
 		return value == null ? '-' : value.toFixed(1) + '%';
@@ -302,11 +309,14 @@ export class MercenariesPersonalHeroStatComponent {
 	}
 
 	private buildCoinsToFarmTooltip(value: PersonalHeroStat, totalCoinsToFarm: number): string {
+		const message = this.i18n.translateString('mercenaries.hero-stats.coins-to-farm-tooltip', {
+			value: value.coinsMissingFromTasks,
+		});
 		// Don't show the tooltip if the user already has enough coins to max the merc
 		return !!totalCoinsToFarm
 			? `
 			<div class="container">
-				Expecting that you get ${value.coinsMissingFromTasks} coins from uncompleted tasks
+				${message}
 			</div>
 		`
 			: null;

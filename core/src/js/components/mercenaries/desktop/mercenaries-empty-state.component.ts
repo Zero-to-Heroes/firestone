@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'mercenaries-empty-state',
@@ -16,6 +17,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesEmptyStateComponent {
-	@Input() title = 'Nothing here yet';
-	@Input() subtitle = 'Play some mercenaries matches to get started! Also, check your filters above :)';
+	@Input() title = this.i18n.translateString('mercenaries.emty-state.title');
+	@Input() subtitle = this.i18n.translateString('mercenaries.emty-state.subtitle');
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

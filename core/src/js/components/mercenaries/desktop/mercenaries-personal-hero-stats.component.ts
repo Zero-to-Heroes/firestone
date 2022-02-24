@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
@@ -28,44 +29,78 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="mercenaries-personal-hero-stats" *ngIf="stats$ | async as stats; else emptyState">
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
-				<sortable-label class="level" [name]="'Lvl'" [sort]="sort" [criteria]="'level'"> </sortable-label>
-				<sortable-label class="role" [name]="'Role'" [sort]="sort" [criteria]="'role'"> </sortable-label>
-				<sortable-label class="name" [name]="'Name'" [sort]="sort" [criteria]="'name'"> </sortable-label>
-				<sortable-label class="xp" [name]="'XP'" [sort]="sort" [criteria]="'xp-in-level'"> </sortable-label>
+				<sortable-label
+					class="level"
+					[name]="'mercenaries.hero-stats.level-header' | owTranslate"
+					[sort]="sort"
+					[criteria]="'level'"
+				>
+				</sortable-label>
+				<sortable-label
+					class="role"
+					[name]="'mercenaries.hero-stats.role-header' | owTranslate"
+					[sort]="sort"
+					[criteria]="'role'"
+				>
+				</sortable-label>
+				<sortable-label
+					class="name"
+					[name]="'mercenaries.hero-stats.name-header' | owTranslate"
+					[sort]="sort"
+					[criteria]="'name'"
+				>
+				</sortable-label>
+				<sortable-label
+					class="xp"
+					[name]="'mercenaries.hero-stats.xp-header' | owTranslate"
+					[sort]="sort"
+					[criteria]="'xp-in-level'"
+				>
+				</sortable-label>
 				<sortable-label
 					class="coins left"
-					[name]="'Coins Left'"
+					[name]="'mercenaries.hero-stats.coins-left-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'coins-left'"
-					helpTooltip="Total coins you have in reserve for this merc"
+					[helpTooltip]="'mercenaries.hero-stats.coins-left-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
 				<sortable-label
 					class="coins needed"
-					[name]="'Coins Needed'"
+					[name]="'mercenaries.hero-stats.coins-needed-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'coins-needed-to-max'"
-					helpTooltip="Total coins you still need to get to fully max out this merc"
+					[helpTooltip]="'mercenaries.hero-stats.coins-needed-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
 				<sortable-label
 					class="coins to-farm"
-					[name]="'Coins To Farm'"
+					[name]="'mercenaries.hero-stats.coins-to-farm-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'coins-to-farm-to-max'"
-					helpTooltip="Total coins you still need to earn to fully max out this merc (counts coins you already have and coins you will get by maxing all tasks)"
+					[helpTooltip]="'mercenaries.hero-stats.coins-to-farm-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
 				<sortable-label
 					class="tasks"
-					[name]="'Completed Tasks'"
+					[name]="'mercenaries.hero-stats.completed-tasks-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'task-progress'"
-					helpTooltip="Tasks completed. Ctrl + click on the current task to manually go to the next task. Alt + click to go back one step."
+					[helpTooltip]="'mercenaries.hero-stats.completed-tasks-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
-				<sortable-label class="abilities" [name]="'Abilities'" [isSortable]="false"> </sortable-label>
-				<sortable-label class="equipments" [name]="'Equipments'" [isSortable]="false"> </sortable-label>
+				<sortable-label
+					class="abilities"
+					[name]="'mercenaries.hero-stats.abilities-header' | owTranslate"
+					[isSortable]="false"
+				>
+				</sortable-label>
+				<sortable-label
+					class="equipments"
+					[name]="'mercenaries.hero-stats.equipments-header' | owTranslate"
+					[isSortable]="false"
+				>
+				</sortable-label>
 			</div>
 			<div class="list" scrollable>
 				<mercenaries-personal-hero-stat
@@ -76,7 +111,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		</div>
 		<ng-template #emptyState>
 			<mercenaries-empty-state
-				[subtitle]="'Go to the Mercenaries Village screen in Hearthstone to refresh the information'"
+				[subtitle]="'mercenaries.hero-stats.empty-state-subtitle' | owTranslate"
 			></mercenaries-empty-state
 		></ng-template>
 	`,
@@ -89,9 +124,10 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 	private unsortedStats$: Observable<readonly PersonalHeroStat[]>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -169,7 +205,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		if (!refMerc) {
 			return null;
 		}
-		const debug = refMerc.name === 'Chi-Ji';
+		// const debug = refMerc.name === 'Chi-Ji';
 		const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 		const taskChain = referenceData.taskChains
 			.filter((chain) => chain.mercenaryId === refMerc.id)
@@ -178,7 +214,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				// The last 2 tasks are present in the ref data, but not activated in-game
 				tasks: chain.tasks.slice(0, 18),
 			}))[0];
-		debug && console.debug('taskChain', taskChain);
+		// debug && console.debug('taskChain', taskChain);
 		// Can have only one task per mercenary at the same time
 		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
@@ -187,7 +223,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
 			? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 			: Math.max(0, currentTaskStep);
-		debug && console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
+		// debug && console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -270,15 +306,15 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				.reduce((a, b) => a + b, 0);
 			const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
 			const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
-			console.debug(
-				'equipments',
-				refMerc.name,
-				equipmentCard.name,
-				equipmentCard,
-				baseEquipmentCard,
-				refEquip,
-				memEquip,
-			);
+			// console.debug(
+			// 	'equipments',
+			// 	refMerc.name,
+			// 	equipmentCard.name,
+			// 	equipmentCard,
+			// 	baseEquipmentCard,
+			// 	refEquip,
+			// 	memEquip,
+			// );
 			return {
 				cardId: equipmentCard.id ?? baseEquipmentCard.id,
 				coinsToCraft: coinsToCraft,
@@ -348,7 +384,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 		const sortedTasks = [...(taskChain?.tasks ?? [])].sort((a, b) => a.id - b.id);
 		const currentTask = sortedTasks[currentStep];
-		console.debug('currentTask', taskChain.mercenaryVisitorId, taskChain.mercenaryId, currentTask);
+		// console.debug('currentTask', taskChain.mercenaryVisitorId, taskChain.mercenaryId, currentTask);
 		if (!currentTask) {
 			return null;
 		}
@@ -356,12 +392,20 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const isTaskOngoing =
 			visitorInfo?.TaskChainProgress === currentStep &&
 			(visitorInfo?.Status === TaskStatus.ACTIVE || visitorInfo?.Status === TaskStatus.NEW);
-		console.debug('isTaskOngoing', isTaskOngoing, visitorInfo, currentStep);
-		const taskLabel = isTaskOngoing ? 'Current' : 'Next';
+		// console.debug('isTaskOngoing', isTaskOngoing, visitorInfo, currentStep);
+		const taskLabel = isTaskOngoing
+			? this.i18n.translateString(`mercenaries.hero-stats.current-task-tooltip-title`, {
+					taskNumber: currentStep + 1,
+					taskTitle: currentTask.title,
+			  })
+			: this.i18n.translateString(`mercenaries.hero-stats.next-task-tooltip-title`, {
+					taskNumber: currentStep + 1,
+					taskTitle: currentTask.title,
+			  });
 
 		const currentTaskDescription = `
 				<div class="current-task">
-					<div class="title">${taskLabel} Task ${currentStep + 1}: ${currentTask.title}</div>
+					<div class="title">${taskLabel}</div>
 					<div class="description">${currentTask.description}</div>
 				</div>
 		`;
@@ -370,7 +414,10 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			const nextTask = sortedTasks[currentStep + 1];
 			nextTaskDescription = `
 				<div class="next-task">
-					<div class="title">Next Task ${currentStep + 2}: ${nextTask.title}</div>
+					<div class="title"> ${this.i18n.translateString(`mercenaries.hero-stats.next-task-tooltip-title`, {
+						taskNumber: currentStep + 2,
+						taskTitle: nextTask.title,
+					})}</div>
 					<div class="description">${nextTask.description}</div>
 				</div>
 			`;

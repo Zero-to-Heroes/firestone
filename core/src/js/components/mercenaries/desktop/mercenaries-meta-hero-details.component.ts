@@ -16,7 +16,6 @@ import {
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -46,13 +45,13 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 						<!-- <div class="title">General stats</div> -->
 						<div class="content">
 							<div class="stat">
-								<div class="header">Games played</div>
+								<div class="header" [owTranslate]="'mercenaries.hero-stats.games-played'"></div>
 								<div class="values">
 									<div class="my-value">{{ stats.playerTotalMatches }}</div>
 								</div>
 							</div>
 							<div class="stat">
-								<div class="header">Winrate</div>
+								<div class="header" [owTranslate]="'mercenaries.hero-stats.winrate'"></div>
 								<div class="values">
 									<div
 										class="my-value percent"
@@ -73,7 +72,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 				</div>
 			</div>
 			<div class="equipment-overview">
-				<div class="equipment-header">Equipments</div>
+				<div class="equipment-header" [owTranslate]="'mercenaries.hero-stats.equipments'"></div>
 				<div class="equipment-content">
 					<div class="equipment-item" *ngFor="let equipment of stats.equipment">
 						<div class="equipment-item-icon" [cardTooltip]="equipment.cardId">
@@ -86,13 +85,13 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 						<!-- <div class="equipment-item-name">{{ equipment.name }}</div> -->
 						<div class="equipment-item-stats">
 							<div class="item winrate">
-								<div class="label">Global winrate</div>
+								<div class="label" [owTranslate]="'mercenaries.hero-stats.global-winrate'"></div>
 								<div class="values">
 									<div class="value player">{{ buildValuePercent(equipment.globalWinrate) }}</div>
 								</div>
 							</div>
 							<div class="item winrate">
-								<div class="label">Your winrate</div>
+								<div class="label" [owTranslate]="'mercenaries.hero-stats.your-winrate'"></div>
 								<div class="values">
 									<div class="value player">
 										{{
@@ -105,7 +104,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							</div>
 							<div class="stats">
 								<div class="item popularity">
-									<div class="label">Games played</div>
+									<div class="label" [owTranslate]="'mercenaries.hero-stats.games-played'"></div>
 									<div class="values">
 										<div class="value player">{{ buildValue(equipment.playerGamesPlayed, 0) }}</div>
 									</div>
@@ -117,7 +116,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 			</div>
 
 			<div class="abilities-overview">
-				<div class="ability-header">Abilities</div>
+				<div class="ability-header" [owTranslate]="'mercenaries.hero-stats.abilities'"></div>
 				<div class="ability-content">
 					<div class="ability-item" *ngFor="let ability of stats.abilities">
 						<div class="ability-item-icon" [cardTooltip]="ability.cardId" cardTooltipPosition="top-right">
@@ -142,18 +141,19 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							<div class="item winrate">
 								<div
 									class="label"
-									helpTooltip="How many times each ability is used per time by the community"
-								>
-									Global usage
-								</div>
+									[helpTooltip]="'mercenaries.hero-stats.global-usage-tooltip' | owTranslate"
+									[owTranslate]="'mercenaries.hero-stats.global-usage'"
+								></div>
 								<div class="values">
 									<div class="value player">{{ buildValue(ability.globalUsePerMatch, 2) }}</div>
 								</div>
 							</div>
 							<div class="item winrate">
-								<div class="label" helpTooltip="How many times each ability is used per time by you">
-									Your usage
-								</div>
+								<div
+									class="label"
+									[helpTooltip]="'mercenaries.hero-stats.your-usage-tooltip' | owTranslate"
+									[owTranslate]="'mercenaries.hero-stats.your-usage'"
+								></div>
 								<div class="values">
 									<div class="value player">
 										{{
@@ -176,7 +176,6 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 	heroStats$: Observable<MercenaryInfo>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
@@ -363,7 +362,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 		heroStats: readonly MercenariesHeroStat[],
 		referenceData: MercenariesReferenceData,
 	): readonly MercenaryAbility[] {
-		console.debug('building abilities', heroStats, referenceData);
+		// console.debug('building abilities', heroStats, referenceData);
 		const abilities = referenceData.mercenaries.find(
 			(merc) => this.allCards.getCardFromDbfId(merc.cardDbfId).id === heroStats[0].heroCardId,
 		).abilities;
@@ -372,7 +371,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 			.map((abilityDbfId) => this.allCards.getCardFromDbfId(abilityDbfId).id);
 		// const abilityIds = getHeroAbilities(heroStats[0].heroCardId);
 		return abilityIds.map((abilityId) => {
-			console.debug('handling ability', abilityId);
+			// console.debug('handling ability', abilityId);
 			const globalTotalMatches = sumOnArray(heroStats, (stat) => this.getSkillTotalMatches(stat, abilityId));
 			const globalTotalUses = sumOnArray(heroStats, (stat) => this.getSkillUse(stat, abilityId));
 			const result = {
@@ -385,7 +384,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 				globalUsePerMatch: globalTotalMatches === 0 ? null : globalTotalUses / globalTotalMatches,
 				playerUsePerMatch: null,
 			} as MercenaryAbility;
-			console.debug('ability', abilityId, result, globalTotalMatches, globalTotalUses, heroStats);
+			// console.debug('ability', abilityId, result, globalTotalMatches, globalTotalUses, heroStats);
 			return result;
 		});
 	}
@@ -405,7 +404,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 			.map((equipmentId) => {
 				const stats = groupedByEquipment[equipmentId];
 				const globalTotalMatches = sumOnArray(stats, (stat) => stat.totalMatches);
-				console.debug('equipm', equipmentId, stats, globalTotalMatches);
+				// console.debug('equipm', equipmentId, stats, globalTotalMatches);
 				return {
 					cardId: equipmentId,
 					name: this.allCards.getCard(equipmentId)?.name ?? equipmentId,

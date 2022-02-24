@@ -31,14 +31,14 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				class="show-hidden-teams-link"
 				*ngIf="showHiddenTeamsLink$ | async"
 				field="mercenariesShowHiddenTeams"
-				label="Show archived"
+				[label]="'mercenaries.filters.show-hidden-teams-link-label' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
 			<preference-toggle
 				class="show-merc-names-in-teams-link"
 				*ngIf="showMercNamesInTeamsLink$ | async"
 				field="mercenariesShowMercNamesInTeams"
-				label="Show names"
+				[label]="'mercenaries.filters.show-merc-names-in-teams-link-label' | owTranslate"
 			></preference-toggle>
 		</div>
 	`,

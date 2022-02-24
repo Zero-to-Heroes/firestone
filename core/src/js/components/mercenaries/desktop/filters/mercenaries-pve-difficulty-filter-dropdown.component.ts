@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -34,29 +35,22 @@ export class MercenariesPveDifficultyFilterDropdownComponent
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		this.options = [
-			{
-				value: 'all',
-				label: 'All',
-			} as FilterOption,
-			{
-				value: 'normal',
-				label: 'Normal',
-			} as FilterOption,
-			{
-				value: 'heroic',
-				label: 'Heroic',
-			} as FilterOption,
-			{
-				value: 'legendary',
-				label: 'Legendary',
-			} as FilterOption,
-		] as readonly FilterOption[];
+		this.options = ['all', 'normal', 'heroic', 'legendary'].map(
+			(filter) =>
+				({
+					value: filter,
+					label: this.i18n.translateString(`mercenaries.filters.pve-difficulty.${filter}`),
+				} as FilterOption),
+		);
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.mercenaries.globalStats,
