@@ -35,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				></mercenaries-team-mercenary>
 			</ng-container>
 			<ng-template #emptyState>
-				<div class="empty-team">Head into a bounty or PvP battle to see your team</div>
+				<div class="empty-team" [owTranslate]="'mercenaries.team-widget.empty-state' | owTranslate"></div>
 			</ng-template>
 		</perfect-scrollbar>
 	`,

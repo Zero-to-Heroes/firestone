@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 
@@ -51,7 +52,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			<div
 				class="cooldown-left"
 				*ngIf="!!cooldownLeft"
-				helpTooltip="Turns left before that ability can be used again"
+				[helpTooltip]="'mercenaries.team-widget.cooldown-left-tooltip' | owTranslate"
 			>
 				<img
 					class="cooldown-icon"
@@ -62,7 +63,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			<div
 				class="number-of-uses"
 				*ngIf="totalUsed > 0"
-				helpTooltip="Number of times the mercenary has used this ability in this battle"
+				[helpTooltip]="'mercenaries.team-widget.number-of-users-tooltip' | owTranslate"
 			>
 				<span>{{ totalUsed }}</span>
 			</div>
@@ -74,7 +75,7 @@ export class MercenariesTeamAbilityComponent {
 	@Input() tooltipPosition: boolean;
 
 	@Input() set ability(value: Ability) {
-		console.debug('set ability', this.allCards.getCard(value.cardId).name, value);
+		// console.debug('set ability', this.allCards.getCard(value.cardId).name, value);
 		const abilityCard = this.allCards.getCard(value.cardId);
 		this.type = value.type;
 		this.cardId = value.cardId;
@@ -107,12 +108,20 @@ export class MercenariesTeamAbilityComponent {
 		const influences = (this.speedModifier?.influences ?? [])
 			.map((influence) => `${this.allCards.getCard(influence.cardId).name}: ${influence.value}`)
 			.join('<br/> ');
-		const influenceText = influences.length > 0 ? `<br />Base Speed: ${this.baseSpeed}<br />${influences}` : '';
-		this.speedModifierTooltip = !!this.speedModifier?.value
+		const baseSpeedText = this.i18n.translateString('mercenaries.team-widget.base-speed-text', {
+			value: this.baseSpeed,
+		});
+		const influenceText = influences.length > 0 ? `<br />${baseSpeedText}<br />${influences}` : '';
+		const speedModifierBaseText = !!this.speedModifier?.value
 			? this.speed > this.baseSpeed
-				? `This ability will be ${this.speed - this.baseSpeed} slower next turn. ${influenceText}`
-				: `This ability will be ${-(this.speed - this.baseSpeed)} faster next turn. ${influenceText}`
+				? this.i18n.translateString('mercenaries.team-widget.speed-debuff', {
+						value: this.speed - this.baseSpeed,
+				  })
+				: this.i18n.translateString('mercenaries.team-widget.speed-buff', {
+						value: this.speed - this.baseSpeed,
+				  })
 			: null;
+		this.speedModifierTooltip = speedModifierBaseText ? `${speedModifierBaseText}. ${influenceText}` : null;
 	}
 
 	type: 'ability' | 'equipment';
@@ -128,7 +137,7 @@ export class MercenariesTeamAbilityComponent {
 	speedModifier: BattleSpeedModifier;
 	speedModifierTooltip: string;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	buildAbilityArtUrl(cardId: string): string {
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
