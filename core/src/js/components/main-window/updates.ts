@@ -94,6 +94,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a sim issue where Khadgar would multiply spawns from Broodmother (Onyxia's hero power)`,
+							},
+							{
+								type: 'bug',
 								text: `Remove Hamuul from the minions list.`,
 							},
 						],
