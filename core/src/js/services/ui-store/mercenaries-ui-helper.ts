@@ -1,4 +1,4 @@
-import { ReferenceCard, ScenarioId, TaskStatus } from '@firestone-hs/reference-data';
+import { ReferenceCard, ScenarioId, TaskStatus, VillageVisitorType } from '@firestone-hs/reference-data';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -128,6 +128,7 @@ export const buildMercenariesTasksList = (
 	visitors: readonly MemoryVisitor[],
 	allCards: CardsFacadeService,
 ): readonly Task[] => {
+	console.debug('building tasks', visitors, referenceData);
 	return (
 		visitors
 			// Just remove CLAIMED and INVALID
@@ -139,7 +140,9 @@ export const buildMercenariesTasksList = (
 			)
 			.map((visitor) => {
 				const taskChain = referenceData.taskChains.find(
-					(chain) => chain.mercenaryVisitorId === visitor.VisitorId,
+					(chain) =>
+						chain.mercenaryVisitorId === visitor.VisitorId &&
+						chain.taskChainType !== VillageVisitorType.EVENT,
 				);
 				// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
 				if (!taskChain) {

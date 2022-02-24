@@ -169,6 +169,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		if (!refMerc) {
 			return null;
 		}
+		const debug = refMerc.name === 'Chi-Ji';
 		const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 		const taskChain = referenceData.taskChains
 			.filter((chain) => chain.mercenaryId === refMerc.id)
@@ -177,6 +178,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				// The last 2 tasks are present in the ref data, but not activated in-game
 				tasks: chain.tasks.slice(0, 18),
 			}))[0];
+		debug && console.debug('taskChain', taskChain);
 		// Can have only one task per mercenary at the same time
 		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
@@ -185,7 +187,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
 			? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 			: Math.max(0, currentTaskStep);
-		console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
+		debug && console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
