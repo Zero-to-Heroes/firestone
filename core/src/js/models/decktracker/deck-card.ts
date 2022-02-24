@@ -56,7 +56,7 @@ export class DeckCard {
 
 	public update(newCard: Partial<NonFunctionProperties<DeckCard>>): DeckCard {
 		if (newCard?.cardId && !newCard?.cardName) {
-			console.warn('updating deck card without name', newCard, new Error().stack);
+			console.warn('updating deck card without name', newCard, newCard?.cardId, new Error().stack);
 		}
 		return Object.assign(new DeckCard(), this, newCard);
 	}
