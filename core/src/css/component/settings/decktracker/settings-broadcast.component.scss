@@ -11,8 +11,16 @@
 	font-size: 14px;
 	color: #d9c3ab;
 
+	section {
+		display: flex;
+		flex-direction: column;
+
+		&:not(:last-child) {
+			margin-bottom: 25px;
+		}
+	}
+
 	h2 {
-		margin-top: 15px;
 		margin-bottom: 15px;
 		font-family: Open Sans;
 		font-style: normal;

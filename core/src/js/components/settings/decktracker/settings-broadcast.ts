@@ -23,69 +23,84 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			} as value"
 			scrollable
 		>
-			<h2>Broadcast on Twitch</h2>
-			<p class="text">
-				Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch player, as
-				well as letting them mouse over all the players in the leaderboard in Battlegrounds. To activate it, you
-				will need to:
-			</p>
-			<ol class="todo">
-				<li>
-					1. Install the Firestone Twitch extension on your channel:
-					<a
-						href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
-						target="_blank"
-						(mousedown)="preventMiddleClick($event)"
-						(click)="preventMiddleClick($event)"
-						(auxclick)="preventMiddleClick($event)"
-						>here</a
-					>
-				</li>
-				<li>2. Connect your Twitch account to Firestone by clicking the button below</li>
-				<li>
-					3. Tweak your options (see
-					<a
-						href="https://github.com/Zero-to-Heroes/firestone/wiki/Setting-up-the-Twitch-extension"
-						target="_blank"
-						(mousedown)="preventMiddleClick($event)"
-						(click)="preventMiddleClick($event)"
-						(auxclick)="preventMiddleClick($event)"
-						>here</a
-					>)
-				</li>
-			</ol>
+			<section>
+				<h2>Broadcast on Twitch</h2>
+				<p class="text">
+					Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch
+					player, as well as letting them mouse over all the players in the leaderboard in Battlegrounds. To
+					activate it, you will need to:
+				</p>
+				<ol class="todo">
+					<li>
+						1. Install the Firestone Twitch extension on your channel:
+						<a
+							href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
+							target="_blank"
+							(mousedown)="preventMiddleClick($event)"
+							(click)="preventMiddleClick($event)"
+							(auxclick)="preventMiddleClick($event)"
+							>here</a
+						>
+					</li>
+					<li>2. Connect your Twitch account to Firestone by clicking the button below</li>
+					<li>
+						3. Tweak your options (see
+						<a
+							href="https://github.com/Zero-to-Heroes/firestone/wiki/Setting-up-the-Twitch-extension"
+							target="_blank"
+							(mousedown)="preventMiddleClick($event)"
+							(click)="preventMiddleClick($event)"
+							(auxclick)="preventMiddleClick($event)"
+							>here</a
+						>)
+					</li>
+				</ol>
 
-			<div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">
-				<button (mousedown)="connect()" class="text">
-					<i class="twitch-icon">
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#twitch" />
-						</svg>
-					</i>
-					<span>Login with Twitch</span>
-				</button>
-			</div>
-			<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
-				<div class="user-name">
-					Logged in as:
-					<a
-						href="https://www.twitch.tv/{{ value.twitchUserName }}"
-						target="_blank"
-						(mousedown)="preventMiddleClick($event)"
-						(click)="preventMiddleClick($event)"
-						(auxclick)="preventMiddleClick($event)"
-						>{{ value.twitchUserName }}</a
-					>
+				<div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">
+					<button (mousedown)="connect()" class="text">
+						<i class="twitch-icon">
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#twitch" />
+							</svg>
+						</i>
+						<span>Login with Twitch</span>
+					</button>
 				</div>
-				<button (mousedown)="disconnect()" class="text">
-					<i class="twitch-icon">
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#twitch" />
-						</svg>
-					</i>
-					<span>Disconnect</span>
-				</button>
-			</div>
+				<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
+					<div class="user-name">
+						Logged in as:
+						<a
+							href="https://www.twitch.tv/{{ value.twitchUserName }}"
+							target="_blank"
+							(mousedown)="preventMiddleClick($event)"
+							(click)="preventMiddleClick($event)"
+							(auxclick)="preventMiddleClick($event)"
+							>{{ value.twitchUserName }}</a
+						>
+					</div>
+					<button (mousedown)="disconnect()" class="text">
+						<i class="twitch-icon">
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#twitch" />
+							</svg>
+						</i>
+						<span>Disconnect</span>
+					</button>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="title" [owTranslate]="'settings.general.twitch.configuration-title'"></h2>
+				<div class="settings-group">
+					<preference-numeric-input
+						[label]="'settings.general.twitch.delay-label' | owTranslate"
+						[tooltip]="'settings.general.twitch.delay-label-tooltip' | owTranslate"
+						[field]="'twitchDelay'"
+						[minValue]="0"
+						[incrementStep]="100"
+					></preference-numeric-input>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

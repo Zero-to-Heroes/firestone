@@ -4,7 +4,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
@@ -41,6 +41,8 @@ export class TwitchAuthService {
 	private bgEvents = new BehaviorSubject<BattlegroundsState>(null);
 	private twitchAccessToken$: Observable<string>;
 
+	private twitchDelay = 0;
+
 	constructor(
 		private prefs: PreferencesService,
 		private http: HttpClient,
@@ -58,6 +60,8 @@ export class TwitchAuthService {
 		});
 
 		await this.store.initComplete();
+
+		this.store.listenPrefs$((prefs) => prefs.twitchDelay).subscribe(([delay]) => (this.twitchDelay = delay));
 		this.twitchAccessToken$ = this.store
 			.listenPrefs$((prefs) => prefs.twitchAccessToken)
 			.pipe(
@@ -72,6 +76,7 @@ export class TwitchAuthService {
 					this.buildEvent(deckEvent, bgsState, twitchAccessToken),
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				delay(this.twitchDelay),
 			)
 			.subscribe((event) => this.sendEvent(event));
 		console.log('[twitch-auth] init done');
@@ -291,6 +296,13 @@ export class TwitchAuthService {
 			GameTag.WINDFURY,
 			GameTag.ZONE_POSITION,
 		];
+		// console.debug(
+		// 	'is serializable?',
+		// 	tag,
+		// 	serializableTags,
+		// 	serializableTags.map((tag) => GameTag[tag]),
+		// 	serializableTags.map((tag) => GameTag[tag]).includes(tag),
+		// );
 		return serializableTags.map((tag) => GameTag[tag]).includes(tag);
 	}
 
