@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.8.2',
+		version: '8.8.4',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,24 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `Update for patch 22.4.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `BETA: Add a "current session" widget that recaps your latest placements, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
+								text: `Official release of the "Session widget" feature. This widget recaps your latest placements, latest matches, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
+							},
+							{
+								type: 'feature',
+								text: `Adds some configuration options to the session widget: size, opacity, the ability to show/hide the "grouped" and "individual matches" sections, as well as the ability to decide how many past matches you want to show as details.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `I have received a few reports of the card tooltip staying stuck on screen, with no way to dismiss it. I haven't been able to reproduce the issue myself though. As a temporary fix, card tooltips will auto-hide after 15s.`,
 							},
 						],
 					},
@@ -74,19 +78,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue where "attack immediately" minions would mess up the attack order.`,
+								text: `Fix an issue where the Twitch extension would stop receiving updates because the messages sent by Firestone to Twitch were too big.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Tavish's "Aim Low" and "Aim Right" would always pick the left-most minion in case of health ties.`,
+								text: `Fix a sim issue where the attacking minion would be wrongly picked once all minions had attacked.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Tamsin hero power would always be supposed to be used, even when that was not the case`,
+								text: `Fix a sim issue where Millificient Manastorm's golden buddy would still deal 8 damage.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a display issue in the simulator when the Firestone zoon is > 100%.`,
+								text: `Fix a sim issue where Tamsin's hero power would always be considered activated.`,
+							},
+							{
+								type: 'bug',
+								text: `Remove Hamuul from the minions list.`,
 							},
 						],
 					},
@@ -95,7 +103,19 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add tentative support for Tavern Brawl where you build your own deck (it won't work if you paste a deck from a third party website that has a custom name for the deck).`,
+								text: `Add an option to change the size of ALL counters.`,
+							},
+							{
+								type: 'feature',
+								text: `Flag the Golem created by Kazakus in the opponent's hand.`,
+							},
+							{
+								type: 'feature',
+								text: `Add decklist support for old solo adventures.`,
+							},
+							{
+								type: 'feature',
+								text: `Add an option for streamers to add a delay to the events sent to Twitch (so that the extension stays synchronized with what users see on stream, especially with a delayed stream).`,
 							},
 						],
 					},
