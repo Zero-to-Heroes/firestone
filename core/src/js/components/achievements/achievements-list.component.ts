@@ -100,7 +100,7 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 			this.mapData((option) =>
 				this.domSanitizer.bypassSecurityTrustHtml(`
 					<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#${option.emptyStateIcon}"/>
+						<use xlink:href="assets/svg/sprite.svg#${option.emptyStateIcon}"/>
 					</svg>
 				`),
 			),

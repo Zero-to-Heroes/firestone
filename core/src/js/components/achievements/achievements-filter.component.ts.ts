@@ -29,7 +29,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[formControl]="searchForm"
 					(mousedown)="onMouseDown($event)"
 					[(ngModel)]="searchString"
-					placeholder="Search achievement..."
+					[placeholder]="'app.achievements.search-placeholder' | owTranslate"
 				/>
 			</label>
 		</div>

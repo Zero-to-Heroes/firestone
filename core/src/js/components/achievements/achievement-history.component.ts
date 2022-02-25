@@ -14,7 +14,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		<div class="achievement-history">
 			<div class="history" scrollable>
 				<div class="top-container">
-					<span class="title">My Achievements History</span>
+					<span class="title" [owTranslate]="'app.achievements.history.title'"></span>
 				</div>
 				<ul *ngIf="{ achievementsHistory: achievementHistory$ | async } as value">
 					<li *ngFor="let historyItem of value.achievementHistory; trackBy: trackById">
@@ -29,8 +29,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
 							</svg>
 						</i>
-						<span>No history yet</span>
-						<span>Complete an achievement to start one!</span>
+						<span [owTranslate]="'app.achievements.history.empty-state-title'"></span>
+						<span [owTranslate]="'app.achievements.history.empty-state-subtitle'"></span>
 					</section>
 				</ul>
 			</div>
