@@ -10,7 +10,7 @@ import { PreferencesService } from '../../services/preferences.service';
 		`../../../css/component/controls/control-bug.component.scss`,
 	],
 	template: `
-		<button (mousedown)="showBugForm()" helpTooltip="Report a bug">
+		<button (mousedown)="showBugForm()" [helpTooltip]="'app.global.controls.bug-button-tooltip' | owTranslate">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

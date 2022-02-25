@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 		`../../../css/component/controls/control-help.component.scss`,
 	],
 	template: `
-		<button (mousedown)="showHelp()" helpTooltip="Show release notes">
+		<button (mousedown)="showHelp()" [helpTooltip]="'app.global.controls.help-button-tooltip' | owTranslate">
 			<svg class="svg-icon-fill">
 				<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#help"></use>
 			</svg>
