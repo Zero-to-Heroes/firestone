@@ -11,25 +11,27 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<div class="settings-group achievements-notifications">
-			<h2 class="title">Update when you see achievements notifications</h2>
+			<h2 class="title" [owTranslate]="'settings.achievements.notifications.title'"></h2>
 			<section class="toggle-label">
 				<preference-toggle
 					field="achievementsEnabled2"
-					label="Enable FS achievements"
-					tooltip="Enable Firestone-exclusive achievements tracking."
+					[label]="'settings.achievements.notifications.firestone-achievements-text' | owTranslate"
+					[tooltip]="'settings.achievements.notifications.firestone-achievements-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="achievementsDisplayNotifications2"
-					label="Show notifications"
-					tooltip="Display a notification whenever you unlock an achievement. Turning this off also turns Hearthstone's own in-game achievements tracking."
+					[label]="'settings.achievements.notifications.show-notifications-text' | owTranslate"
+					[tooltip]="'settings.achievements.notifications.show-notifications-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					*ngIf="isDev"
 					field="resetAchievementsOnAppStart"
-					label="Streamer mode"
-					tooltip="Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
+					[label]="'settings.achievements.notifications.streamer-mode-text' | owTranslate"
+					[tooltip]="'settings.achievements.notifications.streamer-mode-tooltip' | owTranslate"
 					advancedSetting
-					messageWhenToggleValue="Got it, we won't load your existing achievements next time you start Firestone"
+					[messageWhenToggleValue]="
+						'settings.achievements.notifications.streamer-mode-confirmation' | owTranslate
+					"
 					[valueToDisplayMessageOn]="true"
 				></preference-toggle>
 			</section>

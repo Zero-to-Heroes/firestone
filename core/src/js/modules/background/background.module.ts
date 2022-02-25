@@ -322,13 +322,10 @@ import { ReplaysComponent } from '../../components/replays/replays.component';
 import { SecretsHelperControlBarComponent } from '../../components/secrets-helper/secrets-helper-control-bar.component';
 import { SecretsHelperWidgetIconComponent } from '../../components/secrets-helper/secrets-helper-widget-icon.component';
 import { SecretsHelperComponent } from '../../components/secrets-helper/secrets-helper.component';
-import { SettingsAchievementsLiveComponent } from '../../components/settings/achievements/settings-achievements-live.component';
 import { SettingsAchievementsMenuComponent } from '../../components/settings/achievements/settings-achievements-menu.component';
 import { SettingsAchievementsNotificationsComponent } from '../../components/settings/achievements/settings-achievements-notifications.component';
-import { SettingsAchievementsSoundCaptureComponent } from '../../components/settings/achievements/settings-achievements-sound-capture.component';
-import { SettingsAchievementsStorageComponent } from '../../components/settings/achievements/settings-achievements-storage.component';
-import { SettingsAchievementsVideoCaptureComponent } from '../../components/settings/achievements/settings-achievements-video-capture.component';
 import { SettingsAchievementsComponent } from '../../components/settings/achievements/settings-achievements.component';
+import { SettingsAchievementsLiveComponent } from '../../components/settings/achievements/unused_settings-achievements-live.component';
 import { AdvancedSettingDirective } from '../../components/settings/advanced-setting.directive';
 import { SettingsBattlegroundsGeneralComponent } from '../../components/settings/battlegrounds/settings-battlegrounds-general.component';
 import { SettingsBattlegroundsMenuComponent } from '../../components/settings/battlegrounds/settings-battlegrounds-menu.component';
@@ -870,9 +867,6 @@ const components = [
 
 		SettingsAchievementsComponent,
 		SettingsAchievementsMenuComponent,
-		SettingsAchievementsVideoCaptureComponent,
-		SettingsAchievementsSoundCaptureComponent,
-		SettingsAchievementsStorageComponent,
 		SettingsAchievementsNotificationsComponent,
 		SettingsAchievementsLiveComponent,
 		SettingsModalComponent,
