@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { Ability } from './mercenaries-team-ability.component';
@@ -23,7 +24,12 @@ import { Ability } from './mercenaries-team-ability.component';
 				<div class="role-icon" *ngIf="roleIcon"><img [src]="roleIcon" /></div>
 				<div class="name">
 					<span>{{ name }}</span>
-					<span class="level" *ngIf="level" helpTooltip="Current mercenary level">({{ level }})</span>
+					<span
+						class="level"
+						*ngIf="level"
+						[helpTooltip]="'mercenaries.team-widget.merc-level-tooltip' | owTranslate"
+						>({{ level }})</span
+					>
 				</div>
 			</div>
 			<mercenaries-team-ability
@@ -53,7 +59,9 @@ export class MercenariesTeamMercenaryComponent {
 			!value.role || value.role === TagRole[TagRole.NEUTRAL] || value.role === TagRole[TagRole.INVALID]
 				? null
 				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
-		this.name = value.cardId ? refMercenaryCard.name ?? 'Unrecognized Mercernary' : 'Unknown Mercenary';
+		this.name = value.cardId
+			? refMercenaryCard.name ?? this.i18n.translateString('mercenaries.team-widget.unrecognized-mercenary')
+			: this.i18n.translateString('mercenaries.team-widget.unknown-mercenary');
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => {
 			const abilityCard = this.allCards.getCard(ability.cardId);
@@ -95,5 +103,5 @@ export class MercenariesTeamMercenaryComponent {
 	isDead: boolean;
 	isBench: boolean;
 
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 }

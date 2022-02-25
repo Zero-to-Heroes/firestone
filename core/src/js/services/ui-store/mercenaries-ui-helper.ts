@@ -1,4 +1,5 @@
 import { ReferenceCard, ScenarioId, TaskStatus, VillageVisitorType } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -127,8 +128,8 @@ export const buildMercenariesTasksList = (
 	referenceData: MercenariesReferenceData,
 	visitors: readonly MemoryVisitor[],
 	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
 ): readonly Task[] => {
-	console.debug('building tasks', visitors, referenceData);
 	return (
 		visitors
 			// Just remove CLAIMED and INVALID
@@ -168,6 +169,12 @@ export const buildMercenariesTasksList = (
 					mercenaryRole: mercenaryCard.mercenaryRole,
 					mercenaryName: mercenaryCard.name,
 					title: task.title,
+					header: isTaskChainStory(taskChain)
+						? task.title
+						: i18n.translateString('mercenaries.team-widget.task-title', {
+								taskNumber: visitor.TaskChainProgress + 1,
+								taskTitle: task.title,
+						  }),
 					description: task.description,
 					progress: visitor.TaskProgress,
 					taskChainProgress: visitor.TaskChainProgress,
@@ -201,6 +208,10 @@ export const buildMercenariesTasksList = (
 				return a.mercenaryName < b.mercenaryName ? -1 : 1;
 			})
 	);
+};
+
+const isTaskChainStory = (task: MercenariesReferenceData['taskChains'][0]): boolean => {
+	return task.taskChainType === VillageVisitorType.SPECIAL && task.mercenaryVisitorId === 1938;
 };
 
 export const buildBounties = (

@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+} from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -30,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesOutOfCombatTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit, AfterViewInit {
 	treasures$: Observable<readonly ReferenceCard[]>;
 
 	private highlightService: MercenariesSynergiesHighlightService;

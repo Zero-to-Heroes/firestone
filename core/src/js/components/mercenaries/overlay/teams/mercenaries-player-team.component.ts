@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
-import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
@@ -38,10 +38,10 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 	tasks$: Observable<readonly Task[]>;
 
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -54,7 +54,9 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 			)
 			.pipe(
 				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
+				map(([referenceData, visitors]) =>
+					buildMercenariesTasksList(referenceData, visitors, this.allCards, this.i18n),
+				),
 				takeUntil(this.destroyed$),
 			);
 		this.team$ = this.store

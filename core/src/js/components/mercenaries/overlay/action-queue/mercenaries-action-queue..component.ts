@@ -24,7 +24,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		'../../../../../css/component/mercenaries/overlay/action-queue/mercenaries-action-queue.component.scss',
 	],
 	template: `
-		<!-- TODO translate -->
 		<div class="root">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">

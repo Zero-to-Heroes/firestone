@@ -51,7 +51,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div class="background-second-part"></div>
 								<div class="content">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									Tasks
+									{{ 'mercenaries.team-widget.task-button' | owTranslate }}
 								</div>
 								<div
 									class="task-list {{ tooltipPosition }}"
@@ -68,21 +68,16 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 											<img class="frame" [src]="task.frameUrl" />
 										</div>
 										<div class="task-content">
-											<div class="header">
-												{{
-													task.title.startsWith('Story')
-														? task.title
-														: 'Task ' + (task.taskChainProgress + 1) + ': ' + task.title
-												}}
-											</div>
+											<div class="header">{{ task.header }}</div>
 											<div class="description">{{ task.description }}</div>
 											<div class="progress">
 												<div
 													class="label"
-													helpTooltip="Quest progress at the beginning of the encounter"
-												>
-													Progress:
-												</div>
+													[owTranslate]="'mercenaries.team-widget.task-progress-label'"
+													[helpTooltip]="
+														'mercenaries.team-widget.task-progress-tooltip' | owTranslate
+													"
+												></div>
 												<div class="value">{{ task.progress }}</div>
 											</div>
 										</div>
@@ -102,7 +97,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div class="background-main-part"></div>
 								<div class="content">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									Roles chart
+									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
 								</div>
 							</div>
 						</div>
@@ -270,6 +265,7 @@ export interface Task {
 	readonly mercenaryRole: 'TANK' | 'CASTER' | 'FIGHTER';
 	readonly mercenaryName: string;
 	readonly title: string;
+	readonly header: string;
 	readonly description: string;
 	readonly taskChainProgress: number;
 	readonly progress: number;

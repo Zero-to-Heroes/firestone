@@ -13,7 +13,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/mercenaries/desktop/filters/_mercenaries-filters.component.scss`,
 	],
 	template: `
-		<!-- TODO translate -->
 		<div class="mercenaries-filters">
 			<mercenaries-mode-filter-dropdown class="mode"></mercenaries-mode-filter-dropdown>
 			<mercenaries-pve-difficulty-filter-dropdown

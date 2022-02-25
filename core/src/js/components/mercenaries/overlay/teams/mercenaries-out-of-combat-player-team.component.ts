@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
@@ -14,7 +15,6 @@ import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { MercenariesReferenceData } from '../../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
-import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
@@ -47,10 +47,10 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 	tasks$: Observable<readonly Task[]>;
 
 	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -63,7 +63,9 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 			)
 			.pipe(
 				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
+				map(([referenceData, visitors]) =>
+					buildMercenariesTasksList(referenceData, visitors, this.allCards, this.i18n),
+				),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting tasks in ', this.constructor.name, filter)),
 				takeUntil(this.destroyed$),
