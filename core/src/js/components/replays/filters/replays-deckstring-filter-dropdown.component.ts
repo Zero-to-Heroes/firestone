@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -30,7 +31,11 @@ export class ReplaysDeckstringFilterDropdownComponent
 	implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean; options: readonly IOption[] }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -47,7 +52,7 @@ export class ReplaysDeckstringFilterDropdownComponent
 					const options = [
 						{
 							value: null,
-							label: 'All decks',
+							label: this.i18n.translateString('app.replays.filters.deck.all'),
 						} as IOption,
 						...decks.map(
 							(deck) =>

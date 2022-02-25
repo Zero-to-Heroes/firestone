@@ -7,8 +7,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		<preference-toggle
 			class="replays-icon-toggle"
 			field="replaysShowClassIcon"
-			label="Use class icons"
-			helpTooltip="Toggle between class icons and hero icons"
+			[label]="'app.replays.class-icon-toggle.label' | owTranslate"
+			[helpTooltip]="'app.replays.class-icon-toggle.tooltip' | owTranslate"
 		></preference-toggle>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -29,78 +30,37 @@ export class ReplaysGameModeFilterDropdownComponent extends AbstractSubscription
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 		this.options = [
-			{
-				value: null,
-				label: 'All game modes',
-			} as IOption,
-			{
-				value: 'battlegrounds',
-				label: 'Battlegrounds',
-			} as IOption,
-			{
-				value: 'mercenaries-all',
-				label: 'Mercenaries (All)',
-			} as IOption,
-			{
-				value: 'mercenaries-pve',
-				label: 'Mercenaries PvE',
-			} as IOption,
-			{
-				value: 'mercenaries-pvp',
-				label: 'Mercenaries PvP',
-			} as IOption,
-			{
-				value: 'ranked',
-				label: 'Ranked (All)',
-			} as IOption,
-			{
-				value: 'ranked-standard',
-				label: 'Ranked Standard',
-			} as IOption,
-			{
-				value: 'ranked-wild',
-				label: 'Ranked Wild',
-			} as IOption,
-			{
-				value: 'ranked-classic',
-				label: 'Ranked Classic',
-			} as IOption,
-			{
-				value: 'both-duels',
-				label: 'Duels (All)',
-			} as IOption,
-			{
-				value: 'duels',
-				label: 'Duels Casual',
-			} as IOption,
-			{
-				value: 'paid-duels',
-				label: 'Duels Heroic',
-			} as IOption,
-			{
-				value: 'arena',
-				label: 'Arena',
-			} as IOption,
-			{
-				value: 'casual',
-				label: 'Casual (All)',
-			} as IOption,
-			{
-				value: 'friendly',
-				label: 'Friendly (All)',
-			} as IOption,
-			{
-				value: 'tavern-brawl',
-				label: 'Tavern Brawl',
-			} as IOption,
-			{
-				value: 'practice',
-				label: 'Vs AI',
-			} as IOption,
-		] as readonly IOption[];
+			'all',
+			'battlegrounds',
+			'mercenaries-all',
+			'mercenaries-pve',
+			'mercenaries-pvp',
+			'ranked',
+			'ranked-standard',
+			'ranked-wild',
+			'ranked-classic',
+			'both-duels',
+			'duels',
+			'paid-duels',
+			'arena',
+			'casual',
+			'friendly',
+			'tavern-brawl',
+			'practice',
+		].map(
+			(value) =>
+				({
+					value: value === 'all' ? null : value,
+					label: this.i18n.translateString(`app.replays.filters.game-mode.${value}`),
+				} as IOption),
+		);
 	}
 
 	ngAfterContentInit() {

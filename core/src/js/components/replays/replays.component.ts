@@ -30,7 +30,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				} as value"
 			>
 				<div class="match-stats" *ngIf="value.bgsPostMatchStatsPanel?.player?.cardId">
-					<div class="title">Match Stats</div>
+					<div class="title" [owTranslate]="'app.replays.bg-stats.title'"></div>
 					<bgs-post-match-stats-recap [stats]="value.bgsPostMatchStatsPanel"></bgs-post-match-stats-recap>
 				</div>
 				<div class="replays-list" *ngIf="value.isShowingDuels && currentView === 'match-details'">

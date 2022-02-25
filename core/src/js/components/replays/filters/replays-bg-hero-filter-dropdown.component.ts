@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
@@ -30,16 +31,17 @@ export class ReplaysBgHeroFilterDropdownComponent extends AbstractSubscriptionCo
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 		const collator = new Intl.Collator('en-US');
 		this.options = [
 			{
 				value: null,
-				label: 'All heroes',
+				label: this.i18n.translateString('app.replays.filters.hero.all'),
 			} as IOption,
 			...this.allCards
 				.getCards()

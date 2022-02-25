@@ -48,7 +48,7 @@ declare let amplitude;
 
 				<div class="group player-images" *ngIf="!isMercenariesGame">
 					<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
-					<div class="vs" *ngIf="opponentClassImage">VS</div>
+					<div class="vs" *ngIf="opponentClassImage" [owTranslate]="'app.replays.replay-info.versus'"></div>
 					<img
 						class="player-class opponent"
 						[src]="opponentClassImage"
@@ -69,7 +69,7 @@ declare let amplitude;
 						*ngFor="let hero of playerStartingTeam"
 						[hero]="hero"
 					></replay-info-merc-player>
-					<div class="vs">VS</div>
+					<div class="vs" [owTranslate]="'app.replays.replay-info.versus' | owTranslate"></div>
 					<replay-info-merc-player
 						class="portrait opponent"
 						*ngFor="let hero of opponentStartingTeam"
@@ -87,7 +87,7 @@ declare let amplitude;
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
-						helpTooltip="Cards added to deck after this round "
+						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
 					></div>
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
@@ -96,7 +96,7 @@ declare let amplitude;
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
-						helpTooltip="Cards added to deck after this round "
+						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
 					></div>
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
@@ -105,7 +105,7 @@ declare let amplitude;
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
-						helpTooltip="Treasure added to deck after this round"
+						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
 					></div>
 					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 				</div>
@@ -114,17 +114,12 @@ declare let amplitude;
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
-						helpTooltip="Treasure added to deck after this round"
+						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
 					></div>
 					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 				</div>
 
-				<!-- <div class="group result-text {{ visualResult }}" *ngIf="gameMode !== 'battlegrounds'">
-					{{ capitalize(visualResult) }}
-				</div> -->
-
 				<div class="group result" *ngIf="result">
-					<!-- <div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div> -->
 					<div class="result">{{ result }}</div>
 				</div>
 
@@ -153,7 +148,7 @@ declare let amplitude;
 					*ngIf="deltaMmr != null"
 				>
 					<div class="value">{{ deltaMmr }}</div>
-					<div class="text">MMR</div>
+					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
 				</div>
 
 				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg && !isMercenariesGame">
@@ -168,7 +163,12 @@ declare let amplitude;
 			<div class="right-info">
 				<div class="group match-stats" *ngIf="hasMatchStats" (click)="showStats()">
 					<div class="watch" *ngIf="showStatsLabel">{{ showStatsLabel }}</div>
-					<div class="stats-icon" [helpTooltip]="!showStatsLabel ? 'Show stats' : null">
+					<div
+						class="stats-icon"
+						[helpTooltip]="
+							!showStatsLabel ? ('app.replays.replay-info.show-stats-button-tooltip' | owTranslate) : null
+						"
+					>
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/replays/replays_icons.svg#match_stats" />
 						</svg>
@@ -177,7 +177,14 @@ declare let amplitude;
 
 				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
 					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
-					<div class="watch-icon" [helpTooltip]="!showReplayLabel ? 'Watch replay' : null">
+					<div
+						class="watch-icon"
+						[helpTooltip]="
+							!showReplayLabel
+								? ('app.replays.replay-info.watch-replay-button-tooltip' | owTranslate)
+								: null
+						"
+					>
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 						</svg>
@@ -191,8 +198,8 @@ declare let amplitude;
 export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	showMercDetails$: Observable<boolean>;
 
-	@Input() showStatsLabel = 'Stats';
-	@Input() showReplayLabel = 'Watch';
+	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
+	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -325,7 +332,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 		this.opponentName = isBg
 			? null
 			: this.isMercenariesGame && this.replayInfo.scenarioId === ScenarioId.LETTUCE_PVP_VS_AI
-			? 'The Innkeeper (AI Bot)'
+			? this.i18n.translateString('app.replays.replay-info.mercenaries-bot-opponent-name')
 			: this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = isBg
 			? this.replayInfo.bgsPerfectGame || parseInt(this.replayInfo.additionalResult) <= 4
@@ -347,10 +354,11 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 					icon: getTribeIcon(race),
 					tooltip: getTribeName(race, this.i18n),
 				}));
-			this.tribesTooltip = `Tribes available in this run: ${this.availableTribes
-				.map((tribe) => tribe.tooltip)
-				.join(', ')}`;
-			this.bgsPerfectGame = this.result === 'Perfect!';
+			this.tribesTooltip = this.i18n.translateString('app.replays.replay-info.bgs-available-tribes-tooltip', {
+				value: this.availableTribes.map((tribe) => tribe.tooltip).join(', '),
+			});
+			this.bgsPerfectGame =
+				this.result === this.i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
 			this.finalWarband = this.buildFinalWarband();
 		}
 		this.loots = [];
@@ -398,7 +406,11 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
 		const name = heroCard.name;
-		const deckName = info.playerDeckName ? ` with ${decodeURIComponent(info.playerDeckName)}` : '';
+		const deckName = info.playerDeckName
+			? this.i18n.translateString('app.replays.replay-info.deck-name-tooltip', {
+					value: decodeURIComponent(info.playerDeckName),
+			  })
+			: '';
 		const tooltip = isPlayer ? name + deckName : null;
 		if (replaysShowClassIcon) {
 			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
@@ -446,28 +458,11 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	private buildMatchResultText(info: GameStat): string {
 		if (info.gameMode === 'battlegrounds' && info.additionalResult) {
 			if (info.bgsPerfectGame) {
-				return 'Perfect!';
+				return this.i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
 			}
-			// prettier-ignore
-			switch (parseInt(info.additionalResult)) {
-				case 1: return '1st';
-				case 2: return '2nd';
-				case 3: return '3rd';
-				case 4: return '4th';
-				case 5: return '5th';
-				case 6: return '6th';
-				case 7: return '7th';
-				case 8: return '8th';
-			}
+			return this.i18n.translateString(`app.replays.replay-info.bgs-result.${parseInt(info.additionalResult)}`);
 		}
 		return null;
-		// prettier-ignore
-		// switch (info.result) {
-		// 	case 'won': return 'Victory';
-		// 	case 'lost': return 'Defeat';
-		// 	case 'tied': return 'Tie';
-		// 	default: return 'Unknown';
-		// }
 	}
 
 	private buildPlayCoinIconSvg(info: GameStat): [SafeHtml, string] {
@@ -475,13 +470,16 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			return [null, null];
 		}
 		const iconName = info.coinPlay === 'coin' ? 'match_coin' : 'match_play';
-		const tooltip = info.coinPlay === 'coin' ? 'Had the Coin' : 'Went first';
+		const tooltip =
+			info.coinPlay === 'coin'
+				? this.i18n.translateString('app.replays.replay-info.went-second-tooltip')
+				: this.i18n.translateString('app.replays.replay-info.went-first-tooltip');
 		return [
 			this.sanitizer.bypassSecurityTrustHtml(`
-			<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/replays/replays_icons.svg#${iconName}"/>
-			</svg>
-		`),
+				<svg class="svg-icon-fill">
+					<use xlink:href="assets/svg/replays/replays_icons.svg#${iconName}"/>
+				</svg>
+			`),
 			tooltip,
 		];
 	}
@@ -520,13 +518,6 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			minionStats: minionStats,
 		} as KnownBoard;
 	}
-
-	// private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
-	// 	return Object.keys(totalMinionsDamageDealt)
-	// 		.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
-	// 		.map((cardId) => totalMinionsDamageDealt[cardId])
-	// 		.reduce((a, b) => a + b, 0);
-	// }
 }
 
 interface InternalLoot {

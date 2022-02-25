@@ -33,16 +33,16 @@ export class ReplaysOpponentClassFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
-		const collator = new Intl.Collator('en-US');
+		const collator = new Intl.Collator(this.i18n.formatCurrentLocale());
 		this.options = [
 			{
 				value: null,
-				label: 'All classes (opponent)',
+				label: this.i18n.translateString('app.replays.filters.opponent.all'),
 			} as IOption,
 			...classes
 				.map(

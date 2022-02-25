@@ -7,6 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
@@ -47,7 +48,12 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<li *ngFor="let groupedReplay of displayedGroupedReplays">
 					<grouped-replays [groupedReplays]="groupedReplay"></grouped-replays>
 				</li>
-				<div class="loading" *ngIf="isLoading" (click)="onScroll()">Click to load more replays...</div>
+				<div
+					class="loading"
+					*ngIf="isLoading"
+					(click)="onScroll()"
+					[owTranslate]="'app.replays.list.load-more-button'"
+				></div>
 			</infinite-scroll>
 			<section class="empty-state" *ngIf="!allReplays?.length">
 				<div class="state-container">
@@ -56,8 +62,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 							<use xlink:href="assets/svg/sprite.svg#empty_state_replays" />
 						</svg>
 					</i>
-					<span class="title">Nothing here yet</span>
-					<span class="subtitle">Play a match to get started</span>
+					<span class="title" [owTranslate]="'app.replays.list.empty-state-title'"></span>
+					<span class="subtitle" [owTranslate]="'app.replays.list.empty-state-subtitle'"></span>
 				</div>
 			</section>
 		</div>
@@ -77,7 +83,11 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	private displayedReplays: readonly GameStat[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -274,7 +284,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	private groupReplays(replays: readonly GameStat[]): readonly GroupedReplays[] {
 		const groupingFunction = (replay: GameStat) => {
 			const date = new Date(replay.creationTimestamp);
-			return date.toLocaleDateString('en-US', {
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 				month: 'short',
 				day: '2-digit',
 				year: 'numeric',

@@ -38,11 +38,11 @@ export class ReplaysPlayerClassFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
-		const collator = new Intl.Collator('en-US');
+		const collator = new Intl.Collator(this.i18n.formatCurrentLocale());
 		this.options = [
 			{
 				value: null,
-				label: 'All classes (player)',
+				label: this.i18n.translateString('app.replays.filters.player.all'),
 			} as IOption,
 			...classes
 				.map(
