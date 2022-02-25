@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { PreferencesService } from '@services/preferences.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -23,34 +23,34 @@ import { Knob } from '../preference-slider.component';
 			} as value"
 			scrollable
 		>
-			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget-title'"></div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget.title'"></div>
 			<div class="settings-group">
 				<preference-toggle
 					field="showCurrentSessionWidgetBgs"
-					[label]="'settings.battlegrounds.session-widget-label' | owTranslate"
-					[tooltip]="'settings.battlegrounds.session-widget-label-tooltip' | owTranslate"
+					[label]="'settings.battlegrounds.session-widget.label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget.label-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="sessionWidgetShowGroup"
 					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
-					[label]="'settings.battlegrounds.session-widget-show-groups' | owTranslate"
-					[tooltip]="'settings.battlegrounds.session-widget-show-groups-tooltip' | owTranslate"
+					[label]="'settings.battlegrounds.session-widget.show-groups' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget.show-groups-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="sessionWidgetShowMatches"
 					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
-					[label]="'settings.battlegrounds.session-widget-show-matches' | owTranslate"
-					[tooltip]="'settings.battlegrounds.session-widget-show-matches-tooltip' | owTranslate"
+					[label]="'settings.battlegrounds.session-widget.show-matches' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget.show-matches-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-numeric-input
 					[disabled]="!value.showCurrentSessionWidgetBgs || !value.sessionWidgetShowMatches"
-					[label]="'settings.battlegrounds.session-widget-number-of-matches' | owTranslate"
-					[tooltip]="'settings.battlegrounds.session-widget-number-of-matches-tooltip' | owTranslate"
+					[label]="'settings.battlegrounds.session-widget.number-of-matches' | owTranslate"
+					[tooltip]="'settings.battlegrounds.session-widget.number-of-matches-tooltip' | owTranslate"
 					[field]="'sessionWidgetNumberOfMatchesToShow'"
 				></preference-numeric-input>
 			</div>
 
-			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget-size-title'"></div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget.size-title'"></div>
 			<div class="settings-group">
 				<preference-slider
 					class="minions-list-size-slider"
@@ -66,7 +66,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget-opacity-title'"></div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.session-widget.opacity-title'"></div>
 			<div class="settings-group">
 				<preference-slider
 					class="minions-list-size-slider"
@@ -92,32 +92,32 @@ export class SettingsBattlegroundsSessionComponent extends AbstractSubscriptionC
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			percentageValue: 50,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 	opacityKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Transparent',
+			label: this.i18n.translateString('settings.global.knob-opacity.transparent'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Opaque',
+			label: this.i18n.translateString('settings.global.knob-opacity.opaque'),
 		},
 	];
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}

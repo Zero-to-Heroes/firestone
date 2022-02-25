@@ -1,14 +1,7 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
@@ -23,6 +16,7 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/component/settings/battlegrounds/settings-battlegrounds-general.component.scss`,
 	],
 	template: `
+		<!-- TODO translate -->
 		<div
 			class="battlegrounds-general"
 			*ngIf="{
@@ -40,113 +34,97 @@ import { Knob } from '../preference-slider.component';
 			<preference-toggle
 				class="enable-bgs"
 				field="bgsFullToggle"
-				label="Enable Battlegrounds"
-				tooltip="Turn off to disable all Battlegrounds live features"
+				[label]="'settings.battlegrounds.full-toggle-label' | owTranslate"
+				[tooltip]="'settings.battlegrounds.full-toggle-tooltip' | owTranslate"
 			></preference-toggle>
-			<div class="title">Companion App</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.general.companion-app-title'"></div>
 			<div class="settings-group">
 				<div class="subgroup">
 					<preference-toggle
 						field="bgsEnableApp"
 						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-						label="Enable App"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsEnableSimulation"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-						label="Enable battle simulation"
-						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsHideSimResultsOnRecruit"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsShowSimResultsOnlyOnRecruit }"
-						label="Hide simulation after battle"
-						tooltip="When active, simulation results will be hidden once the battle phase ends"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsShowSimResultsOnlyOnRecruit"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsHideSimResultsOnRecruit }"
-						label="Show simulation only in tavern"
-						tooltip="When active, simulation results will be hidden during the battle, and shown once you get back to the tavern"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsUseLocalSimulator"
-						[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
-						label="Use local battle simulator"
-						tooltip="Turning that off will run the battle simulations on a remote server, thus freeing your machine up. On the other hand, the results will take a bit longer to arrive"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsShowHeroSelectionScreen"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						label="Show hero selection screen"
-						tooltip="When turned on, a window with stats on the heroes offered is shown"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsShowNextOpponentRecapSeparately"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						label="Show next opp recap"
-						tooltip="On the second-screen BG window, shows your next opponent's info at the top in a bigger space, in addition to being in the list with all the others below."
-					></preference-toggle>
-					<preference-toggle
-						field="bgsShowHeroSelectionAchievements"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-						label="Show achievements"
-						tooltip="Shows the missing achievements for each hero at the hero selection stage."
-					></preference-toggle>
-					<preference-toggle
-						field="bgsShowHeroSelectionTooltip"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-						label="Show hero tooltip"
-						tooltip="Shows hero stats when mousing over the hero portrait on the game's hero selection screen."
-					></preference-toggle>
-					<preference-toggle
-						field="bgsUseLocalPostMatchStats"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						label="Compute post-match stats locally"
-						tooltip="When turned on, the stats that appear on the post-match screen will be computed locally, which is faster but can be CPU intensive. Turn it off to compute the stats on the cloud (it will take a bit more time though)"
+						[label]="'settings.battlegrounds.general.enable-app-label' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseOverlay"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						label="Set integrated mode"
-						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
+						[label]="'settings.battlegrounds.general.integrated-mode-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.integrated-mode-tooltip' | owTranslate"
 						[toggleFunction]="toggleOverlay"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsEnableSimulation"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.enable-battle-sim-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.enable-battle-sim-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsHideSimResultsOnRecruit"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsShowSimResultsOnlyOnRecruit }"
+						[label]="'settings.battlegrounds.general.hide-simulation-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.hide-simulation-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsShowSimResultsOnlyOnRecruit"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsHideSimResultsOnRecruit }"
+						[label]="'settings.battlegrounds.general.show-sim-only-in-tavern-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-sim-only-in-tavern-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsUseLocalSimulator"
+						[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.use-local-simulator-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.use-local-simulator-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsShowHeroSelectionScreen"
+						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.popup-hero-selection-screen-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.popup-hero-selection-screen-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsShowNextOpponentRecapSeparately"
+						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.show-next-opponent-recap-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-next-opponent-recap-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsShowHeroSelectionAchievements"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.show-achievements-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-achievements-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsShowHeroSelectionTooltip"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.show-hero-tooltip-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-hero-tooltip-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowOverlayButton"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle || !value.bgsUseOverlay }"
-						label="Show overlay button"
-						tooltip="Shows a button on the overlay to toggle the main window or on off, which you can use instead of the hotkeys"
+						[label]="'settings.battlegrounds.general.show-overlay-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-overlay-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsForceShowPostMatchStats"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						label="Popup post-match stats"
-						tooltip="When active, the battlegrounds window will be restored after a match to show the post-match stats, even if it was minimized"
+						[label]="'settings.battlegrounds.general.popup-post-match-stats-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.popup-post-match-stats-tooltip' | owTranslate"
 					></preference-toggle>
 				</div>
 			</div>
 
-			<div class="title">Simulator configuration</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.general.simulator-config-title'"></div>
 			<div class="settings-group">
-				<preference-toggle
-					field="bgsEnableSimulationSampleInOverlay"
-					[ngClass]="{
-						'disabled':
-							!value.enableSimulation || !value.bgsEnableBattleSimulationOverlay || !value.bgsFullToggle
-					}"
-					label="Simulation example in overlay"
-					tooltip="Adds a button to view an example of how the simulator reached a specific result. WARNING: it will open a new tab in your default browser."
-				></preference-toggle>
 				<div
 					class="slider-label"
 					[ngClass]="{
 						'disabled': !value.useLocalSimulator || !value.enableSimulation || !value.bgsFullToggle
 					}"
-					helpTooltip="The number of simulations ran for each battle. We found 5,000 simulations to be a perfect spot. Increasing the number will increase the accuracy of the calculation but will require more resources from your PC."
-				>
-					Number of simulations
-				</div>
+					[owTranslate]="'settings.battlegrounds.general.simulator-number-of-sims-label'"
+					[helpTooltip]="'settings.battlegrounds.general.simulator-number-of-sims-tooltip' | owTranslate"
+				></div>
 				<preference-slider
 					class="simulation-slider"
 					field="bgsSimulatorNumberOfSims"
@@ -184,15 +162,15 @@ export class SettingsBattlegroundsGeneralComponent
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			percentageValue: 18,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 
@@ -201,11 +179,10 @@ export class SettingsBattlegroundsGeneralComponent
 	private reloadBgWindows;
 
 	constructor(
-		private prefs: PreferencesService,
-		private el: ElementRef,
-		private ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}

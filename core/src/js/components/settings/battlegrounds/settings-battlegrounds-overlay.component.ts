@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -34,51 +35,61 @@ import { Knob } from '../preference-slider.component';
 			<preference-toggle
 				class="enable-bgs"
 				field="bgsFullToggle"
-				label="Enable Battlegrounds"
-				tooltip="Turn off to disable all Battlegrounds live features"
+				[label]="'settings.battlegrounds.full-toggle-label' | owTranslate"
+				[tooltip]="'settings.battlegrounds.full-toggle-tooltip' | owTranslate"
 			></preference-toggle>
-			<div class="title">Overlay configuration</div>
+
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.overlay-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show banned tribes"
-					tooltip="Adds a small widget that shows what tribes are banned in the current run"
+					[label]="'settings.battlegrounds.overlay.show-banned-tribes-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.show-banned-tribes-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableMinionListOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show minions list"
-					tooltip="Show the list of minions, grouped by tavern tier"
+					[label]="'settings.battlegrounds.overlay.show-minions-list-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.show-minions-list-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableTurnNumbertOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					[label]="'battlegrounds.turn-counter.settings-label' | owTranslate"
+					[label]="'settings.battlegrounds.overlay.turn-counter-label' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowLastOpponentIconInOverlay"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Last opponent icon"
-					tooltip="Adds an icon next to your last opponent in the leaderboard"
+					[label]="'settings.battlegrounds.overlay.last-opponent-icon-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.last-opponent-icon-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableOpponentBoardMouseOver"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show last opponent board"
-					tooltip="Show the last known opponent's board (and additional info) when mousing over their portrait in the leaderboard"
+					[label]="'settings.battlegrounds.overlay.last-opponent-board-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.last-opponent-board-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableBattleSimulationOverlay"
 					[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
-					label="Battle Simulation overlay"
-					tooltip="Also show the current battle simulation results as an overlay on top of the game"
+					[label]="'settings.battlegrounds.overlay.battle-simulation-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.battle-simulation-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
 
-			<div class="title">Simulator configuration</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.general.simulator-config-title'"></div>
 			<div class="settings-group">
-				<div class="slider-label">Widget size</div>
+				<preference-toggle
+					field="bgsEnableSimulationSampleInOverlay"
+					[ngClass]="{
+						'disabled':
+							!value.enableSimulation || !value.bgsEnableBattleSimulationOverlay || !value.bgsFullToggle
+					}"
+					[label]="'settings.battlegrounds.overlay.battle-simulation-example-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.battle-simulation-example-tooltip' | owTranslate"
+				></preference-toggle>
+				<div class="slider-label" [owTranslate]="'settings.global.widget-size-label'"></div>
 				<preference-slider
 					class="simulator-size-slider"
 					field="bgsSimulatorScale"
@@ -93,16 +104,19 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title">Banned tribes</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.banned-tribes-title-label'"></div>
 			<div class="settings-group" [ngClass]="{ 'disabled': !value.showBannedTribes || !value.bgsFullToggle }">
 				<preference-toggle
 					class="banned-tribes-vertical"
 					field="bgsBannedTribesShowVertically"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
-					label="Show in column"
-					tooltip="When active, banned tribes are shown in a column instead of a row"
+					[label]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-tooltip' | owTranslate"
 				></preference-toggle>
-				<div class="slider-label">Icon size</div>
+				<div
+					class="slider-label"
+					[owTranslate]="'settings.battlegrounds.overlay.banned-tribes-icon-size-label'"
+				></div>
 				<preference-slider
 					class="banned-tribes-size-slider"
 					field="bgsBannedTribeScale"
@@ -117,30 +131,34 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title">Minions list</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.minions-list-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
 					field="bgsEnableMinionListMouseOver"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
-					label="Show minions list on mouse over"
-					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-on-mouse-over-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-on-mouse-over-tooltip' | owTranslate"
 					advancedSetting
-					messageWhenToggleValue="Got it, we will only show you the minions details when you click on a star"
+					[messageWhenToggleValue]="
+						'settings.battlegrounds.overlay.minions-list-show-on-mouse-over-confirmation' | owTranslate
+					"
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowTribesHighlight"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
-					label="Show tribes highlight"
-					tooltip="Adds buttons to highlight specific tribes in Bob's Tavern"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-tribes-highlight-label' | owTranslate"
+					[tooltip]="
+						'settings.battlegrounds.overlay.minions-list-show-tribes-highlight-tooltip' | owTranslate
+					"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
-					label="Show golden cards"
-					tooltip="Show both the normal and golden version of cards when mousing over the minion"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-tooltip' | owTranslate"
 				></preference-toggle>
-				<div class="slider-label">Widget size</div>
+				<div class="slider-label" [owTranslate]="'settings.global.widget-size-label'"></div>
 				<preference-slider
 					class="minions-list-size-slider"
 					field="bgsMinionsListScale"
@@ -155,16 +173,16 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title">Opponent board</div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.opponent-board-title'"></div>
 			<div class="settings-group" [ngClass]="{ 'disabled': !value.showBannedTribes || !value.bgsFullToggle }">
 				<preference-toggle
 					class="opponent-board-top"
 					field="bgsOpponentOverlayAtTop"
 					[ngClass]="{ 'disabled': !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
-					label="Show at top of the screen"
-					tooltip="Toggle to show the opponent board at the top or bottom of the screen"
+					[label]="'settings.battlegrounds.overlay.opponent-board-show-top-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.opponent-board-show-top-tooltip' | owTranslate"
 				></preference-toggle>
-				<div class="slider-label">Icon size</div>
+				<div class="slider-label" [owTranslate]="'settings.global.widget-size-label'"></div>
 				<preference-slider
 					class="opponent-board-size-slider"
 					field="bgsOpponentBoardScale"
@@ -203,19 +221,23 @@ export class SettingsBattlegroundsOverlayComponent extends AbstractSubscriptionC
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			percentageValue: 18,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
