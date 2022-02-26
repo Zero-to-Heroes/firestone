@@ -11,15 +11,36 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<div class="settings-group decktracker-launch">
-			<h2 class="modes">Decktracker is active for the following modes</h2>
+			<h2 class="modes" [owTranslate]="'settings.decktracker.modes.title'"></h2>
 			<section class="toggle-label">
-				<preference-toggle field="decktrackerShowRanked" label="Ranked"></preference-toggle>
-				<preference-toggle field="decktrackerShowDuels" label="Duels"></preference-toggle>
-				<preference-toggle field="decktrackerShowArena" label="Arena"></preference-toggle>
-				<preference-toggle field="decktrackerShowTavernBrawl" label="Tavern Brawl"></preference-toggle>
-				<preference-toggle field="decktrackerShowPractice" label="Practice"></preference-toggle>
-				<preference-toggle field="decktrackerShowFriendly" label="Friendly"></preference-toggle>
-				<preference-toggle field="decktrackerShowCasual" label="Casual"></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowRanked"
+					[label]="'settings.decktracker.modes.ranked' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowDuels"
+					[label]="'settings.decktracker.modes.duels' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowArena"
+					[label]="'settings.decktracker.modes.arena' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowTavernBrawl"
+					[label]="'settings.decktracker.modes.tavern-brawl' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowPractice"
+					[label]="'settings.decktracker.modes.practice' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowFriendly"
+					[label]="'settings.decktracker.modes.friendly' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerShowCasual"
+					[label]="'settings.decktracker.modes.casual' | owTranslate"
+				></preference-toggle>
 			</section>
 		</div>
 	`,

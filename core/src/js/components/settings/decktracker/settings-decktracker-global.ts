@@ -104,19 +104,18 @@ export class SettingsDecktrackerGlobalComponent {
 	resetText = this.i18n.translateString('settings.decktracker.global.reset-button');
 	confirmationShown = false;
 	showResetConfirmationText = false;
-
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			percentageValue: 50,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 

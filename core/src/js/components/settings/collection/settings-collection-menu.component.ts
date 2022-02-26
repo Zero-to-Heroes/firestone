@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="collection-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'notification' }" (mousedown)="selectMenu('notification')">
-				<span>General</span>
+				<span [owTranslate]="'settings.collection.menu.general'"></span>
 			</li>
 		</ul>
 	`,

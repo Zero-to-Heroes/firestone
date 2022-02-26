@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -19,141 +20,141 @@ import { Knob } from '../preference-slider.component';
 			*ngIf="{ overlayGroupByZone: overlayGroupByZone$ | async } as value"
 			scrollable
 		>
-			<div class="title">Activate / Deactivate features</div>
+			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.tracker-title'"></div>
 			<div class="settings-group">
-				<div class="subtitle">Your deck</div>
-				<div class="subgroup">
-					<preference-toggle
-						field="overlayGroupByZone"
-						label="Group cards by zone"
-						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
-					></preference-toggle>
-					<preference-toggle
-						[ngClass]="{ 'disabled': value.overlayGroupByZone }"
-						class="indented"
-						field="overlayCardsGoToBottom"
-						label="Used cards go to bottom"
-						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
-					></preference-toggle>
-					<preference-toggle
-						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
-						class="indented"
-						field="overlayShowGlobalEffects"
-						label="Show global effects"
-						tooltip="When active, a new section appears at the top of the tracker that shows global effects on the game (for now, only Dungeon Run passives)"
-					></preference-toggle>
-					<preference-toggle
-						class="indented"
-						field="overlayOverlayDarkenUsedCards"
-						label="Darken used cards"
-						tooltip="When active, the cards that have been used are darkened."
-					></preference-toggle>
-					<preference-toggle
-						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
-						class="indented"
-						field="overlaySortByManaInOtherZone"
-						label="Sort cards by mana cost"
-						tooltip="When active, the cards will be sorted by mana cost in the Other zone. Otherwise, the zone will first show the cards on the board, then the graveyard, then the others."
-					></preference-toggle>
-					<preference-toggle
-						[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
-						class="indented"
-						field="overlayHideGeneratedCardsInOtherZone"
-						label="Hide generated cards in Other zone"
-						tooltip="When active, the cards that didn't start in your deck won't appear in the Other zone"
-					></preference-toggle>
-					<preference-toggle
-						field="decktrackerNoDeckMode"
-						label="Ignore decklist"
-						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
-						advancedSetting
-						messageWhenToggleValue="Got it, the tracker will ignore your decklist"
-						[valueToDisplayMessageOn]="true"
-					></preference-toggle>
-				</div>
-				<div class="subtitle">Counters</div>
-				<div class="subgroup">
-					<preference-toggle
-						field="playerGalakrondCounter"
-						label="Galakrond Invoke"
-						tooltip="Show the number of times you have invoked Galakrond (appears only if the deck contains Galakrond or cards that Invoke Galakrond)"
-					></preference-toggle>
-					<preference-toggle
-						field="playerPogoCounter"
-						label="Pogo-Hopper"
-						tooltip="Show the number of times you played a Pogo-Hopper (excluding Battlegrounds)"
-					></preference-toggle>
-					<preference-toggle
-						field="playerJadeGolemCounter"
-						label="Jade Golem"
-						tooltip="Show the current size of your Jade Golems"
-					></preference-toggle>
-					<preference-toggle
-						field="playerCthunCounter"
-						label="C'Thun"
-						tooltip="Show the current size of your C'Thun"
-					></preference-toggle>
-					<preference-toggle
-						field="playerFatigueCounter"
-						label="Fatigue"
-						tooltip="Show your current fatigue damage"
-					></preference-toggle>
-					<preference-toggle
-						field="playerAttackCounter"
-						label="Attack on board"
-						tooltip="Show the total attack of minions on your board + your hero"
-					></preference-toggle>
-					<preference-toggle
-						field="playerSpellCounter"
-						label="Number of spells"
-						tooltip="Show the total number of spells you played this match. Shows up only if relevant cards are found in the deck or hand"
-					></preference-toggle>
-					<preference-toggle
-						field="playerElementalCounter"
-						label="Elementals"
-						tooltip="Show the total number of elementals you played this turn and last turn. Shows up only if relevant cards are found in your hand"
-					></preference-toggle>
-					<preference-toggle
-						field="playerWatchpostCounter"
-						label="Watch Posts"
-						tooltip="Show the total number of watch posts you played this match. Shows up only if relevant cards are found in the deck or hand"
-					></preference-toggle>
-					<preference-toggle
-						field="playerLibramCounter"
-						label="Librams"
-						tooltip="Show the total number of librams you played this match. Shows up only if relevant cards are found in the deck or hand"
-					></preference-toggle>
-					<preference-toggle
-						field="playerElwynnBoarCounter"
-						label="Elwynn Boar deaths"
-						tooltip="Show the number of times an Elwynn Boar died for you"
-					></preference-toggle>
-					<preference-toggle
-						field="playerHeroPowerDamageCounter"
-						label="Hero Power damage"
-						tooltip="Show the total damage done by your hero power this match. Shows up only if Mordresh Fire Eye or Jan'Alai the Dragonhawk are in your deck."
-					></preference-toggle>
-					<preference-toggle
-						field="playerBolnerCounter"
-						label="Bolner Hammerbeak"
-						tooltip="When you have Bolner Hammerbeak in hand, show the first Battlecry card that was played this turn, if any"
-					></preference-toggle>
-					<preference-toggle
-						field="playerBrilliantMacawCounter"
-						[label]="'counters.brilliant-macaw.settings-name' | owTranslate"
-						[tooltip]="'counters.brilliant-macaw.settings-tooltip' | owTranslate"
-					></preference-toggle>
-					<preference-toggle
-						field="playerMulticasterCounter"
-						label="Multicaster"
-						tooltip="Show the spell schools of which you played a spell this game"
-					></preference-toggle>
-				</div>
+				<preference-toggle
+					field="overlayGroupByZone"
+					[label]="'settings.decktracker.opponent-deck.group-cards-by-zone-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': value.overlayGroupByZone }"
+					class="indented"
+					field="overlayCardsGoToBottom"
+					[label]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					class="indented"
+					field="overlayOverlayDarkenUsedCards"
+					[label]="'settings.decktracker.opponent-deck.darken-used-cards-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.darken-used-cards-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					class="indented"
+					field="overlayShowGlobalEffects"
+					[label]="'settings.decktracker.opponent-deck.global-effects-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.global-effects-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					class="indented"
+					field="overlaySortByManaInOtherZone"
+					[label]="'settings.decktracker.opponent-deck.sort-by-mana-cost-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					class="indented"
+					field="overlayHideGeneratedCardsInOtherZone"
+					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.hide-generated-cards-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="decktrackerNoDeckMode"
+					[label]="'settings.decktracker.your-deck.ignore-decklist-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.ignore-decklist-tooltip' | owTranslate"
+					advancedSetting
+					[messageWhenToggleValue]="
+						'settings.decktracker.your-deck.ignore-decklist-confirmation' | owTranslate
+					"
+					[valueToDisplayMessageOn]="true"
+				></preference-toggle>
 			</div>
 
-			<div class="title">Tracker's size & opacity</div>
+			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.counters.title'"></div>
 			<div class="settings-group">
-				<div class="subtitle">Your deck</div>
+				<preference-toggle
+					field="playerGalakrondCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.galakrond-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.galakrond-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerPogoCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.pogo-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.pogo-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerJadeGolemCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.jade-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.jade-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerCthunCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.cthun-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.cthun-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerFatigueCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.fatigue-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.fatigue-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerAttackCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.attack-on-board-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.attack-on-board-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerSpellCounter"
+					[label]="'settings.decktracker.your-deck.counters.number-of-spells-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.number-of-spells-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerElementalCounter"
+					[label]="'settings.decktracker.your-deck.counters.elementals-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.elementals-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerWatchpostCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.watch-post-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.watch-post-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerLibramCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.libram-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.libram-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerElwynnBoarCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.elwynn-boar-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.elwynn-boar-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerHeroPowerDamageCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.hero-power-damage-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerBolnerCounter"
+					[label]="'settings.decktracker.your-deck.counters.bolner-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.bolner-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerBrilliantMacawCounter"
+					[label]="'settings.decktracker.your-deck.counters.brilliant-macaw-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerMulticasterCounter"
+					[label]="'settings.decktracker.your-deck.counters.multicaster-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.multicaster-tooltip' | owTranslate"
+				></preference-toggle>
+			</div>
+
+			<div class="title" [owTranslate]="'settings.decktracker.opponent-deck.tracker-size-title'"></div>
+			<div class="settings-group">
+				<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.tracker-title'"></div>
 				<preference-slider
 					class="first-slider"
 					[field]="'decktrackerScale'"
@@ -164,7 +165,7 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
-				<div class="text">Opacity</div>
+				<div class="text" [owTranslate]="'settings.decktracker.opponent-deck.opacity-title'"></div>
 				<preference-slider
 					[field]="'overlayOpacityInPercent'"
 					[enabled]="true"
@@ -197,19 +198,23 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			percentageValue: 50,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			percentageValue: 100,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 

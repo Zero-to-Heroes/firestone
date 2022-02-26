@@ -24,35 +24,31 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			scrollable
 		>
 			<section>
-				<h2>Broadcast on Twitch</h2>
-				<p class="text">
-					Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch
-					player, as well as letting them mouse over all the players in the leaderboard in Battlegrounds. To
-					activate it, you will need to:
-				</p>
+				<h2 [owTranslate]="'settings.general.twitch.title'"></h2>
+				<p class="text" [owTranslate]="'settings.general.twitch.intro'"></p>
 				<ol class="todo">
 					<li>
-						1. Install the Firestone Twitch extension on your channel:
+						{{ 'settings.general.twitch.todo-1' | owTranslate }}
 						<a
 							href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
 							target="_blank"
 							(mousedown)="preventMiddleClick($event)"
 							(click)="preventMiddleClick($event)"
 							(auxclick)="preventMiddleClick($event)"
-							>here</a
+							>{{ 'settings.general.twitch.link' | owTranslate }}</a
 						>
 					</li>
-					<li>2. Connect your Twitch account to Firestone by clicking the button below</li>
+					<li [owTranslate]="'settings.general.twitch.todo-2'"></li>
 					<li>
-						3. Tweak your options (see
+						{{ 'settings.general.twitch.todo-3' | owTranslate }}
 						<a
 							href="https://github.com/Zero-to-Heroes/firestone/wiki/Setting-up-the-Twitch-extension"
 							target="_blank"
 							(mousedown)="preventMiddleClick($event)"
 							(click)="preventMiddleClick($event)"
 							(auxclick)="preventMiddleClick($event)"
-							>here</a
-						>)
+							>{{ 'settings.general.twitch.link' | owTranslate }}</a
+						>
 					</li>
 				</ol>
 
@@ -63,12 +59,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								<use xlink:href="assets/svg/sprite.svg#twitch" />
 							</svg>
 						</i>
-						<span>Login with Twitch</span>
+						<span [owTranslate]="'settings.general.twitch.login-button-text'"></span>
 					</button>
 				</div>
 				<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
 					<div class="user-name">
-						Logged in as:
+						{{ 'settings.general.twitch.logged-in-as' | owTranslate }}
 						<a
 							href="https://www.twitch.tv/{{ value.twitchUserName }}"
 							target="_blank"
@@ -84,7 +80,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								<use xlink:href="assets/svg/sprite.svg#twitch" />
 							</svg>
 						</i>
-						<span>Disconnect</span>
+						<span [owTranslate]="'settings.general.twitch.logout-button-text'"></span>
 					</button>
 				</div>
 			</section>
