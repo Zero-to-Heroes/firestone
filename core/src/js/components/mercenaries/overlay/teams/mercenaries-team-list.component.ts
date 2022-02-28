@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<div class="list-background"></div>
 			<ng-container *ngIf="!!mercenaries?.length; else emptyState">
 				<mercenaries-team-mercenary
-					*ngFor="let mercenary of mercenaries"
+					*ngFor="let mercenary of mercenaries; trackBy: trackByFn"
 					[mercenary]="mercenary"
 					[tooltipPosition]="tooltipPosition"
 				></mercenaries-team-mercenary>
@@ -111,6 +111,10 @@ export class MercenariesTeamListComponent
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.scaleSub.unsubscribe();
+	}
+
+	trackByFn(index: number, item: BattleMercenary) {
+		return item.entityId;
 	}
 
 	private refreshScroll() {

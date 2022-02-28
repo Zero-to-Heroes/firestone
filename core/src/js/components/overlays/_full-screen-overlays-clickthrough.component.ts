@@ -110,7 +110,7 @@ export class FullScreenOverlaysClickthroughComponent
 		const width = gameHeight * 1.4;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		const dpi = gameInfo.logicalWidth / gameWidth;
-		const newLeft = dpi * 0.5 * (gameWidth - width);
+		const newLeft = Math.floor(dpi * 0.5 * (gameWidth - width));
 		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
 		window.dispatchEvent(new Event('window-resize'));
 	}
