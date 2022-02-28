@@ -16,7 +16,6 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/component/settings/battlegrounds/settings-battlegrounds-general.component.scss`,
 	],
 	template: `
-		<!-- TODO translate -->
 		<div
 			class="battlegrounds-general"
 			*ngIf="{

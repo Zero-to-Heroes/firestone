@@ -13,7 +13,6 @@ import { Ability } from './mercenaries-team-ability.component';
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],
 	template: `
-		<!-- TODO translate -->
 		<div class="mercenary" [ngClass]="{ 'dead': isDead, 'bench': isBench }">
 			<div
 				class="item header"

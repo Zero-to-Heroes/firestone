@@ -42,39 +42,27 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<preference-toggle
 					class="enable-vs-button"
 					field="shareGamesWithVS"
-					label="Contribute to the vS Data Reaper Report"
+					[label]="vs.toggleLabel"
 				></preference-toggle>
 			</section>
 			<section class="out-of-cards">
-				<h2>
-					<img
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png?v=2"
-						class="icon"
-					/>Out of Cards
-				</h2>
+				<h2><img [src]="ooc.icon" class="icon" />{{ ooc.title }}</h2>
 				<div class="pitch">
-					<p>
-						Out of Cards is a Hearthstone community site with articles, guides, decks, card database, and
-						more. Syncing your card collection to the site makes it easier to find decks to play. You can
-						visit them <a href="https://outof.cards/hearthstone/" target="_blank">here</a>.
-					</p>
+					<p [innerHTML]="ooc.pitch"></p>
 				</div>
 				<div class="what-text">
-					<p>
-						If you connect your Out of Cards account, Firestone will send your collection data to Out of
-						Cards so you can use it online.
-					</p>
+					<p [innerHTML]="ooc.whatNext"></p>
 				</div>
 				<div class="connect">
 					<div class="logged-out" *ngIf="oocLoginUrl && !value.oocLoggedIn">
 						<button (mousedown)="oocConnect()">
-							<span>Connect</span>
+							<span [owTranslate]="'settings.general.third-party.ooc.connect-button-text'"></span>
 						</button>
 					</div>
 					<div class="logged-in" *ngIf="oocLoginUrl && value.oocLoggedIn">
-						<div class="user-name">You're logged in</div>
+						<div class="user-name" [owTranslate]="'settings.general.third-party.ooc.connected-text'"></div>
 						<button (mousedown)="oocDisconnect()">
-							<span>Disconnect</span>
+							<span [owTranslate]="'settings.general.third-party.ooc.disconnect-button-text'"></span>
 						</button>
 					</div>
 				</div>
@@ -82,57 +70,42 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					*ngIf="oocLoginUrl && value.oocLoggedIn"
 					class="collection-sync-notif"
 					field="outOfCardsShowNotifOnSync"
-					label="Show notification when collection is synchronizeed"
+					[label]="ooc.toggleLabel"
 				></preference-toggle>
 			</section>
 			<section class="vs">
 				<h2>
-					<img
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png?v=2"
-						class="icon"
-					/>
-					d0nkey.top
+					<img [src]="d0nkey.icon" class="icon" />
+					{{ d0nkey.title }}
 				</h2>
 				<div class="pitch">
-					<p>
-						<a href="https://www.d0nkey.top" target="_blank">d0nkey.top</a> is a fan website that gathers
-						all decks from official Hearthstone competitions, as well as decks from streamers to allow
-						anyone to easily find interesting decks to play. Synchronizing to d0nkey.top will let you share
-						your decks with your audience (if you're a streamer) or will help them build a better database
-						to provide more free services to the community.
-					</p>
+					<p [innerHTML]="d0nkey.pitch"></p>
 				</div>
 				<div class="what-text">
-					<p>
-						If you decide to sync to d0nkey.top, Firestone will send them each game you play, which will
-						appear in a specific section on the website (which is still under construction). The replays
-						will be private by default, unless you're streaming at the same time. See the
-						<a href="https://www.d0nkey.top/streamer-instructions" target="_blank">instructions page</a> for
-						how to set everything up.
-					</p>
+					<p [innerHTML]="d0nkey.whatNext"></p>
 				</div>
 				<preference-toggle
 					class="enable-vs-button"
 					field="d0nkeySync"
-					label="Synchronize your replays to d0nkey.top"
+					[label]="d0nkey.toggleLabel"
 				></preference-toggle>
 			</section>
 
 			<section class="vs">
 				<h2>
-					<img src="https://hearthstone-decks.net/wp-content/uploads/2021/12/Logo.png" class="icon" />
-					Hearthstone-decks
+					<img [src]="hsdecks.icon" class="icon" />
+					{{ hsdecks.title }}
 				</h2>
 				<div class="pitch">
-					<p [innerHTML]="'settings.general.third-party.hsdecks.pitch' | owTranslate"></p>
+					<p [innerHTML]="hsdecks.pitch"></p>
 				</div>
 				<div class="what-text">
-					<p [innerHTML]="'settings.general.third-party.hsdecks.next' | owTranslate"></p>
+					<p [innerHTML]="hsdecks.next"></p>
 				</div>
 				<preference-toggle
 					class="enable-vs-button"
 					field="hearthstoneDecksSync"
-					[label]="'settings.general.third-party.hsdecks.pref-label' | owTranslate"
+					[label]="hsdecks.toggleLabel"
 				></preference-toggle>
 			</section>
 		</div>
@@ -155,6 +128,44 @@ export class SettingsGeneralThirdPartyComponent
 			)}</a>`,
 		}),
 		whatNext: this.i18n.translateString('settings.general.third-party.vs.next'),
+		toggleLabel: this.i18n.translateString('settings.general.third-party.vs.toggle-label'),
+	};
+	ooc = {
+		title: this.i18n.translateString('settings.general.third-party.ooc.title'),
+		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png?v=2',
+		pitch: this.i18n.translateString('settings.general.third-party.ooc.pitch', {
+			websiteLink: `<a href="https://outof.cards/hearthstone/" target="_blank">${this.i18n.translateString(
+				'settings.general.third-party.ooc.website-link',
+			)}</a>`,
+		}),
+		whatNext: this.i18n.translateString('settings.general.third-party.ooc.next'),
+		toggleLabel: this.i18n.translateString('settings.general.third-party.ooc.toggle-label'),
+	};
+	d0nkey = {
+		title: this.i18n.translateString('settings.general.third-party.d0nkey.title'),
+		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png?v=2',
+		pitch: this.i18n.translateString('settings.general.third-party.d0nkey.pitch', {
+			websiteLink: `<a href="https://www.d0nkey.top" target="_blank">${this.i18n.translateString(
+				'settings.general.third-party.d0nkey.website-link',
+			)}</a>`,
+		}),
+		whatNext: this.i18n.translateString('settings.general.third-party.d0nkey.next', {
+			link: `<a href="https://www.d0nkey.top/streamer-instructions" target="_blank">${this.i18n.translateString(
+				'settings.general.third-party.d0nkey.next-link',
+			)}</a>`,
+		}),
+		toggleLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-label'),
+	};
+	hsDecks = {
+		title: this.i18n.translateString('settings.general.third-party.hsdecks.title'),
+		icon: 'https://hearthstone-decks.net/wp-content/uploads/2021/12/Logo.png',
+		pitch: this.i18n.translateString('settings.general.third-party.hsdecks.pitch', {
+			websiteLink: `<a href="https://hearthstone-decks.net" target="_blank">${this.i18n.translateString(
+				'settings.general.third-party.hsdecks.website-link',
+			)}</a>`,
+		}),
+		whatNext: this.i18n.translateString('settings.general.third-party.hsdecks.next'),
+		toggleLabel: this.i18n.translateString('settings.general.third-party.hsdecks.toggle-label'),
 	};
 
 	constructor(
