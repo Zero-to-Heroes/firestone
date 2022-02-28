@@ -616,10 +616,10 @@ export class MainWindowStoreService {
 			new ShowReplaysProcessor(this.prefs),
 
 			TriggerShowMatchStatsEvent.eventName(),
-			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs),
+			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs, this.i18n),
 
 			ShowMatchStatsEvent.eventName(),
-			new ShowMatchStatsProcessor(this.prefs),
+			new ShowMatchStatsProcessor(this.prefs, this.i18n),
 
 			SelectMatchStatsTabEvent.eventName(),
 			new SelectMatchStatsTabProcessor(this.prefs),
@@ -699,7 +699,7 @@ export class MainWindowStoreService {
 			new BgsPostMatchStatsComputedProcessor(this.replaysStateBuilder),
 
 			BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
-			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards),
+			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards, this.i18n),
 
 			BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
 			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),
@@ -720,7 +720,7 @@ export class MainWindowStoreService {
 			new BgsSimulatorMinionTierFilterSelectedProcessor(this.prefs),
 
 			BattlegroundsMainWindowSelectBattleEvent.eventName(),
-			new BattlegroundsMainWindowSelectBattleProcessor(),
+			new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
 
 			// Mercenaries
 			MercenariesModeFilterSelectedEvent.eventName(),

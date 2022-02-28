@@ -109,7 +109,7 @@ const handleLibram = (
 	costReduction: number,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => LIBRAM_IDS.includes(refCard?.id),
+		(card, refCard) => LIBRAM_IDS.includes(refCard?.id as CardIds),
 		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
 		deckState,
 		allCards,

@@ -1,5 +1,6 @@
 import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -15,7 +16,7 @@ import { BgsNextOpponentParser } from './bgs-next-opponent-parser';
 import { EventParser } from './_event-parser';
 
 export class BgsHeroSelectedParser implements EventParser {
-	constructor(private readonly allCards: CardsFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsHeroSelectedEvent';
@@ -78,7 +79,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			) as readonly BgsPanel[],
 		} as BattlegroundsState);
 		if (event.additionalData?.nextOpponentCardId) {
-			return new BgsNextOpponentParser().parse(
+			return new BgsNextOpponentParser(this.i18n).parse(
 				updatedState,
 				new BgsNextOpponentEvent(event.additionalData.nextOpponentCardId),
 			);

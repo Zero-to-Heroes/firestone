@@ -1,1 +1,1 @@
-export type BattleInfoMessage = 'scallywag' | 'secret' | 'error' | undefined;
+export type BattleInfoMessage = 'scallywag' | 'piloted-whirl-o-tron' | 'secret' | 'error' | undefined;

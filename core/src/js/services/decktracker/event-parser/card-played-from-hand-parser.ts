@@ -165,11 +165,11 @@ export class CardPlayedFromHandParser implements EventParser {
 	}
 
 	private isWatchpost(refCard: ReferenceCard) {
-		return WATCH_POST_IDS.includes(refCard.id);
+		return WATCH_POST_IDS.includes(refCard.id as CardIds);
 	}
 
 	private isLibram(refCard: ReferenceCard) {
-		return LIBRAM_IDS.includes(refCard.id);
+		return LIBRAM_IDS.includes(refCard.id as CardIds);
 	}
 
 	event(): string {

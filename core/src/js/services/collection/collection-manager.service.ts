@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { COIN_IDS } from '@firestone-hs/reference-data';
+import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
@@ -130,7 +130,7 @@ export class CollectionManager {
 			console.log('[collection-manager] retrieved coins from db', coinsFromDb?.length);
 			return coinsFromDb;
 		} else {
-			const refCoins = this.allCards.getCards().filter((card) => COIN_IDS.includes(card.id));
+			const refCoins = this.allCards.getCards().filter((card) => COIN_IDS.includes(card.id as CardIds));
 			const coins: readonly Coin[] = refCoins.map((coin) => ({
 				cardId: coin.id,
 				owned: memoryCoins.find((c) => c.CoinId === coin.dbfId) != null,
