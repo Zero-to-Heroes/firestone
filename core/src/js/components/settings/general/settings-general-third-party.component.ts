@@ -6,6 +6,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -25,32 +26,18 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="general-third-party" *ngIf="{ oocLoggedIn: oocLoggedIn$ | async } as value" scrollable>
-			<div class="intro">
-				We believe that your data belongs to you, and that you should be able to synchronize it to other third
-				party websites and help them do whatever they do best with it. We don't get paid for this, but we do get
-				some exposure since they then talk about us :)
-			</div>
+			<div class="intro" [owTranslate]="'settings.general.third-party.intro'"></div>
 			<section class="vs">
+				<!-- TODO translate -->
 				<h2>
-					<img
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/vs.png?v=2"
-						class="icon"
-					/>
-					Vicious Syndicate
+					<img [src]="vs.icon" class="icon" />
+					{{ vs.title }}
 				</h2>
 				<div class="pitch">
-					<p>
-						Vicious Syndicate builds a weekly meta report that captures what the meta looks, using both data
-						coming from thousands of games and insights by top-level players. You can visit them
-						<a href="https://www.vicioussyndicate.com" target="_blank">here</a>.
-					</p>
+					<p [innerHTML]="vs.pitch"></p>
 				</div>
 				<div class="what-text">
-					<p>
-						If you decide to contribute to the vS Data Reaper Report, Firestone will anonymously send them
-						info about your games (mostly the cards played by each player and some meta data, like player
-						ranks).
-					</p>
+					<p [innerHTML]="vs.whatNext"></p>
 				</div>
 				<preference-toggle
 					class="enable-vs-button"
@@ -159,11 +146,23 @@ export class SettingsGeneralThirdPartyComponent
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 	hsDecksUrl = ``;
 
+	vs = {
+		title: this.i18n.translateString('settings.general.third-party.vs.title'),
+		icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/vs.png?v=2`,
+		pitch: this.i18n.translateString('settings.general.third-party.vs.pitch', {
+			websiteLink: `<a href="https://www.vicioussyndicate.com" target="_blank">${this.i18n.translateString(
+				'settings.general.third-party.vs.website-link',
+			)}</a>`,
+		}),
+		whatNext: this.i18n.translateString('settings.general.third-party.vs.next'),
+	};
+
 	constructor(
-		private prefs: PreferencesService,
-		private ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}

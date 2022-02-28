@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -16,51 +17,57 @@ import { Knob } from '../preference-slider.component';
 			<section class="toggle-label">
 				<preference-toggle
 					field="launchAppOnGameStart"
-					label="Launch Firestone when game starts"
-					tooltip="When turned off, you need to manually launch Firestone every time"
+					[label]="'settings.general.launch.launch-on-game-start-label' | owTranslate"
+					[tooltip]="'settings.general.launch.launch-on-game-start-tooltip' | owTranslate"
 					advancedSetting
 				></preference-toggle>
 				<preference-toggle
 					field="collectionUseOverlay"
-					label="Set integrated mode"
-					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
+					[label]="'settings.general.launch.integrated-mode-label' | owTranslate"
+					[tooltip]="'settings.general.launch.integrated-mode-tooltip' | owTranslate"
 					[toggleFunction]="toggleOverlay"
 				></preference-toggle>
 				<preference-toggle
 					field="showSessionRecapOnExit"
-					label="Session recap on exit"
-					tooltip="Shows a recap of the past session when you exit Hearthstone"
+					[label]="'settings.general.launch.session-recap-on-exit-label' | owTranslate"
+					[tooltip]="'settings.general.launch.session-recap-on-exit-tooltip' | owTranslate"
 				></preference-toggle>
 
 				<preference-toggle
 					field="showXpRecapAtGameEnd"
-					label="Show XP recap on game end"
-					tooltip="Shows a recap of the XP / levels gained after each match"
+					[label]="'settings.general.launch.xp-recap-on-game-end-label' | owTranslate"
+					[tooltip]="'settings.general.launch.xp-recap-on-game-end-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="dontShowNewVersionNotif"
-					label="Hide release notes on app start"
-					tooltip="Don't show the new release notes for the new Firestone version"
+					[label]="'settings.general.launch.hide-release-notes-label' | owTranslate"
+					[tooltip]="'settings.general.launch.hide-release-notes-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="setAllNotifications"
-					label="Display notifications"
-					tooltip="Toggles global visibility of toast notifications [bottom-right]. When active, you can still configure notifications per game mode in the corresponding tabs."
+					[label]="'settings.general.launch.display-notifications-label' | owTranslate"
+					[tooltip]="'settings.general.launch.display-notifications-tooltip' | owTranslate"
 					advancedSetting
-					messageWhenToggleValue="Notifications now TURNED OFF globally."
+					[messageWhenToggleValue]="
+						'settings.general.launch.display-notifications-confirmation' | owTranslate
+					"
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
 			</section>
 		</div>
 
-		<div class="title">Accessibility</div>
+		<div class="title" [owTranslate]="'settings.general.launch.accessibility-title'"></div>
 		<div class="settings-group">
 			<preference-toggle
 				field="flashWindowOnYourTurn"
-				[label]="'settings.general.flash-window' | owTranslate"
-				[tooltip]="'settings.general.flash-window-tooltip' | owTranslate"
+				[label]="'settings.general.launch.flash-window' | owTranslate"
+				[tooltip]="'settings.general.launch.flash-window-tooltip' | owTranslate"
 			></preference-toggle>
-			<div class="subtitle" helpTooltip="A zoom level that will be applied to all windows">Zoom level</div>
+			<div
+				class="subtitle"
+				[owTranslate]="'settings.general.launch.zoom-label'"
+				[helpTooltip]="'settings.general.launch.zoom-tooltip' | owTranslate"
+			></div>
 			<preference-slider
 				class="first-slider"
 				[field]="'globalZoomLevel'"
@@ -77,18 +84,19 @@ import { Knob } from '../preference-slider.component';
 			<div class="reset-container">
 				<button
 					(mousedown)="reset()"
-					helpTooltip="Reset ALL your preferences, including the various widgets positions on screen"
+					[helpTooltip]="'settings.general.launch.reset-prefs-tooltip' | owTranslate"
 				>
 					<span>{{ resetText }}</span>
 				</button>
-				<div class="confirmation" *ngIf="showResetConfirmationText">
-					All your preferences have been reset. This includes the various widgets locations on screen, as well
-					as your Twitch settings, so don't forget to set back what you need :)
-				</div>
+				<div
+					class="confirmation"
+					*ngIf="showResetConfirmationText"
+					[owTranslate]="'settings.general.launch.reset-prefs-confirmation'"
+				></div>
 			</div>
 			<div class="res-container">
-				<button (mousedown)="restartApp()" helpTooltip="Restart the app. ">
-					<span>Restart App</span>
+				<button (mousedown)="restartApp()">
+					<span [owTranslate]="'settings.general.launch.restart-app-button-label'"></span>
 				</button>
 			</div>
 		</div>
@@ -96,27 +104,31 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralLaunchComponent implements AfterViewInit {
-	resetText = 'Reset preferences';
+	resetText = this.i18n.translateString('settings.general.launch.reset-prefs-button-default');
 	confirmationShown = false;
 	showResetConfirmationText = false;
 	sizeKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 100,
-			label: 'Normal',
+			label: this.i18n.translateString('settings.global.knob-zoom.normal'),
 		},
 		{
 			absoluteValue: 200,
-			label: '200%',
+			label: this.i18n.translateString('settings.global.knob-zoom.zoom-200'),
 		},
 		{
 			absoluteValue: 400,
-			label: '400%',
+			label: this.i18n.translateString('settings.global.knob-zoom.zoom-400'),
 		},
 	];
 
 	private reloadWindows;
 
-	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		this.reloadWindows = this.ow.getMainWindow().reloadWindows;
@@ -129,11 +141,11 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 	async reset() {
 		if (!this.confirmationShown) {
 			this.confirmationShown = true;
-			this.resetText = 'Are you sure?';
+			this.resetText = this.i18n.translateString('settings.general.launch.reset-prefs-button-confirmation');
 			return;
 		}
 
-		this.resetText = 'Reset preferences';
+		this.resetText = this.i18n.translateString('settings.general.launch.reset-prefs-button-default');
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
 		await this.prefs.reset();

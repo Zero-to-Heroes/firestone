@@ -166,7 +166,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 			</div>
 
-			<div class="title" [owTranslate]="'settings.decktracker.opponent-deck.tracker-size-title'"></div>
+			<div class="title" [owTranslate]="'settings.decktracker.opponent-deck.size-title'"></div>
 			<div class="settings-group">
 				<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.tracker-title'"></div>
 				<preference-slider

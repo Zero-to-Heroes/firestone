@@ -9,19 +9,19 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="general-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'launch' }" (mousedown)="selectMenu('launch')">
-				<span>General</span>
+				<span [owTranslate]="'settings.general.menu.general'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'localization' }" (mousedown)="selectMenu('localization')">
-				<span>Localization</span>
+				<span [owTranslate]="'settings.general.menu.localization'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'bugreport' }" (mousedown)="selectMenu('bugreport')">
-				<span>Report a bug</span>
+				<span [owTranslate]="'settings.general.menu.bug-report'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'third-party' }" (mousedown)="selectMenu('third-party')">
-				<span>Third party</span>
+				<span [owTranslate]="'settings.general.menu.third-party'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'broadcast' }" (mousedown)="selectMenu('broadcast')">
-				<span>Twitch</span>
+				<span [owTranslate]="'settings.general.menu.broadcast'"></span>
 			</li>
 		</ul>
 	`,

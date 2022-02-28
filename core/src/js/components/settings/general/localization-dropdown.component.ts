@@ -38,7 +38,7 @@ export class LocalizationDropdownComponent extends AbstractSubscriptionComponent
 			} as IOption,
 			{
 				value: 'frFR',
-				label: 'French',
+				label: 'Français',
 			} as IOption,
 		] as readonly IOption[];
 	}

@@ -104,7 +104,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.banned-tribes-title-label'"></div>
+			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.banned-tribes-title'"></div>
 			<div class="settings-group" [ngClass]="{ 'disabled': !value.showBannedTribes || !value.bgsFullToggle }">
 				<preference-toggle
 					class="banned-tribes-vertical"
