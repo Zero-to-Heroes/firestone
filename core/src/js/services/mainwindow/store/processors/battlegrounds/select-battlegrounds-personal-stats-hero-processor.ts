@@ -15,6 +15,7 @@ export class SelectBattlegroundsPersonalStatsHeroProcessor implements Processor 
 			selectedPersonalHeroStatsTab: event.tab,
 		} as NavigationBattlegrounds);
 
+		// TODO translate
 		return [
 			null,
 			navigationState.update({

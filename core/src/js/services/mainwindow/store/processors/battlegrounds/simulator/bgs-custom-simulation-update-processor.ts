@@ -14,7 +14,6 @@ export class BgsCustomSimulationUpdateProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('handling simulation update event', event);
 		const merged = BgsFaceOffWithSimulation.create(
 			deepmerge(
 				(event.currentFaceOff as Partial<BgsFaceOffWithSimulation>) ?? new BgsFaceOffWithSimulation(),
@@ -24,12 +23,10 @@ export class BgsCustomSimulationUpdateProcessor implements Processor {
 				},
 			),
 		);
-		console.debug('merged', merged, event.currentFaceOff, event.partialUpdate);
 
 		const newState = currentState.battlegrounds.customSimulationState.update({
 			faceOff: merged,
 		} as BgsCustomSimulationState);
-		console.debug('newState', newState);
 
 		return [
 			currentState.update({

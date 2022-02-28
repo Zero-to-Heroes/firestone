@@ -6,6 +6,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { getDuelsModeName } from '@services/duels/duels-utils';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import {
@@ -35,7 +36,6 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
-import { getDuelsModeName } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
@@ -197,35 +197,35 @@ export class DuelsStateBuilderService {
 		const result = [
 			DuelsCategory.create({
 				id: 'duels-runs',
-				name: 'My Runs',
+				name: this.i18n.translateString('app.duels.menu.my-runs'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-personal-decks',
-				name: 'My Decks',
+				name: this.i18n.translateString('app.duels.menu.my-decks'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-stats',
-				name: 'Heroes',
+				name: this.i18n.translateString('app.duels.menu.heroes'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-treasures',
-				name: 'Treasures',
+				name: this.i18n.translateString('app.duels.menu.treasures'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-top-decks',
-				name: 'High-wins decks',
+				name: this.i18n.translateString('app.duels.menu.high-win-decks'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
@@ -246,7 +246,7 @@ export class DuelsStateBuilderService {
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-leaderboard',
-				name: 'Leaderboard',
+				name: this.i18n.translateString('app.duels.menu.leaderboard'),
 				enabled: true,
 				icon: undefined,
 				categories: null,
@@ -303,6 +303,11 @@ export class DuelsStateBuilderService {
 				const mainStats = this.buildMainPersonalDecktats(groupedByDecklist[deckstring]);
 				const playerClass = this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase();
 
+				const defaultDeckName = this.i18n.translateString('app.duels.deck-stat.default-deck-name', {
+					wins: mainStats.global.averageWinsPerRun.toFixed(1),
+					playerClass: formatClass(playerClass, this.i18n),
+					gameMode: getDuelsModeName(firstMatch.type, this.i18n),
+				});
 				return {
 					...mainStats,
 					initialDeckList: firstMatch.initialDeckList,
@@ -310,12 +315,7 @@ export class DuelsStateBuilderService {
 					playerClass: playerClass,
 					deckStatsForTypes: decksForTypes,
 					// FIXME: use prefs in component to override deck name
-					deckName:
-						this.getDeckName(firstMatch.initialDeckList, prefs) ??
-						`${mainStats.global.averageWinsPerRun.toFixed(1)} wins ${formatClass(
-							playerClass,
-							this.i18n,
-						)} (${getDuelsModeName(firstMatch.type)})`,
+					deckName: this.getDeckName(firstMatch.initialDeckList, prefs) ?? defaultDeckName,
 					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;
 			});
@@ -443,7 +443,7 @@ export class DuelsStateBuilderService {
 	private groupDecks(decks: readonly DuelsDeckStat[]): readonly DuelsGroupedDecks[] {
 		const groupingFunction = (deck: DuelsDeckStat) => {
 			const date = new Date(deck.periodStart);
-			return date.toLocaleDateString('en-US', {
+			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
 				month: 'short',
 				day: '2-digit',
 				year: 'numeric',

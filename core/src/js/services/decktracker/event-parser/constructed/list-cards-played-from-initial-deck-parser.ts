@@ -1,4 +1,4 @@
-import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
+import { CardIds, COIN_IDS, getBaseCardId } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
@@ -26,26 +26,7 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const baseCardId = getBaseCardId(cardId);
 		const card = this.helper.findCardInZone(deck.hand, baseCardId, entityId);
-		if (
-			card.creatorCardId ||
-			gameEvent.additionalData.creatorCardId ||
-			[
-				CardIds.TheCoinCore,
-				CardIds.TheCoin1,
-				CardIds.TheCoin2,
-				CardIds.TheCoin3,
-				CardIds.TheCoin4,
-				CardIds.TheCoin5,
-				CardIds.TheCoin6,
-				CardIds.TheCoin7,
-				CardIds.TheCoin8,
-				CardIds.TheCoin9,
-				CardIds.TheCoin10,
-				CardIds.TheCoin11,
-				CardIds.TheCoin12,
-				CardIds.TheCoin13,
-			].includes(baseCardId as CardIds)
-		) {
+		if (card.creatorCardId || gameEvent.additionalData.creatorCardId || COIN_IDS.includes(baseCardId as CardIds)) {
 			return currentState;
 		}
 

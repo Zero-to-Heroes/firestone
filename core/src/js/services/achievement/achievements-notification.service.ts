@@ -34,7 +34,6 @@ export class AchievementsNotificationService {
 			return;
 		}
 		// amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
-		// TODO translate
 		const recapText = (
 			achievement.emptyText ??
 			achievement.completedText ??

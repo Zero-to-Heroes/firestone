@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -10,6 +11,7 @@ export class CardNotificationsService {
 		private readonly notificationService: OwNotificationsService,
 		private readonly cards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	public async createNewCardToast(cardId: string, isSecondCopy: boolean, type: CollectionCardType) {
@@ -30,12 +32,27 @@ export class CardNotificationsService {
 		}
 
 		const cardName: string =
-			type === 'GOLDEN' ? `Golden ${dbCard.name}` : type === 'DIAMOND' ? `Diamond ${dbCard.name}` : dbCard.name;
+			type === 'GOLDEN'
+				? this.i18n.translateString('app.collection.card-history.golden-card', {
+						cardName: dbCard.name,
+				  })
+				: type === 'DIAMOND'
+				? this.i18n.translateString('app.collection.card-history.diamond-card', {
+						cardName: dbCard.name,
+				  })
+				: dbCard.name;
 		const goldenClass = type === 'GOLDEN' ? 'premium' : '';
-		const newLabel = isSecondCopy ? 'Second copy' : 'New card';
+		const newLabel = isSecondCopy
+			? this.i18n.translateString('app.collection.card-history.second-copy-long')
+			: this.i18n.translateString('app.collection.card-history.new-copy-long');
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
+		const clickText = this.i18n.translateString('app.collection.card-history.click-to-view', {
+			link: `<span class="link">${this.i18n.translateString(
+				'app.collection.card-history.click-to-view-link',
+			)}</span>`,
+		});
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
@@ -55,7 +72,7 @@ export class CardNotificationsService {
 							</i>
 						</div>
 						<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
-						<span class="cta">Click to <span class="link">expand</span></span>
+						<span class="cta">${clickText}</span>
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">
@@ -77,6 +94,12 @@ export class CardNotificationsService {
 
 		if (prefs.showDust) {
 			console.log('[card-notification] showing dust notification', dust, numberOfCards);
+			const duplicateCardsText = this.i18n.translateString('app.collection.card-history.duplicate-cards', {
+				numberOfCards: numberOfCards,
+			});
+			const dustPotentialText = this.i18n.translateString('app.collection.card-history.dust-potential', {
+				dust: dust,
+			});
 			this.notificationService.emitNewNotification({
 				content: `
                     <div class="message-container message-dust">
@@ -88,8 +111,8 @@ export class CardNotificationsService {
                             </i>
                         </div>
                         <div class="text">
-                            <span>${numberOfCards} duplicate cards</span>
-                            <span class="dust-amount">${dust} Dust potential</span>
+                            <span>${duplicateCardsText}</span>
+                            <span class="dust-amount">${dustPotentialText}</span>
                         </div>
                         <button class="i-30 close-button">
                             <svg class="svg-icon-fill">

@@ -1,4 +1,5 @@
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -9,6 +10,8 @@ import { RealTimeStatsState } from '../real-time-stats/real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class BgsRealTimeStatsUpdatedParser implements EventParser {
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsRealTimeStatsUpdatedEvent';
 	}
@@ -47,7 +50,9 @@ export class BgsRealTimeStatsUpdatedParser implements EventParser {
 				tripleTimings: triples,
 			} as IBgsPostMatchStats,
 			player: mainPlayer,
-			name: `Live stats - Turn ${currentState.currentGame.currentTurn}`,
+			name: this.i18n.translateString('battlegrounds.post-match-stats.live-stats-title', {
+				turn: currentState.currentGame.currentTurn,
+			}),
 		} as BgsPostMatchStatsPanel);
 	}
 }

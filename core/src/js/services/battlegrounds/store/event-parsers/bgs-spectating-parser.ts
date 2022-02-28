@@ -13,9 +13,6 @@ export class BgsSpectatingParser implements EventParser {
 		return currentState.update({
 			spectating: event.isSpectating,
 			inGame: currentState.inGame && event.isSpectating,
-			// currentGame: currentState.currentGame.update({
-			// 	gameEnded: !event.isSpectating,
-			// } as BgsGame),
 		} as BattlegroundsState);
 	}
 }

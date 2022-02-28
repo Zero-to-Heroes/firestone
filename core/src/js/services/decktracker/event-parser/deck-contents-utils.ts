@@ -1,4 +1,4 @@
-import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -109,7 +109,7 @@ const handleLibram = (
 	costReduction: number,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.name?.includes('Libram of'),
+		(card, refCard) => LIBRAM_IDS.includes(refCard?.id),
 		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
 		deckState,
 		allCards,

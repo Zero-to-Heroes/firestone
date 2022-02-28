@@ -1,4 +1,5 @@
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
@@ -8,7 +9,11 @@ import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegroun
 import { Processor } from '../processor';
 
 export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
-	constructor(private readonly events: Events, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly events: Events,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public async process(
 		event: BgsPersonalStatsSelectHeroDetailsEvent,
@@ -19,11 +24,8 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		const category: BattlegroundsPersonalStatsHeroDetailsCategory = currentState.battlegrounds.findCategory(
 			'bgs-category-personal-hero-details-' + event.heroCardId,
 		) as BattlegroundsPersonalStatsHeroDetailsCategory;
-		const currentHeroId = category?.heroId;
-		console.debug('[gr] new hero?', currentHeroId, event, category, currentState, navigationState);
 		let newState = currentState;
 		if (event.heroCardId !== currentState.battlegrounds.lastHeroPostMatchStatsHeroId) {
-			console.debug('[gr] new hero');
 			this.events.broadcast(Events.POPULATE_HERO_DETAILS_FOR_BG, event.heroCardId);
 			newState = currentState.update({
 				battlegrounds: currentState.battlegrounds.update({
@@ -43,7 +45,9 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 			navigationState.update({
 				isVisible: true,
 				navigationBattlegrounds: navigationBattlegrounds,
-				text: this.allCards.getCard(event.heroCardId)?.name ?? 'Heroes',
+				text:
+					this.allCards.getCard(event.heroCardId)?.name ??
+					this.i18n.translateString('app.battlegrounds.menu.heroes'),
 				image: null,
 			} as NavigationState),
 		];

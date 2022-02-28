@@ -436,6 +436,8 @@ export const getAchievementsForHero = (
 	if (!heroName) {
 		return [];
 	}
+	// Doesn't work with localized data, but we should never be in that situation
+	console.warn('missing section id for', heroCardId, heroName);
 	const searchName = `as ${heroName}`;
 	const result = (heroAchievements ?? []).filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
 	if (!result?.length) {

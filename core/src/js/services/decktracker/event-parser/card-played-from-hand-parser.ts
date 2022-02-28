@@ -1,4 +1,4 @@
-import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -165,11 +165,11 @@ export class CardPlayedFromHandParser implements EventParser {
 	}
 
 	private isWatchpost(refCard: ReferenceCard) {
-		return refCard?.name?.includes('Watch Post');
+		return WATCH_POST_IDS.includes(refCard.id);
 	}
 
 	private isLibram(refCard: ReferenceCard) {
-		return refCard?.name?.startsWith('Libram');
+		return LIBRAM_IDS.includes(refCard.id);
 	}
 
 	event(): string {

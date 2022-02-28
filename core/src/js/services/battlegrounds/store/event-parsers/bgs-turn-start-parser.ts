@@ -1,4 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -10,7 +11,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTurnStartParser implements EventParser {
-	constructor(private readonly logsUploader: LogsUploaderService) {}
+	constructor(private readonly logsUploader: LogsUploaderService, private readonly i18n: LocalizationFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsTurnStartEvent';
@@ -63,7 +64,9 @@ export class BgsTurnStartParser implements EventParser {
 		return (currentState.panels.find(
 			(panel) => panel.id === 'bgs-next-opponent-overview',
 		) as BgsNextOpponentOverviewPanel).update({
-			name: `Turn ${newCurrentTurn} - Next opponent`,
+			name: this.i18n.translateString('battlegrounds.in-game.opponents.next-opponent-title', {
+				turn: newCurrentTurn,
+			}),
 		} as BgsNextOpponentOverviewPanel);
 	}
 }

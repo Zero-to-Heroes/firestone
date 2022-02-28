@@ -12,7 +12,6 @@ export class BgsResetHighlightsParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsResetHighlightsEvent): Promise<BattlegroundsState> {
 		const highlightedTribes: readonly Race[] = [];
 		const highlightedMinions: readonly string[] = [];
-		// TODO: reset minions
 		return currentState.update({
 			highlightedTribes: highlightedTribes,
 			highlightedMinions: highlightedMinions,

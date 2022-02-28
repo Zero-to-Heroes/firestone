@@ -3,6 +3,7 @@ import { GameType } from '@firestone-hs/reference-data';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -132,6 +133,7 @@ export class BattlegroundsStoreService {
 		private readonly gameEventsService: GameEvents,
 		private readonly logsUploader: LogsUploaderService,
 		private readonly owUtils: OwUtilsService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -503,21 +505,21 @@ export class BattlegroundsStoreService {
 	private buildEventParsers(): readonly EventParser[] {
 		const eventParsers = [
 			new NoBgsMatchParser(),
-			new BgsMatchStartParser(this.prefs, this.gameStateService),
+			new BgsMatchStartParser(this.prefs, this.gameStateService, this.i18n),
 			new BgsGameSettingsParser(),
 			// new BattlegroundsResetBattleStateParser(),
-			new BgsInitParser(this.prefs),
+			new BgsInitParser(this.prefs, this.i18n),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
-			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs),
+			new BgsHeroSelectionParser(this.memory, this.owUtils, this.prefs, this.i18n),
 			new BgsHeroSelectedParser(this.allCards),
-			new BgsNextOpponentParser(),
+			new BgsNextOpponentParser(this.i18n),
 			new BgsTavernUpgradeParser(this.gameEventsService),
 			new BgsBuddyGainedParser(this.gameEventsService),
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService),
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
-			new BgsTurnStartParser(this.logsUploader),
-			new BgsGameEndParser(this.prefs, this.memory),
+			new BgsTurnStartParser(this.logsUploader, this.i18n),
+			new BgsGameEndParser(this.prefs, this.memory, this.i18n),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.ow, this.gameEventsService),
 			// new BgsResetBattleStateParser(),
@@ -529,7 +531,7 @@ export class BattlegroundsStoreService {
 			new BgsCombatStartParser(),
 			new BgsRecruitStartParser(this.owUtils, this.prefs),
 			new BgsGlobalInfoUpdatedParser(),
-			new BgsStartComputingPostMatchStatsParser(this.prefs),
+			new BgsStartComputingPostMatchStatsParser(),
 			new BgsInitMmrParser(this.memory, this.gameStateService),
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
@@ -541,7 +543,7 @@ export class BattlegroundsStoreService {
 			new BgsBattleSimulationUpdateParser(),
 			new BgsBattleSimulationResetParser(),
 
-			new BgsRealTimeStatsUpdatedParser(),
+			new BgsRealTimeStatsUpdatedParser(this.i18n),
 		];
 
 		return eventParsers;

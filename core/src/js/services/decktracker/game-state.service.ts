@@ -403,7 +403,7 @@ export class GameStateService {
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
-		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
+		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState, this.i18n);
 		if (!playerFromTracker) {
 			return playerDeckWithDynamicZones;
 		}
@@ -515,7 +515,7 @@ export class GameStateService {
 			new WeaponDestroyedParser(),
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
-			new OpponentPlayerParser(this.aiDecks, this.deckHandler, this.helper, this.allCards, this.prefs),
+			new OpponentPlayerParser(this.aiDecks, this.deckHandler, this.helper, this.allCards, this.prefs, this.i18n),
 			new PlayersInfoParser(),
 			new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs),
 			new CardOnBoardAtGameStart(this.helper, this.allCards),

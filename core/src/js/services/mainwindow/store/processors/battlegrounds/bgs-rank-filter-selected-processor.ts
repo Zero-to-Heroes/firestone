@@ -14,7 +14,6 @@ export class BgsRankFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsRankFilter(event.rankFilter);
-
 		return [null, null];
 	}
 }

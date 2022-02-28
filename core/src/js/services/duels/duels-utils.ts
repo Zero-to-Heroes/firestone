@@ -8,6 +8,7 @@ import {
 	duelsPassivePool2UltraRare,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 const PASSIVES = [];
 
@@ -43,11 +44,11 @@ export const duelsTreasureRank = (cardId: string): number => {
 	return 1;
 };
 
-export const getDuelsModeName = (mode: 'duels' | 'paid-duels'): string => {
+export const getDuelsModeName = (mode: 'duels' | 'paid-duels', i18n: LocalizationFacadeService): string => {
 	switch (mode) {
 		case 'duels':
-			return 'Casual';
+			return i18n.translateString('global.game-mode.casual-duels');
 		case 'paid-duels':
-			return 'Heroic';
+			return i18n.translateString('global.game-mode.heroic-duels');
 	}
 };

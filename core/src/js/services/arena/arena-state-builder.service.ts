@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards/dist/retrieve-arena-rewards';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../models/arena/arena-state';
 import { ArenaCategory } from '../../models/mainwindow/arena/arena-category';
 import { PatchInfo } from '../../models/patches';
@@ -19,6 +20,7 @@ export class ArenaStateBuilderService {
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -41,7 +43,7 @@ export class ArenaStateBuilderService {
 			categories: [
 				ArenaCategory.create({
 					id: 'arena-runs',
-					name: 'My Runs',
+					name: this.i18n.translateString('app.arena.menu.my-runs'),
 					enabled: true,
 					icon: undefined,
 					categories: null,

@@ -31,7 +31,7 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 				armor: 0,
 			},
 		];
-		console.debug('bgs damage armor opponentRevealed', heroCardId, newData, hpOverTurn[heroCardId]);
+		// console.debug('bgs damage armor opponentRevealed', heroCardId, newData, hpOverTurn[heroCardId]);
 		hpOverTurn[heroCardId] = newData;
 		return currentState.update({
 			hpOverTurn: hpOverTurn,

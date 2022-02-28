@@ -17,11 +17,11 @@ export class PackMonitor {
 	private totalDuplicateCards = 0;
 
 	constructor(
-		private events: Events,
-		private cards: CardsFacadeService,
-		private gameEvents: GameEventsEmitterService,
-		private ow: OverwolfService,
-		private notifications: CardNotificationsService,
+		private readonly events: Events,
+		private readonly cards: CardsFacadeService,
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly ow: OverwolfService,
+		private readonly notifications: CardNotificationsService,
 	) {
 		this.gameEvents.onGameStart.subscribe(() => {
 			this.unrevealedCards = [];

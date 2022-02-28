@@ -1,4 +1,5 @@
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -17,6 +18,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -97,7 +99,7 @@ export class OpponentPlayerParser implements EventParser {
 
 	private getNameFromCard(cardId: string): string {
 		const card = cardId ? this.allCards.getCard(cardId) : null;
-		return card ? card.name : 'Unnamed player';
+		return card ? card.name : this.i18n.translateString('decktracker.unnamed-player');
 	}
 
 	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {

@@ -28,7 +28,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div class="general-third-party" *ngIf="{ oocLoggedIn: oocLoggedIn$ | async } as value" scrollable>
 			<div class="intro" [owTranslate]="'settings.general.third-party.intro'"></div>
 			<section class="vs">
-				<!-- TODO translate -->
 				<h2>
 					<img [src]="vs.icon" class="icon" />
 					{{ vs.title }}

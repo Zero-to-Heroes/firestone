@@ -1,7 +1,6 @@
 import { BattlegroundsCategory } from '../battlegrounds-category';
 
 export class BattlegroundsPerfectGamesCategory extends BattlegroundsCategory {
-	// TODO translate
 	constructor() {
 		super();
 		// @ts-ignore

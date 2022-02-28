@@ -16,7 +16,6 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		// still not working
 		const heroCardId = normalizeHeroCardId(gameEvent.cardId);
 		const armor = gameEvent.additionalData.armor;
 		const health = gameEvent.additionalData.health;
