@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -14,25 +15,32 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	template: `
 		<div class="container">
 			<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
-				{{ (advancedModeToggledOn$ | async) ? 'Hide advanced settings' : 'Show advanced settings' }}
+				{{ buttonText$ | async }}
 			</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsAdvancedToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	advancedModeToggledOn$: Observable<boolean>;
+	buttonText$: Observable<string>;
 
 	constructor(
-		private readonly prefs: PreferencesService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.advancedModeToggledOn$ = this.listenForBasicPref$((prefs) => prefs.advancedModeToggledOn);
+		this.buttonText$ = this.listenForBasicPref$((prefs) => prefs.advancedModeToggledOn).pipe(
+			this.mapData((pref) =>
+				pref
+					? this.i18n.translateString('settings.global.hide-advanced-settings-button')
+					: this.i18n.translateString('settings.global.show-advanced-settings-button'),
+			),
+		);
 	}
 
 	toggleAdvancedSettings() {

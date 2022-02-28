@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<window-wrapper [activeTheme]="'general'">
 			<section class="title-bar">
-				<div class="title">Settings</div>
+				<div class="title" [owTranslate]="'settings.title'"></div>
 				<div class="controls">
 					<control-close [windowId]="thisWindowId" [shouldHide]="true"></control-close>
 				</div>

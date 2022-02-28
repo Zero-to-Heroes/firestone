@@ -10,31 +10,31 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="menu-selection">
 			<li [ngClass]="{ 'selected': selectedApp === 'general' }" (mousedown)="changeSelection('general')">
-				<span>General</span>
+				<span [owTranslate]="'settings.menu.general'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'decktracker' }" (mousedown)="changeSelection('decktracker')">
-				<span>Deck Tracker</span>
+				<span [owTranslate]="'settings.menu.decktracker'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedApp === 'battlegrounds' }"
 				(mousedown)="changeSelection('battlegrounds')"
 			>
-				<span>Battlegrounds</span>
+				<span [owTranslate]="'settings.menu.battlegrounds'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'mercenaries' }" (mousedown)="changeSelection('mercenaries')">
-				<span>Mercenaries</span>
+				<span [owTranslate]="'settings.menu.mercenaries'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
-				<span>Replays</span>
+				<span [owTranslate]="'settings.menu.replays'"></span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
-				<span>Collection</span>
+				<span [owTranslate]="'settings.menu.collection'"></span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedApp === 'achievements' }"
 				(mousedown)="changeSelection('achievements')"
 			>
-				<span>Achievements</span>
+				<span [owTranslate]="'settings.menu.achievements'"></span>
 			</li>
 		</ul>
 	`,
