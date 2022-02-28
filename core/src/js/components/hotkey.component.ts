@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -25,7 +26,11 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	private hotkey = 'Alt+C';
 	private hotkeyChangedListener;
 
-	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		// this.cdr.detach();
@@ -54,8 +59,9 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 
 	private splitHotkey(): string {
 		const split = this.hotkey.split('+');
+		const hotkeyText = this.i18n.translateString('app.global.controls.hotkey-text');
 		return (
-			'<span class="text">Show/Hide:</span>' +
+			`<span class="text">${hotkeyText}</span>` +
 			split.map((splitItem) => `<span class="key">${splitItem}</span>`).join('<span class="plus">+</span>')
 		);
 	}

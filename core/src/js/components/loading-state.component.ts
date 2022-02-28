@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -7,8 +6,8 @@ import {
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'loading-state',
@@ -19,16 +18,15 @@ import {
 				<div class="loading-icon" [inlineSVG]="loadingStateSvgName"></div>
 				<span class="title" *ngIf="mainTitle"> {{ mainTitle }} </span>
 				<span class="subtitle" *ngIf="subtitle">{{ subtitle }}</span>
-				<span class="subtitle hint" *ngIf="hint && displayedHint">{{ displayedHint }}</span>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class LoadingStateComponent implements AfterViewInit, OnDestroy {
-	@Input() mainTitle = "We're loading all the goods";
-	@Input() subtitle = "Please wait while we're collecting the information";
+export class LoadingStateComponent implements OnDestroy {
+	@Input() mainTitle = this.i18n.translateString('app.loading.title');
+	@Input() subtitle = this.i18n.translateString('app.loading.subtitle');
 	@Input() hint: boolean;
 	@Input() set svgName(value: string) {
 		if (value) {
@@ -38,37 +36,16 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 	}
 
 	loadingStateSvgName = 'assets/svg/loading_state.svg';
-	displayedHint: string;
 	className: string;
 
 	private interval;
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
-
-	ngAfterViewInit() {
-		this.interval = setInterval(() => {
-			this.handleHint();
-		}, 5000);
-		this.handleHint();
-	}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
-	}
-
-	private handleHint() {
-		if (this.hint) {
-			this.displayedHint = this.pickDisplayHint();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}
-	}
-
-	private pickDisplayHint(): string {
-		return 'You can select between local and cloud computing. Local computing will generate faster results while cloud computing will use less resources.';
 	}
 }

@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -58,9 +59,8 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 						[ngClass]="{ 'disabled': !value.validSelection }"
 						[helpTooltip]="buttonTooltip(value.validSelection)"
 						(click)="confirmSelection(value.validSelection)"
-					>
-						Apply
-					</div>
+						[owTranslate]="'app.global.controls.multiselect-validation-button'"
+					></div>
 				</div>
 			</div>
 		</div>
@@ -87,6 +87,8 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
+	@Input() validationErrorTooltip = this.i18n.translateString('multiselect-validation-error-tooltip');
+
 	valueText$: Observable<string>;
 	workingOptions$: Observable<readonly InternalOption[]>;
 	validSelection$: Observable<boolean>;
@@ -103,9 +105,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	private sub$$: Subscription;
 
 	constructor(
-		private readonly el: ElementRef,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 		// Not sure why, but if we call these in AfterContentInif, they are not properly refreshed
@@ -211,7 +214,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	buttonTooltip(validSelection: boolean): string {
-		return validSelection ? null : 'Please select either all tribes or only 5';
+		return validSelection ? null : this.validationErrorTooltip;
 	}
 
 	isValidSelection(options: readonly IOption[], workingOptions: readonly InternalOption[]): boolean {

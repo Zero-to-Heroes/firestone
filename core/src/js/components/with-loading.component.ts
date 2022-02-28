@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'with-loading',
@@ -34,8 +35,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class WithLoadingComponent {
 	@Input() isLoading: boolean;
-	@Input() mainTitle = "We're loading all the goods";
-	@Input() subtitle = "Please wait while we're collecting the information";
+	@Input() mainTitle = this.i18n.translateString('app.loading.title');
+	@Input() subtitle = this.i18n.translateString('app.loading.subtitle');
 	@Input() hint: boolean;
 	@Input() svgName: string;
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

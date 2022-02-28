@@ -30,10 +30,13 @@ const REFRESH_CAP = 5;
 	styleUrls: [`../../css/global/reset-styles.scss`, `../../css/component/ads.component.scss`],
 	template: `
 		<div class="ads-container">
-			<div class="subscription-link" *ngIf="shouldDisplayAds" (click)="showSubscription()">
-				Support the dev and remove the ads
-			</div>
-			<div class="thank-you-link" *ngIf="!shouldDisplayAds">Thank you for supporting us! You rock :)</div>
+			<div
+				class="subscription-link"
+				*ngIf="shouldDisplayAds"
+				(click)="showSubscription()"
+				[owTranslate]="'app.global.ads.support-the-dev'"
+			></div>
+			<div class="thank-you-link" *ngIf="!shouldDisplayAds" [owTranslate]="'app.global.ads.supporter'"></div>
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">

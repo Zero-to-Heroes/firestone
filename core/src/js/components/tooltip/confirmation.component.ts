@@ -7,6 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'confirmation',
@@ -72,13 +73,13 @@ export class ConfirmationComponent {
 		}
 	}
 
-	_confirmationTitle = 'Are you sure?';
-	_confirmationText = 'This will close the tracker for the duration of the current match';
-	_validButtonText = 'Exit';
-	_cancelButtonText = 'Cancel';
+	_confirmationTitle = this.i18n.translateString('app.global.controls.default-confirmation-title');
+	_confirmationText = this.i18n.translateString('app.global.controls.default-confirmation-text');
+	_validButtonText = this.i18n.translateString('app.global.controls.default-validation-button');
+	_cancelButtonText = this.i18n.translateString('app.global.controls.default-cancel-button');
 	_showOk = true;
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	ok() {
 		this.onConfirm.next(true);
