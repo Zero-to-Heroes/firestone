@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -10,7 +11,11 @@ import { TriggerShowMatchStatsEvent } from '../../events/replays/trigger-show-ma
 import { Processor } from '../processor';
 
 export class TriggerShowMatchStatsProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly bgsRunStats: BgsRunStatsService,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public async process(
 		event: TriggerShowMatchStatsEvent,
@@ -37,6 +42,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
+				name: this.i18n.translateString('battlegrounds.menu.live-stats'),
 				stats: null,
 				globalStats: currentState.battlegrounds.globalStats,
 				player: null,

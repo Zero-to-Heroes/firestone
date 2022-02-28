@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
@@ -63,6 +64,7 @@ export class StoreBootstrapService {
 		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryCacheService,
 		private readonly memory: MemoryInspectionService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		console.log('[store-boostrap] constructor');
 		setTimeout(() => {
@@ -182,6 +184,7 @@ export class StoreBootstrapService {
 			categories: achievementTopCategories,
 			achievementHistory: achievementHistory,
 			isLoading: false,
+			filters: AchievementsState.buildFilterOptions(this.i18n),
 		} as AchievementsState);
 
 		this.dungeonLoot.setLastDuelsMatch(

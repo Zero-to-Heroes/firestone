@@ -4,8 +4,6 @@ import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../serv
 import { MemoryMercenariesInfo } from '../memory/memory-mercenaries-info';
 
 export class MercenariesBattleState {
-	// readonly inGame: boolean;
-	// readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
 	readonly gameMode: GameType;
 	readonly currentTurn: number = 0;

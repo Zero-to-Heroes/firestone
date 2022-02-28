@@ -9,7 +9,7 @@ import { BgsStatsFilterId } from './bgs-stats-filter-id.type';
 
 export class BgsPostMatchStatsPanel implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-post-match-stats';
-	readonly name: string = 'Live stats';
+	readonly name: string;
 	readonly icon: string;
 	readonly stats: IBgsPostMatchStats;
 	readonly newBestUserStats: readonly BgsBestStat[];

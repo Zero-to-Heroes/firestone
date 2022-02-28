@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -30,6 +31,7 @@ export class BgsInitService {
 		private readonly ow: OverwolfService,
 		private readonly cards: CardsFacadeService,
 		private readonly api: ApiRunner,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
@@ -95,6 +97,7 @@ export class BgsInitService {
 			} as BattlegroundsPersonalStatsHeroDetailsCategory),
 		);
 		return BattlegroundsPersonalHeroesCategory.create({
+			name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
 			enabled: true,
 			categories: heroDetailCategories,
 		} as BattlegroundsPersonalHeroesCategory);
@@ -102,24 +105,28 @@ export class BgsInitService {
 
 	private buildPersonalRatingCategory(): BattlegroundsCategory {
 		return BattlegroundsPersonalRatingCategory.create({
+			name: this.i18n.translateString('app.battlegrounds.menu.rating'),
 			enabled: true,
 		} as BattlegroundsPersonalRatingCategory);
 	}
 
 	private buildPerfectGamesCategory(): BattlegroundsCategory {
 		return BattlegroundsPerfectGamesCategory.create({
+			name: this.i18n.translateString('app.battlegrounds.menu.perfect-games'),
 			enabled: true,
 		} as BattlegroundsPerfectGamesCategory);
 	}
 
 	private buildPersonalStatsCategory(): BattlegroundsCategory {
 		return BattlegroundsPersonalStatsCategory.create({
+			name: this.i18n.translateString('app.battlegrounds.menu.records'),
 			enabled: true,
 		} as BattlegroundsPersonalStatsCategory);
 	}
 
 	private buildSimulatorCategory(): BattlegroundsCategory {
 		return BattlegroundsSimulatorCategory.create({
+			name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
 			enabled: true,
 		} as BattlegroundsSimulatorCategory);
 	}

@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -15,6 +16,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		private readonly memoryService: MemoryInspectionService,
 		private readonly owUtils: OwUtilsService,
 		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -52,6 +54,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		heroCardIds: readonly string[],
 	): Promise<BgsHeroSelectionOverviewPanel> {
 		return BgsHeroSelectionOverviewPanel.create({
+			name: this.i18n.translateString('battlegrounds.menu.hero-selection'),
 			heroOptionCardIds: heroCardIds,
 		} as BgsHeroSelectionOverviewPanel);
 	}

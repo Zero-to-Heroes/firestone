@@ -16,11 +16,8 @@ export class BgsHeroStat {
 	readonly playerAverageMmrLoss: number;
 	readonly playerGamesPlayed: number;
 	readonly playerTop4: number;
-	// readonly playerTop4Percentage: number;
 	readonly playerTop1: number;
 	readonly lastPlayedTimestamp: number;
-	// readonly playerTop1Percentage: number;
-	// readonly tribesStat: readonly { tribe: string; percent: number }[];
 	readonly warbandStats: readonly { turn: number; totalStats: number }[];
 	readonly combatWinrate: readonly { turn: number; winrate: number }[];
 	readonly placementDistribution: readonly {

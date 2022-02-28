@@ -4,7 +4,7 @@ import { BgsOpponentOverview } from './bgs-opponent-overview';
 
 export class BgsNextOpponentOverviewPanel implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-next-opponent-overview';
-	readonly name: string = 'Next opponent';
+	readonly name: string;
 	readonly icon: string;
 	readonly opponentOverview: BgsOpponentOverview;
 

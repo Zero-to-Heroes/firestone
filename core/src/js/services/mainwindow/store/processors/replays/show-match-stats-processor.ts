@@ -1,4 +1,5 @@
 import { Entity } from '@firestone-hs/replay-parser';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BgsPlayer } from '../../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
@@ -11,7 +12,7 @@ import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event
 import { Processor } from '../processor';
 
 export class ShowMatchStatsProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationFacadeService) {}
 
 	public async process(
 		event: ShowMatchStatsEvent,
@@ -35,6 +36,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
+				name: this.i18n.translateString('battlegrounds.menu.live-stats'),
 				stats: matchStats,
 				globalStats: currentState.battlegrounds.globalStats,
 				player: matchStats

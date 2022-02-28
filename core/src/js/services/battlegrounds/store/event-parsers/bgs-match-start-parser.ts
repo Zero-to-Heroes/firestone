@@ -1,4 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Preferences } from '../../../../models/preferences';
@@ -10,7 +11,11 @@ import { BgsInitParser } from './bgs-init-parser';
 import { EventParser } from './_event-parser';
 
 export class BgsMatchStartParser implements EventParser {
-	constructor(private readonly prefs: PreferencesService, private readonly gameState: GameStateService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly gameState: GameStateService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && gameEvent.type === 'BgsMatchStartEvent';
@@ -31,7 +36,7 @@ export class BgsMatchStartParser implements EventParser {
 				return currentState.update({
 					inGame: false, // We don't know yet if this is a BG game
 					currentGame: newGame,
-					panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
+					panels: BgsInitParser.buildEmptyPanels(currentState, prefs, this.i18n),
 					heroSelectionDone: false,
 					currentPanelId: 'bgs-hero-selection-overview',
 					highlightedMinions: [] as readonly string[],
@@ -44,7 +49,7 @@ export class BgsMatchStartParser implements EventParser {
 			return currentState.update({
 				inGame: true,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
-				panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
+				panels: BgsInitParser.buildEmptyPanels(currentState, prefs, this.i18n),
 				heroSelectionDone: false,
 				currentPanelId: 'bgs-hero-selection-overview',
 				spectating: event.spectating,

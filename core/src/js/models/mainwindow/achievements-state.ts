@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Achievement } from '../achievement';
 import { AchievementHistory } from '../achievement/achievement-history';
 import { FilterOption } from '../filter-option';
@@ -5,11 +6,11 @@ import { VisualAchievement } from '../visual-achievement';
 import { VisualAchievementCategory } from '../visual-achievement-category';
 
 export class AchievementsState {
+	readonly filters: readonly FilterOption[];
 	readonly categories: readonly VisualAchievementCategory[] = [];
 	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly isLoading: boolean = true;
-	static readonly FILTERS = AchievementsState.buildFilterOptions();
 
 	public update(base: AchievementsState): AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);
@@ -65,35 +66,35 @@ export class AchievementsState {
 		return [...this.categories.map((cat) => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])];
 	}
 
-	private static buildFilterOptions(): readonly FilterOption[] {
+	public static buildFilterOptions(i18n: LocalizationFacadeService): readonly FilterOption[] {
 		return [
 			{
 				value: 'ALL_ACHIEVEMENTS',
-				label: 'All achievements',
+				label: i18n.translateString('all.achievements.filters.all'),
 				filterFunction: (a) => true,
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Holy Moly, you are epic!',
-				emptyStateText: '100% of achievements in this category complete.',
+				emptyStateTitle: i18n.translateString('all.achievements.filters.all-empty-state-title'),
+				emptyStateText: i18n.translateString('all.achievements.filters.all-empty-state-text'),
 			},
 			{
 				value: 'ONLY_MISSING',
-				label: 'Incomplete achievements',
+				label: i18n.translateString('all.achievements.filters.missing'),
 				filterFunction: (a: VisualAchievement) => {
 					return a.completionSteps.some((step) => step.numberOfCompletions === 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements are awaiting you!',
-				emptyStateText: 'Find them listed here once completed.',
+				emptyStateTitle: i18n.translateString('all.achievements.filters.missing-empty-state-title'),
+				emptyStateText: i18n.translateString('all.achievements.filters.missing-empty-state-text'),
 			},
 			{
 				value: 'ONLY_COMPLETED',
-				label: 'Completed achievements',
+				label: i18n.translateString('all.achievements.filters.completed'),
 				filterFunction: (a: VisualAchievement) => {
 					return a.completionSteps.every((step) => step.numberOfCompletions > 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Tons of achievements are awaiting you!',
-				emptyStateText: 'Find them listed here once completed.',
+				emptyStateTitle: i18n.translateString('all.achievements.filters.missing-empty-state-title'),
+				emptyStateText: i18n.translateString('all.achievements.filters.missing-empty-state-text'),
 			},
 		];
 	}

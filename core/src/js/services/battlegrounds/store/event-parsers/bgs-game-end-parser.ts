@@ -1,5 +1,6 @@
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -16,7 +17,11 @@ import { EventParser } from './_event-parser';
 
 // TODO: coins wasted doesn't take into account hero powers that let you have more coins (Bel'ial)
 export class BgsGameEndParser implements EventParser {
-	constructor(private readonly prefs: PreferencesService, private readonly memory: MemoryInspectionService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly memory: MemoryInspectionService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsGameEndEvent';
@@ -63,6 +68,7 @@ export class BgsGameEndParser implements EventParser {
 		// TODO: add somewhere the info about whether the user is a premium subscriber
 		// Let's use the face-offs directly from the game state, instead of duplicating the info
 		return BgsBattlesPanel.create({
+			name: this.i18n.translateString('battlegrounds.menu.simulator'),
 			faceOffs: null, // currentState.currentGame.faceOffs,
 		} as BgsBattlesPanel);
 	}

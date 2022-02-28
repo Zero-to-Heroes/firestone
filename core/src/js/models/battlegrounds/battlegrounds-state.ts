@@ -11,9 +11,7 @@ export class BattlegroundsState {
 	readonly heroSelectionDone: boolean;
 	readonly panels: readonly BgsPanel[] = [];
 	readonly currentPanelId: BgsPanelId;
-	// readonly globalStats: BgsStats;
 	readonly currentGame: BgsGame;
-	// readonly gameEnded: boolean; // Flag useful mostly for twitch to know when to hide the overlay
 	readonly forceOpen: boolean;
 	// Maybe move this elsewhere, so as not to send it everytime we emit the BattlegroundsState?
 	// It is a pretty big object

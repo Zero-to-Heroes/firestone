@@ -7,7 +7,6 @@ export class VisualAchievementCategory {
 	readonly icon: string;
 	readonly categories: readonly VisualAchievementCategory[] = [];
 	readonly achievements: readonly VisualAchievement[] = [];
-	// readonly filterOptions: readonly FilterOption[] = [];
 
 	public static create(value: VisualAchievementCategory): VisualAchievementCategory {
 		return Object.assign(new VisualAchievementCategory(), value);

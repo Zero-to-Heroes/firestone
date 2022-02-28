@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { combineLatest, Observable } from 'rxjs';
-import { AchievementsState, findAchievements } from '../../models/mainwindow/achievements-state';
+import { findAchievements } from '../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -91,9 +91,10 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 		this.achieved$ = flatCompletions$.pipe(
 			this.mapData((completions) => completions?.filter((a) => a.numberOfCompletions > 0).length ?? 0),
 		);
-		const filterOption$ = this.listenForBasicPref$((prefs) => prefs.achievementsCompletedActiveFilter).pipe(
-			this.mapData((pref) => AchievementsState.FILTERS.find((option) => option.value === pref)),
-		);
+		const filterOption$ = combineLatest(
+			this.store.listenPrefs$((prefs) => prefs.achievementsCompletedActiveFilter),
+			this.store.listen$(([main, nav]) => main.achievements.filters),
+		).pipe(this.mapData(([[pref], [filters]]) => filters.find((option) => option.value === pref)));
 		this.emptyStateTitle$ = filterOption$.pipe(this.mapData((option) => option.emptyStateTitle));
 		this.emptyStateText$ = filterOption$.pipe(this.mapData((option) => option.emptyStateText));
 		this.emptyStateSvgTemplate$ = filterOption$.pipe(

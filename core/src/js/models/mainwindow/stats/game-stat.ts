@@ -1,5 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
 import { capitalizeEachWord } from '../../../services/utils';
 import { CoinPlayType } from '../replays/coin-play.type';
@@ -61,7 +62,9 @@ export class GameStat {
 		return this.gameMode === 'battlegrounds';
 	}
 
-	public buildPlayerRankImage(): {
+	public buildPlayerRankImage(
+		i18n: LocalizationFacadeService,
+	): {
 		frameImage?: string;
 		medalImage?: string;
 		tooltip?: string;
@@ -78,54 +81,65 @@ export class GameStat {
 			}
 			if (this.playerRank.indexOf('legend') !== -1) {
 				rankIcon = `${prefix}/legend`;
-				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} Legend`;
+				rankIconTooltip = i18n.translateString('app.replays.replay-info.game-mode-tooltip.legend-format', {
+					format: capitalizeEachWord(this.gameFormat),
+				});
 			} else if (this.playerRank.indexOf('-') > -1) {
 				const leagueId = parseInt(this.playerRank.split('-')[0]);
 				const rank = this.playerRank.split('-')[1];
 				const paddedRank = rank.padStart(2, '0');
-				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
+				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId, i18n);
 				return {
 					frameImage: leagueFrame,
 					medalImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
-					tooltip: `${capitalizeEachWord(this.gameFormat)} ${leagueName} ${rank}`,
 					frameDecoration: decoration,
+					tooltip: i18n.translateString('app.replays.replay-info.game-mode-tooltip.ladder', {
+						format: capitalizeEachWord(this.gameFormat),
+						leagueName: leagueName,
+						rank: rank,
+					}),
 				};
 			} else if (this.playerRank.indexOf('-') === -1) {
 				rankIcon = `${prefix}/rank${this.playerRank}_small`;
-				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} ${this.playerRank}`;
+				rankIconTooltip = i18n.translateString('app.replays.replay-info.game-mode-tooltip.ladder-fallback', {
+					format: capitalizeEachWord(this.gameFormat),
+					rank: this.playerRank,
+				});
 			} else {
 				rankIcon = `${prefix}/rank25_small`;
-				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} Rank 25`;
+				rankIconTooltip = i18n.translateString('app.replays.replay-info.game-mode-tooltip.ladder-default', {
+					format: capitalizeEachWord(this.gameFormat),
+				});
 			}
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
-			rankIconTooltip = 'Battlegrounds';
+			rankIconTooltip = i18n.translateString('global.game-mode.battlegrounds');
 		} else if (this.gameMode?.startsWith('mercenaries')) {
 			rankIcon = 'mercenaries';
-			rankIconTooltip = 'Mercenaries';
+			rankIconTooltip = i18n.translateString('global.game-mode.mercenaries');
 		} else if (this.gameMode === 'practice') {
 			if (GALAKROND_EXPLORER.indexOf(this.scenarioId) !== -1) {
 				rankIcon = 'galakrond_explorers';
-				rankIconTooltip = "Galakrond's Awakening - Explorers";
+				rankIconTooltip = i18n.translateString('global.game-mode.galakrond-explorers');
 			} else if (GALAKROND_EVIL.indexOf(this.scenarioId) !== -1) {
 				rankIcon = 'galakrond_evil';
-				rankIconTooltip = "Galakrond's Awakening - E.V.I.L.";
+				rankIconTooltip = i18n.translateString('global.game-mode.galakrond-evil');
 			} else {
 				rankIcon = 'casual';
-				rankIconTooltip = 'Practice';
+				rankIconTooltip = i18n.translateString('global.game-mode.practice');
 			}
 		} else if (this.gameMode === 'casual') {
 			rankIcon = 'casual';
-			rankIconTooltip = 'Casual';
+			rankIconTooltip = i18n.translateString('global.game-mode.casual');
 		} else if (this.gameMode === 'friendly') {
 			rankIcon = 'friendly';
-			rankIconTooltip = 'Friendly';
+			rankIconTooltip = i18n.translateString('global.game-mode.friendly');
 		} else if (this.gameMode === 'duels') {
 			rankIcon = `casual_duels`;
-			rankIconTooltip = 'Duels';
+			rankIconTooltip = i18n.translateString('global.game-mode.casual-duels');
 		} else if (this.gameMode === 'paid-duels') {
 			rankIcon = `heroic_duels`;
-			rankIconTooltip = 'Heroic Duels';
+			rankIconTooltip = i18n.translateString('global.game-mode.heroic-duels');
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
@@ -136,14 +150,14 @@ export class GameStat {
 				const wins = this.playerRank.split('-')[0];
 				// const losses = this.playerRank.split('-')[1];
 				rankIcon = `arena/arena${wins}wins`;
-				rankIconTooltip = 'Arena';
+				rankIconTooltip = i18n.translateString('global.game-mode.arena');
 			} else {
 				rankIcon = 'arena/arena12wins';
-				rankIconTooltip = 'Arena';
+				rankIconTooltip = i18n.translateString('global.game-mode.arena');
 			}
 		} else if (this.gameMode === 'tavern-brawl') {
 			rankIcon = 'tavernbrawl';
-			rankIconTooltip = 'Tavern Brawl';
+			rankIconTooltip = i18n.translateString('global.game-mode.tavern-brawl');
 		} else {
 			rankIcon = 'arenadraft';
 		}
@@ -165,26 +179,26 @@ export class GameStat {
 		}
 	}
 
-	private getLeagueInfo(leagueId: number): [string, string] {
-		const leagueName = this.getLeagueName(leagueId);
+	private getLeagueInfo(leagueId: number, i18n: LocalizationFacadeService): [string, string] {
+		const leagueName = this.getLeagueName(leagueId, i18n);
 		return [
 			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Ranked_Medal_Frame_${leagueName}.png?v=3`,
 			leagueName,
 		];
 	}
 
-	private getLeagueName(leagueId: number): string {
+	private getLeagueName(leagueId: number, i18n: LocalizationFacadeService): string {
 		switch (leagueId) {
 			case 5:
-				return 'Bronze';
+				return i18n.translateString('global.ranks.constructed.bronze');
 			case 4:
-				return 'Silver';
+				return i18n.translateString('global.ranks.constructed.silver');
 			case 3:
-				return 'Gold';
+				return i18n.translateString('global.ranks.constructed.gold');
 			case 2:
-				return 'Platinum';
+				return i18n.translateString('global.ranks.constructed.platinum');
 			case 1:
-				return 'Diamond';
+				return i18n.translateString('global.ranks.constructed.diamond');
 		}
 	}
 }

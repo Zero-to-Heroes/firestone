@@ -4,7 +4,7 @@ import { BgsPanelId } from '../bgs-panel-id.type';
 
 export class BgsBattlesPanel implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-battles';
-	readonly name: string = 'Battle simulations';
+	readonly name: string;
 	readonly icon: string;
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
 	readonly selectedFaceOffId: string;

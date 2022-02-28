@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
@@ -14,6 +15,7 @@ export class ReplaysNotificationService {
 		private readonly prefs: PreferencesService,
 		private readonly events: Events,
 		private readonly rewards: RewardMonitorService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.events
 			.on(Events.GAME_STATS_UPDATED)
@@ -49,7 +51,7 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
-		const rankImage = stat.buildPlayerRankImage();
+		const rankImage = stat.buildPlayerRankImage(this.i18n);
 		console.debug('[replays-notification] preparing playerRankImage', rankImage);
 		const rankText = buildRankText(stat.playerRank, stat.gameMode, stat.additionalResult) ?? '';
 		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;

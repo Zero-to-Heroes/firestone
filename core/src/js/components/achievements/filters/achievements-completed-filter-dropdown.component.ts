@@ -7,9 +7,8 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { FilterOption } from '../../../models/filter-option';
-import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -40,8 +39,8 @@ export class AchievementsCompletedFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
 	filters: readonly FilterOption[];
-	options: readonly IOption[];
 
+	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -55,19 +54,26 @@ export class AchievementsCompletedFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options = AchievementsState.FILTERS.map((option) => ({
-			label: option.label,
-			value: option.value,
-		}));
-		this.filter$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.achievementsCompletedActiveFilter)
+		this.options$ = this.store
+			.listen$(([main, nav]) => main.achievements.filters)
 			.pipe(
-				this.mapData(([filter]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: true,
-				})),
+				this.mapData(([filters]) =>
+					filters.map((option) => ({
+						label: option.label,
+						value: option.value,
+					})),
+				),
 			);
+		this.filter$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => prefs.achievementsCompletedActiveFilter),
+			this.options$,
+		).pipe(
+			this.mapData(([[filter], options]) => ({
+				filter: filter,
+				placeholder: options.find((option) => option.value === filter)?.label,
+				visible: true,
+			})),
+		);
 	}
 
 	ngAfterViewInit() {
