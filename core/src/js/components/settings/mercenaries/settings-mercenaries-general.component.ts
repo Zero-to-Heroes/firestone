@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -15,54 +16,54 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<preference-toggle
 					[field]="'mercenariesEnablePlayerTeamWidget'"
-					[label]="'Player team widget'"
-					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment. "
+					[label]="'settings.mercenaries.general.player-team-widget-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.player-team-widget-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableOpponentTeamWidget'"
-					[label]="'Opponent team widget'"
-					helpTooltip="When active, shows a recap overlay of all known opponent's heroes, abililties and equipment. "
+					[label]="'settings.mercenaries.general.opponent-team-widget-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.opponent-team-widget-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableOutOfCombatPlayerTeamWidget'"
-					[label]="'Team widget: Map'"
-					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the bounty map. Useful for easily inspecting your team when choosing a path or picking a treasure. "
+					[label]="'settings.mercenaries.general.map-team-widget-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.map-team-widget-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableOutOfCombatPlayerTeamWidgetOnVillage'"
-					[label]="'Team widget: Village'"
-					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the collection and team select screens. "
+					[label]="'settings.mercenaries.general.village-team-widget-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.village-team-widget-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableActionsQueueWidgetPvE'"
-					[label]="'Actions queue widget (PvE)'"
-					helpTooltip="When active, shows an ordered list of all queued actions in PvE encounters. "
+					[label]="'settings.mercenaries.general.action-queue-pve-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.action-queue-pve-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesEnableActionsQueueWidgetPvP'"
-					[label]="'Actions queue widget (PvP)'"
-					helpTooltip="When active, shows an ordered list of all queued actions in PvP encounters. Because the opponent's actions are hidden until they resolve, this will only show you your own mercenaries' actions."
+					[label]="'settings.mercenaries.general.action-queue-pvp-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.action-queue-pvp-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesShowColorChartButton'"
-					[label]="'Show role chart'"
-					helpTooltip="When active, adds a small button below the team widget over which you can mouse over to display a recap of the roles bonus damage triangle"
+					[label]="'settings.mercenaries.general.role-chart-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.role-chart-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesShowTaskButton'"
-					[label]="'Show tasks button'"
-					helpTooltip="When active, adds a small button below the team widget over which you can mouse over to display a recap of all your current tasks. Always hidden in PvP."
+					[label]="'settings.mercenaries.general.tasks-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.tasks-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'mercenariesHighlightSynergies'"
-					[label]="'Highlight synergies'"
-					helpTooltip="When mousing over an ability or equipment (in the team widget) or a treasure (in the treasure selection screen), highlights all cards in the team widget that have synergies with it."
+					[label]="'settings.mercenaries.general.synergies-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.synergies-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
 
-			<div class="title">Widgets size</div>
+			<div class="title" [owTranslate]="'settings.global.widget-size-label'"></div>
 			<div class="settings-group">
-				<div class="subtitle">Your team</div>
+				<div class="subtitle" [owTranslate]="'settings.mercenaries.general.your-team'"></div>
 				<preference-slider
 					class="first-slider"
 					[field]="'mercenariesPlayerTeamOverlayScale'"
@@ -73,7 +74,7 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
-				<div class="subtitle">Opponent's team</div>
+				<div class="subtitle" [owTranslate]="'settings.mercenaries.general.opponent-team'"></div>
 				<preference-slider
 					class="first-slider"
 					[field]="'mercenariesOpponentTeamOverlayScale'"
@@ -84,7 +85,7 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
-				<div class="subtitle">Action queue</div>
+				<div class="subtitle" [owTranslate]="'settings.mercenaries.general.action-queue'"></div>
 				<preference-slider
 					class="first-slider"
 					[field]="'mercenariesActionsQueueOverlayScale'"
@@ -104,15 +105,17 @@ export class SettingsMercenariesGeneralComponent {
 	sizeKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 75,
-			label: 'Small',
+			label: this.i18n.translateString('settings.global.knob-sizes.small'),
 		},
 		{
 			absoluteValue: 100,
-			label: 'Medium',
+			label: this.i18n.translateString('settings.global.knob-sizes.medium'),
 		},
 		{
 			absoluteValue: 125,
-			label: 'Large',
+			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 }
