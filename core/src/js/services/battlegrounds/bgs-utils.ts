@@ -832,6 +832,11 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'scallywag',
 			};
+		} else if (hasPilotedWhirlOTron(boardInfo)) {
+			return {
+				isSupported: false,
+				reason: 'piloted-whirl-o-tron',
+			};
 		} else if (boardInfo?.secrets?.length > 0) {
 			//console.debug('not supported');
 			return {
@@ -860,6 +865,13 @@ const isSupportedScenarioForPlayer = (
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
 		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
+	);
+};
+
+const hasPilotedWhirlOTron = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTron) ||
+		hasMinionOnBoard(boardInfo, CardIds.PilotedWhirlOTronBattlegrounds)
 	);
 };
 

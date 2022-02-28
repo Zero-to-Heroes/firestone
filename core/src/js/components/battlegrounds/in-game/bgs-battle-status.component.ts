@@ -193,6 +193,16 @@ export class BgsBattleStatusComponent {
 					},
 				);
 				break;
+			case 'piloted-whirl-o-tron':
+				this._simulationMessage = this.i18n.translateString(
+					'battlegrounds.battle.composition-not-supported.general',
+					{
+						value: this.i18n.translateString(
+							'battlegrounds.battle.composition-not-supported.reason-piloted-whirl-o-tron',
+						),
+					},
+				);
+				break;
 			case 'secret':
 				this._simulationMessage = this.i18n.translateString(
 					'battlegrounds.battle.composition-not-supported.general',
