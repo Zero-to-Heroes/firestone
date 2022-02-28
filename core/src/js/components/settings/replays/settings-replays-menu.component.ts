@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="replays-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'general' }" (mousedown)="selectMenu('general')">
-				<span>General</span>
+				<span [owTranslate]="'settings.replays.menu.general'"></span>
 			</li>
 		</ul>
 	`,

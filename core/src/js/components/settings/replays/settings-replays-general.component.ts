@@ -11,13 +11,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<div class="replays-general">
-			<div class="settings-group">
-				<!-- <preference-toggle
-					[field]="'replaysShowNotification'"
-					[label]="'Show notifications'"
-				></preference-toggle> -->
-				No settings there yet
-			</div>
+			<div class="settings-group" [owTranslate]="'settings.replays.empty-state'"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
