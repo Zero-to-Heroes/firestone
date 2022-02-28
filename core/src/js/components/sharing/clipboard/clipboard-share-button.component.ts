@@ -7,6 +7,7 @@ import {
 	HostListener,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
@@ -25,7 +26,7 @@ import { SocialShareButtonComponent } from '../social-share-button.component';
 			[stayOpenOnClick]="false"
 			[inlineSVG]="networkSvg"
 		></div>
-		<div class="label" *ngIf="showLabel">Clipboard</div>
+		<div class="label" *ngIf="showLabel" [owTranslate]="'app.share.clipboard.title'"></div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,10 +40,11 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 		protected readonly overlayPositionBuilder: OverlayPositionBuilder,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly events: Events,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
 		this.network = 'clipboard';
-		this.tooltip = 'Copy current screen to clipboard';
+		this.tooltip = this.i18n.translateString('app.share.clipboard.tooltip');
 	}
 
 	@HostListener('mousedown')
@@ -52,12 +54,12 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {
 		this.events.broadcast(Events.SHOW_SCREEN_CAPTURE_EFFECT);
-		this.tooltip = 'Image copied to clipboard';
+		this.tooltip = this.i18n.translateString('app.share.clipboard.confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
-			this.tooltip = 'Copy current screen to clipboard';
+			this.tooltip = this.i18n.translateString('app.share.clipboard.tooltip');
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

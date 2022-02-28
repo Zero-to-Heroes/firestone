@@ -28,20 +28,20 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[ngModel]="title"
 				*ngIf="loggedIn"
 				(ngModelChange)="handleTitleChange($event)"
-				placeholder="Your post title"
+				[placeholder]="'app.share.reddit.post-title-placeholder' | owTranslate"
 			/>
 			<div class="subreddit">
 				<input
 					[formControl]="form"
 					[ngModel]="subreddit"
 					*ngIf="loggedIn"
-					helpTooltip="Subreddit to post to. Most used subreddits are /r/hearthstone and /r/BobsTavern (with or without the leader /r/)."
-					placeholder="subreddit"
+					[placeholder]="'app.share.reddit.subreddit-placeholder' | owTranslate"
+					[helpTooltip]="'app.share.reddit.subreddit-tooltip' | owTranslate"
 				/>
 				<filter-dropdown
 					class="flairs"
 					*ngIf="loggedIn && flairs"
-					helpTooltip="Flair to tag your post with. Some subreddits rejects posts if no flair is assigned."
+					[helpTooltip]="'app.share.reddit.flair-tooltip' | owTranslate"
 					[options]="flairs"
 					[filter]="flair"
 					[placeholder]="placeholder"
@@ -50,9 +50,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				></filter-dropdown>
 			</div>
 
-			<div class="login-message" *ngIf="!loggedIn">
-				Please use the button on the left to login before posting a message
-			</div>
+			<div class="login-message" *ngIf="!loggedIn" [owTranslate]="'app.share.reddit.logged-out-message'"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

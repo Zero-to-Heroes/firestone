@@ -10,7 +10,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="avatar-image" [helpTooltip]="username">
 				<img [src]="loginImage" />
 			</div>
-			<button (mousedown)="logInOut()">{{ loggedIn ? 'Log out' : 'Log in' }}</button>
+			<button (mousedown)="logInOut()">
+				{{ loggedIn ? ('app.share.logout-button' | owTranslate) : ('app.share.login-button' | owTranslate) }}
+			</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

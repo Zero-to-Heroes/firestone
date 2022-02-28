@@ -24,7 +24,7 @@ import { RedditShareModalComponent } from './reddit-share-modal.component';
 			helpTooltip="Share current screen on {{ networkTitle }}"
 			[inlineSVG]="networkSvg"
 		></div>
-		<div class="label" *ngIf="showLabel">Reddit</div>
+		<div class="label" *ngIf="showLabel" [owTranslate]="'app.share.reddit.title'"></div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

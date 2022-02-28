@@ -13,9 +13,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				(mousedown)="preventDrag($event)"
 				placeholder="Please add a small text"
 			></textarea>
-			<div class="login-message" *ngIf="!loggedIn">
-				Please use the button on the left to login before posting a message
-			</div>
+			<div class="login-message" *ngIf="!loggedIn" [owTranslate]="'app.share.logged-out-message'"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
