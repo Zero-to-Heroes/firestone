@@ -12,6 +12,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ConfirmationComponent } from '../components/tooltip/confirmation.component';
 import { Events } from '../services/events.service';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
@@ -45,11 +46,12 @@ export class AskConfirmationDirective implements OnDestroy {
 	private positionStrategy: PositionStrategy;
 
 	constructor(
-		private overlayPositionBuilder: OverlayPositionBuilder,
-		private elementRef: ElementRef,
-		private overlay: Overlay,
-		private cdr: ChangeDetectorRef,
-		private events: Events,
+		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly elementRef: ElementRef,
+		private readonly overlay: Overlay,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly events: Events,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	// eslint-disable-next-line @angular-eslint/use-lifecycle-interface
@@ -134,11 +136,14 @@ export class AskConfirmationDirective implements OnDestroy {
 		const tooltipRef: ComponentRef<ConfirmationComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		tooltipRef.instance.confirmationTitle = this.confirmationTitle ?? 'Are you sure?';
+		tooltipRef.instance.confirmationTitle =
+			this.confirmationTitle ?? this.i18n.translateString('app.global.controls.default-confirmation-title');
 		tooltipRef.instance.confirmationText =
-			this.confirmationText ?? 'This will close the tracker for the duration of the current match';
-		tooltipRef.instance.validButtonText = this.validButtonText ?? 'Exit';
-		tooltipRef.instance.cancelButtonText = this.cancelButtonText ?? 'Cancel';
+			this.confirmationText ?? this.i18n.translateString('app.global.controls.default-confirmation-text');
+		tooltipRef.instance.validButtonText =
+			this.validButtonText ?? this.i18n.translateString('app.global.controls.default-validation-button');
+		tooltipRef.instance.cancelButtonText =
+			this.cancelButtonText ?? this.i18n.translateString('app.global.controls.default-cancel-button');
 		tooltipRef.instance.showOk = this.showOk;
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
