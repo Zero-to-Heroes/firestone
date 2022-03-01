@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
 import {
@@ -45,11 +45,11 @@ export class TwitchAuthService {
 	private twitchDelay = 0;
 
 	constructor(
-		private prefs: PreferencesService,
-		private http: HttpClient,
-		private notificationService: OwNotificationsService,
-		private store: AppUiStoreFacadeService,
-		private allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly http: HttpClient,
+		private readonly notificationService: OwNotificationsService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.init();
 	}
@@ -313,14 +313,16 @@ export class TwitchAuthService {
 
 	public async sendExpiredTwitchTokenNotification() {
 		console.log('[twitch-auth] Sending expired token notification');
+		const title = this.i18n.translateString('twitch.could-not-log-error-title');
+		const text = this.i18n.translateString('twitch.could-not-log-error-text');
 		const content = `
 			<div class="achievement-message-container">
 				<div class="message">
 					<div class="title">
-						<span>We couldn't log you into your Twitch account</span>
+						<span>${title}</span>
 					</div>
 					<div class="recap-text">
-						<span>Please go to the settings and reconnect to your Twitch account</span>
+						<span>${text}</span>
 					</div>
 				</div>
 				<button class="i-30 close-button">

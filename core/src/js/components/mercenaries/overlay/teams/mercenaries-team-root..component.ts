@@ -51,7 +51,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div class="background-second-part"></div>
 								<div class="content">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									{{ 'mercenaries.team-widget.task-button' | owTranslate }}
+									{{ 'mercenaries.team-widget.tasks-button' | owTranslate }}
 								</div>
 								<div
 									class="task-list {{ tooltipPosition }}"

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GetSelectedDeckIdOperation } from '@services/plugins/mind-vision/get-selected-deck-id-operation';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
@@ -17,7 +18,6 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
-import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { GetAchievementsInfoOperation } from './mind-vision/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
@@ -70,7 +70,7 @@ export class MemoryInspectionService {
 	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVision, this.ow);
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
-	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
+	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow, this.i18n);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
 	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVision, this.ow);
@@ -85,10 +85,10 @@ export class MemoryInspectionService {
 	private listenersRegistered: boolean;
 
 	constructor(
-		private events: Events,
-		private ow: OverwolfService,
-		private mindVision: MindVisionService,
-		private cards: SetsService,
+		private readonly ow: OverwolfService,
+		private readonly mindVision: MindVisionService,
+		private readonly cards: SetsService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		// this.init();
 	}

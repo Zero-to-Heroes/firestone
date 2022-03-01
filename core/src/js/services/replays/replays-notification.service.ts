@@ -56,6 +56,7 @@ export class ReplaysNotificationService {
 		const rankText = buildRankText(stat.playerRank, stat.gameMode, stat.additionalResult) ?? '';
 		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;
 		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
+		// TODO translate
 		const xpEl = xpForGame
 			? `
 			<div class="xp-text">

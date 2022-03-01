@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaInfo } from '../../../models/arena-info';
 import { BoostersInfo } from '../../../models/memory/boosters-info';
 import { CoinInfo } from '../../../models/memory/coin-info';
@@ -32,6 +33,7 @@ export class MindVisionService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly notifs: OwNotificationsService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.init();
 	}
@@ -495,8 +497,8 @@ export class MindVisionService {
 				}
 				if (first === 'mindvision-instantiate-error') {
 					this.notifyError(
-						'Memory reading error',
-						'Some features will be unavailable. Please run Firestone/Overwolf as admin or contact us on Discord',
+						this.i18n.translateString('app.internal.memory.reading-error-title'),
+						this.i18n.translateString('app.internal.memory.reading-error-text'),
 						first,
 					);
 				}

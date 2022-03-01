@@ -267,7 +267,7 @@ const handleLadyPrestor = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownRaceName('dragon'),
+				cardName: i18n.getUnknownRaceName(i18n.translateString('global.tribe.dragon')),
 				creatorCardId: CardIds.LadyPrestor1,
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
@@ -360,7 +360,7 @@ const handlePrinceLiam = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownRaceName('Legendary Minion'),
+				cardName: i18n.getUnknownRaceName(i18n.translateString('global.legendary-minion')),
 				creatorCardId: CardIds.PrinceLiam,
 				rarity: 'legendary',
 				cardType: 'Minion',

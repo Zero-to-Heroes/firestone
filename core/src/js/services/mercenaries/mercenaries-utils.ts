@@ -50,6 +50,7 @@ export const getMercLevelFromExperience = (totalXp: number, referenceData: Merce
 	return Math.max(1, currentLevel);
 };
 
+// TODO translate
 export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeService): string => {
 	const fullName = allCards.getCard(cardId).name;
 	switch (cardId) {

@@ -420,6 +420,7 @@ const frost = (card: ReferenceCard) => spellSchool(card, SpellSchool.FROST);
 const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
 const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 
+// TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
 const dealsDamage = (card: ReferenceCard) =>
 	hasText(card, /deal \$?\#?\d+ damage/) || hasText(card, /restore \$?\#?\d+ health/);

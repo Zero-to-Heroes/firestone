@@ -284,6 +284,10 @@ export class AppBootstrapService {
 		} else {
 			this.currentState = 'READY';
 			if (!shouldShowAds) {
+				const title = this.init_LocalizationService.translateString(
+					'app.internal.startup.firestone-ready-title',
+				);
+				const text = this.init_LocalizationService.translateString('app.internal.startup.firestone-ready-text');
 				this.notifs.emitNewNotification({
 					content: `
 					<div class="general-message-container general-theme">
@@ -294,9 +298,9 @@ export class AppBootstrapService {
 						</div>
 						<div class="message">
 							<div class="title">
-								<span>Firestone ready to go</span>
+								<span>${title}</span>
 							</div>
-							<span class="text">Thank you for supporting us!</span>
+							<span class="text">${text}</span>
 						</div>
 						<button class="i-30 close-button">
 							<svg class="svg-icon-fill">

@@ -6,7 +6,6 @@ import { formatClass } from './hs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
 import { OverwolfService } from './overwolf.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
-import { capitalizeEachWord } from './utils';
 
 @Injectable()
 export class LocalizationService {
@@ -70,25 +69,36 @@ export class LocalizationService {
 	}
 
 	public getCreatedByCardName(creatorCardId: string): string {
-		return `Created by ${this.getCardName(creatorCardId) ?? 'unknown'}`;
+		return this.translateString('decktracker.created-by', {
+			value: this.getCardName(creatorCardId) ?? this.getUnknownCardName(null),
+		});
 	}
 
 	public getUnknownCardName(i18n: LocalizationFacadeService, playerClass: string = null): string {
-		return playerClass ? `Unknown ${formatClass(playerClass, i18n)} card` : 'Unknown Card';
+		return playerClass
+			? this.translateString('decktracker.unknown-class-card', {
+					playerClass: formatClass(playerClass, i18n),
+			  })
+			: this.translateString('decktracker.unknown-card');
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {
-		return `Unknown ${manaCost} mana spell`;
+		return this.translateString('decktracker.unknown-mana-spell', {
+			manaCost: manaCost,
+		});
 	}
 
-	public getUnknownRaceName(race: string): string {
-		return `Unknown ${capitalizeEachWord(race)}`;
+	public getUnknownRaceName(info: string): string {
+		return this.translateString('decktracker.unknown-info', {
+			info: info,
+		});
 	}
 
 	public translateString(key: string, params: any = null): string {
 		return this.translate.instant(key, params);
 	}
 
+	// TODO translate
 	public formatCurrentLocale(): string {
 		switch (this.locale) {
 			case 'frFR':
