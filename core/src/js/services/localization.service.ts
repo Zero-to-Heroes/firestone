@@ -101,8 +101,34 @@ export class LocalizationService {
 	// TODO translate
 	public formatCurrentLocale(): string {
 		switch (this.locale) {
+			case 'deDE':
+				return 'de-DE';
+			case 'enUS':
+				return 'en-US';
+			case 'esES':
+				return 'es-ES';
+			case 'esMX':
+				return 'es-MX';
 			case 'frFR':
 				return 'fr-FR';
+			case 'itIT':
+				return 'it-IT';
+			case 'jaJP':
+				return 'ja-JP';
+			case 'koKR':
+				return 'ko-KR';
+			case 'plPL':
+				return 'pl-PL';
+			case 'ptBR':
+				return 'pt-BR';
+			case 'ruRU':
+				return 'ru-RU';
+			case 'thTH':
+				return 'th-TH';
+			case 'zhCN':
+				return 'zh-CN';
+			case 'zhTW':
+				return 'zh-TW';
 			default:
 				return 'en-US';
 		}

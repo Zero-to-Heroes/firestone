@@ -77,3 +77,30 @@ settings-mercenaries {
 	left: 5px;
 	right: auto;
 }
+
+::ng-deep {
+	::-webkit-scrollbar {
+		width: 5px;
+		height: 0; // Always hide horizontal scrollbars
+	}
+
+	::-webkit-scrollbar-track {
+		display: none;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-thumb-color);
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--on-scrollbar-thumb-color);
+	}
+
+	::-webkit-scrollbar-button {
+		display: none;
+	}
+
+	::-webkit-scrollbar-track-piece {
+		display: none;
+	}
+}

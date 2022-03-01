@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'settings-general-localization',
@@ -9,22 +10,27 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		`../../../../css/component/settings/general/settings-general-localization.component.scss`,
 	],
 	template: `
+		<div class="title" [owTranslate]="'settings.general.localization.title'"></div>
 		<div class="settings-group localization">
-			<div class="text">
-				Firestone is slowly putting in place localization. For the moment, the options are very limited, and
-				only concern the cards (text and images). Later on more languages will be added, and the app text itself
-				will also be translated. But it takes time, so please be patient :)
-			</div>
-			<div class="text">
-				IMPORTANT: the localization effort is community-driven, and I can't proofread all translations. If you
-				see something weird, please ping me on Discord.
-			</div>
-			<div class="text">
-				Please restart the app (from the General tab) to make sure the new language is taken into account
-			</div>
+			<div class="text" [innerHTML]="text1"></div>
+			<div class="text" [innerHTML]="text11"></div>
+			<div class="text" [innerHTML]="text2"></div>
+			<div class="text" [innerHTML]="text3"></div>
 			<localization-dropdown class="language-dropdown"></localization-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralLocalizationComponent {}
+export class SettingsGeneralLocalizationComponent {
+	text1 = this.i18n.translateString('settings.general.localization.text-1');
+	text11 = this.i18n.translateString('settings.general.localization.text-11');
+	text2 = this.i18n.translateString('settings.general.localization.text-2', {
+		link: `<a href="https://github.com/Zero-to-Heroes/firestone-translations/blob/main/README.md" target="_blank">${this.i18n.translateString(
+			'settings.general.localization.link',
+		)}</a
+	>`,
+	});
+	text3 = this.i18n.translateString('settings.general.localization.text-3');
+
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+}

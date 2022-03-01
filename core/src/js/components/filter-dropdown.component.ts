@@ -13,7 +13,7 @@ import { IOption } from 'ng-select';
 
 @Component({
 	selector: 'filter-dropdown',
-	styleUrls: [`../../css/component/filter-dropdown.component.scss`],
+	styleUrls: [`../../css/global/scrollbar.scss`, `../../css/component/filter-dropdown.component.scss`],
 	template: `
 		<ng-select
 			*ngIf="_visible"

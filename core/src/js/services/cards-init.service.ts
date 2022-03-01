@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, Locale } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/reference-data';
 import { CARDS_VERSION } from './hs-utils';
 import { PreferencesService } from './preferences.service';
 
@@ -25,12 +25,6 @@ export class CardsInitService {
 	}
 
 	private getFileName(locale: string) {
-		switch (locale) {
-			case Locale[Locale.enUS]:
-			case Locale[Locale.frFR]:
-				return `cards_${locale}.json`;
-			default:
-				return `cards_${Locale[Locale.enUS]}.json`;
-		}
+		return `cards_${locale}.json`;
 	}
 }
