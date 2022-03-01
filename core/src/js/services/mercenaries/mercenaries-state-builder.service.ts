@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { MercenarySelector, VillageVisitorType } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@services/preferences.service';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 
-const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=12';
+const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=17';
 
 @Injectable()
 export class MercenariesStateBuilderService {
-	constructor(private readonly api: ApiRunner) {}
+	constructor(private readonly api: ApiRunner, private readonly prefs: PreferencesService) {}
 
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
-		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(MERCENARIES_REFERENCE_DATA);
+		const prefs = await this.prefs.getPreferences();
+		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
+			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json?v=13`,
+		);
 		console.debug('[mercs] reference data', referenceData);
 		return referenceData;
 	}
