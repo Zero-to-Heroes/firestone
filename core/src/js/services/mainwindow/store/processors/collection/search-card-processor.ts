@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Card } from '../../../../../models/card';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -10,7 +11,11 @@ import { SearchCardsEvent } from '../../events/collection/search-cards-event';
 import { Processor } from '../processor';
 
 export class SearchCardProcessor implements Processor {
-	constructor(private collectionManager: CollectionManager, private cards: SetsService) {}
+	constructor(
+		private collectionManager: CollectionManager,
+		private cards: SetsService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public async process(
 		event: SearchCardsEvent,
@@ -46,7 +51,9 @@ export class SearchCardProcessor implements Processor {
 			navigationState.update({
 				isVisible: true,
 				navigationCollection: newCollection,
-				text: 'Searching for ' + event.searchString,
+				text: this.i18n.translateString('app.collection.card-search.results-title', {
+					value: event.searchString,
+				}),
 				image: null,
 			} as NavigationState),
 		];

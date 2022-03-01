@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../../models/preferences';
@@ -9,7 +10,11 @@ import { ChangeVisibleApplicationProcessor } from './change-visible-application-
 import { Processor } from './processor';
 
 export class StoreInitProcessor implements Processor {
-	constructor(private readonly events: Events, private prefs: PreferencesService) {}
+	constructor(
+		private readonly events: Events,
+		private readonly prefs: PreferencesService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public async process(
 		event: StoreInitEvent,
@@ -41,7 +46,7 @@ export class StoreInitProcessor implements Processor {
 
 		const currentAppFromPrefs = prefs.currentMainVisibleSection;
 		if (currentAppFromPrefs) {
-			const [, navState] = await new ChangeVisibleApplicationProcessor(this.prefs).process(
+			const [, navState] = await new ChangeVisibleApplicationProcessor(this.prefs, this.i18n).process(
 				new ChangeVisibleApplicationEvent(currentAppFromPrefs),
 				currentState,
 				null,

@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Card } from '../../models/card';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
@@ -23,6 +24,7 @@ export class OutOfCardsService {
 	constructor(
 		private prefs: PreferencesService,
 		private api: ApiRunner,
+		private readonly i18n: LocalizationFacadeService,
 		// These are not needed for generating tokens
 		@Optional() private allCards: CardsFacadeService,
 		@Optional() private memory: MemoryInspectionService,
@@ -123,6 +125,8 @@ export class OutOfCardsService {
 
 		const prefs = await this.prefs.getPreferences();
 		if (prefs.outOfCardsShowNotifOnSync) {
+			const title = this.i18n.translateString('settings.general.third-party.ooc.title');
+			const msg = this.i18n.translateString('settings.general.third-party.ooc.collection-synchronized');
 			this.notifs.emitNewNotification({
 				content: `
 					<div class="general-message-container general-theme">
@@ -133,9 +137,9 @@ export class OutOfCardsService {
 						</div>
 						<div class="message">
 							<div class="title">
-								<span>Out of Cards</span>
+								<span>${title}</span>
 							</div>
-							<span class="text">Collection synchronized</span>
+							<span class="text">${msg}</span>
 						</div>
 						<button class="i-30 close-button">
 							<svg class="svg-icon-fill">

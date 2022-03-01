@@ -478,7 +478,7 @@ export class MainWindowStoreService {
 	private buildProcessors(): Map<string, Processor> {
 		return Map.of(
 			StoreInitEvent.eventName(),
-			new StoreInitProcessor(this.events, this.prefs),
+			new StoreInitProcessor(this.events, this.prefs, this.i18n),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),
@@ -487,7 +487,7 @@ export class MainWindowStoreService {
 			new NavigationNextProcessor(),
 
 			ChangeVisibleApplicationEvent.eventName(),
-			new ChangeVisibleApplicationProcessor(this.prefs),
+			new ChangeVisibleApplicationProcessor(this.prefs, this.i18n),
 
 			CloseMainWindowEvent.eventName(),
 			new CloseMainWindowProcessor(),
@@ -518,7 +518,7 @@ export class MainWindowStoreService {
 			new CollectionSelectCurrentTabProcessor(),
 
 			SearchCardsEvent.eventName(),
-			new SearchCardProcessor(this.collectionManager, this.sets),
+			new SearchCardProcessor(this.collectionManager, this.sets, this.i18n),
 
 			LoadMoreCardHistoryEvent.eventName(),
 			new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
@@ -610,7 +610,7 @@ export class MainWindowStoreService {
 
 			// Replays
 			ShowReplayEvent.eventName(),
-			new ShowReplayProcessor(this.bgsRunStatsService),
+			new ShowReplayProcessor(this.bgsRunStatsService, this.i18n),
 
 			ShowReplaysEvent.eventName(),
 			new ShowReplaysProcessor(this.prefs),
@@ -748,7 +748,7 @@ export class MainWindowStoreService {
 			new MercenariesHeroSearchProcessor(),
 
 			MercenariesSelectCompositionEvent.eventName(),
-			new MercenariesSelectCompositionProcessor(),
+			new MercenariesSelectCompositionProcessor(this.i18n),
 
 			MercenariesSelectCategoryEvent.eventName(),
 			new MercenariesSelectCategoryProcessor(),

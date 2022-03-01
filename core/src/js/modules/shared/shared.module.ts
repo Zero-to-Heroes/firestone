@@ -135,7 +135,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=13');
+	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=14');
 }
 
 // Include everything that is needed for both Twitch and the standard app here

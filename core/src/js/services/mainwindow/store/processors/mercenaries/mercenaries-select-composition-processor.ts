@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationMercenaries } from '../../../../../models/mainwindow/navigation/navigation-mercenaries';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -5,6 +6,8 @@ import { MercenariesSelectCompositionEvent } from '../../events/mercenaries/merc
 import { Processor } from '../processor';
 
 export class MercenariesSelectCompositionProcessor implements Processor {
+	constructor(private readonly i18n: LocalizationFacadeService) {}
+
 	public async process(
 		event: MercenariesSelectCompositionEvent,
 		currentState: MainWindowState,
@@ -17,7 +20,7 @@ export class MercenariesSelectCompositionProcessor implements Processor {
 				selectedCompositionId: event.compositionId,
 				menuDisplayType: 'breadcrumbs',
 			} as NavigationMercenaries),
-			text: 'Composition details',
+			text: this.i18n.translateString('app.mercenaries.menu.composition-details'),
 		} as NavigationState);
 		return [null, nav];
 	}

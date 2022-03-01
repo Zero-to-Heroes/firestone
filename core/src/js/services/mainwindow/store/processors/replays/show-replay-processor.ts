@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +8,7 @@ import { ShowReplayEvent } from '../../events/replays/show-replay-event';
 import { Processor } from '../processor';
 
 export class ShowReplayProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService) {}
+	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly i18n: LocalizationFacadeService) {}
 
 	public async process(
 		event: ShowReplayEvent,
@@ -30,7 +31,7 @@ export class ShowReplayProcessor implements Processor {
 						currentView: 'match-details',
 						selectedTab: 'replay',
 					} as NavigationReplays),
-					text: new Date(selectedInfo.creationTimestamp).toLocaleDateString('en-US', {
+					text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 						month: 'short',
 						day: '2-digit',
 						year: 'numeric',
@@ -58,7 +59,7 @@ export class ShowReplayProcessor implements Processor {
 				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
-				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString('en-US', {
+				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 					month: 'short',
 					day: '2-digit',
 					year: 'numeric',

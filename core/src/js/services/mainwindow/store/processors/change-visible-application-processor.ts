@@ -1,3 +1,4 @@
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationArena } from '../../../../models/mainwindow/navigation/navigation-arena';
@@ -12,7 +13,7 @@ import { ChangeVisibleApplicationEvent } from '../events/change-visible-applicat
 import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationFacadeService) {}
 
 	public async process(
 		event: ChangeVisibleApplicationEvent,
@@ -104,9 +105,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 	private getInitialText(module: string): string {
 		switch (module) {
 			case 'achievements':
-				return 'Categories';
+				return this.i18n.translateString('app.achievements.menu.categories');
 			case 'decktracker':
-				return 'Decks';
+				return this.i18n.translateString('app.achievements.menu.decks-header');
 			default:
 				return null;
 		}

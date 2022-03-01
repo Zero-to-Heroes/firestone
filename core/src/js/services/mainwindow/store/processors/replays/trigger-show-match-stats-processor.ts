@@ -71,7 +71,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 				isVisible: true,
 				currentApp: 'replays',
 				navigationReplays: newReplays,
-				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString('en-US', {
+				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
 					month: 'short',
 					day: '2-digit',
 					year: 'numeric',

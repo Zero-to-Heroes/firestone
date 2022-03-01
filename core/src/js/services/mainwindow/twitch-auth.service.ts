@@ -33,6 +33,7 @@ const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
 const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
+// TODO translate
 @Injectable()
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
