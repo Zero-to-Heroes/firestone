@@ -39,7 +39,7 @@ export class NewPackProcessor implements Processor {
 		};
 		console.log('[pack-history] handling new pack', newPack);
 		// Save the new pack info
-		const newPackStats: readonly PackResult[] = [newPack, ...currentState.binder.packStats];
+		const newPackStats: readonly PackResult[] = [newPack, ...(currentState.binder.packStats ?? [])];
 
 		const setToUpdate = currentState.binder.allSets.find((set) => set.id === event.setId);
 		if (!setToUpdate) {
