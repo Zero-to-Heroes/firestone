@@ -116,7 +116,6 @@ export class SettingsGeneralThirdPartyComponent
 	implements AfterContentInit, OnDestroy {
 	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
-	hsDecksUrl = ``;
 
 	vs = {
 		title: this.i18n.translateString('settings.general.third-party.vs.title'),
@@ -155,7 +154,7 @@ export class SettingsGeneralThirdPartyComponent
 		}),
 		toggleLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-label'),
 	};
-	hsDecks = {
+	hsdecks = {
 		title: this.i18n.translateString('settings.general.third-party.hsdecks.title'),
 		icon: 'https://hearthstone-decks.net/wp-content/uploads/2021/12/Logo.png',
 		pitch: this.i18n.translateString('settings.general.third-party.hsdecks.pitch', {
