@@ -148,6 +148,8 @@ export class RemoteAchievementsService {
 		this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
 	}
 
+	// TODO: this is only used to get the quotas, so maybe expose a specific endpoint
+	// for this to reduce the data transfer?
 	public async loadHsRawAchievements(): Promise<readonly HsRawAchievement[]> {
 		const raw: any = await this.api.callGetApi(RAW_HS_ACHIEVEMENTS_RETRIEVE_URL);
 		return raw?.achievements || [];

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@services/preferences.service';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ApiRunner } from '../../api-runner';
@@ -13,7 +14,11 @@ export class AchievementsLoaderService {
 
 	private achievements: readonly Achievement[] = [];
 
-	constructor(private api: ApiRunner, private challengeBuilder: ChallengeBuilderService) {}
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly challengeBuilder: ChallengeBuilderService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public async getAchievement(achievementId: string): Promise<Achievement> {
 		await this.waitForInit();
@@ -56,8 +61,9 @@ export class AchievementsLoaderService {
 
 	private async loadAll(): Promise<readonly RawAchievement[]> {
 		console.log('[achievements-loader] loading all achievements');
+		const prefs = await this.prefs.getPreferences();
 		const achievementFiles = [
-			'hearthstone_game',
+			`hearthstone_game_${prefs.locale}`,
 			'global',
 			'battlegrounds2',
 			'dungeon_run',

@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { PreferencesService } from '@services/preferences.service';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -22,10 +23,11 @@ export class AchievementsRepository {
 	private storeUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private remoteAchievements: RemoteAchievementsService,
-		private achievementsLoader: AchievementsLoaderService,
-		private ow: OverwolfService,
-		private api: ApiRunner,
+		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly ow: OverwolfService,
+		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
@@ -134,9 +136,13 @@ export class AchievementsRepository {
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
 		const config: any = await this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=12`);
+		const prefs = await this.prefs.getPreferences();
 		const fileNames: readonly string[] = config?.categories ?? [];
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
-			fileNames.map((fileName) => this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=18`)),
+			fileNames.map((fileName) => {
+				const locFileName = fileName === 'hearthstone_game' ? `hearthstone_game_${prefs.locale}` : fileName;
+				return this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${locFileName}.json?v=18`);
+			}),
 		)) as any;
 		return {
 			categories: categories,
