@@ -98,22 +98,52 @@
 			flex-grow: 1;
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: start;
 		}
 
 		.rank {
 			display: flex;
-			width: 100px;
+			width: 130px;
 			align-items: center;
 
 			.current {
-				width: 50px;
+				// width: 50px;
 				height: 35px;
 				color: var(--default-title-color);
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				font-size: 20px;
+				position: relative;
+
+				::ng-deep rank-image {
+					width: 100%;
+					height: 100%;
+
+					.rank-image {
+						display: flex;
+					}
+
+					.icon {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						left: 15px;
+						position: relative;
+					}
+
+					.rank-text {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						font-size: 24px;
+						padding: 0;
+						margin: 0;
+						position: relative;
+						top: 0;
+						bottom: 0;
+					}
+				}
 			}
 
 			.delta {

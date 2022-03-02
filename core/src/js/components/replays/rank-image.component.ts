@@ -6,7 +6,10 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 	selector: 'rank-image',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/rank-image.component.scss`],
 	template: `
-		<div class="rank-image {{ gameMode }}" [helpTooltip]="playerRank ? playerRankImageTooltip : rankIssueTooltip">
+		<div
+			class="rank-image {{ gameMode }}"
+			[helpTooltip]="rankTooltip ? rankTooltip : playerRank ? playerRankImageTooltip : rankIssueTooltip"
+		>
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
 				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />
 				<img class="frame" *ngIf="playerRankImage" [src]="playerRankImage" />
@@ -29,6 +32,7 @@ export class RankImageComponent {
 	}
 
 	@Input() gameMode: string;
+	@Input() rankTooltip: string;
 
 	playerRank: string;
 	playerRankImage: string;

@@ -64,15 +64,16 @@ import { tap } from 'rxjs/operators';
 					<div class="summary">
 						<div class="games" [helpTooltip]="gamesTooltip$ | async">{{ totalGamesLabel$ | async }}</div>
 						<div class="rank">
-							<ng-container *ngIf="{ currentPlayerRank: currentPlayerRank$ | async } as value2">
-								<div
-									class="current"
-									*ngIf="value2.currentPlayerRank != null"
-									[helpTooltip]="'session.summary.mmr-tooltip' | owTranslate"
-								>
-									{{ value2.currentPlayerRank }}
-								</div>
-							</ng-container>
+							<div class="current">
+								<!-- {{ value2.currentPlayerRank }} -->
+								<rank-image
+									*ngIf="lastGame$ | async as lastGame"
+									class="player-rank"
+									[stat]="lastGame"
+									[gameMode]="lastGame.gameMode"
+									[rankTooltip]="'session.summary.mmr-tooltip' | owTranslate"
+								></rank-image>
+							</div>
 							<ng-container *ngIf="deltaRank$ | async as deltaRank">
 								<div
 									class="delta"
@@ -147,7 +148,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	gamesTooltip$: Observable<string>;
 	opacity$: Observable<number>;
 
-	// private lastGame$: Observable<GameStat>;
+	lastGame$: Observable<GameStat>;
 
 	currentMode = 'battlegrounds';
 
@@ -218,15 +219,15 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.i18n.translateString('session.summary.total-games', { value: games.length });
 			}),
 		);
-		const lastGame$ = lastGames$.pipe(
+		this.lastGame$ = lastGames$.pipe(
 			this.mapData((games) => {
 				const lastGame = games[0];
 				return !!lastGame ? lastGame.update({ playerRank: lastGame.newPlayerRank }) : null;
 			}),
 		);
-		this.currentPlayerRank$ = lastGame$.pipe(
-			this.mapData((game) => (game?.newPlayerRank != null ? game.newPlayerRank : game?.playerRank)),
-		);
+		// this.currentPlayerRank$ = lastGame$.pipe(
+		// 	this.mapData((game) => (game?.newPlayerRank != null ? game.newPlayerRank : game?.playerRank)),
+		// );
 		this.deltaRank$ = combineLatest(lastGames$, currentGameType$).pipe(
 			this.mapData(([games, currentGameType]) => {
 				let startingRank: number = null;
