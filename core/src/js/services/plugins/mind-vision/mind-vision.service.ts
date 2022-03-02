@@ -28,6 +28,7 @@ export class MindVisionService {
 	initializing = false;
 	// initializedListener = false;
 	memoryUpdateListener;
+	globalEventListener;
 
 	constructor(
 		private readonly events: Events,
@@ -490,7 +491,12 @@ export class MindVisionService {
 				this.initializing = false;
 			});
 			const plugin = await this.get();
-			plugin.onGlobalEvent.addListener(async (first: string, second: string) => {
+
+			if (this.globalEventListener) {
+				plugin.onGlobalEvent.removeListener(this.globalEventListener);
+			}
+			console.debug('[mind-vision] adding listener', plugin.onGlobalEvent);
+			this.globalEventListener = async (first: string, second: string) => {
 				console.log('no-format', '[mind-vision] received global event', first, second);
 				if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 					await this.performResetListening(plugin);
@@ -502,7 +508,8 @@ export class MindVisionService {
 						first,
 					);
 				}
-			});
+			};
+			plugin.onGlobalEvent.addListener(this.globalEventListener);
 		} catch (e) {
 			console.warn('[mind-vision] Could not load plugin, retrying', e);
 			this.initializing = false;

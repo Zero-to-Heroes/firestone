@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { NonFunctionProperties } from '@services/utils';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -91,11 +92,11 @@ export class DeckState {
 	readonly damageTakenThisTurn: number;
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 
-	public static create(value: DeckState): DeckState {
+	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);
 	}
 
-	public update(value: DeckState): DeckState {
+	public update(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 

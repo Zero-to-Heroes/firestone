@@ -223,11 +223,13 @@ export class EndGameUploaderService {
 				game.gameMode === 'duels'
 					? params.duelsInfo?.rating ?? duelsInfo?.Rating
 					: params.duelsInfo?.paidRating ?? duelsInfo?.PaidRating;
-			game.additionalResult = duelsInfo?.Wins + '-' + duelsInfo?.Losses;
+			if (duelsInfo?.Wins != null && duelsInfo?.Losses != null) {
+				game.additionalResult = duelsInfo?.Wins + '-' + duelsInfo?.Losses;
+			}
 			try {
 				if (
-					(replay.result === 'won' && (params.duelsInfo?.wins ?? duelsInfo.Wins) === 11) ||
-					(replay.result === 'lost' && (params.duelsInfo?.losses ?? duelsInfo.Losses) === 2)
+					(replay.result === 'won' && (params.duelsInfo?.wins ?? duelsInfo?.Wins) === 11) ||
+					(replay.result === 'lost' && (params.duelsInfo?.losses ?? duelsInfo?.Losses) === 2)
 				) {
 					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
 					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);

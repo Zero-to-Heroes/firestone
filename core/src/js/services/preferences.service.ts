@@ -98,7 +98,7 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async setValue(field: string, pref: boolean | number): Promise<Preferences> {
+	public async setValue(field: string, pref: boolean | number | string): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
 		await this.savePreferences(newPrefs);

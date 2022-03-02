@@ -50,6 +50,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
 	public static readonly WEAPON_EQUIPPED = 'WEAPON_EQUIPPED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';
+	public static readonly HERO_REVEALED = 'HERO_REVEALED';
 	public static readonly LINKED_ENTITY = 'LINKED_ENTITY';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
 	public static readonly CARD_CHANGED_IN_HAND = 'CARD_CHANGED_IN_HAND';

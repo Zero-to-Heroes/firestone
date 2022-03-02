@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { HeroRevealedParser } from '@services/decktracker/event-parser/hero-revealed-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -499,6 +500,7 @@ export class GameStateService {
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
 			new CardRevealedParser(this.helper, this.allCards, this.i18n),
+			new HeroRevealedParser(),
 			new LinkedEntityParser(this.helper, this.i18n),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),

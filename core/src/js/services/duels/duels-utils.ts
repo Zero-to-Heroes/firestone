@@ -6,11 +6,16 @@ import {
 	duelsActivePool2UltraRare,
 	duelsPassivePool2,
 	duelsPassivePool2UltraRare,
+	GameType,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 const PASSIVES = [];
+
+export const isDuels = (gameType: GameType): boolean => {
+	return gameType === GameType.GT_PVPDR || gameType === GameType.GT_PVPDR_PAID;
+};
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
 	const card = allCards.getCard(cardId);

@@ -18,6 +18,7 @@ import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/ses
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
 import { SettingsBattlegroundsSessionComponent } from '@components/settings/battlegrounds/settings-battlegrounds-session.component';
+import { SettingsDecktrackerDuelsComponent } from '@components/settings/decktracker/settings-decktracker-duels.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -290,6 +291,8 @@ import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/cou
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
+import { DuelsMaxLifeOpponentWidgetWrapperComponent } from '../../components/overlays/duels-max-life-player-widget-wrapper.component';
+import { DuelsMaxLifeWidgetComponent } from '../../components/overlays/duels-max-life/duels-max-life-widget.component';
 import { MercsActionQueueWidgetWrapperComponent } from '../../components/overlays/mercs-action-queue-widget-wrapper.component';
 import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overlays/mercs-opponent-team-widget-wrapper.component';
 import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
@@ -579,6 +582,7 @@ const components = [
 		ConstructedMenuSelectionComponent,
 
 		CurrentSessionWidgetComponent,
+		DuelsMaxLifeWidgetComponent,
 
 		GenericCountersComponent,
 
@@ -805,6 +809,7 @@ const components = [
 		ConstructedBoardWidgetWrapperComponent,
 		CurrentSessionWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
+		DuelsMaxLifeOpponentWidgetWrapperComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
@@ -880,6 +885,7 @@ const components = [
 		SettingsDecktrackerGlobalComponent,
 		SettingsBroadcastComponent,
 		SettingsDecktrackerBetaComponent,
+		SettingsDecktrackerDuelsComponent,
 
 		SettingsReplaysComponent,
 		SettingsReplaysGeneralComponent,

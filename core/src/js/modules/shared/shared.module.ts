@@ -10,6 +10,7 @@ import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battl
 import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
 import { NumericInputComponent } from '@components/settings/numeric-input.component';
+import { PreferenceDropdownComponent } from '@components/settings/preference-dropdown.component';
 import { PreferenceNumericInputComponent } from '@components/settings/preference-numeric-input.component';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -135,7 +136,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=18');
+	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=19');
 }
 
 // Include everything that is needed for both Twitch and the standard app here
@@ -207,6 +208,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		NumericInputComponent,
+		PreferenceDropdownComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,
@@ -341,6 +343,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		NumericInputComponent,
+		PreferenceDropdownComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,

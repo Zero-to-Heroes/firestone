@@ -483,6 +483,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'HERO_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.HERO_REVEALED, gameEvent, {
+						health: gameEvent.Value.AdditionalProps.Health,
+					}),
+				);
+				break;
 			case 'LINKED_ENTITY':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.LINKED_ENTITY, gameEvent, {

@@ -210,7 +210,10 @@ export const buildRankText = (playerRank: string, gameMode: string, additionalRe
 		additionalResult.indexOf('-') !== -1
 	) {
 		const [wins, losses] = additionalResult.split('-');
-		return `${wins}-${losses}`;
+		if (wins != null && losses != null) {
+			return `${wins}-${losses}`;
+		}
+		return null;
 	}
 	if (!playerRank) {
 		return null;

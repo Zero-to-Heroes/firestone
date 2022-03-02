@@ -3,7 +3,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Injectable()
 export class TipService {
-	private numberOfTips = 9;
+	private numberOfTips = 10;
 	private previousIndex = -1;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
