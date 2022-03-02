@@ -6,7 +6,6 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { FeatureFlags } from '@services/feature-flags';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
@@ -62,7 +61,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
 			tap((info) => console.debug('showWidget?', info)),
-			this.mapData(([[displayBgs]]) => displayBgs && FeatureFlags.ENABLE_SESSION_WIDGET),
+			this.mapData(([[displayBgs]]) => displayBgs),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
 			this.visible = show;

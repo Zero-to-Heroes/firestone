@@ -1,6 +1,5 @@
 // When changing these feature flags, don't forget to update the new-version component
 export class FeatureFlags {
-	public static readonly ENABLE_SESSION_WIDGET = true;
 	public static readonly ENABLE_DETAILED_MERC = false;
 
 	// Shelved for now

@@ -64,14 +64,15 @@ import { tap } from 'rxjs/operators';
 					<div class="summary">
 						<div class="games" [helpTooltip]="gamesTooltip$ | async">{{ totalGamesLabel$ | async }}</div>
 						<div class="rank">
-							<div class="current">
-								<rank-image
-									*ngIf="lastGame$ | async as lastGame"
-									class="player-rank"
-									[stat]="lastGame"
-									[gameMode]="lastGame.gameMode"
-								></rank-image>
-							</div>
+							<ng-container *ngIf="{ currentPlayerRank: currentPlayerRank$ | async } as value2">
+								<div
+									class="current"
+									*ngIf="value2.currentPlayerRank != null"
+									[helpTooltip]="'session.summary.mmr-tooltip' | owTranslate"
+								>
+									{{ value2.currentPlayerRank }}
+								</div>
+							</ng-container>
 							<ng-container *ngIf="deltaRank$ | async as deltaRank">
 								<div
 									class="delta"
@@ -80,6 +81,7 @@ import { tap } from 'rxjs/operators';
 										'positive': deltaRank > 0,
 										'negative': deltaRank < 0
 									}"
+									[helpTooltip]="'session.summary.delta-mmr-tooltip' | owTranslate"
 								>
 									{{ buildValue(deltaRank, 0) }}
 								</div>
@@ -135,15 +137,17 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	currentDisplayedMode$: Observable<string>;
 	showGroups$: Observable<boolean>;
 	showMatches$: Observable<boolean>;
+	currentPlayerRank$: Observable<string>;
 	// currentGrouping$: Observable<SessionWidgetGroupingType>;
 	// currentGroupingLabel$: Observable<string>;
 	totalGamesLabel$: Observable<string>;
-	lastGame$: Observable<GameStat>;
 	deltaRank$: Observable<number>;
 	groups$: Observable<readonly Group[]>;
 	matches$: Observable<readonly GameStat[]>;
 	gamesTooltip$: Observable<string>;
 	opacity$: Observable<number>;
+
+	// private lastGame$: Observable<GameStat>;
 
 	currentMode = 'battlegrounds';
 
@@ -214,11 +218,14 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.i18n.translateString('session.summary.total-games', { value: games.length });
 			}),
 		);
-		this.lastGame$ = lastGames$.pipe(
+		const lastGame$ = lastGames$.pipe(
 			this.mapData((games) => {
 				const lastGame = games[0];
 				return !!lastGame ? lastGame.update({ playerRank: lastGame.newPlayerRank }) : null;
 			}),
+		);
+		this.currentPlayerRank$ = lastGame$.pipe(
+			this.mapData((game) => (game?.newPlayerRank != null ? game.newPlayerRank : game?.playerRank)),
 		);
 		this.deltaRank$ = combineLatest(lastGames$, currentGameType$).pipe(
 			this.mapData(([games, currentGameType]) => {
