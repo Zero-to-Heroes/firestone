@@ -102,7 +102,7 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	private async callInternal(
-		callback: (result: T, left: number) => void,
+		callback: (result: T | 'reset', left: number) => void,
 		input: any,
 		retriesLeft: number,
 		forceReset = false,
@@ -123,12 +123,18 @@ export class MindVisionOperationFacade<T> {
 		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.debug('result from memory', resultFromMemory);
 		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft)) {
-			this.log('result empty, calling with a force reset');
-			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
+			this.log('result empty, calling with a force reset', retriesLeft);
+			this.debug(
+				'result empty, calling with a force reset',
+				this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft),
+				resultFromMemory,
+			);
+			callback('reset', retriesLeft - 1);
+			// setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
 			return;
 		}
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
-			this.debug('result from memory is empty, retying');
+			this.debug('result from memory is empty, retying', retriesLeft);
 			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1), this.delay);
 			return;
 		}

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
@@ -18,7 +19,7 @@ import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
 import { OverwolfService } from '../overwolf.service';
-import { MindVisionService } from './mind-vision/mind-vision.service';
+import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/operations/get-arena-info-operation';
@@ -51,42 +52,49 @@ export class MemoryInspectionService {
 	// 	'match_info', // For the GEP game ID
 	// ];
 
-	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVision, this.ow);
-	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
+	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVisionFacade, this.ow);
+	private getCollectionOperation = new GetCollectionOperation(this.mindVisionFacade, this.ow, this.cards);
 	private getBattlegroundsOwnedHeroSkinDbfIdsOperation = new GetBattlegroundsOwnedHeroSkinDbfIdsOperation(
-		this.mindVision,
+		this.mindVisionFacade,
 		this.ow,
 		this.cards,
 	);
-	private getCardBacksOperation = new GetCardBacksOperation(this.mindVision, this.ow, this.cards);
-	private getCoinsOperation = new GetCoinsOperation(this.mindVision, this.ow, this.cards);
-	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
-	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
-	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVision, this.ow);
-	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(this.mindVision, this.ow);
-	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
-	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
-	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
-	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVision, this.ow);
-	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVision, this.ow);
-	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
-	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow, this.i18n);
-	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
-	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
-	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVision, this.ow);
-	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVision, this.ow);
-	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
-		this.mindVision,
+	private getCardBacksOperation = new GetCardBacksOperation(this.mindVisionFacade, this.ow, this.cards);
+	private getCoinsOperation = new GetCoinsOperation(this.mindVisionFacade, this.ow, this.cards);
+	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.ow);
+	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.ow);
+	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVisionFacade, this.ow);
+	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(
+		this.mindVisionFacade,
 		this.ow,
 	);
-	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
-	private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(this.mindVision, this.ow);
+	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVisionFacade, this.ow);
+	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVisionFacade, this.ow);
+	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVisionFacade, this.ow);
+	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVisionFacade, this.ow);
+	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
+	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
+	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
+	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVisionFacade, this.ow);
+	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
+	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
+	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVisionFacade, this.ow);
+	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
+		this.mindVisionFacade,
+		this.ow,
+	);
+	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
+	private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
+		this.mindVisionFacade,
+		this.ow,
+	);
 
 	private listenersRegistered: boolean;
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly mindVision: MindVisionService,
+		private readonly mindVisionFacade: MindVisionFacadeService,
+		private readonly mindVision: MindVisionStateMachineService,
 		private readonly cards: SetsService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
@@ -94,57 +102,60 @@ export class MemoryInspectionService {
 	}
 
 	public async getMemoryChanges(): Promise<MemoryUpdate> {
-		return this.getMemoryChangesOperation.call();
+		return this.mindVision.callMindVision(() => this.getMemoryChangesOperation.call());
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
-		return this.getCollectionOperation.call();
+		return this.mindVision.callMindVision(() => this.getCollectionOperation.call());
 	}
 
 	public async getBattlegroundsOwnedHeroSkinDbfIds(): Promise<readonly number[]> {
-		return this.getBattlegroundsOwnedHeroSkinDbfIdsOperation.call();
+		return this.mindVision.callMindVision(() => this.getBattlegroundsOwnedHeroSkinDbfIdsOperation.call());
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
-		return this.getCardBacksOperation.call();
+		return this.mindVision.callMindVision(() => this.getCardBacksOperation.call());
 	}
 
 	public async getCoins(): Promise<readonly CoinInfo[]> {
-		return this.getCoinsOperation.call();
+		return this.mindVision.callMindVision(() => this.getCoinsOperation.call());
 	}
 
 	public async getMatchInfo(): Promise<MatchInfo> {
-		return this.getMatchInfoOperation.call();
+		return this.mindVision.callMindVision(() => this.getMatchInfoOperation.call());
 	}
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {
-		return this.getBattlegroundsInfoOperation.call(numberOfRetries);
+		return this.mindVision.callMindVision(() => this.getBattlegroundsInfoOperation.call(numberOfRetries));
 	}
 
 	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo> {
-		return this.getMercenariesInfoOperation.call(numberOfRetries);
+		return this.mindVision.callMindVision(() => this.getMercenariesInfoOperation.call(numberOfRetries));
 	}
 
 	public async getMercenariesCollectionInfo(
 		numberOfRetries?: number,
 		forceResetAfterEmptyCalls = false,
 	): Promise<MemoryMercenariesCollectionInfo> {
-		let result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries);
-		if (this.getMercenariesCollectionInfoOperation.emptyCheck(result) && forceResetAfterEmptyCalls) {
-			result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries, true);
-		}
-		return result;
+		return this.mindVision.callMindVision(() => this.getMercenariesCollectionInfoOperation.call(numberOfRetries));
+		// let result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries));
+		// if (this.getMercenariesCollectionInfoOperation.emptyCheck(result) && forceResetAfterEmptyCalls) {
+		// 	result = await this.getMercenariesCollectionInfoOperation.call(numberOfRetries, true);
+		// }
+		// return this.mindVision.callMindVision(() => result;
 	}
 
 	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {
-		return this.getBattlegroundsEndGameOperation.call(numberOfRetries);
+		return this.mindVision.callMindVision(() => this.getBattlegroundsEndGameOperation.call(numberOfRetries));
 	}
 
 	public async getBattlegroundsMatchWithPlayers(
 		numberOfRetries?: number,
 		forceReset = false,
 	): Promise<BattlegroundsInfo> {
-		return this.getBattlegroundsMatchOperation.call(numberOfRetries, forceReset);
+		return this.mindVision.callMindVision(() =>
+			this.getBattlegroundsMatchOperation.call(numberOfRetries, forceReset),
+		);
 	}
 
 	public async getActiveDeck(
@@ -152,66 +163,74 @@ export class MemoryInspectionService {
 		numberOfRetries: number,
 		forceResetIfResultEmpty = false,
 	): Promise<DeckInfoFromMemory> {
-		let result = await this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId);
+		let result = await this.mindVision.callMindVision(() =>
+			this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId),
+		);
 		console.debug('[mind-vision] [getActiveDeck]', result, forceResetIfResultEmpty);
 		if (this.getActiveDeckOperation.emptyCheck(result) && forceResetIfResultEmpty) {
 			console.debug('[mind-vision] [getActiveDeck]', 'calling with force reset');
-			result = await this.getActiveDeckOperation.call(numberOfRetries, true, selectedDeckId);
+			result = await this.mindVision.callMindVision(() =>
+				this.getActiveDeckOperation.call(numberOfRetries, true, selectedDeckId),
+			);
 			console.debug('[mind-vision] [getActiveDeck]', 'after force reset', result);
 		}
 		return result;
 	}
 
 	public async getSelectedDeckId(): Promise<number> {
-		const result = await this.getSelectedDeckIdOperation.call();
-		console.debug('[mind-vision] [getSelectedDeckId]', result);
-		return result;
+		// const result = await this.getSelectedDeckIdOperation.call());
+		// console.debug('[mind-vision] [getSelectedDeckId]', result);
+		return this.mindVision.callMindVision(() => this.getSelectedDeckIdOperation.call());
 	}
 
 	public async getWhizbangDeck(deckId: number): Promise<DeckInfoFromMemory> {
-		return this.getWhizbangDeckOperation.call(2, false, deckId);
+		return this.mindVision.callMindVision(() => this.getWhizbangDeckOperation.call(2, false, deckId));
 	}
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
-		return this.getArenaInfoOperation.call();
+		return this.mindVision.callMindVision(() => this.getArenaInfoOperation.call());
 	}
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
-		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
+		return this.mindVision.callMindVision(() => this.getDuelsInfoOperation.call(numberOfRetries, forceReset));
 	}
 
 	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {
-		return this.getDuelsRewardsInfoOperation.call(1, forceReset);
+		return this.mindVision.callMindVision(() => this.getDuelsRewardsInfoOperation.call(1, forceReset));
 	}
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
-		return this.getRewardsTrackInfoOperation.call();
+		return this.mindVision.callMindVision(() => this.getRewardsTrackInfoOperation.call());
 	}
 
 	public async getAchievementsInfo(forceReset = false, numberOfRetries = 1): Promise<HsAchievementsInfo> {
-		return this.getAchievementsInfoOperation.call(numberOfRetries, forceReset);
+		return this.mindVision.callMindVision(() =>
+			this.getAchievementsInfoOperation.call(numberOfRetries, forceReset),
+		);
 	}
 
 	public async getBoostersInfo(): Promise<readonly PackInfo[]> {
-		return this.getBoostersInfoOperation.call();
+		return this.mindVision.callMindVision(() => this.getBoostersInfoOperation.call());
 	}
 
 	public async getInGameAchievementsProgressInfo(
 		forceReset = false,
 		numberOfRetries = 2,
 	): Promise<HsAchievementsInfo> {
-		return this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset);
+		return this.mindVision.callMindVision(() =>
+			this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset),
+		);
 	}
 
 	public async getCurrentSceneFromMindVision(): Promise<SceneMode> {
-		return this.getCurrentSceneOperation.call();
+		return this.mindVision.callMindVision(() => this.getCurrentSceneOperation.call());
 	}
 
 	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
-		return this.isMaybeOnDuelsRewardsScreenOperation.call();
+		return this.mindVision.callMindVision(() => this.isMaybeOnDuelsRewardsScreenOperation.call());
 	}
 
-	public async reset(): Promise<void> {
-		await this.mindVision.reset();
-	}
+	// public async reset(): Promise<void> {
+	// 	await this.mindVision.reset();
+	// }
 }

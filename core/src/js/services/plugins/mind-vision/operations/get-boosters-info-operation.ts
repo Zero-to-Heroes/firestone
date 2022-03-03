@@ -1,11 +1,11 @@
 import { PackInfo } from '@models/collection/pack-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
 import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
-import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 
 export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly PackInfo[]> {
-	constructor(mindVision: MindVisionService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
 		super(
 			ow,
 			'getBoostersInfo',

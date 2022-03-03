@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService as AchievementsDb } from '../../services/achievement/achievements-storage.service';
@@ -20,7 +21,7 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
-import { MindVisionService } from '../../services/plugins/mind-vision/mind-vision.service';
+import { MindVisionFacadeService } from '../../services/plugins/mind-vision/mind-vision-facade.service';
 import { OwUtilsService } from '../../services/plugins/ow-utils.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -59,7 +60,8 @@ export class SharedServicesModule {
 				CardHistoryStorageService,
 				CollectionManager,
 				CollectionStorageService,
-				MindVisionService,
+				MindVisionFacadeService,
+				MindVisionStateMachineService,
 				OwUtilsService,
 				HotkeyService,
 				ApiRunner,

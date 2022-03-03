@@ -1,11 +1,11 @@
 import { CardBack } from '@models/card-back';
 import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
-import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 import { SetsService } from '../../../collection/sets-service.service';
 
 export class GetCardBacksOperation extends MindVisionOperationFacade<readonly CardBack[]> {
-	constructor(mindVision: MindVisionService, ow: OverwolfService, private allCards: SetsService) {
+	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService, private allCards: SetsService) {
 		super(
 			ow,
 			'getCardBacks',

@@ -2,11 +2,11 @@ import { GameFormat } from '@firestone-hs/reference-data';
 import { DuelsInfo } from '@models/duels-info';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
-import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 
 export class GetDuelsInfoOperation extends MindVisionOperationFacade<DuelsInfo> {
-	constructor(mindVision: MindVisionService, ow: OverwolfService, i18n: LocalizationFacadeService) {
+	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService, i18n: LocalizationFacadeService) {
 		super(
 			ow,
 			'getDuelsInfo',

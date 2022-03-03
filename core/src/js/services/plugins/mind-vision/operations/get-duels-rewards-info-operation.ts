@@ -1,10 +1,10 @@
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
-import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 
 export class GetDuelsRewardsInfoOperation extends MindVisionOperationFacade<DuelsRewardsInfo> {
-	constructor(mindVision: MindVisionService, ow: OverwolfService) {
+	constructor(mindVision: MindVisionFacadeService, ow: OverwolfService) {
 		super(
 			ow,
 			'getDuelsRewardsInfo',

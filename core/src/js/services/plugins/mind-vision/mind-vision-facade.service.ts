@@ -7,102 +7,26 @@ import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenari
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfo } from '@models/rewards-track-info';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Events } from '../../events.service';
 import { OwNotificationsService } from '../../notifications.service';
-import { OverwolfService } from '../../overwolf.service';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
 
+// Should not be called from outside its package.
+// Use MindVisionStateMachine instead
 @Injectable()
-export class MindVisionService {
-	private static readonly MAX_RETRIES_FOR_MEMORY_LISTENING = 3;
+export class MindVisionFacadeService {
+	public globalEventListener: (first: string, second: string) => Promise<void>;
+	public memoryUpdateListener: (changes: string | 'reset') => Promise<void>;
 
-	// Use two different instances so that the reset of the main plugin doesn't impact
-	// the listener
 	private mindVisionPlugin: any;
-	// private mindVisionListenerPlugin: any;
 
-	initialized = false;
-	initializing = false;
-	// initializedListener = false;
-	memoryUpdateListener;
-	globalEventListener;
+	constructor(private readonly notifs: OwNotificationsService) {}
 
-	constructor(
-		private readonly events: Events,
-		private readonly ow: OverwolfService,
-		private readonly notifs: OwNotificationsService,
-		private readonly i18n: LocalizationFacadeService,
-	) {
-		this.init();
-	}
-
-	private async init() {
-		const inGame = await this.ow.inGame();
-		if (inGame) {
-			this.initialize();
-		} else {
-			console.log('[mind-vision] not in game, not starting memory poll or memory reading plugin');
-		}
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.exitGame(res)) {
-				if (this.memoryUpdateListener) {
-					console.log('[mind-vision] leaving game, stopping memory poll', res);
-					const plugin = await this.get();
-					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-					await this.stopListening();
-					this.memoryUpdateListener = null;
-					this.initialized = false;
-					this.initializing = false;
-				}
-				await this.reset();
-			} else if ((await this.ow.inGame()) && res.gameChanged) {
-				if (!this.memoryUpdateListener) {
-					console.log(
-						'[mind-vision] starting game, starting memory poll',
-						this.initialized,
-						this.initializing,
-					);
-					this.initialize();
-				}
-			}
-		});
-	}
-
-	private retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
-
-	private async listenForUpdates() {
+	public async listenForUpdates() {
 		return new Promise<void>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				console.log('[mind-vision] getting ready to listen for updates', this.memoryUpdateListener == null);
-				if (this.memoryUpdateListener) {
-					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-				}
-
-				console.log('[mind-vision] adding updates listener');
-				this.memoryUpdateListener = async (changes: string | 'reset') => {
-					console.log('[mind-vision] memory update', changes);
-					const changesToBroadcast: MemoryUpdate | 'reset' =
-						changes === 'reset' ? changes : JSON.parse(changes);
-					// Happens when the plugin is reset, we need to resubscribe
-					if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
-						console.log('[mind-vision] resetting memory update?', this.retriesLeft);
-						if (this.retriesLeft >= 0) {
-							this.retriesLeft--;
-							await this.performResetListening(plugin);
-						} else {
-							console.error('[mind-vision] stopping after 5 resets');
-						}
-						resolve();
-						return;
-					}
-					this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
-					this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
-				};
-				plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
 				plugin.listenForUpdates((result) => {
 					console.log('[mind-vision] listenForUpdates callback result: ', result);
 					resolve();
@@ -270,7 +194,7 @@ export class MindVisionService {
 		});
 	}
 
-	public async getActiveDeck(selectedDeckId: number, forceReset: boolean): Promise<any> {
+	public async getActiveDeck(selectedDeckId: number, forceReset = false): Promise<any> {
 		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
@@ -410,9 +334,6 @@ export class MindVisionService {
 		});
 	}
 
-	// Here we reset both plugins because this method is used only once, after
-	// initialization, to be sure we refresh the plugins once the memory is
-	// properly populated
 	public async reset(): Promise<void> {
 		console.log('[mind-vision] calling reset');
 		return new Promise<void>(async (resolve) => {
@@ -429,109 +350,59 @@ export class MindVisionService {
 		});
 	}
 
-	public async resetListening(): Promise<void> {
-		console.log('[mind-vision] calling resetListening');
+	public async tearDown(): Promise<void> {
+		console.log('[mind-vision] calling tearDown');
 		return new Promise<void>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.resetListening((result) => {
-					console.log('[mind-vision] resetListening done');
+				plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+				plugin.onGlobalEvent.removeListener(this.globalEventListener);
+				plugin.tearDown((result) => {
+					console.log('[mind-vision] tearDown done');
 					resolve();
 				});
 			} catch (e) {
-				console.log('[mind-vision] could not resetListening', e);
-				resolve(null);
-			}
-		});
-	}
-
-	public async stopListening(): Promise<void> {
-		console.log('[mind-vision] calling stopListening');
-		return new Promise<void>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.stopListening((result) => {
-					console.log('[mind-vision] stopListening done');
-					resolve();
-				});
-			} catch (e) {
-				console.log('[mind-vision] could not stopListening', e);
+				console.log('[mind-vision] could not tearDown', e);
 				resolve(null);
 			}
 		});
 	}
 
 	private async get() {
-		await this.waitForInit();
 		return this.mindVisionPlugin.get();
 	}
 
-	private async initialize() {
-		if (this.initialized || this.initializing) {
-			console.log('[mind-vision] already initialized, returning', this.initialized, this.initializing);
-			return;
-		}
-
-		this.initialized = false;
-		this.initializing = true;
-		try {
-			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
-			this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
-			this.mindVisionPlugin.initialize(async (status: boolean) => {
-				if (status === false) {
-					console.error("[mind-vision] Plugin couldn't be loaded??", 'retrying');
-					this.initializing = false;
-					setTimeout(() => this.initialize(), 2000);
-					return;
+	public async initializePlugin() {
+		return new Promise<void>(async (resolve) => {
+			this.instantiatePlugin(async () => {
+				const plugin = await this.get();
+				console.debug('[mind-vision] adding listener', plugin.onGlobalEvent);
+				if (this.globalEventListener) {
+					plugin.onGlobalEvent.removeListener(this.globalEventListener);
 				}
-				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
+				plugin.onGlobalEvent.addListener(this.globalEventListener);
 
-				this.listenForUpdates();
-				this.initialized = true;
-				this.initializing = false;
+				console.debug('[mind-vision] adding listener', plugin.onMemoryUpdate);
+				if (this.memoryUpdateListener) {
+					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+				}
+				plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
+				resolve();
 			});
-			const plugin = await this.get();
-
-			if (this.globalEventListener) {
-				plugin.onGlobalEvent.removeListener(this.globalEventListener);
-			}
-			console.debug('[mind-vision] adding listener', plugin.onGlobalEvent);
-			this.globalEventListener = async (first: string, second: string) => {
-				console.log('no-format', '[mind-vision] received global event', first, second);
-				if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
-					await this.performResetListening(plugin);
-				}
-				if (first === 'mindvision-instantiate-error') {
-					this.notifyError(
-						this.i18n.translateString('app.internal.memory.reading-error-title'),
-						this.i18n.translateString('app.internal.memory.reading-error-text'),
-						first,
-					);
-				}
-			};
-			plugin.onGlobalEvent.addListener(this.globalEventListener);
-		} catch (e) {
-			console.warn('[mind-vision] Could not load plugin, retrying', e);
-			this.initializing = false;
-			this.initialized = false;
-			setTimeout(() => this.initialize(), 2000);
-		}
+		});
 	}
 
-	private resetting = false;
-
-	private async performResetListening(plugin) {
-		if (this.resetting) {
-			return;
-		}
-		console.log('[mind-vision] resetting starting');
-		this.resetting = true;
-		plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-		this.memoryUpdateListener = null;
-		await this.resetListening();
-		await this.listenForUpdates();
-		this.resetting = false;
-		console.log('[mind-vision] resetting done');
+	private async instantiatePlugin(callback) {
+		this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
+		this.mindVisionPlugin.initialize(async (status: boolean) => {
+			if (status === false) {
+				console.error("[mind-vision] Plugin couldn't be loaded??", 'retrying');
+				setTimeout(() => this.instantiatePlugin(callback), 2000);
+				return;
+			}
+			console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
+			callback();
+		});
 	}
 
 	private hasRootMemoryReadingError(message: string): boolean {
@@ -562,17 +433,13 @@ export class MindVisionService {
 			notificationId: `${code}`,
 		});
 	}
+}
 
-	private waitForInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			const dbWait = () => {
-				if (this.initialized) {
-					resolve();
-				} else {
-					setTimeout(() => dbWait(), 500);
-				}
-			};
-			dbWait();
-		});
-	}
+enum CurrentState {
+	IDLE,
+	CONSTRUCTING,
+	INITIALIZING,
+	READY,
+	TEARING_DOWN,
+	ERROR,
 }
