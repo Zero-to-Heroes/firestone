@@ -103,7 +103,7 @@
 
 		.rank {
 			display: flex;
-			width: 130px;
+			width: 144px;
 			align-items: center;
 
 			.current {
@@ -150,6 +150,7 @@
 				font-size: 20px;
 				color: var(--default-title-color);
 				margin-left: 10px;
+				white-space: nowrap;
 
 				&.positive {
 					color: #61ff47;
