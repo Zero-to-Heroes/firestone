@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { OverwolfService } from '@services/overwolf.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MemoryUpdate } from '@models/memory/memory-update';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { OwNotificationsService } from '@services/notifications.service';
 import { OverwolfService } from '@services/overwolf.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionStateActive } from '@services/plugins/mind-vision/states/mind-vision-state-active';
 import { MindVisionStateIdle } from '@services/plugins/mind-vision/states/mind-vision-state-idle';
 import { MindVisionStateInit } from '@services/plugins/mind-vision/states/mind-vision-state-init';
+import { MindVisionStateListening } from '@services/plugins/mind-vision/states/mind-vision-state-listening';
 import { MindVisionStateReset } from '@services/plugins/mind-vision/states/mind-vision-state-reset';
 import { MindVisionStateTearDown } from '@services/plugins/mind-vision/states/mind-vision-state-tear-down';
 import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
@@ -24,6 +27,12 @@ export class MindVisionStateMachineService {
 		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 			console.warn('[mind-vision] global event has root memory reading error');
 			this.performAction(Action.RESET);
+		} else if (first === 'mindvision-instantiate-error') {
+			this.notifyError(
+				this.i18n.translateString('app.internal.memory.reading-error-title'),
+				this.i18n.translateString('app.internal.memory.reading-error-text'),
+				first,
+			);
 		} else if (first === 'reset') {
 			console.warn('[mind-vision] first is reset', first, second);
 			this.performAction(Action.RESET);
@@ -56,7 +65,13 @@ export class MindVisionStateMachineService {
 		},
 		[CurrentState.INIT]: {
 			transitions: [
-				{ transition: Action.INIT_COMPLETE, to: CurrentState.ACTIVE },
+				{ transition: Action.INIT_COMPLETE, to: CurrentState.LISTENING },
+				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
+			],
+		},
+		[CurrentState.LISTENING]: {
+			transitions: [
+				{ transition: Action.LISTENING_COMPLETE, to: CurrentState.ACTIVE },
 				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 			],
 		},
@@ -70,7 +85,7 @@ export class MindVisionStateMachineService {
 		},
 		[CurrentState.RESET]: {
 			transitions: [
-				{ transition: Action.RESET_COMPLETE, to: CurrentState.ACTIVE },
+				{ transition: Action.RESET_COMPLETE, to: CurrentState.LISTENING },
 				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 			],
 		},
@@ -83,6 +98,8 @@ export class MindVisionStateMachineService {
 		private readonly mindVisionFacade: MindVisionFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly events: Events,
+		private readonly notifs: OwNotificationsService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.setup();
 	}
@@ -114,6 +131,7 @@ export class MindVisionStateMachineService {
 		this.states
 			.set(CurrentState.IDLE, new MindVisionStateIdle(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.INIT, new MindVisionStateInit(this.mindVisionFacade, this.dispatcher, this.ow))
+			.set(CurrentState.LISTENING, new MindVisionStateListening(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.ACTIVE, new MindVisionStateActive(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.RESET, new MindVisionStateReset(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.TEAR_DOWN, new MindVisionStateTearDown(this.mindVisionFacade, this.dispatcher, this.ow));
@@ -134,14 +152,16 @@ export class MindVisionStateMachineService {
 	}
 
 	private async performAction(action: Action, payload: any = null) {
+		// The state has a direct transition to another state
+		const newState = this.getNextState(this.currentState, action);
 		console.debug(
 			'[mind-vision] performing action',
 			CurrentState[this.currentState?.stateId()],
 			'->',
 			Action[action],
+			'->',
+			CurrentState[newState?.stateId()],
 		);
-		// The state has a direct transition to another state
-		const newState = this.getNextState(this.currentState, action);
 		if (newState) {
 			console.debug(
 				'[mind-vision] got direct next state',
@@ -192,6 +212,31 @@ export class MindVisionStateMachineService {
 
 	private hasRootMemoryReadingError(message: string): boolean {
 		return message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
+	}
+
+	private notifyError(title: string, text: string, code: string) {
+		this.notifs.emitNewNotification({
+			content: `
+				<div class="general-message-container general-theme">
+					<div class="firestone-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+						</svg>
+					</div>
+					<div class="message">
+						<div class="title">
+							<span>${title}</span>
+						</div>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+			notificationId: `${code}`,
+		});
 	}
 
 	private async waitForActiveState() {

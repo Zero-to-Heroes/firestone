@@ -84,7 +84,7 @@ import { tap } from 'rxjs/operators';
 									}"
 									[helpTooltip]="'session.summary.delta-mmr-tooltip' | owTranslate"
 								>
-									{{ buildValue(deltaRank, 0) }}
+									{{ deltaRank }}
 								</div>
 							</ng-container>
 						</div>

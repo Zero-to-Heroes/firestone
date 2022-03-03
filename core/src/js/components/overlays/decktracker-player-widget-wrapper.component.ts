@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -85,7 +85,7 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		).pipe(
-			// tap((info) => console.debug('info', info)),
+			tap((info) => console.debug('info', info)),
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs, decktrackerCloseOnGameEnd],

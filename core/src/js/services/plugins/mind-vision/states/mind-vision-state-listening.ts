@@ -4,19 +4,28 @@ import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
 
-export class MindVisionStateActive implements MindVisionState {
+export class MindVisionStateListening implements MindVisionState {
 	constructor(
 		private readonly mindVision: MindVisionFacadeService,
 		private readonly dispatcher: (action: Action) => Promise<void>,
 		private readonly ow: OverwolfService,
 	) {}
 
-	stateId = () => CurrentState.ACTIVE;
+	stateId = () => CurrentState.LISTENING;
 
 	onExit = async () => {};
 
 	async onEnter(): Promise<void> {
 		this.log('onEnter, plugin init starting');
+		await this.mindVision.listenForUpdates();
+		this.log('plugin ready, running sanity check');
+		let collection = await this.mindVision.getCollection();
+		while (!collection?.length) {
+			this.log('waiting for collection to be populated');
+			collection = await this.mindVision.getCollection();
+		}
+		this.log('sanity check ok');
+		this.dispatcher(Action.LISTENING_COMPLETE);
 	}
 
 	async performAction(action: Action): Promise<Action> {
@@ -29,12 +38,8 @@ export class MindVisionStateActive implements MindVisionState {
 	}
 
 	async apiCall<T>(apiCall: () => Promise<T | 'reset'>): Promise<T | 'reset'> {
-		const result: T | 'reset' = await apiCall();
-		if (result === 'reset') {
-			this.dispatcher(Action.RESET);
-			return 'reset';
-		}
-		return result;
+		this.error('not able to call API');
+		return null;
 	}
 
 	private error(...args: any[]) {
