@@ -1,7 +1,7 @@
-import { BattlegroundsInfo } from '../../../models/battlegrounds-info';
-import { OverwolfService } from '../../overwolf.service';
-import { MindVisionOperationFacade } from './mind-vision-operation-facade';
-import { MindVisionService } from './mind-vision.service';
+import { BattlegroundsInfo } from '@models/battlegrounds-info';
+import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
+import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 
 export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<BattlegroundsInfo> {
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {

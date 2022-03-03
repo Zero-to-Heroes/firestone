@@ -1,7 +1,7 @@
-import { HsAchievementsInfo } from '../../achievement/achievements-info';
-import { OverwolfService } from '../../overwolf.service';
-import { MindVisionOperationFacade } from './mind-vision-operation-facade';
-import { MindVisionService } from './mind-vision.service';
+import { HsAchievementsInfo } from '@services/achievement/achievements-info';
+import { OverwolfService } from '@services/overwolf.service';
+import { MindVisionOperationFacade } from '@services/plugins/mind-vision/mind-vision-operation-facade';
+import { MindVisionService } from '@services/plugins/mind-vision/mind-vision.service';
 
 export class GetAchievementsInfoOperation extends MindVisionOperationFacade<HsAchievementsInfo> {
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {

@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { ArenaInfo } from '@models/arena-info';
+import { BoostersInfo } from '@models/memory/boosters-info';
+import { CoinInfo } from '@models/memory/coin-info';
+import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenaries-collection-info';
+import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
+import { MemoryUpdate } from '@models/memory/memory-update';
+import { RewardsTrackInfo } from '@models/rewards-track-info';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { ArenaInfo } from '../../../models/arena-info';
-import { BoostersInfo } from '../../../models/memory/boosters-info';
-import { CoinInfo } from '../../../models/memory/coin-info';
-import { MemoryMercenariesCollectionInfo } from '../../../models/memory/memory-mercenaries-collection-info';
-import { MemoryMercenariesInfo } from '../../../models/memory/memory-mercenaries-info';
-import { MemoryUpdate } from '../../../models/memory/memory-update';
-import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 import { Events } from '../../events.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
-import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
+import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
 
