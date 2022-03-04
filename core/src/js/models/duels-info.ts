@@ -7,11 +7,15 @@ export interface DuelsInfo {
 	readonly PaidRating: number;
 	readonly LastRatingChange: number;
 	readonly DeckList: readonly number[];
+	// Use that in priority
+	readonly DeckListWithCardIds: readonly string[];
 	readonly ChosenLoot: number;
 	readonly ChosenTreasure: number;
 	readonly LootOptionBundles: readonly OptionBundle[];
 	readonly TreasureOption: readonly number[];
 	readonly StartingHeroPower: number;
+	// Use that in priority
+	readonly StartingHeroPowerCardId: number;
 	readonly PlayerClass: number;
 
 	// Not read from memory, just there for compatiblity with standard decklists
