@@ -1,4 +1,4 @@
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { Card } from '../../../../../models/card';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -14,7 +14,7 @@ export class SearchCardProcessor implements Processor {
 	constructor(
 		private collectionManager: CollectionManager,
 		private cards: SetsService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationService,
 	) {}
 
 	public async process(

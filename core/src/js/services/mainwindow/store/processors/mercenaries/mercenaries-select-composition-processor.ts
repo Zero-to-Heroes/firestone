@@ -1,4 +1,4 @@
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationMercenaries } from '../../../../../models/mainwindow/navigation/navigation-mercenaries';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -6,7 +6,7 @@ import { MercenariesSelectCompositionEvent } from '../../events/mercenaries/merc
 import { Processor } from '../processor';
 
 export class MercenariesSelectCompositionProcessor implements Processor {
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: LocalizationService) {}
 
 	public async process(
 		event: MercenariesSelectCompositionEvent,

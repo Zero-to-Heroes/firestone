@@ -1,5 +1,5 @@
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
@@ -12,7 +12,7 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationService,
 	) {}
 
 	public async process(

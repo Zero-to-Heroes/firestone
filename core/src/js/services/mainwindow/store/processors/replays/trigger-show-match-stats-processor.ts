@@ -1,4 +1,4 @@
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -14,7 +14,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 	constructor(
 		private readonly bgsRunStats: BgsRunStatsService,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationService,
 	) {}
 
 	public async process(

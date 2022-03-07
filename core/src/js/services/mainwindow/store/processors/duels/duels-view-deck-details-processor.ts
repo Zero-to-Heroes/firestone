@@ -1,14 +1,14 @@
+import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Events } from '../../../../events.service';
 import { formatClass } from '../../../../hs-utils';
-import { LocalizationFacadeService } from '../../../../localization-facade.service';
 import { DuelsViewDeckDetailsEvent } from '../../events/duels/duels-view-deck-details-event';
 import { Processor } from '../processor';
 
 export class DuelsViewDeckDetailsProcessor implements Processor {
-	constructor(private readonly events: Events, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly events: Events, private readonly i18n: LocalizationService) {}
 
 	public async process(
 		event: DuelsViewDeckDetailsEvent,

@@ -1,4 +1,4 @@
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -8,7 +8,7 @@ import { ShowReplayEvent } from '../../events/replays/show-replay-event';
 import { Processor } from '../processor';
 
 export class ShowReplayProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly i18n: LocalizationService) {}
 
 	public async process(
 		event: ShowReplayEvent,

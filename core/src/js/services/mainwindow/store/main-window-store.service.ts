@@ -1,10 +1,13 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
+import { DuelsTreasureSelectionEvent } from '@services/mainwindow/store/events/duels/duels-treasure-selection-event';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
+import { DuelsTreasureSelectionParser } from '@services/mainwindow/store/processors/duels/duels-treasure-selection-parser';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -25,7 +28,6 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
-import { LocalizationFacadeService } from '../../localization-facade.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
@@ -332,7 +334,7 @@ export class MainWindowStoreService {
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly translate: TranslateService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -862,6 +864,9 @@ export class MainWindowStoreService {
 
 			DuelsIsOnMainScreenEvent.eventName(),
 			new DuelsIsOnMainScreenProcessor(),
+
+			DuelsTreasureSelectionEvent.eventName(),
+			new DuelsTreasureSelectionParser(this.cards),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

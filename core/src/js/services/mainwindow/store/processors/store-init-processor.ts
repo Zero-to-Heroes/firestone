@@ -1,4 +1,4 @@
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { LocalizationService } from '@services/localization.service';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../../models/preferences';
@@ -13,7 +13,7 @@ export class StoreInitProcessor implements Processor {
 	constructor(
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: LocalizationService,
 	) {}
 
 	public async process(
