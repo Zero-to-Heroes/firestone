@@ -12,13 +12,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
-import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { Events } from '../../../services/events.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -149,7 +149,7 @@ export class DeckTrackerOverlayRootComponent
 		private el: ElementRef,
 		private renderer: Renderer2,
 		private events: Events,
-		private readonly cardsHighlight: CardsHighlightService,
+		private readonly cardsHighlight: CardsHighlightFacadeService,
 	) {
 		super(store, cdr);
 		this.cardsHighlight.init();
@@ -282,7 +282,7 @@ export class DeckTrackerOverlayRootComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
-		this.cardsHighlight.shutDown();
+		// this.cardsHighlight.shutDown();
 	}
 
 	onMinimize() {

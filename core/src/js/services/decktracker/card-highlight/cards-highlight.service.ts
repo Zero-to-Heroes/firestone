@@ -52,8 +52,6 @@ import {
 	weapon,
 } from './selectors';
 
-// We don't want a shared service with a facade here, as we don't want any communitication between
-// different decks
 @Injectable()
 export class CardsHighlightService extends AbstractSubscriptionService {
 	private handlers: { [uniqueId: string]: Handler } = {};
@@ -63,11 +61,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	constructor(private readonly prefs: PreferencesService, protected readonly store: AppUiStoreFacadeService) {
 		super(store);
-		// this.init();
+		this.setup();
+		window['cardsHighlightService'] = this;
 	}
 
-	public async init(options?: SelectorOptions) {
-		this.options = options;
+	private async setup() {
 		await this.store.initComplete();
 		const obs: Observable<GameState> = this.store
 			.listenDeckState$((gameState) => gameState)
@@ -79,20 +77,24 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		obs.pipe(takeUntil(this.destroyed$)).subscribe((gameState) => (this.gameState = gameState));
 	}
 
-	public shutDown() {
-		super.onDestroy();
+	public async init(options?: SelectorOptions) {
+		this.options = options;
 	}
 
-	register(_uniqueId: string, handler: Handler) {
-		this.handlers[_uniqueId] = handler;
+	// public shutDown() {
+	// 	super.onDestroy();
+	// }
+
+	register(_uniqueId: string, handler: Handler, side: 'player' | 'opponent' | 'duels') {
+		this.handlers[side + _uniqueId] = handler;
 	}
 
-	unregister(_uniqueId: string) {
-		delete this.handlers[_uniqueId];
+	unregister(_uniqueId: string, side: 'player' | 'opponent' | 'duels') {
+		delete this.handlers[side + _uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: 'player' | 'opponent', card?: DeckCard) {
-		console.debug('onMouseEnter', cardId, side, this.gameState);
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard) {
+		console.debug('onMouseEnter', cardId, side, this.gameState, this.options);
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
 			return;
@@ -114,7 +116,17 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		) => boolean = this.buildSelector(cardId, card);
 		console.debug('built selector', selector);
 		if (selector) {
-			Object.values(this.handlers)
+			console.debug(
+				'highlighting',
+				this.handlers,
+				Object.keys(this.handlers).filter((key) => key.startsWith(side)),
+				Object.keys(this.handlers)
+					.filter((key) => key.startsWith(side))
+					.map((key) => this.handlers[key]),
+			);
+			Object.keys(this.handlers)
+				.filter((key) => key.startsWith(side))
+				.map((key) => this.handlers[key])
 				.filter((handler) => {
 					return selector(
 						handler,

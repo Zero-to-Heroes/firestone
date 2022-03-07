@@ -9,6 +9,7 @@ import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twi
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { init } from '@sentry/browser';
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsSimulationOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
@@ -22,7 +23,6 @@ import { StateMouseOverComponent } from '../../components/decktracker/overlay/tw
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { CardsFacadeService } from '../../services/cards-facade.service';
-import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { Events } from '../../services/events.service';
 import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -75,7 +75,7 @@ console.log('version is', process.env.APP_VERSION);
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: AppUiStoreFacadeService, useFactory: () => null },
-		{ provide: CardsHighlightService, useFactory: () => null },
+		{ provide: CardsHighlightFacadeService, useFactory: () => null },
 	],
 })
 export class DeckTrackerTwitchModule {}

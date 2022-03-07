@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
 import { Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
@@ -106,6 +107,7 @@ export class AppBootstrapService {
 		private init_AppUiStoreService: AppUiStoreService,
 		private init_LocalizationService: LocalizationService,
 		private init_OWUtilsService: OwUtilsService,
+		private init_CardsHighlightService: CardsHighlightService,
 	) {}
 
 	public async init() {

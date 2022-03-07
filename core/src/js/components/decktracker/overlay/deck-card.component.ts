@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -11,10 +10,10 @@ import {
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { uuid } from '../../../services/utils';
 
@@ -131,7 +130,7 @@ import { uuid } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckCardComponent implements AfterViewInit, OnDestroy {
+export class DeckCardComponent implements OnDestroy {
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 		this.cdr.detectChanges();
@@ -173,7 +172,14 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	@Input() side: 'player' | 'opponent';
+	@Input() set side(value: 'player' | 'opponent' | 'duels') {
+		console.debug('setting side', value);
+		this._side = value;
+		this.registerHighlight();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
@@ -203,29 +209,35 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
+	private _side: 'player' | 'opponent' | 'duels';
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly cards: CardsFacadeService,
-		@Optional() private readonly cardsHighlightService: CardsHighlightService,
+		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
 	) {}
 
-	ngAfterViewInit() {
+	registerHighlight() {
 		this._uniqueId = uuid();
-		this.cardsHighlightService?.register(this._uniqueId, {
-			referenceCardProvider: () => this._referenceCard,
-			deckCardProvider: () => this._card,
-			zoneProvider: () => this._zone,
-			highlightCallback: () => this.doHighlight(),
-			unhighlightCallback: () => this.doUnhighlight(),
-		});
+		console.debug('registering card', this._side);
+		this.cardsHighlightService?.register(
+			this._uniqueId,
+			{
+				referenceCardProvider: () => this._referenceCard,
+				deckCardProvider: () => this._card,
+				zoneProvider: () => this._zone,
+				highlightCallback: () => this.doHighlight(),
+				unhighlightCallback: () => this.doUnhighlight(),
+			},
+			this._side,
+		);
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
-		this.cardsHighlightService?.unregister(this._uniqueId);
+		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
 	}
 
 	doHighlight() {
@@ -243,7 +255,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		this.cardsHighlightService?.onMouseEnter(this.cardId, this.side, this._card);
+		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this._card);
 	}
 
 	onMouseLeave(event: MouseEvent) {

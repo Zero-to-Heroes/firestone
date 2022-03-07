@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { filter } from 'rxjs/operators';
 	selector: 'duels-decktracker-ooc',
 	styleUrls: [
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-		'../../../../css/component/overlays/duels-ooc-tracker/duels-decktracker-ooc.component.scss',
+		'../../../../css/component/overlays/duels-ooc/duels-decktracker-ooc.component.scss',
 	],
 	template: `
 		<div class="root active" [activeTheme]="'decktracker'">
@@ -27,7 +27,7 @@ import { filter } from 'rxjs/operators';
 					<div class="decktracker-container">
 						<div class="decktracker" *ngIf="!!cards" [style.width.px]="overlayWidthInPx">
 							<div class="background"></div>
-							<deck-list class="played-cards" [cards]="cards"> </deck-list>
+							<deck-list class="played-cards" [cards]="cards" [side]="'duels'"> </deck-list>
 							<div class="backdrop" *ngIf="showBackdrop"></div>
 						</div>
 					</div>
@@ -44,7 +44,7 @@ export class DuelsDecktrackerOocComponent extends AbstractSubscriptionComponent 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly cardsHighlight: CardsHighlightService,
+		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
@@ -57,16 +57,12 @@ export class DuelsDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				filter(([deck]) => !!deck),
 				this.mapData(([deck]) => deck.DeckList as readonly string[]),
 			);
-		this.cardsHighlight.init({
-			skipGameState: true,
-			skipPrefs: true,
-			uniqueZone: true,
-		});
+		this.cardsHighlight.initForDuels();
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
-		this.cardsHighlight.shutDown();
+		// this.cardsHighlight.shutDown();
 	}
 }

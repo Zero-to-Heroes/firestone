@@ -22,11 +22,14 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			displayMode="DISPLAY_MODE_GROUPED"
 			[colorManaCost]="true"
 			[collection]="collection"
+			[side]="side"
 		></decktracker-deck-list>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckListComponent {
+	@Input() side: 'player' | 'opponent' | 'duels';
+
 	@Input() set deckstring(value: string) {
 		const decklist = this.deckHandler.buildDeckList(value);
 		this.deckState = DeckState.create({

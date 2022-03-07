@@ -73,7 +73,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() darkenUsedCards: boolean;
 	@Input() hideGeneratedCardsInOtherZone: boolean;
 	@Input() sortCardsByManaCostInOtherZone: boolean;
-	@Input() side: 'player' | 'opponent';
+	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;

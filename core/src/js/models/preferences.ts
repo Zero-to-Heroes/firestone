@@ -376,6 +376,7 @@ export class Preferences {
 	readonly duelsHideStatsBelowThreshold: boolean;
 	readonly duelsShowMaxLifeWidget2: 'off' | 'mouseover' | 'blink' = 'mouseover';
 	readonly duelsShowOocTracker: boolean = true;
+	readonly duelsHighlightTreasureSynergies: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocTrackerPosition: { left: number; top: number };
 
