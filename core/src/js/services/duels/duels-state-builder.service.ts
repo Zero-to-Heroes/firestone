@@ -10,6 +10,7 @@ import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
+import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckDefinition, decode } from 'deckstrings';
@@ -97,6 +98,10 @@ export class DuelsStateBuilderService {
 			} else if (changes.IsDuelsMainRunScreen === false) {
 				console.debug('[duels-state-builder] duels not main screen');
 				this.isOnMainScreen.next(false);
+			}
+
+			if (changes.DuelsCurrentOptionSelection) {
+				this.mainWindowStateUpdater.next(new DuelsCurrentOptionEvent(changes.DuelsCurrentOptionSelection));
 			}
 		});
 

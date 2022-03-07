@@ -55,7 +55,7 @@ export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
 	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
-// export const overload = hasMechanic(GameTag.OVERLOAD);
+export const discover = hasMechanic(GameTag.DISCOVER);
 
 export const overload = (handler: Handler): boolean => {
 	return (handler.referenceCardProvider()?.mechanics ?? []).includes('OVERLOAD');

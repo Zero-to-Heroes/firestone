@@ -44,6 +44,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
 
 			<duels-max-life-opponent-widget-wrapper></duels-max-life-opponent-widget-wrapper>
+			<duels-ooc-treasure-selection-widget-wrapper></duels-ooc-treasure-selection-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

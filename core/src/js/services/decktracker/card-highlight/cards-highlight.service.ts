@@ -18,6 +18,7 @@ import {
 	corrupted,
 	deathrattle,
 	demon,
+	discover,
 	divineShield,
 	dragon,
 	effectiveCostEqual,
@@ -94,7 +95,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	}
 
 	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard) {
-		console.debug('onMouseEnter', cardId, side, this.gameState, this.options);
+		// console.debug('onMouseEnter', cardId, side, this.gameState, this.options);
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
 			return;
@@ -114,16 +115,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			deckState?: DeckState,
 			options?: SelectorOptions,
 		) => boolean = this.buildSelector(cardId, card);
-		console.debug('built selector', selector);
+		// console.debug('built selector', selector);
 		if (selector) {
-			console.debug(
-				'highlighting',
-				this.handlers,
-				Object.keys(this.handlers).filter((key) => key.startsWith(side)),
-				Object.keys(this.handlers)
-					.filter((key) => key.startsWith(side))
-					.map((key) => this.handlers[key]),
-			);
+			// console.debug(
+			// 	'highlighting',
+			// 	this.handlers,
+			// 	Object.keys(this.handlers).filter((key) => key.startsWith(side)),
+			// 	Object.keys(this.handlers)
+			// 		.filter((key) => key.startsWith(side))
+			// 		.map((key) => this.handlers[key]),
+			// );
 			Object.keys(this.handlers)
 				.filter((key) => key.startsWith(side))
 				.map((key) => this.handlers[key])
@@ -135,7 +136,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					);
 				})
 				.forEach((handler) => {
-					console.debug('handler', handler);
+					// console.debug('handler', handler);
 					handler.highlightCallback();
 				});
 		}
@@ -278,10 +279,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, or(shadow, holy));
 			case CardIds.SpringTheTrap:
 				return and(inDeck, secret);
-			case CardIds.StonehearthVindicator:
-				return and(inDeck, spell, effectiveCostLess(4));
 			case CardIds.StaffOfPainTavernBrawl:
 				return and(spell, shadow);
+			case CardIds.StakingAClaimTavernBrawl:
+				return and(discover);
+			case CardIds.StonehearthVindicator:
+				return and(inDeck, spell, effectiveCostLess(4));
 			case CardIds.SwordOfTheFallen:
 				return and(inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:

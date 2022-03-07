@@ -1,4 +1,4 @@
-import { SceneMode } from '@firestone-hs/reference-data';
+import { DungeonCrawlOptionType, SceneMode } from '@firestone-hs/reference-data';
 import { CardPackInfo, PackInfo } from './pack-info';
 
 export interface MemoryUpdate {
@@ -15,6 +15,9 @@ export interface MemoryUpdate {
 	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
 	readonly BattlegroundsNewRating: number;
 	readonly IsDuelsMainRunScreen: boolean;
+	// readonly IsDuelsSelectingTreasure: boolean;
+	// readonly DuelsPendingTreasureSelection: DuelsTreasureSelection;
+	readonly DuelsCurrentOptionSelection: DungeonCrawlOptionType;
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPack: PackInfo;
@@ -38,5 +41,9 @@ export interface Reward {
 
 export interface MercenaryTreasureSelection {
 	readonly MercenaryId: number;
+	readonly Options: readonly number[];
+}
+
+export interface DuelsTreasureSelection {
 	readonly Options: readonly number[];
 }

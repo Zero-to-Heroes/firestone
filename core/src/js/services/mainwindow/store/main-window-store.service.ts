@@ -3,11 +3,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationService } from '@services/localization.service';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
+import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
-import { DuelsTreasureSelectionEvent } from '@services/mainwindow/store/events/duels/duels-treasure-selection-event';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
+import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/duels/duels-current-option-parser';
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
-import { DuelsTreasureSelectionParser } from '@services/mainwindow/store/processors/duels/duels-treasure-selection-parser';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -865,8 +865,8 @@ export class MainWindowStoreService {
 			DuelsIsOnMainScreenEvent.eventName(),
 			new DuelsIsOnMainScreenProcessor(),
 
-			DuelsTreasureSelectionEvent.eventName(),
-			new DuelsTreasureSelectionParser(this.cards),
+			DuelsCurrentOptionEvent.eventName(),
+			new DuelsCurrentOptionParser(this.cards, this.memoryReading),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

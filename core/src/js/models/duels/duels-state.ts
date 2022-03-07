@@ -1,5 +1,6 @@
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
+import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
@@ -30,6 +31,8 @@ export class DuelsState {
 
 	readonly currentDuelsDeck: DeckInfoFromMemory;
 	readonly isOnDuelsMainScreen: boolean;
+	readonly treasureSelection: TreasureSelection;
+	readonly currentOption: DungeonCrawlOptionType;
 
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);
@@ -43,4 +46,8 @@ export class DuelsState {
 		const result = this.categories?.find((cat) => cat.id === categoryId);
 		return result;
 	}
+}
+
+export interface TreasureSelection {
+	readonly treasures: readonly ReferenceCard[];
 }
