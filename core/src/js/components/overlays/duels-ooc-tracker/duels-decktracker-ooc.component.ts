@@ -51,33 +51,6 @@ export class DuelsDecktrackerOocComponent extends AbstractSubscriptionComponent 
 	}
 
 	ngAfterContentInit(): void {
-		// this.deck$ = this.store
-		// 	.listen$(([main, nav]) => main.duels.currentDuelsDeck)
-		// 	.pipe(
-		// 		tap((info) => console.debug('gregre', 'info', info)),
-		// 		filter(([deck]) => !!deck),
-		// 		this.mapData(([deck]) => {
-		// 			console.debug('mapping deck', deck);
-		// 			const deckCards: readonly DeckCard[] = deck.DeckList.map((cardId) => cardId as string)
-		// 				.map((cardId) => this.allCards.getCard(cardId))
-		// 				.map((card) => {
-		// 					return DeckCard.create({
-		// 						cardId: card.id,
-		// 						cardName: card.name,
-		// 						cardType: card.type,
-		// 						actualManaCost: card.cost,
-		// 						manaCost: card.cost,
-		// 						rarity: card.rarity,
-		// 					});
-		// 				});
-		// 			const result = DeckState.create({
-		// 				deck: deckCards,
-		// 				deckList: deckCards,
-		// 			});
-		// 			console.debug('gregre', 'deck', result, deck);
-		// 			return result;
-		// 		}),
-		// 	);
 		this.cards$ = this.store
 			.listen$(([main, nav]) => main.duels.currentDuelsDeck)
 			.pipe(

@@ -17,6 +17,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div class="decktracker-appearance" scrollable>
 			<div class="subtitle" [owTranslate]="'settings.decktracker.duels.title'"></div>
 			<div class="settings-group">
+				<preference-toggle
+					field="duelsShowOocTracker"
+					[label]="'settings.decktracker.duels.show-ooc-tracker-label' | owTranslate"
+					[tooltip]="'settings.decktracker.duels.show-ooc-tracker-tooltip' | owTranslate"
+				></preference-toggle>
 				<preferences-dropdown
 					field="duelsShowMaxLifeWidget2"
 					[label]="'settings.decktracker.duels.max-health-label' | owTranslate"
@@ -31,7 +36,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class SettingsDecktrackerDuelsComponent extends AbstractSubscriptionComponent {
 	maxHealthOptions: readonly IOption[] = ['off', 'mouseover', 'blink'].map((value) => ({
 		value: value,
-		label: this.i18n.translateString(`settings.decktracker.duels.max-health-option-${value}`),
+		label: this.i18n.translateString(`settings.decktracker.duels.max-health-option-${value}`) ?? '',
 	}));
 
 	constructor(
