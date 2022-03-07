@@ -1,5 +1,6 @@
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -19,6 +20,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly memory: MemoryInspectionService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -54,7 +56,8 @@ export class OpponentPlayerParser implements EventParser {
 		}
 
 		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString));
+		const matchInfo = await this.memory.getMatchInfo();
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString), matchInfo);
 
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can

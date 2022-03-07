@@ -1,3 +1,4 @@
+import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -11,6 +12,7 @@ export class DecklistUpdateParser implements EventParser {
 		private readonly aiDecks: AiDeckService,
 		private readonly handler: DeckHandlerService,
 		private readonly prefs: PreferencesService,
+		private readonly memory: MemoryInspectionService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -46,7 +48,8 @@ export class DecklistUpdateParser implements EventParser {
 			return currentState;
 		}
 
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring));
+		const matchInfo = await this.memory.getMatchInfo();
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), matchInfo);
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,

@@ -6,15 +6,10 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { MatchInfo } from '../../models/match-info';
 import { getDefaultHeroDbfIdForClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class DeckHandlerService {
-	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly memory: MemoryInspectionService,
-		private readonly i18n: LocalizationFacadeService,
-	) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {
@@ -60,12 +55,11 @@ export class DeckHandlerService {
 		return result;
 	}
 
-	public async postProcessDeck(deck: readonly DeckCard[]): Promise<readonly DeckCard[]> {
+	public async postProcessDeck(deck: readonly DeckCard[], matchInfo: MatchInfo): Promise<readonly DeckCard[]> {
 		if (!deck || deck.length === 0) {
 			return deck;
 		}
 
-		const matchInfo = await this.memory.getMatchInfo();
 		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, matchInfo));
 	}
 
