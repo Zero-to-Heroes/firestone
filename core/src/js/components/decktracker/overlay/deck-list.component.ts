@@ -22,7 +22,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			displayMode="DISPLAY_MODE_GROUPED"
 			[colorManaCost]="true"
 			[collection]="collection"
-			tooltipPosition="right"
 		></decktracker-deck-list>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -18,12 +18,9 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
-import { DebugService } from '../../../services/debug.service';
 import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { Events } from '../../../services/events.service';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -147,17 +144,15 @@ export class DeckTrackerOverlayRootComponent
 	private showTooltips = true;
 
 	constructor(
-		private prefs: PreferencesService,
-		private ow: OverwolfService,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private el: ElementRef,
 		private renderer: Renderer2,
 		private events: Events,
-		private init_DebugService: DebugService,
 		private readonly cardsHighlight: CardsHighlightService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
+		this.cardsHighlight.init();
 	}
 
 	async ngAfterViewInit() {

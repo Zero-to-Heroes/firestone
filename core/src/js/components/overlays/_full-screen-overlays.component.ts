@@ -43,6 +43,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
 
+			<!-- Duels -->
+			<duels-decktracker-ooc-widget-wrapper></duels-decktracker-ooc-widget-wrapper>
+
 			<!-- BG -->
 			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
 			<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>

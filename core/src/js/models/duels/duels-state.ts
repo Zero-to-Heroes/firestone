@@ -2,6 +2,7 @@ import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
@@ -26,6 +27,9 @@ export class DuelsState {
 	// it will be erased every time we recompute everything from the global stats
 	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
 	readonly currentDuelsMetaPatch: PatchInfo;
+
+	readonly currentDuelsDeck: DeckInfoFromMemory;
+	readonly isOnDuelsMainScreen: boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);

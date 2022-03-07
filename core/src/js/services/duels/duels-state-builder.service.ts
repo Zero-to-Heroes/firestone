@@ -5,9 +5,15 @@ import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
+import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
+import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
+import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
+import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckDefinition, decode } from 'deckstrings';
+import { BehaviorSubject } from 'rxjs';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import {
 	DuelsDeckStatInfo,
@@ -38,7 +44,7 @@ import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
+// const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
 const DUELS_GLOBAL_STATS_URL_SPLIT =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json?v=21';
 const DUELS_GLOBAL_STATS_DECKS =
@@ -50,6 +56,9 @@ const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get
 export class DuelsStateBuilderService {
 	public static STATS_THRESHOLD = 40;
 
+	public duelsDeck = new BehaviorSubject<DeckInfoFromMemory>(null);
+	public isOnMainScreen = new BehaviorSubject<boolean>(false);
+
 	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -59,14 +68,60 @@ export class DuelsStateBuilderService {
 		private readonly allCards: CardsFacadeService,
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly memory: MemoryInspectionService,
 	) {
+		this.init();
+	}
+
+	private async init() {
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
 			.subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
 
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
+			const changes: MemoryUpdate = data.data[0];
+			if (changes.IsDuelsMainRunScreen) {
+				const duelsInfo = await this.memory.getDuelsInfo();
+				console.debug('[duels-state-builder] duels info', duelsInfo);
+				this.duelsDeck.next({
+					...duelsInfo,
+					// Give priority to the cardIds, as this is what we get when reading the duels deck
+					// from the main Duels manager, instead of the dungeon run scene
+					DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
+				});
+			}
+			// null simply means "no change"
+			if (changes.IsDuelsMainRunScreen === true) {
+				console.debug('[duels-state-builder] duels main screen');
+				this.isOnMainScreen.next(true);
+			} else if (changes.IsDuelsMainRunScreen === false) {
+				console.debug('[duels-state-builder] duels not main screen');
+				this.isOnMainScreen.next(false);
+			}
+		});
+
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+			this.duelsDeck.asObservable().subscribe((deck) => {
+				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(deck));
+			});
+			this.isOnMainScreen.asObservable().subscribe((deck) => {
+				this.mainWindowStateUpdater.next(new DuelsIsOnMainScreenEvent(deck));
+			});
 		});
+
+		const duelsInfo = await this.memory.getDuelsInfo();
+		if (duelsInfo) {
+			this.duelsDeck.next({
+				...duelsInfo,
+				// Give priority to the cardIds, as this is what we get when reading the duels deck
+				// from the main Duels manager, instead of the dungeon run scene
+				DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
+			});
+			console.log('[duels-state-builder] initial duels deck', this.duelsDeck?.value?.DeckList?.length);
+			console.debug('[duels-state-builder] initial duels deck', this.duelsDeck);
+		}
 	}
 
 	public async loadLeaderboard(): Promise<DuelsLeaderboard> {

@@ -14,6 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
+import { DuelsDecktrackerOocWidgetWrapperComponent } from '@components/overlays/duels-decktracker-ooc-widget-wrapper.component';
+import { DuelsDecktrackerOocComponent } from '@components/overlays/duels-ooc-tracker/duels-decktracker-ooc.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
@@ -810,6 +812,8 @@ const components = [
 		CurrentSessionWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
+		DuelsDecktrackerOocWidgetWrapperComponent,
+		DuelsDecktrackerOocComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,

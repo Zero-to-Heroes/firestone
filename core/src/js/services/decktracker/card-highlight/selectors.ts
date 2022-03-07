@@ -1,38 +1,35 @@
-import { CardClass, CardType, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { Handler } from './cards-highlight.service';
+import { Handler, SelectorOptions } from './cards-highlight.service';
 
 export const and = (
-	...filters: ((h: Handler, d?: DeckState) => boolean)[]
-): ((handler: Handler, d?: DeckState) => boolean) => {
-	return (handler, deckState) => filters.every((filter) => filter(handler, deckState));
+	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
+): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
+	return (handler, deckState, options?: SelectorOptions) =>
+		filters.every((filter) => filter(handler, deckState, options));
 };
 
 export const or = (
-	...filters: ((h: Handler, d?: DeckState) => boolean)[]
-): ((handler: Handler, d?: DeckState) => boolean) => {
-	return (handler, deckState) => filters.some((filter) => filter(handler, deckState));
+	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
+): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
+	return (handler, deckState, options?: SelectorOptions) =>
+		filters.some((filter) => filter(handler, deckState, options));
 };
 
-export const not = (filter: (h: Handler, d?: DeckState) => boolean): ((handler: Handler, d?: DeckState) => boolean) => {
-	return (handler, deckState) => !filter(handler, deckState);
+export const not = (
+	filter: (h: Handler, d?: DeckState, options?: SelectorOptions) => boolean,
+): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
+	return (handler, deckState, options?: SelectorOptions) => !filter(handler, deckState, options);
 };
 
-export const inDeck = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'deck';
-};
-
-export const inHand = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'hand';
-};
-
-export const inOther = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'other';
-};
-
-export const inGraveyard = (handler: Handler): boolean => {
-	return handler.deckCardProvider()?.zone === 'GRAVEYARD';
-};
+const inZoneId = (zone: string) => (handler: Handler, d?: DeckState, options?: SelectorOptions): boolean =>
+	options?.uniqueZone || handler.zoneProvider()?.id?.toLowerCase() === zone?.toLowerCase();
+const inZoneName = (zone: string) => (handler: Handler, d?: DeckState, options?: SelectorOptions): boolean =>
+	handler.deckCardProvider()?.zone?.toLowerCase() === zone?.toLowerCase();
+export const inDeck = inZoneId('deck');
+export const inHand = inZoneId('hand');
+export const inOther = inZoneId('other');
+export const inGraveyard = inZoneName('GRAVEYARD');
 
 export const effectiveCostLess = (cost: number) => (handler: Handler): boolean => {
 	return handler.deckCardProvider()?.getEffectiveManaCost() < cost;
@@ -50,10 +47,18 @@ export const notInInitialDeck = (handler: Handler): boolean => {
 	return handler.deckCardProvider().creatorCardId != null || handler.deckCardProvider().creatorCardIds?.length > 0;
 };
 
-export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState): boolean => {
+export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
 	return deckState?.spellsPlayedThisMatch
 		.map((spell) => spell.entityId)
 		.includes(handler.deckCardProvider()?.entityId);
+};
+
+const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
+	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
+// export const overload = hasMechanic(GameTag.OVERLOAD);
+
+export const overload = (handler: Handler): boolean => {
+	return (handler.referenceCardProvider()?.mechanics ?? []).includes('OVERLOAD');
 };
 
 export const outcast = (handler: Handler): boolean => {

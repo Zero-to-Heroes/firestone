@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -37,6 +38,7 @@ import {
 	notInInitialDeck,
 	or,
 	outcast,
+	overload,
 	pirate,
 	race,
 	rogue,
@@ -57,26 +59,28 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	private handlers: { [uniqueId: string]: Handler } = {};
 
 	private gameState: GameState;
+	private options: SelectorOptions;
 
 	constructor(private readonly prefs: PreferencesService, protected readonly store: AppUiStoreFacadeService) {
 		super(store);
-		this.init();
+		// this.init();
+	}
+
+	public async init(options?: SelectorOptions) {
+		this.options = options;
+		await this.store.initComplete();
+		const obs: Observable<GameState> = this.store
+			.listenDeckState$((gameState) => gameState)
+			.pipe(
+				filter((gameState) => !!gameState),
+				map(([gameState]) => gameState),
+				takeUntil(this.destroyed$),
+			);
+		obs.pipe(takeUntil(this.destroyed$)).subscribe((gameState) => (this.gameState = gameState));
 	}
 
 	public shutDown() {
 		super.onDestroy();
-	}
-
-	private async init() {
-		await this.store.initComplete();
-		this.store
-			.listenDeckState$((gameState) => gameState)
-			.pipe(
-				map(([gameState]) => gameState),
-				filter((gameState) => !!gameState),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((gameState) => (this.gameState = gameState));
 	}
 
 	register(_uniqueId: string, handler: Handler) {
@@ -88,13 +92,14 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	}
 
 	async onMouseEnter(cardId: string, side: 'player' | 'opponent', card?: DeckCard) {
+		console.debug('onMouseEnter', cardId, side, this.gameState);
 		// Happens when using the deck-list component outside of a game
-		if (!this.gameState) {
+		if (!this.options?.skipGameState && !this.gameState) {
 			return;
 		}
 
 		const prefs = await this.prefs.getPreferences();
-		if (!prefs.overlayHighlightRelatedCards) {
+		if (!this.options?.skipPrefs && !prefs.overlayHighlightRelatedCards) {
 			return;
 		}
 
@@ -102,13 +107,25 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			console.warn('no side provided', cardId, side);
 		}
 
-		const selector: (handler: Handler, deckState?: DeckState) => boolean = this.buildSelector(cardId, card);
+		const selector: (
+			handler: Handler,
+			deckState?: DeckState,
+			options?: SelectorOptions,
+		) => boolean = this.buildSelector(cardId, card);
+		console.debug('built selector', selector);
 		if (selector) {
 			Object.values(this.handlers)
-				.filter((handler) =>
-					selector(handler, side === 'player' ? this.gameState.playerDeck : this.gameState.opponentDeck),
-				)
-				.forEach((handler) => handler.highlightCallback());
+				.filter((handler) => {
+					return selector(
+						handler,
+						side === 'player' ? this.gameState?.playerDeck : this.gameState?.opponentDeck,
+						this.options,
+					);
+				})
+				.forEach((handler) => {
+					console.debug('handler', handler);
+					handler.highlightCallback();
+				});
 		}
 	}
 
@@ -116,7 +133,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private buildSelector(cardId: string, card: DeckCard): (handler: Handler, deckState?: DeckState) => boolean {
+	private buildSelector(
+		cardId: string,
+		card: DeckCard,
+	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
 			case CardIds.AllianceBannerman:
 				return and(inDeck, minion);
@@ -188,6 +208,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, pirate);
 			case CardIds.IcebloodTower:
 				return and(inDeck, spell);
+			case CardIds.InvestmentOpportunity:
+				return and(inDeck, overload);
 			case CardIds.JaceDarkweaver:
 				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
 			case CardIds.JewelOfNzoth:
@@ -288,4 +310,10 @@ export interface Handler {
 	readonly zoneProvider: () => DeckZone;
 	readonly highlightCallback: () => void;
 	readonly unhighlightCallback: () => void;
+}
+
+export interface SelectorOptions {
+	readonly uniqueZone?: boolean;
+	readonly skipGameState?: boolean;
+	readonly skipPrefs?: boolean;
 }

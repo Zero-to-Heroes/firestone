@@ -1,6 +1,10 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
+import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
+import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
+import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -852,6 +856,12 @@ export class MainWindowStoreService {
 
 			DuelsRequestNewGlobalStatsLoadEvent.eventName(),
 			new DuelsRequestNewGlobalStatsLoadProcessor(this.duelsBuilder),
+
+			DuelsCurrentDeckEvent.eventName(),
+			new DuelsCurrentDeckProcessor(),
+
+			DuelsIsOnMainScreenEvent.eventName(),
+			new DuelsIsOnMainScreenProcessor(),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

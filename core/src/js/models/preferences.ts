@@ -375,6 +375,9 @@ export class Preferences {
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;
 	readonly duelsHideStatsBelowThreshold: boolean;
 	readonly duelsShowMaxLifeWidget2: 'off' | 'mouseover' | 'blink' = 'mouseover';
+	readonly duelsShowOocTracker: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly duelsOocTrackerPosition: { left: number; top: number };
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

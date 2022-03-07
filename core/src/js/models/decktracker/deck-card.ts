@@ -43,7 +43,7 @@ export class DeckCard {
 	readonly playTiming?: number;
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
-	public static create(base: DeckCard = {} as DeckCard) {
+	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
 		// if (base.cardId && !base.cardName) {
 		// console.warn('creating deck card without name', base, new Error().stack);
 		// }

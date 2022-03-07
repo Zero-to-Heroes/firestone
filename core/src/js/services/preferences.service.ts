@@ -217,6 +217,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsOocTrackerPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsOocTrackerPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateTrackerPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, decktrackerPosition: { left, top } };

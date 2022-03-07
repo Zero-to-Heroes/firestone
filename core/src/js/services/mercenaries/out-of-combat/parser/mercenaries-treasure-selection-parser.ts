@@ -32,7 +32,8 @@ export class MercenariesTreasureSelectionParser implements MercenariesOutOfComba
 		} else if (changes.IsMercenariesSelectingTreasure == false) {
 			return state.update({ treasureSelection: null });
 		}
-		console.warn('invalid case', changes);
+		// Can happen when selecting a treasure for Duels (it's the same event that is sent)
+		// console.warn('invalid case', changes);
 		return state;
 	}
 }

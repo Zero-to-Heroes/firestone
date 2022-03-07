@@ -11,9 +11,9 @@ import {
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
 import { DeckDefinition, decode, encode } from 'deckstrings';
 import { Metadata } from '../../models/decktracker/metadata';
-import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -30,6 +30,10 @@ const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/dec
 
 @Injectable()
 export class DeckParserService {
+	// We store this separately because we retrieve it with a different timing (we have to
+	// get it from the hub screen, instead of when moving away to the match)
+	public duelsDeck: DeckInfoFromMemory;
+
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 	private spectating: boolean;
@@ -37,9 +41,6 @@ export class DeckParserService {
 	private currentNonGamePlayScene: SceneMode;
 	private currentScene: SceneMode;
 	private currentDeck: DeckInfo;
-	// We store this separately because we retrieve it with a different timing (we have to
-	// get it from the hub screen, instead of when moving away to the match)
-	private duelsDeck: DeckInfoFromMemory;
 
 	private deckTemplates: readonly DeckInfoFromMemory[];
 
@@ -51,6 +52,7 @@ export class DeckParserService {
 		private readonly ow: OverwolfService,
 		private readonly handler: DeckHandlerService,
 		private readonly api: ApiRunner,
+		private readonly duelsService: DuelsStateBuilderService,
 	) {
 		this.init();
 	}
@@ -106,7 +108,9 @@ export class DeckParserService {
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
 		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 2);
 		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory);
-		const activeDeck = this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory;
+		const activeDeck =
+			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
+			deckFromMemory;
 		// console.log('[deck-parser] active deck after duels', activeDeck, this.currentNonGamePlayScene);
 		// if (this.isDuelsInfo(activeDeck)) {
 		// 	activeDeck = {
@@ -187,6 +191,11 @@ export class DeckParserService {
 				}
 			}
 		});
+		this.duelsService.duelsDeck.subscribe((deck) => {
+			console.debug('[deck-parser] duels deck', deck);
+			this.duelsDeck = deck;
+		});
+
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			if (this.spectating) {
 				console.log('[deck-parser] spectating, not registering memory update');
@@ -222,15 +231,6 @@ export class DeckParserService {
 						: changes.CurrentScene;
 				this.currentScene = changes.CurrentScene;
 			}
-			if (changes.IsDuelsMainRunScreen) {
-				const duelsInfo = await this.getDuelsInfo();
-				this.duelsDeck = {
-					...duelsInfo,
-					// Give priority to the cardIds, as this is what we get when reading the duels deck
-					// from the main Duels manager, instead of the dungeon run scene
-					DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-				};
-			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
@@ -249,30 +249,19 @@ export class DeckParserService {
 			this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
 		console.log('[deck-parser] initial scene', this.currentNonGamePlayScene);
 		this.selectedDeckId = await this.memory.getSelectedDeckId();
-		const duelsInfo = await this.getDuelsInfo();
-		if (duelsInfo) {
-			this.duelsDeck = {
-				...duelsInfo,
-				// Give priority to the cardIds, as this is what we get when reading the duels deck
-				// from the main Duels manager, instead of the dungeon run scene
-				DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-			};
-			console.log('[deck-parser] initial duels deck', this.duelsDeck?.DeckList?.length);
-			console.debug('[deck-parser] initial duels deck', this.duelsDeck);
-		}
 	}
 
-	private isDuelsInfo(activeDeck: DeckInfoFromMemory | DuelsInfo): activeDeck is DuelsInfo {
-		return (activeDeck as DuelsInfo)?.Wins !== undefined;
-	}
+	// private isDuelsInfo(activeDeck: DeckInfoFromMemory | DuelsInfo): activeDeck is DuelsInfo {
+	// 	return (activeDeck as DuelsInfo)?.Wins !== undefined;
+	// }
 
-	private async getDuelsInfo(): Promise<DuelsInfo> {
-		let result = await this.memory.getDuelsInfo(false, 3);
-		if (!result) {
-			result = await this.memory.getDuelsInfo(true, 3);
-		}
-		return result;
-	}
+	// private async getDuelsInfo(): Promise<DuelsInfo> {
+	// 	let result = await this.memory.getDuelsInfo(false, 3);
+	// 	if (!result) {
+	// 		result = await this.memory.getDuelsInfo(true, 3);
+	// 	}
+	// 	return result;
+	// }
 
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory, scenarioId: number, gameType: GameType) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
