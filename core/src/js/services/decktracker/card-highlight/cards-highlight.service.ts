@@ -12,10 +12,13 @@ import { PreferencesService } from '../../preferences.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import {
 	and,
+	arcane,
+	battlecry,
 	beast,
 	cardType,
 	corrupt,
 	corrupted,
+	damage as dealsDamage,
 	deathrattle,
 	demon,
 	discover,
@@ -25,8 +28,11 @@ import {
 	effectiveCostLess,
 	effectiveCostMore,
 	fel,
+	fire,
+	freeze,
 	frenzy,
 	frost,
+	healthBiggerThanAttack,
 	holy,
 	inDeck,
 	inGraveyard,
@@ -35,6 +41,8 @@ import {
 	legendary,
 	mech,
 	minion,
+	nature,
+	neutral,
 	not,
 	notInInitialDeck,
 	or,
@@ -175,6 +183,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.BarakKodobane1:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
+
 			case CardIds.BladeOfQuickeningTavernBrawlToken:
 				return and(inDeck, outcast);
 			case CardIds.BloodreaverGuldan:
@@ -279,10 +288,6 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, or(shadow, holy));
 			case CardIds.SpringTheTrap:
 				return and(inDeck, secret);
-			case CardIds.StaffOfPainTavernBrawl:
-				return and(spell, shadow);
-			case CardIds.StakingAClaimTavernBrawl:
-				return and(discover);
 			case CardIds.StonehearthVindicator:
 				return and(inDeck, spell, effectiveCostLess(4));
 			case CardIds.SwordOfTheFallen:
@@ -310,7 +315,151 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
 
-			// Duels
+			// Duels passives
+			case CardIds.AllShallServeTavernBrawl:
+				return and(minion, demon);
+			case CardIds.AllTogetherNowTavernBrawl:
+				return and(or(inDeck, inHand), battlecry);
+			case CardIds.ArcaneFluxTavernBrawl:
+				return and(spell, arcane);
+			case CardIds.ArcaniteCrystalTavernBrawl:
+				return and(spell, arcane);
+			case CardIds.ArcticArmorTavernBrawl:
+				return and(freeze);
+			case CardIds.BandOfBeesTavernBrawl:
+				return and(or(inDeck, inHand), effectiveCostLess(3));
+			case CardIds.BattleTotem2:
+				return and(or(inDeck, inHand), battlecry);
+			case CardIds.BronzeSignetTavernBrawl:
+				return and(inDeck, minion);
+			case CardIds.BitterColdTavernBrawl:
+				return and(frost, dealsDamage);
+			case CardIds.CapturedFlag:
+				return and(or(inDeck, inHand), minion);
+			case CardIds.CorruptedFelstoneTavernBrawl:
+				return and(or(inDeck, inHand), spell, fel);
+			case CardIds.DeathlyDeathTavernBrawl:
+				return and(minion, deathrattle);
+			case CardIds.DisksOfLegendTavernBrawl:
+				return and(or(inDeck, inHand), minion, legendary);
+			case CardIds.DivineIlluminationTavernBrawl:
+				return and(holy);
+			case CardIds.DoubleTime:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.DraconicDreamTavernBrawl:
+				return and(dragon);
+			case CardIds.DragonAffinityTavernBrawl:
+				return and(dragon);
+			case CardIds.DragonboneRitualTavernBrawl:
+				return and(dragon);
+			case CardIds.DragonbloodTavernBrawl:
+				return and(dragon);
+			case CardIds.EerieStoneTavernBrawl:
+				return and(spell, shadow);
+			case CardIds.ElixirOfVigorTavernBrawl:
+				return and(minion);
+			case CardIds.EnduranceTrainingTavernBrawl:
+				return and(minion, taunt);
+			case CardIds.ExpeditedBurialTavernBrawl:
+				return and(minion, deathrattle);
+			case CardIds.FirekeepersIdolTavernBrawl:
+				return and(spell, fire);
+			case CardIds.FlamesOfTheKirinTorTavernBrawl:
+				return and(or(inDeck, inHand), spell, fire);
+			case CardIds.FlameWavesTavernBrawl:
+				return and(or(inDeck, inHand), spell, fire);
+			case CardIds.GlacialDownpourTavernBrawl:
+				return and(or(inDeck, inHand), spell, frost);
+			case CardIds.GreedyGainsTavernBrawl:
+				return and(or(inDeck, inHand), minion);
+			case CardIds.GrommashsArmguardsTavernBrawl:
+				return and(weapon);
+			case CardIds.GuardianLightTavernBrawl:
+				return and(or(inDeck, inHand), spell, holy);
+			case CardIds.HoldTheLineTavernBrawl:
+				return and(taunt);
+			case CardIds.ImpCredibleTrousersTavernBrawl:
+				return and(or(inDeck, inHand), spell, fel);
+			case CardIds.InspiringPresenceTavernBrawl:
+				return and(minion, legendary);
+			case CardIds.InvigoratingLightTavernBrawl:
+				return and(spell, holy);
+			case CardIds.IronRootsTavernBrawl:
+				return and(or(inDeck, inHand), spell, nature);
+			case CardIds.KhadgarsScryingOrb:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.KindlingFlameTavernBrawl:
+				return and(spell, fire, dealsDamage);
+			case CardIds.MeekMasteryTavernBrawl:
+				return and(or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
+			case CardIds.MulchMadnessTavernBrawl:
+				return and(minion, neutral);
+			case CardIds.MendingPoolsTavernBrawl:
+				return and(spell, nature);
+			case CardIds.MummyMagic:
+				return and(or(inDeck, inHand), minion, deathrattle);
+			case CardIds.NaturalForceTavernBrawl:
+				return and(spell, nature, dealsDamage);
+			case CardIds.OopsAllSpellsTavernBrawl:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.OpenTheDoorwaysTavernBrawl:
+				return and(discover);
+			case CardIds.OrbOfRevelationTavernBrawl:
+				return and(or(inDeck, inHand), discover);
+			case CardIds.PillageTheFallenTavernBrawl:
+				return and(weapon);
+			case CardIds.PlaguebringerTavernBrawl:
+				return and(spell, effectiveCostMore(1));
+			case CardIds.PotionOfSparkingTavernBrawl:
+				return and(minion, rush);
+			case CardIds.RallyTheTroopsTavernBrawl:
+				return and(or(inDeck, inHand), battlecry);
+			case CardIds.RhoninsScryingOrbTavernBrawl:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.RighteousReservesTavernBrawl:
+				return and(or(inDeck, inHand), minion, divineShield);
+			case CardIds.RingOfPhaseshiftingTavernBrawl:
+				return and(or(inDeck, inHand), minion, legendary);
+			case CardIds.RingOfRefreshmentTavernBrawl:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.RobeOfTheApprenticeTavernBrawl:
+				return and(or(inDeck, inHand), spell, dealsDamage);
+			case CardIds.RobeOfTheMagi:
+				return and(or(inDeck, inHand), spell, dealsDamage);
+			case CardIds.RobesOfShrinkingTavernBrawl:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.RocketBackpacksTavernBrawl:
+				return and(or(inDeck, inHand), minion, not(rush));
+			case CardIds.ScepterOfSummoning:
+				return and(or(inDeck, inHand), minion, effectiveCostMore(5));
+			case CardIds.SpecialDeliveryTavernBrawl:
+				return and(or(inDeck, inHand), minion, rush);
+			case CardIds.Shadowcasting101TavernBrawl:
+				return and(or(inDeck, inHand), minion);
+			case CardIds.SpreadingSaplingsTavernBrawl:
+				return and(or(inDeck, inHand), spell, nature);
+			case CardIds.StaffOfPainTavernBrawl:
+				return and(or(inDeck, inHand), spell, shadow);
+			case CardIds.StakingAClaimTavernBrawl:
+				return and(or(inDeck, inHand), discover);
+			case CardIds.StarvingTavernBrawl:
+				return and(minion, beast);
+			case CardIds.StickyFingersTavernBrawl:
+				return and(or(inDeck, inHand), notInInitialDeck);
+			case CardIds.SunstridersCrownTavernBrawl:
+				return and(or(inDeck, inHand), spell);
+			case CardIds.TotemOfTheDead2:
+				return and(deathrattle);
+			case CardIds.UnlockedPotential:
+				return and(or(inDeck, inHand), minion, healthBiggerThanAttack);
+			case CardIds.UnstableMagicTavernBrawl:
+				return and(or(inDeck, inHand), spell, arcane);
+			case CardIds.WitherTheWeakTavernBrawl:
+				return and(or(inDeck, inHand), spell, fel);
+
+			// Duels treasures
+			case CardIds.BladeOfTheBurningSun:
+				return and(inDeck, minion);
 			case CardIds.PrincessTavernBrawl:
 				return and(inDeck, minion, deathrattle);
 			case CardIds.SowTheSeedsTavernBrawl:

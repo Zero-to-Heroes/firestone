@@ -47,6 +47,10 @@ export const notInInitialDeck = (handler: Handler): boolean => {
 	return handler.deckCardProvider().creatorCardId != null || handler.deckCardProvider().creatorCardIds?.length > 0;
 };
 
+export const healthBiggerThanAttack = (handler: Handler): boolean => {
+	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
+};
+
 export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
 	return deckState?.spellsPlayedThisMatch
 		.map((spell) => spell.entityId)
@@ -55,55 +59,30 @@ export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
 	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
+export const battlecry = hasMechanic(GameTag.BATTLECRY);
+export const corrupt = hasMechanic(GameTag.CORRUPT);
+export const corrupted = hasMechanic(GameTag.CORRUPTED);
+export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover = hasMechanic(GameTag.DISCOVER);
-
-export const overload = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('OVERLOAD');
-};
-
-export const outcast = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('OUTCAST');
-};
-
-export const deathrattle = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('DEATHRATTLE');
-};
-
-export const frenzy = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('FRENZY');
-};
-
-export const corrupt = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('CORRUPT');
-};
-
-export const rush = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('RUSH');
-};
-
-export const taunt = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('TAUNT');
-};
-
-export const divineShield = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('DIVINE_SHIELD');
-};
-
-export const corrupted = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('CORRUPTED');
-};
-
-export const secret = (handler: Handler): boolean => {
-	return (handler.referenceCardProvider()?.mechanics ?? []).includes('SECRET');
-};
+export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
+export const freeze = hasMechanic(GameTag.FREEZE);
+export const frenzy = hasMechanic(GameTag.FRENZY);
+export const outcast = hasMechanic(GameTag.OUTCAST);
+export const overload = hasMechanic(GameTag.OVERLOAD);
+export const rush = hasMechanic(GameTag.RUSH);
+export const secret = hasMechanic(GameTag.SECRET);
+export const taunt = hasMechanic(GameTag.TAUNT);
 
 export const spellSchool = (spellSchool: SpellSchool) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
 };
-export const shadow = spellSchool(SpellSchool.SHADOW);
+export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
-export const holy = spellSchool(SpellSchool.HOLY);
+export const fire = spellSchool(SpellSchool.FIRE);
 export const frost = spellSchool(SpellSchool.FROST);
+export const holy = spellSchool(SpellSchool.HOLY);
+export const nature = spellSchool(SpellSchool.NATURE);
+export const shadow = spellSchool(SpellSchool.SHADOW);
 
 export const cardType = (type: CardType) => (handler: Handler): boolean => {
 	return (
@@ -127,9 +106,15 @@ export const pirate = race(Race.PIRATE);
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
 };
+export const neutral = cardClass(CardClass.NEUTRAL);
 export const rogue = cardClass(CardClass.ROGUE);
 
 export const rarity = (rarity: RarityTYpe) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.rarity?.toLowerCase() === rarity?.toLowerCase();
 };
 export const legendary = rarity('Legendary');
+
+// TODO: implement it
+export const damage = (handler: Handler): boolean => {
+	return true;
+};
