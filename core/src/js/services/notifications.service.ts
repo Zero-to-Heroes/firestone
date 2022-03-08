@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
 import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
@@ -17,7 +18,7 @@ export class OwNotificationsService {
 
 	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
 		// Give it time to boot
-		setTimeout(() => this.detectNotificationsWindow(), 5000);
+		this.startNotificationsWindow();
 
 		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
 			withLatestFrom(this.prefs.getPreferences()),
@@ -50,6 +51,39 @@ export class OwNotificationsService {
 			}
 		}
 		this.stateEmitter.next(htmlMessage);
+	}
+
+	public notifyError(title: string, text: string, code: string) {
+		this.emitNewNotification({
+			content: `
+				<div class="general-message-container general-theme">
+					<div class="firestone-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+						</svg>
+					</div>
+					<div class="message">
+						<div class="title">
+							<span>${title}</span>
+						</div>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+			notificationId: `${code}`,
+		});
+	}
+
+	private async startNotificationsWindow() {
+		while (!this.windowId) {
+			console.log('[notifs] waiting for notifications window to be created');
+			this.detectNotificationsWindow();
+			await sleep(2000);
+		}
 	}
 
 	private async detectNotificationsWindow() {

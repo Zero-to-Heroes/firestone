@@ -15,8 +15,6 @@ import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-visi
 import { sleep } from '@services/utils';
 import { Events } from '../../events.service';
 
-declare let OverwolfPlugin: any;
-
 @Injectable()
 export class MindVisionStateMachineService {
 	private states: Map<CurrentState, MindVisionState> = new Map();
@@ -28,7 +26,7 @@ export class MindVisionStateMachineService {
 			console.warn('[mind-vision] global event has root memory reading error');
 			this.performAction(Action.RESET);
 		} else if (first === 'mindvision-instantiate-error') {
-			this.notifyError(
+			this.notifs.notifyError(
 				this.i18n.translateString('app.internal.memory.reading-error-title'),
 				this.i18n.translateString('app.internal.memory.reading-error-text'),
 				first,
@@ -133,7 +131,10 @@ export class MindVisionStateMachineService {
 			.set(CurrentState.INIT, new MindVisionStateInit(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.LISTENING, new MindVisionStateListening(this.mindVisionFacade, this.dispatcher, this.ow))
 			.set(CurrentState.ACTIVE, new MindVisionStateActive(this.mindVisionFacade, this.dispatcher, this.ow))
-			.set(CurrentState.RESET, new MindVisionStateReset(this.mindVisionFacade, this.dispatcher, this.ow))
+			.set(
+				CurrentState.RESET,
+				new MindVisionStateReset(this.mindVisionFacade, this.dispatcher, this.notifs, this.i18n),
+			)
 			.set(CurrentState.TEAR_DOWN, new MindVisionStateTearDown(this.mindVisionFacade, this.dispatcher, this.ow));
 		this.mindVisionFacade.globalEventListener = this.globalEventListener;
 		this.mindVisionFacade.memoryUpdateListener = this.memoryUpdateListener;
@@ -212,31 +213,6 @@ export class MindVisionStateMachineService {
 
 	private hasRootMemoryReadingError(message: string): boolean {
 		return message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
-	}
-
-	private notifyError(title: string, text: string, code: string) {
-		this.notifs.emitNewNotification({
-			content: `
-				<div class="general-message-container general-theme">
-					<div class="firestone-icon">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
-						</svg>
-					</div>
-					<div class="message">
-						<div class="title">
-							<span>${title}</span>
-						</div>
-						<span class="text">${text}</span>
-					</div>
-					<button class="i-30 close-button">
-						<svg class="svg-icon-fill">
-							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
-						</svg>
-					</button>
-				</div>`,
-			notificationId: `${code}`,
-		});
 	}
 
 	private async waitForActiveState() {

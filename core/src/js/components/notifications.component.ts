@@ -11,8 +11,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
-import { from, Observable, Subscription } from 'rxjs';
-import { concatMap, delayWhen, filter, map, pluck, tap, withLatestFrom } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { concatMap, filter, map, tap } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -57,7 +57,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	};
 
 	private windowId: string;
-	private windowId$: Observable<string>;
+	// private windowId$: Observable<string>;
 	private activeNotifications: ActiveNotification[] = [];
 	private notifications$: Observable<Message>;
 	private messageReceivedListener: (message: any) => void;
@@ -80,26 +80,38 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		private elRef: ElementRef,
 		private prefs: PreferencesService,
 	) {
+		this.init();
+	}
+
+	private async init() {
+		console.log('init starting');
 		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
-		this.windowId$ = from(this.ow.getCurrentWindow()).pipe(pluck('id'));
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		console.log('got window id');
+		await this.ow.restoreWindow(this.windowId);
+		await this.ow.bringToFront(this.windowId);
+		console.log('brought window to front');
 
 		this.notifications$
 			.pipe(
-				delayWhen(() => this.windowId$),
-				withLatestFrom(this.windowId$),
-				filter(([message, windowId]) => !!message),
-				delayWhen(([message, windowId]) => from(this.ow.restoreWindow(windowId))),
-				delayWhen(([message, windowId]) => from(this.ow.bringToFront(windowId))),
-				map(([message, windowId]) => {
+				tap((info) => console.log('inital notification', info)),
+				filter((message) => !!message),
+				tap((info) => console.log('before delay', info)),
+				map((message) => {
+					// Don't await them because we don't want to block the main thread
+					console.log('after window restore');
 					const toast = this.getToastNotification(message);
+					console.log('got toast notification', toast);
 					toast.theClass = message.theClass;
 					return { message, toast };
 				}),
+				tap((info) => console.log('after toast', info)),
 				concatMap(({ message, toast }) =>
 					toast.click.pipe(
 						tap((clickEvent: MouseEvent) => this.handleToastClick(clickEvent, message, toast.id)),
 					),
 				),
+				tap((info) => console.log('end', info)),
 			)
 			.subscribe();
 	}
