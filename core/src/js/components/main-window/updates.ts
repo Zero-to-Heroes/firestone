@@ -32,38 +32,38 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.8.4',
+		version: '8.9.0',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		I just wanted to let you know that you're awesome. Keep it up!
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					The following weeks will be focused on Duels. This release adds a couple of features and bug fixes, and more is coming. Also, if you have specific wishes for Duels support in Firestone, now is the time to ping me on Discord :)
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Official release of the "Session widget" feature. This widget recaps your latest placements, latest matches, net MMR and the heroes + final boards you had since you last reset the data. The widget is hidden by default (as it's mostly intended for streamers), but you can enable it in the settings.`,
+								type: 'misc',
+								text: `The app is now open for translation! If you want to help, please visit <a href="https://github.com/Zero-to-Heroes/firestone-translations/blob/main/README.md" target="_blank">this link</a>`,
 							},
 							{
-								type: 'feature',
-								text: `Adds some configuration options to the session widget: size, opacity, the ability to show/hide the "grouped" and "individual matches" sections, as well as the ability to decide how many past matches you want to show as details.`,
+								type: 'misc',
+								text: `The part of the app that handles reading the game's memory has been improved. It should now be more robust, and you will see notifications appear when the reading process had to restart (which can degrade the app's features until it is fully restarted).`,
 							},
 						],
 					},
 					{
-						category: 'decktracker',
+						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `I have received a few reports of the card tooltip staying stuck on screen, with no way to dismiss it. I haven't been able to reproduce the issue myself though. As a temporary fix, card tooltips will auto-hide after 15s.`,
+								type: 'feature',
+								text: `You can now see the synergies each of the offered Treasures have with your deck. For some of them (like Orb of Revelation) I wasn't too sure about what exactly to highlight, so feel free to let me know if some of them don't make enough sense.`,
 							},
 						],
 					},
@@ -74,31 +74,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the Twitch extension would stop receiving updates because the messages sent by Firestone to Twitch were too big.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where the attacking minion would be wrongly picked once all minions had attacked.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Millificient Manastorm's golden buddy would still deal 8 damage.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Tamsin's hero power would always be considered activated.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Khadgar would multiply spawns from Broodmother (Onyxia's hero power)`,
-							},
-							{
-								type: 'bug',
-								text: `Remove Hamuul from the minions list.`,
+								text: `Fix an issue where the selected treasure would not appear in the decklist for the first match.`,
 							},
 						],
 					},
@@ -107,19 +87,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to change the size of ALL counters.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag the Golem created by Kazakus in the opponent's hand.`,
-							},
-							{
-								type: 'feature',
-								text: `Add decklist support for old solo adventures.`,
-							},
-							{
-								type: 'feature',
-								text: `Add an option for streamers to add a delay to the events sent to Twitch (so that the extension stays synchronized with what users see on stream, especially with a delayed stream).`,
+								text: `I have reversed how highlights for Drekthar works, as it feels more useful to see which minions it can pull from your decks (instead of the ones that potentially prevent it from activating).`,
 							},
 						],
 					},
