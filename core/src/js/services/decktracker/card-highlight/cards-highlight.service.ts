@@ -254,6 +254,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.MagisterUnchainedTavernBrawlToken:
 				return and(inDeck, spell);
+			case CardIds.MagisterDawngrasp:
+				return and(inOther, spell, spellPlayedThisMatch);
 			case CardIds.NzothGodOfTheDeep:
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
 			case CardIds.NzothTheCorruptor:
