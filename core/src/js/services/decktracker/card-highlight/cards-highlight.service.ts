@@ -460,6 +460,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			// Duels treasures
 			case CardIds.BladeOfTheBurningSun:
 				return and(inDeck, minion);
+			case CardIds.PartyPortalTavernBrawl2:
+				return and(or(inDeck, inHand), spell);
 			case CardIds.PrincessTavernBrawl:
 				return and(inDeck, minion, deathrattle);
 			case CardIds.SowTheSeedsTavernBrawl:
