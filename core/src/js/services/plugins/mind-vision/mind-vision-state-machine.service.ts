@@ -58,7 +58,7 @@ export class MindVisionStateMachineService {
 		[CurrentState.IDLE]: {
 			transitions: [
 				{ transition: Action.GAME_START, to: CurrentState.INIT },
-				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
+				// { transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 			],
 		},
 		[CurrentState.INIT]: {
@@ -77,7 +77,6 @@ export class MindVisionStateMachineService {
 			transitions: [
 				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 				{ transition: Action.RESET, to: CurrentState.RESET },
-				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 				// { transition: Transition.ERROR, to: CurrentState.ERROR },
 			],
 		},
@@ -140,14 +139,20 @@ export class MindVisionStateMachineService {
 		this.mindVisionFacade.memoryUpdateListener = this.memoryUpdateListener;
 
 		this.currentState = this.states.get(CurrentState.IDLE);
-		this.performAction(Action.STARTUP);
+		await this.performAction(Action.STARTUP);
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			console.debug('[mind-vision] state changed', res);
 			if (this.ow.exitGame(res)) {
-				// TODO: the transition / action split is not super clear
+				console.log('[mind-vision] game left', res);
 				this.performTransition(Action.GAME_LEFT);
-			} else if ((await this.ow.inGame()) && res.gameChanged) {
-				this.performAction(Action.GAME_START);
+			} else if (res.gameChanged) {
+				const inGame = this.ow.gameRunning(res.gameInfo) || (await this.ow.inGame());
+				console.debug('[mind-vision] game changed', res, inGame);
+				if (inGame) {
+					console.debug('[mind-vision] performing GAME_START', res);
+					this.performAction(Action.GAME_START);
+				}
 			}
 		});
 	}
@@ -178,30 +183,32 @@ export class MindVisionStateMachineService {
 
 		// No direct transition, we perform the action
 		const transition: Action = await this.currentState.performAction(action, payload);
-		// console.debug('[mind-vision] got transition', Action[action], Action[transition]);
+		console.debug('[mind-vision] got transition', Action[action], Action[transition]);
 		if (transition) {
 			this.performTransition(transition);
 		}
 	}
 
 	private async performTransition(transition: Action) {
-		// console.debug(
-		// 	'[mind-vision] performing transition',
-		// 	Action[transition],
-		// 	CurrentState[this.currentState?.stateId()],
-		// );
+		console.debug(
+			'[mind-vision] performing transition',
+			Action[transition],
+			CurrentState[this.currentState?.stateId()],
+		);
 		const newState = this.getNextState(this.currentState, transition);
-		await this.setState(newState);
+		if (newState) {
+			await this.setState(newState);
+		}
 	}
 
 	private getNextState(currentState: MindVisionState, transition: Action): MindVisionState {
 		const newState = this.fsm[currentState.stateId()].transitions.find((t) => t.transition === transition)?.to;
-		// console.debug(
-		// 	'[mind-vision] next state',
-		// 	Action[transition],
-		// 	this.currentState?.stateId(),
-		// 	CurrentState[newState],
-		// );
+		console.debug(
+			'[mind-vision] next state',
+			Action[transition],
+			this.currentState?.stateId(),
+			CurrentState[newState],
+		);
 		return this.states.get(newState);
 	}
 
