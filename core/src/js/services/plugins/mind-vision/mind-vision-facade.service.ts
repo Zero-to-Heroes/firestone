@@ -7,7 +7,6 @@ import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenari
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfo } from '@models/rewards-track-info';
-import { OwNotificationsService } from '../../notifications.service';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
@@ -20,8 +19,7 @@ export class MindVisionFacadeService {
 	public memoryUpdateListener: (changes: string | 'reset') => Promise<void>;
 
 	private mindVisionPlugin: any;
-
-	constructor(private readonly notifs: OwNotificationsService) {}
+	private initialized = false;
 
 	public async listenForUpdates() {
 		return new Promise<void>(async (resolve, reject) => {
@@ -131,6 +129,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse duelsInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getDuelsHeroOptions(): Promise<readonly number[]> {
+		return new Promise<readonly number[]>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsHeroOptions((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getDuelsHeroOptions', e);
 				resolve(null);
 			}
 		});
@@ -368,10 +380,6 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	private async get() {
-		return this.mindVisionPlugin.get();
-	}
-
 	public async initializePlugin() {
 		return new Promise<void>(async (resolve) => {
 			this.instantiatePlugin(async () => {
@@ -392,6 +400,11 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	private async get() {
+		await this.waitForInit();
+		return this.mindVisionPlugin.get();
+	}
+
 	private async instantiatePlugin(callback) {
 		this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
 		this.mindVisionPlugin.initialize(async (status: boolean) => {
@@ -401,45 +414,21 @@ export class MindVisionFacadeService {
 				return;
 			}
 			console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
+			this.initialized = true;
 			callback();
 		});
 	}
 
-	private hasRootMemoryReadingError(message: string): boolean {
-		return message && message.includes('ReadProcessMemory') && message.includes('WriteProcessMemory');
-	}
-
-	private notifyError(title: string, text: string, code: string) {
-		this.notifs.emitNewNotification({
-			content: `
-				<div class="general-message-container general-theme">
-					<div class="firestone-icon">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
-						</svg>
-					</div>
-					<div class="message">
-						<div class="title">
-							<span>${title}</span>
-						</div>
-						<span class="text">${text}</span>
-					</div>
-					<button class="i-30 close-button">
-						<svg class="svg-icon-fill">
-							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
-						</svg>
-					</button>
-				</div>`,
-			notificationId: `${code}`,
+	private waitForInit(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				if (this.initialized) {
+					resolve();
+				} else {
+					setTimeout(() => dbWait(), 500);
+				}
+			};
+			dbWait();
 		});
 	}
-}
-
-enum CurrentState {
-	IDLE,
-	CONSTRUCTING,
-	INITIALIZING,
-	READY,
-	TEARING_DOWN,
-	ERROR,
 }
