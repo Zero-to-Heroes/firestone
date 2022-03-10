@@ -1,0 +1,125 @@
+:host {
+	display: flex;
+}
+
+.hero-info {
+	flex-grow: 1;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 1vh;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 1.3vh;
+	line-height: 2.2vh;
+
+	background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/decktracker_bg.png');
+	background-size: contain;
+	border-radius: 25px;
+
+	border-width: 1px;
+	border-style: solid;
+	border-image-slice: 1;
+	// border-image-source: linear-gradient(to bottom right, rgba(255, 185, 72, 0) 0%, #ffb948 100%);
+	// This gives a nice effect where rounded corners don't have a border
+	border-image-source: linear-gradient(to bottom right, #ffb948 100%, #ffb948 100%);
+
+	--bar-chart-bar-color: var(--color-2);
+	--on-bar-chart-bar-color: var(--color-1);
+
+	.bio {
+		display: flex;
+
+		.portrait {
+			width: 15vh;
+			flex-shrink: 0;
+		}
+
+		.bio-info {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			padding-top: 2vh;
+
+			.name {
+				color: var(--default-title-color);
+				font-size: 1.8vh;
+				text-align: center;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 100%;
+				margin-bottom: 2vh;
+			}
+		}
+	}
+
+	.section-header {
+		color: var(--default-title-color);
+		font-size: 1.8vh;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		margin-bottom: 2vh;
+		margin-top: 2vh;
+	}
+}
+
+.win-distribution {
+	height: 9vh;
+	width: 25vh;
+	top: 0;
+	align-self: center;
+
+	::ng-deep .tooltip-container {
+		width: 150px;
+	}
+}
+
+.stat {
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 1vh;
+	flex-wrap: nowrap;
+
+	.header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		margin-bottom: 0;
+		flex-grow: 1;
+	}
+
+	.values {
+		display: flex;
+		width: 14vh;
+	}
+
+	.global-value {
+		font-size: 2vh;
+		color: var(--default-title-color);
+	}
+
+	.my-value {
+		margin-left: 0.5vh;
+	}
+
+	.positive {
+		color: #61ff47;
+
+		&::before {
+			content: '+';
+		}
+	}
+
+	.negative {
+		color: #ff4747;
+	}
+}

@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { sleep } from '@services/utils';
 import { Observable } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
@@ -45,6 +46,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 			<duels-max-life-opponent-widget-wrapper></duels-max-life-opponent-widget-wrapper>
 			<duels-ooc-treasure-selection-widget-wrapper></duels-ooc-treasure-selection-widget-wrapper>
+			<duels-ooc-hero-selection-widget-wrapper></duels-ooc-hero-selection-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,6 +90,7 @@ export class FullScreenOverlaysClickthroughComponent
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.ow.setWindowPassthrough(this.windowId);
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.debug('res changed', res);
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
@@ -111,10 +114,14 @@ export class FullScreenOverlaysClickthroughComponent
 		const gameHeight = gameInfo.height;
 		const height = gameHeight;
 		const width = gameHeight * 1.4;
+		// console.debug('changing window size', width, height);
 		await this.ow.changeWindowSize(this.windowId, width, height);
+		window.dispatchEvent(new Event('window-resize'));
+
+		await sleep(300);
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = Math.floor(dpi * 0.5 * (gameWidth - width));
 		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
-		window.dispatchEvent(new Event('window-resize'));
+		// console.debug('changing window position', newLeft, 0, dpi, gameWidth - width);
 	}
 }

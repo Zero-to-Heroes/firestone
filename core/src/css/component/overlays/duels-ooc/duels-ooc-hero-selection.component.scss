@@ -1,0 +1,35 @@
+:host {
+	display: flex;
+}
+
+.container {
+	width: 50vh;
+	height: 100%;
+	padding-top: 8%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 7%;
+	row-gap: 0;
+
+	.cell {
+		height: 100%;
+		width: 100%;
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.empty-card {
+		background: rgba(255, 255, 255, 0.01);
+		width: 91%;
+		height: 91%;
+	}
+}
+
+duels-hero-info {
+	margin-left: 20vh;
+	width: 40vh;
+	margin-bottom: 4vh;
+}

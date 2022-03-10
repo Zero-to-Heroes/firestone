@@ -9,6 +9,7 @@ import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-fro
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
+import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
@@ -102,6 +103,10 @@ export class DuelsStateBuilderService {
 
 			if (changes.DuelsCurrentOptionSelection) {
 				this.mainWindowStateUpdater.next(new DuelsCurrentOptionEvent(changes.DuelsCurrentOptionSelection));
+			}
+
+			if (changes.IsDuelsChoosingHero != null) {
+				this.mainWindowStateUpdater.next(new DuelsChoosingHeroEvent(changes.IsDuelsChoosingHero));
 			}
 		});
 

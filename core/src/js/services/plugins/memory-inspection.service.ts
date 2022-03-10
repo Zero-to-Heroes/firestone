@@ -3,6 +3,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
+import { GetDuelsHeroOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-options-operation';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
@@ -75,6 +76,7 @@ export class MemoryInspectionService {
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
+	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVisionFacade, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
@@ -193,6 +195,10 @@ export class MemoryInspectionService {
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
 		return this.mindVision.callMindVision(() => this.getDuelsInfoOperation.call(numberOfRetries, forceReset));
+	}
+
+	public async getDuelsHeroOptions(forceReset = false, numberOfRetries = 1): Promise<readonly number[]> {
+		return this.mindVision.callMindVision(() => this.getDuelsHeroOptionsOperation.call(numberOfRetries));
 	}
 
 	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {

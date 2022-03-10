@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
+import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable } from 'rxjs';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -80,6 +82,14 @@ export class AppUiStoreFacadeService {
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
 		return this.debugObservable(this.store.bgHeroStats$());
+	}
+
+	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
+		return this.debugObservable(this.store.duelsHeroStats$());
+	}
+
+	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+		return this.debugObservable(this.store.duelsTopDecks$());
 	}
 
 	public send(event: MainWindowStoreEvent) {

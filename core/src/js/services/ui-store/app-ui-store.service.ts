@@ -1,4 +1,16 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
+import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
+import { DuelsRun } from '@models/duels/duels-run';
+import { DuelsStatTypeFilterType } from '@models/duels/duels-stat-type-filter.type';
+import {
+	buildDuelsHeroPlayerStats,
+	filterDuelsHeroStats,
+	filterDuelsRuns,
+	getDuelsMmrFilterNumber,
+	topDeckApplyFilters,
+} from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -49,6 +61,12 @@ export class AppUiStoreService {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 
 	private bgsHeroStats: BehaviorSubject<readonly BgsHeroStat[]> = new BehaviorSubject<readonly BgsHeroStat[]>(null);
+	private duelsHeroStats: BehaviorSubject<readonly DuelsHeroPlayerStat[]> = new BehaviorSubject<
+		readonly DuelsHeroPlayerStat[]
+	>(null);
+	private duelsTopDecks: BehaviorSubject<readonly DuelsGroupedDecks[]> = new BehaviorSubject<
+		readonly DuelsGroupedDecks[]
+	>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -66,6 +84,8 @@ export class AppUiStoreService {
 				mercenariesOutOfCombatStore: this.mercenariesOutOfCombatStore.observers,
 				mercenariesSynergiesStore: this.mercenariesSynergiesStore.observers,
 				bgsHeroStats: this.bgsHeroStats.observers,
+				duelsHeroStats: this.duelsHeroStats.observers,
+				duelsTopDecks: this.duelsTopDecks.observers,
 			});
 	}
 
@@ -194,6 +214,20 @@ export class AppUiStoreService {
 		);
 	}
 
+	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
+		return this.duelsHeroStats.asObservable().pipe(
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
+		);
+	}
+
+	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
+		return this.duelsTopDecks.asObservable().pipe(
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
+		);
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -201,6 +235,133 @@ export class AppUiStoreService {
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private init() {
+		this.initBgsHeroStats();
+		this.initDuelsHeroStats();
+		this.initDuelsTopDecks();
+		this.initialized = true;
+	}
+
+	private initDuelsTopDecks() {
+		this.listen$(
+			([main, nav]) => main.duels.topDecks,
+			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
+			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
+			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+			([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+		)
+			.pipe(
+				filter(
+					([
+						topDecks,
+						mmrPercentiles,
+						mmrFilter,
+						classFilter,
+						heroPowerFilter,
+						sigTreasureFilter,
+						timeFilter,
+						dustFilter,
+						patch,
+					]) => !!topDecks?.length && !!mmrPercentiles?.length,
+				),
+				map(
+					([
+						topDecks,
+						mmrPercentiles,
+						mmrFilter,
+						classFilter,
+						heroPowerFilter,
+						sigTreasureFilter,
+						timeFilter,
+						dustFilter,
+						patch,
+					]) => {
+						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+						const result = topDecks
+							.map((deck) =>
+								topDeckApplyFilters(
+									deck,
+									trueMmrFilter,
+									classFilter,
+									heroPowerFilter,
+									sigTreasureFilter,
+									timeFilter,
+									dustFilter,
+									patch,
+								),
+							)
+							.filter((group) => group.decks.length > 0);
+						return result;
+					},
+				),
+			)
+			.subscribe((stats) => this.duelsTopDecks.next(stats));
+	}
+
+	private initDuelsHeroStats() {
+		this.listen$(
+			([main, nav]) => main.duels.globalStats?.heroes,
+			([main, nav]) => main.duels.runs,
+			([main, nav]) => nav.navigationDuels.heroSearchString,
+			([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
+			([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
+			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
+			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+		)
+			.pipe(
+				filter(([heroes, other]) => !!heroes?.length),
+				map(
+					([
+						duelStats,
+						runs,
+						heroSearchString,
+						statType,
+						gameMode,
+						timeFilter,
+						heroFilter,
+						heroPowerFilter,
+						sigTreasureFilter,
+						patch,
+					]) =>
+						[
+							filterDuelsHeroStats(
+								duelStats,
+								heroFilter,
+								heroPowerFilter,
+								sigTreasureFilter,
+								statType,
+								this.allCards,
+								heroSearchString,
+							),
+							filterDuelsRuns(
+								runs,
+								timeFilter,
+								heroFilter,
+								gameMode,
+								patch,
+								0,
+								heroPowerFilter,
+								sigTreasureFilter,
+								statType,
+							),
+							statType,
+						] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
+				),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				tap((info) => console.debug('ready for duels hero stats', info)),
+				map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
+				tap((info) => console.debug('after duels hero stats', info)),
+			)
+			.subscribe((stats) => this.duelsHeroStats.next(stats));
+	}
+
+	private initBgsHeroStats() {
 		this.listen$(
 			([main, nav]) => main.battlegrounds.globalStats,
 			([main, nav]) => main.stats.gameStats?.stats,
@@ -237,7 +398,6 @@ export class AppUiStoreService {
 				tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
-		this.initialized = true;
 	}
 }
 

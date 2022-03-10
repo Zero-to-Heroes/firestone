@@ -2,9 +2,11 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationService } from '@services/localization.service';
+import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
+import { DuelsChoosingHeroParser } from '@services/mainwindow/store/processors/duels/duels-choosing-hero-parser';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
 import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/duels/duels-current-option-parser';
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
@@ -867,6 +869,9 @@ export class MainWindowStoreService {
 
 			DuelsCurrentOptionEvent.eventName(),
 			new DuelsCurrentOptionParser(this.cards, this.memoryReading),
+
+			DuelsChoosingHeroEvent.eventName(),
+			new DuelsChoosingHeroParser(this.cards, this.memoryReading),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

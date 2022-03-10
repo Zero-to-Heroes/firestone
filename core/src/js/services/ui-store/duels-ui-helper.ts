@@ -1,6 +1,7 @@
 import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { DuelsTopDecksDustFilterType } from '@models/duels/duels-top-decks-dust-filter.type';
 import { DuelsGameModeFilterType } from '../../models/duels/duels-game-mode-filter.type';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsHeroFilterType } from '../../models/duels/duels-hero-filter.type';
@@ -43,7 +44,7 @@ export const filterDuelsHeroStats = (
 			)
 			// TODO: update for Vanndar
 			.filter((stat) => {
-				console.debug('considering stat', stat);
+				// console.debug('considering stat', stat);
 				if (!searchString?.length) {
 					return true;
 				}
@@ -388,6 +389,77 @@ const getTopDeck = (
 			winrate: deckSummary.global?.winrate || buildWinrate(deckSummary.runs),
 		} as ExtendedDuelsDeckSummary,
 	};
+};
+
+export const topDeckApplyFilters = (
+	grouped: DuelsGroupedDecks,
+	mmrFilter: number,
+	heroFilter: DuelsHeroFilterType,
+	heroPowerFilter: 'all' | string,
+	sigTreasureFilter: 'all' | string,
+	timeFilter: DuelsTimeFilterType,
+	dustFilter: DuelsTopDecksDustFilterType,
+	patch: PatchInfo,
+): DuelsGroupedDecks => {
+	return {
+		...grouped,
+		decks: grouped.decks
+			.filter((deck) => topDeckMmrFilter(deck, mmrFilter))
+			.filter((deck) => topDeckHeroFilter(deck, heroFilter))
+			.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
+			.filter((deck) => topDeckSigTreasureFilter(deck, sigTreasureFilter))
+			.filter((deck) => topDeckTimeFilter(deck, timeFilter, patch))
+			.filter((deck) => topDeckDustFilter(deck, dustFilter)),
+	};
+};
+
+const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
+	return !filter || deck.rating >= filter;
+};
+
+const topDeckHeroFilter = (deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean => {
+	return !filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === filter;
+};
+
+const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {
+	return !filter || filter === 'all' || deck.heroPowerCardId === filter;
+};
+
+const topDeckSigTreasureFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {
+	return !filter || filter === 'all' || deck.signatureTreasureCardId === filter;
+};
+
+const topDeckDustFilter = (deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean => {
+	if (!filter) {
+		return true;
+	}
+
+	switch (filter) {
+		case 'all':
+			return true;
+		default:
+			return deck.dustCost <= parseInt(filter);
+	}
+};
+
+const topDeckTimeFilter = (deck: DuelsDeckStat, filter: DuelsTimeFilterType, patch: PatchInfo): boolean => {
+	if (!filter) {
+		return true;
+	}
+	switch (filter) {
+		case 'all-time':
+			return true;
+		case 'last-patch':
+			// See bgs-ui-helper
+			return (
+				deck.buildNumber >= patch.number ||
+				new Date(deck.periodStart).getTime() > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+			);
+		case 'past-seven':
+			return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+		case 'past-three':
+			return new Date(deck.periodStart) >= new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+	}
 };
 
 const buildWinrate = (runs: readonly DuelsRun[]): number => {

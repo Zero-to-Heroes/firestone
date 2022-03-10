@@ -7,18 +7,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { Subscription } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
-import { DuelsHeroFilterType } from '../../../models/duels/duels-hero-filter.type';
-import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
-import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
-import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
-import { PatchInfo } from '../../../models/patches';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -55,77 +47,8 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 
 	ngAfterContentInit(): void {
 		this.sub$$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.topDecks,
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				filter(
-					([
-						topDecks,
-						mmrPercentiles,
-						mmrFilter,
-						classFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						timeFilter,
-						dustFilter,
-						patch,
-					]) => !!topDecks?.length && !!mmrPercentiles?.length,
-				),
-				map(
-					([
-						topDecks,
-						mmrPercentiles,
-						mmrFilter,
-						classFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						timeFilter,
-						dustFilter,
-						patch,
-					]) => {
-						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
-						const result = topDecks
-							.map((deck) =>
-								this.applyFilters(
-									deck,
-									trueMmrFilter,
-									classFilter,
-									heroPowerFilter,
-									sigTreasureFilter,
-									timeFilter,
-									dustFilter,
-									patch,
-								),
-							)
-							.filter((group) => group.decks.length > 0);
-						if (!result?.length) {
-							console.log(
-								'[duels-top-decks] no results',
-								topDecks?.length,
-								trueMmrFilter,
-								classFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-								timeFilter,
-								dustFilter,
-								patch,
-							);
-						}
-						return result;
-					},
-				),
-				tap((stat) => cdLog('emitting top decks in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
+			.duelsTopDecks$()
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe((topDecks) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call
 				setTimeout(() => {
@@ -173,77 +96,6 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 			this.cdr.detectChanges();
 		}
 		return;
-	}
-
-	private applyFilters(
-		grouped: DuelsGroupedDecks,
-		mmrFilter: number,
-		heroFilter: DuelsHeroFilterType,
-		heroPowerFilter: 'all' | string,
-		sigTreasureFilter: 'all' | string,
-		timeFilter: DuelsTimeFilterType,
-		dustFilter: DuelsTopDecksDustFilterType,
-		patch: PatchInfo,
-	): DuelsGroupedDecks {
-		return {
-			...grouped,
-			decks: grouped.decks
-				.filter((deck) => this.mmrFilter(deck, mmrFilter))
-				.filter((deck) => this.heroFilter(deck, heroFilter))
-				.filter((deck) => this.heroPowerFilter(deck, heroPowerFilter))
-				.filter((deck) => this.sigTreasureFilter(deck, sigTreasureFilter))
-				.filter((deck) => this.timeFilter(deck, timeFilter, patch))
-				.filter((deck) => this.dustFilter(deck, dustFilter)),
-		};
-	}
-
-	private mmrFilter(deck: DuelsDeckStat, filter: number): boolean {
-		return !filter || deck.rating >= filter;
-	}
-
-	private heroFilter(deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean {
-		return !filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === filter;
-	}
-
-	private heroPowerFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
-		return !filter || filter === 'all' || deck.heroPowerCardId === filter;
-	}
-
-	private sigTreasureFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
-		return !filter || filter === 'all' || deck.signatureTreasureCardId === filter;
-	}
-
-	private dustFilter(deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean {
-		if (!filter) {
-			return true;
-		}
-
-		switch (filter) {
-			case 'all':
-				return true;
-			default:
-				return deck.dustCost <= parseInt(filter);
-		}
-	}
-
-	private timeFilter(deck: DuelsDeckStat, filter: DuelsTimeFilterType, patch: PatchInfo): boolean {
-		if (!filter) {
-			return true;
-		}
-		switch (filter) {
-			case 'all-time':
-				return true;
-			case 'last-patch':
-				// See bgs-ui-helper
-				return (
-					deck.buildNumber >= patch.number ||
-					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
-				);
-			case 'past-seven':
-				return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-			case 'past-three':
-				return new Date(deck.periodStart) >= new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
-		}
 	}
 
 	private getTotalRunsLength(groups: readonly DuelsGroupedDecks[]): number {

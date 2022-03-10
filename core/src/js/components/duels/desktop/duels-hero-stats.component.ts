@@ -1,21 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
-import { DuelsRun } from '../../../models/duels/duels-run';
-import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import {
-	buildDuelsHeroPlayerStats,
-	filterDuelsHeroStats,
-	filterDuelsRuns,
-} from '../../../services/ui-store/duels-ui-helper';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -46,102 +35,21 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent imple
 	}
 
 	ngAfterContentInit() {
-		this.stats$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.globalStats?.heroes,
-				([main, nav]) => main.duels.runs,
-				([main, nav]) => nav.navigationDuels.heroSearchString,
-				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
-				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
-				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				map(
-					([
-						duelStats,
-						runs,
-						heroSearchString,
-						statType,
-						gameMode,
-						heroSorting,
-						timeFilter,
-						heroFilter,
-						heroPowerFilter,
-						sigTreasureFilter,
-						hideThreshold,
-						patch,
-					]) =>
-						[
-							filterDuelsHeroStats(
-								duelStats,
-								heroFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-								this.allCards,
-								heroSearchString,
-							),
-							filterDuelsRuns(
-								runs,
-								timeFilter,
-								heroFilter,
-								gameMode,
-								patch,
-								0,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-							),
-							statType,
-							heroSorting,
-							hideThreshold,
-						] as [
-							readonly DuelsHeroStat[],
-							readonly DuelsRun[],
-							DuelsStatTypeFilterType,
-							DuelsHeroSortFilterType,
-							boolean,
-						],
-				),
-				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				// tap(([duelStats, duelsRuns, statType, heroSorting, hideThreshold]) =>
-				// 	console.debug('[debug] update', buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-				// ),
-				map(([duelStats, duelsRuns, statType, heroSorting, hideThreshold]) =>
-					buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)
-						.sort(this.sortBy(heroSorting))
-						.filter((stat) =>
-							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
-						),
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
-	}
-
-	private areEqual(
-		a: [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType, DuelsHeroSortFilterType, boolean],
-		b: [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType, DuelsHeroSortFilterType, boolean],
-	): boolean {
-		if (a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
+		this.stats$ = combineLatest(
+			this.store.duelsHeroStats$(),
+			this.store.listenPrefs$(
+				(prefs) => prefs.duelsActiveHeroSortFilter,
+				(prefs) => prefs.duelsHideStatsBelowThreshold,
+			),
+		).pipe(
+			this.mapData(([stats, [heroSorting, hideThreshold]]) =>
+				[...stats]
+					.sort(this.sortBy(heroSorting))
+					.filter((stat) =>
+						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+					),
+			),
+		);
 	}
 
 	private sortBy(heroSorting: DuelsHeroSortFilterType): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {

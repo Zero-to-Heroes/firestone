@@ -94,14 +94,15 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				Math.max(this.bounds.top, positionFromPrefs.top),
 			),
 		};
-		console.debug(
-			'bound position from prefs',
-			boundPositionFromPrefs,
-			this.bounds,
-			gameHeight - widgetRect.height - this.bounds.bottom,
-			gameHeight,
-			widgetRect,
-		);
+		// console.debug(
+		// 	'bound position from prefs',
+		// 	boundPositionFromPrefs,
+		// 	this.bounds,
+		// 	gameWidth,
+		// 	gameWidth - widgetRect.width - this.bounds.right,
+		// 	Math.max(this.bounds.left, positionFromPrefs.left),
+		// 	widgetRect,
+		// );
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
@@ -113,7 +114,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	startDragging() {
-		console.debug('start dragging', this.el.nativeElement);
+		// console.debug('start dragging', this.el.nativeElement);
 	}
 
 	async stopDragging() {
@@ -121,18 +122,19 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	async dragEnded(event: CdkDragEnd) {
-		console.debug('drag ended', event);
+		// console.debug('drag ended', event);
 		const newPosition = {
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
-		console.debug('new position', newPosition);
+		// console.debug('new position', newPosition);
 		await this.positionUpdater(newPosition.x, newPosition.y);
 		this.reposition(() => event.source._dragRef.reset());
 	}
 
 	@HostListener('window:window-resize')
 	async onResize(): Promise<void> {
+		// console.debug('resize');
 		await this.doResize();
 		await this.reposition();
 	}

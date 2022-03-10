@@ -568,22 +568,29 @@ export class OverwolfService {
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
 		return new Promise<void>((resolve) => {
 			try {
-				overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
+				console.debug('changing', Math.round(newX), Math.round(newY));
+				overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY), (res) => {
+					console.debug('change res', res);
+					resolve();
+				});
 			} catch (e) {
 				console.error('Exception while trying to changePosition', windowId, newX, newY, e);
+				resolve();
 			}
-			resolve();
 		});
 	}
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
 		return new Promise<void>((resolve) => {
 			try {
-				overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
+				overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height), (res) => {
+					console.debug('resize res', res);
+					resolve();
+				});
 			} catch (e) {
 				console.error('Exception while trying to changeSize', windowId, width, height, e);
+				resolve();
 			}
-			resolve();
 		});
 	}
 
