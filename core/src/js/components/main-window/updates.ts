@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.9.0',
+		version: '9.0.0',
 		sections: [
 			{
 				type: 'intro',
@@ -50,7 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'misc',
-								text: `The app is now open for translation! If you want to help, please visit <a href="https://github.com/Zero-to-Heroes/firestone-translations/blob/main/README.md" target="_blank">this link</a>`,
+								text: `The app is now open for translation! If you want to help, please visit <a href="https://github.com/Zero-to-Heroes/firestone-translations/blob/main/README.md" target="_blank">this link</a>.`,
 							},
 							{
 								type: 'misc',
