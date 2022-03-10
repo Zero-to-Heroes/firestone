@@ -70,6 +70,59 @@
 		margin-bottom: 2vh;
 		margin-top: 2vh;
 	}
+
+	.top-decks-header {
+		margin-top: 4vh;
+	}
+
+	.top-decks {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		column-gap: 0;
+		row-gap: 3vh;
+
+		.deck {
+			display: flex;
+			flex-direction: column;
+
+			.icons {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+					width: 3.5vh;
+					clip-path: ellipse(45% 45% at 50% 50%);
+				}
+			}
+
+			.recap {
+				display: flex;
+				margin-top: 0.5vh;
+				align-items: center;
+				justify-content: center;
+
+				.wins {
+					color: #61ff47;
+				}
+				.losses {
+					color: #ff4747;
+				}
+				.wins-separator {
+					margin-left: 0.2vh;
+					margin-right: 0.2vh;
+				}
+				.dust {
+					display: flex;
+					margin-left: 1vh;
+
+					.dust-icon {
+						--icon-color: var(--default-text-color);
+					}
+				}
+			}
+		}
+	}
 }
 
 .win-distribution {

@@ -58,9 +58,28 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				[id]="'duels-hero-vignette-overlay' + name"
 				[tooltipTitle]="'duels.hero-info.win-distribution-tooltip' | owTranslate"
 			></basic-bar-chart>
-			<div class="section-header" [owTranslate]="'duels.hero-info.top-decks-header' | owTranslate"></div>
+			<div
+				class="section-header top-decks-header"
+				[owTranslate]="'duels.hero-info.top-decks-header' | owTranslate"
+			></div>
 			<div class="top-decks" *ngIf="decks?.length">
-				<div class="top-deck" *ngFor="let deck of decks; trackBy: trackByDeck"></div>
+				<div class="deck" *ngFor="let deck of decks; trackBy: trackByDeck">
+					<div class="icons">
+						<img [src]="getArt(deck.heroCardId)" class="hero-icon" />
+						<img [src]="getArt(deck.heroPowerCardId)" class="hero-power-icon" />
+						<img [src]="getArt(deck.signatureTreasureCardId)" class="signature-treasure-icon" />
+					</div>
+					<div class="recap">
+						<div class="wins">{{ deck.wins }}</div>
+						<div class="wins-separator">-</div>
+						<div class="losses">{{ deck.losses }}</div>
+						<div class="dust-separator"></div>
+						<div class="dust">
+							<div class="dust-amount">{{ deck.dust }}</div>
+							<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -68,7 +87,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 })
 export class DuelsHeroInfoComponent {
 	@Input() set heroInfo(value: DuelsHeroInfo) {
-		console.debug('setting hero info', value);
+		// console.debug('setting hero info', value);
 		this.heroPortrait = this.i18n.getCardImage(value.cardId, { isHighRes: true, isHeroSkin: true });
 		this.name = value.name;
 		this.globalWinrate = value.globalWinrate;
@@ -85,8 +104,7 @@ export class DuelsHeroInfoComponent {
 					value: Math.max(input.value, 0.5),
 				})) ?? [],
 		} as SimpleBarChartData;
-
-		console.debug('hero portrait', this.heroPortrait);
+		this.decks = value.topDecks.slice(0, 6);
 	}
 
 	heroPortrait: string;
@@ -105,5 +123,9 @@ export class DuelsHeroInfoComponent {
 			return '100';
 		}
 		return !value ? '-' : value.toFixed(decimals);
+	}
+
+	getArt(cardId: string): string {
+		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
 	}
 }

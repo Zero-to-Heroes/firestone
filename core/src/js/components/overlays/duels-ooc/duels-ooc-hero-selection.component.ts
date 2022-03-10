@@ -1,10 +1,18 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
-import { DuelsHeroInfo } from '@components/overlays/duels-ooc/duels-hero-info';
+import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import {
+	buildDuelsHeroPlayerStats,
+	filterDuelsHeroStats,
+	filterDuelsRuns,
+	getDuelsMmrFilterNumber,
+	topDeckApplyFilters,
+} from '@services/ui-store/duels-ui-helper';
+import { groupByFunction, uuid } from '@services/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -45,27 +53,100 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				filter(([heroDbfIds]) => !!heroDbfIds?.length),
 				this.mapData(([heroDbfIds]) => heroDbfIds.map((dbfId) => this.allCards.getCardFromDbfId(dbfId))),
 			);
-		const stats$ = combineLatest(this.heroes$, this.store.duelsHeroStats$()).pipe(
+		const stats$ = combineLatest(
+			this.heroes$,
+			this.store
+				.listen$(
+					([main, nav]) => main.duels.globalStats?.heroes,
+					([main, nav]) => main.duels.runs,
+					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+				)
+				.pipe(
+					filter(([heroes, other]) => !!heroes?.length),
+					this.mapData(([duelStats, runs, gameMode, timeFilter, patch]) =>
+						buildDuelsHeroPlayerStats(
+							filterDuelsHeroStats(duelStats, 'all', null, null, 'hero', this.allCards, null),
+							'hero',
+							filterDuelsRuns(runs, timeFilter, 'all', gameMode, patch, 0, 'all', 'all', 'hero'),
+						),
+					),
+				),
+		).pipe(
 			filter(([heroes, stats]) => !!stats?.length && !!heroes?.length),
 			this.mapData(([heroes, stats]) =>
 				stats.filter((stat) => heroes.map((hero) => hero.id).includes(stat.cardId)),
 			),
 		);
-		const topDecks$ = combineLatest(this.heroes$, this.store.duelsTopDecks$()).pipe(
-			this.mapData(([heroes, topDecks]) =>
-				topDecks
-					.flatMap((group) => group.decks)
-					.filter((deck) => heroes.map((hero) => hero.id).includes(deck.heroCardId)),
+		const topDecks$ = combineLatest(
+			this.heroes$,
+			this.store.listen$(
+				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
+		).pipe(
+			filter(([heroes, [topDecks, mmrPercentiles]]) => !!topDecks?.length && !!mmrPercentiles?.length),
+			this.mapData(([heroes, [topDecks, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch]]) => {
+				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
+				return topDecks
+					.map((deck) =>
+						topDeckApplyFilters(deck, trueMmrFilter, 'all', 'all', 'all', timeFilter, dustFilter, patch),
+					)
+					.filter((group) => group.decks.length > 0)
+					.flatMap((group) => group.decks)
+					.filter((deck) => heroes.map((hero) => hero.id).includes(deck.heroCardId));
+			}),
 		);
 		this.heroInfo$ = combineLatest(this.selectedHeroCardId.asObservable(), stats$, topDecks$).pipe(
+			// tap((info) => console.debug('hero info ready?', info)),
+			filter(([cardId, stats, topDecks]) => !!stats?.length && !!topDecks?.length),
 			this.mapData(([cardId, stats, topDecks]) => {
 				if (!cardId) {
 					return null;
 				}
 
 				const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === cardId);
-				console.debug('[duels-ooc-hero-selection] heroInfo start', cardId, stats, topDecks);
+				if (!stat) {
+					console.warn('missing stat', cardId, stats);
+					return null;
+				}
+				const heroDecks = topDecks
+					.filter((deck) => deck.heroCardId === cardId)
+					.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
+					.map((deck) => {
+						const result: DuelsHeroInfoTopDeck = {
+							deckId: uuid(),
+							decklist: deck.decklist,
+							heroCardId: deck.heroCardId,
+							heroPowerCardId: deck.heroPowerCardId,
+							signatureTreasureCardId: deck.signatureTreasureCardId,
+							wins: deck.wins,
+							losses: deck.losses,
+							treasureCardIds: deck.treasuresCardIds,
+							dust: deck.dustCost,
+						};
+						return result;
+					});
+				// Remove duplicate decklists
+				const groupedDecks = groupByFunction(
+					(deck: DuelsHeroInfoTopDeck) =>
+						`${deck.decklist}-${deck.heroCardId}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+				)(heroDecks);
+				const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
+
+				// console.debug(
+				// 	'[duels-ooc-hero-selection] heroInfo start',
+				// 	cardId,
+				// 	stats,
+				// 	uniqueDecks,
+				// 	heroDecks,
+				// 	groupedDecks,
+				// );
 				const card = this.allCards.getCard(cardId);
 				const result: DuelsHeroInfo = {
 					cardId: cardId,
@@ -75,7 +156,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					globalPopularity: stat.globalPopularity,
 					playerMatches: stat.playerTotalMatches,
 					globalWinDistribution: stat.globalWinDistribution,
-					topDecks: [],
+					topDecks: uniqueDecks,
 				};
 				return result;
 			}),
@@ -89,6 +170,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 
 	onMouseLeave(cardId: string) {
 		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+		this.selectedHeroCardId.next(null);
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

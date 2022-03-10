@@ -11,4 +11,12 @@ export interface DuelsHeroInfo {
 
 export interface DuelsHeroInfoTopDeck {
 	readonly deckId: string;
+	readonly decklist: string;
+	readonly heroCardId: string;
+	readonly heroPowerCardId: string;
+	readonly signatureTreasureCardId: string;
+	readonly wins: number;
+	readonly losses: number;
+	readonly treasureCardIds: readonly string[];
+	readonly dust: number;
 }
