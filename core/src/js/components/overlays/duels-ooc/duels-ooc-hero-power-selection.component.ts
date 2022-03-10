@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
-import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
+import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -17,26 +17,35 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
-	selector: 'duels-ooc-hero-selection',
+	selector: 'duels-ooc-hero-power-selection',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-hero-selection.component.scss',
+		'../../../../css/component/overlays/duels-ooc/duels-ooc-hero-power-selection.component.scss',
 	],
 	template: `
-		<div class="container" *ngIf="heroes$ | async as heroes">
-			<div class="cell" *ngFor="let hero of heroes; trackBy: trackByFn">
-				<div class="empty-card" (mouseenter)="onMouseEnter(hero.id)" (mouseleave)="onMouseLeave(hero.id)"></div>
+		<div class="container" *ngIf="heroPowers$ | async as heroPowers">
+			<div class="cell" *ngFor="let heroPower of heroPowers; trackBy: trackByFn">
+				<div
+					class="empty-card"
+					(mouseenter)="onMouseEnter(heroPower.id)"
+					(mouseleave)="onMouseLeave(heroPower.id)"
+				></div>
 			</div>
 		</div>
-		<duels-hero-info *ngIf="heroInfo$ | async as heroInfo" [heroInfo]="heroInfo"></duels-hero-info>
+		<duels-hero-power-info
+			*ngIf="heroPowerInfo$ | async as heroPowerInfo"
+			[heroPowerInfo]="heroPowerInfo"
+		></duels-hero-power-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	heroes$: Observable<readonly ReferenceCard[]>;
-	heroInfo$: Observable<DuelsHeroInfo>;
+export class DuelsOutOfCombatHeroPowerSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit {
+	heroPowers$: Observable<readonly ReferenceCard[]>;
+	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
 
-	private selectedHeroCardId = new BehaviorSubject<string>(null);
+	private selectedHeroPowerCardId = new BehaviorSubject<string>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -47,14 +56,14 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 	}
 
 	ngAfterContentInit() {
-		this.heroes$ = this.store
-			.listen$(([state, prefs]) => state?.duels?.heroOptionsDbfIds)
+		this.heroPowers$ = this.store
+			.listen$(([state, prefs]) => state?.duels?.heroPowerOptions)
 			.pipe(
-				filter(([heroDbfIds]) => !!heroDbfIds?.length),
-				this.mapData(([heroDbfIds]) => heroDbfIds.map((dbfId) => this.allCards.getCardFromDbfId(dbfId))),
+				filter(([options]) => !!options?.length),
+				this.mapData(([options]) => options.map((option) => this.allCards.getCardFromDbfId(option.DatabaseId))),
 			);
 		const stats$ = combineLatest(
-			this.heroes$,
+			this.heroPowers$,
 			this.store
 				.listen$(
 					([main, nav]) => main.duels.globalStats?.heroes,
@@ -66,21 +75,21 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					filter(([heroes, other]) => !!heroes?.length),
 					this.mapData(([duelStats, runs, timeFilter, patch]) =>
 						buildDuelsHeroPlayerStats(
-							filterDuelsHeroStats(duelStats, 'all', null, null, 'hero', this.allCards, null),
-							'hero',
+							filterDuelsHeroStats(duelStats, 'all', 'all', 'all', 'hero-power', this.allCards, null),
+							'hero-power',
 							// TODO: remove this filter and use the current Duels mode from memory
-							filterDuelsRuns(runs, timeFilter, 'all', 'all', patch, 0, 'all', 'all', 'hero'),
+							filterDuelsRuns(runs, timeFilter, 'all', 'all', patch, 0, 'all', 'all', 'hero-power'),
 						),
 					),
 				),
 		).pipe(
-			filter(([heroes, stats]) => !!stats?.length && !!heroes?.length),
-			this.mapData(([heroes, stats]) =>
-				stats.filter((stat) => heroes.map((hero) => hero.id).includes(stat.cardId)),
+			filter(([heroPowers, stats]) => !!stats?.length && !!heroPowers?.length),
+			this.mapData(([heroPowers, stats]) =>
+				stats.filter((stat) => heroPowers.map((heroPower) => heroPower.id).includes(stat.cardId)),
 			),
 		);
 		const topDecks$ = combineLatest(
-			this.heroes$,
+			this.heroPowers$,
 			this.store.listen$(
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
@@ -90,8 +99,8 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
-			filter(([heroes, [topDecks, mmrPercentiles]]) => !!topDecks?.length && !!mmrPercentiles?.length),
-			this.mapData(([heroes, [topDecks, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch]]) => {
+			filter(([heroPowers, [topDecks, mmrPercentiles]]) => !!topDecks?.length && !!mmrPercentiles?.length),
+			this.mapData(([heroPowers, [topDecks, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch]]) => {
 				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 				return topDecks
 					.map((deck) =>
@@ -99,11 +108,10 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					)
 					.filter((group) => group.decks.length > 0)
 					.flatMap((group) => group.decks)
-					.filter((deck) => heroes.map((hero) => hero.id).includes(deck.heroCardId));
+					.filter((deck) => heroPowers.map((hero) => hero.id).includes(deck.heroPowerCardId));
 			}),
 		);
-		this.heroInfo$ = combineLatest(this.selectedHeroCardId.asObservable(), stats$, topDecks$).pipe(
-			// tap((info) => console.debug('hero info ready?', info)),
+		this.heroPowerInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), stats$, topDecks$).pipe(
 			filter(([cardId, stats, topDecks]) => !!stats?.length && !!topDecks?.length),
 			this.mapData(([cardId, stats, topDecks]) => {
 				if (!cardId) {
@@ -115,8 +123,8 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					console.warn('missing stat', cardId, stats);
 					return null;
 				}
-				const heroDecks = topDecks
-					.filter((deck) => deck.heroCardId === cardId)
+				const heroPowerDecks = topDecks
+					.filter((deck) => deck.heroPowerCardId === cardId)
 					.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 					.map((deck) => {
 						const result: DuelsHeroInfoTopDeck = {
@@ -136,20 +144,12 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				const groupedDecks = groupByFunction(
 					(deck: DuelsHeroInfoTopDeck) =>
 						`${deck.decklist}-${deck.heroCardId}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
-				)(heroDecks);
+				)(heroPowerDecks);
 				const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
-
-				// console.debug(
-				// 	'[duels-ooc-hero-selection] heroInfo start',
-				// 	cardId,
-				// 	stats,
-				// 	uniqueDecks,
-				// 	heroDecks,
-				// 	groupedDecks,
-				// );
 				const card = this.allCards.getCard(cardId);
-				const result: DuelsHeroInfo = {
+				const result: DuelsHeroPowerInfo = {
 					cardId: cardId,
+					heroCardId: stat.hero,
 					name: card.name,
 					globalWinrate: stat.globalWinrate,
 					playerWinrate: stat.playerWinrate,
@@ -165,12 +165,12 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 
 	onMouseEnter(cardId: string) {
 		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
-		this.selectedHeroCardId.next(cardId);
+		this.selectedHeroPowerCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string) {
 		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedHeroCardId.next(null);
+		this.selectedHeroPowerCardId.next(null);
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

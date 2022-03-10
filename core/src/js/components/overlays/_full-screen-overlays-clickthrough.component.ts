@@ -47,6 +47,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<duels-max-life-opponent-widget-wrapper></duels-max-life-opponent-widget-wrapper>
 			<duels-ooc-treasure-selection-widget-wrapper></duels-ooc-treasure-selection-widget-wrapper>
 			<duels-ooc-hero-selection-widget-wrapper></duels-ooc-hero-selection-widget-wrapper>
+			<duels-ooc-hero-power-selection-widget-wrapper></duels-ooc-hero-power-selection-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -19,6 +19,8 @@ export class DuelsCurrentOptionParser implements Processor {
 			? await this.memory.getDuelsInfo()
 			: null;
 		const treasures = duelsInfo?.TreasureOption;
+		const heroPowerOptions =
+			event.option === DungeonCrawlOptionType.HERO_POWER ? await this.memory.getDuelsHeroPowerOptions() : null;
 		const newState = currentState.update({
 			duels: currentState.duels.update({
 				currentOption: event.option,
@@ -27,6 +29,7 @@ export class DuelsCurrentOptionParser implements Processor {
 							treasures: treasures.map((option) => this.allCards.getCardFromDbfId(option)),
 					  }
 					: null,
+				heroPowerOptions: heroPowerOptions,
 			}),
 		});
 		return [newState, null];

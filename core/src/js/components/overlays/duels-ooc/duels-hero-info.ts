@@ -20,3 +20,15 @@ export interface DuelsHeroInfoTopDeck {
 	readonly treasureCardIds: readonly string[];
 	readonly dust: number;
 }
+
+export interface DuelsHeroPowerInfo {
+	readonly cardId: string;
+	readonly heroCardId: string;
+	readonly name: string;
+	readonly globalWinrate: number;
+	readonly playerWinrate: number;
+	readonly globalPopularity: number;
+	readonly playerMatches: number;
+	readonly globalWinDistribution: readonly { winNumber: number; value: number }[];
+	readonly topDecks: readonly DuelsHeroInfoTopDeck[];
+}

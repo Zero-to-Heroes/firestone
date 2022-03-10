@@ -31,3 +31,11 @@ export interface OptionBundle {
 	readonly BundleId: number;
 	readonly Elements: readonly number[];
 }
+
+export interface MemoryDuelsHeroPowerOption {
+	readonly DatabaseId: number;
+	readonly Enabled: boolean;
+	readonly Visible: boolean;
+	readonly Completed: boolean;
+	readonly Locked: boolean;
+}

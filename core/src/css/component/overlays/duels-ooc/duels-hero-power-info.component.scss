@@ -1,0 +1,241 @@
+:host {
+	display: flex;
+}
+
+.hero-power-info {
+	flex-grow: 1;
+	width: 100%;
+	display: flex;
+	padding: 1vh;
+	padding-top: 2vh;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 1.3vh;
+	line-height: 2.2vh;
+
+	background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/decktracker_bg.png');
+	background-size: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+
+	border-radius: 25px;
+	border-width: 1px;
+	border-style: solid;
+	border-image-slice: 1;
+	// border-image-source: linear-gradient(to bottom right, rgba(255, 185, 72, 0) 0%, #ffb948 100%);
+	// This gives a nice effect where rounded corners don't have a border
+	border-image-source: linear-gradient(to bottom right, #ffb948 100%, #ffb948 100%);
+
+	--bar-chart-bar-color: var(--color-2);
+	--on-bar-chart-bar-color: var(--color-1);
+
+	.bio {
+		display: flex;
+		flex-direction: column;
+		width: 30%;
+		flex-shrink: 0;
+
+		.name {
+			color: var(--default-title-color);
+			font-size: 1.8vh;
+			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 100%;
+			margin-bottom: 2vh;
+		}
+
+		.images-container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.images {
+			position: relative;
+
+			.portrait {
+				width: 15vh;
+				flex-shrink: 0;
+			}
+
+			.hero-power {
+				position: absolute;
+				bottom: 1vh;
+				z-index: 1;
+				width: 5vh;
+				height: 6vh;
+				right: 2vh;
+
+				.hero-power-container {
+					width: 100%;
+					height: 100%;
+				}
+
+				.image {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					clip-path: ellipse(40% 30% at 50% 55%);
+
+					&.empty-icon {
+						background: var(--color-5);
+					}
+				}
+
+				.frame {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+				}
+			}
+		}
+
+		.stats {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	.section-header {
+		color: var(--default-title-color);
+		font-size: 1.8vh;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		margin-bottom: 2vh;
+	}
+
+	.win-distribution-section,
+	.top-decks-section {
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.win-distribution-section {
+		width: 30%;
+	}
+
+	.top-decks-section {
+		width: 40%;
+	}
+
+	.top-decks {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		column-gap: 0;
+		row-gap: 3vh;
+		margin-top: 2vh;
+
+		.deck {
+			display: flex;
+			flex-direction: column;
+
+			.icons {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+					width: 3.5vh;
+					clip-path: ellipse(45% 45% at 50% 50%);
+				}
+			}
+
+			.recap {
+				display: flex;
+				margin-top: 0.5vh;
+				align-items: center;
+				justify-content: center;
+
+				.wins {
+					color: #61ff47;
+				}
+				.losses {
+					color: #ff4747;
+				}
+				.wins-separator {
+					margin-left: 0.2vh;
+					margin-right: 0.2vh;
+				}
+				.dust {
+					display: flex;
+					margin-left: 1vh;
+
+					.dust-icon {
+						--icon-color: var(--default-text-color);
+					}
+				}
+			}
+		}
+	}
+}
+
+.win-distribution {
+	height: 9vh;
+	width: 100%;
+	top: 0;
+	align-self: center;
+	margin-top: 3vh;
+	padding-right: 3vh;
+	padding-left: 3vh;
+
+	::ng-deep .tooltip-container {
+		width: 150px;
+	}
+}
+
+.stat {
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 1vh;
+	flex-wrap: nowrap;
+
+	.header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+		margin-bottom: 0;
+		flex-grow: 1;
+	}
+
+	.values {
+		display: flex;
+		width: 14vh;
+	}
+
+	.global-value {
+		font-size: 2vh;
+		color: var(--default-title-color);
+	}
+
+	.my-value {
+		margin-left: 0.5vh;
+	}
+
+	.positive {
+		color: #61ff47;
+
+		&::before {
+			content: '+';
+		}
+	}
+
+	.negative {
+		color: #ff4747;
+	}
+}

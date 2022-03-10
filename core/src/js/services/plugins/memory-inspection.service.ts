@@ -4,15 +4,16 @@ import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/inpu
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
 import { GetDuelsHeroOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-options-operation';
+import { GetDuelsHeroPowerOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-power-options-operation';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { PackInfo } from '../../models/collection/pack-info';
-import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { CoinInfo } from '../../models/memory/coin-info';
+import { DuelsInfo, MemoryDuelsHeroPowerOption } from '../../models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -77,6 +78,11 @@ export class MemoryInspectionService {
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow, this.i18n);
+	private getDuelsHeroPowerOptionsOperation = new GetDuelsHeroPowerOptionsOperation(
+		this.mindVisionFacade,
+		this.ow,
+		this.i18n,
+	);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVisionFacade, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVisionFacade, this.ow);
 	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVisionFacade, this.ow);
@@ -199,6 +205,13 @@ export class MemoryInspectionService {
 
 	public async getDuelsHeroOptions(forceReset = false, numberOfRetries = 1): Promise<readonly number[]> {
 		return this.mindVision.callMindVision(() => this.getDuelsHeroOptionsOperation.call(numberOfRetries));
+	}
+
+	public async getDuelsHeroPowerOptions(
+		forceReset = false,
+		numberOfRetries = 1,
+	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+		return this.mindVision.callMindVision(() => this.getDuelsHeroPowerOptionsOperation.call(numberOfRetries));
 	}
 
 	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {
