@@ -6,4 +6,5 @@ export type DuelsCategoryType =
 	| 'duels-personal-deck-details'
 	| 'duels-top-decks'
 	| 'duels-leaderboard'
+	| 'duels-deckbuilder'
 	| 'duels-deck-details';

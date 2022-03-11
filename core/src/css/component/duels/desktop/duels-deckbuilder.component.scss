@@ -1,0 +1,10 @@
+:host() {
+	display: flex;
+	min-height: 0;
+}
+
+.duels-deckbuilder {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+}

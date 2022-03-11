@@ -57,6 +57,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						</duels-personal-deck-details>
 						<duels-top-decks *ngIf="category.value?.id === 'duels-top-decks'"> </duels-top-decks>
 						<duels-leaderboard *ngIf="category.value?.id === 'duels-leaderboard'"></duels-leaderboard>
+						<duels-deckbuilder *ngIf="category.value?.id === 'duels-deckbuilder'"></duels-deckbuilder>
 					</div>
 				</with-loading>
 			</section>

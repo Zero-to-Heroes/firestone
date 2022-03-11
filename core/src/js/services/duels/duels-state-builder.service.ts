@@ -316,6 +316,13 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			// DuelsCategory.create({
+			// 	id: 'duels-deckbuilder',
+			// 	name: this.i18n.translateString('app.duels.menu.deckbuilder'),
+			// 	enabled: true,
+			// 	icon: undefined,
+			// 	categories: null,
+			// } as DuelsCategory),
 		];
 		return result;
 	}
