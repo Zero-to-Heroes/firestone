@@ -1,6 +1,7 @@
 export interface DuelsHeroInfo {
 	readonly cardId: string;
 	readonly name: string;
+	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
 	readonly playerWinrate: number;
 	readonly globalPopularity: number;
@@ -25,6 +26,7 @@ export interface DuelsHeroPowerInfo {
 	readonly cardId: string;
 	readonly heroCardId: string;
 	readonly name: string;
+	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
 	readonly playerWinrate: number;
 	readonly globalPopularity: number;
@@ -38,6 +40,7 @@ export interface DuelsSignatureTreasureInfo {
 	readonly heroCardId: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;
+	readonly globalTotalMatches: number;
 	readonly globalWinrate: number;
 	readonly playerWinrate: number;
 	readonly globalPopularity: number;

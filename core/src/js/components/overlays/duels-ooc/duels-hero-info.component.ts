@@ -13,11 +13,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 		<div class="hero-info">
 			<div class="bio">
 				<img [src]="heroPortrait" class="portrait" />
-				<!-- 
-					Info to add:
-					- top decks available with current dust filters (and also filter out unavailable hero powers and treasures?) (or at least gray them out?)
-
-				 -->
 				<div class="bio-info">
 					<div class="name">{{ name }}</div>
 					<div class="stat">
@@ -50,7 +45,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					</div>
 				</div>
 			</div>
-			<div class="section-header" [owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate"></div>
+			<div
+				class="section-header"
+				[owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"
+			></div>
 			<basic-bar-chart
 				*ngIf="globalWinDistribution?.data?.length > 0"
 				class="win-distribution"
@@ -101,10 +99,12 @@ export class DuelsHeroInfoComponent {
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
 					// To never show an empty bar
-					value: Math.max(input.value, 0.5),
+					value: Math.max(100 * input.value, 0.5),
 				})) ?? [],
 		} as SimpleBarChartData;
 		this.decks = value.topDecks.slice(0, 6);
+		this.totalRuns = value.globalTotalMatches;
+		// console.debug('globalWinDistrib', this.globalWinDistribution, value.globalWinDistribution, value);
 	}
 
 	heroPortrait: string;
@@ -115,6 +115,7 @@ export class DuelsHeroInfoComponent {
 	playerMatches: string;
 	globalWinDistribution: SimpleBarChartData;
 	decks: readonly DuelsHeroInfoTopDeck[];
+	totalRuns: number;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 

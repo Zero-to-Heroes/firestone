@@ -172,6 +172,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 								heroCardId: stat.hero,
 								heroPowerCardId: selectedHeroPower,
 								name: card.name,
+								globalTotalMatches: stat.globalTotalMatches,
 								globalWinrate: stat.globalWinrate,
 								playerWinrate: stat.playerWinrate,
 								globalPopularity: stat.globalPopularity,

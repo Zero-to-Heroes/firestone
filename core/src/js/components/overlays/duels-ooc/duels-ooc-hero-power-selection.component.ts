@@ -157,6 +157,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								cardId: currentHeroPowerCardId,
 								heroCardId: stat.hero,
 								name: card.name,
+								globalTotalMatches: stat.globalTotalMatches,
 								globalWinrate: stat.globalWinrate,
 								playerWinrate: stat.playerWinrate,
 								globalPopularity: stat.globalPopularity,

@@ -77,7 +77,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 		).pipe(
 			filter(([heroes, stats]) => !!stats?.length && !!heroes?.length),
 			this.mapData(([heroes, stats]) => {
-				console.debug('building stats', stats, heroes);
+				// console.debug('building stats', stats, heroes);
 				return stats.filter((stat) =>
 					// Because of Drek'That and Vanndar
 					// It's not necessary to update the Hero Power and Signature Treasures
@@ -145,7 +145,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 						};
 						return result;
 					});
-				console.debug('hero decks', heroDecks, topDecks);
+				// console.debug('hero decks', heroDecks, topDecks);
 				// Remove duplicate decklists
 				const groupedDecks = groupByFunction(
 					(deck: DuelsHeroInfoTopDeck) =>
@@ -153,19 +153,20 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				)(heroDecks);
 				const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 
-				console.debug(
-					'[duels-ooc-hero-selection] heroInfo start',
-					cardId,
-					stats,
-					stat,
-					uniqueDecks,
-					heroDecks,
-					groupedDecks,
-				);
+				// console.debug(
+				// 	'[duels-ooc-hero-selection] heroInfo start',
+				// 	cardId,
+				// 	stats,
+				// 	stat,
+				// 	uniqueDecks,
+				// 	heroDecks,
+				// 	groupedDecks,
+				// );
 				const card = this.allCards.getCard(cardId);
 				const result: DuelsHeroInfo = {
 					cardId: cardId,
 					name: card.name,
+					globalTotalMatches: stat.globalTotalMatches,
 					globalWinrate: stat.globalWinrate,
 					playerWinrate: stat.playerWinrate,
 					globalPopularity: stat.globalPopularity,

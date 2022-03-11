@@ -61,7 +61,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 			<div class="win-distribution-section">
 				<div
 					class="section-header"
-					[owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate"
+					[owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"
 				></div>
 				<basic-bar-chart
 					*ngIf="globalWinDistribution?.data?.length > 0"
@@ -117,10 +117,11 @@ export class DuelsHeroPowerInfoComponent {
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
 					// To never show an empty bar
-					value: Math.max(input.value, 0.5),
+					value: Math.max(100 * input.value, 0.5),
 				})) ?? [],
 		} as SimpleBarChartData;
 		this.decks = value.topDecks.slice(0, 6);
+		this.totalRuns = value.globalTotalMatches;
 	}
 
 	heroPortrait: string;
@@ -132,6 +133,7 @@ export class DuelsHeroPowerInfoComponent {
 	playerMatches: string;
 	globalWinDistribution: SimpleBarChartData;
 	decks: readonly DuelsHeroInfoTopDeck[];
+	totalRuns: number;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 
