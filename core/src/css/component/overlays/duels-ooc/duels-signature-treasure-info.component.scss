@@ -2,7 +2,7 @@
 	display: flex;
 }
 
-.hero-power-info {
+.signature-treasure-info {
 	flex-grow: 1;
 	width: 100%;
 	display: flex;
@@ -70,7 +70,7 @@
 				z-index: 1;
 				width: 5.5vh;
 				height: 6vh;
-				right: 0;
+				right: -4vh;
 
 				.hero-power-container {
 					width: 100%;
@@ -96,6 +96,29 @@
 					height: 100%;
 					top: 0;
 					left: 0;
+				}
+			}
+
+			.signature-treasure {
+				position: absolute;
+				bottom: 4vh;
+				z-index: 1;
+				width: 5vh;
+				height: 6vh;
+				left: -3vh;
+
+				.signature-treasure-container {
+					width: 100%;
+					height: 100%;
+				}
+
+				.image {
+					position: absolute;
+					width: 100%;
+					height: 100%;
+					top: 0;
+					left: 0;
+					clip-path: ellipse(40% 37% at 50% 55%);
 				}
 			}
 		}

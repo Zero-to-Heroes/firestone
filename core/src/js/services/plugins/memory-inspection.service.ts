@@ -5,6 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
 import { GetDuelsHeroOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-options-operation';
 import { GetDuelsHeroPowerOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-power-options-operation';
+import { GetDuelsSignatureTreasureOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-signature-treasure-options-operation';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
@@ -79,6 +80,11 @@ export class MemoryInspectionService {
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroPowerOptionsOperation = new GetDuelsHeroPowerOptionsOperation(
+		this.mindVisionFacade,
+		this.ow,
+		this.i18n,
+	);
+	private getDuelsSignatureTreasureOptionsOperation = new GetDuelsSignatureTreasureOptionsOperation(
 		this.mindVisionFacade,
 		this.ow,
 		this.i18n,
@@ -212,6 +218,15 @@ export class MemoryInspectionService {
 		numberOfRetries = 1,
 	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
 		return this.mindVision.callMindVision(() => this.getDuelsHeroPowerOptionsOperation.call(numberOfRetries));
+	}
+
+	public async getDuelsSignatureTreasureOptions(
+		forceReset = false,
+		numberOfRetries = 1,
+	): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+		return this.mindVision.callMindVision(() =>
+			this.getDuelsSignatureTreasureOptionsOperation.call(numberOfRetries),
+		);
 	}
 
 	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {

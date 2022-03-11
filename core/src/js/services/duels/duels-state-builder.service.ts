@@ -101,7 +101,7 @@ export class DuelsStateBuilderService {
 				this.isOnMainScreen.next(false);
 			}
 
-			if (changes.DuelsCurrentOptionSelection) {
+			if (changes.DuelsCurrentOptionSelection != null) {
 				this.mainWindowStateUpdater.next(new DuelsCurrentOptionEvent(changes.DuelsCurrentOptionSelection));
 			}
 

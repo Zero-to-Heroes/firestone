@@ -19,8 +19,15 @@ export class DuelsCurrentOptionParser implements Processor {
 			? await this.memory.getDuelsInfo()
 			: null;
 		const treasures = duelsInfo?.TreasureOption;
-		const heroPowerOptions =
-			event.option === DungeonCrawlOptionType.HERO_POWER ? await this.memory.getDuelsHeroPowerOptions() : null;
+		const heroPowerOptions = [DungeonCrawlOptionType.HERO_POWER, DungeonCrawlOptionType.TREASURE_SATCHEL].includes(
+			event.option,
+		)
+			? await this.memory.getDuelsHeroPowerOptions()
+			: null;
+		const signatureTreasureOptions =
+			event.option === DungeonCrawlOptionType.TREASURE_SATCHEL
+				? await this.memory.getDuelsSignatureTreasureOptions()
+				: null;
 		const newState = currentState.update({
 			duels: currentState.duels.update({
 				currentOption: event.option,
@@ -30,6 +37,7 @@ export class DuelsCurrentOptionParser implements Processor {
 					  }
 					: null,
 				heroPowerOptions: heroPowerOptions,
+				signatureTreasureOptions: signatureTreasureOptions,
 			}),
 		});
 		return [newState, null];

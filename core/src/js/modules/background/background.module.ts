@@ -17,13 +17,16 @@ import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/curre
 import { DuelsDecktrackerOocWidgetWrapperComponent } from '@components/overlays/duels-decktracker-ooc-widget-wrapper.component';
 import { DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-hero-power-selection-widget-wrapper.component';
 import { DuelsOutOfCombatHeroSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-hero-selection-widget-wrapper.component';
+import { DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-signature-treasure-widget-wrapper.component';
 import { DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-treasure-selection-widget-wrapper.component';
 import { DuelsDecktrackerOocComponent } from '@components/overlays/duels-ooc/duels-decktracker-ooc.component';
 import { DuelsHeroInfoComponent } from '@components/overlays/duels-ooc/duels-hero-info.component';
 import { DuelsHeroPowerInfoComponent } from '@components/overlays/duels-ooc/duels-hero-power-info.component';
 import { DuelsOutOfCombatHeroPowerSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-hero-power-selection.component';
 import { DuelsOutOfCombatHeroSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-hero-selection.component';
+import { DuelsOutOfCombatSignatureTreasureSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component';
 import { DuelsOutOfCombatTreasureSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-treasure-selection.component';
+import { DuelsSignatureTreasureInfoComponent } from '@components/overlays/duels-ooc/duels-signature-treasure-info.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
@@ -830,6 +833,9 @@ const components = [
 		DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent,
 		DuelsOutOfCombatHeroPowerSelectionComponent,
 		DuelsHeroPowerInfoComponent,
+		DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent,
+		DuelsOutOfCombatSignatureTreasureSelectionComponent,
+		DuelsSignatureTreasureInfoComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,

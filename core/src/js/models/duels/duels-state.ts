@@ -36,6 +36,7 @@ export class DuelsState {
 	readonly currentOption: DungeonCrawlOptionType;
 	readonly heroOptionsDbfIds: readonly number[];
 	readonly heroPowerOptions: readonly MemoryDuelsHeroPowerOption[];
+	readonly signatureTreasureOptions: readonly MemoryDuelsHeroPowerOption[];
 
 	public static create(base: Partial<NonFunctionProperties<DuelsState>>): DuelsState {
 		return Object.assign(new DuelsState(), base);

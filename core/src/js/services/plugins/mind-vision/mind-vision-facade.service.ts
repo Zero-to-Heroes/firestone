@@ -163,6 +163,20 @@ export class MindVisionFacadeService {
 		});
 	}
 
+	public async getDuelsSignatureTreasureOptions(): Promise<readonly MemoryDuelsHeroPowerOption[]> {
+		return new Promise<readonly MemoryDuelsHeroPowerOption[]>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsSignatureTreasureOptions((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getDuelsSignatureTreasureOptions', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
 		return new Promise<{ Rating: number }>(async (resolve) => {
 			if (forceReset) {

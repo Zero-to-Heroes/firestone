@@ -17,6 +17,8 @@ export interface DuelsHeroPlayerStat {
 	readonly periodStart: string;
 	readonly cardId: string;
 	readonly hero: string;
+	readonly heroPower: string;
+	readonly signatureTreasure: string;
 	readonly globalTotalMatches: number;
 	readonly globalPopularity: number;
 	readonly globalWinrate: number;

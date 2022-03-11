@@ -38,4 +38,5 @@ export interface MemoryDuelsHeroPowerOption {
 	readonly Visible: boolean;
 	readonly Completed: boolean;
 	readonly Locked: boolean;
+	readonly Selected: boolean;
 }

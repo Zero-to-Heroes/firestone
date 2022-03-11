@@ -205,6 +205,8 @@ export const buildDuelsHeroPlayerStats = (
 		const validRuns = runs.filter((run) => isRelevantRunForHeroStat(run, statType, key));
 		return {
 			hero: group[0].hero,
+			heroPower: group[0].heroPowerCardId,
+			signatureTreasure: group[0].signatureTreasureCardId,
 			periodStart: null,
 			cardId: key,
 			globalPopularity: (100 * totalRunsForGroup) / totalRuns,

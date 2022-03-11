@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
-import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
+import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -17,33 +17,33 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
-	selector: 'duels-ooc-hero-power-selection',
+	selector: 'duels-ooc-signature-treasure-selection',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-hero-power-selection.component.scss',
+		'../../../../css/component/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component.scss',
 	],
 	template: `
-		<div class="container" *ngIf="heroPowers$ | async as heroPowers">
-			<div class="cell" *ngFor="let heroPower of heroPowers; trackBy: trackByFn">
+		<div class="container" *ngIf="signatureTreasures$ | async as signatureTreasures">
+			<div class="cell" *ngFor="let signatureTreasure of signatureTreasures; trackBy: trackByFn">
 				<div
 					class="empty-card"
-					(mouseenter)="onMouseEnter(heroPower.id)"
-					(mouseleave)="onMouseLeave(heroPower.id)"
+					(mouseenter)="onMouseEnter(signatureTreasure.id)"
+					(mouseleave)="onMouseLeave(signatureTreasure.id)"
 				></div>
 			</div>
 		</div>
-		<duels-hero-power-info
-			*ngIf="heroPowerInfo$ | async as heroPowerInfo"
-			[heroPowerInfo]="heroPowerInfo"
-		></duels-hero-power-info>
+		<duels-signature-treasure-info
+			*ngIf="signatureTreasureInfo$ | async as signatureTreasureInfo"
+			[signatureTreasureInfo]="signatureTreasureInfo"
+		></duels-signature-treasure-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatHeroPowerSelectionComponent
+export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit {
-	heroPowers$: Observable<readonly ReferenceCard[]>;
-	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
+	signatureTreasures$: Observable<readonly ReferenceCard[]>;
+	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 
 	private selectedHeroPowerCardId = new BehaviorSubject<string>(null);
 
@@ -56,44 +56,56 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 	}
 
 	ngAfterContentInit() {
-		this.heroPowers$ = this.store
-			.listen$(([state, prefs]) => state?.duels?.heroPowerOptions)
+		this.signatureTreasures$ = this.store
+			.listen$(([state, prefs]) => state?.duels?.signatureTreasureOptions)
 			.pipe(
 				filter(([options]) => !!options?.length),
 				this.mapData(([options]) => options.map((option) => this.allCards.getCardFromDbfId(option.DatabaseId))),
 			);
+		const selectedHeroPower$ = this.store
+			.listen$(([main, nav]) => main.duels?.heroPowerOptions)
+			.pipe(
+				this.mapData(([heroPowerOptions]) => {
+					const selectedOption = heroPowerOptions.find((option) => option.Selected);
+					const refCard = this.allCards.getCardFromDbfId(selectedOption.DatabaseId);
+					return refCard.id;
+				}),
+			);
 		const allStats$ = combineLatest(
-			this.heroPowers$,
+			this.signatureTreasures$,
+			selectedHeroPower$,
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => main.duels.topDecks,
-				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+				([main, nav]) => main.duels.runs,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
+			filter(([selectedHeroPower]) => !!selectedHeroPower),
 			this.mapData(
 				([
-					allHeroPowerCards,
-					[duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch],
+					allSignatureTreasureCards,
+					selectedHeroPower,
+					[duelStats, duelsTopDecks, mmrPercentiles, runs, timeFilter, dustFilter, mmrFilter, patch],
 				]) => {
-					return allHeroPowerCards
+					return allSignatureTreasureCards
 						.map((card) => card.id)
-						.map((currentHeroPowerCardId) => {
+						.map((currentSignatureTreasureCardId) => {
 							const stats = buildDuelsHeroPlayerStats(
 								filterDuelsHeroStats(
 									duelStats,
 									'all',
-									currentHeroPowerCardId,
+									selectedHeroPower,
 									'all',
-									'hero-power',
+									'signature-treasure',
 									this.allCards,
 									null,
 								),
-								'hero-power',
+								'signature-treasure',
 								// TODO: remove this filter and use the current Duels mode from memory
 								filterDuelsRuns(
 									runs,
@@ -102,14 +114,16 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 									'all',
 									patch,
 									0,
-									currentHeroPowerCardId,
-									'all',
-									'hero-power',
+									selectedHeroPower,
+									currentSignatureTreasureCardId,
+									'signature-treasure',
 								),
 							);
-							const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === currentHeroPowerCardId);
+							const stat: DuelsHeroPlayerStat = stats.find(
+								(s) => s.cardId === currentSignatureTreasureCardId,
+							);
 							if (!stat) {
-								console.warn('missing stat', currentHeroPowerCardId, stats);
+								console.warn('missing stat', currentSignatureTreasureCardId, stats);
 								return null;
 							}
 
@@ -120,8 +134,8 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 										deck,
 										trueMmrFilter,
 										'all',
-										currentHeroPowerCardId,
-										'all',
+										selectedHeroPower,
+										currentSignatureTreasureCardId,
 										timeFilter,
 										dustFilter,
 										patch,
@@ -129,8 +143,8 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								)
 								.filter((group) => group.decks.length > 0)
 								.flatMap((group) => group.decks);
-							const heroPowerDecks = topDecks
-								.filter((deck) => deck.heroPowerCardId === currentHeroPowerCardId)
+							const signatureTreasureDecks = topDecks
+								.filter((deck) => deck.signatureTreasureCardId === currentSignatureTreasureCardId)
 								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 								.map((deck) => {
 									const result: DuelsHeroInfoTopDeck = {
@@ -149,13 +163,14 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
 								(deck: DuelsHeroInfoTopDeck) =>
-									`${deck.decklist}-${deck.heroCardId}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
-							)(heroPowerDecks);
+									`${deck.decklist}-${deck.heroCardId}-${deck.signatureTreasureCardId}-${deck.signatureTreasureCardId}`,
+							)(signatureTreasureDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
-							const card = this.allCards.getCard(currentHeroPowerCardId);
-							const result: DuelsHeroPowerInfo = {
-								cardId: currentHeroPowerCardId,
+							const card = this.allCards.getCard(currentSignatureTreasureCardId);
+							const result: DuelsSignatureTreasureInfo = {
+								cardId: currentSignatureTreasureCardId,
 								heroCardId: stat.hero,
+								heroPowerCardId: selectedHeroPower,
 								name: card.name,
 								globalWinrate: stat.globalWinrate,
 								playerWinrate: stat.playerWinrate,
@@ -165,19 +180,19 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								topDecks: uniqueDecks,
 							};
 							return {
-								cardId: currentHeroPowerCardId,
+								cardId: currentSignatureTreasureCardId,
 								stat: result,
 							};
 						});
 				},
 			),
 		);
-		this.heroPowerInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), allStats$).pipe(
-			this.mapData(([currentHeroPowerCardId, allStats]) => {
-				if (!currentHeroPowerCardId) {
+		this.signatureTreasureInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), allStats$).pipe(
+			this.mapData(([currentSignatureTreasureCardId, allStats]) => {
+				if (!currentSignatureTreasureCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat.cardId === currentHeroPowerCardId).stat;
+				return allStats.find((stat) => stat.cardId === currentSignatureTreasureCardId).stat;
 			}),
 		);
 	}

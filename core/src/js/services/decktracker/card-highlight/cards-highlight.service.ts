@@ -407,7 +407,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.OpenTheDoorwaysTavernBrawl:
 				return and(discover);
 			case CardIds.OrbOfRevelationTavernBrawl:
-				return and(or(inDeck, inHand), discover);
+				return and(or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
 			case CardIds.PillageTheFallenTavernBrawl:
 				return and(weapon);
 			case CardIds.PlaguebringerTavernBrawl:
