@@ -63,17 +63,13 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
 			filter(([allHeroCards, [duelStats, duelsTopDecks]]) => !!duelStats?.length && !!duelsTopDecks?.length),
 			this.mapData(
-				([
-					allHeroCards,
-					[duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch],
-				]) => {
+				([allHeroCards, [duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
 					return allHeroCards
 						.map((card) => card.id)
 						.map((cardId) => {
@@ -81,7 +77,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 								filterDuelsHeroStats(duelStats, 'all', null, null, 'hero', this.allCards, null),
 								'hero',
 								// TODO: remove this filter and use the current Duels mode from memory
-								filterDuelsRuns(runs, timeFilter, 'all', 'all', patch, 0, 'all', 'all', 'hero'),
+								filterDuelsRuns(runs, 'last-patch', 'all', 'all', patch, 0, 'all', 'all', 'hero'),
 							).filter((stat) =>
 								// Because of Drek'That and Vanndar
 								// It's not necessary to update the Hero Power and Signature Treasures
@@ -109,7 +105,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 										'all',
 										'all',
 										'all',
-										timeFilter,
+										'last-patch',
 										dustFilter,
 										patch,
 									),

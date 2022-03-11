@@ -70,7 +70,6 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
@@ -78,7 +77,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 			this.mapData(
 				([
 					allHeroPowerCards,
-					[duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, timeFilter, dustFilter, patch],
+					[duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, dustFilter, patch],
 				]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)
@@ -97,7 +96,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								// TODO: remove this filter and use the current Duels mode from memory
 								filterDuelsRuns(
 									runs,
-									timeFilter,
+									'last-patch',
 									'all',
 									'all',
 									patch,
@@ -122,7 +121,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 										'all',
 										currentHeroPowerCardId,
 										'all',
-										timeFilter,
+										'last-patch',
 										dustFilter,
 										patch,
 									),

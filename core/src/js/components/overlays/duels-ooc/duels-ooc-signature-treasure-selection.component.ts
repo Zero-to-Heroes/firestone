@@ -79,7 +79,6 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
-				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
@@ -90,7 +89,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([
 					allSignatureTreasureCards,
 					selectedHeroPower,
-					[duelStats, duelsTopDecks, mmrPercentiles, runs, timeFilter, dustFilter, mmrFilter, patch],
+					[duelStats, duelsTopDecks, mmrPercentiles, runs, dustFilter, mmrFilter, patch],
 				]) => {
 					return allSignatureTreasureCards
 						.map((card) => card.id)
@@ -109,7 +108,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 								// TODO: remove this filter and use the current Duels mode from memory
 								filterDuelsRuns(
 									runs,
-									timeFilter,
+									'last-patch',
 									'all',
 									'all',
 									patch,
@@ -136,7 +135,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 										'all',
 										selectedHeroPower,
 										currentSignatureTreasureCardId,
-										timeFilter,
+										'last-patch',
 										dustFilter,
 										patch,
 									),
