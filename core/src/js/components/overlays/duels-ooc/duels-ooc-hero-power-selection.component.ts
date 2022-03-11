@@ -130,7 +130,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								.flatMap((group) => group.decks);
 							const heroPowerDecks = topDecks
 								.filter((deck) => deck.heroPowerCardId === currentHeroPowerCardId)
-								.sort((a, b) => b.rating - a.rating)
+								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 								.map((deck) => {
 									const result: DuelsHeroInfoTopDeck = {
 										deckId: uuid(),

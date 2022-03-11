@@ -144,7 +144,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 								.flatMap((group) => group.decks);
 							const signatureTreasureDecks = topDecks
 								.filter((deck) => deck.signatureTreasureCardId === currentSignatureTreasureCardId)
-								.sort((a, b) => b.rating - a.rating)
+								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 								.map((deck) => {
 									const result: DuelsHeroInfoTopDeck = {
 										deckId: uuid(),

@@ -119,7 +119,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 								);
 							const heroDecks = topDecks
 								.filter((deck) => deck.heroCardId.startsWith(cardId))
-								.sort((a, b) => b.rating - a.rating)
+								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 								.map((deck) => {
 									const result: DuelsHeroInfoTopDeck = {
 										deckId: uuid(),
