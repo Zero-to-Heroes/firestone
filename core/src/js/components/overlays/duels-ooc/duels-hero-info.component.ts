@@ -55,6 +55,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				[data]="globalWinDistribution"
 				[id]="'duels-hero-vignette-overlay' + name"
 				[tooltipTitle]="'duels.hero-info.win-distribution-tooltip' | owTranslate"
+				[preventEmptyValues]="true"
 			></basic-bar-chart>
 			<div
 				class="section-header top-decks-header"
@@ -99,7 +100,7 @@ export class DuelsHeroInfoComponent {
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
 					// To never show an empty bar
-					value: Math.max(100 * input.value, 0.5),
+					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;
 		this.decks = value.topDecks.slice(0, 6);

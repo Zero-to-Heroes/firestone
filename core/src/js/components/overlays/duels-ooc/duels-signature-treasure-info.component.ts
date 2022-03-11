@@ -78,6 +78,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					[data]="globalWinDistribution"
 					[id]="'duels-hero-vignette-overlay' + name"
 					[tooltipTitle]="'duels.hero-info.win-distribution-tooltip' | owTranslate"
+					[preventEmptyValues]="true"
 				></basic-bar-chart>
 			</div>
 			<div class="top-decks-section">
@@ -111,7 +112,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 })
 export class DuelsSignatureTreasureInfoComponent {
 	@Input() set signatureTreasureInfo(value: DuelsSignatureTreasureInfo) {
-		// console.debug('setting hero info', value);
 		this.heroPortrait = this.i18n.getCardImage(value.heroCardId, { isHighRes: true, isHeroSkin: true });
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroPowerCardId}.jpg`;
 		this.signatureTreasureImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
@@ -127,7 +127,7 @@ export class DuelsSignatureTreasureInfoComponent {
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
 					// To never show an empty bar
-					value: Math.max(100 * input.value, 0.5),
+					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;
 		this.decks = value.topDecks.slice(0, 6);
