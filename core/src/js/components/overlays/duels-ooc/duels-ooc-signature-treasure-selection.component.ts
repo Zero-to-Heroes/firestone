@@ -163,7 +163,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
 								(deck: DuelsHeroInfoTopDeck) =>
-									`${deck.decklist}-${deck.heroCardId}-${deck.signatureTreasureCardId}-${deck.signatureTreasureCardId}`,
+									`${deck.decklist}-${deck.signatureTreasureCardId}-${deck.signatureTreasureCardId}`,
 							)(signatureTreasureDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 							const card = this.allCards.getCard(currentSignatureTreasureCardId);

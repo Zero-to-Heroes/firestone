@@ -10,6 +10,7 @@ import {
 	filterDuelsHeroStats,
 	filterDuelsRuns,
 	getDuelsMmrFilterNumber,
+	mergeDuelsHeroPlayerStats,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, uuid } from '@services/utils';
@@ -75,9 +76,16 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				),
 		).pipe(
 			filter(([heroes, stats]) => !!stats?.length && !!heroes?.length),
-			this.mapData(([heroes, stats]) =>
-				stats.filter((stat) => heroes.map((hero) => hero.id).includes(stat.cardId)),
-			),
+			this.mapData(([heroes, stats]) => {
+				console.debug('building stats', stats, heroes);
+				return stats.filter((stat) =>
+					// Because of Drek'That and Vanndar
+					// It's not necessary to update the Hero Power and Signature Treasures
+					// components because at that point the Hero Power uniquely identifies
+					// the stat
+					heroes.map((hero) => hero.id).some((heroCardId) => stat.cardId.startsWith(heroCardId)),
+				);
+			}),
 		);
 		const topDecks$ = combineLatest(
 			this.heroes$,
@@ -99,7 +107,9 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					)
 					.filter((group) => group.decks.length > 0)
 					.flatMap((group) => group.decks)
-					.filter((deck) => heroes.map((hero) => hero.id).includes(deck.heroCardId));
+					.filter((deck) =>
+						heroes.map((hero) => hero.id).some((heroCardId) => deck.heroCardId.startsWith(heroCardId)),
+					);
 			}),
 		);
 		this.heroInfo$ = combineLatest(this.selectedHeroCardId.asObservable(), stats$, topDecks$).pipe(
@@ -110,13 +120,16 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 					return null;
 				}
 
-				const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === cardId);
+				const stat: DuelsHeroPlayerStat = mergeDuelsHeroPlayerStats(
+					stats.filter((s) => s.cardId.startsWith(cardId)),
+					cardId,
+				);
 				if (!stat) {
 					console.warn('missing stat', cardId, stats);
 					return null;
 				}
 				const heroDecks = topDecks
-					.filter((deck) => deck.heroCardId === cardId)
+					.filter((deck) => deck.heroCardId.startsWith(cardId))
 					.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 					.map((deck) => {
 						const result: DuelsHeroInfoTopDeck = {
@@ -132,21 +145,23 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 						};
 						return result;
 					});
+				console.debug('hero decks', heroDecks, topDecks);
 				// Remove duplicate decklists
 				const groupedDecks = groupByFunction(
 					(deck: DuelsHeroInfoTopDeck) =>
-						`${deck.decklist}-${deck.heroCardId}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+						`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
 				)(heroDecks);
 				const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 
-				// console.debug(
-				// 	'[duels-ooc-hero-selection] heroInfo start',
-				// 	cardId,
-				// 	stats,
-				// 	uniqueDecks,
-				// 	heroDecks,
-				// 	groupedDecks,
-				// );
+				console.debug(
+					'[duels-ooc-hero-selection] heroInfo start',
+					cardId,
+					stats,
+					stat,
+					uniqueDecks,
+					heroDecks,
+					groupedDecks,
+				);
 				const card = this.allCards.getCard(cardId);
 				const result: DuelsHeroInfo = {
 					cardId: cardId,

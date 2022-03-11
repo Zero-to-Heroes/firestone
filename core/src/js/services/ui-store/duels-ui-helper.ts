@@ -15,7 +15,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
 import { CardsFacadeService } from '../cards-facade.service';
 import { duelsTreasureRank, isPassive } from '../duels/duels-utils';
-import { groupByFunction } from '../utils';
+import { groupByFunction, sumOnArray } from '../utils';
 
 export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[],
@@ -223,6 +223,46 @@ export const buildDuelsHeroPlayerStats = (
 				: null,
 		} as DuelsHeroPlayerStat;
 	});
+};
+
+// Because of the neutral heroes
+export const mergeDuelsHeroPlayerStats = (
+	statsToMerge: readonly DuelsHeroPlayerStat[],
+	cardIdOverride: string,
+): DuelsHeroPlayerStat => {
+	const refStat = statsToMerge[0];
+	const totalRuns = (100 * refStat.globalTotalMatches) / refStat.globalPopularity;
+	const totalMatchesForGroup = statsToMerge.map((g) => g.globalTotalMatches).reduce((a, b) => a + b, 0);
+	const winsDistribution: { winNumber: number; value: number }[] = [];
+	for (let i = 0; i <= 12; i++) {
+		const totalWinsForNumber = statsToMerge.map((g) => g.globalWinDistribution[i].value).reduce((a, b) => a + b, 0);
+		winsDistribution.push({ winNumber: i, value: (100 * totalWinsForNumber) / totalMatchesForGroup });
+	}
+	const totalWins = statsToMerge
+		.map((stat) => stat.globalWinrate * stat.globalTotalMatches)
+		.reduce((a, b) => a + b, 0);
+
+	const playerTotalMatches = (100 * refStat.playerTotalMatches) / refStat.playerPopularity;
+	const playerTotalMatchesForGroup = sumOnArray(statsToMerge, (stat) => stat.playerTotalMatches);
+	const playerTotalWins = statsToMerge
+		.map((stat) => stat.playerWinrate * stat.playerTotalMatches)
+		.reduce((a, b) => a + b, 0);
+
+	return {
+		hero: cardIdOverride,
+		heroPower: statsToMerge[0].heroPower,
+		signatureTreasure: statsToMerge[0].signatureTreasure,
+		periodStart: null,
+		cardId: cardIdOverride,
+		globalPopularity: (100 * totalMatchesForGroup) / totalRuns,
+		globalTotalMatches: totalMatchesForGroup,
+
+		globalWinrate: totalWins / totalMatchesForGroup,
+		globalWinDistribution: winsDistribution as readonly { winNumber: number; value: number }[],
+		playerTotalMatches: playerTotalMatchesForGroup,
+		playerPopularity: playerTotalMatches ? (100 * playerTotalMatches) / playerTotalMatchesForGroup : null,
+		playerWinrate: playerTotalMatchesForGroup ? playerTotalWins / playerTotalMatchesForGroup : null,
+	} as DuelsHeroPlayerStat;
 };
 
 export const getCurrentDeck = (

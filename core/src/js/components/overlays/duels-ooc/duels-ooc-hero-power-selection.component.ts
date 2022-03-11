@@ -149,7 +149,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
 								(deck: DuelsHeroInfoTopDeck) =>
-									`${deck.decklist}-${deck.heroCardId}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+									`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
 							)(heroPowerDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 							const card = this.allCards.getCard(currentHeroPowerCardId);
