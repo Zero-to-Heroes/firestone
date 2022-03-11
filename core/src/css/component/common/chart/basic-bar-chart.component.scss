@@ -19,4 +19,10 @@
 			background: var(--on-bar-chart-bar-color);
 		}
 	}
+
+	&.no-empty {
+		.bar {
+			min-height: 1.5%;
+		}
+	}
 }

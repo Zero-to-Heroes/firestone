@@ -8,7 +8,7 @@ import { SimpleBarChartData } from './simple-bar-chart-data';
 		`../../../../css/component/common/chart/basic-bar-chart.component.scss`,
 	],
 	template: `
-		<div class="chart-container" *ngIf="bars?.length">
+		<div class="chart-container" [ngClass]="{ 'no-empty': _preventEmptyValues }" *ngIf="bars?.length">
 			<div class="bar" *ngFor="let bar of bars" [style.height.%]="bar.height" [helpTooltip]="bar.tooltip"></div>
 		</div>
 	`,
@@ -28,7 +28,13 @@ export class BasicBarChartComponent {
 		this.udpateStats();
 	}
 
+	@Input() set preventEmptyValues(value: boolean) {
+		this._preventEmptyValues = value;
+		this.udpateStats();
+	}
+
 	bars: readonly Bar[] = [];
+	_preventEmptyValues: boolean;
 
 	private _data: SimpleBarChartData;
 	private _tooltipTitle = 'Title';
