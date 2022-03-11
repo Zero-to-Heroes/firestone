@@ -165,6 +165,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FrostBlast4Lettuce:
 		case CardIds.FrostBlast5Lettuce:
 			return frost;
+		case CardIds.FrostVolley1Lettuce:
+		case CardIds.FrostVolley2Lettuce:
+		case CardIds.FrostVolley3Lettuce:
+		case CardIds.FrostVolley4Lettuce:
+		case CardIds.FrostVolley5Lettuce:
+			return frost;
 		case CardIds.FrostStaff1Lettuce:
 		case CardIds.FrostStaff2Lettuce:
 		case CardIds.FrostStaff3Lettuce:
