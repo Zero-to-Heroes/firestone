@@ -119,7 +119,7 @@ export class MindVisionStateMachineService {
 			await this.waitForActiveState();
 			return this.callMindVision(apiCall);
 		} else {
-			console.log('[mind-vision] [api] callMindVision requests success', result, apiCall);
+			console.debug('[mind-vision] [api] callMindVision requests success', result, apiCall);
 			return result;
 		}
 	}
