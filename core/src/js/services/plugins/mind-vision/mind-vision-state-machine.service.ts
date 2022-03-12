@@ -70,6 +70,8 @@ export class MindVisionStateMachineService {
 		[CurrentState.LISTENING]: {
 			transitions: [
 				{ transition: Action.LISTENING_COMPLETE, to: CurrentState.ACTIVE },
+				// This can happen if the sanity check fails and requires a reset
+				{ transition: Action.RESET, to: CurrentState.RESET },
 				{ transition: Action.GAME_LEFT, to: CurrentState.TEAR_DOWN },
 			],
 		},

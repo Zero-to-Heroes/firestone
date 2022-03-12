@@ -3,6 +3,7 @@ import { OverwolfService } from '@services/overwolf.service';
 import { Action, CurrentState } from '@services/plugins/mind-vision/mind-vision-actions';
 import { MindVisionFacadeService } from '@services/plugins/mind-vision/mind-vision-facade.service';
 import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
+import { sleep } from '@services/utils';
 
 export class MindVisionStateListening implements MindVisionState {
 	constructor(
@@ -17,14 +18,16 @@ export class MindVisionStateListening implements MindVisionState {
 
 	async onEnter(): Promise<void> {
 		this.log('onEnter, plugin init starting');
-		await this.mindVision.listenForUpdates();
-		this.log('plugin ready, running sanity check');
+		this.log('running sanity checks');
 		let collection = await this.mindVision.getCollection();
 		while (!collection?.length) {
+			await sleep(500);
 			this.log('waiting for collection to be populated');
 			collection = await this.mindVision.getCollection();
 		}
-		this.log('sanity check ok');
+		this.log('sanity check ok, listening');
+		await this.mindVision.listenForUpdates();
+		this.log('plugin ready');
 		this.dispatcher(Action.LISTENING_COMPLETE);
 	}
 
