@@ -45,6 +45,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 			<!-- Duels -->
 			<duels-decktracker-ooc-widget-wrapper></duels-decktracker-ooc-widget-wrapper>
+			<!-- <duels-ooc-high-wins-deck-snaps-widget-wrapper></duels-ooc-high-wins-deck-snaps-widget-wrapper> -->
 
 			<!-- BG -->
 			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
