@@ -429,5 +429,5 @@ const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
 const dealsDamage = (card: ReferenceCard) =>
-	hasText(card, /deal \$?\#?\d+ damage/) || hasText(card, /restore \$?\#?\d+ health/);
+	hasText(card, /deal \$?\{?\#?\d+\}? damage/) || hasText(card, /restore \$?\{?\#?\d+\}? health/);
 const freeze = (card: ReferenceCard) => hasText(card, /freeze/);
