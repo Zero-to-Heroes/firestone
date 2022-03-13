@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.1.0',
+		version: '9.1.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -60,21 +60,25 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'duels',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where the selected treasure would not appear in the decklist for the first match.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix invalid labels for the Mercenaries tabs.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some of the new mercs' "deal damage" abilities would not be highlighted when mousing over a "spell damage" passive.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
