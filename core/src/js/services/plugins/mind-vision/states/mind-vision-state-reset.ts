@@ -27,6 +27,7 @@ export class MindVisionStateReset implements MindVisionState {
 		// Otherwise the notification just hangs until the reset is over
 		await sleep(500);
 		await this.mindVision.reset();
+		await sleep(500);
 		this.dispatcher(Action.RESET_COMPLETE);
 	}
 
