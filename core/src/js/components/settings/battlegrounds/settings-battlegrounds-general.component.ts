@@ -102,8 +102,8 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						field="bgsShowOverlayButton"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle || !value.bgsUseOverlay }"
-						[label]="'settings.battlegrounds.general.show-overlay-label' | owTranslate"
-						[tooltip]="'settings.battlegrounds.general.show-overlay-tooltip' | owTranslate"
+						[label]="'settings.battlegrounds.general.show-overlay-button' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-overlay-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsForceShowPostMatchStats"
