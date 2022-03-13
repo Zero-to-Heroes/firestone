@@ -140,7 +140,7 @@ export class MercenariesDesktopComponent
 	}
 
 	getCatName(categoryId: MercenariesCategoryId) {
-		return this.i18n.translateString('mercenaries.menu.mercenaries-compositions-stats');
+		return this.i18n.translateString(`mercenaries.menu.${categoryId}`);
 	}
 
 	selectCategory(categoryId: MercenariesCategoryId) {
