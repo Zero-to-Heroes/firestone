@@ -21,6 +21,10 @@ export class MindVisionStateMachineService {
 	private currentState: MindVisionState;
 
 	private globalEventListener = async (first: string, second: string) => {
+		if (this.currentState?.stateId() === CurrentState.RESET) {
+			console.debug('no-format', '[mind-vision] received global event', first, second);
+			return;
+		}
 		console.log('no-format', '[mind-vision] received global event', first, second);
 		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 			console.warn('[mind-vision] global event has root memory reading error');

@@ -97,7 +97,6 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 
 	@Input() set showGoldenCards(value: boolean) {
 		this._showGoldenCards = value;
-		console.log('showGoldenCards', value);
 		this.updateInfos();
 	}
 
