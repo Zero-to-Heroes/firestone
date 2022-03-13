@@ -40,7 +40,7 @@
 		"elementtree": "^0.1.7",
 		"immutable": "3.8.2",
 		"jszip": "^3.2.2",
-		"lodash-es": "^4.17.15",
+		"lodash-es": "^4.17.21",
 		"ng-inline-svg": "8.4.1",
 		"ng-lz-string": "1.5.3",
 		"ng-select": "1.0.1",
