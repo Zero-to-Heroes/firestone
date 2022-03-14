@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { Board, SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
+import { GetBoardOperation } from '@services/plugins/mind-vision/operations/get-board-operation';
 import { GetDuelsHeroOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-options-operation';
 import { GetDuelsHeroPowerOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-power-options-operation';
 import { GetDuelsSignatureTreasureOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-signature-treasure-options-operation';
@@ -65,6 +66,7 @@ export class MemoryInspectionService {
 	private getCardBacksOperation = new GetCardBacksOperation(this.mindVisionFacade, this.ow, this.cards);
 	private getCoinsOperation = new GetCoinsOperation(this.mindVisionFacade, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVisionFacade, this.ow);
+	private getBoardOperation = new GetBoardOperation(this.mindVisionFacade, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVisionFacade, this.ow);
 	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVisionFacade, this.ow);
 	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(
@@ -137,6 +139,10 @@ export class MemoryInspectionService {
 
 	public async getMatchInfo(): Promise<MatchInfo> {
 		return this.mindVision.callMindVision(() => this.getMatchInfoOperation.call());
+	}
+
+	public async getCurrentBoard(): Promise<Board> {
+		return this.mindVision.callMindVision(() => this.getBoardOperation.call());
 	}
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {

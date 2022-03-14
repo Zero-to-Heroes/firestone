@@ -10,8 +10,6 @@ import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
-import { OverwolfService } from './overwolf.service';
-import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { PreferencesService } from './preferences.service';
@@ -33,11 +31,9 @@ export class GameEvents {
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
 		private events: Events,
-		private playersInfoService: PlayersInfoService,
 		private gameEventsEmitter: GameEventsEmitterService,
 		private deckParser: DeckParserService,
 		private prefs: PreferencesService,
-		private ow: OverwolfService,
 		private store: MainWindowStoreService,
 		private memoryService: MemoryInspectionService,
 	) {
@@ -192,14 +188,13 @@ export class GameEvents {
 				// This info is not needed by the tracker, but it is needed by some achievements
 				// that rely on the rank
 				setTimeout(async () => {
-					const [playerInfo, opponentInfo, playerDeck] = await Promise.all([
-						this.playersInfoService.getPlayerInfo(),
-						this.playersInfoService.getOpponentInfo(),
+					const [matchInfo, playerDeck] = await Promise.all([
+						this.memoryService.getMatchInfo(),
 						this.deckParser.getCurrentDeck(10000),
 					]);
-					console.log('players info', playerInfo, opponentInfo);
-					if (!playerInfo || !opponentInfo) {
-						console.warn('[game-events] no player info returned by mmindvision', playerInfo, opponentInfo);
+					console.log('matchInfo', matchInfo);
+					if (!matchInfo?.localPlayer || !matchInfo?.opponent) {
+						console.warn('[game-events] no player info returned by mmindvision', matchInfo);
 						amplitude.getInstance().logEvent('error-logged', {
 							'error-category': 'memory-reading',
 							'error-id': 'no-player-info',
@@ -207,10 +202,9 @@ export class GameEvents {
 					}
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
-							type: GameEvent.PLAYERS_INFO,
+							type: GameEvent.MATCH_INFO,
 							additionalData: {
-								playerInfo: playerInfo,
-								opponentInfo: opponentInfo,
+								matchInfo: matchInfo,
 							},
 							localPlayer: {
 								deck: playerDeck,

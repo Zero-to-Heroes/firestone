@@ -3,7 +3,6 @@ import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
-import { MatchInfo } from '../../models/match-info';
 import { getDefaultHeroDbfIdForClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
@@ -55,16 +54,16 @@ export class DeckHandlerService {
 		return result;
 	}
 
-	public async postProcessDeck(deck: readonly DeckCard[], matchInfo: MatchInfo): Promise<readonly DeckCard[]> {
+	public async postProcessDeck(deck: readonly DeckCard[], boardId: Board): Promise<readonly DeckCard[]> {
 		if (!deck || deck.length === 0) {
 			return deck;
 		}
 
-		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, matchInfo));
+		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, boardId));
 	}
 
-	private postProcessDeckCard(deckCard: DeckCard, matchInfo: MatchInfo): DeckCard {
-		const newCardId = this.updateCardId(deckCard.cardId, matchInfo);
+	private postProcessDeckCard(deckCard: DeckCard, boardId: Board): DeckCard {
+		const newCardId = this.updateCardId(deckCard.cardId, boardId);
 		if (newCardId === deckCard.cardId) {
 			return deckCard;
 		}
@@ -89,13 +88,13 @@ export class DeckHandlerService {
 		}
 	}
 
-	private updateCardId(cardId: string, matchInfo: MatchInfo): string {
-		if (cardId !== CardIds.TransferStudent || !matchInfo) {
+	private updateCardId(cardId: string, boardId: Board): string {
+		if (cardId !== CardIds.TransferStudent || !boardId) {
 			return cardId;
 		}
 
 		// Don't use generated card ids here, as they are changing all the time
-		switch (matchInfo.boardId) {
+		switch (boardId) {
 			case Board.STORMWIND:
 				return 'SCH_199t';
 			case Board.ORGRIMMAR:

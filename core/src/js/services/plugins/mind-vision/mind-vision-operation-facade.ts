@@ -117,12 +117,7 @@ export class MindVisionOperationFacade<T> {
 		// this.debug('result from memory', resultFromMemory);
 		if (retriesLeft <= 0) {
 			if (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft)) {
-				this.log('result empty, calling with a force reset', retriesLeft);
-				this.debug(
-					'result empty, calling with a force reset',
-					this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft),
-					resultFromMemory,
-				);
+				this.log('result empty, calling with a force reset', retriesLeft, resultFromMemory);
 				callback('reset', retriesLeft - 1);
 				return;
 			} else {

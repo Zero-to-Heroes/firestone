@@ -6,12 +6,12 @@ import { EventParser } from './event-parser';
 
 export class PlayersInfoParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.PLAYERS_INFO;
+		return state && gameEvent.type === GameEvent.MATCH_INFO;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
-			playerName: gameEvent.additionalData.opponentInfo?.name ?? currentState.opponentDeck.hero?.name,
+			playerName: gameEvent.additionalData.matchInfo?.opponent?.name ?? currentState.opponentDeck.hero?.name,
 		} as HeroCard);
 		const newOpponentDeck = currentState.opponentDeck.update({
 			hero: newHero,
@@ -22,6 +22,6 @@ export class PlayersInfoParser implements EventParser {
 	}
 
 	event(): string {
-		return GameEvent.PLAYERS_INFO;
+		return GameEvent.MATCH_INFO;
 	}
 }

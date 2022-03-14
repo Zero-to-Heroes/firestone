@@ -18,7 +18,6 @@ import {
 	isMercenariesPvP,
 	normalizeMercenariesCardId,
 } from '../mercenaries/mercenaries-utils';
-import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
@@ -43,7 +42,6 @@ export class EndGameUploaderService {
 	constructor(
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
-		private playersInfo: PlayersInfoService,
 		private memoryInspection: MemoryInspectionService,
 		private dungeonLootParser: DungeonLootParserService,
 		private arenaService: ArenaRunParserService,

@@ -219,9 +219,11 @@ export class MindVisionStateMachineService {
 	}
 
 	private async setState(newState: MindVisionState) {
-		await this.currentState.onExit();
-		this.currentState = newState;
-		await this.currentState.onEnter();
+		if (newState?.stateId() != this.currentState?.stateId()) {
+			await this.currentState.onExit();
+			this.currentState = newState;
+			await this.currentState.onEnter();
+		}
 	}
 
 	private hasRootMemoryReadingError(message: string): boolean {

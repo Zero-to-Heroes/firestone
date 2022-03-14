@@ -56,8 +56,8 @@ export class OpponentPlayerParser implements EventParser {
 		}
 
 		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
-		const matchInfo = await this.memory.getMatchInfo();
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString), matchInfo);
+		const board = await this.memory.getCurrentBoard();
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString), board);
 
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can

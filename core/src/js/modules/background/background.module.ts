@@ -453,7 +453,6 @@ import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-
 import { MercenariesOutOfCombatService } from '../../services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
-import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
@@ -977,7 +976,6 @@ const components = [
 		SettingsCommunicationService,
 		TwitchAuthService,
 		OutOfCardsService,
-		PlayersInfoService,
 
 		CollectionBootstrapService,
 		PackMonitor,

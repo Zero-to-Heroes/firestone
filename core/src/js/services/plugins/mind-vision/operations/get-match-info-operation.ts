@@ -25,16 +25,6 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 			},
 			3,
 			1500,
-			(matchInfo: InternalMatchInfo) => {
-				const isEmpty = !matchInfo?.LocalPlayer?.Name;
-				if (isEmpty) {
-					console.log('[GetMatchInfoOperation] matchInfo is empty', matchInfo, JSON.stringify(matchInfo));
-				}
-				// console.debug('is matchinfo empty?', !matchInfo?.LocalPlayer?.name);
-				// console.debug('matchinfo', matchInfo);
-				// console.debug('matchinfo str', JSON.stringify(matchInfo));
-				return isEmpty;
-			},
 		);
 	}
 

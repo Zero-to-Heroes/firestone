@@ -40,7 +40,7 @@ export class StandardRankedMinLeagueReq implements Requirement {
 		if (gameEvent.type === GameEvent.MATCH_METADATA) {
 			this.handleMetadataEvent(gameEvent);
 		}
-		if (gameEvent.type === GameEvent.PLAYERS_INFO) {
+		if (gameEvent.type === GameEvent.MATCH_INFO) {
 			this.handlePlayerEvent(gameEvent);
 		}
 	}
@@ -56,8 +56,8 @@ export class StandardRankedMinLeagueReq implements Requirement {
 
 	private handlePlayerEvent(gameEvent: GameEvent) {
 		if (
-			gameEvent.additionalData?.playerInfo?.standard?.leagueId <= this.targetRank ||
-			gameEvent.additionalData?.playerInfo?.standard?.legendRank > 0
+			gameEvent.additionalData?.matchInfo?.localPlayer?.standard?.leagueId <= this.targetRank ||
+			gameEvent.additionalData?.matchInfo?.localPlayer?.standard?.legendRank > 0
 		) {
 			this.isMinLeague = true;
 		}

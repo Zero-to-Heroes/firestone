@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Board } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '@models/arena-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
@@ -112,6 +113,20 @@ export class MindVisionFacadeService {
 			const plugin = await this.get();
 			try {
 				plugin.getMatchInfo((matchInfo) => {
+					resolve(matchInfo ? JSON.parse(matchInfo) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse matchInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getCurrentBoard(): Promise<Board> {
+		return new Promise<Board>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getCurrentBoard((matchInfo) => {
 					resolve(matchInfo ? JSON.parse(matchInfo) : null);
 				});
 			} catch (e) {

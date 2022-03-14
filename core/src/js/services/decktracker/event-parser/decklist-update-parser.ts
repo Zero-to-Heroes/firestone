@@ -48,8 +48,8 @@ export class DecklistUpdateParser implements EventParser {
 			return currentState;
 		}
 
-		const matchInfo = await this.memory.getMatchInfo();
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), matchInfo);
+		const board = await this.memory.getCurrentBoard();
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board);
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,

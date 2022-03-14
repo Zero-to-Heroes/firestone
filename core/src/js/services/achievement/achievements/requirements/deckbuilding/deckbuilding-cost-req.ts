@@ -43,7 +43,7 @@ export class DeckbuildingCostReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.PLAYERS_INFO) {
+		if (gameEvent.type === GameEvent.MATCH_INFO) {
 			this.handleEvent(gameEvent);
 		}
 	}

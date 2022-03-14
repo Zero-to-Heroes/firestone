@@ -1,7 +1,6 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { sleep } from '@services/utils';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -72,13 +71,8 @@ export class MatchMetadataParser implements EventParser {
 		);
 
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
-		// To avoid getting empty match infos
-		await sleep(500);
-		const matchInfo = await this.memory.getMatchInfo();
-		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(
-			this.buildDeck(currentDeck),
-			matchInfo,
-		);
+		const board = await this.memory.getCurrentBoard();
+		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(this.buildDeck(currentDeck), board);
 		const hero: HeroCard = this.buildHero(currentDeck);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
