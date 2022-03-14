@@ -14,6 +14,7 @@ import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
+import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { DeckDefinition, decode } from 'deckstrings';
 import { BehaviorSubject } from 'rxjs';
@@ -133,6 +134,13 @@ export class DuelsStateBuilderService {
 			console.log('[duels-state-builder] initial duels deck', this.duelsDeck?.value?.DeckList?.length);
 			console.debug('[duels-state-builder] initial duels deck', this.duelsDeck);
 		}
+
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
+				const [updatedAdventuresInfo] = await Promise.all([this.memory.getAdventuresInfo()]);
+				this.mainWindowStateUpdater.next(new DuelsStateUpdatedEvent(updatedAdventuresInfo));
+			}
+		});
 	}
 
 	public async loadLeaderboard(): Promise<DuelsLeaderboard> {
