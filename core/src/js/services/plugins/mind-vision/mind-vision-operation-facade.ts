@@ -107,33 +107,32 @@ export class MindVisionOperationFacade<T> {
 		retriesLeft: number,
 		forceReset = false,
 	) {
-		if (!forceReset && retriesLeft <= 0) {
-			// There are cases where not retrieving the info it totally valid,
-			// like trying to get the BattlegroundsInfo right after logging in
-			this.log('not getting any value', retriesLeft, forceReset);
-			callback(null, retriesLeft);
-			return;
-		}
-		if (!(await this.ow.inGame())) {
-			this.log('not in game', retriesLeft, forceReset);
-			callback(null, 0);
-			return;
-		}
+		// if (!(await this.ow.inGame())) {
+		// 	this.log('not in game', retriesLeft, forceReset);
+		// 	callback(null, 0);
+		// 	return;
+		// }
 		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.debug('result from memory', resultFromMemory);
-		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft)) {
-			this.log('result empty, calling with a force reset', retriesLeft);
-			this.debug(
-				'result empty, calling with a force reset',
-				this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft),
-				resultFromMemory,
-			);
-			callback('reset', retriesLeft - 1);
-			// setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
-			return;
-		}
-		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
+		if (retriesLeft <= 0) {
+			if (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft)) {
+				this.log('result empty, calling with a force reset', retriesLeft);
+				this.debug(
+					'result empty, calling with a force reset',
+					this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft),
+					resultFromMemory,
+				);
+				callback('reset', retriesLeft - 1);
+				return;
+			} else {
+				// There are cases where not retrieving the info it totally valid,
+				// like trying to get the BattlegroundsInfo right after logging in
+				this.log('not getting any value', retriesLeft, forceReset);
+				callback(null, retriesLeft);
+				return;
+			}
+		} else if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			this.debug('result from memory is empty, retying', retriesLeft);
 			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1), this.delay);
 			return;
