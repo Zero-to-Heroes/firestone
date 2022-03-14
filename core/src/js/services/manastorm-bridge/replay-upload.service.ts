@@ -45,7 +45,6 @@ export class ReplayUploadService {
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-		const s3 = new S3();
 		const today = new Date();
 		const replayKey = `hearthstone/replay/${today.getFullYear()}/${
 			today.getMonth() + 1
@@ -89,11 +88,23 @@ export class ReplayUploadService {
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);
+		this.performReplayUpload(game, reviewId, params);
+	}
+
+	private performReplayUpload(game: GameForUpload, reviewId: string, params, retriesLeft = 5) {
+		if (retriesLeft <= 0) {
+			console.error('[manastorm-bridge] Could not upload replay');
+			return;
+		}
+		const s3 = new S3();
 		s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 			// There Was An Error With Your S3 Config
 			if (err) {
 				console.warn('[manastorm-bridge] An error during upload', err);
-				// reject();
+				if (err.retryable) {
+					this.performReplayUpload(game, reviewId, params, retriesLeft - 1);
+					return;
+				}
 			} else {
 				console.log('[manastorm-bridge] Uploaded game', reviewId);
 				const info: ManastormInfo = {
@@ -103,7 +114,6 @@ export class ReplayUploadService {
 					game: game,
 				};
 				this.events.broadcast(Events.REVIEW_FINALIZED, info);
-				// this.ow.setExtensionInfo(JSON.stringify(info));
 			}
 		});
 	}
