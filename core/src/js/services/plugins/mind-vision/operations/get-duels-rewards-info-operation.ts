@@ -17,7 +17,6 @@ export class GetDuelsRewardsInfoOperation extends MindVisionOperationFacade<Duel
 			},
 			1, // No retry, because we need to reset the plugin anyway
 			1500,
-			(info: any) => !info,
 		);
 	}
 }
