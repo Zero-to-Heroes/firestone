@@ -6,6 +6,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
+import { AdventuresInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
@@ -200,6 +201,7 @@ export class DuelsStateBuilderService {
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		leaderboard: DuelsLeaderboard,
 		collectionState: BinderState,
+		adventuresInfo: AdventuresInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
@@ -213,6 +215,7 @@ export class DuelsStateBuilderService {
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,
 			leaderboard: leaderboard,
+			adventuresInfo: adventuresInfo,
 		} as DuelsState);
 	}
 

@@ -4,7 +4,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/inpu
 import { ArenaInfo } from '@models/arena-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
 import { CoinInfo } from '@models/memory/coin-info';
-import { MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { AdventuresInfo, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
@@ -131,6 +131,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse matchInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getAdventuresInfo(): Promise<AdventuresInfo> {
+		return new Promise<AdventuresInfo>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getAdventuresInfo((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getAdventuresInfo', e);
 				resolve(null);
 			}
 		});

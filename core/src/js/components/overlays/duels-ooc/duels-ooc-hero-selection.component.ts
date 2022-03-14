@@ -62,14 +62,29 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
+				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
 			filter(([allHeroCards, [duelStats, duelsTopDecks]]) => !!duelStats?.length && !!duelsTopDecks?.length),
 			this.mapData(
-				([allHeroCards, [duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
+				([
+					allHeroCards,
+					[
+						duelStats,
+						duelsTopDecks,
+						runs,
+						mmrPercentiles,
+						adventuresInfo,
+						mmrFilter,
+						dustFilter,
+						lockFilter,
+						patch,
+					],
+				]) => {
 					return allHeroCards
 						.map((card) => card.id)
 						.map((cardId) => {
@@ -108,6 +123,9 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 										'last-patch',
 										dustFilter,
 										patch,
+										adventuresInfo,
+										lockFilter,
+										this.allCards,
 									),
 								)
 								.filter((group) => group.decks.length > 0)

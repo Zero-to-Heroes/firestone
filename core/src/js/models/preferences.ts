@@ -10,8 +10,8 @@ import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
-import { DuelsTopDecksDustFilterType } from './duels/duels-top-decks-dust-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
+import { DuelsTopDecksDustFilterType, DuelsUnlocksFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
@@ -377,6 +377,7 @@ export class Preferences {
 	readonly duelsShowMaxLifeWidget2: 'off' | 'mouseover' | 'blink' = 'mouseover';
 	readonly duelsShowOocTracker: boolean = true;
 	readonly duelsHighlightTreasureSynergies: boolean = true;
+	readonly duelsFilterOutLockedRequirements: DuelsUnlocksFilterType = 'all';
 	readonly duelsShowInfoOnHeroSelection: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocTrackerPosition: { left: number; top: number };

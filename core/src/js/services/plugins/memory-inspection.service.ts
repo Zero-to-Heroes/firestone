@@ -3,6 +3,7 @@ import { Board, SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MindVisionStateMachineService } from '@services/plugins/mind-vision/mind-vision-state-machine.service';
+import { GetAdventuresInfoOperation } from '@services/plugins/mind-vision/operations/get-adventures-info-operation';
 import { GetBoardOperation } from '@services/plugins/mind-vision/operations/get-board-operation';
 import { GetDuelsHeroOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-options-operation';
 import { GetDuelsHeroPowerOptionsOperation } from '@services/plugins/mind-vision/operations/get-duels-hero-power-options-operation';
@@ -15,7 +16,7 @@ import { PackInfo } from '../../models/collection/pack-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { CoinInfo } from '../../models/memory/coin-info';
-import { DuelsInfo, MemoryDuelsHeroPowerOption } from '../../models/memory/memory-duels';
+import { AdventuresInfo, DuelsInfo, MemoryDuelsHeroPowerOption } from '../../models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -79,6 +80,7 @@ export class MemoryInspectionService {
 	private getSelectedDeckIdOperation = new GetSelectedDeckIdOperation(this.mindVisionFacade, this.ow);
 	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVisionFacade, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVisionFacade, this.ow);
+	private getAdventuresInfoOperation = new GetAdventuresInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroOptionsOperation = new GetDuelsHeroOptionsOperation(this.mindVisionFacade, this.ow, this.i18n);
 	private getDuelsHeroPowerOptionsOperation = new GetDuelsHeroPowerOptionsOperation(
@@ -209,6 +211,10 @@ export class MemoryInspectionService {
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
 		return this.mindVision.callMindVision(() => this.getArenaInfoOperation.call());
+	}
+
+	public async getAdventuresInfo(): Promise<AdventuresInfo> {
+		return this.mindVision.callMindVision(() => this.getAdventuresInfoOperation.call());
 	}
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {

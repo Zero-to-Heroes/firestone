@@ -43,6 +43,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				class="filter signature-treasure-filter"
 			></duels-signature-treasure-filter-dropdown>
 			<duels-dust-filter-dropdown class="filter dust-filter"></duels-dust-filter-dropdown>
+			<duels-locked-requirements-filter-dropdown
+				class="filter locked-requirements-filter"
+			></duels-locked-requirements-filter-dropdown>
 			<duels-hero-sort-dropdown class="filter hero-sort"></duels-hero-sort-dropdown>
 
 			<preference-toggle

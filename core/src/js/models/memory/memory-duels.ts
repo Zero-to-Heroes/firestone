@@ -40,3 +40,22 @@ export interface MemoryDuelsHeroPowerOption {
 	readonly Locked: boolean;
 	readonly Selected: boolean;
 }
+
+export interface AdventuresInfo {
+	readonly GuestHeroesInfo: readonly GuestHero[];
+	readonly HeroPowersInfo: readonly AdventureTreasure[];
+	readonly LoadoutTreasuresInfo: readonly AdventureTreasure[];
+}
+
+export interface GuestHero {
+	readonly Id: number;
+	readonly CardDbfId: number;
+}
+
+export interface AdventureTreasure {
+	readonly Id: number;
+	readonly AdventureId: number;
+	readonly CardDbfId: number;
+	readonly HeroId: number;
+	readonly Unlocked: boolean;
+}

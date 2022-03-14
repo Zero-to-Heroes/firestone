@@ -6,19 +6,19 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { Preferences } from '@models/preferences';
+import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { DuelsTopDecksDustFilterType } from '../../../../models/duels/duels-types';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { DuelsTopDecksDustFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-dust-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
-	selector: 'duels-dust-filter-dropdown',
+	selector: 'duels-locked-requirements-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
@@ -27,7 +27,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
-			class="duels-dust-filter-dropdown"
+			class="duels-locked-requirements-filter-dropdown"
 			[options]="options"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
@@ -37,20 +37,20 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDustFilterDropdownComponent
+export class DuelsLockedRequirementsFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
-	options: readonly DustFilterOption[];
+	options: readonly IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -59,36 +59,17 @@ export class DuelsDustFilterDropdownComponent
 		this.options = [
 			{
 				value: 'all',
-				label: this.i18n.translateString('app.duels.filters.dust.all'),
-			} as DustFilterOption,
+				label: this.i18n.translateString('app.duels.filters.locks.all'),
+			} as IOption,
 			{
-				value: '0',
-				label: this.i18n.translateString('app.duels.filters.dust.own'),
-			} as DustFilterOption,
-			{
-				value: '40',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 40 }),
-			} as DustFilterOption,
-			{
-				value: '100',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 100 }),
-			} as DustFilterOption,
-			{
-				value: '200',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 200 }),
-			} as DustFilterOption,
-			{
-				value: '500',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 500 }),
-			} as DustFilterOption,
-			{
-				value: '1000',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 1000 }),
-			} as DustFilterOption,
-		] as readonly DustFilterOption[];
+				value: 'unlocked',
+				label: this.i18n.translateString('app.duels.filters.locks.unlocked'),
+				tooltip: this.i18n.translateString('app.duels.filters.locks.unlocked-tooltip'),
+			} as IOption,
+		] as readonly IOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -109,11 +90,12 @@ export class DuelsDustFilterDropdownComponent
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	onSelected(option: DustFilterOption) {
-		this.stateUpdater.next(new DuelsTopDecksDustFilterSelectedEvent(option.value));
+	onSelected(option: IOption) {
+		this.stateUpdater.next(
+			new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
+				...prefs,
+				duelsFilterOutLockedRequirements: option.value as 'all' | 'unlocked',
+			})),
+		);
 	}
-}
-
-interface DustFilterOption extends IOption {
-	value: DuelsTopDecksDustFilterType;
 }

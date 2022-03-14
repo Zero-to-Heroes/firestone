@@ -1,4 +1,4 @@
-import { DuelsTopDecksDustFilterType } from '../../../../../models/duels/duels-top-decks-dust-filter.type';
+import { DuelsTopDecksDustFilterType } from '../../../../../models/duels/duels-types';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTopDecksDustFilterSelectedEvent implements MainWindowStoreEvent {

@@ -16,12 +16,14 @@ export class DuelsChoosingHeroParser implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// Wait until the hero picker is fully loaded
+		const adventuresInfo = await this.memory.getAdventuresInfo();
 		await sleep(2000);
 		const heroOptionsDbfIds = event.value ? await this.memory.getDuelsHeroOptions() : [];
 		// const heroOptions = heroOptionsDbfIds.map((dbfId) => this.allCards.getCardFromDbfId(dbfId));
 		const newState = currentState.update({
 			duels: currentState.duels.update({
 				heroOptionsDbfIds: heroOptionsDbfIds,
+				adventuresInfo: adventuresInfo,
 			}),
 		});
 		return [newState, null];

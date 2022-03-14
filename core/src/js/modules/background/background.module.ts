@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/duels-deckbuilder.component';
+import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
 import { DuelsDecktrackerOocWidgetWrapperComponent } from '@components/overlays/duels-decktracker-ooc-widget-wrapper.component';
 import { DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-hero-power-selection-widget-wrapper.component';
@@ -762,6 +763,7 @@ const components = [
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
 		DuelsDustFilterDropdownComponent,
+		DuelsLockedRequirementsFilterDropdownComponent,
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,
 		DuelsHeroPowerFilterDropdownComponent,
