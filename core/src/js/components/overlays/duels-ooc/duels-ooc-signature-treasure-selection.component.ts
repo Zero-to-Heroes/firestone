@@ -67,8 +67,11 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 			.pipe(
 				this.mapData(([heroPowerOptions]) => {
 					const selectedOption = heroPowerOptions.find((option) => option.Selected);
-					const refCard = this.allCards.getCardFromDbfId(selectedOption.DatabaseId);
-					return refCard.id;
+					const refCard = this.allCards.getCardFromDbfId(selectedOption?.DatabaseId);
+					if (!refCard) {
+						console.log('[duels-ooc-hero-selection] refCard not found', selectedOption, heroPowerOptions);
+					}
+					return refCard?.id;
 				}),
 			);
 		const allStats$ = combineLatest(
@@ -192,7 +195,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				if (!currentSignatureTreasureCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat.cardId === currentSignatureTreasureCardId).stat;
+				return allStats.find((stat) => stat?.cardId === currentSignatureTreasureCardId)?.stat;
 			}),
 		);
 	}

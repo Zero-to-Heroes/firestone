@@ -177,7 +177,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				if (!currentHeroPowerCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat.cardId === currentHeroPowerCardId).stat;
+				return allStats.find((stat) => stat?.cardId === currentHeroPowerCardId)?.stat;
 			}),
 		);
 	}

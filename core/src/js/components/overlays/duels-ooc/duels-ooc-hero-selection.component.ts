@@ -167,7 +167,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				if (!currentHeroCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat.cardId === currentHeroCardId).stat;
+				return allStats.find((stat) => stat?.cardId === currentHeroCardId)?.stat;
 			}),
 		);
 	}

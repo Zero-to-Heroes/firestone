@@ -27,7 +27,7 @@ export const filterDuelsHeroStats = (
 	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
 	return (
-		heroStats
+		(heroStats ?? [])
 			.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter))
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
