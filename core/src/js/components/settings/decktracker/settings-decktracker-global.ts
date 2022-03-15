@@ -59,7 +59,12 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						field="overlayShowCostReduction"
 						[label]="'settings.decktracker.global.show-cost-reduction' | owTranslate"
-						[tooltip]="'settings.decktracker.global.show-cost-reduction' | owTranslate"
+						[tooltip]="'settings.decktracker.global.show-cost-reduction-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="overlayShowUnknownCards"
+						[label]="'settings.decktracker.global.show-unknown-cards' | owTranslate"
+						[tooltip]="'settings.decktracker.global.show-unknown-cards-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="overlayHighlightRelatedCards"

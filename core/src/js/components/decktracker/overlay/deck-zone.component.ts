@@ -47,6 +47,7 @@ import { groupByFunction } from '../../../services/utils';
 						[card]="card"
 						[tooltipPosition]="_tooltipPosition"
 						[colorManaCost]="colorManaCost"
+						[showUnknownCards]="showUnknownCards"
 						[showUpdatedCost]="_showUpdatedCost"
 						[showStatsChange]="_showStatsChange"
 						[zone]="_zone"
@@ -60,6 +61,7 @@ import { groupByFunction } from '../../../services/utils';
 })
 export class DeckZoneComponent implements AfterViewInit {
 	@Input() colorManaCost: boolean;
+	@Input() showUnknownCards: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;

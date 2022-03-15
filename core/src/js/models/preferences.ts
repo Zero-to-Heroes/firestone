@@ -157,6 +157,7 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly overlayWidthInPx: number = 227; // No UI
 	readonly overlayShowCostReduction: boolean = true;
+	readonly overlayShowUnknownCards: boolean = true;
 
 	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;

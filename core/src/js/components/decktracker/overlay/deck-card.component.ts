@@ -27,6 +27,7 @@ import { uuid } from '../../../services/utils';
 	template: `
 		<div
 			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }}"
+			*ngIf="!isUnknownCard || _showUnknownCards"
 			[ngClass]="{
 				'color-mana-cost': _colorManaCost,
 				'color-class-cards': _colorClassCards,
@@ -165,6 +166,13 @@ export class DeckCardComponent implements OnDestroy {
 		}
 	}
 
+	@Input() set showUnknownCards(value: boolean) {
+		this._showUnknownCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -202,6 +210,8 @@ export class DeckCardComponent implements OnDestroy {
 	isTransformed: boolean;
 	manaCostReduction: boolean;
 	mouseOverRight = 0;
+	_showUnknownCards = true;
+	isUnknownCard: boolean;
 
 	private _showUpdatedCost: boolean;
 	private _showStatsChange: boolean;
@@ -276,6 +286,7 @@ export class DeckCardComponent implements OnDestroy {
 				? this._card.cardName + this.buildSuffix(this._card)
 				: this.i18n.getCardName(this.cardId) ?? this.i18n?.getUnknownCardName()) ??
 			this.i18n.getUnknownCardName();
+		this.isUnknownCard = !this._card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity?.toLowerCase();

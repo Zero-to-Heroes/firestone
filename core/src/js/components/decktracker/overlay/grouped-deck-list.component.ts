@@ -19,6 +19,7 @@ import { SetCard } from '../../../models/set';
 				[zone]="zone"
 				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
+				[showUnknownCards]="showUnknownCards"
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately"
 				[showStatsChange]="showStatsChange"
@@ -31,6 +32,7 @@ import { SetCard } from '../../../models/set';
 })
 export class GroupedDeckListComponent implements OnDestroy {
 	@Input() colorManaCost: boolean;
+	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() showStatsChange: boolean;

@@ -70,6 +70,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[deckState]="value.deck"
 								[displayMode]="displayMode$ | async"
 								[colorManaCost]="colorManaCost$ | async"
+								[showUnknownCards]="showUnknownCards$ | async"
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
@@ -121,6 +122,7 @@ export class DeckTrackerOverlayRootComponent
 	showControlBar$: Observable<boolean>;
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
+	showUnknownCards$: Observable<boolean>;
 	showUpdatedCost$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
@@ -232,6 +234,7 @@ export class DeckTrackerOverlayRootComponent
 		this.showControlBar$ = this.listenForBasicPref$((preferences) => preferences.overlayShowControlBar);
 		this.opacity$ = this.listenForBasicPref$((preferences) => this.opacityExtractor(preferences) / 100);
 		this.colorManaCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowRarityColors);
+		this.showUnknownCards$ = this.listenForBasicPref$((preferences) => preferences.overlayShowUnknownCards);
 		this.showUpdatedCost$ = this.listenForBasicPref$((preferences) => preferences.overlayShowCostReduction);
 		this.showGiftsSeparately$ = this.listenForBasicPref$(
 			(preferences) => preferences.overlayShowGiftedCardsInSeparateLine,
