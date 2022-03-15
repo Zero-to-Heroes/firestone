@@ -65,6 +65,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		const selectedHeroPower$ = this.store
 			.listen$(([main, nav]) => main.duels?.heroPowerOptions)
 			.pipe(
+				filter(([heroPowerOptions]) => !!heroPowerOptions?.length),
 				this.mapData(([heroPowerOptions]) => {
 					const selectedOption = heroPowerOptions.find((option) => option.Selected);
 					const refCard = this.allCards.getCardFromDbfId(selectedOption?.DatabaseId);
