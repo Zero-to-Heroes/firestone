@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationService } from '@services/localization.service';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
@@ -312,23 +313,23 @@ export class MainWindowStoreService {
 	);
 
 	constructor(
-		private cards: CardsFacadeService,
-		private sets: SetsService,
-		private achievementsRepository: AchievementsRepository,
-		private collectionManager: CollectionManager,
-		private cardHistoryStorage: CardHistoryStorageService,
-		private achievementHistoryStorage: AchievementHistoryStorageService,
-		private achievementsLoader: AchievementsLoaderService,
-		private remoteAchievements: RemoteAchievementsService,
-		private collectionDb: CollectionStorageService,
-		private gameStatsUpdater: GameStatsUpdaterService,
-		private gameStatsLoader: GameStatsLoaderService,
-		private ow: OverwolfService,
-		private memoryReading: MemoryInspectionService,
-		private events: Events,
-		private notifs: OwNotificationsService,
-		private userService: UserService,
-		private decktrackerStateLoader: DecktrackerStateLoaderService,
+		private readonly cards: CardsFacadeService,
+		private readonly sets: SetsService,
+		private readonly achievementsRepository: AchievementsRepository,
+		private readonly collectionManager: CollectionManager,
+		private readonly cardHistoryStorage: CardHistoryStorageService,
+		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
+		private readonly achievementsLoader: AchievementsLoaderService,
+		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly collectionDb: CollectionStorageService,
+		private readonly gameStatsUpdater: GameStatsUpdaterService,
+		private readonly gameStatsLoader: GameStatsLoaderService,
+		private readonly ow: OverwolfService,
+		private readonly memoryReading: MemoryInspectionService,
+		private readonly events: Events,
+		private readonly notifs: OwNotificationsService,
+		private readonly userService: UserService,
+		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly storeBootstrap: StoreBootstrapService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
@@ -337,6 +338,7 @@ export class MainWindowStoreService {
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
+		private readonly duelsMemoryCache: DuelsMemoryCacheService,
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
 	) {
@@ -876,7 +878,7 @@ export class MainWindowStoreService {
 			new DuelsCurrentOptionParser(this.cards, this.memoryReading),
 
 			DuelsChoosingHeroEvent.eventName(),
-			new DuelsChoosingHeroParser(this.cards, this.memoryReading),
+			new DuelsChoosingHeroParser(this.memoryReading, this.duelsMemoryCache),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

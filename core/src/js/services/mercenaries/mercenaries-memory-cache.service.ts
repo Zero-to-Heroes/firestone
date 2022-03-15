@@ -182,7 +182,9 @@ export class MercenariesMemoryCacheService {
 	}
 
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
-		const result = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION);
+		const result = this.localStorageService.getItem<MemoryMercenariesCollectionInfo>(
+			LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION,
+		);
 		console.debug('[merc-memory] retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
 		return result;
 	}

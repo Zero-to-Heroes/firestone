@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
@@ -64,6 +65,7 @@ export class StoreBootstrapService {
 		private readonly mercenariesService: MercenariesStateBuilderService,
 		private readonly mercenariesMemory: MercenariesMemoryCacheService,
 		private readonly memory: MemoryInspectionService,
+		private readonly duelsMemoryCache: DuelsMemoryCacheService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		console.log('[store-boostrap] constructor');
@@ -139,7 +141,7 @@ export class StoreBootstrapService {
 				this.duels.loadGlobalStats(),
 				this.duels.loadTopDecks(),
 				this.duels.loadLeaderboard(),
-				this.memory.getAdventuresInfo(),
+				this.duelsMemoryCache.getAdventuresInfo(),
 			]),
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([

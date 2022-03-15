@@ -40,6 +40,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg';
@@ -1035,6 +1036,7 @@ const components = [
 		GameStateMetaInfoService,
 
 		DuelsStateBuilderService,
+		DuelsMemoryCacheService,
 
 		ArenaStateBuilderService,
 

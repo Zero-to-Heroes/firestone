@@ -18,7 +18,9 @@ export class AchievementsStorageService {
 	}
 
 	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS);
+		const fromStorage = this.localStorageService.getItem<HsAchievementsInfo>(
+			LocalStorageService.LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS,
+		);
 		return fromStorage;
 	}
 
@@ -51,7 +53,9 @@ export class AchievementsStorageService {
 	}
 
 	public async loadAllHistory(): Promise<readonly AchievementHistory[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		const fromStorage = this.localStorageService.getItem<readonly AchievementHistory[]>(
+			LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY,
+		);
 		return fromStorage ?? [];
 	}
 
@@ -60,7 +64,9 @@ export class AchievementsStorageService {
 	}
 
 	public async saveHistory(history: AchievementHistory) {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY);
+		const fromStorage = this.localStorageService.getItem<readonly AchievementHistory[]>(
+			LocalStorageService.LOCAL_STORAGE_ACHIEVEMENTS_HISTORY,
+		);
 		const historyList: readonly AchievementHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
 		this.saveAllHistory(newHistory);

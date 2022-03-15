@@ -9,6 +9,7 @@ import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-fro
 import { AdventuresInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
@@ -73,6 +74,7 @@ export class DuelsStateBuilderService {
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly memory: MemoryInspectionService,
+		private readonly duelsMemoryCeche: DuelsMemoryCacheService,
 	) {
 		this.init();
 	}
@@ -137,7 +139,7 @@ export class DuelsStateBuilderService {
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				const [updatedAdventuresInfo] = await Promise.all([this.memory.getAdventuresInfo()]);
+				const [updatedAdventuresInfo] = await Promise.all([this.duelsMemoryCeche.getAdventuresInfo()]);
 				this.mainWindowStateUpdater.next(new DuelsStateUpdatedEvent(updatedAdventuresInfo));
 			}
 		});

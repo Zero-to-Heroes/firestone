@@ -42,27 +42,35 @@ export class CollectionStorageService {
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COLLECTION);
+		const fromStorage = this.localStorageService.getItem<readonly Card[]>(
+			LocalStorageService.LOCAL_STORAGE_COLLECTION,
+		);
 		return fromStorage ?? [];
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARD_BACKS);
+		const fromStorage = this.localStorageService.getItem<readonly CardBack[]>(
+			LocalStorageService.LOCAL_STORAGE_CARD_BACKS,
+		);
 		return fromStorage ?? [];
 	}
 
 	public async getPackInfos(): Promise<readonly PackInfo[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_PACK_INFOS);
+		const fromStorage = this.localStorageService.getItem<readonly PackInfo[]>(
+			LocalStorageService.LOCAL_STORAGE_PACK_INFOS,
+		);
 		return fromStorage ?? [];
 	}
 
 	public async getCoins(): Promise<readonly Coin[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_COINS);
+		const fromStorage = this.localStorageService.getItem<readonly Coin[]>(LocalStorageService.LOCAL_STORAGE_COINS);
 		return fromStorage ?? [];
 	}
 
 	public async saveCardHistory(history: CardHistory): Promise<CardHistory> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY);
+		const fromStorage = this.localStorageService.getItem<readonly CardHistory[]>(
+			LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY,
+		);
 		const historyList: readonly CardHistory[] = fromStorage ?? [];
 		const newHistory = [history, ...historyList];
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY, newHistory);
@@ -80,7 +88,9 @@ export class CollectionStorageService {
 	}
 
 	public async getAllCardHistory(limit: number): Promise<readonly CardHistory[]> {
-		const fromStorage = this.localStorageService.getItem(LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY);
+		const fromStorage = this.localStorageService.getItem<readonly CardHistory[]>(
+			LocalStorageService.LOCAL_STORAGE_CARDS_HISTORY,
+		);
 		if (!!fromStorage) {
 			const result: readonly CardHistory[] = fromStorage ?? [];
 			return result.slice(0, limit);
