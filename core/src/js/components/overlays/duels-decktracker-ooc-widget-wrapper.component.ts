@@ -6,8 +6,9 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -67,10 +68,14 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.duelsShowOocTracker),
-			this.store.listen$(([main, nav]) => main.duels.isOnDuelsMainScreen),
+			this.store.listen$(
+				// Safeguard in case of memory reading failure
+				([main, nav]) => main.currentScene,
+				([main, nav]) => main.duels.isOnDuelsMainScreen,
+			),
 		).pipe(
-			this.mapData(([[displayFromPrefs], [isOnMainScreen]]) => {
-				return displayFromPrefs && isOnMainScreen;
+			this.mapData(([[displayFromPrefs], [currentScene, isOnMainScreen]]) => {
+				return displayFromPrefs && isOnMainScreen && currentScene === SceneMode.PVP_DUNGEON_RUN;
 			}),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
