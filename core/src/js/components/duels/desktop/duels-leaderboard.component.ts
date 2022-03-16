@@ -1,5 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
+import { BnetRegion } from '@firestone-hs/reference-data';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -17,6 +19,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div class="rank" [owTranslate]="'app.duels.leaderboard.rank' | owTranslate"></div>
 					<div class="rating" [owTranslate]="'app.duels.leaderboard.rating' | owTranslate"></div>
 					<div class="name" [owTranslate]="'app.duels.leaderboard.name' | owTranslate"></div>
+					<div class="region" [owTranslate]="'app.duels.leaderboard.region' | owTranslate"></div>
 				</li>
 				<ul class="entries" scrollable>
 					<li
@@ -27,6 +30,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="rank">{{ value.rank }}</div>
 						<div class="rating">{{ value.rating }}</div>
 						<div class="name">{{ value.playerName }} {{ value.isPlayer ? ' (You)' : '' }}</div>
+						<div class="region">{{ getRegion(value.region) }}</div>
 					</li>
 				</ul>
 			</div>
@@ -37,7 +41,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -62,6 +70,10 @@ export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent imp
 				tap((stat) => cdLog('emitting leaderboard in ', this.constructor.name, stat)),
 				takeUntil(this.destroyed$),
 			);
+	}
+
+	getRegion(region: BnetRegion): string {
+		return region ? this.i18n.translateString(`global.region.${BnetRegion[region]?.toLowerCase()}`) : '-';
 	}
 
 	trackValue(index: number, entry: DuelsLeaderboardEntry) {
