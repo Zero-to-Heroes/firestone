@@ -1,4 +1,9 @@
 :host {
 	width: 38vh;
 	height: 20vh;
+	pointer-events: none;
+}
+
+duels-ooc-deck-select {
+	pointer-events: all;
 }
