@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -50,10 +51,13 @@ export class DuelsOocDeckSelectWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.duelsShowOocDeckSelect),
-			this.store.listen$(([main, nav]) => main.duels.isOnDuelsDeckBuildingLobbyScreen),
+			this.store.listen$(
+				([main, nav]) => main.duels.isOnDuelsDeckBuildingLobbyScreen,
+				([main, nav]) => main.currentScene,
+			),
 		).pipe(
-			this.mapData(([[displayFromPrefs], [isOnDeckBuildingLobby]]) => {
-				return displayFromPrefs && isOnDeckBuildingLobby;
+			this.mapData(([[displayFromPrefs], [isOnDeckBuildingLobby, currentScene]]) => {
+				return displayFromPrefs && isOnDeckBuildingLobby && currentScene === SceneMode.PVP_DUNGEON_RUN;
 			}),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
