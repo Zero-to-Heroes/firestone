@@ -447,20 +447,6 @@ export const topDeckApplyFilters = (
 	lockFilter: DuelsUnlocksFilterType,
 	allCards: CardsFacadeService,
 ): DuelsGroupedDecks => {
-	console.debug(
-		'gre',
-		'filtering',
-		grouped,
-		mmrFilter,
-		heroFilter,
-		heroPowerFilter,
-		sigTreasureFilter,
-		timeFilter,
-		dustFilter,
-		patch,
-		adventuresInfo,
-		lockFilter,
-	);
 	return {
 		...grouped,
 		decks: grouped.decks
