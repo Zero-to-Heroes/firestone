@@ -18,7 +18,8 @@ export class MindVisionStateReset implements MindVisionState {
 
 	async onEnter(): Promise<void> {
 		this.log('onEnter, starting reset');
-		this.notifs.notifyError(
+		// Sending the notif seemed like a good idea, but it confuses the users more than anything
+		this.notifs.notifyDebug(
 			this.i18n.translateString('app.internal.memory.reset-started-title'),
 			this.i18n.translateString('app.internal.memory.reset-started-text'),
 			uuid(),
@@ -33,7 +34,7 @@ export class MindVisionStateReset implements MindVisionState {
 
 	onExit = async () => {
 		setTimeout(() => {
-			this.notifs.notifyError(
+			this.notifs.notifyDebug(
 				this.i18n.translateString('app.internal.memory.reset-complete-title'),
 				this.i18n.translateString('app.internal.memory.reset-complete-text'),
 				uuid(),

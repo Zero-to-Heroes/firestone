@@ -13,6 +13,8 @@ export class OwNotificationsService {
 	// Because if we start the app during a game, it might take some time for the notif window to
 	// be created
 	private retriesLeft = 30;
+	private isDev: boolean;
+	private isBeta: boolean;
 
 	private stateEmitter = new BehaviorSubject<Message>(undefined);
 
@@ -26,6 +28,14 @@ export class OwNotificationsService {
 			map(([message]) => message),
 			tap((message) => console.log('notification service', message)),
 		);
+
+		this.init();
+	}
+
+	private async init() {
+		this.isDev = process.env.NODE_ENV !== 'production';
+		const settings = await this.ow.getExtensionSettings();
+		this.isBeta = settings?.settings?.channel === 'beta';
 	}
 
 	public addNotification(htmlMessage: Message): void {
@@ -51,6 +61,35 @@ export class OwNotificationsService {
 			}
 		}
 		this.stateEmitter.next(htmlMessage);
+	}
+
+	public notifyDebug(title: string, text: string, code: string) {
+		if (!this.isDev && !this.isBeta) {
+			return;
+		}
+
+		this.emitNewNotification({
+			content: `
+				<div class="general-message-container general-theme">
+					<div class="firestone-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+						</svg>
+					</div>
+					<div class="message">
+						<div class="title">
+							<span>${title}</span>
+						</div>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+			notificationId: `${code}`,
+		});
 	}
 
 	public notifyError(title: string, text: string, code: string) {

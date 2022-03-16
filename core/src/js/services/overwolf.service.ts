@@ -243,6 +243,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getExtensionSettings(): Promise<any> {
+		return new Promise<any>((resolve) => {
+			overwolf.settings.getExtensionSettings((settings) => {
+				resolve(settings);
+			});
+		});
+	}
+
 	public async getSelectedMatch(): Promise<{ gameId: number; matchId: string; sessionId: string }> {
 		return new Promise<{ gameId: number; matchId: string; sessionId: string }>((resolve) => {
 			overwolf.egs.getSelectedMatch((selectedMatchInfo) => {
