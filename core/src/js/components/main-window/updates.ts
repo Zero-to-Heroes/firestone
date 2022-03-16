@@ -32,15 +32,15 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.1.1',
+		version: '9.2.0',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					I'm aware of the "memory reading" messages getting spammed for some of you. I'm currently working on fine-turning how sensitive memory resets need to be, but it might still take a couple of iterations to get it right. In the meantime, please don't hesitate to open bug reports, it helps me have a better picture of the problem.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		I'm aware of the "memory reading" messages getting spammed for some of you. I'm currently working on fine-turning how sensitive memory resets need to be, but it might still take a couple of iterations to get it right. In the meantime, please don't hesitate to open bug reports, it helps me have a better picture of the problem.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -50,11 +50,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Mousing over the hero in the hero selection stage now shows its stats (winrate, win distribution) as well as recent high-win decks. The decks shown match your Dust filter in the app (so if you have it set to 100 dust or less, it will only show you decks that you can craft for that amount).`,
+								text: `Add quick deck selection when starting a run. It lets you quickly view and copy the deck code of your last deck and a couple of recent cheap high-win decks.`,
 							},
 							{
 								type: 'feature',
-								text: `Mouseover stats are also available on the Hero Power selection screen, as well as on the Signature treasure screen. Be aware though that there is less data here, so the results might be less relevant.`,
+								text: `Add a filter (for the high-wins decks) to hide decks for which you don't have all the unlocks (hero power / signature weapon)`,
 							},
 						],
 					},
@@ -65,15 +65,37 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'mercenaries',
+						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix invalid labels for the Mercenaries tabs.`,
+								type: 'feature',
+								text: `Player region has been added to the leaderboard (it might take a couple of days for the information to be filled for everyone)`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some of the new mercs' "deal damage" abilities would not be highlighted when mousing over a "spell damage" passive.`,
+								text: `Fix an issue where the decklist would sometimes not disappear after ending a run.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a simulation issue with Reno's buddy.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an option to hide the "Unkown Card"s in the tracker.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Encumbered Pack Mule would not appear in the player's decklist if drawn during mulligan.`,
 							},
 						],
 					},
