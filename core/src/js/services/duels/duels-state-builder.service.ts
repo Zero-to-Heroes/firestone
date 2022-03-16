@@ -87,7 +87,7 @@ export class DuelsStateBuilderService {
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
-			if (changes.IsDuelsMainRunScreen) {
+			if (changes.IsDuelsMainRunScreen || (this.isOnMainScreen.value && changes.DuelsCurrentCardsInDeck)) {
 				const duelsInfo = await this.memory.getDuelsInfo();
 				console.debug('[duels-state-builder] duels info', duelsInfo);
 				this.duelsDeck.next({
