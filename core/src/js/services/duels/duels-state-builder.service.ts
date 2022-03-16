@@ -14,6 +14,7 @@ import { getDuelsModeName } from '@services/duels/duels-utils';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
+import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
@@ -103,6 +104,12 @@ export class DuelsStateBuilderService {
 			} else if (changes.IsDuelsMainRunScreen === false) {
 				console.debug('[duels-state-builder] duels not main screen');
 				this.isOnMainScreen.next(false);
+			}
+
+			if (changes.IsDuelsDeckBuildingLobbyScreen != null) {
+				this.mainWindowStateUpdater.next(
+					new DuelsIsOnDeckBuildingLobbyScreenEvent(changes.IsDuelsDeckBuildingLobbyScreen),
+				);
 			}
 
 			if (changes.DuelsCurrentOptionSelection != null) {

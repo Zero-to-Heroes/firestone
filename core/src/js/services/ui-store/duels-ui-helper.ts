@@ -126,7 +126,7 @@ export const filterDuelsRuns = (
 	}
 
 	return runs
-		.filter((run) => run.ratingAtStart >= mmrFilter)
+		.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
 		.filter((run) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(run.heroCardId) === heroFilter))
@@ -447,6 +447,20 @@ export const topDeckApplyFilters = (
 	lockFilter: DuelsUnlocksFilterType,
 	allCards: CardsFacadeService,
 ): DuelsGroupedDecks => {
+	console.debug(
+		'gre',
+		'filtering',
+		grouped,
+		mmrFilter,
+		heroFilter,
+		heroPowerFilter,
+		sigTreasureFilter,
+		timeFilter,
+		dustFilter,
+		patch,
+		adventuresInfo,
+		lockFilter,
+	);
 	return {
 		...grouped,
 		decks: grouped.decks
@@ -485,11 +499,13 @@ const topDeckLockFilter = (
 };
 
 const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
-	return !filter || deck.rating >= filter;
+	return !filter || (filter as any) === 'all' || deck.rating >= filter;
 };
 
 const topDeckHeroFilter = (deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean => {
-	return !filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === filter;
+	return (
+		!filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(filter)
+	);
 };
 
 const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {

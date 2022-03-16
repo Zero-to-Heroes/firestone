@@ -4,7 +4,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/inpu
 import { ArenaInfo } from '@models/arena-info';
 import { BoostersInfo } from '@models/memory/boosters-info';
 import { CoinInfo } from '@models/memory/coin-info';
-import { AdventuresInfo, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
@@ -159,6 +159,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse duelsInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getDuelsDeck(): Promise<DuelsDeck> {
+		return new Promise<DuelsDeck>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsDeck((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getDuelsDeck', e);
 				resolve(null);
 			}
 		});

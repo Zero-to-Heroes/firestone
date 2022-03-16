@@ -22,6 +22,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[label]="'settings.decktracker.duels.show-ooc-tracker-label' | owTranslate"
 					[tooltip]="'settings.decktracker.duels.show-ooc-tracker-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="duelsShowOocDeckSelect"
+					[label]="'settings.decktracker.duels.show-ooc-deck-select-label' | owTranslate"
+					[tooltip]="'settings.decktracker.duels.show-ooc-deck-select-tooltip' | owTranslate"
+				></preference-toggle>
 				<preferences-dropdown
 					field="duelsShowMaxLifeWidget2"
 					[label]="'settings.decktracker.duels.max-health-label' | owTranslate"

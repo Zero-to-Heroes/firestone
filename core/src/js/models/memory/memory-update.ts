@@ -15,6 +15,7 @@ export interface MemoryUpdate {
 	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
 	readonly BattlegroundsNewRating: number;
 	readonly IsDuelsMainRunScreen: boolean;
+	readonly IsDuelsDeckBuildingLobbyScreen: boolean;
 	readonly IsDuelsChoosingHero: boolean;
 	// readonly IsDuelsSelectingTreasure: boolean;
 	// readonly DuelsPendingTreasureSelection: DuelsTreasureSelection;

@@ -1,0 +1,161 @@
+.duels-deck-widget {
+	display: flex;
+	flex-direction: column;
+
+	.vignette {
+		position: relative;
+
+		.game-mode {
+			width: 10vh;
+			height: 10vh;
+			position: relative;
+			transition: all 0.2s linear;
+		}
+
+		.rank-text {
+			position: absolute;
+			top: -1vh;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			align-items: center;
+			justify-content: center;
+			display: flex;
+			text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
+				1px 1px 0 #000;
+			color: white;
+			font-size: 3vh;
+			width: 100%;
+			text-align: center;
+			font-family: Passion One;
+			pointer-events: none;
+		}
+
+		.result {
+			width: 100%;
+			font-size: 2.5vh;
+			line-height: 1.8vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: Open Sans;
+			height: 4vh;
+			color: var(--default-text-color);
+			position: absolute;
+			top: 4.5vh;
+			font-family: Passion One;
+			text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000,
+				1px 1px 0 #000;
+			pointer-events: none;
+
+			.wins {
+				color: #61ff47;
+			}
+
+			.losses {
+				color: #ff4747;
+			}
+		}
+	}
+
+	.treasures-container {
+		position: absolute;
+		top: -2.2vh;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.treasure {
+			width: 30px;
+			height: 30px;
+			clip-path: circle(10px at 50% 50%);
+			transform: scale(1.5);
+			margin-right: 5px;
+		}
+	}
+
+	.deck-list-container {
+		display: none;
+		bottom: -6vh;
+		background: rgba(255, 255, 255, 0.01);
+		position: absolute;
+		left: auto;
+		padding: 3vh;
+		z-index: 9;
+		flex-direction: column;
+		transform: scale(0.8);
+		transform-origin: bottom;
+	}
+
+	.deck-list {
+		max-height: 80vh;
+	}
+
+	.initial-list {
+		left: -24vh;
+	}
+
+	.final-list {
+		right: -24vh;
+	}
+
+	.personal-deck-text {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 1.5vh;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		position: absolute;
+		bottom: -1vh;
+		width: 12vh;
+		left: -1vh;
+		display: none;
+	}
+
+	.dust-cost {
+		display: flex;
+		color: var(--default-text-color);
+		background: var(--color-5);
+		align-items: center;
+
+		.dust-icon {
+			width: 4vh;
+			height: 4vh;
+			margin-left: 0.5vh;
+		}
+		.value {
+			font-size: 2vh;
+		}
+	}
+
+	&:hover {
+		.personal-deck-text {
+			display: flex;
+		}
+
+		.vignette .game-mode {
+			transform: scale(1.2);
+		}
+
+		.deck-list-container {
+			display: flex;
+		}
+	}
+}
+
+.screen-capture-effect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	background: white;
+	opacity: 1;
+	z-index: 1;
+	clip-path: ellipse(47% 46% at 50% 47%);
+	pointer-events: none;
+}

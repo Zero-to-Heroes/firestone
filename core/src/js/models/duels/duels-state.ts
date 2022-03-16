@@ -4,7 +4,7 @@ import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-d
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
-import { AdventuresInfo, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
+import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
@@ -31,7 +31,9 @@ export class DuelsState {
 	readonly currentDuelsMetaPatch: PatchInfo;
 
 	readonly currentDuelsDeck: DeckInfoFromMemory;
+	readonly tempDuelsDeck: DuelsDeck;
 	readonly isOnDuelsMainScreen: boolean;
+	readonly isOnDuelsDeckBuildingLobbyScreen: boolean;
 	readonly treasureSelection: TreasureSelection;
 	readonly currentOption: DungeonCrawlOptionType;
 	readonly heroOptionsDbfIds: readonly number[];

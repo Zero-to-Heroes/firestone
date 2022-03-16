@@ -377,11 +377,14 @@ export class Preferences {
 	readonly duelsHideStatsBelowThreshold: boolean;
 	readonly duelsShowMaxLifeWidget2: 'off' | 'mouseover' | 'blink' = 'mouseover';
 	readonly duelsShowOocTracker: boolean = true;
+	readonly duelsShowOocDeckSelect: boolean = true;
 	readonly duelsHighlightTreasureSynergies: boolean = true;
 	readonly duelsFilterOutLockedRequirements: DuelsUnlocksFilterType = 'all';
 	readonly duelsShowInfoOnHeroSelection: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocTrackerPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly duelsOocDeckSelectPosition: { left: number; top: number };
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

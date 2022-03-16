@@ -4,17 +4,24 @@ import {
 	CardIds,
 	duelsActivePool2,
 	duelsActivePool2UltraRare,
+	duelsPassivePool1,
 	duelsPassivePool2,
 	duelsPassivePool2UltraRare,
 	GameType,
 } from '@firestone-hs/reference-data';
+import { StatGameModeType } from '@models/mainwindow/stats/stat-game-mode.type';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
-const PASSIVES = [];
+const PASSIVES = [...duelsPassivePool1, ...duelsPassivePool2, ...duelsPassivePool2UltraRare];
 
-export const isDuels = (gameType: GameType): boolean => {
-	return gameType === GameType.GT_PVPDR || gameType === GameType.GT_PVPDR_PAID;
+export const isDuels = (gameType: GameType | StatGameModeType): boolean => {
+	return (
+		gameType === GameType.GT_PVPDR ||
+		gameType === GameType.GT_PVPDR_PAID ||
+		gameType === 'duels' ||
+		gameType === 'paid-duels'
+	);
 };
 
 export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
@@ -26,7 +33,9 @@ export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService
 };
 
 export const isPassive = (cardId: string, allCards: CardsFacadeService): boolean => {
-	return PASSIVES.includes(cardId) || allCards.getCard(cardId)?.mechanics?.includes('DUNGEON_PASSIVE_BUFF');
+	return (
+		PASSIVES.includes(cardId as CardIds) || allCards.getCard(cardId)?.mechanics?.includes('DUNGEON_PASSIVE_BUFF')
+	);
 };
 
 // https://hearthstone.fandom.com/wiki/Duels#Current_season

@@ -17,13 +17,16 @@ import { DuelsDeckbuilderComponent } from '@components/duels/desktop/duels-deckb
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
 import { DuelsDecktrackerOocWidgetWrapperComponent } from '@components/overlays/duels-decktracker-ooc-widget-wrapper.component';
+import { DuelsOocDeckSelectWidgetWrapperComponent } from '@components/overlays/duels-ooc-deck-select-widget-wrapper.component';
 import { DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-hero-power-selection-widget-wrapper.component';
 import { DuelsOutOfCombatHeroSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-hero-selection-widget-wrapper.component';
 import { DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-signature-treasure-widget-wrapper.component';
 import { DuelsOutOfCombatTreasureSelectionWidgetWrapperComponent } from '@components/overlays/duels-ooc-treasure-selection-widget-wrapper.component';
+import { DuelsDeckWidgetComponent } from '@components/overlays/duels-ooc/duels-deck-widget.component';
 import { DuelsDecktrackerOocComponent } from '@components/overlays/duels-ooc/duels-decktracker-ooc.component';
 import { DuelsHeroInfoComponent } from '@components/overlays/duels-ooc/duels-hero-info.component';
 import { DuelsHeroPowerInfoComponent } from '@components/overlays/duels-ooc/duels-hero-power-info.component';
+import { DuelsOutOfCombatDeckSelectComponent } from '@components/overlays/duels-ooc/duels-ooc-deck-select.component';
 import { DuelsOutOfCombatHeroPowerSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-hero-power-selection.component';
 import { DuelsOutOfCombatHeroSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-hero-selection.component';
 import { DuelsOutOfCombatSignatureTreasureSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component';
@@ -840,6 +843,9 @@ const components = [
 		DuelsOutOfCombatSignatureTreasureSelectionWidgetWrapperComponent,
 		DuelsOutOfCombatSignatureTreasureSelectionComponent,
 		DuelsSignatureTreasureInfoComponent,
+		DuelsOocDeckSelectWidgetWrapperComponent,
+		DuelsOutOfCombatDeckSelectComponent,
+		DuelsDeckWidgetComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
