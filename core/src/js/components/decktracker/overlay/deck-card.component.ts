@@ -181,7 +181,6 @@ export class DeckCardComponent implements OnDestroy {
 	}
 
 	@Input() set side(value: 'player' | 'opponent' | 'duels') {
-		console.debug('setting side', value);
 		this._side = value;
 		this.registerHighlight();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -230,7 +229,6 @@ export class DeckCardComponent implements OnDestroy {
 
 	registerHighlight() {
 		this._uniqueId = uuid();
-		console.debug('registering card', this._side);
 		this.cardsHighlightService?.register(
 			this._uniqueId,
 			{
