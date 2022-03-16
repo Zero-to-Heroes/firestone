@@ -22,10 +22,22 @@ export class MindVisionStateMachineService {
 
 	private globalEventListener = async (first: string, second: string) => {
 		if (this.currentState?.stateId() === CurrentState.RESET) {
-			console.debug('no-format', '[mind-vision] received global event', first, second);
+			console.debug(
+				'no-format',
+				'[mind-vision] received global event',
+				CurrentState[this.currentState?.stateId()],
+				first,
+				second,
+			);
 			return;
 		}
-		console.log('no-format', '[mind-vision] received global event', first, second);
+		console.log(
+			'no-format',
+			'[mind-vision] received global event',
+			CurrentState[this.currentState?.stateId()],
+			first,
+			second,
+		);
 		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
 			console.warn('[mind-vision] global event has root memory reading error');
 			this.performAction(Action.RESET);
@@ -44,7 +56,7 @@ export class MindVisionStateMachineService {
 	};
 
 	private memoryUpdateListener = async (changes: string | 'reset') => {
-		console.log('[mind-vision] memory update', changes);
+		console.log('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
 		const changesToBroadcast: MemoryUpdate | 'reset' = changes === 'reset' ? changes : JSON.parse(changes);
 		// Happens when the plugin is reset, we need to resubscribe
 		if (changesToBroadcast === 'reset' || changesToBroadcast.ShouldReset) {
@@ -120,12 +132,21 @@ export class MindVisionStateMachineService {
 		// return null.
 		const result = await this.currentState.apiCall(apiCall);
 		if (result === 'reset') {
-			console.log('[mind-vision] [api] callMindVision requests reset', apiCall);
+			console.log(
+				'[mind-vision] [api] callMindVision requests reset',
+				CurrentState[this.currentState?.stateId()],
+				apiCall,
+			);
 			await sleep(100);
 			await this.waitForActiveState();
 			return this.callMindVision(apiCall);
 		} else {
-			console.debug('[mind-vision] [api] callMindVision requests success', result, apiCall);
+			console.debug(
+				'[mind-vision] [api] callMindVision requests success',
+				CurrentState[this.currentState?.stateId()],
+				result,
+				apiCall,
+			);
 			return result;
 		}
 	}
@@ -148,7 +169,7 @@ export class MindVisionStateMachineService {
 		await this.performAction(Action.STARTUP);
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.debug('[mind-vision] state changed', res);
+			console.debug('[mind-vision] state changed', CurrentState[this.currentState?.stateId()], res);
 			if (this.ow.exitGame(res)) {
 				console.log('[mind-vision] game left', res);
 				this.performTransition(Action.GAME_LEFT);
@@ -212,7 +233,7 @@ export class MindVisionStateMachineService {
 		console.debug(
 			'[mind-vision] next state',
 			Action[transition],
-			this.currentState?.stateId(),
+			CurrentState[this.currentState?.stateId()],
 			CurrentState[newState],
 		);
 		return this.states.get(newState);
