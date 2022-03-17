@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.2.0',
+		version: '9.2.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,6 +46,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'content',
+								text: `Update app for patch 22.6`,
+							},
+						],
+					},
+					{
 						category: 'duels',
 						details: [
 							{
@@ -54,7 +63,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Add a filter (for the high-wins decks) to hide decks for which you don't have all the unlocks (hero power / signature weapon)`,
+								text: `Add a filter (for the high-wins decks) to hide decks for which you don't have all the unlocks (hero power / signature weapon).`,
 							},
 						],
 					},
@@ -69,7 +78,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Player region has been added to the leaderboard (it might take a couple of days for the information to be filled for everyone)`,
+								text: `Player region has been added to the leaderboard (it might take a couple of days for the information to be filled for everyone).`,
 							},
 							{
 								type: 'bug',
@@ -91,7 +100,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to hide the "Unkown Card"s in the tracker.`,
+								text: `Add an option to hide the "Unknown Card"s in the tracker.`,
 							},
 							{
 								type: 'bug',
