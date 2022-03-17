@@ -68,7 +68,6 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 			),
 			this.store.listenMercenaries$(([state, prefs]) => state?.gameMode),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[displayFromPrefsPvE, displayFromPrefsPvP], [gameMode]]) => {
 				return (
 					(displayFromPrefsPvE && isMercenariesPvE(gameMode)) ||

@@ -59,7 +59,6 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 			this.store.listenPrefs$((prefs) => prefs.mercenariesHighlightSynergies),
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state?.treasureSelection?.treasures?.length),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[displayFromPrefs], [hasTreasures]]) => {
 				return displayFromPrefs && hasTreasures;
 			}),

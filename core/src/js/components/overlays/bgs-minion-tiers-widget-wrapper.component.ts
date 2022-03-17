@@ -73,7 +73,6 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 				([state, prefs]) => state?.currentGame?.gameEnded,
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded]]) => {
 				return inGame && isCurrentGame && !gameEnded && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),

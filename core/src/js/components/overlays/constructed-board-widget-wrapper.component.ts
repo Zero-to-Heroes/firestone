@@ -86,7 +86,6 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 				(deckState) => deckState?.isMercenaries(),
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[currentScene, displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;

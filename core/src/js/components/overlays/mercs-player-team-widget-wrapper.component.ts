@@ -72,7 +72,6 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 				([state, prefs]) => !!state?.playerTeam?.mercenaries?.length,
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),

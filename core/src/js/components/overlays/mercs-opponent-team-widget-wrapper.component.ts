@@ -74,7 +74,6 @@ export class MercsOpponentTeamWidgetWrapperComponent
 				([state, prefs]) => !!state?.opponentTeam?.mercenaries?.length,
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),

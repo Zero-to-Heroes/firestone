@@ -87,7 +87,6 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 			),
 			displayFromGameMode$,
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs],

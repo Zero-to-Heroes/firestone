@@ -76,7 +76,6 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 			),
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[currentScene], [displayFromPrefs, displayFromPrefsVillage], [hasState]]) => {
 				const scenes = [];
 				if (displayFromPrefs) {

@@ -67,7 +67,6 @@ export class BgsHeroSelectionWidgetWrapperComponent extends AbstractWidgetWrappe
 				([state, prefs]) => state?.heroSelectionDone,
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(
 				([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded, heroSelectionDone]]) => {
 					return (

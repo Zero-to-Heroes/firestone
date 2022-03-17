@@ -68,7 +68,6 @@ export class SecretsHelperWidgetWrapperComponent extends AbstractWidgetWrapperCo
 				(deckState) => !!deckState?.opponentDeck?.secrets?.length,
 			),
 		).pipe(
-			// tap((info) => console.debug('info', info)),
 			this.mapData(([[currentScene, displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs, hasSecrets]]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;

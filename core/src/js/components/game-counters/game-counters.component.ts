@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../services/cards-facade.service';
@@ -76,11 +76,9 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 			this.definition$ = this.store
 				.listenDeckState$((state) => state)
 				.pipe(
-					tap((info) => this.activeCounter === 'brilliantMacaw' && console.debug('info', info)),
 					filter(([state]) => !!state),
 					this.mapData(([state]) => this.buildDefinition(state, this.activeCounter, this.side)),
 				);
-			console.debug('built def', this.definition$);
 		} else {
 			this.definition$ = this.store
 				.listenBattlegrounds$(([state, prefs]) => state)
