@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '2022-02-16-00-04';
+export const CARDS_VERSION = '2022-03-17-21-34';
 
 export const classes = [
 	'demonhunter',
@@ -470,6 +470,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 			return 'lettuce';
 		case BoosterType.ALTERAC_VALLEY:
 			return 'alterac_valley';
+		// case BoosterType.THE_SUNKEN_CITY:
+		// 	return 'the_sunken_city';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
@@ -540,6 +542,8 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'alterac_valley':
 		case 'onyxias_lair':
 			return BoosterType.ALTERAC_VALLEY;
+		// case 'the_sunken_city':
+		// 	return BoosterType.THE_SUNKEN_CITY;
 		default:
 			console.warn('no default booster type for set id', setId);
 			return null;

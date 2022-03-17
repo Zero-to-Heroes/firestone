@@ -40,7 +40,7 @@ export interface MemoryMercenarySkin {
 	readonly Id: number;
 	readonly CardDbfId: number;
 	readonly Default: boolean;
-	readonly Equipped: boolean;
+	// readonly Equipped: boolean;
 	readonly Premium: number;
 }
 

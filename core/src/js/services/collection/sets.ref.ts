@@ -12,9 +12,15 @@ export const standardSets: readonly string[] = [
 	'deadmines',
 	'alterac_valley',
 	'onyxias_lair',
+	'the_sunken_city',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'the_sunken_city',
+		name: `The Sunken City`,
+		launchDate: new Date('2022-03-17'),
+	},
 	{
 		id: 'onyxias_lair',
 		name: `Onyxia's Lair`,

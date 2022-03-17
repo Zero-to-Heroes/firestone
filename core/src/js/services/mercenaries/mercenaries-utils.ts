@@ -154,12 +154,13 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
-	CardIds.MuddyFootingLettuceEnchantment,
-	CardIds.EarthStompLettuceEnchantment,
 	CardIds.DoomedLettuceEnchantment,
-	CardIds.StaggeredLettuceEnchantment,
+	CardIds.EarthStompLettuceEnchantment,
 	CardIds.EmeraldRootsLettuceEnchantment,
-	CardIds.FrostbiteLettuceEnchantment,
 	CardIds.FlurryLettuceEnchantment,
+	CardIds.FrostbiteLettuceEnchantment,
+	CardIds.MuddyFootingLettuceEnchantment,
 	CardIds.ShadowShockLettuceEnchantment,
+	CardIds.StaggeredLettuceEnchantment,
+	CardIds.ThunderStruckLettuceEnchantment,
 ];

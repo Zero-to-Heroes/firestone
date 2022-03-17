@@ -19,6 +19,8 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.SnakeTrap_SnakeVanillaToken,
 	CardIds.ImprovedSnakeTrap_SnakeToken,
 	CardIds.ElementEarth_StoneElementalToken,
+	CardIds.BabyKrush_DevilsaurToken,
+	CardIds.DevilsaurBattlegrounds,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
@@ -43,7 +45,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'demon':
 		case Race.DEMON:
-			referenceCardId = CardIds.WrathWeaver;
+			referenceCardId = CardIds.ImpulsiveTrickster;
 			break;
 		case 'dragon':
 		case Race.DRAGON:
@@ -51,7 +53,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'murloc':
 		case Race.MURLOC:
-			referenceCardId = CardIds.MurlocTidehunterCore;
+			referenceCardId = CardIds.RockpoolHunter;
 			break;
 		case 'pirate':
 		case Race.PIRATE:
@@ -251,6 +253,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.Rokara_GloryOfCombat;
 		case CardIds.Onyxia2:
 			return CardIds.Onyxia_Broodmother;
+		case CardIds.AmbassadorFaelin:
+			return CardIds.AmbassadorFaelin_ExpeditionPlans;
 
 		case '':
 			return null; // new heroes
@@ -604,6 +608,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 381;
 		case CardIds.Onyxia2:
 			return 379;
+		case CardIds.AmbassadorFaelin:
+			return 394;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;

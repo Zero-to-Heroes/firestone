@@ -39,6 +39,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return arcane;
 		case CardIds.Atiesh:
 			return or(and(fire, dealsDamage), and(frost, dealsDamage));
+		case CardIds.AvatarOfStormpike1Lettuce:
+		case CardIds.AvatarOfStormpike2Lettuce:
+		case CardIds.AvatarOfStormpike3Lettuce:
+		case CardIds.AvatarOfStormpike4Lettuce:
+			return dwarf;
 		case CardIds.BannerOfTheHorde1Lettuce:
 		case CardIds.BannerOfTheHorde2Lettuce:
 		case CardIds.BannerOfTheHorde3Lettuce:
@@ -57,6 +62,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BlessingOfTheMoon4Lettuce:
 		case CardIds.BlessingOfTheMoon5Lettuce:
 			return or(nightelf, tauren, troll, and(nature, dealsDamage));
+		case CardIds.BloodFrenzy1Lettuce:
+		case CardIds.BloodFrenzy2Lettuce:
+		case CardIds.BloodFrenzy3Lettuce:
+		case CardIds.BloodFrenzy4Lettuce:
+		case CardIds.BloodFrenzy5Lettuce:
+			return orc;
 		case CardIds.BloodPact1Lettuce:
 		case CardIds.BloodPact2Lettuce:
 		case CardIds.BloodPact3Lettuce:
@@ -75,6 +86,17 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.CenarionSurge4Lettuce:
 		case CardIds.CenarionSurge5Lettuce:
 			return nature;
+		case CardIds.ChromaticDragonflight1Lettuce:
+		case CardIds.ChromaticDragonflight2Lettuce:
+		case CardIds.ChromaticDragonflight3Lettuce:
+		case CardIds.ChromaticDragonflight4Lettuce:
+			return dragon;
+		case CardIds.ChromaticInfusion1Lettuce:
+		case CardIds.ChromaticInfusion2Lettuce:
+		case CardIds.ChromaticInfusion3Lettuce:
+		case CardIds.ChromaticInfusion4Lettuce:
+		case CardIds.ChromaticInfusion5Lettuce:
+			return dragon;
 		case CardIds.CondemnLettuce:
 			return holy;
 		case CardIds.DarkShamanCowl1Lettuce:
@@ -89,6 +111,17 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.Demonfire4Lettuce:
 		case CardIds.Demonfire5Lettuce:
 			return demon;
+		case CardIds.DemonSoul1Lettuce:
+		case CardIds.DemonSoul2Lettuce:
+		case CardIds.DemonSoul3Lettuce:
+		case CardIds.DemonSoul4Lettuce:
+			return and(fel, dealsDamage);
+		case CardIds.DeepBreath1Lettuce:
+		case CardIds.DeepBreath2Lettuce:
+		case CardIds.DeepBreath3Lettuce:
+		case CardIds.DeepBreath4Lettuce:
+		case CardIds.DeepBreath5Lettuce:
+			return and(fire, dealsDamage);
 		case CardIds.ElementaryStudies1Lettuce:
 		case CardIds.ElementaryStudies2Lettuce:
 		case CardIds.ElementaryStudies3Lettuce:
@@ -117,6 +150,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FelBlast4Lettuce:
 		case CardIds.FelBlast5Lettuce:
 			return fel;
+		case CardIds.FelCorruption1Lettuce:
+		case CardIds.FelCorruption2Lettuce:
+		case CardIds.FelCorruption3Lettuce:
+		case CardIds.FelCorruption4Lettuce:
+		case CardIds.FelCorruption5Lettuce:
+			return orc;
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
@@ -299,6 +338,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SearingStrike4Lettuce:
 		case CardIds.SearingStrike5Lettuce:
 			return fire;
+		case CardIds.Shadowflame1Lettuce1:
+		case CardIds.Shadowflame2Lettuce1:
+		case CardIds.Shadowflame3Lettuce1:
+		case CardIds.Shadowflame4Lettuce1:
+		case CardIds.Shadowflame5Lettuce1:
+			return dragon;
 		case CardIds.ShadowLance1Lettuce:
 		case CardIds.ShadowLance2Lettuce:
 		case CardIds.ShadowLance3Lettuce:
@@ -317,6 +362,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SnapFreeze4Lettuce:
 		case CardIds.SnapFreeze5Lettuce:
 			return freeze;
+		case CardIds.SpareParts1Lettuce:
+		case CardIds.SpareParts2Lettuce:
+		case CardIds.SpareParts3Lettuce:
+		case CardIds.SpareParts4Lettuce:
+			return dragon;
 		case CardIds.SplittingStrike1Lettuce:
 		case CardIds.SplittingStrike2Lettuce:
 		case CardIds.SplittingStrike3Lettuce:
@@ -429,5 +479,5 @@ const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
 const dealsDamage = (card: ReferenceCard) =>
-	hasText(card, /deal \$?\{?\#?\d+\}? damage/) || hasText(card, /restore \$?\{?\#?\d+\}? health/);
+	true || hasText(card, /deal \$?\{?\#?\d+\}? damage/) || hasText(card, /restore \$?\{?\#?\d+\}? health/);
 const freeze = (card: ReferenceCard) => hasText(card, /freeze/);
