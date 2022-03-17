@@ -67,14 +67,14 @@ export class LogRegisterService {
 		// 		console.log('[log-register] status for Decks.log', status);
 		// 	})
 		// 	.start();
-		new LogListenerService(this.ow)
-			.configure('FullScreenFX.log', (data) => {
-				// this.decksService.queueingIntoMatch(data);
-				this.dungeonLootParser.handleBlur(data);
-			})
-			.subscribe((status) => {
-				console.log('[log-register] status for FullScreenFX.log', status);
-			})
-			.start();
+		// new LogListenerService(this.ow)
+		// 	.configure('FullScreenFX.log', (data) => {
+		// 		// this.decksService.queueingIntoMatch(data);
+		// 		this.dungeonLootParser.handleBlur(data);
+		// 	})
+		// 	.subscribe((status) => {
+		// 		console.log('[log-register] status for FullScreenFX.log', status);
+		// 	})
+		// 	.start();
 	}
 }

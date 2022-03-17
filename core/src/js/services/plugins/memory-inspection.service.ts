@@ -48,7 +48,6 @@ import { GetMercenariesInfoOperation } from './mind-vision/operations/get-mercen
 import { GetRewardsTrackInfoOperation } from './mind-vision/operations/get-rewards-track-info-operation';
 import { GetSelectedDeckIdOperation } from './mind-vision/operations/get-selected-deck-id-operation';
 import { GetWhizbangDeckOperation } from './mind-vision/operations/get-whizbang-deck-operation';
-import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/operations/is-maybe-on-duels-rewards-screen-operation';
 
 @Injectable()
 export class MemoryInspectionService {
@@ -104,10 +103,10 @@ export class MemoryInspectionService {
 		this.ow,
 	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
-	private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
-		this.mindVisionFacade,
-		this.ow,
-	);
+	// private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
+	// 	this.mindVisionFacade,
+	// 	this.ow,
+	// );
 
 	private listenersRegistered: boolean;
 
@@ -278,9 +277,9 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getCurrentSceneOperation.call());
 	}
 
-	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
-		return this.mindVision.callMindVision(() => this.isMaybeOnDuelsRewardsScreenOperation.call());
-	}
+	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
+	// 	return this.mindVision.callMindVision(() => this.isMaybeOnDuelsRewardsScreenOperation.call());
+	// }
 
 	// public async reset(): Promise<void> {
 	// 	await this.mindVision.reset();

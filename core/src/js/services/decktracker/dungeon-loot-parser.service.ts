@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardClass, GameType } from '@firestone-hs/reference-data';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../models/game-event';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -42,10 +43,6 @@ export class DungeonLootParserService {
 	private rewardsInput: Input;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private rewardsTimeout;
-	// private shouldTryToGetRewards: boolean;
-
-	private debug: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -76,16 +73,6 @@ export class DungeonLootParserService {
 				this.spectating = event.additionalData.spectating;
 			}
 		});
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.exitGame(res)) {
-				// this.shouldTryToGetRewards = false;
-				if (this.rewardsTimeout) {
-					this.log('clearing rewards timeout');
-					clearTimeout(this.rewardsTimeout);
-					this.rewardsTimeout = null;
-				}
-			}
-		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
 			this.log('Received new review id event', event);
 			const info: ManastormInfo = event.data[0];
@@ -93,6 +80,12 @@ export class DungeonLootParserService {
 				this.currentReviewId = info.reviewId;
 				this.log('set reviewId');
 				// this.sendLootInfo();
+			}
+		});
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.IsDuelsRewardsPending) {
+				this.handleRewards();
 			}
 		});
 		setTimeout(() => {
@@ -124,32 +117,12 @@ export class DungeonLootParserService {
 		}
 	}
 
-	public async handleBlur(logLine: string) {
-		if (this.spectating) {
-			this.log('spectating, not handling blur');
-			return;
-		}
-		// this.logDebug('handling blur', logLine);
-		if (!this.goingIntoQueueRegex.exec(logLine)) {
-			return;
-		}
-
-		// this.logDebug('blurring');
-		const currentScene = await this.memory.getCurrentSceneFromMindVision();
-		// this.logDebug('got current scene', currentScene);
-		// PVPDR
-		if (currentScene !== 18) {
-			return;
-		}
-
+	// If we launch the app on the rewards screen, we already dismiss the duels run as being over,
+	// so we can't attach the rewards to the run. It's not big enough an issue to warrant changing
+	// the current behavior
+	public async handleRewards() {
 		if (!this.currentDuelsRunId) {
-			this.log('not enough info to link an Arena Reward');
-			return;
-		}
-
-		const isMaybeOnRewardsScreen = await this.memory.isMaybeOnDuelsRewardsScreen();
-		// this.logDebug('isMaybeOnRewardsScreen', isMaybeOnRewardsScreen);
-		if (!isMaybeOnRewardsScreen) {
+			this.log('not enough info to link a Duels Reward, retrying');
 			return;
 		}
 
@@ -157,7 +130,7 @@ export class DungeonLootParserService {
 		const rewards = await this.memory.getDuelsRewardsInfo(true);
 		this.log('reward', rewards);
 		if (!rewards?.Rewards || rewards?.Rewards.length === 0) {
-			this.log('no rewards, missed the timing', this.currentDuelsWins, this.currentDuelsLosses);
+			this.log('no rewards, missed the timing?', this.currentDuelsWins, this.currentDuelsLosses);
 			return;
 		}
 
@@ -418,8 +391,12 @@ export class DungeonLootParserService {
 		this.currentDuelsSignatureTreasureCardId = undefined;
 	}
 
-	private logDebug(...args) {
+	private debug(...args) {
 		console.debug('[dungeon-loot-parser]', this.currentReviewId, this.currentDuelsRunId, ...args);
+	}
+
+	private warn(...args) {
+		console.warn('[dungeon-loot-parser]', this.currentReviewId, this.currentDuelsRunId, ...args);
 	}
 
 	private log(...args) {

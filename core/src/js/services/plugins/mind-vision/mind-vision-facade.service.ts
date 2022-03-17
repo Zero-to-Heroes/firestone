@@ -404,19 +404,19 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
-		return new Promise<boolean>(async (resolve) => {
-			const plugin = await this.get();
-			try {
-				plugin.isMaybeOnDuelsRewardsScreen((result) => {
-					resolve(result);
-				});
-			} catch (e) {
-				console.log('[mind-vision] could not parse isMaybeOnDuelsRewardsScreen', e);
-				resolve(null);
-			}
-		});
-	}
+	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
+	// 	return new Promise<boolean>(async (resolve) => {
+	// 		const plugin = await this.get();
+	// 		try {
+	// 			plugin.isMaybeOnDuelsRewardsScreen((result) => {
+	// 				resolve(result);
+	// 			});
+	// 		} catch (e) {
+	// 			console.log('[mind-vision] could not parse isMaybeOnDuelsRewardsScreen', e);
+	// 			resolve(null);
+	// 		}
+	// 	});
+	// }
 
 	public async reset(): Promise<void> {
 		console.log('[mind-vision] calling reset');
