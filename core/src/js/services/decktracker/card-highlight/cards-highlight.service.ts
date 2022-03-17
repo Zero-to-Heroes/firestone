@@ -342,6 +342,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.DeathlyDeathTavernBrawl:
 				return and(minion, deathrattle);
+			case CardIds.DeathstriderTavernBrawl:
+				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DisksOfLegendTavernBrawl:
 				return and(or(inDeck, inHand), minion, legendary);
 			case CardIds.DivineIlluminationTavernBrawl:
@@ -446,10 +448,14 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), discover);
 			case CardIds.StarvingTavernBrawl:
 				return and(minion, beast);
+			case CardIds.StormpikeBattleRam:
+				return and(or(inDeck, inHand), minion, beast);
 			case CardIds.StickyFingersTavernBrawl:
 				return and(or(inDeck, inHand), notInInitialDeck);
 			case CardIds.SunstridersCrownTavernBrawl:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.TerrorscaleStalker:
+				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TotemOfTheDead2:
 				return and(deathrattle);
 			case CardIds.UnlockedPotential:
