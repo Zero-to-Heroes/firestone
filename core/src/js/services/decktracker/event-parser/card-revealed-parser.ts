@@ -22,6 +22,11 @@ export class CardRevealedParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// const creatorCardId = gameEvent.additionalData.creatorCardId;
+		// For some reason, during a reconnect, the logs contain the full list of all cards
+		// in our deck and puts them in the SETASIDE zone.
+		if (currentState.reconnectOngoing) {
+			return currentState;
+		}
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

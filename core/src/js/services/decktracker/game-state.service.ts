@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { HeroRevealedParser } from '@services/decktracker/event-parser/hero-revealed-parser';
+import { ReconnectStartParser } from '@services/decktracker/event-parser/reconnect-start-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -554,6 +555,7 @@ export class GameStateService {
 			new CopiedFromEntityIdParser(this.helper, this.i18n),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
+			new ReconnectStartParser(),
 			new ReconnectOverParser(this.deckHandler),
 		];
 

@@ -32,6 +32,7 @@ export class ReconnectOverParser implements EventParser {
 		console.debug('after applying reconnect over event', stateAfterOpponentDeckUpdate, stateAfterPlayerDeckUpdate);
 		return stateAfterOpponentDeckUpdate.update({
 			mulliganOver: true,
+			reconnectOngoing: false,
 		} as GameState);
 	}
 
