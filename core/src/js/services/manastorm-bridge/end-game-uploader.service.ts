@@ -221,14 +221,18 @@ export class EndGameUploaderService {
 				game.gameMode === 'duels'
 					? params.duelsInfo?.rating ?? duelsInfo?.Rating
 					: params.duelsInfo?.paidRating ?? duelsInfo?.PaidRating;
-			if (duelsInfo?.Wins != null && duelsInfo?.Losses != null) {
-				game.additionalResult = duelsInfo?.Wins + '-' + duelsInfo?.Losses;
+			// Not sure which one is the most reliable. I'm putting the one we just got from the memory as I suspect the information
+			// is more up-to-date, but maybe that could be wrong if there is some lag and the user has already started a new game
+			// UPDATE: the other way around is used everywhere else, so sticking with it, as it hasn't
+			// revealed any major bug
+			const wins = params.duelsInfo?.wins ?? duelsInfo?.Wins;
+			const losses = params.duelsInfo?.losses ?? duelsInfo?.Losses;
+			if (wins != null && losses != null) {
+				game.additionalResult = wins + '-' + losses;
+				console.log('[manastorm-bridge]', currentReviewId, 'duels result', game.additionalResult);
 			}
 			try {
-				if (
-					(replay.result === 'won' && (params.duelsInfo?.wins ?? duelsInfo?.Wins) === 11) ||
-					(replay.result === 'lost' && (params.duelsInfo?.losses ?? duelsInfo?.Losses) === 2)
-				) {
+				if ((replay.result === 'won' && wins === 11) || (replay.result === 'lost' && losses === 2)) {
 					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
 					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
 					if (newPlayerRank != null) {
@@ -396,6 +400,7 @@ export class EndGameUploaderService {
 		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
+		console.debug('[manastorm-bridge]', currentReviewId, 'game ready', game);
 		return game;
 	}
 

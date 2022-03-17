@@ -22,6 +22,7 @@ export class ReplayUploadService {
 		}
 
 		console.log('[manastorm-bridge] uploading game');
+		console.debug('[manastorm-bridge] uploading game', game);
 		const user = await this.ow.getCurrentUser();
 		console.log('[manastorm-bridge] retrieved current user');
 		this.postFullReview(game.reviewId, user.userId, user.username, game);
