@@ -13,7 +13,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { isPassive } from '@services/duels/duels-utils';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
-import { sortByProperties } from '@services/utils';
+import { groupByFunction, sortByProperties } from '@services/utils';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -157,7 +157,14 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			.filter((deck) => deck.heroCardId === heroCardId)
 			.filter((deck) => deck.heroPowerCardId === heroPowerCardId)
 			.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId);
-		const sortedCandidates = candidates.sort(
+		// Remove duplicates
+		const groupedDecks = groupByFunction(
+			(deck: DuelsDeckStat) => `${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+		)(candidates);
+		const uniqueDecks = Object.values(groupedDecks).map(
+			(decks) => [...decks].sort(sortByProperties((d: DuelsDeckStat) => [-d.rating]))[0],
+		);
+		const sortedCandidates = uniqueDecks.sort(
 			sortByProperties((deck: DuelsDeckStat) => [deck.dustCost, -new Date(deck.runStartDate).getTime()]),
 		);
 		// console.debug(
