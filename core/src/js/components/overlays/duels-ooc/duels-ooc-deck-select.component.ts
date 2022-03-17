@@ -4,6 +4,7 @@ import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-w
 import { allDuelsSignatureTreasures, CardIds } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
+import { DuelsDeckStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { DuelsDeck } from '@models/memory/memory-duels';
@@ -12,8 +13,9 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { isPassive } from '@services/duels/duels-utils';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
+import { sortByProperties } from '@services/utils';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
@@ -154,14 +156,21 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			.flatMap((deck) => deck.decks)
 			.filter((deck) => deck.heroCardId === heroCardId)
 			.filter((deck) => deck.heroPowerCardId === heroPowerCardId)
-			.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId)
-			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
-			.sort((a, b) => a.dustCost - b.dustCost);
-		if (!candidates.length) {
+			.filter((deck) => deck.signatureTreasureCardId === signatureTreasureCardId);
+		const sortedCandidates = candidates.sort(
+			sortByProperties((deck: DuelsDeckStat) => [deck.dustCost, -new Date(deck.runStartDate).getTime()]),
+		);
+		// console.debug(
+		// 	'candidates',
+		// 	sortedCandidates.map((deck) => [deck.dustCost, deck.runStartDate]),
+		// 	numberOfDecks,
+		// 	sortedCandidates.slice(0, numberOfDecks),
+		// );
+		if (!sortedCandidates.length) {
 			return [];
 		}
 
-		return candidates.slice(0, numberOfDecks).map((candidate) => ({
+		const result: readonly DuelsDeckWidgetDeck[] = sortedCandidates.slice(0, numberOfDecks).map((candidate) => ({
 			id: '' + candidate.id,
 			heroCardId: heroCardId,
 			heroPowerCardId: heroPowerCardId,
@@ -176,6 +185,8 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			isLastPersonalDeck: false,
 			dustCost: candidate.dustCost,
 		}));
+		// console.debug('result', result);
+		return result;
 	}
 
 	private buildLastPlayedDeck(
