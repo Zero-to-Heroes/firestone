@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.2.1',
+		version: '9.2.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -84,6 +84,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the decklist would sometimes not disappear after ending a run.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where selecting a Hero Power or Signature Treasure would prevent you from selecting other heroes in the dropdown.`,
+							},
 						],
 					},
 					{
@@ -105,6 +109,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Encumbered Pack Mule would not appear in the player's decklist if drawn during mulligan.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where mercs would not be updated (in the mercs list) until you moused over them.`,
 							},
 						],
 					},

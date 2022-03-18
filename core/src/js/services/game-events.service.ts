@@ -1044,6 +1044,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
+				console.log('BATTLEGROUNDS_TAVERN_UPGRADE', gameEvent.Value.CardId, gameEvent.Value.TavernLevel);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,
