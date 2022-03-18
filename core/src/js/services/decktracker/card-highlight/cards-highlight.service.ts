@@ -394,6 +394,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell);
 			case CardIds.KindlingFlameTavernBrawl:
 				return and(spell, fire, dealsDamage);
+			// case CardIds.KotoriLightblade:
+			// 	return and(or(inDeck, inHand), spell, holy);
 			case CardIds.MeekMasteryTavernBrawl:
 				return and(or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
 			case CardIds.MulchMadnessTavernBrawl:
