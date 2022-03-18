@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -90,6 +90,9 @@ export class MercenariesTeamMercenaryComponent {
 			: null;
 		this.isDead = value.isDead;
 		this.isBench = value.zone === Zone.SETASIDE;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
 	}
 
 	mercCardId: string;
@@ -102,5 +105,9 @@ export class MercenariesTeamMercenaryComponent {
 	isDead: boolean;
 	isBench: boolean;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 }
