@@ -67,7 +67,7 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent imple
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)

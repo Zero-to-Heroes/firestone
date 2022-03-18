@@ -130,7 +130,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
 				([main, nav]) => nav.navigationDuels.selectedDeckId,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
@@ -139,14 +139,14 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 				),
-				map(([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
+				map(([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, heroesFilter, gameMode, patch]) =>
 					getCurrentDeck(
 						decks,
 						deckstring,
 						topDecks,
 						deckId,
 						timeFilter,
-						classFilter,
+						heroesFilter,
 						gameMode,
 						patch,
 						0,

@@ -20,7 +20,7 @@ import { groupByFunction, sumOnArray } from '../utils';
 
 export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[],
-	heroFilter: DuelsHeroFilterType,
+	heroesFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	signatureTreasureFilter: 'all' | string,
 	statType: DuelsStatTypeFilterType,
@@ -29,7 +29,11 @@ export const filterDuelsHeroStats = (
 ): readonly DuelsHeroStat[] => {
 	return (
 		(heroStats ?? [])
-			.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter))
+			.filter((stat) =>
+				!heroesFilter?.length
+					? false
+					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+			)
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
@@ -66,7 +70,7 @@ export const filterDuelsHeroStats = (
 
 export const filterDuelsTreasureStats = (
 	treasures: readonly DuelsTreasureStat[],
-	heroFilter: DuelsHeroFilterType,
+	heroesFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	sigTreasureFilter: 'all' | string,
 	statType: DuelsTreasureStatTypeFilterType,
@@ -81,7 +85,11 @@ export const filterDuelsTreasureStats = (
 		.filter((stat) => !!stat)
 		// Avoid generating errors when the API hasn't properly formatted the data yet
 		.filter((stat) => !(+stat.treasureCardId > 0))
-		.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter))
+		.filter((stat) =>
+			!heroesFilter?.length
+				? false
+				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+		)
 		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
 		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
 		.filter((stat) => isCorrectType(stat, statType, allCards))
@@ -95,17 +103,6 @@ export const filterDuelsTreasureStats = (
 	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
 	if (!result.length) {
 		console.log('no treasure to show', treasures?.length);
-		console.debug(
-			'treasures',
-			heroFilter,
-			heroPowerFilter,
-			sigTreasureFilter,
-			treasures,
-			treasures
-				.filter((stat) => !!stat)
-				.filter((stat) => !(+stat.treasureCardId > 0))
-				.filter((stat) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(stat.hero) === heroFilter)),
-		);
 	}
 	return result;
 };
@@ -113,7 +110,7 @@ export const filterDuelsTreasureStats = (
 export const filterDuelsRuns = (
 	runs: readonly DuelsRun[],
 	timeFilter: DuelsTimeFilterType,
-	heroFilter: DuelsHeroFilterType,
+	heroesFilter: DuelsHeroFilterType,
 	gameMode: DuelsGameModeFilterType,
 	patch: PatchInfo,
 	mmrFilter: number,
@@ -129,7 +126,11 @@ export const filterDuelsRuns = (
 		.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
-		.filter((run) => (heroFilter === 'all' ? true : normalizeDuelsHeroCardId(run.heroCardId) === heroFilter))
+		.filter((run) =>
+			!heroesFilter?.length
+				? false
+				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
+		)
 		.filter((stat) =>
 			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
@@ -488,10 +489,10 @@ const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
 	return !filter || (filter as any) === 'all' || deck.rating >= filter;
 };
 
-const topDeckHeroFilter = (deck: DuelsDeckStat, filter: DuelsHeroFilterType): boolean => {
-	return (
-		!filter || filter === 'all' || normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(filter)
-	);
+const topDeckHeroFilter = (deck: DuelsDeckStat, heroesFilter: DuelsHeroFilterType): boolean => {
+	return !heroesFilter?.length
+		? false
+		: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
 };
 
 const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {

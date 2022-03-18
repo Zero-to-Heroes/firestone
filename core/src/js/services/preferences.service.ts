@@ -485,7 +485,7 @@ export class PreferencesService {
 
 	public async updateDuelsHeroFilter(value: DuelsHeroFilterType) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveHeroFilter: value };
+		const newPrefs: Preferences = { ...prefs, duelsActiveHeroesFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

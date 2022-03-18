@@ -25,6 +25,7 @@
 
 		.text {
 			flex-grow: 1;
+			overflow: hidden;
 
 			::ng-deep {
 				.selection-icons {

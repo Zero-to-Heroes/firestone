@@ -247,7 +247,7 @@ export class AppUiStoreService {
 			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 			([main, nav]) => main.duels.adventuresInfo,
 			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-			([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
 			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -304,7 +304,7 @@ export class AppUiStoreService {
 			([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 			([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-			([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+			([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
 			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
@@ -404,6 +404,6 @@ export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCa
 
 export const cdLog = (...args) => {
 	if (process.env.NODE_ENV !== 'production') {
-		console.debug('[cd]', ...args);
+		// console.debug('[cd]', ...args);
 	}
 };

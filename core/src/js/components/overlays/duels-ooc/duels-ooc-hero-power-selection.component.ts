@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -41,7 +41,8 @@ import { filter } from 'rxjs/operators';
 })
 export class DuelsOutOfCombatHeroPowerSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	heroPowers$: Observable<readonly ReferenceCard[]>;
 	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
 
@@ -97,7 +98,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 							const stats = buildDuelsHeroPlayerStats(
 								filterDuelsHeroStats(
 									duelStats,
-									'all',
+									allDuelsHeroes,
 									currentHeroPowerCardId,
 									'all',
 									'hero-power',
@@ -109,7 +110,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								filterDuelsRuns(
 									runs,
 									'last-patch',
-									'all',
+									allDuelsHeroes,
 									'all',
 									patch,
 									0,
@@ -130,7 +131,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 									topDeckApplyFilters(
 										deck,
 										trueMmrFilter,
-										'all',
+										allDuelsHeroes,
 										currentHeroPowerCardId,
 										'all',
 										'last-patch',

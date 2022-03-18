@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -41,7 +41,8 @@ import { filter } from 'rxjs/operators';
 })
 export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	signatureTreasures$: Observable<readonly ReferenceCard[]>;
 	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 
@@ -113,7 +114,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 							const stats = buildDuelsHeroPlayerStats(
 								filterDuelsHeroStats(
 									duelStats,
-									'all',
+									allDuelsHeroes,
 									selectedHeroPower,
 									'all',
 									'signature-treasure',
@@ -125,7 +126,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 								filterDuelsRuns(
 									runs,
 									'last-patch',
-									'all',
+									allDuelsHeroes,
 									'all',
 									patch,
 									0,
@@ -148,7 +149,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 									topDeckApplyFilters(
 										deck,
 										trueMmrFilter,
-										'all',
+										allDuelsHeroes,
 										selectedHeroPower,
 										currentSignatureTreasureCardId,
 										'last-patch',

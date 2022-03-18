@@ -84,7 +84,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class BattlegroundsContentComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	showTitle$: Observable<boolean>;
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
@@ -188,7 +189,7 @@ export class BattlegroundsContentComponent
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
+				// tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
 				takeUntil(this.destroyed$),
 			);
 	}

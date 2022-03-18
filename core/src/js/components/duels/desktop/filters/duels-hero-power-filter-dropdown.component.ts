@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
+import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -43,7 +43,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsHeroPowerFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -63,20 +64,25 @@ export class DuelsHeroPowerFilterDropdownComponent
 		this.options$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes),
 			this.store.listenPrefs$(
-				(prefs) => prefs.duelsActiveHeroFilter,
+				(prefs) => prefs.duelsActiveHeroesFilter,
 				(prefs) => prefs.duelsActiveSignatureTreasureFilter,
 			),
 		).pipe(
 			filter(([[stats], [heroFilter, signatureFilter]]) => !!stats?.length),
-			map(([[stats], [heroFilter, signatureFilter]]) => {
+			map(([[stats], [heroesFilter, signatureFilter]]) => {
 				const uniqueHeroPowers = [...new Set(stats.map((stat) => stat.heroPowerCardId))];
 				// Only show the hero powers that are relevant with the other filters
+
 				return uniqueHeroPowers
 					.filter((heroPower) =>
-						heroFilter === 'all'
-							? true
+						!heroesFilter?.length
+							? false
 							: duelsHeroConfigs
-									.find((conf) => conf.hero === heroFilter)
+									.find((conf) =>
+										heroesFilter.some(
+											(heroFilter) => normalizeDuelsHeroCardId(conf.hero) === heroFilter,
+										),
+									)
 									?.heroPowers?.includes(heroPower as CardIds),
 					)
 					.filter((heroPower) =>

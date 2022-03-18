@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -93,10 +93,28 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 						.map((card) => card.id)
 						.map((cardId) => {
 							const stats = buildDuelsHeroPlayerStats(
-								filterDuelsHeroStats(duelStats, 'all', null, null, 'hero', this.allCards, null),
+								filterDuelsHeroStats(
+									duelStats,
+									allDuelsHeroes,
+									null,
+									null,
+									'hero',
+									this.allCards,
+									null,
+								),
 								'hero',
 								// TODO: remove this filter and use the current Duels mode from memory
-								filterDuelsRuns(runs, 'last-patch', 'all', 'all', patch, 0, 'all', 'all', 'hero'),
+								filterDuelsRuns(
+									runs,
+									'last-patch',
+									allDuelsHeroes,
+									'all',
+									patch,
+									0,
+									'all',
+									'all',
+									'hero',
+								),
 							).filter((stat) =>
 								// Because of Drek'That and Vanndar
 								// It's not necessary to update the Hero Power and Signature Treasures
@@ -121,7 +139,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 									topDeckApplyFilters(
 										deck,
 										trueMmrFilter,
-										'all',
+										allDuelsHeroes,
 										'all',
 										'all',
 										'last-patch',

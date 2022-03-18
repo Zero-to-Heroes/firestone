@@ -6,11 +6,11 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { allDuelsHeroes } from '@firestone-hs/reference-data';
-import { IOption } from 'ng-select';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import { DuelsHeroFilterType } from '../../../../models/duels/duels-hero-filter.type';
+import { DuelsHeroFilterType } from '@models/duels/duels-hero-filter.type';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
@@ -25,25 +25,27 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
 		`../../../../../css/component/filter-dropdown.component.scss`,
+		`../../../../../css/component/duels/desktop/filters/duels-hero-filter-dropdown.component.scss`,
 	],
 	template: `
-		<filter-dropdown
+		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"
 			class="duels-hero-filter-dropdown"
-			[options]="options$ | async"
-			[filter]="value.filter"
+			[options]="options"
+			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
 			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		></filter-dropdown-multiselect>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsHeroFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
-	options$: Observable<readonly IOption[]>;
-	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
+	implements AfterContentInit, AfterViewInit
+{
+	options: readonly MultiselectOption[];
+	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -58,88 +60,41 @@ export class DuelsHeroFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options$ = combineLatest(
-			this.store.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId),
-			this.store.listenPrefs$(
-				(prefs) => prefs.duelsActiveHeroPowerFilter,
-				(prefs) => prefs.duelsActiveSignatureTreasureFilter,
-				(prefs) => prefs.duelsActiveStatTypeFilter,
-			),
-		).pipe(
-			map(([[selectedCategoryId], [heroPowerFilter, signatureFilter, statTypeFilter]]) => {
-				// Don't hide some options if the corresponding filter is not visible
-				// const heroPowerVisible = isHeroPowerVisible(selectedCategoryId, statTypeFilter);
-				// heroPowerFilter = heroPowerVisible ? heroPowerFilter : 'all';
-				// const sigTreasureVisible = isSignatureTreasureVisible(selectedCategoryId, statTypeFilter);
-				// signatureFilter = sigTreasureVisible ? signatureFilter : 'all';
-				// Only show the hero powers that are relevant with the other filters
-				// Actually since you only have a single hero for a given hero power or signature treasure, it doesn't
-				// make sense to restrict the choices.
-				const result = allDuelsHeroes;
-				// .filter((hero) =>
-				// 	heroPowerFilter === 'all'
-				// 		? true
-				// 		: duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(heroPowerFilter as CardIds))
-				// 				?.hero === (hero as CardIds),
-				// )
-				// .filter((hero) =>
-				// 	signatureFilter === 'all'
-				// 		? true
-				// 		: duelsHeroConfigs.find((conf) =>
-				// 				conf.signatureTreasures?.includes(signatureFilter as CardIds),
-				// 		  )?.hero === (hero as CardIds),
-				// );
-				console.debug('filtering heroes', allDuelsHeroes, result);
-				return result;
-			}),
-			map((heroes) =>
-				['all', ...heroes].map(
-					(option) =>
-						({
-							value: option,
-							label:
-								option === 'all'
-									? this.i18n.translateString('app.duels.filters.hero.all')
-									: this.i18n.getCardName(option),
-						} as HeroFilterOption),
-				),
-			),
-		);
-		this.filter$ = combineLatest(
-			this.options$,
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveHeroFilter,
+		console.log('oigrejogi');
+		this.options = allDuelsHeroes.map((value) => {
+			return {
+				value: value,
+				label: this.i18n.getCardName(value),
+				image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`,
+			};
+		});
+		this.filter$ = this.store
+			.listen$(
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
-			),
-		).pipe(
-			filter(([options, [filter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
-			map(([options, [filter, selectedCategoryId]]) => ({
-				filter: filter,
-				placeholder: options.find((option) => option.value === filter)?.label,
-				visible: [
-					'duels-stats',
-					'duels-runs',
-					'duels-treasures',
-					'duels-personal-decks',
-					'duels-top-decks',
-				].includes(selectedCategoryId),
-			})),
-			// Don't know why this is necessary, but without it, the filter doesn't update
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
-		);
+			)
+			.pipe(
+				filter(([filter, selectedCategoryId]) => !!selectedCategoryId),
+				this.mapData(([filter, selectedCategoryId]) => ({
+					selected: filter ?? allDuelsHeroes,
+					placeholder: this.i18n.translateString('app.duels.filters.hero.all'),
+					visible: [
+						'duels-stats',
+						'duels-runs',
+						'duels-treasures',
+						'duels-personal-decks',
+						'duels-top-decks',
+					].includes(selectedCategoryId),
+				})),
+			) as any;
 	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	onSelected(option: HeroFilterOption) {
-		this.stateUpdater.next(new DuelsTopDecksHeroFilterSelectedEvent(option.value));
+	onSelected(option: DuelsHeroFilterType) {
+		console.debug('selecting', option);
+		this.stateUpdater.next(new DuelsTopDecksHeroFilterSelectedEvent(option));
 	}
-}
-
-interface HeroFilterOption extends IOption {
-	value: DuelsHeroFilterType;
 }

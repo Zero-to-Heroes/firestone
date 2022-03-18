@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, Race } from '@firestone-hs/reference-data';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { ArenaClassFilterType } from './arena/arena-class-filter.type';
@@ -365,7 +365,7 @@ export class Preferences {
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
-	readonly duelsActiveHeroFilter: DuelsHeroFilterType = 'all';
+	readonly duelsActiveHeroesFilter: DuelsHeroFilterType = allDuelsHeroes;
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveHeroPowerFilter: 'all' | string = 'all';

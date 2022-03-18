@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
+import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -43,7 +43,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsSignatureTreasureFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -63,19 +64,23 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 		this.options$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes),
 			this.store.listenPrefs$(
-				(prefs) => prefs.duelsActiveHeroFilter,
+				(prefs) => prefs.duelsActiveHeroesFilter,
 				(prefs) => prefs.duelsActiveHeroPowerFilter,
 			),
 		).pipe(
 			filter(([[stats], [heroFilter, heroPowerFilter]]) => !!stats?.length),
-			map(([[stats], [heroFilter, heroPowerFilter]]) => {
+			map(([[stats], [heroesFilter, heroPowerFilter]]) => {
 				const uniqueSignatureTreasures = [...new Set(stats.map((stat) => stat.signatureTreasureCardId))];
 				return uniqueSignatureTreasures
 					.filter((sig) =>
-						heroFilter === 'all'
-							? true
+						!heroesFilter?.length
+							? false
 							: duelsHeroConfigs
-									.find((conf) => conf.hero === heroFilter)
+									.find((conf) =>
+										heroesFilter.some(
+											(heroFilter) => normalizeDuelsHeroCardId(conf.hero) === heroFilter,
+										),
+									)
 									?.signatureTreasures?.includes(sig as CardIds),
 					)
 					.filter((sig) =>
