@@ -6,7 +6,7 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
-import { allDuelsHeroes, CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
+import { allDuelsHeroes } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
@@ -58,44 +58,53 @@ export class DuelsHeroFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.options$ = this.store
-			.listenPrefs$(
+		this.options$ = combineLatest(
+			this.store.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId),
+			this.store.listenPrefs$(
 				(prefs) => prefs.duelsActiveHeroPowerFilter,
 				(prefs) => prefs.duelsActiveSignatureTreasureFilter,
-			)
-			.pipe(
-				map(([heroPowerFilter, signatureFilter]) => {
-					// Only show the hero powers that are relevant with the other filters
-					const result = allDuelsHeroes
-						.filter((hero) =>
-							heroPowerFilter === 'all'
-								? true
-								: duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(heroPowerFilter as CardIds))
-										?.hero === (hero as CardIds),
-						)
-						.filter((hero) =>
-							signatureFilter === 'all'
-								? true
-								: duelsHeroConfigs.find((conf) =>
-										conf.signatureTreasures?.includes(signatureFilter as CardIds),
-								  )?.hero === (hero as CardIds),
-						);
-					console.debug('filtering heroes', allDuelsHeroes, result);
-					return result;
-				}),
-				map((heroes) =>
-					['all', ...heroes].map(
-						(option) =>
-							({
-								value: option,
-								label:
-									option === 'all'
-										? this.i18n.translateString('app.duels.filters.hero.all')
-										: this.i18n.getCardName(option),
-							} as HeroFilterOption),
-					),
+				(prefs) => prefs.duelsActiveStatTypeFilter,
+			),
+		).pipe(
+			map(([[selectedCategoryId], [heroPowerFilter, signatureFilter, statTypeFilter]]) => {
+				// Don't hide some options if the corresponding filter is not visible
+				// const heroPowerVisible = isHeroPowerVisible(selectedCategoryId, statTypeFilter);
+				// heroPowerFilter = heroPowerVisible ? heroPowerFilter : 'all';
+				// const sigTreasureVisible = isSignatureTreasureVisible(selectedCategoryId, statTypeFilter);
+				// signatureFilter = sigTreasureVisible ? signatureFilter : 'all';
+				// Only show the hero powers that are relevant with the other filters
+				// Actually since you only have a single hero for a given hero power or signature treasure, it doesn't
+				// make sense to restrict the choices.
+				const result = allDuelsHeroes;
+				// .filter((hero) =>
+				// 	heroPowerFilter === 'all'
+				// 		? true
+				// 		: duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(heroPowerFilter as CardIds))
+				// 				?.hero === (hero as CardIds),
+				// )
+				// .filter((hero) =>
+				// 	signatureFilter === 'all'
+				// 		? true
+				// 		: duelsHeroConfigs.find((conf) =>
+				// 				conf.signatureTreasures?.includes(signatureFilter as CardIds),
+				// 		  )?.hero === (hero as CardIds),
+				// );
+				console.debug('filtering heroes', allDuelsHeroes, result);
+				return result;
+			}),
+			map((heroes) =>
+				['all', ...heroes].map(
+					(option) =>
+						({
+							value: option,
+							label:
+								option === 'all'
+									? this.i18n.translateString('app.duels.filters.hero.all')
+									: this.i18n.getCardName(option),
+						} as HeroFilterOption),
 				),
-			);
+			),
+		);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(

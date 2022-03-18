@@ -155,7 +155,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 				return {
 					filter: '' + filter,
 					placeholder: options.find((option) => option.value === filter)?.label ?? options[0].label,
-					visible: this.isVisible(selectedCategoryId, statTypeFilter),
+					visible: isSignatureTreasureVisible(selectedCategoryId, statTypeFilter),
 				};
 			}),
 			// Don't know why this is necessary, but without it, the filter doesn't update
@@ -163,16 +163,6 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 			tap((filter) => cdLog('emitting signature treasure filter in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
-	}
-
-	private isVisible(selectedCategoryId: string, statTypeFilter: DuelsStatTypeFilterType): boolean {
-		if (!['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(selectedCategoryId)) {
-			return false;
-		}
-		if (selectedCategoryId === 'duels-stats' && statTypeFilter !== 'hero-power') {
-			return false;
-		}
-		return true;
 	}
 
 	ngAfterViewInit() {
@@ -183,3 +173,16 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 		this.stateUpdater.next(new DuelsSignatureTreasureFilterSelectedEvent(option.value));
 	}
 }
+
+export const isSignatureTreasureVisible = (
+	selectedCategoryId: string,
+	statTypeFilter: DuelsStatTypeFilterType,
+): boolean => {
+	if (!['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(selectedCategoryId)) {
+		return false;
+	}
+	if (selectedCategoryId === 'duels-stats' && statTypeFilter !== 'hero-power') {
+		return false;
+	}
+	return true;
+};
