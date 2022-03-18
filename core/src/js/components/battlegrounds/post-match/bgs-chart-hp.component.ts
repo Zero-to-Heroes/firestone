@@ -392,7 +392,7 @@ export class BgsChartHpComponent {
 			cardId: cardId,
 			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
 			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer: normalizeHeroCardId(cardId) === this._mainPlayerCardId,
+			isPlayer: normalizeHeroCardId(cardId, this.allCards) === this._mainPlayerCardId,
 			hpOverTurn:
 				hpOverTurn[cardId]
 					?.filter((turnInfo) => turnInfo)

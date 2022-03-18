@@ -24,7 +24,7 @@ export class BgsHeroSelectedParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
-		const normalizedCardId = normalizeHeroCardId(event.cardId);
+		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards);
 		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
 			console.error('selecting KelThuzad in hero selection???');
 			return currentState;
@@ -33,7 +33,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		const newPlayer = existingMainPlayer
 			? existingMainPlayer.update({
 					cardId: normalizedCardId,
-					heroPowerCardId: getHeroPower(event.cardId),
+					heroPowerCardId: getHeroPower(event.cardId, this.allCards),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:
@@ -48,7 +48,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			  } as BgsPlayer)
 			: BgsPlayer.create({
 					cardId: normalizedCardId,
-					heroPowerCardId: getHeroPower(event.cardId),
+					heroPowerCardId: getHeroPower(event.cardId, this.allCards),
 					name: this.allCards.getCard(event.cardId).name,
 					isMainPlayer: true,
 					initialHealth:
@@ -79,7 +79,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			) as readonly BgsPanel[],
 		} as BattlegroundsState);
 		if (event.additionalData?.nextOpponentCardId) {
-			return new BgsNextOpponentParser(this.i18n).parse(
+			return new BgsNextOpponentParser(this.i18n, this.allCards).parse(
 				updatedState,
 				new BgsNextOpponentEvent(event.additionalData.nextOpponentCardId),
 			);

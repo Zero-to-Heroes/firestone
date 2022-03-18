@@ -390,7 +390,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				: null;
 			return {
 				id: game.reviewId,
-				cardId: normalizeHeroCardId(game.playerCardId),
+				cardId: normalizeHeroCardId(game.playerCardId, this.allCards),
 				tooltip: this.allCards.getCard(game.playerCardId).name,
 				// boardEntities: bgsBoard?.board,
 				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),

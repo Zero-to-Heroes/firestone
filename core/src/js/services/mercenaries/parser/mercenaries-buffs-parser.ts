@@ -6,7 +6,6 @@ import {
 	MercenariesBattleState,
 	MercenariesBattleTeam,
 } from '../../../models/mercenaries/mercenaries-battle-state';
-import { normalizeHeroCardId } from '../../battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { sumOnArray } from '../../utils';
 import {
@@ -59,7 +58,9 @@ export class MercenariesBuffsParser implements MercenariesParser {
 		for (const mercenary of playerTeam.mercenaries ?? []) {
 			const playerEntity =
 				playerBoard.find((a) => a.entityId === mercenary.entityId) ??
-				playerBoard.find((a) => normalizeHeroCardId(a.cardId) === normalizeMercenariesCardId(mercenary.cardId));
+				playerBoard.find(
+					(a) => normalizeMercenariesCardId(a.cardId) === normalizeMercenariesCardId(mercenary.cardId),
+				);
 			// Just a normal case where we're considering an entity that isn't on the board
 			if (!playerEntity) {
 				if (mercenary.inPlay) {
@@ -76,7 +77,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 				const playerAbility =
 					playerAbilities.find((a) => a.entityId === ability.entityId) ??
 					playerAbilities.find(
-						(a) => normalizeHeroCardId(a.cardId) === normalizeMercenariesCardId(ability.cardId),
+						(a) => normalizeMercenariesCardId(a.cardId) === normalizeMercenariesCardId(ability.cardId),
 					);
 				// Typically can happen for opposing mercs unrevealed abilities
 				if (!playerAbility) {

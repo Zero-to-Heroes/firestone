@@ -4,6 +4,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -24,6 +25,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly simulation: BgsBattleSimulationService,
 		private readonly logsUploader: LogsUploaderService,
 		private readonly gameEventsService: GameEvents,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -56,7 +58,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			});
 			return currentState.update({
 				currentGame: currentState.currentGame.updateLastFaceOff(
-					normalizeHeroCardId(event.opponentBoard.heroCardId),
+					normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
 					{
 						battleInfoStatus: 'empty',
 						battleInfoMesage: undefined,
@@ -74,8 +76,16 @@ export class BgsPlayerBoardParser implements EventParser {
 		}
 
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
-			.map((p) => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(player.cardId) ? player : p))
-			.map((p) => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(opponent.cardId) ? opponent : p));
+			.map((p) =>
+				normalizeHeroCardId(p.cardId, this.allCards) === normalizeHeroCardId(player.cardId, this.allCards)
+					? player
+					: p,
+			)
+			.map((p) =>
+				normalizeHeroCardId(p.cardId, this.allCards) === normalizeHeroCardId(opponent.cardId, this.allCards)
+					? opponent
+					: p,
+			);
 
 		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
 		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
@@ -89,12 +99,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			},
 		};
 		const isSupported = isSupportedScenario(battleInfo);
-		if (!event.opponentBoard?.heroCardId || !normalizeHeroCardId(event.opponentBoard?.heroCardId)) {
+		if (!event.opponentBoard?.heroCardId || !normalizeHeroCardId(event.opponentBoard?.heroCardId, this.allCards)) {
 			console.error('[bgs-player-board-parser] missing opponentCardId', event);
 		}
 
 		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
-			normalizeHeroCardId(event.opponentBoard.heroCardId),
+			normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
 			{
 				battleInfo: battleInfo,
 				battleInfoStatus: 'waiting-for-result',
@@ -142,7 +152,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				hpLeft: health - damage,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				entityId: playerBoard.hero.EntityId,
-				nonGhostCardId: player.getNormalizedHeroCardId(),
+				nonGhostCardId: player.getNormalizedHeroCardId(this.allCards),
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
@@ -154,7 +164,9 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	private updatePlayer(currentState: BattlegroundsState, playerBoard: PlayerBoard): BgsPlayer {
 		const playerToUpdate = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(playerBoard.heroCardId),
+			(player) =>
+				normalizeHeroCardId(player.cardId, this.allCards) ===
+				normalizeHeroCardId(playerBoard.heroCardId, this.allCards),
 		);
 		if (!playerToUpdate) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
@@ -162,8 +174,8 @@ export class BgsPlayerBoardParser implements EventParser {
 					'Could not idenfity player for whom to update board history',
 					currentState.currentGame.reviewId,
 					playerBoard.heroCardId,
-					normalizeHeroCardId(playerBoard.heroCardId),
-					currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId)),
+					normalizeHeroCardId(playerBoard.heroCardId, this.allCards),
+					currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId, this.allCards)),
 				);
 			}
 			return null;

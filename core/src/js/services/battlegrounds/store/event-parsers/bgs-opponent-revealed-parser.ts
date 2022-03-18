@@ -21,13 +21,13 @@ export class BgsOpponentRevealedParser implements EventParser {
 			event.cardId,
 			currentState?.currentGame?.players?.map((player) => player.cardId),
 		);
-		const normalizedCardId = normalizeHeroCardId(event.cardId);
+		const normalizedCardId = normalizeHeroCardId(event.cardId, this.allCards);
 		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
 			return currentState;
 		}
 
 		const existingPlayer = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId) === normalizedCardId,
+			(player) => normalizeHeroCardId(player.cardId, this.allCards) === normalizedCardId,
 		);
 		const newPlayer =
 			existingPlayer != null
@@ -36,14 +36,14 @@ export class BgsOpponentRevealedParser implements EventParser {
 				  } as BgsPlayer)
 				: BgsPlayer.create({
 						cardId: normalizedCardId,
-						heroPowerCardId: getHeroPower(event.cardId),
+						heroPowerCardId: getHeroPower(event.cardId, this.allCards),
 						name: this.allCards.getCard(event.cardId).name,
 						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
 				  } as BgsPlayer);
 		const newGame = currentState.currentGame.update({
 			players: [
 				...currentState.currentGame.players.filter(
-					(player) => normalizeHeroCardId(player.cardId) !== normalizedCardId,
+					(player) => normalizeHeroCardId(player.cardId, this.allCards) !== normalizedCardId,
 				),
 				newPlayer,
 			] as readonly BgsPlayer[],

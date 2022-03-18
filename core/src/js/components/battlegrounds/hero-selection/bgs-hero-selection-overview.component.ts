@@ -99,7 +99,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
 				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
 				const heroOverviews = selectionOptions.map((cardId) => {
-					const normalized = normalizeHeroCardId(cardId, true);
+					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const existingStat = stats.find((overview) => overview.id === normalized);
 					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements

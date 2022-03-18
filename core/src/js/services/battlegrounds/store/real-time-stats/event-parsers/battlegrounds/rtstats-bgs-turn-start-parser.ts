@@ -1,9 +1,12 @@
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../../models/game-event';
 import { normalizeHeroCardId } from '../../../../bgs-utils';
 import { HpTurnInfo, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsTurnStartParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return (
 			gameEvent.type === GameEvent.BATTLEGROUNDS_RECRUIT_PHASE ||
@@ -46,7 +49,9 @@ export class RTStatBgsTurnStartParser implements EventParser {
 	}
 
 	private getHpForHero(heroCardId: string, heroes: readonly Hero[]): { currentHp: number; currentArmor: number } {
-		const hero = heroes.find((h) => normalizeHeroCardId(h.CardId) === normalizeHeroCardId(heroCardId));
+		const hero = heroes.find(
+			(h) => normalizeHeroCardId(h.CardId, this.allCards) === normalizeHeroCardId(heroCardId, this.allCards),
+		);
 		if (!hero) {
 			console.warn('could not find hero', heroCardId, heroes);
 		}

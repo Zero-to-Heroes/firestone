@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map } from 'rxjs/operators';
@@ -50,6 +51,7 @@ export class TwitchAuthService {
 		private readonly notificationService: OwNotificationsService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -237,7 +239,7 @@ export class TwitchAuthService {
 	private buildLeaderboardPlayer(player: BgsPlayer): TwitchBgsPlayer {
 		return {
 			cardId: player.getDisplayCardId(),
-			heroPowerCardId: player.getDisplayHeroPowerCardId(),
+			heroPowerCardId: player.getDisplayHeroPowerCardId(this.allCards),
 			name: player.name,
 			isMainPlayer: player.isMainPlayer,
 			initialHealth: player.initialHealth,

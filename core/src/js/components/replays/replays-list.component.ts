@@ -7,6 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
@@ -87,6 +88,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -252,7 +254,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			return true;
 		}
 
-		return !filter || normalizeHeroCardId(stat.playerCardId) === filter;
+		return !filter || normalizeHeroCardId(stat.playerCardId, this.allCards) === filter;
 	}
 
 	private gameModeFilter(stat: GameStat, filter: string): boolean {

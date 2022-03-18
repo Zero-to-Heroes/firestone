@@ -125,12 +125,12 @@ export class RealTimeStatsService {
 			new RTStatsMinionsKilledParser(),
 
 			// BG-specific
-			new RTStatBgsTurnStartParser(),
-			new RTStatsBgsHeroSelectedParser(),
-			new RTStatsBgsOpponentRevealedParser(),
-			new RTStatsBgsFaceOffParser(),
+			new RTStatBgsTurnStartParser(this.allCards),
+			new RTStatsBgsHeroSelectedParser(this.allCards),
+			new RTStatsBgsOpponentRevealedParser(this.allCards),
+			new RTStatsBgsFaceOffParser(this.allCards),
 			new RTStatsBgsBattleHistoryUpdatedParser(),
-			new RTStatsBgsTriplesCreatedParser(),
+			new RTStatsBgsTriplesCreatedParser(this.allCards),
 			new RTStatsBgsBoardStatsParser(),
 			new RTStatsBgsRerollsParser(),
 			new RTStatsBgsFreezeParser(),

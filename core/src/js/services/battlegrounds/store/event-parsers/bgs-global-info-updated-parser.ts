@@ -1,4 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MemoryBgGame, MemoryBgPlayer } from '../../../../models/battlegrounds-info';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -13,6 +14,8 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsGlobalInfoUpdatedParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsGlobalInfoUpdatedEvent';
 	}
@@ -32,7 +35,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
 			.map((player) => {
 				const playerFromMemory = playersFromMemory.find(
-					(mem) => normalizeHeroCardId(mem.CardId) === normalizeHeroCardId(player.cardId),
+					(mem) =>
+						normalizeHeroCardId(mem.CardId, this.allCards) ===
+						normalizeHeroCardId(player.cardId, this.allCards),
 				);
 				if (!playerFromMemory) {
 					return player;

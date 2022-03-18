@@ -78,8 +78,8 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	return referenceCardId;
 };
 
-export const getHeroPower = (heroCardId: string): string => {
-	const normalized = normalizeHeroCardId(heroCardId);
+export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): string => {
+	const normalized = normalizeHeroCardId(heroCardId, allCards);
 	switch (normalized) {
 		case 'TB_BaconShop_HERO_01':
 			return 'TB_BaconShop_HP_001';
@@ -261,44 +261,34 @@ export const getHeroPower = (heroCardId: string): string => {
 	}
 };
 
-export const normalizeHeroCardId = (
-	heroCardId: string,
-	fullNormalize = false,
-	allCards: CardsFacadeService = null,
-): string => {
+export const normalizeHeroCardId = (heroCardId: string, allCards: CardsFacadeService): string => {
 	if (!heroCardId) {
 		return heroCardId;
 	}
 
-	// Generic handling of BG hero skins, hoping they will keep the same pattern
-	// In fact, keep the hero skin. It will be up to all the data processing jobs to
-	// properly map it to the correct base hero
-	// TMP: deactivated until I have a way to generate the card images for the
-	// new skins
-	if (true || fullNormalize) {
-		if (allCards) {
-			const heroCard = allCards.getCard(heroCardId);
-			if (!!heroCard?.battlegroundsHeroParentDbfId) {
-				const parentCard = allCards.getCardFromDbfId(heroCard.battlegroundsHeroParentDbfId);
-				if (!!parentCard) {
-					return parentCard.id;
-				}
-			}
-		}
-		// Fallback to regex
-		const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/);
-
-		if (bgHeroSkinMatch) {
-			return bgHeroSkinMatch[1];
-		}
-	}
-
-	switch (heroCardId) {
+	const normalizedAfterSkin = normalizeHeroCardIdAfterSkin(heroCardId, allCards);
+	switch (normalizedAfterSkin) {
 		case 'TB_BaconShop_HERO_59t':
 			return 'TB_BaconShop_HERO_59';
 		default:
-			return heroCardId;
+			return normalizedAfterSkin;
 	}
+};
+
+const normalizeHeroCardIdAfterSkin = (heroCardId: string, allCards: CardsFacadeService): string => {
+	const heroCard = allCards.getCard(heroCardId);
+	if (!!heroCard?.battlegroundsHeroParentDbfId) {
+		const parentCard = allCards.getCardFromDbfId(heroCard.battlegroundsHeroParentDbfId);
+		if (!!parentCard) {
+			return parentCard.id;
+		}
+	}
+	// Fallback to regex
+	const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/);
+	if (bgHeroSkinMatch) {
+		return bgHeroSkinMatch[1];
+	}
+	return heroCardId;
 };
 
 export const getAllCardsInGame = (
@@ -616,8 +606,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 	}
 };
 
-export const getBuddy = (heroCardId: CardIds): CardIds => {
-	switch (normalizeHeroCardId(heroCardId)) {
+export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): CardIds => {
+	switch (normalizeHeroCardId(heroCardId, allCards)) {
 		case CardIds.AFKayBattlegrounds:
 			return CardIds.SnackVendorBattlegrounds1;
 		case CardIds.AlakirBattlegrounds:
@@ -775,6 +765,8 @@ export const getBuddy = (heroCardId: CardIds): CardIds => {
 			return CardIds.IcesnarlTheMighty;
 		case CardIds.Onyxia2:
 			return CardIds.ManyWhelpsBattlegrounds;
+		case CardIds.AmbassadorFaelin:
+			return CardIds.SubmersibleChef;
 		default:
 			console.error('missing buddy section for ', heroCardId);
 			return null;

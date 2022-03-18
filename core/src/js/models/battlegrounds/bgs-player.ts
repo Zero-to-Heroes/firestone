@@ -1,6 +1,7 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
 import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
@@ -43,16 +44,16 @@ export class BgsPlayer implements IBgsPlayer {
 		return Object.assign(new BgsPlayer(), this, base);
 	}
 
-	public getNormalizedHeroCardId(): string {
-		return normalizeHeroCardId(this.cardId);
+	public getNormalizedHeroCardId(allCards: CardsFacadeService): string {
+		return normalizeHeroCardId(this.cardId, allCards);
 	}
 
 	public getDisplayCardId(): string {
 		return this.displayedCardId || this.cardId;
 	}
 
-	public getDisplayHeroPowerCardId(): string {
-		return getHeroPower(this.getDisplayCardId());
+	public getDisplayHeroPowerCardId(allCards: CardsFacadeService): string {
+		return getHeroPower(this.getDisplayCardId(), allCards);
 	}
 
 	public getCurrentTavernTier(): number {

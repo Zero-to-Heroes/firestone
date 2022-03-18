@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -9,7 +10,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBuddyGainedParser implements EventParser {
-	constructor(private readonly gameEventsService: GameEvents) {}
+	constructor(private readonly gameEventsService: GameEvents, private readonly allCards: CardsFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsBuddyGainedEvent';
@@ -17,7 +18,9 @@ export class BgsBuddyGainedParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsBuddyGainedEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+			(player) =>
+				normalizeHeroCardId(player.cardId, this.allCards) ===
+				normalizeHeroCardId(event.heroCardId, this.allCards),
 		);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.KelthuzadBattlegrounds) {
@@ -26,7 +29,7 @@ export class BgsBuddyGainedParser implements EventParser {
 						'No player found to update the buddy',
 						currentState.currentGame.reviewId,
 						event.heroCardId,
-						normalizeHeroCardId(event.heroCardId),
+						normalizeHeroCardId(event.heroCardId, this.allCards),
 						currentState.currentGame.players.map((player) => player.cardId),
 					);
 				}
@@ -38,7 +41,9 @@ export class BgsBuddyGainedParser implements EventParser {
 			buddyTurns: [...playerToUpdate.buddyTurns, turn],
 		});
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
+			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
+				? newPlayer
+				: player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

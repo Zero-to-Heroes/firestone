@@ -68,8 +68,8 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 						.filter(
 							(replay) =>
 								!heroId ||
-								normalizeHeroCardId(heroId, true, this.allCards) ===
-									normalizeHeroCardId(replay.playerCardId, true, this.allCards),
+								normalizeHeroCardId(heroId, this.allCards) ===
+									normalizeHeroCardId(replay.playerCardId, this.allCards),
 						)
 						.slice(0, 10);
 				}),

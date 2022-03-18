@@ -100,7 +100,7 @@ export class BgsSimulatorHeroSelectionComponent
 		if (!!heroCardId) {
 			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCardId}.jpg`;
 			this.heroName = this.allCards.getCard(heroCardId)?.name;
-			const heroPower = getHeroPower(heroCardId);
+			const heroPower = getHeroPower(heroCardId, this.allCards);
 			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPower)?.text);
 		} else {
 			this.heroIcon = null;
@@ -153,8 +153,10 @@ export class BgsSimulatorHeroSelectionComponent
 							icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 							name: card.name,
 							heroPower: {
-								id: getHeroPower(card.id),
-								text: this.sanitizeText(this.allCards.getCard(getHeroPower(card.id))?.text),
+								id: getHeroPower(card.id, this.allCards),
+								text: this.sanitizeText(
+									this.allCards.getCard(getHeroPower(card.id, this.allCards))?.text,
+								),
 							},
 						}))
 						.sort(sortByProperties((hero: Hero) => [hero.name])),

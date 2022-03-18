@@ -64,7 +64,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
 		this.leaderboardPositionClass = `position-${value.player.leaderboardPlace}`;
-		const buddyCardId = getBuddy(value.player?.cardId as CardIds);
+		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
 		const buddyCard = this.cards.getCard(buddyCardId);
 		const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
 		this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
@@ -76,7 +76,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 			isPremium: true,
 			isHighRes: true,
 		});
-		const heroPowerCardId = getHeroPower(value.player?.cardId);
+		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards);
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,
 		});

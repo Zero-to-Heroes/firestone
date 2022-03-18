@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 
 @Component({
@@ -43,7 +44,7 @@ export class BgsHeroFaceOffComponent {
 
 	@Input() set opponent(value: BgsPlayer) {
 		this.heroCardId = value.getDisplayCardId();
-		this.heroPowerIcon = value.getDisplayHeroPowerCardId();
+		this.heroPowerIcon = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;
 		this.health = Math.max(value.initialHealth - value.damageTaken, 0);
 		this.maxHealth = value.initialHealth;
@@ -54,4 +55,6 @@ export class BgsHeroFaceOffComponent {
 		this.losses = value?.filter((faceOff) => faceOff.result === 'lost').length || 0;
 		this.ties = value?.filter((faceOff) => faceOff.result === 'tied').length || 0;
 	}
+
+	constructor(private readonly allCards: CardsFacadeService) {}
 }

@@ -187,7 +187,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'collectible':
 				return (portrait: ReferenceCard) => portrait.playerClass?.toLowerCase();
 			case 'battlegrounds':
-				return (portrait: ReferenceCard) => normalizeHeroCardId(portrait.id);
+				return (portrait: ReferenceCard) => normalizeHeroCardId(portrait.id, this.allCards);
 			case 'mercenaries':
 				return (portrait: ReferenceCard) => normalizeMercenariesCardId(portrait.id);
 			case 'book-of-mercs':

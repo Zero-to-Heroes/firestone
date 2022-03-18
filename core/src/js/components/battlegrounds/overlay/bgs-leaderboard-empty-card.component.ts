@@ -174,7 +174,7 @@ export class BgsLeaderboardEmptyCardComponent
 			return;
 		}
 
-		this.isLastOpponent = this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId();
+		this.isLastOpponent = this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId(this.allCards);
 		this._bgsPlayer = {
 			player: BgsPlayer.create({
 				cardId: this._previousPlayer.cardId,

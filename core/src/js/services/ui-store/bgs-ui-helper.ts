@@ -57,8 +57,7 @@ const buildHeroStat = (
 	allCards: CardsFacadeService,
 ): BgsHeroStat => {
 	const playerGamesPlayed = playerMatches.filter(
-		(stat) =>
-			normalizeHeroCardId(stat.playerCardId, true, allCards) === normalizeHeroCardId(heroCardId, true, allCards),
+		(stat) => normalizeHeroCardId(stat.playerCardId, allCards) === normalizeHeroCardId(heroCardId, allCards),
 	);
 	const totalPlayerGamesPlayed = playerGamesPlayed.length;
 	const playerPopularity = (100 * totalPlayerGamesPlayed) / playerMatches.length;
@@ -155,7 +154,7 @@ const convertToBgsHeroStat = (
 	const placementTotalMatches = sumOnArray(stat.placementDistribution, (info) => info.totalMatches);
 	return {
 		id: stat.cardId,
-		heroPowerCardId: getHeroPower(stat.cardId),
+		heroPowerCardId: getHeroPower(stat.cardId, allCards),
 		name: allCards.getCard(stat.cardId)?.name,
 		totalMatches: stat.totalMatches,
 		popularity: (100 * stat.totalMatches) / totalMatches,

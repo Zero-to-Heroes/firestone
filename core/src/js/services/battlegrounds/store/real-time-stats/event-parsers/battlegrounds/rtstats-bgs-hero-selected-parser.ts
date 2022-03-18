@@ -1,10 +1,13 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../../models/game-event';
 import { normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatsBgsHeroSelectedParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return (
 			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
@@ -16,7 +19,7 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const heroCardId = normalizeHeroCardId(gameEvent.cardId);
+		const heroCardId = normalizeHeroCardId(gameEvent.cardId, this.allCards);
 		const armor = gameEvent.additionalData.armor;
 		const health = gameEvent.additionalData.health;
 

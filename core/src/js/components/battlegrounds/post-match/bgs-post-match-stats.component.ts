@@ -142,7 +142,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
-		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId();
+		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.player.name;
 		this.tavernTier = value.player.getCurrentTavernTier();
 		this.boardMinions = value.player.getLastKnownBoardState();

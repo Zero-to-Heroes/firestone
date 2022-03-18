@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -11,7 +12,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTavernUpgradeParser implements EventParser {
-	constructor(private readonly gameEventsService: GameEvents) {}
+	constructor(private readonly gameEventsService: GameEvents, private readonly allCards: CardsFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsTavernUpgradeEvent';
@@ -19,7 +20,9 @@ export class BgsTavernUpgradeParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsTavernUpgradeEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(
-			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+			(player) =>
+				normalizeHeroCardId(player.cardId, this.allCards) ===
+				normalizeHeroCardId(event.heroCardId, this.allCards),
 		);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.KelthuzadBattlegrounds) {
@@ -28,7 +31,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 						'No player found to update the history',
 						currentState.currentGame.reviewId,
 						event.heroCardId,
-						normalizeHeroCardId(event.heroCardId),
+						normalizeHeroCardId(event.heroCardId, this.allCards),
 						currentState.currentGame.players.map((player) => player.cardId),
 					);
 				}
@@ -61,7 +64,9 @@ export class BgsTavernUpgradeParser implements EventParser {
 			tripleHistory: newTripleHistory,
 		} as BgsPlayer);
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
-			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
+			normalizeHeroCardId(player.cardId, this.allCards) === normalizeHeroCardId(newPlayer.cardId, this.allCards)
+				? newPlayer
+				: player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);
 		return currentState.update({

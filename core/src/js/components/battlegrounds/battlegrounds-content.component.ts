@@ -7,6 +7,7 @@ import {
 	HostListener,
 	OnDestroy,
 } from '@angular/core';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -99,9 +100,10 @@ export class BattlegroundsContentComponent
 	closeHandler: () => void;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -154,7 +156,9 @@ export class BattlegroundsContentComponent
 			);
 		this.mainPlayerCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.getNormalizedHeroCardId()));
+			.pipe(
+				this.mapData(([currentGame]) => currentGame?.getMainPlayer()?.getNormalizedHeroCardId(this.allCards)),
+			);
 		this.mmr$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(

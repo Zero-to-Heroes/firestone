@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
@@ -99,7 +99,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.heroCardId = value.getDisplayCardId();
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
-		this.heroPowerCardId = value.getDisplayHeroPowerCardId();
+		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardState();
@@ -111,7 +111,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 
 	private _opponent: BgsPlayer;
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	ngAfterViewInit() {
 		if (this.debug) {

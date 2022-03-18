@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -92,9 +93,10 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	opponentsSubject$$ = new BehaviorSubject<readonly BgsPlayer[]>([]);
 
 	constructor(
-		private readonly ads: AdService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -263,7 +265,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	}
 
 	isLastOpponent(opponent: BgsPlayer, lastOpponentCardId: string): boolean {
-		const result = normalizeHeroCardId(opponent.cardId) === lastOpponentCardId;
+		const result = normalizeHeroCardId(opponent.cardId, this.allCards) === lastOpponentCardId;
 		return result;
 	}
 }

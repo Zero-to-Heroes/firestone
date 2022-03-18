@@ -187,7 +187,9 @@ export class BgsSimulatorHeroPowerSelectionComponent
 								(card.type === 'Hero' && card.name.toLowerCase().includes(searchString)),
 						)
 						.map((card) =>
-							card.type === 'Hero_power' ? card : this.allCards.getCard(getHeroPower(card.id)),
+							card.type === 'Hero_power'
+								? card
+								: this.allCards.getCard(getHeroPower(card.id, this.allCards)),
 						)
 						.map((card) => card.id);
 					console.debug('allcardids', allCardIds);

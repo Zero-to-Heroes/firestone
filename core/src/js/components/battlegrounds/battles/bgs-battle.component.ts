@@ -15,6 +15,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Subscription } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { ApiRunner } from '../../../services/api-runner';
@@ -278,6 +279,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -338,7 +340,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							playerBoard: {
 								player: {
 									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId),
+									heroPowerId: getHeroPower(newHeroCardId, this.allCards),
 								},
 							},
 						},
@@ -349,7 +351,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							opponentBoard: {
 								player: {
 									cardId: newHeroCardId,
-									heroPowerId: getHeroPower(newHeroCardId),
+									heroPowerId: getHeroPower(newHeroCardId, this.allCards),
 								},
 							},
 						},

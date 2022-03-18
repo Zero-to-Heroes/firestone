@@ -1,4 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -14,7 +15,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsNextOpponentParser implements EventParser {
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: LocalizationFacadeService, private readonly allCards: CardsFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsNextOpponentEvent';
@@ -27,7 +28,7 @@ export class BgsNextOpponentParser implements EventParser {
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const opponent = currentState.currentGame.players.find(
-			(player) => player.getNormalizedHeroCardId() === newNextOpponentPanel.opponentOverview?.cardId,
+			(player) => player.getNormalizedHeroCardId(this.allCards) === newNextOpponentPanel.opponentOverview?.cardId,
 		);
 		console.debug('[bgs-next-opponent] mainPlayer', mainPlayer, opponent);
 		if (!mainPlayer || !opponent) {
@@ -43,7 +44,7 @@ export class BgsNextOpponentParser implements EventParser {
 				(mainPlayer?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId)) -
 				(mainPlayer?.damageTaken ?? 0),
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
-			opponentCardId: opponent?.getNormalizedHeroCardId(),
+			opponentCardId: opponent?.getNormalizedHeroCardId(this.allCards),
 			opponentHpLeft:
 				(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId)) -
 				(opponent?.damageTaken ?? 0),
@@ -84,7 +85,7 @@ export class BgsNextOpponentParser implements EventParser {
 		const opponentOverview: BgsOpponentOverview = BgsOpponentOverview.create({
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
 			cardId:
-				normalizeHeroCardId(cardId) ??
+				normalizeHeroCardId(cardId, this.allCards) ??
 				// If there is no card ID, this means we face the same opponent as previously
 				currentState.panels
 					.filter((panel) => panel.id === 'bgs-next-opponent-overview')

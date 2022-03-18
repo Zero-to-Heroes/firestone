@@ -1,9 +1,9 @@
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
-import { OverwolfService } from '../../../overwolf.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -12,7 +12,7 @@ import { EventParser } from './_event-parser';
 export class BgsBattleResultParser implements EventParser {
 	constructor(
 		private readonly events: Events,
-		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
 		private readonly gameEventsService: GameEvents,
 	) {}
 
@@ -31,13 +31,13 @@ export class BgsBattleResultParser implements EventParser {
 			return currentState;
 		}
 
-		if (!event.opponentCardId || !normalizeHeroCardId(event.opponentCardId)) {
+		if (!event.opponentCardId || !normalizeHeroCardId(event.opponentCardId, this.allCards)) {
 			console.error('[bgs-battle-result] missing opponentCardId', event);
 		}
 
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			// If we're facing the ghost, the plugin returns the original hero card id here
-			normalizeHeroCardId(event.opponentCardId),
+			normalizeHeroCardId(event.opponentCardId, this.allCards),
 			{
 				result: event.result,
 				damage: event.damage,

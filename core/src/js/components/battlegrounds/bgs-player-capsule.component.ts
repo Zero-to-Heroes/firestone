@@ -1,13 +1,6 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
@@ -80,7 +73,7 @@ export class BgsPlayerCapsuleComponent {
 		this.heroCardId = value.getDisplayCardId();
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
-		this.heroPowerCardId = value.getDisplayHeroPowerCardId();
+		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
 		this.name = value.name;
 		this.tavernTier = this.displayTavernTier ? value.getCurrentTavernTier() : undefined;
 		this.boardMinions = value.getLastKnownBoardState();
@@ -94,7 +87,7 @@ export class BgsPlayerCapsuleComponent {
 
 	private _player: BgsPlayer;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private allCards: CardsFacadeService) {}
 
 	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
 		return item.tavernTier;

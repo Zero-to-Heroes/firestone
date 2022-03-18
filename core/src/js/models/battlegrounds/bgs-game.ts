@@ -1,5 +1,6 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';
@@ -30,9 +31,11 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), this, base);
 	}
 
-	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
+	public updatePlayer(newPlayer: BgsPlayer, allCards: CardsFacadeService): BgsGame {
 		const newPlayers: readonly BgsPlayer[] = this.players.map((player) =>
-			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
+			normalizeHeroCardId(player.cardId, allCards) === normalizeHeroCardId(newPlayer.cardId, allCards)
+				? newPlayer
+				: player,
 		);
 		return this.update({ players: newPlayers } as BgsGame);
 	}
@@ -80,7 +83,8 @@ export class BgsGame {
 			})
 			.reverse();
 		if (!matchingFaceOffs.length) {
-			console.error(
+			// Stop logging these as errors, as they happen pretty often during reconnects
+			console.warn(
 				'[face-off] [bgs-next-opponent] no matching face-off',
 				opponentHeroCardId,
 				this.faceOffs.map(
