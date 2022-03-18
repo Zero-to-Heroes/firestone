@@ -7,11 +7,11 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
+import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { Race } from '@firestone-hs/reference-data';
-import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
+import { getTribeIcon, getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -36,6 +36,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
+			[validSelectionNumber]="5"
+			[validationErrorTooltip]="validationErrorTooltip"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown-multiselect>
 	`,
@@ -44,8 +46,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class BattlegroundsTribesFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
-	options$: Observable<readonly IOption[]>;
+	options$: Observable<readonly MultiselectOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
+
+	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.tribe.validation-error-tooltip');
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -71,7 +75,8 @@ export class BattlegroundsTribesFilterDropdownComponent
 								({
 									value: '' + tribe,
 									label: getTribeName(tribe, this.i18n),
-								} as IOption),
+									image: getTribeIcon(tribe),
+								} as MultiselectOption),
 						)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				),

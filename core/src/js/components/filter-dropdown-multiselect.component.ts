@@ -10,14 +10,11 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { getTribeIcon } from '../services/battlegrounds/bgs-utils';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { areDeepEqual, removeFromReadonlyArray } from '../services/utils';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
@@ -71,7 +68,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;
-	@Input() set options(value: readonly IOption[]) {
+	@Input() set options(value: readonly MultiselectOption[]) {
 		this.options$.next(value);
 	}
 
@@ -87,7 +84,10 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
-	@Input() validationErrorTooltip = this.i18n.translateString('multiselect-validation-error-tooltip');
+	@Input() validSelectionNumber: number;
+	@Input() validationErrorTooltip = this.i18n.translateString(
+		'app.global.controls.multiselect-validation-error-tooltip',
+	);
 
 	valueText$: Observable<string>;
 	workingOptions$: Observable<readonly InternalOption[]>;
@@ -99,7 +99,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	_selected: readonly string[];
 
 	private tempSelected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
-	private options$: BehaviorSubject<readonly IOption[]> = new BehaviorSubject(null);
+	private options$: BehaviorSubject<readonly MultiselectOption[]> = new BehaviorSubject(null);
 	private selected$: BehaviorSubject<readonly string[]> = new BehaviorSubject(null);
 
 	private sub$$: Subscription;
@@ -115,7 +115,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		// the first time (maybe because of "visible"?)
 		this.valueText$ = combineLatest(this.options$.asObservable(), this.selected$.asObservable()).pipe(
 			filter(([options, selected]) => !!options?.length),
-			map(([options, selected]) => {
+			this.mapData(([options, selected]) => {
 				if (!selected?.length || selected.length === options.length) {
 					return this.placeholder;
 				}
@@ -125,16 +125,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				);
 			}),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting textValue in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 		// Reset the info every time the input options change
 		this.sub$$ = this.options$
@@ -146,36 +136,16 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		this.workingOptions$ = combineLatest(this.options$.asObservable(), this.tempSelected$.asObservable()).pipe(
 			filter(([options, tempSelected]) => !!options),
 			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-			map(([options, tempSelected]) => {
+			this.mapData(([options, tempSelected]) => {
 				return options.map((option) => ({
 					...option,
-					image: getTribeIcon(+option.value as Race),
 					selected: tempSelected?.includes(option.value),
 				}));
 			}),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting workingOptions in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 		this.validSelection$ = combineLatest(this.options$.asObservable(), this.workingOptions$).pipe(
 			filter(([options, workingOptions]) => !!options),
-			map(([options, workingOptions]) => this.isValidSelection(options, workingOptions)),
-			distinctUntilChanged(),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting validSelection in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
+			this.mapData(([options, workingOptions]) => this.isValidSelection(options, workingOptions)),
 		);
 	}
 
@@ -203,7 +173,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		}
 	}
 
-	select(option: IOption, isSelected: boolean) {
+	select(option: MultiselectOption, isSelected: boolean) {
 		let tempSelected = this.tempSelected$.value;
 		if (isSelected && !tempSelected.includes(option.value)) {
 			tempSelected = [...tempSelected, option.value];
@@ -217,9 +187,12 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		return validSelection ? null : this.validationErrorTooltip;
 	}
 
-	isValidSelection(options: readonly IOption[], workingOptions: readonly InternalOption[]): boolean {
+	isValidSelection(options: readonly MultiselectOption[], workingOptions: readonly InternalOption[]): boolean {
+		if (this.validSelectionNumber == null) {
+			return true;
+		}
 		const selected = workingOptions.filter((option) => option.selected).length;
-		const result = selected === 5 || selected === options.length;
+		const result = selected === this.validSelectionNumber || selected === options.length;
 		return result;
 	}
 
@@ -236,16 +209,16 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		return item.value;
 	}
 
-	private buildIcons(options: IOption[]): string {
-		const icons = options
-			.map((option) => getTribeIcon(+option.value as Race))
-			.map((icon) => `<img src="${icon}" class="icon" />`)
-			.join('');
+	private buildIcons(options: MultiselectOption[]): string {
+		const icons = options.map((option) => `<img src="${option.image}" class="icon" />`).join('');
 		return `<div class="selection-icons">${icons}</div>`;
 	}
 }
 
-interface InternalOption extends IOption {
-	readonly selected: boolean;
+export interface MultiselectOption extends IOption {
 	readonly image: string;
+}
+
+interface InternalOption extends MultiselectOption {
+	readonly selected: boolean;
 }
