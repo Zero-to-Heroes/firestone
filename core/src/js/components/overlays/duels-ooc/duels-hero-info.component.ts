@@ -59,14 +59,22 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 			></basic-bar-chart>
 			<div
 				class="section-header top-decks-header"
-				[owTranslate]="'duels.hero-info.top-decks-header' | owTranslate"
+				[owTranslate]="'duels.hero-info.top-decks-header' | owTranslate: { value: totalDecks }"
 			></div>
 			<div class="top-decks" *ngIf="decks?.length">
 				<div class="deck" *ngFor="let deck of decks; trackBy: trackByDeck">
 					<div class="icons">
-						<img [src]="getArt(deck.heroCardId)" class="hero-icon" />
-						<img [src]="getArt(deck.heroPowerCardId)" class="hero-power-icon" />
-						<img [src]="getArt(deck.signatureTreasureCardId)" class="signature-treasure-icon" />
+						<img [src]="getArt(deck.heroCardId)" class="hero-icon" [cardTooltip]="deck.heroCardId" />
+						<img
+							[src]="getArt(deck.heroPowerCardId)"
+							class="hero-power-icon"
+							[cardTooltip]="deck.heroPowerCardId"
+						/>
+						<img
+							[src]="getArt(deck.signatureTreasureCardId)"
+							class="signature-treasure-icon"
+							[cardTooltip]="deck.signatureTreasureCardId"
+						/>
 					</div>
 					<div class="recap">
 						<div class="wins">{{ deck.wins }}</div>
@@ -80,6 +88,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					</div>
 				</div>
 			</div>
+			<div class="footer" [owTranslate]="'duels.hero-info.footer'"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,6 +112,7 @@ export class DuelsHeroInfoComponent {
 					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;
+		this.totalDecks = value.topDecks.length;
 		this.decks = value.topDecks.slice(0, 6);
 		this.totalRuns = value.globalTotalMatches;
 		// console.debug('globalWinDistrib', this.globalWinDistribution, value.globalWinDistribution, value);
@@ -116,6 +126,7 @@ export class DuelsHeroInfoComponent {
 	playerMatches: string;
 	globalWinDistribution: SimpleBarChartData;
 	decks: readonly DuelsHeroInfoTopDeck[];
+	totalDecks: number;
 	totalRuns: number;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}

@@ -26,7 +26,11 @@ import { filter } from 'rxjs/operators';
 	template: `
 		<div class="container" *ngIf="heroes$ | async as heroes">
 			<div class="cell" *ngFor="let hero of heroes; trackBy: trackByFn">
-				<div class="empty-card" (mouseenter)="onMouseEnter(hero.id)" (mouseleave)="onMouseLeave(hero.id)"></div>
+				<div
+					class="empty-card"
+					(mouseenter)="onMouseEnter(hero.id)"
+					(mouseleave)="onMouseLeave(hero.id, $event)"
+				></div>
 			</div>
 		</div>
 		<duels-hero-info *ngIf="heroInfo$ | async as heroInfo" [heroInfo]="heroInfo"></duels-hero-info>
@@ -195,9 +199,11 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 		this.selectedHeroCardId.next(cardId);
 	}
 
-	onMouseLeave(cardId: string) {
-		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedHeroCardId.next(null);
+	onMouseLeave(cardId: string, event: MouseEvent) {
+		if (!event.shiftKey) {
+			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+			this.selectedHeroCardId.next(null);
+		}
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

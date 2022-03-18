@@ -28,7 +28,7 @@ import { filter } from 'rxjs/operators';
 				<div
 					class="empty-card"
 					(mouseenter)="onMouseEnter(heroPower.id)"
-					(mouseleave)="onMouseLeave(heroPower.id)"
+					(mouseleave)="onMouseLeave(heroPower.id, $event)"
 				></div>
 			</div>
 		</div>
@@ -213,9 +213,11 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 		this.selectedHeroPowerCardId.next(cardId);
 	}
 
-	onMouseLeave(cardId: string) {
-		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedHeroPowerCardId.next(null);
+	onMouseLeave(cardId: string, event: MouseEvent) {
+		if (!event.shiftKey) {
+			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+			this.selectedHeroPowerCardId.next(null);
+		}
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

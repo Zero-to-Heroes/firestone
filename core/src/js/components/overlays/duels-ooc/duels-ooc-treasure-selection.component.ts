@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 				class="empty-card treasure-card"
 				*ngFor="let treasure of treasures; trackBy: trackByFn"
 				(mouseenter)="onMouseEnter(treasure.id)"
-				(mouseleave)="onMouseLeave(treasure.id)"
+				(mouseleave)="onMouseLeave(treasure.id, $event)"
 			></div>
 		</div>
 	`,
@@ -61,8 +61,10 @@ export class DuelsOutOfCombatTreasureSelectionComponent
 	}
 
 	@HostListener('mouseleave')
-	onMouseLeave(cardId: string) {
-		this.highlightService.onMouseLeave(cardId);
+	onMouseLeave(cardId: string, event: MouseEvent) {
+		if (!event.shiftKey) {
+			this.highlightService.onMouseLeave(cardId);
+		}
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {
