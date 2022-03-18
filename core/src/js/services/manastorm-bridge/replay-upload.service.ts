@@ -50,51 +50,52 @@ export class ReplayUploadService {
 		const replayKey = `hearthstone/replay/${today.getFullYear()}/${
 			today.getMonth() + 1
 		}/${today.getDate()}/${uuid()}.xml.zip`;
+		const metadata = {
+			'review-id': reviewId,
+			'replay-key': replayKey,
+			'application-key': 'firestone',
+			'user-key': userId,
+			'username': userName,
+			'file-type': 'hszip',
+			'player-rank': game.playerRank != null ? '' + game.playerRank : '',
+			'new-player-rank': game.newPlayerRank != null ? '' + game.newPlayerRank : '',
+			'opponent-rank': game.opponentRank != null ? '' + game.opponentRank : '',
+			'game-mode': game.gameMode,
+			'game-format': game.gameFormat,
+			'build-number': game.buildNumber ? '' + game.buildNumber : '',
+			'deckstring': game.deckstring,
+			'deck-name': game.deckName ? encodeURIComponent(game.deckName) : null,
+			'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
+			'should-zip': 'true',
+			'app-version': '' + process.env.APP_VERSION,
+			'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
+			'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
+			'bgs-has-prizes': JSON.stringify(!!game.hasBgsPrizes),
+			'duels-run-id': encodeURIComponent(game.runId),
+			'run-id': encodeURIComponent(game.runId),
+			'additional-result': game.additionalResult,
+			'normalized-xp-gained': '' + game.xpForGame?.xpGainedWithoutBonus,
+			'real-xp-gamed': '' + game.xpForGame?.realXpGained,
+			'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
+			'mercs-bounty-id': '' + game.mercsBountyId,
+			// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
+			// better name ourselves
+			'force-opponent-name': game.forceOpponentName,
+		};
 		const params = {
 			Bucket: BUCKET,
 			Key: fileKey,
 			ACL: 'public-read-write',
 			Body: blob,
-			Metadata: {
-				'review-id': reviewId,
-				'replay-key': replayKey,
-				'application-key': 'firestone',
-				'user-key': userId,
-				'username': userName,
-				'file-type': 'hszip',
-				'player-rank': game.playerRank != null ? '' + game.playerRank : '',
-				'new-player-rank': game.newPlayerRank != null ? '' + game.newPlayerRank : '',
-				'opponent-rank': game.opponentRank != null ? '' + game.opponentRank : '',
-				'game-mode': game.gameMode,
-				'game-format': game.gameFormat,
-				'build-number': game.buildNumber ? '' + game.buildNumber : '',
-				'deckstring': game.deckstring,
-				'deck-name': game.deckName ? encodeURIComponent(game.deckName) : null,
-				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
-				'should-zip': 'true',
-				'app-version': '' + process.env.APP_VERSION,
-				'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
-				'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
-				'bgs-has-prizes': JSON.stringify(!!game.hasBgsPrizes),
-				'duels-run-id': encodeURIComponent(game.runId),
-				'run-id': encodeURIComponent(game.runId),
-				'additional-result': game.additionalResult,
-				'normalized-xp-gained': '' + game.xpForGame?.xpGainedWithoutBonus,
-				'real-xp-gamed': '' + game.xpForGame?.realXpGained,
-				'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
-				'mercs-bounty-id': '' + game.mercsBountyId,
-				// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
-				// better name ourselves
-				'force-opponent-name': game.forceOpponentName,
-			},
+			Metadata: metadata,
 		};
-		console.log('[manastorm-bridge] uploading with params', params);
+		console.log('no-format', '[manastorm-bridge] uploading with params', JSON.stringify(metadata));
 		this.performReplayUpload(game, reviewId, params);
 	}
 
 	private performReplayUpload(game: GameForUpload, reviewId: string, params, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
-			console.error('[manastorm-bridge] Could not upload replay');
+			console.error('[manastorm-bridge] Could not upload replay', game);
 			return;
 		}
 		const s3 = new S3();
