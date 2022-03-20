@@ -2,8 +2,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
 import { SetCard } from '@models/set';
+import { CardsFacadeService } from '@services/cards-facade.service';
+import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OverwolfService } from '@services/overwolf.service';
+import { decode, encode } from 'deckstrings';
 
 @Component({
 	selector: 'duels-deck-widget',
@@ -111,10 +114,14 @@ export class DuelsDeckWidgetComponent {
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	copyDeckCode() {
-		this.ow.placeOnClipboard(this.initialDeck);
+		const deckDefinition = decode(this.initialDeck);
+		deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, this.allCards));
+		const normalizedDeckstring = encode(deckDefinition);
+		this.ow.placeOnClipboard(normalizedDeckstring);
 		this.screenCaptureOn = true;
 		this.copyTooltip = this.i18n.translateString('duels.deck-select.copy-deck-tooltip-confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {

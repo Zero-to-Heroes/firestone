@@ -32,11 +32,13 @@ export class CopyDesckstringComponent {
 	@Input() title: string;
 
 	@Input() set deckstring(value: string) {
+		this._deckstring = value;
 		const deckDefinition = decode(value);
 		deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, this.allCards));
 		this.normalizedDeckstring = encode(deckDefinition);
 	}
 
+	private _deckstring: string;
 	private normalizedDeckstring: string;
 	private inputCopy: string;
 
@@ -55,7 +57,7 @@ export class CopyDesckstringComponent {
 		this.ow.placeOnClipboard(this.normalizedDeckstring);
 		this.inputCopy = this.title || this.copyText;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
-		console.log('copied deckstring to clipboard', this.normalizedDeckstring);
+		console.log('copied deckstring to clipboard', this.normalizedDeckstring, this._deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
