@@ -1,5 +1,6 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 export const CARDS_VERSION = '2022-03-17-21-34';
@@ -602,6 +603,36 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 		default:
 			console.warn('Could not normalize hero card id', playerClass);
 			return 7;
+	}
+};
+
+export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeService): number => {
+	const playerClass: string = cards.getCardFromDbfId(heroDbfId)?.playerClass;
+	switch (playerClass) {
+		case 'DemonHunter':
+		case 'Demonhunter':
+			return 56550;
+		case 'Druid':
+			return 274;
+		case 'Hunter':
+			return 31;
+		case 'Mage':
+			return 637;
+		case 'Paladin':
+			return 671;
+		case 'Priest':
+			return 813;
+		case 'Rogue':
+			return 930;
+		case 'Shaman':
+			return 1066;
+		case 'Warlock':
+			return 893;
+		case 'Warrior':
+			return 7;
+		default:
+			// Keep the neutral heroes
+			return heroDbfId;
 	}
 };
 

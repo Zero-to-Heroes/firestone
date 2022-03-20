@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { CardsFacadeService } from '@services/cards-facade.service';
+import { normalizeDeckHeroDbfId } from '@services/hs-utils';
+import { decode, encode } from 'deckstrings';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -24,17 +27,24 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CopyDesckstringComponent {
-	@Input() deckstring: string;
 	@Input() copyText: string;
 	@Input() showTooltip: boolean;
 	@Input() title: string;
 
+	@Input() set deckstring(value: string) {
+		const deckDefinition = decode(value);
+		deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, this.allCards));
+		this.normalizedDeckstring = encode(deckDefinition);
+	}
+
+	private normalizedDeckstring: string;
 	private inputCopy: string;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async copyDeckstring() {
@@ -42,10 +52,10 @@ export class CopyDesckstringComponent {
 			console.log('no OW service present, not copying to clipboard');
 			return;
 		}
-		this.ow.placeOnClipboard(this.deckstring);
+		this.ow.placeOnClipboard(this.normalizedDeckstring);
 		this.inputCopy = this.title || this.copyText;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
-		console.log('copied deckstring to clipboard', this.deckstring);
+		console.log('copied deckstring to clipboard', this.normalizedDeckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
