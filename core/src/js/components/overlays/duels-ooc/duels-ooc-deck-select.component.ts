@@ -11,6 +11,7 @@ import { DuelsDeck } from '@models/memory/memory-duels';
 import { SetCard } from '@models/set';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { isPassive } from '@services/duels/duels-utils';
+import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
@@ -25,7 +26,7 @@ import { filter } from 'rxjs/operators';
 	],
 	template: `
 		<div class="container" *ngIf="decks$ | async as decks">
-			<ng-container *ngIf="{ collection: collection$ | async } as value">
+			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDecks: tempDuelsDecks$ | async } as value">
 				<duels-deck-widget
 					class="deck-container item-{{ i }}"
 					[ngClass]="{ 'inactive': currentActiveDeck != null && currentActiveDeck !== i }"
@@ -36,6 +37,16 @@ import { filter } from 'rxjs/operators';
 					(mouseleave)="onMouseLeave(i)"
 				>
 				</duels-deck-widget>
+				<!-- <div class="deck-container item-3 explore-decks-widget">
+					<div
+						class="vignette"
+						[ngClass]="{ 'inactive': currentActiveDeck != null }"
+						(click)="exploreDecks(value.tempDuelsDeck)"
+						[helpTooltip]="'duels.deck-selection.explore-decks-tooltip' | owTranslate"
+					>
+						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
+					</div>
+				</div> -->
 			</ng-container>
 		</div>
 	`,
@@ -44,6 +55,7 @@ import { filter } from 'rxjs/operators';
 export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decks$: Observable<readonly DuelsDeckWidgetDeck[]>;
 	collection$: Observable<readonly SetCard[]>;
+	tempDuelsDeck$: Observable<DuelsDeck>;
 
 	currentActiveDeck: number;
 
@@ -63,6 +75,17 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 					([allSets]) =>
 						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 				),
+			);
+		this.tempDuelsDeck$ = this.store
+			.listen$(([main, nav]) => main.duels.tempDuelsDeck)
+			.pipe(
+				filter(
+					([tempDuelsDeck]) =>
+						tempDuelsDeck?.HeroCardId &&
+						tempDuelsDeck?.HeroPowerCardId &&
+						!!tempDuelsDeck?.Decklist?.length,
+				),
+				this.mapData(([tempDuelsDeck]) => tempDuelsDeck),
 			);
 		this.decks$ = combineLatest(
 			this.store.listen$(
@@ -89,7 +112,7 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 					topDeckApplyFilters(
 						group,
 						mmrFilter,
-						heroCardId as any,
+						[heroCardId as CardIds],
 						heroPowerCardId,
 						signatureTreasureCardId,
 						'last-patch',
@@ -126,9 +149,19 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		}
 	}
 
+	exploreDecks(referenceDeck: DuelsDeck) {
+		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
+		console.debug('explore decks', referenceDeck, heroCardId, heroPowerCardId, signatureTreasureCardId);
+		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
+	}
+
 	private extractPickInfos(
 		tempDuelsDeck: DuelsDeck,
-	): { heroCardId: string; heroPowerCardId: string; signatureTreasureCardId: string } {
+	): {
+		heroCardId: string;
+		heroPowerCardId: string;
+		signatureTreasureCardId: string;
+	} {
 		const heroCardId = tempDuelsDeck.HeroCardId;
 		const heroPowerCardId = tempDuelsDeck.HeroPowerCardId;
 		const signatureTreasureCardId = tempDuelsDeck.Decklist.find((cardId) =>

@@ -23,9 +23,19 @@
 			top: 7vh;
 		}
 
+		&.item-3 {
+			right: 0;
+			top: 14vh;
+		}
+
 		&.inactive {
 			filter: grayscale(1);
 			opacity: 0.5;
 		}
+	}
+
+	.explore-decks-widget {
+		width: 10vh;
+		height: 10vh;
 	}
 }

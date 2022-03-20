@@ -1,3 +1,4 @@
+import { NonFunctionProperties } from '@services/utils';
 import { DuelsCategoryType } from '../duels/duels-category.type';
 
 export class NavigationDuels {
@@ -10,7 +11,7 @@ export class NavigationDuels {
 	readonly treasureSearchString: string;
 	readonly heroSearchString: string;
 
-	public update(base: NavigationDuels): NavigationDuels {
+	public update(base: Partial<NonFunctionProperties<NavigationDuels>>): NavigationDuels {
 		return Object.assign(new NavigationDuels(), this, base);
 	}
 
