@@ -84,8 +84,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class BattlegroundsContentComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
-{
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	showTitle$: Observable<boolean>;
 	currentPanelId$: Observable<string>;
 	currentPanel$: Observable<BgsPanel>;
