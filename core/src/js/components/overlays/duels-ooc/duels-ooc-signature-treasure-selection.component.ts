@@ -41,8 +41,7 @@ import { filter } from 'rxjs/operators';
 })
 export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit
-{
+	implements AfterContentInit {
 	signatureTreasures$: Observable<readonly ReferenceCard[]>;
 	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 

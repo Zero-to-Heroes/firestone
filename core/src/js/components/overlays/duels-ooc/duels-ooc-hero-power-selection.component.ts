@@ -41,8 +41,7 @@ import { filter } from 'rxjs/operators';
 })
 export class DuelsOutOfCombatHeroPowerSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit
-{
+	implements AfterContentInit {
 	heroPowers$: Observable<readonly ReferenceCard[]>;
 	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
 
