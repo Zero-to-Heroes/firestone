@@ -12,7 +12,7 @@ import {
 	getDuelsMmrFilterNumber,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
-import { groupByFunction, uuid } from '@services/utils';
+import { groupByFunction, sleep, uuid } from '@services/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -218,7 +218,9 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		);
 	}
 
-	onMouseEnter(cardId: string) {
+	async onMouseEnter(cardId: string) {
+		this.selectedHeroPowerCardId.next(null);
+		await sleep(100);
 		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
 		this.selectedHeroPowerCardId.next(cardId);
 	}
