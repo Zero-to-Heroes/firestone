@@ -28,7 +28,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			} as value2"
 			[ngClass]="{ 'no-ads': !(showAds$ | async), 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
-			<div class="content" *ngIf="value.opponents; else emptyState">
+			<div class="content" *ngIf="value2.opponents; else emptyState">
 				<ng-container
 					*ngIf="{
 						currentTurn: currentTurn$ | async,
@@ -46,7 +46,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="subtitle" [owTranslate]="'battlegrounds.in-game.opponents.title'"></div>
 						<div class="opponents" scrollable>
 							<bgs-opponent-overview
-								*ngFor="let opponent of value.opponents; trackBy: trackByOpponentInfoFn"
+								*ngFor="let opponent of value2.opponents; trackBy: trackByOpponentInfoFn"
 								[opponent]="opponent"
 								[currentTurn]="value.currentTurn"
 								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId)"
@@ -74,7 +74,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[helpTooltip]="'battlegrounds.in-game.opponents.score-board-tooltip' | owTranslate"
 					[owTranslate]="'battlegrounds.in-game.opponents.score-board-title'"
 				></div>
-				<bgs-hero-face-offs *ngIf="value.opponents?.length"></bgs-hero-face-offs>
+				<bgs-hero-face-offs *ngIf="value2.opponents?.length"></bgs-hero-face-offs>
 			</div>
 		</div>
 	`,

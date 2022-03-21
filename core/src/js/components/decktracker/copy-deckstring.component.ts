@@ -33,9 +33,17 @@ export class CopyDesckstringComponent {
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
-		const deckDefinition = decode(value);
-		deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, this.allCards));
-		this.normalizedDeckstring = encode(deckDefinition);
+		if (!!value) {
+			try {
+				const deckDefinition = decode(value);
+				deckDefinition.heroes = deckDefinition.heroes.map((hero) =>
+					normalizeDeckHeroDbfId(hero, this.allCards),
+				);
+				this.normalizedDeckstring = encode(deckDefinition);
+			} catch (e) {
+				console.error('could not decode deckstring', value, e);
+			}
+		}
 	}
 
 	private _deckstring: string;

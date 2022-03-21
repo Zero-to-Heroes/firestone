@@ -1,11 +1,4 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-} from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -55,12 +48,10 @@ export class DuelsOutOfCombatTreasureSelectionComponent
 		this.highlightService.initForDuels();
 	}
 
-	@HostListener('mouseenter')
 	onMouseEnter(cardId: string) {
 		this.highlightService.onMouseEnter(cardId, 'duels');
 	}
 
-	@HostListener('mouseleave')
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event.shiftKey) {
 			this.highlightService.onMouseLeave(cardId);
