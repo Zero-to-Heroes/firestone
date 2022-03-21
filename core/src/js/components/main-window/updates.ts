@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.2.2',
+		version: '9.2.4',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,24 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `Update app for patch 22.6`,
-							},
-						],
-					},
-					{
 						category: 'duels',
 						details: [
 							{
 								type: 'feature',
-								text: `Add quick deck selection when starting a run. It lets you quickly view and copy the deck code of your last deck and a couple of recent cheap high-win decks.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a filter (for the high-wins decks) to hide decks for which you don't have all the unlocks (hero power / signature weapon).`,
+								text: `Add an "explore other high-wins decks" button on the deck selection screen.`,
 							},
 						],
 					},
@@ -78,15 +65,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Player region has been added to the leaderboard (it might take a couple of days for the information to be filled for everyone).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the decklist would sometimes not disappear after ending a run.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where selecting a Hero Power or Signature Treasure would prevent you from selecting other heroes in the dropdown.`,
+								text: `Allow multiple selections in the hero filter dropdown (and add a "Clear" and "Reset" button to make it easier to use).`,
 							},
 						],
 					},
@@ -95,29 +74,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a simulation issue with Reno's buddy.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to hide the "Unknown Card"s in the tracker.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Encumbered Pack Mule would not appear in the player's decklist if drawn during mulligan.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where mercs would not be updated (in the mercs list) until you moused over them.`,
+								text: `Fix an issue where you could see what heroes the other players had picked before picking your own.`,
 							},
 						],
 					},
