@@ -24,8 +24,8 @@
 		}
 
 		&.item-3 {
-			right: 0;
-			top: 14vh;
+			right: 1vh;
+			top: 20vh;
 		}
 
 		&.inactive {
@@ -37,5 +37,15 @@
 	.explore-decks-widget {
 		width: 10vh;
 		height: 10vh;
+		--icon-color: var(--color-2);
+		background-color: var(--color-6);
+		clip-path: circle(4vh at 50% 50%);
+		transition: all 0.2s linear;
+
+		&:hover {
+			--icon-color: var(--color-1);
+			background-color: var(--color-5);
+			transform: scale(1.1);
+		}
 	}
 }

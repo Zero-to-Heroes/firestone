@@ -16,7 +16,7 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
@@ -26,7 +26,7 @@ import { filter } from 'rxjs/operators';
 	],
 	template: `
 		<div class="container" *ngIf="decks$ | async as decks">
-			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDecks: tempDuelsDecks$ | async } as value">
+			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDeck: tempDuelsDeck$ | async } as value">
 				<duels-deck-widget
 					class="deck-container item-{{ i }}"
 					[ngClass]="{ 'inactive': currentActiveDeck != null && currentActiveDeck !== i }"
@@ -37,16 +37,16 @@ import { filter } from 'rxjs/operators';
 					(mouseleave)="onMouseLeave(i)"
 				>
 				</duels-deck-widget>
-				<!-- <div class="deck-container item-3 explore-decks-widget">
+				<div class="deck-container item-3 explore-decks-widget" *ngIf="value.tempDuelsDeck">
 					<div
 						class="vignette"
 						[ngClass]="{ 'inactive': currentActiveDeck != null }"
 						(click)="exploreDecks(value.tempDuelsDeck)"
-						[helpTooltip]="'duels.deck-selection.explore-decks-tooltip' | owTranslate"
+						[helpTooltip]="'duels.deck-select.explore-decks-tooltip' | owTranslate"
 					>
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
 					</div>
-				</div> -->
+				</div>
 			</ng-container>
 		</div>
 	`,
@@ -79,6 +79,7 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		this.tempDuelsDeck$ = this.store
 			.listen$(([main, nav]) => main.duels.tempDuelsDeck)
 			.pipe(
+				tap((info) => console.debug('gregre', info)),
 				filter(
 					([tempDuelsDeck]) =>
 						tempDuelsDeck?.HeroCardId &&
@@ -162,6 +163,7 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		heroPowerCardId: string;
 		signatureTreasureCardId: string;
 	} {
+		console.debug('extracting picks', tempDuelsDeck);
 		const heroCardId = tempDuelsDeck.HeroCardId;
 		const heroPowerCardId = tempDuelsDeck.HeroPowerCardId;
 		const signatureTreasureCardId = tempDuelsDeck.Decklist.find((cardId) =>
@@ -200,12 +202,6 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		const sortedCandidates = uniqueDecks.sort(
 			sortByProperties((deck: DuelsDeckStat) => [deck.dustCost, -new Date(deck.runStartDate).getTime()]),
 		);
-		// console.debug(
-		// 	'candidates',
-		// 	sortedCandidates.map((deck) => [deck.dustCost, deck.runStartDate]),
-		// 	numberOfDecks,
-		// 	sortedCandidates.slice(0, numberOfDecks),
-		// );
 		if (!sortedCandidates.length) {
 			return [];
 		}
