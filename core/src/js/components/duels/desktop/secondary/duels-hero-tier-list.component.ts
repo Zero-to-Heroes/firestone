@@ -50,7 +50,7 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,

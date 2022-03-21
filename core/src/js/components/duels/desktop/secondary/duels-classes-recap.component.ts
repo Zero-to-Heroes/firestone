@@ -101,7 +101,7 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 			.listen$(
 				([main, nav]) => main.duels.runs,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)

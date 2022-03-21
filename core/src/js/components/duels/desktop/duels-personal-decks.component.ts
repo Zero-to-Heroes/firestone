@@ -39,7 +39,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 			.listen$(
 				([main, nav]) => main.duels.personalDeckStats,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckNames,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,

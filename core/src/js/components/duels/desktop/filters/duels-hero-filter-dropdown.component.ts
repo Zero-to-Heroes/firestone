@@ -42,7 +42,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsHeroFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options: readonly MultiselectOption[];
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
@@ -69,7 +70,7 @@ export class DuelsHeroFilterDropdownComponent
 		});
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(

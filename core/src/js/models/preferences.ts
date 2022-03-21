@@ -365,7 +365,7 @@ export class Preferences {
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
-	readonly duelsActiveHeroesFilter: DuelsHeroFilterType = allDuelsHeroes;
+	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveHeroPowerFilter: 'all' | string = 'all';

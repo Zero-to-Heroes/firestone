@@ -63,7 +63,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 		this.options$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes),
 			this.store.listenPrefs$(
-				(prefs) => prefs.duelsActiveHeroesFilter,
+				(prefs) => prefs.duelsActiveHeroesFilter2,
 				(prefs) => prefs.duelsActiveHeroPowerFilter,
 			),
 		).pipe(
@@ -71,23 +71,27 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 			map(([[stats], [heroesFilter, heroPowerFilter]]) => {
 				const uniqueSignatureTreasures = [...new Set(stats.map((stat) => stat.signatureTreasureCardId))];
 				return uniqueSignatureTreasures
-					.filter((sig) =>
+					.filter((loadout) =>
 						!heroesFilter?.length
-							? false
+							? true
 							: duelsHeroConfigs
-									.find((conf) =>
+									// Only keep the confs that include the selected heroes
+									.filter((conf) =>
 										heroesFilter.some(
 											(heroFilter) => normalizeDuelsHeroCardId(conf.hero) === heroFilter,
 										),
 									)
-									?.signatureTreasures?.includes(sig as CardIds),
+									// From all these confs, check if the hero power is in one of them
+									.flatMap((conf) => conf.signatureTreasures)
+									.includes(loadout as CardIds),
 					)
-					.filter((sig) =>
+					.filter((loadout) =>
 						heroPowerFilter === 'all'
 							? true
 							: duelsHeroConfigs
-									.find((conf) => conf.heroPowers?.includes(heroPowerFilter as CardIds))
-									?.signatureTreasures?.includes(sig as CardIds),
+									.filter((conf) => conf.heroPowers.includes(heroPowerFilter as CardIds))
+									.flatMap((conf) => conf.signatureTreasures)
+									.includes(loadout as CardIds),
 					);
 			}),
 			map((signatureTreasureCardIds) => [

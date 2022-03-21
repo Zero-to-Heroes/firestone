@@ -18,7 +18,7 @@ export class DuelsExploreDecksParser implements Processor {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			duelsActiveHeroesFilter: [event.heroCardId as CardIds],
+			duelsActiveHeroesFilter2: [event.heroCardId as CardIds],
 			duelsActiveHeroPowerFilter: event.heroPowerCardId,
 			duelsActiveSignatureTreasureFilter: event.signatureTreasureCardId,
 		};

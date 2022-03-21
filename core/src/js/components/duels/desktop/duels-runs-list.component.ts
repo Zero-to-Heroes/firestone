@@ -86,7 +86,7 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 				.listen$(
 					([main, nav]) => main.duels.runs,
 					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter,
+					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 					// TODO: MMR filter
