@@ -45,10 +45,10 @@ export class LocalizationDropdownComponent extends AbstractSubscriptionComponent
 				value: 'esES',
 				label: 'Espa\u00f1ol (EU)',
 			} as IOption,
-			// {
-			// 	value: 'esMX',
-			// 	label: 'Espa\u00f1ol (AL)',
-			// } as IOption,
+			{
+				value: 'esMX',
+				label: 'Espa\u00f1ol (AL)',
+			} as IOption,
 			{
 				value: 'frFR',
 				label: 'Fran\u00e7ais',
@@ -61,10 +61,10 @@ export class LocalizationDropdownComponent extends AbstractSubscriptionComponent
 				value: 'jaJP',
 				label: '\u65e5\u672c\u8a9e',
 			} as IOption,
-			// {
-			// 	value: 'koKR',
-			// 	label: '\ud55c\uad6d\uc5b4',
-			// } as IOption,
+			{
+				value: 'koKR',
+				label: '\ud55c\uad6d\uc5b4',
+			} as IOption,
 			{
 				value: 'plPL',
 				label: 'Polski',
@@ -85,10 +85,10 @@ export class LocalizationDropdownComponent extends AbstractSubscriptionComponent
 				value: 'zhCN',
 				label: '\u7b80\u4f53\u4e2d\u6587',
 			} as IOption,
-			// {
-			// 	value: 'zhTW',
-			// 	label: '\u7e41\u9ad4\u4e2d\u6587',
-			// } as IOption,
+			{
+				value: 'zhTW',
+				label: '\u7e41\u9ad4\u4e2d\u6587',
+			} as IOption,
 		] as readonly IOption[];
 	}
 
