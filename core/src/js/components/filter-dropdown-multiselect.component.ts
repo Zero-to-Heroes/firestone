@@ -52,6 +52,16 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 				</div>
 				<div class="controls">
 					<div
+						class="button clear"
+						(click)="clearSelection()"
+						[owTranslate]="'app.global.controls.multiselect-clear-button'"
+					></div>
+					<div
+						class="button reset"
+						(click)="resetSelection()"
+						[owTranslate]="'app.global.controls.multiselect-reset-button'"
+					></div>
+					<div
 						class="button apply"
 						[ngClass]="{ 'disabled': !value.validSelection }"
 						[helpTooltip]="buttonTooltip(value.validSelection)"
@@ -186,6 +196,14 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			tempSelected = removeFromReadonlyArray(tempSelected, tempSelected.indexOf(option.value));
 		}
 		this.tempSelected$.next(tempSelected);
+	}
+
+	clearSelection() {
+		this.tempSelected$.next([]);
+	}
+
+	resetSelection() {
+		this.tempSelected$.next(this.options$.value.map((option) => option.value));
 	}
 
 	buttonTooltip(validSelection: boolean): string {
