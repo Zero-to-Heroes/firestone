@@ -23,11 +23,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div
 			class="container"
 			*ngIf="{
-				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async
+				showNextOpponentRecapSeparately: showNextOpponentRecapSeparately$ | async,
+				opponents: opponents$ | async
 			} as value2"
 			[ngClass]="{ 'no-ads': !(showAds$ | async), 'no-opp-recap': !value2.showNextOpponentRecapSeparately }"
 		>
-			<div class="content" *ngIf="opponents$ | async as opponents; else emptyState">
+			<div class="content" *ngIf="value.opponents; else emptyState">
 				<ng-container
 					*ngIf="{
 						currentTurn: currentTurn$ | async,
@@ -45,7 +46,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div class="subtitle" [owTranslate]="'battlegrounds.in-game.opponents.title'"></div>
 						<div class="opponents" scrollable>
 							<bgs-opponent-overview
-								*ngFor="let opponent of opponents; trackBy: trackByOpponentInfoFn"
+								*ngFor="let opponent of value.opponents; trackBy: trackByOpponentInfoFn"
 								[opponent]="opponent"
 								[currentTurn]="value.currentTurn"
 								[showLastOpponentIcon]="isLastOpponent(opponent, lastOpponentCardId)"
@@ -73,7 +74,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[helpTooltip]="'battlegrounds.in-game.opponents.score-board-tooltip' | owTranslate"
 					[owTranslate]="'battlegrounds.in-game.opponents.score-board-title'"
 				></div>
-				<bgs-hero-face-offs></bgs-hero-face-offs>
+				<bgs-hero-face-offs *ngIf="value.opponents?.length"></bgs-hero-face-offs>
 			</div>
 		</div>
 	`,
@@ -104,36 +105,11 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 	ngAfterContentInit(): void {
 		this.enableSimulation$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsEnableSimulation)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting enableSimulation in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 		this.showNextOpponentRecapSeparately$ = this.listenForBasicPref$(
 			(prefs) => prefs.bgsShowNextOpponentRecapSeparately,
 		);
-		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(
-			distinctUntilChanged(),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting showAds in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
-		);
+		this.showAds$ = from(this.ads.shouldDisplayAds()).pipe(this.mapData((ads) => ads));
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state, prefs]) => state?.currentGame?.currentTurn)
 			.pipe(this.mapData(([turn]) => turn));
@@ -161,102 +137,50 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.nextOpponentCardId$ = currentPanel$.pipe(
-			map((panel) => panel.opponentOverview.cardId),
-			distinctUntilChanged(),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting nextOpponentCardId in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
-		);
+		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel.opponentOverview.cardId));
 		this.lastOpponentCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
-			.pipe(
-				map(([lastOpponentCardId]) => lastOpponentCardId),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting lastOpponentCardId in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));
 		this.nextBattle$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				filter(([game]) => !!game),
-				map(([game]) => game.lastFaceOff()),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting nextBattle in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([game]) => game.lastFaceOff()),
 			);
 		this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				debounceTime(1000),
 				filter(([game]) => !!game),
-				map(([game]) =>
-					[...game.players].sort((a, b) => {
-						if (a.leaderboardPlace < b.leaderboardPlace) {
-							return -1;
-						}
-						if (b.leaderboardPlace < a.leaderboardPlace) {
-							return 1;
-						}
-						if (a.damageTaken < b.damageTaken) {
-							return -1;
-						}
-						if (b.damageTaken < a.damageTaken) {
-							return 1;
-						}
-						return 0;
-					}),
+				this.mapData(
+					([game]) =>
+						[...game.players].sort((a, b) => {
+							if (a.leaderboardPlace < b.leaderboardPlace) {
+								return -1;
+							}
+							if (b.leaderboardPlace < a.leaderboardPlace) {
+								return 1;
+							}
+							if (a.damageTaken < b.damageTaken) {
+								return -1;
+							}
+							if (b.damageTaken < a.damageTaken) {
+								return 1;
+							}
+							return 0;
+						}),
+					areDeepEqual,
 				),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting opponents in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			)
 			.subscribe((opponents) => this.opponentsSubject$$.next(opponents));
-		this.opponents$ = this.opponentsSubject$$.asObservable();
-		this.nextOpponent$ = combineLatest(this.nextOpponentCardId$, this.opponentsSubject$$.asObservable()).pipe(
-			map(([nextOpponentCardId, opponents]) => opponents.find((opp) => opp.cardId === nextOpponentCardId)),
-			// distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting otherOpponents in ', this.constructor.name, info)),
+		this.opponents$ = this.opponentsSubject$$.asObservable().pipe(
+			filter((opponents) => opponents?.length >= 8),
 			takeUntil(this.destroyed$),
+		);
+		this.nextOpponent$ = combineLatest(this.nextOpponentCardId$, this.opponentsSubject$$.asObservable()).pipe(
+			this.mapData(([nextOpponentCardId, opponents]) =>
+				opponents.find((opp) => opp.cardId === nextOpponentCardId),
+			),
 		);
 	}
 
