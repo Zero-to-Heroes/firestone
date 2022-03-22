@@ -195,6 +195,16 @@ export const pickRandom = <T>(array: readonly T[]): T => {
 	return array[Math.floor(Math.random() * array.length)];
 };
 
+export const getStandardDeviation = (array: readonly number[]): { mean: number; standardDeviation: number } => {
+	const n = array.length;
+	const mean = array.reduce((a, b) => a + b) / n;
+	const deviation = Math.sqrt(array.map((x) => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+	return {
+		mean: mean,
+		standardDeviation: deviation,
+	};
+};
+
 export const chunk = <T>(array: T[], size: number): T[][] =>
 	array.reduce((acc, _, i) => {
 		if (i % size === 0) {

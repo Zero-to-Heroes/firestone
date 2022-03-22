@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { getStandardDeviation } from '@services/utils';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
@@ -92,36 +93,38 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 						.filter((stat) =>
 							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
 						);
+					const { mean, standardDeviation } = getStandardDeviation(stats.map((stat) => stat.globalWinrate));
+
 					return [
 						{
 							label: 'S',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-s-tooltip'),
-							items: this.filterItems(stats, 60, 101),
+							items: this.filterItems(stats, mean + 2 * standardDeviation, 101),
 						},
 						{
 							label: 'A',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-a-tooltip'),
-							items: this.filterItems(stats, 57, 60),
+							items: this.filterItems(stats, mean + standardDeviation, mean + 2 * standardDeviation),
 						},
 						{
 							label: 'B',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-b-tooltip'),
-							items: this.filterItems(stats, 54, 57),
+							items: this.filterItems(stats, mean, mean + standardDeviation),
 						},
 						{
 							label: 'C',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-c-tooltip'),
-							items: this.filterItems(stats, 50, 54),
+							items: this.filterItems(stats, mean - standardDeviation, mean),
 						},
 						{
 							label: 'D',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-d-tooltip'),
-							items: this.filterItems(stats, 45, 50),
+							items: this.filterItems(stats, mean - 2 * standardDeviation, mean - standardDeviation),
 						},
 						{
 							label: 'E',
 							tooltip: this.i18n.translateString('app.duels.stats.tier-e-tooltip'),
-							items: this.filterItems(stats, 0, 45),
+							items: this.filterItems(stats, 0, mean - 2 * standardDeviation),
 						},
 					].filter((tier) => tier.items?.length);
 				}),
