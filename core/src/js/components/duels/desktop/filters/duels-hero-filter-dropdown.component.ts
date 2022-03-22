@@ -59,7 +59,6 @@ export class DuelsHeroFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		console.log('oigrejogi');
 		this.options = allDuelsHeroes.map((value) => {
 			return {
 				value: value,

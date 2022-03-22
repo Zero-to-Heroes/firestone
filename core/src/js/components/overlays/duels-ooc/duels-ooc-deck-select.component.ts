@@ -16,7 +16,7 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
@@ -79,7 +79,6 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		this.tempDuelsDeck$ = this.store
 			.listen$(([main, nav]) => main.duels.tempDuelsDeck)
 			.pipe(
-				tap((info) => console.debug('gregre', info)),
 				filter(
 					([tempDuelsDeck]) =>
 						tempDuelsDeck?.HeroCardId &&

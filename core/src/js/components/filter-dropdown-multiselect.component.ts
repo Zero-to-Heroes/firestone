@@ -129,7 +129,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 				if (!selected?.length || selected.length === options.length) {
 					return this.placeholder;
 				}
-				console.debug('selected', selected, options);
 				return this.buildIcons(
 					selected
 						.map((sel) => options.find((option) => option.value === sel))
@@ -145,7 +144,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			)
 			.subscribe((options) => {
 				this.tempSelected$.next(options.map((option) => option.value));
-				console.debug('gre', options, this.tempSelected$.value);
 			});
 		this.workingOptions$ = combineLatest(this.options$.asObservable(), this.tempSelected$.asObservable()).pipe(
 			filter(([options, tempSelected]) => !!options),
@@ -188,7 +186,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	select(option: MultiselectOption, isSelected: boolean) {
-		console.debug('selecting', option, isSelected, this.tempSelected$.value);
 		let tempSelected = this.tempSelected$.value;
 		if (isSelected && !tempSelected.includes(option.value)) {
 			tempSelected = [...tempSelected, option.value];

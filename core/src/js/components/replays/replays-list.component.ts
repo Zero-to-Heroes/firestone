@@ -260,7 +260,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	private gameModeFilter(stat: GameStat, filter: string): boolean {
 		const gameMode = stat.gameMode;
 		const format = stat.gameFormat;
-		console.debug('applying filter', filter, gameMode, stat);
 		switch (filter) {
 			case null:
 				return !isMercenariesPvE(gameMode);
