@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.2.4',
+		version: '9.3.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an "explore other high-wins decks" button on the deck selection screen.`,
+								text: `Add a few missing languages in the Localization dropdown in the Settings.`,
 							},
 						],
 					},
@@ -65,7 +65,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Allow multiple selections in the hero filter dropdown (and add a "Clear" and "Reset" button to make it easier to use).`,
+								text: `Improve tiers for Treasures so that they're not all S tier :)`,
 							},
 						],
 					},
@@ -73,8 +73,41 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add counters for Southsea Strongarm and Majordomo Executus.`,
+							},
+							{
+								type: 'feature',
+								text: `Add an option to sort the heroes by their tier (global winrate) in the Heroes tab.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue where you could see what heroes the other players had picked before picking your own.`,
+								text: `Prevent an info leak where the opponent heroes were sent to the extension before they were revealed in the UI.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the heroes' warband stats could have some impossible values for the early turns.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add basic support for Blademaster Okani.`,
+							},
+							{
+								type: 'feature',
+								text: `Add card oracle for Runaway Gyrocopter and Plague of Murlocs (for the Tombs of Terror adventure).`,
+							},
+							{
+								type: 'feature',
+								text: `Add card highlight for Jr. and Sr. Tomb Diver (Tombs of Terror) and Scrap Shoot (Hunter).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "show stats separately" option was not working in the single-zone display. You should now be able to see these multiple Amulets of Undying with their correct stat boosts directly in the tracker.`,
 							},
 						],
 					},
