@@ -282,6 +282,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, legendary);
 			case CardIds.ScavengersIngenuity:
 				return and(inDeck, beast);
+			case CardIds.ScrapShot:
+				return and(inDeck, beast);
 			case CardIds.SelectiveBreederCore:
 				return and(inDeck, beast);
 			case CardIds.Smokescreen:
