@@ -111,8 +111,12 @@ export class GroupedDeckListComponent implements OnDestroy {
 			}
 			for (let i = 0; i < cardsInDeck; i++) {
 				base.push(
+					// Not sure why initially the card is created from the decklist instead of the deck, since the
+					// card in deck has more information (like the base attribute update field)
 					VisualDeckCard.create({
-						...groupedFromDecklist.get(cardId)[0],
+						...(groupedFromDeck.get(cardId)[i] ??
+							groupedFromDeck.get(cardId)[0] ??
+							groupedFromDecklist.get(cardId)[0]),
 						highlight: 'normal',
 						creatorCardIds: creatorCardIds,
 					} as VisualDeckCard),
