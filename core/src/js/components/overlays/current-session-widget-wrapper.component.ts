@@ -7,7 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -60,7 +60,6 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
-			tap((info) => console.debug('showWidget?', info)),
 			this.mapData(([[displayBgs]]) => displayBgs),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {

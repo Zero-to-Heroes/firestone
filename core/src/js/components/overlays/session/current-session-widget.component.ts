@@ -20,7 +20,6 @@ import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '@services/utils';
 import { combineLatest, from, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'current-session-widget',
@@ -274,13 +273,9 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.sessionWidgetScale)
-			.pipe(
-				tap((info) => console.debug('hop', info)),
-				this.mapData(([pref]) => pref),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => {
 				const element = this.el.nativeElement.querySelector('.scalable');
-				console.debug('hop2', element, scale);
 				if (element) {
 					this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
 				}

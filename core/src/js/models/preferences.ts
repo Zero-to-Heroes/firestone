@@ -285,6 +285,13 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerBgsSouthseaCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBgsSouthseaCounterWidgetPosition: { left: number; top: number };
+	readonly playerBgsMajordomoCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBgsMajordomoCounterWidgetPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
 	readonly replaysFilterGameMode: string;

@@ -12,7 +12,6 @@ export interface CounterDefinition {
 export type CounterType =
 	| 'galakrond'
 	| 'pogo'
-	| 'bgsPogo'
 	| 'attack'
 	| 'jadeGolem'
 	| 'cthun'
@@ -26,4 +25,7 @@ export type CounterType =
 	| 'heroPowerDamage'
 	| 'multicaster'
 	| 'si7Counter'
-	| 'elwynnBoar';
+	| 'elwynnBoar'
+	| 'bgsPogo'
+	| 'bgsSouthsea'
+	| 'bgsMajordomo';

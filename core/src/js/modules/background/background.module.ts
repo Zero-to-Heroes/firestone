@@ -15,6 +15,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/duels-deckbuilder.component';
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
+import { PlayerBgsMajordomoWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
+import { PlayerBgsSouthseaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
 import { CurrentSessionWidgetWrapperComponent } from '@components/overlays/current-session-widget-wrapper.component';
 import { DuelsDecktrackerOocWidgetWrapperComponent } from '@components/overlays/duels-decktracker-ooc-widget-wrapper.component';
 import { DuelsOocDeckSelectWidgetWrapperComponent } from '@components/overlays/duels-ooc-deck-select-widget-wrapper.component';
@@ -877,6 +879,8 @@ const components = [
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
+		PlayerBgsSouthseaWidgetWrapperComponent,
+		PlayerBgsMajordomoWidgetWrapperComponent,
 
 		OpponentCounterWidgetWrapperComponent,
 		OpponentWatchpostCounterWidgetWrapperComponent,

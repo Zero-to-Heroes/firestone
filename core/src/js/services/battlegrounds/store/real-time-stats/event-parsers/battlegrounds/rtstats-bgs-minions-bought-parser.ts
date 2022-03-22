@@ -1,7 +1,6 @@
-import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
 import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../../../../../models/game-event';
-import { RealTimeStatsState } from '../../real-time-stats';
+import { NumericTurnInfoWithCardIds, RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsMinionsBoughtParser implements EventParser {
@@ -23,14 +22,16 @@ export class RTStatBgsMinionsBoughtParser implements EventParser {
 			return currentState;
 		}
 
-		const boughtThisTurn =
-			currentState.minionsBoughtOverTurn.find((info) => info.turn === currentState.currentTurn)?.value ?? 0;
-		const newBought: readonly NumericTurnInfo[] = [
+		const boughtThisTurn = currentState.minionsBoughtOverTurn.find(
+			(info) => info.turn === currentState.currentTurn,
+		);
+		const newBought: readonly NumericTurnInfoWithCardIds[] = [
 			...currentState.minionsBoughtOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
-				value: boughtThisTurn + 1,
-			},
+				value: (boughtThisTurn?.value ?? 0) + 1,
+				cardIds: (boughtThisTurn?.cardIds ?? []).concat(gameEvent.cardId),
+			} as NumericTurnInfoWithCardIds,
 		];
 
 		return currentState.update({

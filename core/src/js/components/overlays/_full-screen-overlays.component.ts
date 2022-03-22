@@ -86,6 +86,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-hero-power-damage-widget-wrapper></opponent-hero-power-damage-widget-wrapper>
+
+			<!-- BG Counters -->
+			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>
+			<player-bgs-majordomo-widget-wrapper></player-bgs-majordomo-widget-wrapper>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

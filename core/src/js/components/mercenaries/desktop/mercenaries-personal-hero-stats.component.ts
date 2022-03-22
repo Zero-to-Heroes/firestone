@@ -157,7 +157,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.pipe(
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-				// tap((info) => console.debug('hop', info)),
 				map(([referenceData, collectionInfo]) =>
 					collectionInfo.Mercenaries.map((memMerc) =>
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),

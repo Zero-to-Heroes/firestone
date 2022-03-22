@@ -1,5 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BgsMajordomoCounterDefinition } from '@components/game-counters/definitions/bgs-majordomo-counter';
+import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -80,12 +82,15 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 					this.mapData(([state]) => this.buildDefinition(state, this.activeCounter, this.side)),
 				);
 		} else {
-			this.definition$ = this.store
-				.listenBattlegrounds$(([state, prefs]) => state)
-				.pipe(
-					filter(([state]) => !!state),
-					this.mapData(([state]) => this.buildBgsDefinition(state, this.activeCounter, this.side)),
-				);
+			this.definition$ = combineLatest(
+				this.store.listenBattlegrounds$(([state, prefs]) => state),
+				this.store.listenDeckState$((state) => state),
+			).pipe(
+				filter(([[bgState], [deckState]]) => !!bgState && !!deckState),
+				this.mapData(([[bgState], [deckState]]) =>
+					this.buildBgsDefinition(bgState, this.activeCounter, deckState, this.side),
+				),
+			);
 		}
 	}
 
@@ -135,11 +140,22 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	private buildBgsDefinition(
 		gameState: BattlegroundsState,
 		activeCounter: CounterType,
+		deckState: GameState,
 		side: string,
 	): CounterDefinition {
 		switch (activeCounter) {
 			case 'bgsPogo':
 				return BgsPogoCounterDefinition.create(gameState, side, this.i18n);
+			case 'bgsSouthsea':
+				return BgsSouthseaStrongarmCounterDefinition.create(
+					gameState,
+					side,
+					deckState,
+					this.allCards,
+					this.i18n,
+				);
+			case 'bgsMajordomo':
+				return BgsMajordomoCounterDefinition.create(gameState, side, deckState, this.allCards, this.i18n);
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 		}

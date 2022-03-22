@@ -7,6 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -52,8 +53,10 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
 	protected prefExtractor: (prefs: Preferences) => boolean;
-	protected deckStateExtractor: (deckState: GameState) => boolean;
+	protected deckStateExtractor: (deckState: GameState, bgsState?: BattlegroundsState) => boolean;
 	protected isWidgetVisible = () => this.visible;
+
+	protected onBgs: boolean;
 
 	private visible: boolean;
 
@@ -83,21 +86,27 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 				(deckState) => deckState?.gameEnded,
 				(deckState) => deckState?.isBattlegrounds(),
 				(deckState) => deckState?.isMercenaries(),
-				(deckState) => (this.deckStateExtractor ? this.deckStateExtractor(deckState) : true),
+				(deckState) => deckState,
 			),
+			this.store.listenBattlegrounds$(([gameState]) => gameState),
 			displayFromGameMode$,
 		).pipe(
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs],
-					[gameStarted, gameEnded, isBgs, isMercs, displayFromState],
+					[gameStarted, gameEnded, isBgs, isMercs, deckState],
+					[bgState],
 					displayFromGameMode,
 				]) => {
+					const displayFromState = this.deckStateExtractor
+						? this.deckStateExtractor(deckState, bgState)
+						: true;
 					if (
 						!gameStarted ||
-						isBgs ||
+						(this.onBgs && !isBgs) ||
+						(!this.onBgs && isBgs) ||
 						isMercs ||
-						!displayFromGameMode ||
+						(!this.onBgs && !displayFromGameMode) ||
 						!displayFromPrefs ||
 						!displayFromState
 					) {

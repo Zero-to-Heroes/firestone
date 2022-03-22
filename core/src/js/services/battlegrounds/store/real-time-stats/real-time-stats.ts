@@ -41,7 +41,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly freezesOverTurn: readonly NumericTurnInfo[] = [];
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
-	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[] = [];
+	readonly minionsBoughtOverTurn: readonly NumericTurnInfoWithCardIds[] = [];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[] = [];
 	readonly luckFactor: number = 0;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
@@ -68,4 +68,8 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 
 export interface HpTurnInfo extends NumericTurnInfo {
 	readonly armor: number;
+}
+
+export interface NumericTurnInfoWithCardIds extends NumericTurnInfo {
+	readonly cardIds: readonly string[];
 }
