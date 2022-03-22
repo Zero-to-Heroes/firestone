@@ -38,7 +38,7 @@
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.92",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.95",
 		"@firestone-hs/reference-data": "^0.1.209",
 		"@firestone-hs/replay-parser": "^1.1.44",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
