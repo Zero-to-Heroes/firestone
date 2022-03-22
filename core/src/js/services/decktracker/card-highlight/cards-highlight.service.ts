@@ -294,6 +294,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.StonehearthVindicator:
 				return and(inDeck, spell, effectiveCostLess(4));
+			case CardIds.SrTombDiver:
+			case CardIds.JrTombDiver:
+				return and(or(inDeck, inOther), spell, secret);
 			case CardIds.SwordOfTheFallen:
 				return and(inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:
