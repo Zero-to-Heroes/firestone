@@ -231,6 +231,10 @@ export class TwitchAuthService {
 	}
 
 	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
+		// Prevent info leak
+		if (state.currentGame?.players?.length < 8) {
+			return [];
+		}
 		return [...(state.currentGame?.players || [])]
 			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
 			.map((player) => this.buildLeaderboardPlayer(player));
