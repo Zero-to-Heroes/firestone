@@ -60,6 +60,10 @@ export class BattlegroundsHeroSortDropdownComponent
 	ngAfterContentInit() {
 		this.options = [
 			{
+				value: 'tier',
+				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.tier'),
+			} as HeroSortFilterOption,
+			{
 				value: 'average-position',
 				label: this.i18n.translateString('app.battlegrounds.filters.hero-sort.average-position'),
 			} as HeroSortFilterOption,

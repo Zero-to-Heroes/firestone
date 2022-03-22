@@ -284,6 +284,8 @@ const mergeHeroStats = (stats: readonly BgsGlobalHeroStat2[]): BgsGlobalHeroStat
 
 const buildSortingFunction = (heroSortFilter: BgsHeroSortFilterType): ((a: BgsHeroStat, b: BgsHeroStat) => number) => {
 	switch (heroSortFilter) {
+		case 'tier':
+			return (a, b) => a.averagePosition - b.averagePosition;
 		case 'games-played':
 			return (a, b) => b.playerGamesPlayed - a.playerGamesPlayed;
 		case 'mmr':
