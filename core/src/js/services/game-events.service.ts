@@ -586,6 +586,20 @@ export class GameEvents {
 					),
 				);
 				break;
+			case 'COUNTER_WILL_TRIGGER':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(
+						GameEvent.COUNTER_WILL_TRIGGER,
+						gameEvent,
+						gameEvent.Value.AdditionalProps
+							? {
+									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
+							  }
+							: null,
+					),
+				);
+				break;
 			case 'SECRET_TRIGGERED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(
