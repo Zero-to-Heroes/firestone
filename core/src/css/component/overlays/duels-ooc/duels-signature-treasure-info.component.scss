@@ -48,6 +48,7 @@
 			text-overflow: ellipsis;
 			max-width: 100%;
 			margin-bottom: 2vh;
+			flex-shrink: 0;
 		}
 
 		.images-container {

@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -45,7 +45,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	signatureTreasures$: Observable<readonly ReferenceCard[]>;
 	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 
-	private selectedHeroPowerCardId = new BehaviorSubject<string>(null);
+	private selectedSignatureTreasureCardId = new BehaviorSubject<string>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -207,26 +207,53 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				},
 			),
 		);
-		this.signatureTreasureInfo$ = combineLatest(this.selectedHeroPowerCardId.asObservable(), allStats$).pipe(
-			this.mapData(([currentSignatureTreasureCardId, allStats]) => {
+		this.signatureTreasureInfo$ = combineLatest(
+			this.selectedSignatureTreasureCardId.asObservable(),
+			selectedHeroPower$,
+			allStats$,
+		).pipe(
+			this.mapData(([currentSignatureTreasureCardId, heroPowerCardId, allStats]) => {
 				if (!currentSignatureTreasureCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat?.cardId === currentSignatureTreasureCardId)?.stat;
+				const result = allStats.find((stat) => stat?.cardId === currentSignatureTreasureCardId)?.stat;
+				console.log('result', result);
+				if (!!result) {
+					return result;
+				}
+
+				const heroConfig = duelsHeroConfigs.find((conf) =>
+					conf.signatureTreasures?.includes(currentSignatureTreasureCardId as CardIds),
+				);
+				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
+					(value, index) => ({
+						winNumber: index,
+						value: 0,
+					}),
+				);
+				return {
+					cardId: currentSignatureTreasureCardId,
+					heroCardId: heroConfig?.hero,
+					heroPowerCardId: heroPowerCardId,
+					name: this.allCards.getCard(currentSignatureTreasureCardId)?.name,
+					globalTotalMatches: 0,
+					globalWinDistribution: emptyWinDistribution,
+					playerMatches: 0,
+				} as DuelsSignatureTreasureInfo;
 			}),
 		);
 	}
 
 	async onMouseEnter(cardId: string) {
-		this.selectedHeroPowerCardId.next(null);
+		this.selectedSignatureTreasureCardId.next(null);
 		await sleep(100);
 		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
-		this.selectedHeroPowerCardId.next(cardId);
+		this.selectedSignatureTreasureCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string) {
 		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedHeroPowerCardId.next(null);
+		// this.selectedHeroPowerCardId.next(null);
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

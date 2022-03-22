@@ -128,7 +128,7 @@ export class DuelsSignatureTreasureInfoComponent {
 		this.playerWinrate = value.playerWinrate;
 		this.globalPopularity = value.globalPopularity;
 		this.playerMatches = this.i18n.translateString('duels.hero-info.player-matches', {
-			value: value.playerMatches,
+			value: value.playerMatches ?? 0,
 		});
 		this.globalWinDistribution = {
 			data:
@@ -138,9 +138,9 @@ export class DuelsSignatureTreasureInfoComponent {
 					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;
-		this.totalDecks = value.topDecks.length;
-		this.decks = value.topDecks.slice(0, 6);
-		this.totalRuns = value.globalTotalMatches;
+		this.totalDecks = value.topDecks?.length ?? 0;
+		this.decks = value.topDecks?.slice(0, 6);
+		this.totalRuns = value.globalTotalMatches ?? 0;
 	}
 
 	heroPortrait: string;
