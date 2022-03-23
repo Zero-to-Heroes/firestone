@@ -28,7 +28,7 @@ export class OwnedFilterComponent implements AfterViewInit {
 	readonly FILTER_ALL = 'all';
 
 	cardsOwnedSelectOptions: IOption[] = [
-		{ label: this.i18n.translateString('app.collection.filters.owned.pwn'), value: this.FILTER_OWN },
+		{ label: this.i18n.translateString('app.collection.filters.owned.own'), value: this.FILTER_OWN },
 		{ label: this.i18n.translateString('app.collection.filters.owned.dontown'), value: this.FILTER_DONT_OWN },
 		{ label: this.i18n.translateString('app.collection.filters.owned.all'), value: this.FILTER_ALL },
 	];

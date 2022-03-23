@@ -17,8 +17,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesEmptyStateComponent {
-	@Input() title = this.i18n.translateString('mercenaries.emty-state.title');
-	@Input() subtitle = this.i18n.translateString('mercenaries.emty-state.subtitle');
+	@Input() title = this.i18n.translateString('mercenaries.empty-state.title');
+	@Input() subtitle = this.i18n.translateString('mercenaries.empty-state.subtitle');
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 }

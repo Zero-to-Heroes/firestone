@@ -80,11 +80,11 @@ export class ArenaTimeFilterDropdownComponent
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
-							label: this.i18n.translateString('app.arena.filters.time.past-7'),
+							label: this.i18n.translateString('app.arena.filters.time.past-seven'),
 						} as TimeFilterOption,
 						{
 							value: 'past-three',
-							label: this.i18n.translateString('app.arena.filters.time.past-3'),
+							label: this.i18n.translateString('app.arena.filters.time.past-three'),
 						} as TimeFilterOption,
 					] as readonly TimeFilterOption[];
 					return {
