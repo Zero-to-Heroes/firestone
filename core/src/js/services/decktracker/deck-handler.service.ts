@@ -3,7 +3,7 @@ import { Board, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
-import { getDefaultHeroDbfIdForClass } from '../hs-utils';
+import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
 @Injectable()
@@ -74,10 +74,10 @@ export class DeckHandlerService {
 		} as DeckCard);
 	}
 
-	public normalizeDeckstring(deckstring: string, heroCardId?: string): string {
+	public normalizeDeckstring(deckstring: string): string {
 		try {
 			const deck = decode(deckstring);
-			deck.heroes = deck.heroes?.map((heroDbfId) => this.normalizeHero(heroDbfId, heroCardId));
+			deck.heroes = deck.heroes?.map((heroDbfId) => normalizeDeckHeroDbfId(heroDbfId, this.allCards));
 			const newDeckstring = encode(deck);
 			return newDeckstring;
 		} catch (e) {

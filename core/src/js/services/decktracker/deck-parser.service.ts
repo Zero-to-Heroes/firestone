@@ -20,7 +20,7 @@ import { MemoryUpdate } from '../../models/memory/memory-update';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { getDefaultHeroDbfIdForClass } from '../hs-utils';
+import { getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
@@ -277,7 +277,7 @@ export class DeckParserService {
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
-				? [this.handler.normalizeHero(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId) || 7]
+				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId, this.allCards)]
 				: deckFromMemory.HeroClass
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],

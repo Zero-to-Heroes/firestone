@@ -65,7 +65,7 @@ export class GameStatsLoaderService {
 					...stat,
 					playerDecklist: isMercenaries(stat.gameMode)
 						? stat.playerDecklist
-						: this.handler.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
+						: this.handler.normalizeDeckstring(stat.playerDecklist),
 					// Because old stats are corrupted
 					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
 					postMatchStats: postMatchStats,
