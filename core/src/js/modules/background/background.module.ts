@@ -1,5 +1,6 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
 import {
 	ApplicationRef,
@@ -551,24 +552,25 @@ const components = [
 
 @NgModule({
 	imports: [
-		BrowserModule,
-		HttpClientModule,
+		AngularResizedEventModule,
 		BrowserAnimationsModule,
-		DragDropModule,
-		SharedServicesModule.forRoot(),
-		InlineSVGModule.forRoot(),
-		SelectModule,
-		FormsModule,
-		ReactiveFormsModule,
-		SharedModule,
+		BrowserModule,
 		ChartsModule,
+		ColiseumComponentsModule,
+		DragDropModule,
+		FormsModule,
+		HttpClientModule,
+		InlineSVGModule.forRoot(),
 		NgxChartsModule,
-		SimpleNotificationsModule.forRoot(),
 		OverlayModule,
 		PerfectScrollbarModule,
-		ColiseumComponentsModule,
+		ReactiveFormsModule,
+		ScrollingModule,
+		SharedModule,
 		SharedDeckTrackerModule,
-		AngularResizedEventModule,
+		SharedServicesModule.forRoot(),
+		SelectModule,
+		SimpleNotificationsModule.forRoot(),
 	],
 	declarations: [
 		...components,

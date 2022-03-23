@@ -2,6 +2,7 @@
 export class FeatureFlags {
 	public static readonly ENABLE_DETAILED_MERC = false;
 	public static readonly ENABLE_DUELS_OOC = true;
+	public static readonly ENABLE_DUELS_DECK_BUILDER = false;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;

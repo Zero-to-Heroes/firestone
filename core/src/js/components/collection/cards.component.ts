@@ -13,13 +13,14 @@ import {
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+
+export const DEFAULT_CARD_WIDTH = 170;
+export const DEFAULT_CARD_HEIGHT = 240;
 
 @Component({
 	selector: 'cards',
@@ -180,9 +181,6 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 		value: filter,
 	}));
 
-	readonly DEFAULT_CARD_WIDTH = 170;
-	readonly DEFAULT_CARD_HEIGHT = 240;
-
 	highRes$: Observable<boolean>;
 
 	_searchString: string;
@@ -194,8 +192,8 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 	cardsOwnedActiveFilter = this.FILTER_ALL;
 	loading = false;
 
-	cardWidth = this.DEFAULT_CARD_WIDTH;
-	cardHeight = this.DEFAULT_CARD_HEIGHT;
+	cardWidth = DEFAULT_CARD_WIDTH;
+	cardHeight = DEFAULT_CARD_HEIGHT;
 
 	private iterator: IterableIterator<void>;
 
@@ -212,24 +210,11 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((value) => {
 				const cardScale = value / 100;
-				this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-				this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+				this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
+				this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
