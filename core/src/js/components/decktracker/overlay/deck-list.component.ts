@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -23,11 +24,14 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[colorManaCost]="true"
 			[collection]="collection"
 			[side]="side"
+			(cardClicked)="onCardClicked($event)"
 		></decktracker-deck-list>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckListComponent {
+	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
 	@Input() side: 'player' | 'opponent' | 'duels';
 
 	@Input() set deckstring(value: string) {
@@ -65,4 +69,8 @@ export class DeckListComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {}
+
+	onCardClicked(card: VisualDeckCard) {
+		this.cardClicked.next(card);
+	}
 }

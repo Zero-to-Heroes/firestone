@@ -3,8 +3,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	Input,
 	Optional,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -52,6 +54,7 @@ import { groupByFunction } from '../../../services/utils';
 						[showStatsChange]="_showStatsChange"
 						[zone]="_zone"
 						[side]="side"
+						(cardClicked)="onCardClicked($event)"
 					></deck-card>
 				</li>
 			</ul>
@@ -60,6 +63,8 @@ import { groupByFunction } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckZoneComponent implements AfterViewInit {
+	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
 	@Input() colorManaCost: boolean;
 	@Input() showUnknownCards: boolean;
 
@@ -127,6 +132,10 @@ export class DeckZoneComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onCardClicked(card: VisualDeckCard) {
+		this.cardClicked.next(card);
 	}
 
 	trackCard(index, card: VisualDeckCard) {

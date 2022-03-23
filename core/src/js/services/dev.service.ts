@@ -160,6 +160,9 @@ export class DevService {
 			console.warn('iterations over');
 			// window['startDeckCycle'](logName, deckString);
 		};
+		window['encodeDeck'] = (deckstring) => {
+			console.debug(encode(deckstring));
+		};
 		window['decodeDeck'] = (deckstring) => {
 			console.debug(decode(deckstring));
 		};

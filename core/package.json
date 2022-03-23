@@ -72,6 +72,7 @@
 		"ng2-charts": "^2.3.0",
 		"ng2-fittext": "^1.2.8",
 		"ngx-perfect-scrollbar": "^8.0.0",
+		"ngx-virtual-scroller": "^4.0.3",
 		"node-vibrant": "^3.1.5",
 		"pako": "1.0.10",
 		"queue-typescript": "1.0.1",

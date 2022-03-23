@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	Output,
+} from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -25,12 +33,15 @@ import { SetCard } from '../../../models/set';
 				[showStatsChange]="showStatsChange"
 				[side]="side"
 				[collection]="collection"
+				(cardClicked)="onCardClicked($event)"
 			></deck-zone>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupedDeckListComponent implements OnDestroy {
+	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
 	@Input() colorManaCost: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -75,6 +86,10 @@ export class GroupedDeckListComponent implements OnDestroy {
 	ngOnDestroy(): void {
 		this.zone = null;
 		this._deckState = null;
+	}
+
+	onCardClicked(card: VisualDeckCard) {
+		this.cardClicked.next(card);
 	}
 
 	private buildGroupedList() {

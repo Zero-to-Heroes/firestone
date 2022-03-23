@@ -4,12 +4,15 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Optional,
+	Output,
 	ViewRef,
 } from '@angular/core';
+import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -57,6 +60,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltipPosition]="_tooltipPosition"
 					[collection]="collection"
 					[side]="side"
+					(cardClicked)="onCardClicked($event)"
 				>
 				</grouped-deck-list>
 			</ng-container>
@@ -65,6 +69,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
@@ -111,6 +117,10 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
+	}
+
+	onCardClicked(card: VisualDeckCard) {
+		this.cardClicked.next(card);
 	}
 
 	private refreshScroll() {

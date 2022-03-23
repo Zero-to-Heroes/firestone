@@ -1,6 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
 import {
 	ApplicationRef,
@@ -53,6 +52,7 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AchievementCategoryComponent } from '../../components/achievements/achievement-category.component';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
@@ -565,12 +565,13 @@ const components = [
 		OverlayModule,
 		PerfectScrollbarModule,
 		ReactiveFormsModule,
-		ScrollingModule,
+		// ScrollingModule,
 		SharedModule,
 		SharedDeckTrackerModule,
 		SharedServicesModule.forRoot(),
 		SelectModule,
 		SimpleNotificationsModule.forRoot(),
+		VirtualScrollerModule,
 	],
 	declarations: [
 		...components,

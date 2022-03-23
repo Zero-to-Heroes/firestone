@@ -2,10 +2,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Optional,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
@@ -38,6 +40,7 @@ import { uuid } from '../../../services/utils';
 			[cardTooltipPosition]="'auto'"
 			(mouseenter)="onMouseEnter($event)"
 			(mouseleave)="onMouseLeave($event)"
+			(click)="onCardClicked($event)"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
@@ -132,6 +135,8 @@ import { uuid } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckCardComponent implements OnDestroy {
+	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 		this.cdr.detectChanges();
@@ -268,6 +273,10 @@ export class DeckCardComponent implements OnDestroy {
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+	}
+
+	onCardClicked(event: MouseEvent) {
+		this.cardClicked.next(this._card);
 	}
 
 	private async updateInfos() {
