@@ -26,6 +26,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						class="copy-deckstring"
 						[deckstring]="deckInfo.deck.initialDeckList"
 						[copyText]="'decktracker.deck-name.copy-deckstring-label' | owTranslate"
+						[origin]="'duels-high-wins'"
 					></copy-deckstring>
 				</div>
 			</div>

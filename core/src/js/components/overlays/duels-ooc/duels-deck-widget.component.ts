@@ -8,6 +8,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { OverwolfService } from '@services/overwolf.service';
 import { decode, encode } from 'deckstrings';
 
+declare let amplitude;
+
 @Component({
 	selector: 'duels-deck-widget',
 	styleUrls: [
@@ -140,6 +142,7 @@ export class DuelsDeckWidgetComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
+		amplitude.getInstance().logEvent('copy-deckstring', { 'origin': 'duels-quick-deck' });
 	}
 
 	getImage(cardId: string) {

@@ -5,6 +5,8 @@ import { decode, encode } from 'deckstrings';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare let amplitude;
+
 @Component({
 	selector: 'copy-deckstring',
 	styleUrls: [
@@ -30,6 +32,7 @@ export class CopyDesckstringComponent {
 	@Input() copyText: string;
 	@Input() showTooltip: boolean;
 	@Input() title: string;
+	@Input() origin: string;
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
@@ -75,5 +78,6 @@ export class CopyDesckstringComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
+		amplitude.getInstance().logEvent('copy-deckstring', { 'origin': this.origin });
 	}
 }
