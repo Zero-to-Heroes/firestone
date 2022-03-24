@@ -1,3 +1,5 @@
+import { CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { DuelsHeroFilterType } from '@models/duels/duels-hero-filter.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
@@ -14,7 +16,10 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		await this.prefs.updateDuelsHeroFilter(event.value);
+		const uniqueNormalizedHeroes: DuelsHeroFilterType = [
+			...new Set(event.value.map((hero) => normalizeDuelsHeroCardId(hero) as CardIds)),
+		];
+		await this.prefs.updateDuelsHeroFilter(uniqueNormalizedHeroes);
 		return [null, null];
 	}
 }

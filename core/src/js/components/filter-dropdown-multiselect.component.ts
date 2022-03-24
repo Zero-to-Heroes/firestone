@@ -79,7 +79,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	@Input() placeholder: string;
 	@Input() set options(value: readonly MultiselectOption[]) {
-		this.options$.next(value);
+		this.options$.next(value.filter((option) => !!option));
 	}
 
 	@Input() set selected(value: readonly string[]) {
@@ -129,11 +129,14 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 				if (!selected?.length || selected.length === options.length) {
 					return this.placeholder;
 				}
-				return this.buildIcons(
+				console.debug('multiselect icons', selected, options);
+				const result = this.buildIcons(
 					selected
 						.map((sel) => options.find((option) => option.value === sel))
+						.filter((option) => !!option)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				);
+				return result;
 			}),
 		);
 		// Reset the info every time the input options change
@@ -149,10 +152,12 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 			filter(([options, tempSelected]) => !!options),
 			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 			this.mapData(([options, tempSelected]) => {
-				return options.map((option) => ({
+				const result = options.map((option) => ({
 					...option,
 					selected: tempSelected?.includes(option.value),
 				}));
+				console.debug('multiselect options', result, options, tempSelected);
+				return result;
 			}),
 		);
 		this.validSelection$ = combineLatest(this.options$.asObservable(), this.workingOptions$).pipe(
@@ -230,6 +235,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	private buildIcons(options: MultiselectOption[]): string {
+		console.debug('multiselect buildIcons', options);
 		const icons = options.map((option) => `<img src="${option.image}" class="icon" />`).join('');
 		return `<div class="selection-icons">${icons}</div>`;
 	}

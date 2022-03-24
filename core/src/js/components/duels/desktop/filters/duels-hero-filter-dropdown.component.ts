@@ -93,6 +93,6 @@ export class DuelsHeroFilterDropdownComponent
 
 	onSelected(option: DuelsHeroFilterType) {
 		console.debug('selecting', option);
-		this.stateUpdater.next(new DuelsTopDecksHeroFilterSelectedEvent(option));
+		this.stateUpdater.next(new DuelsTopDecksHeroFilterSelectedEvent(option.filter((o) => !!o)));
 	}
 }
