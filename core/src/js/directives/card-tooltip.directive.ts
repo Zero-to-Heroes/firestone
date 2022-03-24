@@ -1,16 +1,6 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	ComponentRef,
-	Directive,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, HostListener, Input, OnDestroy } from '@angular/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
@@ -19,7 +9,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class CardTooltipDirective implements AfterViewInit, OnDestroy {
+export class CardTooltipDirective implements OnDestroy {
 	@Input('cardTooltip') cardId = undefined;
 	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 	@Input() cardTooltipCard: DeckCard = undefined;
@@ -32,7 +22,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		if (value !== this._position) {
 			this._position = value;
-			this.updatePositionStrategy();
+			this.positionStrategyDirty = true;
 		}
 	}
 
@@ -41,17 +31,14 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
+	private positionStrategyDirty = true;
+
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
 		private elementRef: ElementRef,
 		private overlay: Overlay,
 		private cdr: ChangeDetectorRef,
 	) {}
-
-	ngAfterViewInit() {
-		this.cdr.detach();
-		this.updatePositionStrategy();
-	}
 
 	private updatePositionStrategy() {
 		if (this.positionStrategy) {
@@ -170,9 +157,9 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private hideTimeout;
@@ -193,6 +180,11 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 		if (!this.cardId && !this.cardTooltipCard) {
 			return;
+		}
+
+		if (this.positionStrategyDirty) {
+			this.updatePositionStrategy();
+			this.positionStrategyDirty = false;
 		}
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
@@ -218,9 +210,9 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 
 		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
@@ -238,9 +230,9 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			// if (!(this.cdr as ViewRef)?.destroyed) {
+			// 	this.cdr.detectChanges();
+			// }
 		}
 	}
 }
