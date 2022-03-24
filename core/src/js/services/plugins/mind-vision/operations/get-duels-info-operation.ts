@@ -17,7 +17,6 @@ export class GetDuelsInfoOperation extends MindVisionOperationFacade<DuelsInfo> 
 					...info,
 					FormatType: GameFormat.FT_WILD,
 					Name: i18n.translateString('app.duels.deck-stat.default-deck-name-blank'),
-					HeroCardId: 'HERO_01', // Fake
 				} as DuelsInfo),
 			3,
 			1500,

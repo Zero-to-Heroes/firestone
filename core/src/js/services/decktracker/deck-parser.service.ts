@@ -4,6 +4,7 @@ import {
 	CardClass,
 	GameFormat,
 	GameType,
+	normalizeDuelsHeroCardId,
 	PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
@@ -107,7 +108,7 @@ export class DeckParserService {
 		// need to regenerate the deck
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
 		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 2);
-		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory);
+		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory, this.duelsDeck);
 		const activeDeck =
 			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
 			deckFromMemory;
@@ -277,7 +278,13 @@ export class DeckParserService {
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
-				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId, this.allCards)]
+				? [
+						normalizeDeckHeroDbfId(
+							// normalize, so that we have the "base" Vanndar / DrekThar
+							this.allCards.getCard(normalizeDuelsHeroCardId(deckFromMemory.HeroCardId))?.dbfId,
+							this.allCards,
+						),
+				  ]
 				: deckFromMemory.HeroClass
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],
