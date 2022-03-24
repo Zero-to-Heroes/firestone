@@ -11,7 +11,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	],
 	template: `
 		<div class="board-tooltip" *ngIf="_boardMinions?.length">
-			<bgs-board [entities]="_boardMinions" [maxBoardHeight]="-1"></bgs-board>
+			<bgs-board [entities]="_boardMinions"></bgs-board>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

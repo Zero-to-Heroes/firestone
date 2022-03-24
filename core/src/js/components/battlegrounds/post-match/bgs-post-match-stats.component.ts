@@ -55,7 +55,6 @@ import { normalizeCardId } from './card-utils';
 							[entities]="boardMinions"
 							[finalBoard]="true"
 							[minionStats]="minionStats"
-							[maxBoardHeight]="-1"
 							[customTitle]="boardTitle"
 						></bgs-board>
 					</div>

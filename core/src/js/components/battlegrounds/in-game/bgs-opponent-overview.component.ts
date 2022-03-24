@@ -32,7 +32,6 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
-					[maxBoardHeight]="-1"
 				></bgs-board>
 				<div class="filler"></div>
 			</div>

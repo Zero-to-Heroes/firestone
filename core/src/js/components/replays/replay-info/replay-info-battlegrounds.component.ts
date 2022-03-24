@@ -55,7 +55,6 @@ declare let amplitude;
 						[useFullWidth]="true"
 						[hideDamageHeader]="true"
 						[debug]="false"
-						[maxBoardHeight]="-1"
 					></bgs-board>
 				</div>
 

@@ -20,12 +20,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			class="opponent-overview"
 		>
 			<div class="main-info">
-				<bgs-board
-					[entities]="boardMinions"
-					[currentTurn]="currentTurn"
-					[boardTurn]="boardTurn"
-					[maxBoardHeight]="-1"
-				></bgs-board>
+				<bgs-board [entities]="boardMinions" [currentTurn]="currentTurn" [boardTurn]="boardTurn"></bgs-board>
 				<div class="bottom-info">
 					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 					<bgs-buddies
