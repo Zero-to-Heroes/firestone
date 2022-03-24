@@ -307,6 +307,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
+			case CardIds.Vectus:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.VengefulSpirit2:
 				return and(inDeck, deathrattle);
 			case CardIds.WarsongWrangler:
