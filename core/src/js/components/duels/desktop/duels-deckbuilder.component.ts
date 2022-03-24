@@ -67,7 +67,12 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								[style.height.px]="cardHeight"
 							>
 								<div class="card">
-									<img *ngIf="card.imagePath" [src]="card.imagePath" class="real-card" />
+									<img
+										*ngIf="card?.imagePath"
+										[src]="card.imagePath"
+										[cardTooltip]="card.cardId"
+										class="real-card"
+									/>
 								</div>
 							</div>
 						</virtual-scroller>
@@ -118,7 +123,11 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 			this.mapData((cards) =>
 				cards
 					.filter((card) => card.collectible)
-					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase()),
+					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase())
+					// Remove hero skins
+					.filter((card) => card.set !== 'Hero_skins')
+					// Filter "duplicates" between Core / Legacy / Vanilla
+					.filter((card) => !card?.deckDuplicateDbfId),
 			),
 		);
 		const collection$ = this.store
