@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { DuelsInfo } from '@models/memory/memory-duels';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -23,6 +24,14 @@ export class EndGameListenerService {
 	private bgsHasPrizes: boolean;
 	private bgsCurrentRating: number;
 	private bgsNewRating: number;
+	private reviewId: string;
+
+	private paramsMap: Map<
+		string,
+		{
+			duelsInfo: DuelsInfo;
+		}
+	> = new Map();
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -45,6 +54,21 @@ export class EndGameListenerService {
 				console.log('[manastorm-bridge] assigned BGS new rating', this.bgsNewRating);
 			}
 		});
+		this.events.on(Events.DUELS_INFO_UPDATED).subscribe((event) => {
+			const info = event.data[0];
+			const reviewId = info.reviewId;
+			const duelsInfo = info.duelsInfo;
+			const existingParams = this.paramsMap.get(reviewId) ?? {};
+			const newParams = {
+				...existingParams,
+				duelsInfo: duelsInfo,
+			};
+			this.paramsMap.set(reviewId, newParams);
+			console.log('[manastorm-bridge] assigned new duels info', this.paramsMap);
+		});
+		// TODO: might be worth it to use a state machine here as well, in order to avoid mixing the data
+		// from different games
+		// Ideally all data would be queued until the service is back to its READY state
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
 				case GameEvent.GAME_START:
@@ -61,6 +85,10 @@ export class EndGameListenerService {
 					this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
 					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
 					this.currentGameMode = gameEvent.additionalData.metaData.GameType;
+					this.reviewId = await this.gameState.getCurrentReviewId();
+					if (this.paramsMap.size > 0) {
+						console.warn('getting new reviewId before being able to send the current info', this.paramsMap);
+					}
 					break;
 				case GameEvent.BATTLEGROUNDS_HERO_SELECTED:
 					this.bgsCurrentRating = this.bgsStore.state?.currentGame?.mmrAtStart;
@@ -81,15 +109,16 @@ export class EndGameListenerService {
 						console.log('[manastorm-bridge] spectate game, not uploading');
 						return;
 					}
+					this.stopListenToDeckUpdates();
+					const duelsInfo = this.paramsMap.get(this.reviewId)?.duelsInfo;
+					console.log('[manastorm-bridge] retrieved duels info for review', duelsInfo);
+
 					// Keep the await / long processes here to a minimum, since
 					// we want to start reading all the important memory bits as soon
 					// as possible
-					const reviewId = await this.gameState.getCurrentReviewId();
-					this.stopListenToDeckUpdates();
-
 					await this.endGameUploader.upload(
 						gameEvent,
-						reviewId,
+						this.reviewId,
 						this.currentDeckstring,
 						this.currentDeckname,
 						this.currentBuildNumber,
@@ -101,13 +130,15 @@ export class EndGameListenerService {
 								newRating: this.bgsNewRating,
 							},
 							duelsInfo: {
-								wins: this.duelsMonitor.currentDuelsWins,
-								losses: this.duelsMonitor.currentDuelsLosses,
-								rating: this.duelsMonitor.currentDuelsRating,
-								paidRating: this.duelsMonitor.currentDuelsPaidRating,
+								wins: duelsInfo?.Wins,
+								losses: duelsInfo?.Losses,
+								rating: duelsInfo?.Rating,
+								paidRating: duelsInfo?.PaidRating,
 							},
 						},
 					);
+
+					this.paramsMap.delete(this.reviewId);
 					break;
 			}
 		});

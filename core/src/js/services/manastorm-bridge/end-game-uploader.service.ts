@@ -225,6 +225,9 @@ export class EndGameUploaderService {
 			// is more up-to-date, but maybe that could be wrong if there is some lag and the user has already started a new game
 			// UPDATE: the other way around is used everywhere else, so sticking with it, as it hasn't
 			// revealed any major bug
+			// UPDATE2: there are some issues where the game data that is sent already contains the info for the next game
+			// which leads to duplicate entries in terms of win/loss (eg at 3-1, lost, the data is only retrieved after it has
+			// been update to 3-2, and so we send twice the info with 3-2)
 			const wins = params.duelsInfo?.wins ?? duelsInfo?.Wins;
 			const losses = params.duelsInfo?.losses ?? duelsInfo?.Losses;
 			if (wins != null && losses != null) {

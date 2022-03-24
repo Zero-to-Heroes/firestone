@@ -356,6 +356,10 @@ export class DungeonLootParserService {
 			this.currentDuelsHeroPowerCardDbfId,
 			this.currentDuelsSignatureTreasureCardId,
 		);
+		this.events.broadcast(Events.DUELS_INFO_UPDATED, {
+			reviewId: this.currentReviewId,
+			duelsInfo: duelsInfo,
+		});
 	}
 
 	private findSignatureTreasure(deckList: readonly number[]): string {
