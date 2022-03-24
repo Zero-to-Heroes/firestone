@@ -610,7 +610,7 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 
 export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeService): number => {
 	const playerClass: string = cards.getCardFromDbfId(heroDbfId)?.playerClass;
-	console.debug('matching playerClass', playerClass, heroDbfId);
+	// console.debug('matching playerClass', playerClass, heroDbfId);
 	switch (playerClass) {
 		case 'DemonHunter':
 		case 'Demonhunter':
