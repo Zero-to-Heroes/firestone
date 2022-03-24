@@ -23,7 +23,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@Input() set componentType(value: ComponentType<any>) {
 		this._componentType = value;
-
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();
 		}
@@ -31,7 +30,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@Input() set componentInput(value: any) {
 		this._componentInput = value;
-
 		if (value && value !== this._componentInput) {
 			this.updatePositionStrategy();
 		}
@@ -45,6 +43,8 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
+	private positionDirty = true;
+
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
 		private elementRef: ElementRef,
@@ -54,7 +54,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	ngAfterViewInit() {
 		this.viewInit = true;
-		this.updatePositionStrategy();
 	}
 
 	private updatePositionStrategy() {
@@ -98,6 +97,10 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (this.positionDirty) {
+			this.updatePositionStrategy();
+			this.positionDirty = false;
+		}
 		if (!this.tooltipRef) {
 			// Create tooltip portal
 			this.tooltipPortal = new ComponentPortal(this._componentType);
@@ -113,9 +116,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	@HostListener('mouseleave')
@@ -125,9 +128,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 
 		this.tooltipRef.instance.visible = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	@HostListener('window:mousewheel')
@@ -137,9 +140,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 
 		this.tooltipRef.instance.visible = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private buildPositions(): ConnectedPosition[] {

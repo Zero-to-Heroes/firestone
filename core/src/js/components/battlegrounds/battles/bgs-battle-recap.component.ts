@@ -48,7 +48,7 @@ declare let amplitude;
 							[componentInput]="entity"
 							[componentTooltipPosition]="'right'"
 						>
-							<card-on-board class="minion" [entity]="entity" [useSvg]="false"> </card-on-board>
+							<card-on-board class="minion" [entity]="entity"> </card-on-board>
 						</div>
 					</div>
 				</div>
@@ -63,7 +63,7 @@ declare let amplitude;
 							[componentInput]="entity"
 							[componentTooltipPosition]="'left'"
 						>
-							<card-on-board class="minion" [entity]="entity" [useSvg]="false"> </card-on-board>
+							<card-on-board class="minion" [entity]="entity"> </card-on-board>
 						</div>
 					</div>
 					<div class="hero">

@@ -58,7 +58,6 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					<card-on-board
 						class="minion"
 						[entity]="entity"
-						[useSvg]="false"
 						(mousedown)="preventAppDrag($event)"
 						cdkDrag
 						[cdkDragData]="entity"

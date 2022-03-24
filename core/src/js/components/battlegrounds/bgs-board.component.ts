@@ -40,7 +40,6 @@ import { normalizeCardId } from './post-match/card-utils';
 						[entity]="entity"
 						[isMainPlayer]="isMainPlayer"
 						[isRecruitPhase]="isRecruitPhase"
-						[useSvg]="false"
 						cachedComponentTooltip
 						[componentType]="componentType"
 						[componentInput]="entity"
