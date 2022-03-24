@@ -1,0 +1,72 @@
+.battlegrounds {
+	.group.result {
+		width: 55px;
+		display: flex;
+	}
+
+	.tribes {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.tribe {
+			width: 30px;
+			height: 30px;
+			margin-top: -5px;
+			margin-right: 0px;
+
+			.icon {
+				clip-path: ellipse(35% 35% at 50% 50%);
+				width: 120%;
+				height: 120%;
+			}
+		}
+	}
+
+	.warband {
+		bgs-board {
+			height: 100%;
+			position: relative;
+			top: -11px;
+			margin-left: 7px;
+
+			::ng-deep {
+				.board-turn {
+					display: none;
+				}
+				board-card-stats .stat .value.value.value.value.value {
+					font-size: 14px;
+				}
+				.minion-container {
+					margin-right: 7px;
+					li {
+						height: 45px;
+						width: 30.5px;
+
+						.card-on-board-overlays {
+							.overlay {
+								width: 170%;
+								left: -35%;
+								top: -9%;
+
+								&.minion_windfury {
+									opacity: 0.8;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 1400px) {
+	.replay-info {
+		&.battlegrounds {
+			.tribes {
+				display: none;
+			}
+		}
+	}
+}

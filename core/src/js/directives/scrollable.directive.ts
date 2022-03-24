@@ -1,9 +1,11 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Directive({
 	selector: '[scrollable]',
 })
 export class ScrollableDirective {
+	@Output() scrolling = new EventEmitter<boolean>();
+
 	constructor(private elementRef: ElementRef) {}
 
 	@HostListener('mousedown', ['$event'])
@@ -14,8 +16,16 @@ export class ScrollableDirective {
 			const rect = scrollableEl.getBoundingClientRect();
 			if (event.offsetX >= rect.width - scrollbarWidth) {
 				event.stopPropagation();
+				console.debug('started scrolling');
+				this.scrolling.next(true);
 				return;
 			}
 		}
+	}
+
+	@HostListener('mouseup')
+	onHistoryMouseUp() {
+		console.debug('stopped scrolling');
+		this.scrolling.next(false);
 	}
 }

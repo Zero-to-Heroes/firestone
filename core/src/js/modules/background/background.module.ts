@@ -36,6 +36,8 @@ import { DuelsOutOfCombatTreasureSelectionComponent } from '@components/overlays
 import { DuelsSignatureTreasureInfoComponent } from '@components/overlays/duels-ooc/duels-signature-treasure-info.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
+import { ReplayInfoBattlegroundsComponent } from '@components/replays/replay-info/replay-info-battlegrounds.component';
+import { ReplayInfoRankedComponent } from '@components/replays/replay-info/replay-info-ranked.component';
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
 import { SettingsBattlegroundsSessionComponent } from '@components/settings/battlegrounds/settings-battlegrounds-session.component';
 import { SettingsDecktrackerDuelsComponent } from '@components/settings/decktracker/settings-decktracker-duels.component';
@@ -339,7 +341,10 @@ import { GameReplayComponent } from '../../components/replays/game-replay.compon
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from '../../components/replays/match-details.component';
 import { RankImageComponent } from '../../components/replays/rank-image.component';
-import { ReplayInfoComponent, ReplayInfoMercPlayerComponent } from '../../components/replays/replay-info.component';
+import {
+	ReplayInfoComponent,
+	ReplayInfoMercPlayerComponent,
+} from '../../components/replays/replay-info/_replay-info.component';
 import { ReplayIconToggleComponent } from '../../components/replays/replays-icon-toggle.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplayMercDetailsToggleComponent } from '../../components/replays/replays-merc-details-toggle.component';
@@ -693,6 +698,8 @@ const components = [
 		// ReplaysFilterComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
+		ReplayInfoRankedComponent,
+		ReplayInfoBattlegroundsComponent,
 		ReplayInfoMercPlayerComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,

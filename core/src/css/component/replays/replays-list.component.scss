@@ -31,6 +31,25 @@
 	padding-right: 10px;
 	min-height: 0;
 
+	.header {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 19px;
+		color: var(--default-title-color);
+		margin-bottom: 5px;
+
+		&:not(:first-child) {
+			margin-top: 10px;
+		}
+	}
+
+	.replay {
+		display: block;
+		margin-bottom: 5px;
+	}
+
 	::ng-deep replay-info {
 		.replay-info {
 			&.battlegrounds {

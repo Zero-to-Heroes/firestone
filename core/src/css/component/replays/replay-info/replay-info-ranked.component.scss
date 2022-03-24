@@ -1,0 +1,10 @@
+.replay-info {
+	// Probably temporary, but in the meantime we need to make the ranked icons bigger
+	.player-rank {
+		width: 37px;
+		height: 37px;
+		margin-left: -7px;
+		left: 3px;
+		position: relative;
+	}
+}

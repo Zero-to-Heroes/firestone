@@ -10,14 +10,13 @@ import {
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { arraysEqual, groupByFunction } from '../../services/utils';
+import { groupByFunction } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -45,28 +44,47 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					*ngIf="value.showMercDetailsToggle"
 				></replays-merc-details-toggle>
 			</div>
-			<infinite-scroll *ngIf="allReplays?.length" class="replays-list" (scrolled)="onScroll()" scrollable>
+			<virtual-scroller
+				#scroll
+				*ngIf="replays$ | async as replays; else emptyState"
+				class="replays-list"
+				[items]="replays"
+				bufferAmount="5"
+				[scrollDebounceTime]="scrollDebounceTime"
+				scrollable
+				(scrolling)="onScrolling($event)"
+			>
+				<!-- Because the virtual-scroller needs elements of the same size to work, we can't give it groups -->
+				<ng-container *ngFor="let replay of scroll.viewPortItems; trackBy: trackByReplay">
+					<div class="header" *ngIf="replay.header">{{ replay.header }}</div>
+					<replay-info class="replay" *ngIf="!replay.header" [replay]="replay"></replay-info>
+				</ng-container>
+			</virtual-scroller>
+
+			<!-- <infinite-scroll *ngIf="allReplays?.length" class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let groupedReplay of displayedGroupedReplays">
 					<grouped-replays [groupedReplays]="groupedReplay"></grouped-replays>
 				</li>
 				<div
 					class="loading"
 					*ngIf="isLoading"
-					(click)="onScroll()"
+					(click)="onScroll()" 
 					[owTranslate]="'app.replays.list.load-more-button'"
 				></div>
-			</infinite-scroll>
-			<section class="empty-state" *ngIf="!allReplays?.length">
-				<div class="state-container">
-					<i class="i-236X165">
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#empty_state_replays" />
-						</svg>
-					</i>
-					<span class="title" [owTranslate]="'app.replays.list.empty-state-title'"></span>
-					<span class="subtitle" [owTranslate]="'app.replays.list.empty-state-subtitle'"></span>
-				</div>
-			</section>
+			</infinite-scroll> -->
+			<ng-template #emptyState>
+				<section class="empty-state">
+					<div class="state-container">
+						<i class="i-236X165">
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#empty_state_replays" />
+							</svg>
+						</i>
+						<span class="title" [owTranslate]="'app.replays.list.empty-state-title'"></span>
+						<span class="subtitle" [owTranslate]="'app.replays.list.empty-state-subtitle'"></span>
+					</div>
+				</section>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,10 +93,13 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;
+	replays$: Observable<readonly (GameStat | HeaderInfo)[]>;
 
 	isLoading: boolean;
 	allReplays: readonly GameStat[];
 	displayedGroupedReplays: readonly GroupedReplays[] = [];
+
+	scrollDebounceTime = 0;
 
 	private sub$$: Subscription;
 	private displayedReplays: readonly GameStat[] = [];
@@ -119,7 +140,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 					].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
 			),
 		);
-		this.sub$$ = this.store
+		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
@@ -130,35 +151,78 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			)
 			.pipe(
 				filter(([gameStats]) => !!gameStats?.length),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(
-				([
-					gameStats,
-					gameModeFilter,
-					bgHeroFilter,
-					deckstringFilter,
-					playerClassFilter,
-					opponentClassFilter,
-				]) => {
-					// Otherwise the generator is simply closed at the end of the first onScroll call
-					setTimeout(() => {
-						this.displayedReplays = [];
-						this.displayedGroupedReplays = [];
-						this.gamesIterator = this.buildIterator(
-							gameStats,
+				this.mapData(
+					([
+						gameStats,
+						gameModeFilter,
+						bgHeroFilter,
+						deckstringFilter,
+						playerClassFilter,
+						opponentClassFilter,
+					]) => {
+						const allReplays = this.applyFilters(
+							gameStats ?? [],
 							gameModeFilter,
 							bgHeroFilter,
 							deckstringFilter,
 							playerClassFilter,
 							opponentClassFilter,
 						);
-						this.onScroll();
-					});
-				},
+						const groupedReplays = this.groupReplays(allReplays);
+						const flat = groupedReplays
+							.filter((group) => group?.replays?.length)
+							.flatMap((group) => {
+								return [
+									{
+										header: group.header,
+									} as HeaderInfo,
+									...group.replays,
+								];
+							});
+						return flat;
+					},
+				),
 			);
+		// this.sub$$ = this.store
+		// 	.listen$(
+		// 		([main, nav]) => main.replays.allReplays,
+		// 		([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
+		// 		([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
+		// 		([main, nav, prefs]) => prefs.replaysActiveDeckstringFilter,
+		// 		([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
+		// 		([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
+		// 	)
+		// 	.pipe(
+		// 		filter(([gameStats]) => !!gameStats?.length),
+		// 		distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		// 		tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+		// 		takeUntil(this.destroyed$),
+		// 	)
+		// 	.subscribe(
+		// 		([
+		// 			gameStats,
+		// 			gameModeFilter,
+		// 			bgHeroFilter,
+		// 			deckstringFilter,
+		// 			playerClassFilter,
+		// 			opponentClassFilter,
+		// 		]) => {
+		// 			// Otherwise the generator is simply closed at the end of the first onScroll call
+		// 			setTimeout(() => {
+		// 				this.displayedReplays = [];
+		// 				this.displayedGroupedReplays = [];
+		// 				this.gamesIterator = this.buildIterator(
+		// 					gameStats,
+		// 					gameModeFilter,
+		// 					bgHeroFilter,
+		// 					deckstringFilter,
+		// 					playerClassFilter,
+		// 					opponentClassFilter,
+		// 				);
+		// 				this.onScroll();
+		// 			});
+		// 		},
+		// 	);
 	}
 
 	@HostListener('window:beforeunload')
@@ -167,8 +231,20 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		this.sub$$?.unsubscribe();
 	}
 
+	onScrolling(scrolling: boolean) {
+		this.scrollDebounceTime = scrolling ? 1000 : 0;
+		console.debug('handling scrolling in parent', scrolling, this.scrollDebounceTime);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	onScroll() {
 		this.gamesIterator && this.gamesIterator.next();
+	}
+
+	trackByReplay(index: number, item: GameStat | HeaderInfo) {
+		return (item as GameStat).reviewId ?? (item as HeaderInfo)?.header;
 	}
 
 	private *buildIterator(
@@ -298,4 +374,8 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			replays: replaysByDate[date],
 		}));
 	}
+}
+
+interface HeaderInfo {
+	header: string;
 }
