@@ -26,48 +26,6 @@
 			position: relative;
 		}
 	}
-
-	&.mercenaries {
-		.right-info .replay {
-			display: none;
-		}
-	}
-
-	&.mercenaries.show-merc-details {
-		height: 60px;
-
-		.mercenaries-player-images {
-			height: calc(100% + 20px);
-			.portrait {
-				&.bench {
-					display: flex;
-				}
-			}
-		}
-
-		::ng-deep replay-info-merc-player {
-			.merc-portrait {
-				width: 60px;
-				margin-right: -15px;
-
-				.equipment {
-					display: flex;
-				}
-			}
-		}
-
-		.vs {
-			margin-left: 20px;
-		}
-	}
-
-	// &.battlegrounds,
-	// &.arena {
-	// 	::ng-deep .rank-text {
-	// 		bottom: -18%;
-	// 		// padding-right: 13px;
-	// 	}
-	// }
 }
 
 .result-color-code {
@@ -149,79 +107,6 @@
 	}
 }
 
-.merc-portrait {
-	flex-grow: 0;
-	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	width: 40px;
-	height: auto;
-	position: relative;
-	top: 0;
-	left: 0;
-	z-index: 9;
-	margin-top: 0;
-	margin-bottom: 0;
-	margin-right: -5px;
-
-	.icon {
-		position: absolute;
-		top: 11%;
-		left: 13%;
-		width: 76%;
-		height: auto;
-		clip-path: ellipse(35% 44% at 50% 50%);
-	}
-
-	.frame {
-		width: 100%;
-		z-index: 1;
-	}
-
-	.equipment {
-		position: absolute;
-		width: 30px;
-		z-index: 9;
-		flex-grow: 0;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		z-index: 9;
-		bottom: 0;
-		top: auto;
-		left: 14px;
-		display: none;
-
-		.icon {
-			position: absolute;
-			width: 85%;
-			height: auto;
-			top: 4%;
-			left: 4%;
-			clip-path: inset(10% 15% 15% 10%);
-		}
-
-		.frame {
-			width: 100%;
-			z-index: 1;
-		}
-	}
-}
-
-.mercenaries-player-images {
-	.portrait {
-		&.bench {
-			opacity: 0.5;
-			display: none;
-		}
-	}
-
-	.player-name {
-		margin-left: 15px;
-		width: auto;
-	}
-}
-
 .left-info,
 .right-info {
 	display: flex;
@@ -245,18 +130,6 @@
 		height: 30px;
 		margin-right: 5px;
 	}
-
-	// .rank-text {
-	// 	position: absolute;
-	// 	bottom: 3px;
-	// 	text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
-	// 	color: white;
-	// 	font-size: 14px;
-	// 	width: 100%;
-	// 	text-align: center;
-	// 	padding-right: 3px;
-	// 	font-family: Passion One;
-	// }
 }
 
 .player-name {
@@ -379,83 +252,5 @@
 	&:hover svg {
 		color: var(--on-menu-selection-color);
 		--icon-color: var(--on-menu-selection-color);
-	}
-}
-
-.replay-info.battlegrounds {
-	// ::ng-deep rank-image .frame {
-	// 	height: 95%;
-	// 	top: -4px;
-	// 	left: -2px;
-	// }
-	.group.result {
-		width: 55px;
-		display: flex;
-	}
-
-	.tribes {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		.tribe {
-			width: 30px;
-			height: 30px;
-			margin-top: -5px;
-			margin-right: 0px;
-
-			.icon {
-				clip-path: ellipse(35% 35% at 50% 50%);
-				width: 120%;
-				height: 120%;
-			}
-		}
-	}
-
-	.warband {
-		bgs-board {
-			height: 100%;
-			position: relative;
-			top: -11px;
-			margin-left: 7px;
-
-			::ng-deep {
-				.board-turn {
-					display: none;
-				}
-				board-card-stats .stat .value.value.value.value.value {
-					font-size: 14px;
-				}
-				.minion-container {
-					margin-right: 7px;
-					li {
-						height: 45px;
-						width: 30.5px;
-
-						.card-on-board-overlays {
-							.overlay {
-								width: 170%;
-								left: -35%;
-								top: -9%;
-
-								&.minion_windfury {
-									opacity: 0.8;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-@media (max-width: 1400px) {
-	.replay-info {
-		&.battlegrounds {
-			.tribes {
-				display: none;
-			}
-		}
 	}
 }

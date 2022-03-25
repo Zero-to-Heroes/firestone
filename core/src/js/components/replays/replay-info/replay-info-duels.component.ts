@@ -10,58 +10,25 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { isDuels } from '@services/duels/duels-utils';
-import { isMercenaries } from '@services/mercenaries/mercenaries-utils';
 import { Subscription } from 'rxjs';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
+import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
-	selector: 'replay-info',
+	selector: 'replay-info-duels',
 	styleUrls: [
 		`../../../../css/global/menu.scss`,
 		`../../../../css/component/replays/replay-info/replay-info.component.scss`,
 	],
 	template: `
-		<replay-info-ranked
-			*ngIf="gameMode === 'ranked'"
-			[showStatsLabel]="showStatsLabel"
-			[showReplayLabel]="showReplayLabel"
-			[displayCoin]="displayCoin"
-			[replay]="replayInfo"
-		></replay-info-ranked>
-		<replay-info-battlegrounds
-			*ngIf="gameMode === 'battlegrounds'"
-			[showStatsLabel]="showStatsLabel"
-			[showReplayLabel]="showReplayLabel"
-			[replay]="replayInfo"
-		></replay-info-battlegrounds>
-		<replay-info-mercenaries
-			*ngIf="isMercenaries"
-			[showStatsLabel]="showStatsLabel"
-			[showReplayLabel]="showReplayLabel"
-			[replay]="replayInfo"
-		></replay-info-mercenaries>
-		<replay-info-duels
-			*ngIf="isDuels"
-			[showStatsLabel]="showStatsLabel"
-			[showReplayLabel]="showReplayLabel"
-			[replay]="replayInfo"
-			[displayLoot]="displayLoot"
-			[displayShortLoot]="displayShortLoot"
-			[displayCoin]="displayCoin"
-		></replay-info-duels>
-
-		<div
-			*ngIf="gameMode !== 'ranked' && gameMode !== 'battlegrounds' && !isMercenaries && !isDuels"
-			class="replay-info {{ gameMode }} {{ visualResult }}"
-		>
+		<div class="replay-info duels {{ visualResult }}">
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -81,16 +48,43 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
-				<div
-					class="group mmr"
-					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
-					*ngIf="deltaMmr != null"
-				>
-					<div class="value">{{ deltaMmr }}</div>
-					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
+				<div class="group loot" *ngIf="_displayLoot && loots?.length">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/loot.svg"
+						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
+					></div>
+					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
 
-				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg && !isMercenaries">
+				<div class="group short-loot" *ngIf="!_displayLoot && _displayShortLoot && loots?.length">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/loot.svg"
+						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
+					></div>
+					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
+				</div>
+
+				<div class="group treasure" *ngIf="_displayLoot && treasure">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/treasure.svg"
+						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
+					></div>
+					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
+				</div>
+
+				<div class="group short-treasure" *ngIf="!_displayLoot && _displayShortLoot && treasure">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/treasure.svg"
+						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
+					></div>
+					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
+				</div>
+
+				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg">
 					<div
 						class="play-coin-icon icon"
 						[innerHTML]="playCoinIconSvg"
@@ -120,36 +114,44 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
-	@Input() displayLoot: boolean;
-	@Input() displayShortLoot: boolean;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}
-
-	gameMode: StatGameModeType;
-	isMercenaries: boolean;
-	isDuels: boolean;
+	@Input() set displayLoot(value: boolean) {
+		console.debug('displayLoot', value);
+		this._displayLoot = value;
+	}
+	@Input() set displayShortLoot(value: boolean) {
+		console.debug('displayShortLoot', value);
+		this._displayShortLoot = value;
+	}
 
 	replayInfo: GameStat;
-	visualResult: string;
-
 	replaysShowClassIcon: boolean;
+
+	_displayLoot: boolean;
+	_displayShortLoot: boolean;
+
+	visualResult: string;
+	gameMode: StatGameModeType;
 	playerClassImage: string;
 	playerClassTooltip: string;
 	opponentClassImage: string;
 	opponentClassTooltip: string;
-	opponentName: string;
 
+	opponentName: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
-	deltaMmr: number;
+
+	treasure: InternalLoot;
+	loots: InternalLoot[];
 
 	private sub$$: Subscription;
 
@@ -175,11 +177,15 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
-		this.sub$$?.unsubscribe();
+		this.sub$$.unsubscribe();
 	}
 
 	showReplay() {
 		this.store.send(new ShowReplayEvent(this.reviewId));
+	}
+
+	showStats() {
+		this.store.send(new TriggerShowMatchStatsEvent(this.reviewId));
 	}
 
 	capitalize(input: string): string {
@@ -191,8 +197,6 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 			return;
 		}
 		this.gameMode = this.replayInfo.gameMode;
-		this.isMercenaries = isMercenaries(this.gameMode);
-		this.isDuels = isDuels(this.gameMode);
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(
 			this.replayInfo,
 			true,
@@ -209,6 +213,24 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
+		this.loots = [];
+		const isDuelsInfo = (value: any): value is RunStep =>
+			(this.replayInfo as RunStep).treasureCardId !== undefined ||
+			(this.replayInfo as RunStep).lootCardIds !== undefined;
+		if (isDuelsInfo(this.replayInfo)) {
+			if (this.replayInfo.treasureCardId) {
+				this.treasure = {
+					cardId: this.replayInfo.treasureCardId,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.replayInfo.treasureCardId}.jpg`,
+				};
+			}
+			if (this.replayInfo.lootCardIds?.length) {
+				this.loots = this.replayInfo.lootCardIds.map((loot) => ({
+					cardId: loot,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
+				}));
+			}
+		}
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {
@@ -253,4 +275,9 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent implement
 		}
 		return name.split('#')[0];
 	}
+}
+
+interface InternalLoot {
+	icon: string;
+	cardId: string;
 }
