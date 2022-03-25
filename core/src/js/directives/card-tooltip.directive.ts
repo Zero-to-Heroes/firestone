@@ -1,6 +1,15 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectorRef, ComponentRef, Directive, ElementRef, HostListener, Input, OnDestroy } from '@angular/core';
+import {
+	ChangeDetectorRef,
+	ComponentRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
@@ -166,7 +175,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.onMouseLeave();
+		this.onMouseLeave(true);
 	}
 
 	@HostListener('mouseenter')
@@ -223,16 +232,22 @@ export class CardTooltipDirective implements OnDestroy {
 	}
 
 	@HostListener('mouseleave')
-	onMouseLeave() {
+	onMouseLeave(willBeDestroyed = false) {
+		this.positionStrategyDirty = true;
+
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
 
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			// if (!(this.cdr as ViewRef)?.destroyed) {
-			// 	this.cdr.detectChanges();
-			// }
+			// This can cause the "destroyed of null" error if not guarded when component is destroyed
+			if (!willBeDestroyed) {
+				// The guard is not necessary with markForCheck(), but this doesn't work well
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
 		}
 	}
 }

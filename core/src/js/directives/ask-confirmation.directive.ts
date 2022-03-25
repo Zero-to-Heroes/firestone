@@ -119,10 +119,6 @@ export class AskConfirmationDirective implements OnDestroy {
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.positionStrategy.detach();
-			// this.overlayRef.dispose();
-			// if (!(this.cdr as ViewRef)?.destroyed) {
-			// 	this.cdr.detectChanges();
-			// }
 		}
 	}
 
