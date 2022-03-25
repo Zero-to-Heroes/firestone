@@ -31,35 +31,23 @@
 	padding-right: 10px;
 	min-height: 0;
 
-	li {
+	.header {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 19px;
+		color: var(--default-title-color);
 		margin-bottom: 5px;
+
+		&:not(:first-child) {
+			margin-top: 15px;
+		}
 	}
 
-	.grouped-runs {
-		display: flex;
-		flex-direction: column;
-		margin-bottom: 10px;
-
-		.header {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			font-size: 14px;
-			line-height: 19px;
-			color: var(--default-title-color);
-			margin-bottom: 5px;
-		}
-
-		.runs {
-			flex-grow: 1;
-			display: flex;
-			flex-wrap: wrap;
-
-			duels-run {
-				width: 100%;
-				margin-bottom: 5px;
-			}
-		}
+	duels-run {
+		width: 100%;
+		margin-bottom: 5px;
 	}
 }
 

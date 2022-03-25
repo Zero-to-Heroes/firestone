@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -245,9 +244,9 @@ export class DuelsRunComponent implements AfterViewInit {
 			: null;
 		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private extractLoot(info: DuelsRunInfo): readonly string[] {

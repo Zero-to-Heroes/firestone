@@ -1,15 +1,7 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -61,17 +53,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				</ng-container>
 			</virtual-scroller>
 
-			<!-- <infinite-scroll *ngIf="allReplays?.length" class="replays-list" (scrolled)="onScroll()" scrollable>
-				<li *ngFor="let groupedReplay of displayedGroupedReplays">
-					<grouped-replays [groupedReplays]="groupedReplay"></grouped-replays>
-				</li>
-				<div
-					class="loading"
-					*ngIf="isLoading"
-					(click)="onScroll()" 
-					[owTranslate]="'app.replays.list.load-more-button'"
-				></div>
-			</infinite-scroll> -->
 			<ng-template #emptyState>
 				<section class="empty-state">
 					<div class="state-container">
@@ -89,21 +70,13 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class ReplaysListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;
 	replays$: Observable<readonly (GameStat | HeaderInfo)[]>;
 
-	isLoading: boolean;
-	allReplays: readonly GameStat[];
-	displayedGroupedReplays: readonly GroupedReplays[] = [];
-
 	scrollDebounceTime = 0;
-
-	private sub$$: Subscription;
-	private displayedReplays: readonly GameStat[] = [];
-	private gamesIterator: IterableIterator<void>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -183,52 +156,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 					},
 				),
 			);
-		// this.sub$$ = this.store
-		// 	.listen$(
-		// 		([main, nav]) => main.replays.allReplays,
-		// 		([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
-		// 		([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
-		// 		([main, nav, prefs]) => prefs.replaysActiveDeckstringFilter,
-		// 		([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
-		// 		([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
-		// 	)
-		// 	.pipe(
-		// 		filter(([gameStats]) => !!gameStats?.length),
-		// 		distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		// 		tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-		// 		takeUntil(this.destroyed$),
-		// 	)
-		// 	.subscribe(
-		// 		([
-		// 			gameStats,
-		// 			gameModeFilter,
-		// 			bgHeroFilter,
-		// 			deckstringFilter,
-		// 			playerClassFilter,
-		// 			opponentClassFilter,
-		// 		]) => {
-		// 			// Otherwise the generator is simply closed at the end of the first onScroll call
-		// 			setTimeout(() => {
-		// 				this.displayedReplays = [];
-		// 				this.displayedGroupedReplays = [];
-		// 				this.gamesIterator = this.buildIterator(
-		// 					gameStats,
-		// 					gameModeFilter,
-		// 					bgHeroFilter,
-		// 					deckstringFilter,
-		// 					playerClassFilter,
-		// 					opponentClassFilter,
-		// 				);
-		// 				this.onScroll();
-		// 			});
-		// 		},
-		// 	);
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
-		this.sub$$?.unsubscribe();
 	}
 
 	onScrolling(scrolling: boolean) {
@@ -239,50 +166,8 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		}
 	}
 
-	onScroll() {
-		this.gamesIterator && this.gamesIterator.next();
-	}
-
 	trackByReplay(index: number, item: GameStat | HeaderInfo) {
 		return (item as GameStat).reviewId ?? (item as HeaderInfo)?.header;
-	}
-
-	private *buildIterator(
-		replays: readonly GameStat[],
-		gameModeFilter: string,
-		bgHeroFilter: string,
-		deckstringFilter: string,
-		playerClassFilter: string,
-		opponentClassFilter: string,
-		step = 40,
-	): IterableIterator<void> {
-		this.allReplays = this.applyFilters(
-			replays ?? [],
-			gameModeFilter,
-			bgHeroFilter,
-			deckstringFilter,
-			playerClassFilter,
-			opponentClassFilter,
-		);
-		const workingReplays = [...this.allReplays];
-		while (workingReplays.length > 0) {
-			const currentReplays = [];
-			while (workingReplays.length > 0 && currentReplays.length < step) {
-				currentReplays.push(...workingReplays.splice(0, 1));
-			}
-			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			this.displayedGroupedReplays = this.groupReplays(this.displayedReplays);
-			this.isLoading = this.allReplays.length > step;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			yield;
-		}
-		this.isLoading = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		return;
 	}
 
 	private applyFilters(

@@ -3,17 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -23,51 +20,47 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [`../../../../css/component/duels/desktop/duels-runs-list.component.scss`],
 	template: `
 		<div class="duels-runs-container">
-			<infinite-scroll *ngIf="allRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
+			<virtual-scroller
+				#scroll
+				*ngIf="runs$ | async as runs; else emptyState"
+				class="runs-list"
+				[items]="runs"
+				bufferAmount="5"
+				scrollable
+			>
+				<!-- Because the virtual-scroller needs elements of the same size to work, we can't give it groups -->
 				<ng-container *ngIf="{ expandedRunIds: expandedRunIds$ | async } as value">
-					<li
-						*ngFor="let groupedRun of displayedGroupedRuns; trackBy: trackByGroupedRun"
-						class="grouped-runs"
-					>
-						<div class="header">{{ groupedRun.header }}</div>
-						<ul class="runs">
-							<duels-run
-								*ngFor="let run of groupedRun.runs; trackBy: trackByRun"
-								[run]="run"
-								[displayLoot]="displayLoot"
-								[displayShortLoot]="displayShortLoot"
-								[isExpanded]="value.expandedRunIds?.includes(run.id)"
-							></duels-run>
-						</ul>
-					</li>
+					<ng-container *ngFor="let run of scroll.viewPortItems; trackBy: trackByRun">
+						<div class="header" *ngIf="run.header">{{ run.header }}</div>
+						<duels-run
+							*ngIf="!run.header"
+							[run]="run"
+							[displayLoot]="displayLoot"
+							[displayShortLoot]="displayShortLoot"
+							[isExpanded]="value.expandedRunIds?.includes(run.id)"
+						></duels-run>
+					</ng-container>
 				</ng-container>
-				<div class="loading" *ngIf="isLoading" [owTranslate]="'app.duels.run.load-more-button'"></div>
-			</infinite-scroll>
-			<duels-empty-state *ngIf="!allRuns?.length"></duels-empty-state>
+			</virtual-scroller>
+
+			<ng-template #emptyState>
+				<duels-empty-state></duels-empty-state>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	// https://stackoverflow.com/a/52436938/548701
+	runs$: Observable<readonly (DuelsRun | HeaderInfo)[]>;
+	expandedRunIds$: Observable<readonly string[]>;
+
 	@Input() set deckstring(value: string) {
 		this.deckstring$.next(value);
 	}
 	@Input() displayLoot = true;
 	@Input() displayShortLoot = false;
 
-	expandedRunIds$: Observable<readonly string[]>;
-
-	isLoading: boolean;
-	allRuns: readonly DuelsRun[] = [];
-	displayedGroupedRuns: readonly GroupedRun[] = [];
-
-	_deckstring: string;
-
 	private deckstring$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-	private sub$$: Subscription;
-	private displayedRuns: readonly DuelsRun[] = [];
-	private runsIterator: IterableIterator<void>;
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
@@ -81,82 +74,41 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(this.mapData(([expandedRunIds]) => expandedRunIds));
-		this.sub$$ = combineLatest(
-			this.store
-				.listen$(
-					([main, nav]) => main.duels.runs,
-					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
-					([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
-					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-					// TODO: MMR filter
-				)
-				.pipe(
-					filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
-					map(([runs, timeFilter, classFilter, gameMode, patch]) =>
-						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
-					),
-					takeUntil(this.destroyed$),
-				),
+		this.runs$ = combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.duels.runs,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+				// TODO: MMR filter
+			),
 			this.deckstring$.asObservable(),
-		)
-			.pipe(
-				map(([runs, deckstring]) =>
-					!deckstring?.length ? runs : runs.filter((run) => run.initialDeckList === deckstring),
-				),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((runs) => {
-				// Otherwise the generator is simply closed at the end of the first onScroll call
-				setTimeout(() => {
-					this.displayedRuns = [];
-					this.displayedGroupedRuns = [];
-					this.runsIterator = this.buildIterator(runs, 8);
-					this.onScroll();
-				});
-			});
+		).pipe(
+			filter(([[runs, timeFilter, classFilter, gameMode, patch], deckstring]) => !!runs?.length),
+			this.mapData(([[runs, timeFilter, classFilter, gameMode, patch], deckstring]) => {
+				const filteredRuns = filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0);
+				const runsForDeckstring = !deckstring?.length
+					? filteredRuns
+					: filteredRuns.filter((run) => run.initialDeckList === deckstring);
+				const groupedRuns = this.groupRuns(runsForDeckstring);
+				const flat = groupedRuns
+					.filter((group) => group?.runs?.length)
+					.flatMap((group) => {
+						return [
+							{
+								header: group.header,
+							} as HeaderInfo,
+							...group.runs,
+						];
+					});
+				return flat;
+			}),
+		);
 	}
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
-		this.sub$$?.unsubscribe();
-	}
-
-	onScroll() {
-		this.runsIterator && this.runsIterator.next();
-	}
-
-	trackByGroupedRun(index: number, item: GroupedRun) {
-		return item.header;
-	}
-
-	trackByRun(index: number, item: DuelsRun) {
-		return item.id;
-	}
-
-	private *buildIterator(runs: readonly DuelsRun[], step = 40): IterableIterator<void> {
-		this.allRuns = runs;
-		const workingRuns = [...this.allRuns];
-		while (workingRuns.length > 0) {
-			const currentRuns = [];
-			while (workingRuns.length > 0 && currentRuns.length < step) {
-				currentRuns.push(...workingRuns.splice(0, 1));
-			}
-			this.displayedRuns = [...this.displayedRuns, ...currentRuns];
-			this.displayedGroupedRuns = this.groupRuns(this.displayedRuns);
-			this.isLoading = this.allRuns.length > step;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			yield;
-		}
-		this.isLoading = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		return;
+	trackByRun(index: number, item: DuelsRun | HeaderInfo): string {
+		return (item as DuelsRun).id ?? (item as HeaderInfo)?.header;
 	}
 
 	private groupRuns(runs: readonly DuelsRun[]): readonly GroupedRun[] {
@@ -180,4 +132,8 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 interface GroupedRun {
 	readonly header: string;
 	readonly runs: readonly DuelsRun[];
+}
+
+interface HeaderInfo {
+	header: string;
 }
