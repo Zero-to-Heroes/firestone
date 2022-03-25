@@ -38,6 +38,7 @@ import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/ses
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { ReplayInfoBattlegroundsComponent } from '@components/replays/replay-info/replay-info-battlegrounds.component';
 import { ReplayInfoDuelsComponent } from '@components/replays/replay-info/replay-info-duels.component';
+import { ReplayInfoGenericComponent } from '@components/replays/replay-info/replay-info-generic.component';
 import {
 	ReplayInfoMercenariesComponent,
 	ReplayInfoMercPlayerComponent,
@@ -705,6 +706,7 @@ const components = [
 		ReplayInfoMercenariesComponent,
 		ReplayInfoMercPlayerComponent,
 		ReplayInfoDuelsComponent,
+		ReplayInfoGenericComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
 		RankImageComponent,
