@@ -92,8 +92,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<replay-info
 						[replay]="step"
 						[displayCoin]="false"
-						[displayLoot]="_displayLoot"
-						[displayShortLoot]="_displayShortLoot"
+						[displayLoot]="displayLoot"
+						[displayShortLoot]="displayShortLoot"
 					></replay-info>
 				</li>
 			</ul>
@@ -112,24 +112,9 @@ export class DuelsRunComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	@Input() set displayLoot(value: boolean) {
-		this._displayLoot = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@Input() set displayShortLoot(value: boolean) {
-		this._displayShortLoot = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
+	@Input() displayLoot: boolean;
+	@Input() displayShortLoot: boolean;
 	@Input() hideDeckLink = false;
-
-	_displayLoot: boolean;
-	_displayShortLoot: boolean;
 
 	gameMode: 'duels' | 'paid-duels';
 	deckstring: string;

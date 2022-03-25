@@ -48,7 +48,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
-				<div class="group loot" *ngIf="_displayLoot && loots?.length">
+				<div class="group loot" *ngIf="displayLoot && loots?.length">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
@@ -57,7 +57,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
 
-				<div class="group short-loot" *ngIf="!_displayLoot && _displayShortLoot && loots?.length">
+				<div class="group short-loot" *ngIf="!displayLoot && displayShortLoot && loots?.length">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
@@ -66,7 +66,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
 
-				<div class="group treasure" *ngIf="_displayLoot && treasure">
+				<div class="group treasure" *ngIf="displayLoot && treasure">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
@@ -75,7 +75,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 				</div>
 
-				<div class="group short-treasure" *ngIf="!_displayLoot && _displayShortLoot && treasure">
+				<div class="group short-treasure" *ngIf="!displayLoot && displayShortLoot && treasure">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
@@ -118,25 +118,16 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
+	@Input() displayLoot: boolean;
+	@Input() displayShortLoot: boolean;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
 		this.updateInfo();
 	}
-	@Input() set displayLoot(value: boolean) {
-		console.debug('displayLoot', value);
-		this._displayLoot = value;
-	}
-	@Input() set displayShortLoot(value: boolean) {
-		console.debug('displayShortLoot', value);
-		this._displayShortLoot = value;
-	}
 
 	replayInfo: GameStat;
 	replaysShowClassIcon: boolean;
-
-	_displayLoot: boolean;
-	_displayShortLoot: boolean;
 
 	visualResult: string;
 	gameMode: StatGameModeType;
