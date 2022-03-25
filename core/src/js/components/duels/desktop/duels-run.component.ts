@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	Input,
+	Input
 } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -88,12 +88,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps">
-					<replay-info
+					<replay-info-duels
 						[replay]="step"
 						[displayCoin]="false"
 						[displayLoot]="displayLoot"
 						[displayShortLoot]="displayShortLoot"
-					></replay-info>
+					></replay-info-duels>
 				</li>
 			</ul>
 		</div>
