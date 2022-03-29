@@ -22,8 +22,8 @@ declare let adsReady: any;
 declare let OwAd: any;
 declare let amplitude: any;
 
-const REFRESH_IN_MINUTES = 6;
-const REFRESH_CAP = 5;
+// const REFRESH_IN_MINUTES = 6;
+// const REFRESH_CAP = 5;
 
 @Component({
 	selector: 'ads',
@@ -56,19 +56,19 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 	@Input() parentComponent: string;
 
 	@Input() set adRefershToken(value: any) {
-		if (!value || this.forceRefreshToken === value || this.refreshesLeft === REFRESH_CAP) {
-			return;
-		}
-		console.log('[ads] forcing refresh', value, this.forceRefreshToken, this.refreshesLeft);
-		this.forceRefreshToken = value;
-		this.refreshesLeft = REFRESH_CAP;
-		this.tentativeAdRefresh();
+		// if (!value || this.forceRefreshToken === value || this.refreshesLeft === REFRESH_CAP) {
+		// 	return;
+		// }
+		// console.log('[ads] forcing refresh', value, this.forceRefreshToken, this.refreshesLeft);
+		// this.forceRefreshToken = value;
+		// this.refreshesLeft = REFRESH_CAP;
+		// this.tentativeAdRefresh();
 	}
 
 	shouldDisplayAds = true;
 
 	private windowId: string;
-	private forceRefreshToken: any;
+	// private forceRefreshToken: any;
 
 	private adRef;
 	private adInit = false;
@@ -77,13 +77,13 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 	private impressionListener: (message: any) => void;
 	private displayImpressionListener: (message: any) => void;
 	private owAdsReadyListener: (message: any) => void;
-	private refreshTimer;
+	// private refreshTimer;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private refreshesLeft = REFRESH_CAP;
+	// private refreshesLeft = REFRESH_CAP;
 
 	private tip = new BehaviorSubject<string>(null);
-	private interval;
+	private tipInterval;
 
 	constructor(
 		private adService: AdService,
@@ -113,7 +113,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();
 		this.tip$ = this.tip.asObservable().pipe(this.mapData((tip) => tip));
-		this.interval = setInterval(() => {
+		this.tipInterval = setInterval(() => {
 			this.tip.next(this.tipService.getRandomTip());
 		}, 30000);
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -129,8 +129,8 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 		this.adRef?.removeEventListener(this.impressionListener);
 		this.adRef?.removeEventListener(this.displayImpressionListener);
 		this.adRef?.removeEventListener(this.owAdsReadyListener);
-		if (this.interval) {
-			clearInterval(this.interval);
+		if (this.tipInterval) {
+			clearInterval(this.tipInterval);
 		}
 	}
 
@@ -195,16 +195,16 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 						console.log('[ads] display ad impression');
 						// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
 						// impression
-						if (!this.refreshTimer) {
-							if (this.refreshesLeft > 0) {
-								this.refreshTimer = setTimeout(() => {
-									console.log(`[ads] refreshing ad after ${REFRESH_IN_MINUTES} minutes timeout`);
-									this.refreshTimer = null;
-									this.refreshesLeft--;
-									this.refreshAds();
-								}, REFRESH_IN_MINUTES * 60 * 1000);
-							}
-						}
+						// if (!this.refreshTimer) {
+						// 	if (this.refreshesLeft > 0) {
+						// 		this.refreshTimer = setTimeout(() => {
+						// 			console.log(`[ads] refreshing ad after ${REFRESH_IN_MINUTES} minutes timeout`);
+						// 			this.refreshTimer = null;
+						// 			this.refreshesLeft--;
+						// 			this.refreshAds();
+						// 		}, REFRESH_IN_MINUTES * 60 * 1000);
+						// 	}
+						// }
 					};
 					this.owAdsReadyListener = async (data) => {
 						// console.log('[ads] owAdsReady', data);
@@ -242,10 +242,10 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 	}
 
 	private removeAds() {
-		if (this.refreshTimer) {
-			clearTimeout(this.refreshTimer);
-			this.refreshTimer = null;
-		}
+		// if (this.refreshTimer) {
+		// 	clearTimeout(this.refreshTimer);
+		// 	this.refreshTimer = null;
+		// }
 		if (!this.adRef) {
 			return;
 		}
