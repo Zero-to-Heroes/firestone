@@ -115,10 +115,10 @@ export class MercenariesTeamAbilityComponent {
 		const speedModifierBaseText = !!this.speedModifier?.value
 			? this.speed > this.baseSpeed
 				? this.i18n.translateString('mercenaries.team-widget.speed-debuff', {
-						value: this.speed - this.baseSpeed,
+						value: Math.abs(this.speed - this.baseSpeed),
 				  })
 				: this.i18n.translateString('mercenaries.team-widget.speed-buff', {
-						value: this.speed - this.baseSpeed,
+						value: Math.abs(this.speed - this.baseSpeed),
 				  })
 			: null;
 		this.speedModifierTooltip = speedModifierBaseText ? `${speedModifierBaseText}. ${influenceText}` : null;
