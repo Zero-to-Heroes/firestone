@@ -21,6 +21,10 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.ElementEarth_StoneElementalToken,
 	CardIds.BabyKrush_DevilsaurToken,
 	CardIds.DevilsaurBattlegrounds,
+	// To remove once the cards list is properly updated
+	CardIds.FriendOfAFriend,
+	CardIds.FriendOfAFriendBattlegrounds,
+	CardIds.Onyxia_OnyxianWhelpToken,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>

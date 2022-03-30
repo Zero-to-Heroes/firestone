@@ -3,7 +3,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '2022-03-24-15-39';
+export const CARDS_VERSION = '2022-03-30-16-33';
 
 export const classes = [
 	'demonhunter',
