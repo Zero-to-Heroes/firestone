@@ -253,7 +253,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 
 	onMouseLeave(cardId: string) {
 		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		// this.selectedHeroPowerCardId.next(null);
+		this.selectedSignatureTreasureCardId.next(null);
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {
