@@ -152,6 +152,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	// CardIds.ShadowDaggerLettuceEnchantment,
 	CardIds.UnnaturalSmokeLettuceEnchantment,
 	CardIds.BootsOfHasteLettuceEnchantment,
+	CardIds.StringOfFateLettuceEnchantment,
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
