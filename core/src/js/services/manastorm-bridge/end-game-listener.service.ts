@@ -112,6 +112,13 @@ export class EndGameListenerService {
 					this.stopListenToDeckUpdates();
 					const duelsInfo = this.paramsMap.get(this.reviewId)?.duelsInfo;
 					console.log('[manastorm-bridge] retrieved duels info for review', duelsInfo);
+					console.debug(
+						'[manastorm-bridge] other info',
+						this.reviewId,
+						this.currentScenarioId,
+						this.currentBuildNumber,
+						this.currentGameMode,
+					);
 
 					// Keep the await / long processes here to a minimum, since
 					// we want to start reading all the important memory bits as soon
