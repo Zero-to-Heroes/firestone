@@ -138,10 +138,16 @@ export class MercenariesBuffsParser implements MercenariesParser {
 		return !!buffValue || !!debuffValue
 			? {
 					value: debuffValue - buffValue,
-					influences: [...debuffs, ...buffs].map((buff) => ({
-						cardId: buff.cardId,
-						value: buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value,
-					})),
+					influences: [
+						...debuffs.map((buff) => ({
+							cardId: buff.cardId,
+							value: buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value,
+						})),
+						...buffs.map((buff) => ({
+							cardId: buff.cardId,
+							value: -buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value,
+						})),
+					],
 			  }
 			: null;
 	}
