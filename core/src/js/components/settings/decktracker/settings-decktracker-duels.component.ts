@@ -23,6 +23,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltip]="'settings.decktracker.duels.show-ooc-tracker-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="duelsShowInfoOnHeroSelection"
+					[label]="'settings.decktracker.duels.show-ooc-hero-info-label' | owTranslate"
+					[tooltip]="'settings.decktracker.duels.show-ooc-hero-info-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="duelsShowOocDeckSelect"
 					[label]="'settings.decktracker.duels.show-ooc-deck-select-label' | owTranslate"
 					[tooltip]="'settings.decktracker.duels.show-ooc-deck-select-tooltip' | owTranslate"
