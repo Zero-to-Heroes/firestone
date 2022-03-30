@@ -7,6 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { FeatureFlags } from '@services/feature-flags';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -58,10 +59,18 @@ export class DuelsOutOfCombatHeroSelectionWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.duelsShowInfoOnHeroSelection),
-			this.store.listen$(([main, prefs]) => main?.duels),
+			this.store.listen$(
+				([main, prefs]) => main?.duels,
+				([main, nav]) => main.currentScene,
+			),
 		).pipe(
-			this.mapData(([[displayFromPrefs], [duels]]) => {
-				return FeatureFlags.ENABLE_DUELS_OOC && displayFromPrefs && !!duels.heroOptionsDbfIds?.length;
+			this.mapData(([[displayFromPrefs], [duels, currentScene]]) => {
+				return (
+					FeatureFlags.ENABLE_DUELS_OOC &&
+					displayFromPrefs &&
+					currentScene === SceneMode.PVP_DUNGEON_RUN &&
+					!!duels.heroOptionsDbfIds?.length
+				);
 			}),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {

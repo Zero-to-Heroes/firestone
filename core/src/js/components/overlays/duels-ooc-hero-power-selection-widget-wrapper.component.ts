@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { DungeonCrawlOptionType } from '@firestone-hs/reference-data';
+import { DungeonCrawlOptionType, SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -58,10 +58,17 @@ export class DuelsOutOfCombatHeroPowerSelectionWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.duelsShowInfoOnHeroSelection),
-			this.store.listen$(([main, prefs]) => main?.duels),
+			this.store.listen$(
+				([main, prefs]) => main?.duels,
+				([main, nav]) => main.currentScene,
+			),
 		).pipe(
-			this.mapData(([[displayFromPrefs], [duels]]) => {
-				return displayFromPrefs && duels.currentOption === DungeonCrawlOptionType.HERO_POWER;
+			this.mapData(([[displayFromPrefs], [duels, currentScene]]) => {
+				return (
+					displayFromPrefs &&
+					currentScene === SceneMode.PVP_DUNGEON_RUN &&
+					duels.currentOption === DungeonCrawlOptionType.HERO_POWER
+				);
 			}),
 		);
 		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
