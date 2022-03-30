@@ -1169,17 +1169,19 @@ export class GameEvents {
 				);
 				break;
 			case 'RECONNECT_START':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }),
 				);
 				break;
 			case 'RECONNECT_OVER':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }),
 				);
 				break;
 			case 'SPECTATING':
-				console.debug(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.SPECTATING,
