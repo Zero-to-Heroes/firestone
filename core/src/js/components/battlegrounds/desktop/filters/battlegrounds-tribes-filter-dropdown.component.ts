@@ -103,7 +103,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 				selected: !!tribesFilter?.length
 					? tribesFilter.map((tribe) => '' + tribe)
 					: allTribes.map((tribe) => '' + tribe),
-				placeholder: 'All tribes',
+				placeholder: this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes'),
 				visible:
 					!['categories', 'category'].includes(currentView) &&
 					!['bgs-category-personal-stats', 'bgs-category-simulator', 'bgs-category-personal-rating'].includes(

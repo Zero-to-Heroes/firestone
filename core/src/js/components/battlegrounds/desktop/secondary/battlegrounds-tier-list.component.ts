@@ -152,7 +152,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 
 	private buildTribesFilterText(tribesFilter: readonly Race[], allTribes: readonly Race[]): string {
 		if (!tribesFilter?.length || tribesFilter.length === allTribes.length) {
-			return 'All tribes';
+			return this.i18n.translateString('app.battlegrounds.filters.tribe.all-tribes');
 		}
 		return tribesFilter
 			.map((tribe) => getTribeName(tribe, this.i18n))
