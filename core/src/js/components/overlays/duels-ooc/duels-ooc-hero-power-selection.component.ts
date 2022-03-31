@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -14,7 +14,7 @@ import {
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sleep, uuid } from '@services/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-hero-power-selection',
@@ -203,7 +203,29 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				if (!currentHeroPowerCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat?.cardId === currentHeroPowerCardId)?.stat;
+
+				const result = allStats.find((stat) => stat?.cardId === currentHeroPowerCardId)?.stat;
+				if (!!result) {
+					return result;
+				}
+
+				const heroConfig = duelsHeroConfigs.find((conf) =>
+					conf.heroPowers?.includes(currentHeroPowerCardId as CardIds),
+				);
+				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
+					(value, index) => ({
+						winNumber: index,
+						value: 0,
+					}),
+				);
+				return {
+					cardId: currentHeroPowerCardId,
+					heroCardId: heroConfig?.hero,
+					name: this.allCards.getCard(currentHeroPowerCardId)?.name,
+					globalTotalMatches: 0,
+					globalWinDistribution: emptyWinDistribution,
+					playerMatches: 0,
+				} as DuelsHeroPowerInfo;
 			}),
 		);
 	}

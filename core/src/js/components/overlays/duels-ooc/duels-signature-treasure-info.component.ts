@@ -134,7 +134,6 @@ export class DuelsSignatureTreasureInfoComponent {
 			data:
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
-					// To never show an empty bar
 					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;

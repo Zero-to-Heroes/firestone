@@ -111,7 +111,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 })
 export class DuelsHeroPowerInfoComponent {
 	@Input() set heroPowerInfo(value: DuelsHeroPowerInfo) {
-		// console.debug('setting hero info', value);
 		this.heroPortrait = this.i18n.getCardImage(value.heroCardId, { isHighRes: true, isHeroSkin: true });
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.name = value.name;
@@ -125,13 +124,12 @@ export class DuelsHeroPowerInfoComponent {
 			data:
 				value.globalWinDistribution?.map((input) => ({
 					label: '' + input.winNumber,
-					// To never show an empty bar
 					value: input.value,
 				})) ?? [],
 		} as SimpleBarChartData;
-		this.totalDecks = value.topDecks.length;
-		this.decks = value.topDecks.slice(0, 6);
-		this.totalRuns = value.globalTotalMatches;
+		this.totalDecks = value.topDecks?.length ?? 0;
+		this.decks = value.topDecks?.slice(0, 6);
+		this.totalRuns = value.globalTotalMatches ?? 0;
 	}
 
 	heroPortrait: string;
