@@ -43,13 +43,27 @@
 		}
 	}
 
-	.portrait {
-		width: 80px;
-		height: 80px;
-		clip-path: circle(25px at 50% 50%);
-		transform: scale(1.5);
-		margin-top: 15px;
-		margin-bottom: 15px;
+	.portrait-container {
+		position: relative;
+
+		.portrait {
+			width: 80px;
+			height: 80px;
+			clip-path: circle(25px at 50% 50%);
+			transform: scale(1.5);
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+
+		.secondary-class-icon {
+			position: absolute;
+			width: 30px;
+			height: 30px;
+			clip-path: circle(10px at 50% 50%);
+			transform: scale(1.5);
+			top: 15px;
+			right: -30px;
+		}
 	}
 
 	&.unused {

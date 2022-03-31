@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { CardIds } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
@@ -159,9 +160,18 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 		return stats
 			.filter((stat) => stat.globalWinrate)
 			.filter((stat) => stat.globalWinrate >= threshold && stat.globalWinrate < upper)
-			.map((stat) => ({
-				cardId: stat.cardId,
-				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${stat.cardId}.jpg`,
-			}));
+			.map((stat) => {
+				const isNeutralHero =
+					stat.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) ||
+					stat.cardId.startsWith(CardIds.DrektharTavernBrawl);
+				const card = stat.cardId ? this.allCards.getCard(stat.cardId) : null;
+				return {
+					cardId: stat.cardId,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${stat.cardId}.jpg`,
+					secondaryClassIcon: isNeutralHero
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png?v=2`
+						: null,
+				};
+			});
 	}
 }
