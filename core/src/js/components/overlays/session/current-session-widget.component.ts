@@ -202,15 +202,18 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				),
 			);
 
+		const lastModeGames$ = this.store
+			.listen$(([main, nav, prefs]) => main.stats.gameStats?.stats)
+			.pipe(this.mapData(([stats]) => stats?.filter((stat) => this.gameModeFilter(stat, this.currentMode))));
 		const lastGames$: Observable<readonly GameStat[]> = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.currentSessionStartDate),
-			this.store.listen$(([main, nav, prefs]) => main.stats.gameStats?.stats),
+			lastModeGames$,
 		).pipe(
-			this.mapData(([[sessionStartDate], [stats]]) => {
+			this.mapData(([[sessionStartDate], stats]) => {
 				// Newest game first
-				return stats
-					.filter((stat) => this.gameModeFilter(stat, this.currentMode))
-					.filter((stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime());
+				return stats.filter(
+					(stat) => !sessionStartDate || stat.creationTimestamp >= sessionStartDate.getTime(),
+				);
 			}),
 		);
 		this.totalGamesLabel$ = lastGames$.pipe(
@@ -218,15 +221,13 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				return this.i18n.translateString('session.summary.total-games', { value: games.length });
 			}),
 		);
-		this.lastGame$ = lastGames$.pipe(
-			this.mapData((games) => {
-				const lastGame = games[0];
+		// So that a rank is displayed even though we have just reset the session widget
+		this.lastGame$ = combineLatest(lastGames$, lastModeGames$).pipe(
+			this.mapData(([games, gamesForMode]) => {
+				const lastGame = games[0] ?? gamesForMode[0];
 				return !!lastGame ? lastGame.update({ playerRank: lastGame.newPlayerRank }) : null;
 			}),
 		);
-		// this.currentPlayerRank$ = lastGame$.pipe(
-		// 	this.mapData((game) => (game?.newPlayerRank != null ? game.newPlayerRank : game?.playerRank)),
-		// );
 		this.deltaRank$ = combineLatest(lastGames$, currentGameType$).pipe(
 			this.mapData(([games, currentGameType]) => {
 				let startingRank: number = null;
