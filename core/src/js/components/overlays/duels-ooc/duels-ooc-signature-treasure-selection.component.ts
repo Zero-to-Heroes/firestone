@@ -216,14 +216,24 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				if (!currentSignatureTreasureCardId) {
 					return null;
 				}
-				const result = allStats.find((stat) => stat?.cardId === currentSignatureTreasureCardId)?.stat;
-				console.log('result', result);
+
+				const heroPowerConfig = duelsHeroConfigs.find((conf) =>
+					conf.heroPowers?.includes(heroPowerCardId as CardIds),
+				);
+				const result = allStats.find(
+					(stat) =>
+						stat?.cardId === currentSignatureTreasureCardId &&
+						stat?.stat?.heroCardId === heroPowerConfig?.hero,
+				)?.stat;
+				console.log('result', currentSignatureTreasureCardId, result, allStats);
 				if (!!result) {
 					return result;
 				}
 
-				const heroConfig = duelsHeroConfigs.find((conf) =>
-					conf.signatureTreasures?.includes(currentSignatureTreasureCardId as CardIds),
+				const heroConfig = duelsHeroConfigs.find(
+					(conf) =>
+						conf.signatureTreasures?.includes(currentSignatureTreasureCardId as CardIds) &&
+						conf.hero === heroPowerConfig?.hero,
 				);
 				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
 					(value, index) => ({
