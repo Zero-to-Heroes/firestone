@@ -20,18 +20,7 @@ export class DuelsHidePersonalDeckSummaryProcessor implements Processor {
 		const currentPrefs = await this.prefs.getPreferences();
 		const newHiddenDecks = [...currentPrefs.duelsPersonalDeckHiddenDeckCodes, event.deckstring];
 		await this.prefs.setDuelsPersonalDeckHiddenDeckCodes(newHiddenDecks);
-		// const newState: DuelsState = await this.duelsStateBuilder.updateState(
-		// 	currentState.duels,
-		// 	currentState.stats.gameStats,
-		// 	currentState.binder,
-		// 	currentState.duels.currentDuelsMetaPatch,
-		// );
-		return [
-			// Object.assign(new MainWindowState(), currentState, {
-			// 	duels: newState,
-			// } as MainWindowState),
-			null,
-			null,
-		];
+
+		return [null, null];
 	}
 }

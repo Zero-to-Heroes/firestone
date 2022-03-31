@@ -6,15 +6,15 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { Preferences } from '@models/preferences';
+import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -52,7 +52,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				class="show-hidden-decks-link"
 				*ngIf="showHiddenDecksLink$ | async"
 				field="duelsPersonalDeckShowHiddenDecks"
-				[label]="'settings.duels.hide-stats-below-threshold' | owTranslate"
+				[label]="'settings.duels.personal-decks-show-hidden-decks' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
 			<preference-toggle
@@ -61,7 +61,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				field="duelsHideStatsBelowThreshold"
 				[label]="'settings.duels.hide-stats-below-threshold' | owTranslate"
 				[helpTooltip]="helpTooltip"
-				[toggleFunction]="toggleShowHiddenDecks"
+				[toggleFunction]="toggleShowLowData"
 			></preference-toggle>
 		</div>
 	`,
@@ -95,23 +95,16 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 				([main, nav, prefs]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
-				filter(([hiddenCodes, selectedCategoryId]) => !!hiddenCodes && !!selectedCategoryId),
-				map(
-					([hiddenCodes, selectedCategoryId]) =>
-						hiddenCodes.length > 0 && selectedCategoryId === 'duels-personal-decks',
-				),
-				distinctUntilChanged(),
-				tap((filter) => cdLog('emitting showHiddenDecksLink in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
+				this.mapData(([hiddenCodes, selectedCategoryId]) => {
+					const result = !!hiddenCodes?.length && selectedCategoryId === 'duels-personal-decks';
+					console.debug('showing hidden decks link?', result, hiddenCodes, selectedCategoryId);
+					return result;
+				}),
 			);
 		this.showHideBelowThresholdLink$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.selectedCategoryId)
 			.pipe(
-				filter(([selectedCategoryId]) => !!selectedCategoryId),
-				map(([selectedCategoryId]) => ['duels-stats', 'duels-treasures'].includes(selectedCategoryId)),
-				distinctUntilChanged(),
-				tap((filter) => cdLog('emitting showHideBelowThresholdLink in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
+				this.mapData(([selectedCategoryId]) => ['duels-stats', 'duels-treasures'].includes(selectedCategoryId)),
 			);
 	}
 
@@ -121,5 +114,17 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 
 	toggleShowHiddenDecks = (newValue: boolean) => {
 		this.stateUpdater.next(new DuelsToggleShowHiddenPersonalDecksEvent(newValue));
+	};
+
+	toggleShowLowData = (newValue: boolean) => {
+		this.stateUpdater.next(
+			new GenericPreferencesUpdateEvent(
+				(prefs: Preferences) =>
+					({
+						...prefs,
+						duelsHideStatsBelowThreshold: newValue,
+					} as Preferences),
+			),
+		);
 	};
 }

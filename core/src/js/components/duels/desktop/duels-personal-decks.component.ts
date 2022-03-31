@@ -42,17 +42,26 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckNames,
+				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,
+				([main, nav, prefs]) => prefs.duelsPersonalDeckShowHiddenDecks,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				filter(([decks, timeFilter, classFilter, gameMode, deckNames, patch]) => !!decks?.length),
-				map(([decks, timeFilter, classFilter, gameMode, deckNames, patch]) =>
+				filter(
+					([decks, timeFilter, classFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
+						!!decks?.length,
+				),
+				map(([decks, timeFilter, classFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
 					decks
+						.filter(
+							(deck) => !hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
+						)
 						.map((deck) => {
 							return {
 								...deck,
 								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, patch, 0),
 								deckName: deckNames[deck.initialDeckList] ?? deck.deckName,
+								hidden: hiddenCodes?.includes(deck.initialDeckList),
 							};
 						})
 						.filter((deck) => !!deck.runs.length),
