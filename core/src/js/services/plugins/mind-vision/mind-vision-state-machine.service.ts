@@ -13,47 +13,14 @@ import { MindVisionStateReset } from '@services/plugins/mind-vision/states/mind-
 import { MindVisionStateTearDown } from '@services/plugins/mind-vision/states/mind-vision-state-tear-down';
 import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-vision-state';
 import { sleep } from '@services/utils';
+import { BehaviorSubject } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
 import { Events } from '../../events.service';
 
 @Injectable()
 export class MindVisionStateMachineService {
 	private states: Map<CurrentState, MindVisionState> = new Map();
 	private currentState: MindVisionState;
-
-	private globalEventListener = async (first: string, second: string) => {
-		if (this.currentState?.stateId() === CurrentState.RESET) {
-			console.debug(
-				'no-format',
-				'[mind-vision] received global event',
-				CurrentState[this.currentState?.stateId()],
-				first,
-				second,
-			);
-			return;
-		}
-		console.log(
-			'no-format',
-			'[mind-vision] received global event',
-			CurrentState[this.currentState?.stateId()],
-			first,
-			second,
-		);
-		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
-			console.warn('[mind-vision] global event has root memory reading error');
-			this.performAction(Action.RESET);
-		} else if (first === 'mindvision-instantiate-error') {
-			this.notifs.notifyError(
-				this.i18n.translateString('app.internal.memory.reading-error-title'),
-				this.i18n.translateString('app.internal.memory.reading-error-text'),
-				first,
-			);
-		} else if (first === 'reset') {
-			console.warn('[mind-vision] first is reset', first, second);
-			this.performAction(Action.RESET);
-		} else {
-			// this.performAction(Action.GLOBAL_EVENT, { first, second });
-		}
-	};
 
 	private memoryUpdateListener = async (changes: string | 'reset') => {
 		console.log('[mind-vision] memory update', CurrentState[this.currentState?.stateId()], changes);
@@ -109,6 +76,8 @@ export class MindVisionStateMachineService {
 		},
 	};
 
+	private globalEventQueue = new BehaviorSubject<{ first: string; second: string }>(null);
+
 	constructor(
 		private readonly mindVisionFacade: MindVisionFacadeService,
 		private readonly ow: OverwolfService,
@@ -162,7 +131,22 @@ export class MindVisionStateMachineService {
 				new MindVisionStateReset(this.mindVisionFacade, this.dispatcher, this.notifs, this.i18n),
 			)
 			.set(CurrentState.TEAR_DOWN, new MindVisionStateTearDown(this.mindVisionFacade, this.dispatcher, this.ow));
-		this.mindVisionFacade.globalEventListener = this.globalEventListener;
+
+		this.globalEventQueue
+			.asObservable()
+			.pipe(
+				filter((msg) => msg !== null),
+				switchMap(async (msg) => {
+					const { first, second } = msg;
+					this.handleGlobalEvent(first, second);
+				}),
+			)
+			.subscribe();
+
+		this.mindVisionFacade.globalEventListener = async (first: string, second: string) => {
+			console.debug('[mind-vision] enqueueing', first, second);
+			this.globalEventQueue.next({ first, second });
+		};
 		this.mindVisionFacade.memoryUpdateListener = this.memoryUpdateListener;
 
 		this.currentState = this.states.get(CurrentState.IDLE);
@@ -244,6 +228,42 @@ export class MindVisionStateMachineService {
 			await this.currentState.onExit();
 			this.currentState = newState;
 			await this.currentState.onEnter();
+		}
+	}
+
+	private async handleGlobalEvent(first: string, second: string) {
+		// console.debug('[mind-vision] processing', first, second);
+		if (this.currentState?.stateId() === CurrentState.RESET) {
+			console.debug(
+				'no-format',
+				'[mind-vision] received global event',
+				CurrentState[this.currentState?.stateId()],
+				first,
+				second,
+			);
+			return;
+		}
+		console.log(
+			'no-format',
+			'[mind-vision] received global event',
+			CurrentState[this.currentState?.stateId()],
+			first,
+			second,
+		);
+		if (this.hasRootMemoryReadingError(first) || this.hasRootMemoryReadingError(second)) {
+			console.warn('[mind-vision] global event has root memory reading error');
+			await this.performAction(Action.RESET);
+		} else if (first === 'mindvision-instantiate-error') {
+			this.notifs.notifyError(
+				this.i18n.translateString('app.internal.memory.reading-error-title'),
+				this.i18n.translateString('app.internal.memory.reading-error-text'),
+				first,
+			);
+		} else if (first === 'reset') {
+			console.warn('[mind-vision] first is reset', first, second);
+			await this.performAction(Action.RESET);
+		} else {
+			// this.performAction(Action.GLOBAL_EVENT, { first, second });
 		}
 	}
 
