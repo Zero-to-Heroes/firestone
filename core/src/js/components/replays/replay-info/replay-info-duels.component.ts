@@ -52,7 +52,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
-						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
+						[helpTooltip]="'app.replays.replay-info.loot-icon-tooltip' | owTranslate"
 					></div>
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
@@ -61,7 +61,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
-						[helpTooltip]="'app.replays.loot-icon-tooltip' | owTranslate"
+						[helpTooltip]="'app.replays.replay-info.loot-icon-tooltip' | owTranslate"
 					></div>
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
@@ -70,7 +70,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
-						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
+						[helpTooltip]="'app.replays.replay-info.treasure-icon-tooltip' | owTranslate"
 					></div>
 					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 				</div>
@@ -79,7 +79,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
-						[helpTooltip]="'app.replays.treasure-icon-tooltip' | owTranslate"
+						[helpTooltip]="'app.replays.replay-info.treasure-icon-tooltip' | owTranslate"
 					></div>
 					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 				</div>
