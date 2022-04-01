@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -59,8 +59,17 @@ export class ReplaysListViewComponent {
 	}
 
 	flatReplays: readonly (GameStat | HeaderInfo)[] = [];
+	scrollDebounceTime = 0;
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: LocalizationFacadeService, private readonly cdr: ChangeDetectorRef) {}
+
+	onScrolling(scrolling: boolean) {
+		this.scrollDebounceTime = scrolling ? 1000 : 0;
+		console.debug('handling scrolling in parent', scrolling, this.scrollDebounceTime);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	trackByReplay(index: number, item: GameStat | HeaderInfo) {
 		return (item as GameStat).reviewId ?? (item as HeaderInfo)?.header;

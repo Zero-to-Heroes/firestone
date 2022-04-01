@@ -1,22 +1,9 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
-import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
-import { arraysEqual, groupByFunction } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -27,12 +14,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="battlegrounds-perfect-games">
-			<infinite-scroll *ngIf="allReplays?.length" class="replays-list" (scrolled)="onScroll()" scrollable>
-				<li *ngFor="let groupedReplay of displayedGroupedReplays" class="grouped-replays">
-					<grouped-replays [groupedReplays]="groupedReplay"></grouped-replays>
-				</li>
-				<div class="loading" *ngIf="isLoading" (click)="onScroll()">Click to load more replays</div>
-			</infinite-scroll>
+			<replays-list-view [replays]="replays$ | async"></replays-list-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,24 +22,14 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class BattlegroundsPerfectGamesComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy {
-	isLoading: boolean;
-	allReplays: readonly GameStat[];
-	displayedGroupedReplays: readonly GroupedReplays[] = [];
+	replays$: Observable<readonly GameStat[]>;
 
-	private sub$$: Subscription;
-	private displayedReplays: readonly GameStat[] = [];
-	private gamesIterator: IterableIterator<void>;
-
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private i18n: LocalizationFacadeService,
-	) {
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.sub$$ = this.store
+		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,
 				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
@@ -66,69 +38,11 @@ export class BattlegroundsPerfectGamesComponent
 			)
 			.pipe(
 				filter(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => !!perfectGames?.length),
-				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([gameStats, mmrPercentiles, rankFilter, heroFilter]) => {
-				// Otherwise the generator is simply closed at the end of the first onScroll call
-				setTimeout(() => {
-					this.displayedReplays = [];
-					this.displayedGroupedReplays = [];
+				this.mapData(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => {
 					const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
-					this.gamesIterator = this.buildIterator(gameStats, mmrThreshold, heroFilter, 8);
-
-					this.onScroll();
-				});
-			});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
-		this.sub$$?.unsubscribe();
-	}
-
-	onScroll() {
-		this.gamesIterator && this.gamesIterator.next();
-	}
-
-	private *buildIterator(
-		perfectGames: readonly GameStat[],
-		rankFilter: number,
-		heroFilter: string,
-		step = 40,
-	): IterableIterator<void> {
-		this.allReplays = this.applyFilters(perfectGames ?? [], rankFilter, heroFilter);
-		const workingReplays = [...this.allReplays];
-		while (workingReplays.length > 0) {
-			const currentReplays = [];
-			while (workingReplays.length > 0 && currentReplays.length < step) {
-				currentReplays.push(...workingReplays.splice(0, 1));
-			}
-			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			this.displayedGroupedReplays = this.groupReplays(this.displayedReplays);
-			this.isLoading = this.allReplays.length > step;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			yield;
-		}
-		this.isLoading = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		return;
-	}
-
-	private areEqual(
-		a: [readonly GameStat[], readonly MmrPercentile[], number, string],
-		b: [readonly GameStat[], readonly MmrPercentile[], number, string],
-	): boolean {
-		if (a[2] !== b[2] || a[3] !== b[3]) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
+					return this.applyFilters(perfectGames ?? [], mmrThreshold, heroFilter);
+				}),
+			);
 	}
 
 	private applyFilters(replays: readonly GameStat[], rankFilter: number, heroFilter: string): readonly GameStat[] {
@@ -156,22 +70,5 @@ export class BattlegroundsPerfectGamesComponent
 			default:
 				return stat.playerCardId === heroFilter;
 		}
-	}
-
-	private groupReplays(replays: readonly GameStat[]): readonly GroupedReplays[] {
-		const groupingFunction = (replay: GameStat) => {
-			const date = new Date(replay.creationTimestamp);
-			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-				month: 'short',
-				day: '2-digit',
-				year: 'numeric',
-			});
-		};
-		const groupByDate = groupByFunction(groupingFunction);
-		const replaysByDate = groupByDate(replays);
-		return Object.keys(replaysByDate).map((date) => ({
-			header: date,
-			replays: replaysByDate[date],
-		}));
 	}
 }

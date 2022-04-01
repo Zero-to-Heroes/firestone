@@ -3,12 +3,10 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -36,36 +34,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					*ngIf="value.showMercDetailsToggle"
 				></replays-merc-details-toggle>
 			</div>
-			<virtual-scroller
-				#scroll
-				*ngIf="replays$ | async as replays; else emptyState"
-				class="replays-list"
-				[items]="replays"
-				bufferAmount="5"
-				[scrollDebounceTime]="scrollDebounceTime"
-				scrollable
-				(scrolling)="onScrolling($event)"
-			>
-				<!-- Because the virtual-scroller needs elements of the same size to work, we can't give it groups -->
-				<ng-container *ngFor="let replay of scroll.viewPortItems; trackBy: trackByReplay">
-					<div class="header" *ngIf="replay.header">{{ replay.header }}</div>
-					<replay-info class="replay" *ngIf="!replay.header" [replay]="replay"></replay-info>
-				</ng-container>
-			</virtual-scroller>
-
-			<ng-template #emptyState>
-				<section class="empty-state">
-					<div class="state-container">
-						<i class="i-236X165">
-							<svg>
-								<use xlink:href="assets/svg/sprite.svg#empty_state_replays" />
-							</svg>
-						</i>
-						<span class="title" [owTranslate]="'app.replays.list.empty-state-title'"></span>
-						<span class="subtitle" [owTranslate]="'app.replays.list.empty-state-subtitle'"></span>
-					</div>
-				</section>
-			</ng-template>
+			<replays-list-view [replays]="replays$ | async"></replays-list-view>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,7 +43,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;
-	replays$: Observable<readonly (GameStat | HeaderInfo)[]>;
+	replays$: Observable<readonly GameStat[]>;
 
 	scrollDebounceTime = 0;
 
@@ -133,7 +102,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 						playerClassFilter,
 						opponentClassFilter,
 					]) => {
-						const allReplays = this.applyFilters(
+						return this.applyFilters(
 							gameStats ?? [],
 							gameModeFilter,
 							bgHeroFilter,
@@ -141,18 +110,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 							playerClassFilter,
 							opponentClassFilter,
 						);
-						const groupedReplays = this.groupReplays(allReplays);
-						const flat = groupedReplays
-							.filter((group) => group?.replays?.length)
-							.flatMap((group) => {
-								return [
-									{
-										header: group.header,
-									} as HeaderInfo,
-									...group.replays,
-								];
-							});
-						return flat;
 					},
 				),
 			);
@@ -164,10 +121,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	trackByReplay(index: number, item: GameStat | HeaderInfo) {
-		return (item as GameStat).reviewId ?? (item as HeaderInfo)?.header;
 	}
 
 	private applyFilters(
@@ -242,25 +195,8 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 				return gameMode === filter;
 		}
 	}
-
-	private groupReplays(replays: readonly GameStat[]): readonly GroupedReplays[] {
-		const groupingFunction = (replay: GameStat) => {
-			const date = new Date(replay.creationTimestamp);
-			return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-				month: 'short',
-				day: '2-digit',
-				year: 'numeric',
-			});
-		};
-		const groupByDate = groupByFunction(groupingFunction);
-		const replaysByDate = groupByDate(replays);
-		return Object.keys(replaysByDate).map((date) => ({
-			header: date,
-			replays: replaysByDate[date],
-		}));
-	}
 }
 
-interface HeaderInfo {
+export interface HeaderInfo {
 	header: string;
 }
