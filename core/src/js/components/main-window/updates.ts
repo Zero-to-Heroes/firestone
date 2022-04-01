@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.3.0',
+		version: '9.3.7',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the signature treasure would not disappear even when moving the mouse away from the selection.`,
+							},
+						],
+					},
+					{
 						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a few missing languages in the Localization dropdown in the Settings.`,
+								type: 'bug',
+								text: `Trying to fix an issue where the app would sometimes lag behind the game state by quite a bit. This has required a rewrite of an important part of the app, so please let me know if you experience some strange behaiors.`,
 							},
 						],
 					},
@@ -61,32 +70,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `Improve tiers for Treasures so that they're not all S tier :)`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Add counters for Southsea Strongarm and Majordomo Executus.`,
-							},
-							{
-								type: 'feature',
-								text: `Add an option to sort the heroes by their tier (global winrate) in the Heroes tab.`,
-							},
-							{
-								type: 'bug',
-								text: `Prevent an info leak where the opponent heroes were sent to the extension before they were revealed in the UI.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the heroes' warband stats could have some impossible values for the early turns.`,
+								text: `Now display the current rating on the session widget after a reset.`,
 							},
 						],
 					},
@@ -95,19 +83,62 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add basic support for Blademaster Okani.`,
+								text: `Properly identify cards in deck created by Dreadlich Tamsin's hero power.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card oracle for Runaway Gyrocopter and Plague of Murlocs (for the Tombs of Terror adventure).`,
+								text: `Add card highlight for Vectus.`,
+							},
+							{
+								type: 'ui',
+								text: `Stop widgets from flickering when they are first created.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a secondary icon to neutral heroes on the stats screen so that you can identify which class they are more easily.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Jr. and Sr. Tomb Diver (Tombs of Terror) and Scrap Shoot (Hunter).`,
+								text: `Add an option to deactivate stats on mouseover during a run preparation.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the "show stats separately" option was not working in the single-zone display. You should now be able to see these multiple Amulets of Undying with their correct stat boosts directly in the tracker.`,
+								text: `Fix an issue where the "archive deck" button would not do anything.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where no stats overlay would appear when no stats are available.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some dual class signature treasures would not have any associated stats.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `Add a few missing speed buff modifiers.`,
+							},
+							{
+								type: 'ui',
+								text: `Show buff influence as negative values when mousing over a speed modifier in a battle.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Improved the performance of screens where huge list of things are displayed (like the cards list screen). Displaying a list of BG matches still remains quite resource intensive though and still feels a bit a bit laggy, and I'm still working on it.`,
 							},
 						],
 					},
