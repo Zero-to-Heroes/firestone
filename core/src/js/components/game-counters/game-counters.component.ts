@@ -70,7 +70,7 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 	) {
 		super(store, cdr);
 		// this.isBgs = this.activeCounter.includes('bgs');
-		console.log('init counter', this.activeCounter, this.side, this.activeCounter?.includes('bgs'));
+		// console.log('init counter', this.activeCounter, this.side, this.activeCounter?.includes('bgs'));
 	}
 
 	ngAfterContentInit() {

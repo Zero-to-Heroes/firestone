@@ -52,9 +52,6 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 	minionCardIds$: Observable<readonly string[]>;
@@ -86,6 +83,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 			this.mapData(
 				([[currentScene], [inGame, gameEnded]]) => currentScene === SceneMode.GAMEPLAY && inGame && !gameEnded,
 			),
+			this.handleReposition(),
 		);
 		this.minionCardIds$ = combineLatest(
 			this.store.listenBattlegrounds$(([state]) => state.currentGame?.phase),
@@ -132,10 +130,6 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 
 	trackByMinion(index: number, minion: string) {

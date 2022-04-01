@@ -11,7 +11,6 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { ShortCard } from '../../models/decktracker/game-state';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -51,9 +50,6 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.board-container')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 	board$: Observable<BoardOverlay>;
@@ -99,11 +95,8 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 
 				return !gameEnded;
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 
 		this.board$ = this.store
 			.listenDeckState$(

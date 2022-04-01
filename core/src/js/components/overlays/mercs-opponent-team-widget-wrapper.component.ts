@@ -8,7 +8,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -77,13 +76,11 @@ export class MercsOpponentTeamWidgetWrapperComponent
 			this.mapData(([[displayFromPrefs], [playerClosedManually, hasTeamMercs]]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 
+	// TODO: there might be a more elegant solution that doesn't require to override reposition
 	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number }> {
 		const newPosition = await super.reposition(cleanup);
 		if (!newPosition) {

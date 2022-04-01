@@ -7,7 +7,6 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -35,15 +34,12 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateCurrentSessionWidgetPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.currentSessionWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
 	protected bounds = {
 		left: -50,
 		right: -50,
 		top: -50,
 		bottom: -50,
 	};
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -61,10 +57,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	ngAfterContentInit(): void {
 		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
 			this.mapData(([[displayBgs]]) => displayBgs),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 }

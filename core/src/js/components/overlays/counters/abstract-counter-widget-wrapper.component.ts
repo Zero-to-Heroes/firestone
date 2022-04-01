@@ -9,7 +9,6 @@ import {
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '@models/battlegrounds/battlegrounds-state';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -54,11 +53,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 
 	protected prefExtractor: (prefs: Preferences) => boolean;
 	protected deckStateExtractor: (deckState: GameState, bgsState?: BattlegroundsState) => boolean;
-	protected isWidgetVisible = () => this.visible;
 
 	protected onBgs: boolean;
-
-	private visible: boolean;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -122,10 +118,7 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 					return !gameEnded;
 				},
 			),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 }

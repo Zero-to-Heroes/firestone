@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -42,15 +41,12 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateDuelsOocTrackerPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.duelsOocTrackerPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
 	protected bounds = {
 		left: -100,
 		right: -100,
 		top: -50,
 		bottom: -50,
 	};
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -77,10 +73,7 @@ export class DuelsDecktrackerOocWidgetWrapperComponent
 			this.mapData(([[displayFromPrefs], [currentScene, isOnMainScreen]]) => {
 				return displayFromPrefs && isOnMainScreen && currentScene === SceneMode.PVP_DUNGEON_RUN;
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 }

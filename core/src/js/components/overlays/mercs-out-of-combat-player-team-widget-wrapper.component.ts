@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -42,15 +41,12 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 		this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
 	protected bounds = {
 		left: -100,
 		right: -100,
 		top: -50,
 		bottom: -50,
 	};
-
-	private visible: boolean;
 
 	tooltipPosition: CardTooltipPositionType = 'left';
 
@@ -86,11 +82,8 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 				}
 				return hasState && scenes.includes(currentScene);
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 
 	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number }> {

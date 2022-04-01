@@ -57,9 +57,6 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.bgs-leaderboard')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 	bgsPlayers$: Observable<readonly BgsPlayer[]>;
@@ -101,6 +98,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
 						(GameType.GT_BATTLEGROUNDS === metadata.gameType && playerCount === 8)),
 			),
+			this.handleReposition(),
 		);
 		this.bgsPlayers$ = this.store
 			.listenBattlegrounds$(([state]) => state)
@@ -150,10 +148,6 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 				tap((info) => cdLog('emitting showLastOpponentIcon in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {

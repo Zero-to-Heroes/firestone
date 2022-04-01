@@ -7,7 +7,6 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -37,15 +36,12 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 		this.prefs.updateMercenariesActionsQueueOverlayPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.mercenariesActionsQueueOverlayPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
 	protected bounds = {
 		left: -50,
 		right: -50,
 		top: -50,
 		bottom: -50,
 	};
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -74,10 +70,7 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 					(displayFromPrefsPvP && isMercenariesPvP(gameMode))
 				);
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 }

@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -36,9 +35,6 @@ export class BgsWindowButtonWidgetWrapperComponent extends AbstractWidgetWrapper
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateBgsOverlayButtonPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.bgsOverlayButtonPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -70,10 +66,7 @@ export class BgsWindowButtonWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.mapData(([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded]]) => {
 				return inGame && isCurrentGame && !gameEnded && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
+			this.handleReposition(),
 		);
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
 	}
 }

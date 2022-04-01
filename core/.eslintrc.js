@@ -54,6 +54,7 @@ module.exports = {
 		'@typescript-eslint/ban-ts-comment': 'off',
 		'@angular-eslint/no-input-rename': 'off',
 		'@angular-eslint/no-output-on-prefix': 'off',
+		'@angular-eslint/no-empty-lifecycle-method': 'off',
 		'linebreak-style': 0,
 		'prettier/prettier': [
 			'error',

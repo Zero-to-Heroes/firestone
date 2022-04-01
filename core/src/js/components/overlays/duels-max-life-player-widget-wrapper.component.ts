@@ -7,7 +7,6 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { isDuels } from '../../services/duels/duels-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -28,9 +27,6 @@ export class DuelsMaxLifeOpponentWidgetWrapperComponent
 	protected positionUpdater = null;
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
-	protected isWidgetVisible = () => this.visible;
-
-	private visible: boolean;
 
 	showWidget$: Observable<boolean>;
 
@@ -49,10 +45,9 @@ export class DuelsMaxLifeOpponentWidgetWrapperComponent
 		this.showWidget$ = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.duelsShowMaxLifeWidget2),
 			this.store.listenDeckState$((state) => state?.metadata?.gameType),
-		).pipe(this.mapData(([[show], [gameType]]) => isDuels(gameType) && ['mouseover', 'blink'].includes(show)));
-		this.showWidget$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((show) => {
-			this.visible = show;
-			this.reposition();
-		});
+		).pipe(
+			this.mapData(([[show], [gameType]]) => isDuels(gameType) && ['mouseover', 'blink'].includes(show)),
+			this.handleReposition(),
+		);
 	}
 }

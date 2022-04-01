@@ -1,5 +1,8 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { sleep } from '@services/utils';
+import { Observable, pipe, UnaryFunction } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -8,7 +11,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
-export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent {
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
@@ -17,7 +20,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		prefService?: PreferencesService,
 	) => Promise<{ left: number; top: number }>;
 	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
-	protected abstract isWidgetVisible: () => boolean;
 	protected bounds = {
 		left: -20,
 		top: -20,
@@ -36,24 +38,28 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		super(store, cdr);
 	}
 
-	async ngAfterViewInit() {
-		this.reposition();
+	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
+		return pipe(
+			switchMap(async (visible: boolean) => {
+				// console.debug('before making visible', visible);
+				if (visible) {
+					const repositioned = await this.reposition();
+					// console.debug('after reposition', repositioned);
+				}
+				return visible;
+			}),
+			this.mapData((visible) => visible),
+		);
 	}
 
 	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
 		if (this.repositioning) {
+			// console.debug('repositioning, returning');
 			return;
 		}
 		this.repositioning = true;
-		if (!this.isWidgetVisible()) {
-			// console.debug('widget is not visible');
-			this.repositioning = false;
-			return;
-		}
-
 		const prefs = await this.prefs.getPreferences();
-		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
 		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -64,6 +70,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
+
+		// First position the widget based on the prefs
+		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
 		if (!positionFromPrefs) {
 			positionFromPrefs = {
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
@@ -71,17 +80,28 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			};
 			// console.debug('built default position', positionFromPrefs);
 		}
-		const widgetRect = this.getRect();
-		if (!widgetRect?.width) {
-			// console.debug(
-			// 	'no widget, starting again',
-			// 	this.constructor.name,
-			// 	this.isWidgetVisible(),
-			// 	this.isWidgetVisible,
-			// );
-			this.repositioning = false;
-			setTimeout(() => this.reposition(), 500);
-			return;
+		this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
+		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
+
+		// Then make sure it fits inside the bounds
+		const boundPositionFromPrefs = await this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+
+		if (cleanup) {
+			cleanup();
+		}
+
+		this.repositioning = false;
+		return boundPositionFromPrefs;
+	}
+
+	private async keepInBounds(
+		gameWidth: number,
+		gameHeight: number,
+		positionFromPrefs: { left: number; top: number },
+	): Promise<{ left: number; top: number }> {
+		let widgetRect = this.getRect();
+		while (!(widgetRect = this.getRect())?.width) {
+			await sleep(500);
 		}
 		// Make sure the widget stays in bounds
 		const boundPositionFromPrefs = {
@@ -94,22 +114,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				Math.max(this.bounds.top, positionFromPrefs.top),
 			),
 		};
-		// console.debug(
-		// 	'bound position from prefs',
-		// 	boundPositionFromPrefs,
-		// 	this.bounds,
-		// 	gameWidth,
-		// 	gameWidth - widgetRect.width - this.bounds.right,
-		// 	Math.max(this.bounds.left, positionFromPrefs.left),
-		// 	widgetRect,
-		// );
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');
-		if (cleanup) {
-			cleanup();
-		}
-		this.repositioning = false;
 		return boundPositionFromPrefs;
 	}
 
@@ -142,4 +149,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected async doResize() {
 		// Do nothing, only for children
 	}
+
+	// protected
 }

@@ -391,26 +391,22 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private resize() {
 		setTimeout(async () => {
-			// const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
 
-			// 	'game info',
-			// 	gameInfo,
-			// 	wrapper,
-			// 	wrapper.getBoundingClientRect(),
-			// 	this.activeNotifications.length,
-			// );
+			console.log('game info', gameInfo, this.activeNotifications.length);
 			if (!gameInfo) {
 				return;
 			}
 			const gameWidth = gameInfo.logicalWidth;
 			// const gameHeight = gameInfo.logicalHeight;
-			// const dpi = gameWidth / gameInfo.width;
+			const dpi = gameWidth / gameInfo.width;
 			await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
+			console.log('changing notifs window size', width, gameInfo.height - 20, dpi);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 			const newLeft = gameWidth - width;
 			const newTop = 1;
+			console.log('changing notifs window position', newLeft, newTop);
 			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		});
 	}
