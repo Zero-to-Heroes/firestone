@@ -1,15 +1,8 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -17,8 +10,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -26,33 +18,28 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [`../../../../css/component/arena/desktop/arena-runs-list.component.scss`],
 	template: `
 		<div class="arena-runs-container">
-			<infinite-scroll *ngIf="allReplays?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
-				<li *ngFor="let groupedRun of displayedGroupedReplays; trackBy: trackByGroupedRun" class="grouped-runs">
-					<div class="header">{{ groupedRun.header }}</div>
-					<ul class="runs">
-						<arena-run *ngFor="let run of groupedRun.runs; trackBy: trackByRun" [run]="run"></arena-run>
-					</ul>
-				</li>
-				<div
-					class="loading"
-					*ngIf="isLoading"
-					(click)="onScroll()"
-					[owTranslate]="'app.arena.runs.load-runs-button'"
-				></div>
-			</infinite-scroll>
-			<arena-empty-state *ngIf="!allReplays?.length"></arena-empty-state>
+			<virtual-scroller
+				#scroll
+				*ngIf="runs$ | async as runs; else emptyState"
+				class="runs-list"
+				[items]="runs"
+				scrollable
+			>
+				<ng-container *ngFor="let run of scroll.viewPortItems; trackBy: trackByRun">
+					<div class="header" *ngIf="run.header">{{ run.header }}</div>
+					<arena-run *ngIf="!run.header" [run]="run"></arena-run>
+				</ng-container>
+			</virtual-scroller>
+
+			<ng-template #emptyState>
+				<arena-empty-state></arena-empty-state>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	isLoading: boolean;
-	allReplays: readonly ArenaRun[];
-	displayedGroupedReplays: readonly GroupedRun[] = [];
-
-	private sub$$: Subscription;
-	private displayedReplays: readonly ArenaRun[] = [];
-	private gamesIterator: IterableIterator<void>;
+	runs$: Observable<readonly (ArenaRun | HeaderInfo)[]>;
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
@@ -65,7 +52,7 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	ngAfterContentInit() {
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
-		this.sub$$ = this.store
+		this.runs$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.arena.rewards,
@@ -75,94 +62,32 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 			)
 			.pipe(
 				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
-				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([stats, rewards, timeFilter, heroFilter, patch]) => {
+				this.mapData(([stats, rewards, timeFilter, heroFilter, patch]) => {
 					const arenaMatches = stats
 						.filter((stat) => stat.gameMode === 'arena')
 						.filter((stat) => !!stat.runId);
-					return [this.buildArenaRuns(arenaMatches, rewards), timeFilter, heroFilter, patch] as [
-						readonly ArenaRun[],
-						ArenaTimeFilterType,
-						ArenaClassFilterType,
-						PatchInfo,
-					];
+					const arenaRuns = this.buildArenaRuns(arenaMatches, rewards);
+					const filteredRuns = arenaRuns
+						.filter((match) => this.isCorrectHero(match, heroFilter))
+						.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+					const groupedRuns = this.groupRuns(filteredRuns);
+					const flat = groupedRuns
+						.filter((group) => group?.runs?.length)
+						.flatMap((group) => {
+							return [
+								{
+									header: group.header,
+								} as HeaderInfo,
+								...group.runs,
+							];
+						});
+					return flat;
 				}),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe(([arenaRuns, timeFilter, heroFilter, patch]) => {
-				// Otherwise the generator is simply closed at the end of the first onScroll call
-				setTimeout(() => {
-					this.displayedReplays = [];
-					this.displayedGroupedReplays = [];
-					this.gamesIterator = this.buildIterator(arenaRuns, timeFilter, heroFilter, patch, 8);
-					this.onScroll();
-				});
-			});
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy() {
-		super.ngOnDestroy();
-		this.sub$$?.unsubscribe();
-	}
-
-	onScroll() {
-		this.gamesIterator && this.gamesIterator.next();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	trackByGroupedRun(index: number, item: GroupedRun) {
-		return item.header;
+			);
 	}
 
 	trackByRun(index: number, item: ArenaRun) {
 		return item.id;
-	}
-
-	private *buildIterator(
-		arenaMatches: readonly ArenaRun[],
-		timeFilter: ArenaTimeFilterType,
-		heroFilter: ArenaClassFilterType,
-		patch: PatchInfo,
-		step = 40,
-	): IterableIterator<void> {
-		this.allReplays = arenaMatches
-			.filter((match) => this.isCorrectHero(match, heroFilter))
-			.filter((match) => this.isCorrectTime(match, timeFilter, patch));
-		const workingReplays = [...this.allReplays];
-		while (workingReplays.length > 0) {
-			const currentReplays: ArenaRun[] = [];
-			while (workingReplays.length > 0 && currentReplays.length < step) {
-				currentReplays.push(...workingReplays.splice(0, 1));
-			}
-			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			this.displayedGroupedReplays = this.groupRuns(this.displayedReplays);
-			this.isLoading = this.allReplays.length > step;
-
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			yield;
-		}
-		this.isLoading = false;
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		return;
-	}
-
-	private areEqual(
-		a: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
-		b: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
-	): boolean {
-		if (a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
