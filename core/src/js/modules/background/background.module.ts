@@ -44,6 +44,7 @@ import {
 	ReplayInfoMercPlayerComponent,
 } from '@components/replays/replay-info/replay-info-mercenaries.component';
 import { ReplayInfoRankedComponent } from '@components/replays/replay-info/replay-info-ranked.component';
+import { ReplaysListViewComponent } from '@components/replays/replays-list-view.component';
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
 import { SettingsBattlegroundsSessionComponent } from '@components/settings/battlegrounds/settings-battlegrounds-session.component';
 import { SettingsDecktrackerDuelsComponent } from '@components/settings/decktracker/settings-decktracker-duels.component';
@@ -698,6 +699,7 @@ const components = [
 
 		ReplaysComponent,
 		ReplaysListComponent,
+		ReplaysListViewComponent,
 		// ReplaysFilterComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
