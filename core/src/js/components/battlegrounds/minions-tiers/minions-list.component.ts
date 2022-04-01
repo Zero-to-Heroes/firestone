@@ -97,26 +97,24 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 			return;
 		}
 
-		this.groups = [];
+		// this.groups = [];
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
+
+		// setTimeout(() => {
+		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(this._cards);
+		this.groups = Object.keys(groupedByTribe)
+			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
+			.map((tribeString) => ({
+				tribe: Race[tribeString],
+				minions: groupedByTribe[tribeString],
+				highlightedMinions: this._highlightedMinions || [],
+				highlightedTribes: this._highlightedTribes || [],
+			}));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-
-		setTimeout(() => {
-			const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(
-				this._cards,
-			);
-			this.groups = Object.keys(groupedByTribe)
-				.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
-				.map((tribeString) => ({
-					tribe: Race[tribeString],
-					minions: groupedByTribe[tribeString],
-					highlightedMinions: this._highlightedMinions || [],
-					highlightedTribes: this._highlightedTribes || [],
-				}));
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// });
 	}
 }
