@@ -36,127 +36,48 @@
 		margin-right: 20px;
 		margin-bottom: 20px;
 		justify-content: flex-start;
+		--color-7: var(--color-5);
 
-		ng-select {
-			@extend %search-active;
-			height: 30px;
-			background: rgba(255, 255, 255, 0.08);
-			margin-right: 15px;
+		& > * {
+			width: 150px;
+			margin-right: 10px;
 
-			&.class-select {
-				width: 140px;
-			}
-
-			&.rarity-select {
-				width: 110px;
-			}
-
-			&.owned-select {
-				// width: 190px;
-				width: 300px;
-			}
-
-			&:focus,
-			&:active {
-				outline: none;
-			}
-
-			& > div {
-				border: 1px solid $grey03;
-				outline: none;
-
-				div.single > div.toggle:hover {
-					background: transparent;
+			::ng-deep {
+				filter-dropdown {
+					width: 100%;
 				}
 			}
+		}
 
-			.toggle {
-				display: none;
-			}
-
-			.open .caret {
-				transform: scale(1, -1);
-			}
-
-			select-dropdown {
-				& > div {
-					background: $black;
-					border: 1px solid $grey03;
-					border-top: none;
-					outline: none;
-				}
-
-				.filter {
-					display: none;
-				}
-
-				& > div .options ul li {
-					color: $grey01;
-					border-bottom: 1px solid $grey05;
-					padding: 0;
-					padding-left: 9px;
-					padding-right: 10px;
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					height: 30px;
-
-					&.selected {
-						background-color: inherit;
-						color: inherit;
-
-						&:hover {
-							color: inherit;
-						}
-					}
-
-					&.highlighted,
-					&:hover {
-						// grey03
-						background-color: rgba(120, 95, 107, 0.4);
-					}
-
-					span {
-						max-width: 100%;
-						white-space: nowrap;
-						overflow: hidden;
-						text-overflow: ellipsis;
-					}
-				}
-			}
+		card-owned-filter ::ng-deep ng-select select-dropdown .below {
+			width: 300px !important;
 		}
 	}
 
 	.cards-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		height: 100%;
-		justify-content: flex-start;
+		flex-grow: 1;
 		display: flex;
-		flex-wrap: wrap;
-		overflow-y: scroll;
-		align-content: start;
-		// So that the cards don't get cropped by the overflow when moused over
-		padding-top: 25px;
-		margin-top: 5px;
-		padding-left: 15px;
-		margin-left: -15px;
 
-		li {
-			margin-right: -10px;
-			margin-bottom: 4px;
-			transition: all 0.15s ease;
+		.card-container {
+			display: flex;
+			align-items: start;
+			justify-content: center;
 			position: relative;
 			top: -20px; // So that there is not a big gap at the top (which looks weird because of hte scrollbar)
+			transition: all 0.15s ease;
+		}
+	}
 
-			&.hidden {
-				opacity: 0;
-				visibility: hidden;
-				width: 0;
-				margin: 0;
-			}
+	::ng-deep virtual-scroller {
+		width: 100%;
+		flex-grow: 1;
+		height: 100%;
+
+		.scrollable-content {
+			width: 100%;
+			height: auto;
+			display: flex;
+			flex-wrap: wrap;
 		}
 	}
 }

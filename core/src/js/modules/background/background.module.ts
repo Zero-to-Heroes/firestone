@@ -13,6 +13,9 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CollectionCardClassFilterDropdownComponent } from '@components/collection/filters/card-class-filter.component';
+import { CollectionCardOwnedFilterDropdownComponent } from '@components/collection/filters/card-owned-filter.component';
+import { CollectionCardRarityFilterDropdownComponent } from '@components/collection/filters/card-rarity-filter.component';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/duels-deckbuilder.component';
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
@@ -659,6 +662,9 @@ const components = [
 
 		CollectionHeroPortraitOwnedFilterDropdownComponent,
 		CollectionHeroPortraitCategoriesFilterDropdownComponent,
+		CollectionCardRarityFilterDropdownComponent,
+		CollectionCardClassFilterDropdownComponent,
+		CollectionCardOwnedFilterDropdownComponent,
 		OwnedFilterComponent,
 
 		AchievementsComponent,
