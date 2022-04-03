@@ -2,7 +2,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { sleep } from '@services/utils';
 import { Observable, pipe, UnaryFunction } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -27,6 +27,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		bottom: -20,
 	};
 
+	protected debug = false;
+
 	constructor(
 		protected readonly ow: OverwolfService,
 		protected readonly el: ElementRef,
@@ -41,26 +43,27 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
 		return pipe(
 			switchMap(async (visible: boolean) => {
-				// console.debug('before making visible', visible);
+				this.debug && console.debug('before making visible', visible);
 				if (visible) {
 					const repositioned = await this.reposition();
 					// console.debug('after reposition', repositioned);
 				}
+				this.debug && console.debug('return after reposition', visible);
 				return visible;
 			}),
 			this.mapData((visible) => visible),
+			tap((info) => this.debug && console.debug('after mapData', info)),
 		);
 	}
 
 	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
 		if (this.repositioning) {
-			// console.debug('repositioning, returning');
+			this.debug && console.debug('already repositioning, returning');
 			return;
 		}
 		this.repositioning = true;
 		const prefs = await this.prefs.getPreferences();
-		// console.debug('positionFromPrefs', positionFromPrefs);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			console.warn('missing game info', gameInfo);
@@ -73,6 +76,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		// First position the widget based on the prefs
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
+		this.debug && console.debug('position from prefs', positionFromPrefs);
 		if (!positionFromPrefs) {
 			positionFromPrefs = {
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
@@ -84,14 +88,16 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
 
 		// Then make sure it fits inside the bounds
-		const boundPositionFromPrefs = await this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+		// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
+		this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+		this.debug && console.debug('bound position from prefs', positionFromPrefs);
 
 		if (cleanup) {
 			cleanup();
 		}
 
 		this.repositioning = false;
-		return boundPositionFromPrefs;
+		return positionFromPrefs;
 	}
 
 	private async keepInBounds(
