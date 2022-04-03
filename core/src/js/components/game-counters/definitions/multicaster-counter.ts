@@ -31,7 +31,7 @@ export class MulticasterCounterDefinition implements CounterDefinition {
 					.filter((spellSchool) => !!spellSchool),
 			),
 		];
-		console.debug('spell schools', uniqueSpellSchools);
+		// console.debug('spell schools', uniqueSpellSchools);
 		const totalCardsToDraw = uniqueSpellSchools?.length;
 		const tooltip = i18n.translateString(`counters.multicaster.${side}`, {
 			cardsTotal: totalCardsToDraw,
