@@ -600,6 +600,9 @@ export class GameEvents {
 					),
 				);
 				break;
+			case 'COUNTER_TRIGGERED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.COUNTER_TRIGGERED, gameEvent));
+				break;
 			case 'SECRET_TRIGGERED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(
