@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.3.7',
+		version: '9.4.0',
 		sections: [
 			{
 				type: 'intro',
@@ -87,7 +87,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Vectus.`,
+								text: `Add card highlight for Vectus and Shudderwock.`,
 							},
 							{
 								type: 'ui',
@@ -139,6 +139,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Improved the performance of screens where huge list of things are displayed (like the cards list screen). Displaying a list of BG matches still remains quite resource intensive though and still feels a bit a bit laggy, and I'm still working on it.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix missing rank images when using a non-English language`,
 							},
 						],
 					},
