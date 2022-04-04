@@ -145,22 +145,25 @@ export class CardPlayedFromHandParser implements EventParser {
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 		} as DeckState);
 
+		const newCardPlayedThisMatch: ShortCard = {
+			entityId: cardWithZone.entityId,
+			cardId: cardWithZone.cardId,
+			side: isPlayer ? 'player' : 'opponent',
+		};
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
 			? newPlayerDeck
-			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards, this.i18n);
+			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards, this.i18n).update({
+					cardsPlayedThisMatch: [
+						...newPlayerDeck.cardsPlayedThisMatch,
+						newCardPlayedThisMatch,
+					] as readonly ShortCard[],
+			  });
 
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 			cardsPlayedThisMatch: isCardCountered
 				? currentState.cardsPlayedThisMatch
-				: ([
-						...currentState.cardsPlayedThisMatch,
-						{
-							entityId: cardWithZone.entityId,
-							cardId: cardWithZone.cardId,
-							side: isPlayer ? 'player' : 'opponent',
-						},
-				  ] as readonly ShortCard[]),
+				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
 		});
 	}
 

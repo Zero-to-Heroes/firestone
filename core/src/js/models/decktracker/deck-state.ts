@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { ShortCard } from '@models/decktracker/game-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
 import { AttackOnBoard } from './attack-on-board';
@@ -67,6 +68,7 @@ export class DeckState {
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
+	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly watchpostsPlayedThisMatch: number = 0;
 	readonly libramsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;

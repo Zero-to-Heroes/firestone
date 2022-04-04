@@ -176,6 +176,7 @@ export class TwitchAuthService {
 		delete result.dynamicZones;
 		delete result.cardsPlayedThisTurn;
 		delete result.cardsPlayedFromInitialDeck;
+		delete result.cardsPlayedThisMatch;
 		return result as DeckState;
 	}
 

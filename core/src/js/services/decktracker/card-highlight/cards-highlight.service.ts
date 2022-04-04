@@ -15,6 +15,7 @@ import {
 	arcane,
 	battlecry,
 	beast,
+	cardsPlayedThisMatch,
 	cardType,
 	corrupt,
 	corrupted,
@@ -122,6 +123,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			handler: Handler,
 			deckState?: DeckState,
 			options?: SelectorOptions,
+			gameState?: GameState,
 		) => boolean = this.buildSelector(cardId, card);
 		// console.debug('built selector', selector);
 		if (selector) {
@@ -141,6 +143,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						handler,
 						side === 'player' ? this.gameState?.playerDeck : this.gameState?.opponentDeck,
 						this.options,
+						this.gameState,
 					);
 				})
 				.forEach((handler) => {
@@ -286,6 +289,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.SelectiveBreederCore:
 				return and(inDeck, beast);
+			case CardIds.Shudderwock:
+				return and(cardsPlayedThisMatch, minion, battlecry);
 			case CardIds.Smokescreen:
 				return and(inDeck, deathrattle);
 			case CardIds.SpiritGuide:

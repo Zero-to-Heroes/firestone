@@ -56,6 +56,9 @@ export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 		.map((spell) => spell.entityId)
 		.includes(handler.deckCardProvider()?.entityId);
 };
+export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
+	return deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(handler.deckCardProvider()?.entityId);
+};
 
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
 	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);

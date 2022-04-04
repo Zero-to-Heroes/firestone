@@ -83,18 +83,26 @@ export class SecretPlayedFromHandParser implements EventParser {
 					: [...deck.spellsPlayedThisMatch, cardWithZone],
 		} as DeckState);
 
+		const newCardPlayedThisMatch: ShortCard = {
+			entityId: cardWithZone.entityId,
+			cardId: cardWithZone.cardId,
+			side: isPlayer ? 'player' : 'opponent',
+		};
+
+		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
+			? newPlayerDeck
+			: newPlayerDeck.update({
+					cardsPlayedThisMatch: [
+						...newPlayerDeck.cardsPlayedThisMatch,
+						newCardPlayedThisMatch,
+					] as readonly ShortCard[],
+			  });
+
 		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 			cardsPlayedThisMatch: isCardCountered
 				? currentState.cardsPlayedThisMatch
-				: ([
-						...currentState.cardsPlayedThisMatch,
-						{
-							entityId: cardWithZone.entityId,
-							cardId: cardWithZone.cardId,
-							side: isPlayer ? 'player' : 'opponent',
-						},
-				  ] as readonly ShortCard[]),
+				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
 		});
 	}
 
