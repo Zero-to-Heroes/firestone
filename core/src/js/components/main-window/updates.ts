@@ -34,13 +34,13 @@ export const updates: readonly Update[] = [
 	{
 		version: '9.3.7',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		I'm aware of the "memory reading" messages getting spammed for some of you. I'm currently working on fine-turning how sensitive memory resets need to be, but it might still take a couple of iterations to get it right. In the meantime, please don't hesitate to open bug reports, it helps me have a better picture of the problem.
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Giveaway time!',
+				text: `
+					See <a href="https://twitter.com/ZerotoHeroes_HS/status/1510961745195675648" target="_blank">this tweet</a> for details.
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
