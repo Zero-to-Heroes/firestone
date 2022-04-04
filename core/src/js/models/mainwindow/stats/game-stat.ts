@@ -88,7 +88,7 @@ export class GameStat {
 				const leagueId = parseInt(this.playerRank.split('-')[0]);
 				const rank = this.playerRank.split('-')[1];
 				const paddedRank = rank.padStart(2, '0');
-				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId, i18n);
+				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
 				return {
 					frameImage: leagueFrame,
 					medalImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
@@ -179,26 +179,26 @@ export class GameStat {
 		}
 	}
 
-	private getLeagueInfo(leagueId: number, i18n: LocalizationFacadeService): [string, string] {
-		const leagueName = this.getLeagueName(leagueId, i18n);
+	private getLeagueInfo(leagueId: number): [string, string] {
+		const leagueName = this.getLeagueName(leagueId);
 		return [
 			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Ranked_Medal_Frame_${leagueName}.png?v=3`,
 			leagueName,
 		];
 	}
 
-	private getLeagueName(leagueId: number, i18n: LocalizationFacadeService): string {
+	private getLeagueName(leagueId: number): string {
 		switch (leagueId) {
 			case 5:
-				return i18n.translateString('global.ranks.constructed.bronze');
+				return 'Bronze';
 			case 4:
-				return i18n.translateString('global.ranks.constructed.silver');
+				return 'Silver';
 			case 3:
-				return i18n.translateString('global.ranks.constructed.gold');
+				return 'Gold';
 			case 2:
-				return i18n.translateString('global.ranks.constructed.platinum');
+				return 'Platinum';
 			case 1:
-				return i18n.translateString('global.ranks.constructed.diamond');
+				return 'Diamond';
 		}
 	}
 }
