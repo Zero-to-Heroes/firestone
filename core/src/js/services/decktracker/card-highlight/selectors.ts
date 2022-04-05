@@ -70,11 +70,13 @@ export const discover = hasMechanic(GameTag.DISCOVER);
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
+export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
 export const rush = hasMechanic(GameTag.RUSH);
 export const secret = hasMechanic(GameTag.SECRET);
 export const taunt = hasMechanic(GameTag.TAUNT);
+export const dredge = hasMechanic(GameTag.DREDGE);
 
 export const spellSchool = (spellSchool: SpellSchool) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
@@ -104,6 +106,8 @@ export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
 export const mech = race(Race.MECH);
+export const murloc = race(Race.MURLOC);
+export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
 
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {

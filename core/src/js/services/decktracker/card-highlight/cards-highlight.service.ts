@@ -25,6 +25,7 @@ import {
 	discover,
 	divineShield,
 	dragon,
+	dredge,
 	effectiveCostEqual,
 	effectiveCostLess,
 	effectiveCostMore,
@@ -40,8 +41,11 @@ import {
 	inHand,
 	inOther,
 	legendary,
+	magnetic,
 	mech,
 	minion,
+	murloc,
+	naga,
 	nature,
 	neutral,
 	not,
@@ -299,8 +303,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.StonehearthVindicator:
 				return and(inDeck, spell, effectiveCostLess(4));
+			case CardIds.SrExcavatorTavernBrawl:
+				return and(inDeck, minion);
 			case CardIds.SrTombDiver:
 			case CardIds.JrTombDiver:
+			case CardIds.SrTombDiverTavernBrawl:
 				return and(or(inDeck, inOther), spell, secret);
 			case CardIds.SwordOfTheFallen:
 				return and(inDeck, spell, secret);
@@ -344,12 +351,18 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), effectiveCostLess(3));
 			case CardIds.BattleTotem2:
 				return and(or(inDeck, inHand), battlecry);
+			case CardIds.BeckoningBicornTavernBrawl:
+				return and(or(inDeck, inHand), pirate);
 			case CardIds.BronzeSignetTavernBrawl:
 				return and(inDeck, minion);
 			case CardIds.BitterColdTavernBrawl:
 				return and(frost, dealsDamage);
 			case CardIds.CapturedFlag:
 				return and(or(inDeck, inHand), minion);
+			case CardIds.CoilCastingTavernBrawl:
+				return and(or(inDeck, inHand), naga);
+			case CardIds.CookiesLadleTavernBrawl:
+				return and(or(inDeck, inHand), murloc);
 			case CardIds.CorruptedFelstoneTavernBrawl:
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.DeathlyDeathTavernBrawl:
@@ -372,6 +385,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(dragon);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(spell, shadow);
+			case CardIds.EdgeOfDredgeTavernBrawl:
+				return and(or(inDeck, inHand), dredge);
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return and(minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
@@ -422,6 +437,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell);
 			case CardIds.OpenTheDoorwaysTavernBrawl:
 				return and(discover);
+			case CardIds.OptimizedPolarityTavernBrawl:
+				return and(or(inDeck, inHand), mech, not(magnetic));
 			case CardIds.OrbOfRevelationTavernBrawl:
 				return and(or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
 			case CardIds.PillageTheFallenTavernBrawl:
@@ -482,12 +499,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			// Duels treasures
 			case CardIds.BladeOfTheBurningSun:
 				return and(inDeck, minion);
+			case CardIds.DrocomurchanicasTavernBrawlToken:
+				return and(inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.PartyPortalTavernBrawl2:
 				return and(or(inDeck, inHand), spell);
 			case CardIds.PrincessTavernBrawl:
 				return and(inDeck, minion, deathrattle);
 			case CardIds.SowTheSeedsTavernBrawl:
 				return and(inDeck, minion);
+			case CardIds.StaffOfRenewalTavernBrawl:
+				return and(inGraveyard, minion);
 		}
 	}
 }

@@ -153,6 +153,8 @@ export class DeckHandlerService {
 				return 'SCH_199t28';
 			case Board.ALTERAC:
 				return 'SCH_199t29';
+			case Board.VOYAGE_TO_SUNKEN_CITY:
+				return 'SCH_199t30';
 			default:
 				return cardId;
 		}

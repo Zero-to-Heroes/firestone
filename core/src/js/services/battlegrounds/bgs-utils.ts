@@ -22,8 +22,8 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.BabyKrush_DevilsaurToken,
 	CardIds.DevilsaurBattlegrounds,
 	// To remove once the cards list is properly updated
-	CardIds.FriendOfAFriend,
-	CardIds.FriendOfAFriendBattlegrounds,
+	CardIds.FriendOfAFriend1,
+	CardIds.FriendOfAFriend2,
 	CardIds.Onyxia_OnyxianWhelpToken,
 ];
 
@@ -257,8 +257,10 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.Rokara_GloryOfCombat;
 		case CardIds.Onyxia2:
 			return CardIds.Onyxia_Broodmother;
-		case CardIds.AmbassadorFaelin:
+		case CardIds.AmbassadorFaelin2:
 			return CardIds.AmbassadorFaelin_ExpeditionPlans;
+		case CardIds.IniStormcoil2:
+			return CardIds.IniStormcoil_Mechgyver;
 
 		case '':
 			return null; // new heroes
@@ -402,10 +404,12 @@ export const tribeValueForSort = (tribe: string): number => {
 			return 7;
 		case Race[Race.QUILBOAR]:
 			return 8;
-		case Race[Race.ALL]:
+		case Race[Race.NAGA]:
 			return 9;
-		case Race[Race.BLANK]:
+		case Race[Race.ALL]:
 			return 10;
+		case Race[Race.BLANK]:
+			return 11;
 	}
 };
 
@@ -602,8 +606,10 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 381;
 		case CardIds.Onyxia2:
 			return 379;
-		case CardIds.AmbassadorFaelin:
+		case CardIds.AmbassadorFaelin2:
 			return 394;
+		case CardIds.IniStormcoil2:
+			return 401;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;
@@ -769,8 +775,10 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.IcesnarlTheMighty;
 		case CardIds.Onyxia2:
 			return CardIds.ManyWhelpsBattlegrounds;
-		case CardIds.AmbassadorFaelin:
+		case CardIds.AmbassadorFaelin2:
 			return CardIds.SubmersibleChef;
+		case CardIds.IniStormcoil2:
+			return CardIds.SubScrubber;
 		default:
 			console.error('missing buddy section for ', heroCardId);
 			return null;
