@@ -150,6 +150,11 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.decktracker.your-deck.counters.multicaster-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.multicaster-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="playerCoralKeeperCounter"
+					[label]="'settings.decktracker.your-deck.counters.coral-keeper-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.coral-keeper-tooltip' | owTranslate"
+				></preference-toggle>
 			</div>
 
 			<div class="title" [owTranslate]="'settings.decktracker.opponent-deck.size-title'"></div>

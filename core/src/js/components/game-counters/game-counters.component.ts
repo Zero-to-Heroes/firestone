@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsMajordomoCounterDefinition } from '@components/game-counters/definitions/bgs-majordomo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
+import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -128,6 +129,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'multicaster':
 				return MulticasterCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'coralKeeper':
+				return CoralKeeperCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(gameState, side, this.i18n);
 			case 'si7Counter':

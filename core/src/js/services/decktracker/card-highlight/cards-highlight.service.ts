@@ -166,6 +166,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		card: DeckCard,
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
+			case CardIds.AbyssalDepths:
+				return and(inDeck, minion);
 			case CardIds.AllianceBannerman:
 				return and(inDeck, minion);
 			case CardIds.AmuletOfUndying:
@@ -186,6 +188,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.AxeBerserker:
 				return and(inDeck, weapon);
+			case CardIds.AzsharanGardens_SunkenGardensToken:
+				return and(or(inDeck, inHand), minion);
+			case CardIds.AzsharanSaber_SunkenSaberToken:
+				return and(inDeck, minion, beast);
+			case CardIds.AzsharanScavenger_SunkenScavengerToken:
+				return and(minion, murloc);
 			case CardIds.BalindaStonehearth:
 				return and(inDeck, spell);
 			case CardIds.BarakKodobane1:
@@ -201,8 +209,14 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, cardType(CardType.WEAPON));
 			case CardIds.CariaFelsoul:
 				return and(inDeck, demon);
+			case CardIds.ConchsCall:
+				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
 				return and(inOther, not(rogue));
+			case CardIds.CrushclawEnforcer:
+				return and(inDeck, naga);
+			case CardIds.CutlassCourier:
+				return and(inDeck, pirate);
 			case CardIds.DarkInquisitorXanesh:
 				return and(or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.DaUndatakah:
@@ -251,6 +265,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra1:
 				return and(spell, spellSchool(SpellSchool.NATURE));
+			case CardIds.LadyAshvane:
+				return and(inDeck, weapon);
 			case CardIds.LadyVashj_VashjPrimeToken:
 				return and(inDeck, spell);
 			case CardIds.LineHopper:

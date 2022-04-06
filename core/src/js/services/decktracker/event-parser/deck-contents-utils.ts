@@ -17,6 +17,8 @@ export const modifyDeckForSpecialCards = (
 			return handleEmbiggen(deckState, allCards, i18n);
 		case CardIds.DeckOfLunacy:
 			return handleDeckOfLunacy(deckState, allCards, i18n);
+		case CardIds.TheFiresOfZinAzshari:
+			return handleFiresOfZinAzshari(deckState, allCards, i18n);
 		case CardIds.IncantersFlow:
 			return handleIncantersFlow(deckState, allCards, i18n);
 		case CardIds.LunasPocketGalaxy:
@@ -250,6 +252,29 @@ const handleDeckOfLunacy = (
 				rarity: 'unknown',
 				cardType: 'Spell',
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleFiresOfZinAzshari = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => true,
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.translateString('decktracker.unknown-big-minion', { cost: 5 }),
+				creatorCardId: CardIds.TheFiresOfZinAzshari,
+				actualManaCost: 5,
+				rarity: 'unknown',
+				cardType: 'Minion',
+				cardMatchCondition: (other: ReferenceCard) => other.cost >= 5,
 			} as DeckCard),
 		deckState,
 		allCards,

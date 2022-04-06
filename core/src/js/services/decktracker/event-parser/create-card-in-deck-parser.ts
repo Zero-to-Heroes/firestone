@@ -80,5 +80,8 @@ const buildAttributeChange = (card: DeckCard): number => {
 	if (card?.cardId === CardIds.Ignite) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
+	if (card?.cardId === CardIds.Bottomfeeder) {
+		return 2 + (card.mainAttributeChange ?? 0);
+	}
 	return null;
 };
