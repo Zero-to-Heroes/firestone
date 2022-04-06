@@ -131,6 +131,7 @@ export interface MercenariesReferenceData {
 		readonly taskChainType: VillageVisitorType;
 		readonly tasks: readonly {
 			readonly id: number;
+			readonly mercenaryOverrideId: number;
 			readonly title: string;
 			readonly description: string;
 			readonly rewards: readonly {

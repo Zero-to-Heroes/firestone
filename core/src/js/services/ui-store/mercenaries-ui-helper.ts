@@ -160,9 +160,12 @@ export const buildMercenariesTasksList = (
 					return null;
 				}
 
-				const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
+				// 0 is not a valid id
+				const mercIdForImage = task.mercenaryOverrideId || taskChain.mercenaryId;
+				const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercIdForImage);
 				const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
 				const mercenaryCardId = mercenaryCard.id;
+				const role = getHeroRole(mercenaryCard.mercenaryRole);
 				const result = {
 					...visitor, // For debugging purpose
 					mercenaryCardId: mercenaryCardId,
@@ -179,9 +182,9 @@ export const buildMercenariesTasksList = (
 					progress: visitor.TaskProgress,
 					taskChainProgress: visitor.TaskChainProgress,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
-					frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
-						mercenaryCard.mercenaryRole,
-					)}.png?v=5`,
+					frameUrl: role
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`
+						: null,
 				} as Task;
 				return result;
 			})
