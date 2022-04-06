@@ -14,7 +14,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.SnipeVanilla,
 		CardIds.PotionOfPolymorph,
 		CardIds.MirrorEntityLegacy,
-		CardIds.MirrorEntityCore,
+		CardIds.MirrorEntity,
 		CardIds.MirrorEntityVanilla,
 		CardIds.FrozenClone,
 		CardIds.ExplosiveRunes,
@@ -51,7 +51,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityLegacy);
-			secretsWeCantRuleOut.push(CardIds.MirrorEntityCore);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntity);
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityVanilla);
 			secretsWeCantRuleOut.push(CardIds.Ambush);
 		}

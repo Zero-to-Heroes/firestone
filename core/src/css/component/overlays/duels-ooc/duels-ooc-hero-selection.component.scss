@@ -3,23 +3,41 @@
 }
 
 .container {
-	// TODO: change to vh
-	width: 50vh;
+	width: 65vh;
 	height: 100%;
-	padding-top: 8%;
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	column-gap: 7%;
-	row-gap: 0;
+	padding-top: 14vh;
+	padding-bottom: 7vh;
+	flex-shrink: 0;
+	display: flex;
+	flex-wrap: wrap;
 
 	.cell {
-		height: 100%;
-		width: 100%;
+		height: 22vh;
+		width: 14vh;
 		flex-grow: 0;
 		flex-shrink: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		&:nth-child(1) {
+			margin-left: 15vh;
+		}
+		&:nth-child(2) {
+			margin-left: 9vh;
+		}
+		&:nth-child(3) {
+			margin-top: 5vh;
+			margin-left: 4vh;
+		}
+		&:nth-child(4) {
+			margin-top: 5vh;
+			margin-left: 8vh;
+		}
+		&:nth-child(5) {
+			margin-top: 5vh;
+			margin-left: 9vh;
+		}
 	}
 
 	.empty-card {
@@ -30,7 +48,7 @@
 }
 
 duels-hero-info {
-	margin-left: 20vh;
+	margin-left: 12vh;
 	width: 40vh;
 	margin-bottom: 4vh;
 }

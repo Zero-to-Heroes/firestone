@@ -233,6 +233,10 @@ export const mergeDuelsHeroPlayerStats = (
 	cardIdOverride: string,
 ): DuelsHeroPlayerStat => {
 	const refStat = statsToMerge[0];
+	if (!refStat) {
+		return null;
+	}
+
 	const totalRuns = (100 * refStat.globalTotalMatches) / refStat.globalPopularity;
 	const totalMatchesForGroup = statsToMerge.map((g) => g.globalTotalMatches).reduce((a, b) => a + b, 0);
 	const winsDistribution: { winNumber: number; value: number }[] = [];

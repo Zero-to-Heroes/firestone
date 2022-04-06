@@ -128,9 +128,30 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 								stats.filter((s) => s.cardId.startsWith(cardId)),
 								cardId,
 							);
+							const card = this.allCards.getCard(cardId);
 							if (!stat) {
 								console.warn('missing stat', cardId, stats);
-								return null;
+								const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [
+									...Array(13).keys(),
+								].map((value, index) => ({
+									winNumber: index,
+									value: 0,
+								}));
+								const result: DuelsHeroInfo = {
+									cardId: cardId,
+									name: card.name,
+									globalTotalMatches: 0,
+									globalWinrate: undefined,
+									playerWinrate: undefined,
+									globalPopularity: undefined,
+									playerMatches: 0,
+									globalWinDistribution: emptyWinDistribution,
+									topDecks: [],
+								};
+								return {
+									cardId: cardId,
+									stat: result,
+								};
 							}
 
 							const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
@@ -182,7 +203,6 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 							)(heroDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 
-							const card = this.allCards.getCard(cardId);
 							const result: DuelsHeroInfo = {
 								cardId: cardId,
 								name: card.name,

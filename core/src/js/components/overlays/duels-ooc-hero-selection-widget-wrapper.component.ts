@@ -31,7 +31,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 export class DuelsOutOfCombatHeroSelectionWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
 	implements AfterContentInit {
-	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.2;
+	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.13;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0.08 * gameHeight;
 	protected positionUpdater = null;
 	protected positionExtractor = null;
@@ -78,7 +78,7 @@ export class DuelsOutOfCombatHeroSelectionWidgetWrapperComponent
 			return;
 		}
 		const gameHeight = gameInfo.height;
-		this.windowWidth = gameHeight * 1.15; //201 1311
+		this.windowWidth = gameHeight * 1.18; //201 1311
 		this.windowHeight = gameHeight * 0.7;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
