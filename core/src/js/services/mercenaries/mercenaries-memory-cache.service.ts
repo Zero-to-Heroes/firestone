@@ -195,26 +195,45 @@ export class MercenariesMemoryCacheService {
 		readFromMemory: boolean,
 	): readonly MemoryVisitor[] {
 		const updatedSavedVisitorsInfo = savedVisitorsInfo
+			// First check if we have memory info that contradicts the saved info
 			.map((visitor) => {
-				const memoryVisitor = fromMemory.find(
-					(v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId,
-				);
-				return !memoryVisitor && readFromMemory
-					? // If there are tasks in the saved preferences that don't appear in the memory, it means
-					  // that they have been either completed or abandoned
-					  visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
-						? // If their last known status was COMPLETE, we assume they are claimed
-						  { ...visitor, Status: TaskStatus.CLAIMED }
-						: // Otherwise, we assume the task has been abandoned
-						  null
-					: // And if a task in memory is also in the prefs, make sure they have the same status
-					  {
-							...visitor,
-							Status:
-								visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
-									? TaskStatus.CLAIMED
-									: memoryVisitor?.Status ?? visitor.Status,
-					  };
+				const memoryVisitor = readFromMemory ? fromMemory.find((v) => v.VisitorId === visitor.VisitorId) : null;
+				return memoryVisitor ?? visitor;
+			})
+			// Use a single CLAIMED status for completed tasks
+			.map((visitor) =>
+				visitor.Status === TaskStatus.CLAIMED || visitor.Status === TaskStatus.COMPLETE
+					? { ...visitor, Status: TaskStatus.CLAIMED }
+					: visitor,
+			)
+			// Then check for abandoned tasks
+			// This happens if we can't find a memory visitor info for the same task, and the saved task hasn't been completed
+			.map((visitor) => {
+				if (visitor.Status === TaskStatus.CLAIMED) {
+					return visitor;
+				}
+
+				const memoryVisitor = readFromMemory
+					? fromMemory.find((v) => v.VisitorId === visitor.VisitorId && v.TaskId === visitor.TaskId)
+					: null;
+				// Found a match, we just return it
+				if (!!memoryVisitor) {
+					return memoryVisitor;
+				}
+
+				if (visitor.TaskChainProgress === 0) {
+					return null;
+				}
+
+				// Here we have a saved task that isn't found in memory. This can be explained by multiple reasons, but
+				// the one we will use is that the task has been abandoned.
+				// So we simply update the saved task to the previous one in the chain
+				return {
+					...visitor,
+					TaskChainProgress: Math.max(0, visitor.TaskChainProgress - 1),
+					TaskId: -1,
+					Status: TaskStatus.CLAIMED,
+				};
 			})
 			.filter((visitor) => visitor);
 		console.debug('[merc-memory] updated savedVisitorsInfo', updatedSavedVisitorsInfo);
