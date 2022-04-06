@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -83,7 +82,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		).pipe(
-			tap((info) => console.debug('should display player tracker', info)),
 			this.mapData(
 				([
 					[currentScene, displayFromPrefs, decktrackerCloseOnGameEnd],
@@ -91,24 +89,24 @@ export class DecktrackerPlayerWidgetWrapperComponent
 					displayFromGameMode,
 				]) => {
 					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
-						console.debug('should show?', false);
+						// console.debug('should show?', false);
 						return false;
 					}
 
 					if (!decktrackerCloseOnGameEnd) {
-						console.debug('should show?', displayFromGameMode);
+						// console.debug('should show?', displayFromGameMode);
 						return displayFromGameMode;
 					}
 
 					// We explicitely don't check for null, so that if the memory updates are broken
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
-						console.debug('should show?', false);
+						// console.debug('should show?', false);
 						return false;
 					}
 
 					const result = !gameEnded && totalCardsInZones > 0;
-					console.debug('should show?', result);
+					// console.debug('should show?', result);
 					return result;
 				},
 			),
