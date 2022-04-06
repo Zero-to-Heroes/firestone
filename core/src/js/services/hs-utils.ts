@@ -331,6 +331,7 @@ export const publicCardCreators = [
 	CardIds.TolvirWarden,
 	CardIds.ToothOfNefarian,
 	CardIds.TownCrier1,
+	CardIds.TrenchSurveyor,
 	CardIds.Ursatron,
 	CardIds.UtgardeGrapplesniper,
 	CardIds.VarianKingOfStormwind,
