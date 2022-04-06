@@ -65,7 +65,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 											[cardTooltip]="task.mercenaryCardId"
 										>
 											<img class="art" [src]="task.portraitUrl" />
-											<img class="frame" [src]="task.frameUrl" />
+											<img class="frame" *ngIf="task.frameUrl" [src]="task.frameUrl" />
 										</div>
 										<div class="task-content">
 											<div class="header">{{ task.header }}</div>
