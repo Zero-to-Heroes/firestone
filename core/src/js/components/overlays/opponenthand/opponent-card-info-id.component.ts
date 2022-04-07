@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -60,17 +60,27 @@ export class OpponentCardInfoIdComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the
 	// user the actual card
 	private normalizeEnchantment(cardId: string): string {
-		switch (cardId) {
-			case CardIds.InstructorFireheart_HotStreakEnchantment:
-				return CardIds.InstructorFireheart;
-			default:
-				return cardId;
+		const card = this.allCards.getCard(cardId);
+		if (card.type !== 'Enchantment') {
+			return cardId;
 		}
+
+		const match = /(.*)e\d+?/.exec(cardId);
+		if (!!match) {
+			const rootCardId = match[1];
+			return rootCardId;
+		}
+		console.warn('unhandled enchantment', cardId);
+		return cardId;
 	}
 }
