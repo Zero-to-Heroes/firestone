@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 				<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
 					<div class="user-name">
-						{{ 'settings.general.twitch.logged-in-as' | owTranslate }}
+						{{ 'settings.general.twitch.logged-in-as-text' | owTranslate }}
 						<a
 							href="https://www.twitch.tv/{{ value.twitchUserName }}"
 							target="_blank"
