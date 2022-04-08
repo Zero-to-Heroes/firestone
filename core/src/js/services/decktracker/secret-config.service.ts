@@ -23,6 +23,7 @@ export class SecretConfigService {
 				CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
 				CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
 				CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
+				CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
 			];
 		}
 

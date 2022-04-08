@@ -18,6 +18,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.AvengeCore,
 		CardIds.CheatDeath,
 		CardIds.EmergencyManeuvers,
+		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
