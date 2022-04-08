@@ -234,8 +234,9 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const totalCoinsForFullUpgrade =
 			sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft);
 		const totalCoinsLeft = memMerc.CurrencyAmount;
+
 		const coinsMissingFromTasks = taskChain.tasks
-			.filter((task, index) => index > (currentStep ?? -1))
+			.filter((task, index) => index >= (currentStep ?? -1))
 			.flatMap((task) => task.rewards)
 			.filter((task) => task)
 			.filter(
