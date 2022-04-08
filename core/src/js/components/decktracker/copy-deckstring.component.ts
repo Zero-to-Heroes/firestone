@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { allDuelsSignatureTreasures, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
-import { decode, encode } from 'deckstrings';
+import { DeckDefinition, decode, encode } from 'deckstrings';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -39,10 +40,8 @@ export class CopyDesckstringComponent {
 		if (!!value) {
 			try {
 				const deckDefinition = decode(value);
-				deckDefinition.heroes = deckDefinition.heroes.map((hero) =>
-					normalizeDeckHeroDbfId(hero, this.allCards),
-				);
-				this.normalizedDeckstring = encode(deckDefinition);
+				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+				this.normalizedDeckstring = encode(updatedDeckDefinition);
 			} catch (e) {
 				console.error('could not decode deckstring', value, e);
 			}
@@ -81,3 +80,14 @@ export class CopyDesckstringComponent {
 		amplitude.getInstance().logEvent('copy-deckstring', { 'origin': this.origin });
 	}
 }
+
+export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: CardsFacadeService): DeckDefinition => {
+	deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, allCards));
+	// Filter for Duels - remove the signature treasure, as it breaks the HS deck builder
+	const newCards = deckDefinition.cards.filter(([cardDbfId, quantity]) => {
+		const card = allCards.getCardFromDbfId(cardDbfId);
+		return !allDuelsSignatureTreasures.includes(card.id as CardIds);
+	});
+	deckDefinition.cards = newCards;
+	return deckDefinition;
+};

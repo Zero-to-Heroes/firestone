@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsSignatureTreasures, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
+import { sortByProperties } from '@services/utils';
 import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
 import { DeckCard } from '../models/decktracker/deck-card';
@@ -42,6 +44,7 @@ export class DevService {
 		private achievementsMonitor: AchievementsMonitor,
 		private memoryService: MemoryInspectionService,
 		private handler: DeckHandlerService,
+		private allCards: CardsFacadeService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -165,6 +168,27 @@ export class DevService {
 		};
 		window['decodeDeck'] = (deckstring) => {
 			console.debug(decode(deckstring));
+		};
+		window['decodeDeckFull'] = (deckstring) => {
+			const decoded = decode(deckstring);
+			const result = decoded.cards
+				.map(([cardDbfId, quantity]) => ({
+					cardId: this.allCards.getCardFromDbfId(cardDbfId).id,
+					name: this.allCards.getCardFromDbfId(cardDbfId).name,
+					quantity: quantity,
+					manaCost: this.allCards.getCardFromDbfId(cardDbfId).cost,
+				}))
+				.sort(sortByProperties((info) => [info.manaCost, info.name]));
+			console.debug(result);
+		};
+		window['santizeDeckForDuels'] = (deckstring) => {
+			const decoded = decode(deckstring);
+			const newCards = decoded.cards.filter(([cardDbfId, quantity]) => {
+				const card = this.allCards.getCardFromDbfId(cardDbfId);
+				return !allDuelsSignatureTreasures.includes(card.id as CardIds);
+			});
+			decoded.cards = newCards;
+			console.debug(encode(decoded));
 		};
 		window['buildDeck'] = async (decklist, hero) => {
 			const cards = decklist.split('\n');
