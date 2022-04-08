@@ -94,8 +94,8 @@ export class GameStat {
 					medalImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
 					frameDecoration: decoration,
 					tooltip: i18n.translateString('app.replays.replay-info.game-mode-tooltip.ladder', {
-						format: capitalizeEachWord(this.gameFormat),
-						leagueName: leagueName,
+						format: i18n.translateString(`global.format.${this.gameFormat.toLowerCase()}`),
+						leagueName: i18n.translateString(`global.ranks.constructed.${leagueName.toLowerCase()}`),
 						rank: rank,
 					}),
 				};
