@@ -117,7 +117,7 @@ export class FullCardComponent {
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class =
 			card.playerClass !== 'Neutral'
-				? card.playerClass
+				? formatClass(playerClass, this.i18n)
 				: card.classes?.length
 				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
 				: formatClass('all', this.i18n);
