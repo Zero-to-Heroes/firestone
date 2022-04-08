@@ -29,7 +29,7 @@ declare let amplitude;
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
-					<div class="card-info class">
+					<div class="card-info class" *ngIf="class">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.class'"></span>
 						<span class="value">{{ class }}</span>
 					</div>
