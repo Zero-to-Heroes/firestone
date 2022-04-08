@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardClass, GameType } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -240,21 +240,23 @@ export class DungeonLootParserService {
 				);
 				return true;
 			}
-			if (
-				!this.lastDuelsMatch.playerClass ||
-				CardClass[this.duelsInfo.PlayerClass]?.toLowerCase() !== this.lastDuelsMatch.playerClass.toLowerCase()
-			) {
-				this.log(
-					'different player class, starting new run',
-					this.duelsInfo.PlayerClass,
-					CardClass[this.duelsInfo.PlayerClass],
-					this.lastDuelsMatch.playerCardId,
-					this.lastDuelsMatch.playerClass,
-					duelsInfo,
-					this.lastDuelsMatch,
-				);
-				return true;
-			}
+
+			// Remove this condition, as it doesn't work with dual class heroes
+			// if (
+			// 	!this.lastDuelsMatch.playerClass ||
+			// 	CardClass[this.duelsInfo.PlayerClass]?.toLowerCase() !== this.lastDuelsMatch.playerClass.toLowerCase()
+			// ) {
+			// 	this.log(
+			// 		'different player class, starting new run',
+			// 		this.duelsInfo.PlayerClass,
+			// 		CardClass[this.duelsInfo.PlayerClass],
+			// 		this.lastDuelsMatch.playerCardId,
+			// 		this.lastDuelsMatch.playerClass,
+			// 		duelsInfo,
+			// 		this.lastDuelsMatch,
+			// 	);
+			// 	return true;
+			// }
 		}
 
 		if (
