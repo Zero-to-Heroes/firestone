@@ -201,7 +201,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 							id: card.id,
 							icon: this.i18n.getCardImage(card.id),
 							name: card.name,
-							text: card.text,
+							text: this.sanitizeText(card.text),
 						}))
 						.sort(sortByProperties((hero: HeroPower) => [hero.name]));
 					console.debug('result', result);
