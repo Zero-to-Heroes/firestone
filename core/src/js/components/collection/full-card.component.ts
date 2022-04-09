@@ -29,7 +29,7 @@ declare let amplitude;
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
-					<div class="card-info class">
+					<div class="card-info class" *ngIf="class">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.class'"></span>
 						<span class="value">{{ class }}</span>
 					</div>
@@ -117,7 +117,7 @@ export class FullCardComponent {
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class =
 			card.playerClass !== 'Neutral'
-				? card.playerClass
+				? formatClass(playerClass, this.i18n)
 				: card.classes?.length
 				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
 				: formatClass('all', this.i18n);
