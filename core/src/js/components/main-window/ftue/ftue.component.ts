@@ -53,7 +53,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[owTranslate]="'ftue.previous-button'"
 				></div>
 				<div class="next-ftue ftue-nav-link" (click)="next()" growOnClick>
-					{{ currentIndex === ftueSteps.length - 1 ? 'Done' : 'Next' }}
+					{{ currentIndex === ftueSteps.length - 1 ? 
+					"'ftue.done-button' | owTranslate" : 
+					"'ftue.next-button' | owTranslate" }}
 				</div>
 			</div>
 		</div>
