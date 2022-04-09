@@ -120,7 +120,11 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					totalMatches: totalMatches,
 					tooltip: `
 						<div class="content">
-							<div class="title">Built from ${totalMatches.toLocaleString('en-US')} matches filtering for:</div>
+							<div class="title">
+								{{
+									'app.battlegrounds.tier-list.tooltip' | owTranslate: { value: totalMatches.toLocaleString('en-US') }
+								}}
+							</div>
 							<ul class="filters">
 								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null, this.i18n)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(

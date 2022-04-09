@@ -232,6 +232,12 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 						return `${storyIndex.padStart(2, '0')} - Cariel's story`;
 					case 7:
 						return `${storyIndex.padStart(2, '0')} - Scabbs' story`;
+					case 8:
+						return `${storyIndex.padStart(2, '0')} - Tavish's story`;
+					case 9:
+						return `${storyIndex.padStart(2, '0')} - Bru'kan's story`;
+					case 10:
+						return `${storyIndex.padStart(2, '0')} - Dawngrasp's story`;
 					default:
 						return `${storyIndex.padStart(2, '0')} - Other stories`;
 				}

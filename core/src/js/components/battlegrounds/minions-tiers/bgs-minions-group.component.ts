@@ -39,8 +39,8 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					[helpTooltip]="
 						_showTribesHighlight
 							? !highlighted
-								? 'Click to highlight all ' + title + 's in the tavern'
-								: 'Click to remove the ' + title + 's highlight in the tavern'
+								? "'battlegrounds.in-game.minions-list.highlight-tribe' | owTranslate"
+								: "'battlegrounds.in-game.minions-list.unhighlight-tribe' | owTranslate"
 							: null
 					"
 					[helpTooltipPosition]="'left'"
@@ -68,8 +68,8 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						[helpTooltip]="
 							_showTribesHighlight
 								? !minion.highlighted
-									? 'Pin this minion to highlight it in the tavern'
-									: 'Unpin this minion to remove the highlight in the tavern'
+									? "'battlegrounds.in-game.minions-list.highlight-minion' | owTranslate"
+									: "'battlegrounds.in-game.minions-list.unhighlight-minion' | owTranslate"
 								: null
 						"
 						[helpTooltipPosition]="'left'"
