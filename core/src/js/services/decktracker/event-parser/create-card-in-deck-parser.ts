@@ -33,6 +33,7 @@ export class CreateCardInDeckParser implements EventParser {
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
+		const positionFromBottom = this.buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -43,12 +44,13 @@ export class CreateCardInDeckParser implements EventParser {
 			mainAttributeChange: gameEvent.additionalData.creatorEntityId
 				? buildAttributeChange(deck.findCard(gameEvent.additionalData.creatorEntityId))
 				: null,
+			positionFromBottom: positionFromBottom,
 		} as DeckCard);
 		//console.debug('[debug]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
 		//console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
@@ -63,6 +65,32 @@ export class CreateCardInDeckParser implements EventParser {
 
 	event(): string {
 		return GameEvent.CREATE_CARD_IN_DECK;
+	}
+
+	private buildPositionFromBottom(deck: DeckState, creatorCardId: string): number {
+		return undefined;
+		switch (creatorCardId) {
+			case CardIds.AmbassadorFaelin1:
+			case CardIds.AzsharanDefector:
+			case CardIds.AzsharanGardens:
+			case CardIds.AzsharanMooncatcher:
+			case CardIds.AzsharanRitual:
+			case CardIds.AzsharanSaber:
+			case CardIds.AzsharanScavenger:
+			case CardIds.AzsharanScroll:
+			case CardIds.AzsharanSentinel:
+			case CardIds.AzsharanSweeper:
+			case CardIds.AzsharanTrident:
+			case CardIds.AzsharanVessel:
+			case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
+			case CardIds.Bottomfeeder:
+			// TODO: dredge
+			// TODO: radar detector
+			case CardIds.SpiritJailer1:
+				// So that it gets bumped to 1 in the later cleaning phase, and 0 is always free
+				return 0;
+		}
+		return undefined;
 	}
 
 	private buildCardName(card: any, creatorCardId: string): string {

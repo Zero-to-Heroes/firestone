@@ -281,6 +281,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'SHUFFLE_DECK':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SHUFFLE_DECK, gameEvent, {
+						playerId: gameEvent.Value.PlayerId,
+					}),
+				);
+				break;
 			case 'RUMBLE_RUN_STEP':
 				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(

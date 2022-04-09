@@ -7,42 +7,68 @@ import { DeckState } from '../../models/decktracker/deck-state';
 export class GameStateMetaInfoService {
 	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		return Object.assign(new DeckState(), deckState, {
-			board: this.cleanZone(deckState.board),
-			deck: this.cleanZone(deckState.deck),
-			hand: this.updateZone(deckState.hand, currentTurn),
-			otherZone: this.cleanZone(deckState.otherZone),
+			board: this.cleanZone(deckState.board, true),
+			deck: this.cleanBottomPositions(this.cleanZone(deckState.deck, false)),
+			hand: this.updateZone(deckState.hand, currentTurn, true),
+			otherZone: this.cleanZone(deckState.otherZone, true),
 		} as DeckState);
+	}
+
+	private cleanBottomPositions(deck: readonly DeckCard[]): readonly DeckCard[] {
+		return [...deck]
+			.sort((a, b) =>
+				a.positionFromBottom == null
+					? 1
+					: b.positionFromBottom == null
+					? -1
+					: a.positionFromBottom - b.positionFromBottom,
+			)
+			.map((card, index) =>
+				card.update({
+					positionFromBottom: card.positionFromBottom == undefined ? undefined : index + 1,
+				}),
+			);
 	}
 
 	// If the card goes back to deck / board, we want to reset the counter, as it doesn't
 	// provide any meaningful info anymore
-	private cleanZone(zone: readonly DeckCard[]): readonly DeckCard[] {
+	private cleanZone(zone: readonly DeckCard[], removeBottomInfo: boolean): readonly DeckCard[] {
 		return zone.map((card) =>
-			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined ? card : this.cleanCard(card),
+			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined
+				? card
+				: this.cleanCard(card, removeBottomInfo),
 		);
 	}
 
-	private cleanCard(card: DeckCard): DeckCard {
+	private cleanCard(card: DeckCard, removeBottomInfo: boolean): DeckCard {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: undefined,
 		} as CardMetaInfo);
 		return card.update({
 			metaInfo: newMeta,
+			positionFromBottom: removeBottomInfo ? undefined : card.positionFromBottom,
 		} as DeckCard);
 	}
 
-	private updateZone(zone: readonly DeckCard[], currentTurn: number | 'mulligan'): readonly DeckCard[] {
+	private updateZone(
+		zone: readonly DeckCard[],
+		currentTurn: number | 'mulligan',
+		removeBottomInfo: boolean,
+	): readonly DeckCard[] {
 		return zone.map((card) =>
-			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined ? this.updateCard(card, currentTurn) : card,
+			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined
+				? this.updateCard(card, currentTurn, removeBottomInfo)
+				: card,
 		);
 	}
 
-	private updateCard(card: DeckCard, currentTurn: number | 'mulligan'): DeckCard {
+	private updateCard(card: DeckCard, currentTurn: number | 'mulligan', removeBottomInfo: boolean): DeckCard {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: currentTurn,
 		} as CardMetaInfo);
 		return card.update({
 			metaInfo: newMeta,
+			positionFromBottom: removeBottomInfo ? undefined : card.positionFromBottom,
 		} as DeckCard);
 	}
 }
