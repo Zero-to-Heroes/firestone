@@ -153,6 +153,7 @@
 	}
 
 	.number-of-copies,
+	.position-from-bottom,
 	.legendary-symbol,
 	.icon-symbol,
 	.gift-symbol {
@@ -201,6 +202,18 @@
 				width: 13px;
 				height: 16px;
 			}
+		}
+	}
+
+	.position-from-bottom {
+		border: 1px solid #6a109e;
+
+		.inner-border {
+			border: 1px solid #916ca7;
+		}
+
+		span {
+			color: #916ca7;
 		}
 	}
 

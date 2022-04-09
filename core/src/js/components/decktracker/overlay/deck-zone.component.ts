@@ -111,6 +111,7 @@ export class DeckZoneComponent implements AfterViewInit {
 
 	private _showGiftsSeparately = true;
 	private _showStatsChange = true;
+	private _showBottomCardsSeparately = true;
 	private _zone: DeckZone;
 
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
@@ -199,9 +200,12 @@ export class DeckZoneComponent implements AfterViewInit {
 	private buildGroupingKey(card: VisualDeckCard, quantitiesLeftForCard: { [cardId: string]: number }): string {
 		const keyWithBonus = this._showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
 		const keyWithGift = this._showGiftsSeparately
-			? keyWithBonus + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
+			? keyWithBonus + 'creators-' + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 			: keyWithBonus;
-		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithGift + '-graveyard' : keyWithGift;
+		const keyWithBottom = this._showBottomCardsSeparately
+			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
+			: keyWithGift;
+		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithBottom + '-graveyard' : keyWithBottom;
 		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
 		if (!this._collection?.length) {
 			return keyWithCost;
@@ -217,6 +221,12 @@ export class DeckZoneComponent implements AfterViewInit {
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
+		if ((a.positionFromBottom ?? 99) < (b.positionFromBottom ?? 99)) {
+			return 1;
+		}
+		if ((a.positionFromBottom ?? 99) > (b.positionFromBottom ?? 99)) {
+			return -1;
+		}
 		if (this.getCost(a) < this.getCost(b)) {
 			return -1;
 		}

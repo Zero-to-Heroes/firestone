@@ -122,6 +122,11 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
+			<div class="position-from-bottom" *ngIf="positionFromBottom">
+				<div class="inner-border">
+					<span>{{ positionFromBottom }}</span>
+				</div>
+			</div>
 			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 				<div class="inner-border">
 					<span>{{ numberOfCopies }}</span>
@@ -200,6 +205,7 @@ export class DeckCardComponent implements OnDestroy {
 	cardName: string;
 	rarity: string;
 	numberOfCopies: number;
+	positionFromBottom: number;
 	highlight: string;
 	isLinkedCardHighlight: boolean;
 	_colorManaCost: boolean;
@@ -296,6 +302,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.isUnknownCard = !this._card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = this._card.totalQuantity;
+		this.positionFromBottom = this._card.positionFromBottom;
 		this.rarity = this._card.rarity?.toLowerCase();
 		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;
