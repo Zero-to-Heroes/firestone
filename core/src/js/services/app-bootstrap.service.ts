@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
-import { Preferences } from '../models/preferences';
+import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from './achievement/achievements-storage.service';
@@ -384,8 +384,15 @@ export class AppBootstrapService {
 		const prefs = await this.prefs.getPreferences();
 		// Log an event for each of the prefs
 		console.log('no-format', 'pref status', prefs);
-		amplitude.getInstance().logEvent('preferences', {
-			...prefs,
-		});
+		const prefsToSend = { ...new Preferences() };
+		for (const prop in prefs) {
+			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSend, prop);
+			if (!meta) {
+				prefsToSend[prop] = prefs[prop];
+			}
+		}
+		delete prefsToSend.desktopDeckDeletes;
+		delete prefsToSend.desktopDeckStatsReset;
+		amplitude.getInstance().logEvent('preferences', prefsToSend);
 	}
 }
