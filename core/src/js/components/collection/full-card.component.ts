@@ -117,9 +117,9 @@ export class FullCardComponent {
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class =
 			card.playerClass !== 'Neutral'
-				? formatClass(playerClass, this.i18n)
+				? formatClass(card.playerClass, this.i18n)
 				: card.classes?.length
-				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
+				? card.classes.map((playerClass) => formatClass(card.playerClass, this.i18n)).join(', ')
 				: formatClass('all', this.i18n);
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
