@@ -13,7 +13,7 @@ export const or = (
 	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
 ): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
 	return (handler, deckState, options?: SelectorOptions) =>
-		filters.filter(f => !!f).some((filter) => filter(handler, deckState, options));
+		filters.filter((f) => !!f).some((filter) => filter(handler, deckState, options));
 };
 
 export const not = (

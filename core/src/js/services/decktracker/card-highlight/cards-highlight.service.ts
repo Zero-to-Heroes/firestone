@@ -63,7 +63,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
-	weapon
+	weapon,
 } from './selectors';
 
 @Injectable()

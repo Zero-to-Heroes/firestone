@@ -7,7 +7,7 @@ import {
 	Input,
 	Optional,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';

@@ -78,7 +78,6 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 }
 
-
 export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
 	switch (creatorCardId) {
 		case CardIds.AmbassadorFaelin1:
@@ -95,13 +94,13 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.AzsharanVessel:
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
 		case CardIds.Bottomfeeder:
-		// TODO: dredge
-		// TODO: radar detector
+			// TODO: dredge
+			// TODO: radar detector
 			// So that it gets bumped to 1 in the later cleaning phase, and 0 is always free
 			return 0;
 	}
 	return undefined;
-}
+};
 
 const buildAttributeChange = (card: DeckCard): number => {
 	if (card?.cardId === CardIds.Ignite) {

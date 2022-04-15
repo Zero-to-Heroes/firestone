@@ -126,7 +126,10 @@ export class DeckListByZoneComponent implements OnDestroy {
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
 		}
 		let bottomZone = null;
-		if (this._showBottomCardsSeparately && this._deckState.deck.filter((c) => c.positionFromBottom != undefined).length) {
+		if (
+			this._showBottomCardsSeparately &&
+			this._deckState.deck.filter((c) => c.positionFromBottom != undefined).length
+		) {
 			bottomZone = this.buildZone(
 				this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
 				'deck-bottom',
