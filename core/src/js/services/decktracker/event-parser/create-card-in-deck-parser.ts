@@ -33,7 +33,7 @@ export class CreateCardInDeckParser implements EventParser {
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
-		const positionFromBottom = this.buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
+		const positionFromBottom = buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -67,32 +67,6 @@ export class CreateCardInDeckParser implements EventParser {
 		return GameEvent.CREATE_CARD_IN_DECK;
 	}
 
-	private buildPositionFromBottom(deck: DeckState, creatorCardId: string): number {
-		return undefined;
-		switch (creatorCardId) {
-			case CardIds.AmbassadorFaelin1:
-			case CardIds.AzsharanDefector:
-			case CardIds.AzsharanGardens:
-			case CardIds.AzsharanMooncatcher:
-			case CardIds.AzsharanRitual:
-			case CardIds.AzsharanSaber:
-			case CardIds.AzsharanScavenger:
-			case CardIds.AzsharanScroll:
-			case CardIds.AzsharanSentinel:
-			case CardIds.AzsharanSweeper:
-			case CardIds.AzsharanTrident:
-			case CardIds.AzsharanVessel:
-			case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
-			case CardIds.Bottomfeeder:
-			// TODO: dredge
-			// TODO: radar detector
-			case CardIds.SpiritJailer1:
-				// So that it gets bumped to 1 in the later cleaning phase, and 0 is always free
-				return 0;
-		}
-		return undefined;
-	}
-
 	private buildCardName(card: any, creatorCardId: string): string {
 		if (card) {
 			return this.i18n.getCardName(card.id);
@@ -102,6 +76,31 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 		return this.i18n.getUnknownCardName();
 	}
+}
+
+
+export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
+	switch (creatorCardId) {
+		case CardIds.AmbassadorFaelin1:
+		case CardIds.AzsharanDefector:
+		case CardIds.AzsharanGardens:
+		case CardIds.AzsharanMooncatcher:
+		case CardIds.AzsharanRitual:
+		case CardIds.AzsharanSaber:
+		case CardIds.AzsharanScavenger:
+		case CardIds.AzsharanScroll:
+		case CardIds.AzsharanSentinel:
+		case CardIds.AzsharanSweeper:
+		case CardIds.AzsharanTrident:
+		case CardIds.AzsharanVessel:
+		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
+		case CardIds.Bottomfeeder:
+		// TODO: dredge
+		// TODO: radar detector
+			// So that it gets bumped to 1 in the later cleaning phase, and 0 is always free
+			return 0;
+	}
+	return undefined;
 }
 
 const buildAttributeChange = (card: DeckCard): number => {

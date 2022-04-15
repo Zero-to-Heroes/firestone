@@ -42,6 +42,9 @@ export class DeckCard {
 	readonly mainAttributeChange?: number;
 	readonly playTiming?: number;
 	readonly positionFromBottom?: number;
+	readonly positionFromTop?: number;
+	readonly dredged?: boolean;
+	readonly linkedEntityIds?: readonly number[] = [];
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {

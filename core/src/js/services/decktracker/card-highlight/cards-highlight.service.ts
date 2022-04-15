@@ -63,7 +63,7 @@ import {
 	spellPlayedThisMatch,
 	spellSchool,
 	taunt,
-	weapon,
+	weapon
 } from './selectors';
 
 @Injectable()
@@ -162,6 +162,23 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	}
 
 	private buildSelector(
+		cardId: string,
+		card: DeckCard,
+	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
+		const cardIdSelector = this.buildCardIdSelector(cardId, card);
+		const cardContextSelector = this.buildCardContextSelector(card);
+		return or(cardIdSelector, cardContextSelector);
+	}
+
+	private buildCardContextSelector(
+		card: DeckCard,
+	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
+		if (card.dredged && card.linkedEntityIds?.length) {
+			return (handler, deckState, options) => card.linkedEntityIds.includes(handler.deckCardProvider().entityId);
+		}
+	}
+
+	private buildCardIdSelector(
 		cardId: string,
 		card: DeckCard,
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {

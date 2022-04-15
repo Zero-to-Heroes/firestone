@@ -1,4 +1,4 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -39,7 +39,8 @@ export class CardRevealedParser implements EventParser {
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
-			// lastAffectedByCardId: creatorCardId,
+			lastAffectedByCardId: gameEvent.additionalData.creatorCardId,
+			positionFromBottom: this.isDredge(gameEvent.additionalData.creatorCardId) ? 0 : undefined,
 		} as DeckCard);
 
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);
@@ -49,6 +50,10 @@ export class CardRevealedParser implements EventParser {
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+	}
+
+	private isDredge(creatorCardId: string): boolean {
+		return this.cards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.DREDGE]);
 	}
 
 	event(): string {

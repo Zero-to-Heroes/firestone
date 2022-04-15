@@ -27,6 +27,14 @@ export class GameStateMetaInfoService {
 				card.update({
 					positionFromBottom: card.positionFromBottom == undefined ? undefined : index + 1,
 				}),
+			)
+			.sort((a, b) =>
+				a.positionFromTop == null ? -1 : b.positionFromTop == null ? 1 : b.positionFromTop - a.positionFromTop,
+			)
+			.map((card, index) =>
+				card.update({
+					positionFromTop: card.positionFromTop == undefined ? undefined : index + 1,
+				}),
 			);
 	}
 

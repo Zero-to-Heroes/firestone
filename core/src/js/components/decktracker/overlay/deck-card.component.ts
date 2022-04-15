@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Optional,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -122,11 +122,25 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
+			<div
+				class="icon-symbol dreedged"
+				*ngIf="isGraveyard"
+				[helpTooltip]="'decktracker.card-dredged' | owTranslate"
+			>
+				<div class="inner-border">
+					<i inlineSVG="assets/svg/dredged.svg"></i>
+				</div>
+			</div>
+			<!-- <div class="position-from-top" *ngIf="positionFromTop">
+				<div class="inner-border">
+					<span>{{ positionFromTop }}</span>
+				</div>
+			</div>
 			<div class="position-from-bottom" *ngIf="positionFromBottom">
 				<div class="inner-border">
 					<span>{{ positionFromBottom }}</span>
 				</div>
-			</div>
+			</div> -->
 			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 				<div class="inner-border">
 					<span>{{ numberOfCopies }}</span>
@@ -206,6 +220,7 @@ export class DeckCardComponent implements OnDestroy {
 	rarity: string;
 	numberOfCopies: number;
 	positionFromBottom: number;
+	positionFromTop: number;
 	highlight: string;
 	isLinkedCardHighlight: boolean;
 	_colorManaCost: boolean;
@@ -302,7 +317,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.isUnknownCard = !this._card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = this._card.totalQuantity;
-		this.positionFromBottom = this._card.positionFromBottom;
+		this.positionFromTop = this._card.positionFromTop;
 		this.rarity = this._card.rarity?.toLowerCase();
 		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;

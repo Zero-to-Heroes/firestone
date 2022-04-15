@@ -39,6 +39,7 @@ export class LinkedEntityParser implements EventParser {
 			const updatedCard = originalCard.update({
 				cardId: newCard.cardId,
 			} as DeckCard);
+			console.debug('[linked-entity-parser] updating card', updatedCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard);
 		} else {
 			// Can happen for BG heroes
@@ -51,6 +52,7 @@ export class LinkedEntityParser implements EventParser {
 				entityId: gameEvent.additionalData.linkedEntityId,
 				zone: undefined,
 			} as DeckCard);
+			console.debug('[linked-entity-parser] adding card', updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToAddTheCard.deck,
 				updatedCard.cardId,

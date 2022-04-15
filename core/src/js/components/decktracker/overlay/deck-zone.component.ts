@@ -7,7 +7,7 @@ import {
 	Input,
 	Optional,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -112,6 +112,7 @@ export class DeckZoneComponent implements AfterViewInit {
 	private _showGiftsSeparately = true;
 	private _showStatsChange = true;
 	private _showBottomCardsSeparately = true;
+	private _showTopCardsSeparately = true;
 	private _zone: DeckZone;
 
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
@@ -205,7 +206,10 @@ export class DeckZoneComponent implements AfterViewInit {
 		const keyWithBottom = this._showBottomCardsSeparately
 			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
 			: keyWithGift;
-		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithBottom + '-graveyard' : keyWithBottom;
+		const keyWithTop = this._showTopCardsSeparately
+			? keyWithBottom + 'top-' + (card.positionFromTop ?? '')
+			: keyWithBottom;
+		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
 		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
 		if (!this._collection?.length) {
 			return keyWithCost;

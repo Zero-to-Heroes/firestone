@@ -56,6 +56,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
 	public static readonly CARD_CHANGED_IN_HAND = 'CARD_CHANGED_IN_HAND';
 	public static readonly CARD_CHANGED_IN_DECK = 'CARD_CHANGED_IN_DECK';
+	public static readonly CARD_DREDGED = 'CARD_DREDGED';
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
 	public static readonly SECRET_PUT_IN_PLAY = 'SECRET_PUT_IN_PLAY';
 	public static readonly SECRET_WILL_TRIGGER = 'SECRET_WILL_TRIGGER';

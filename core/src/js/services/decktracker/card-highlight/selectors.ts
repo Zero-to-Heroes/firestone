@@ -13,7 +13,7 @@ export const or = (
 	...filters: ((h: Handler, d?: DeckState, options?: SelectorOptions) => boolean)[]
 ): ((handler: Handler, d?: DeckState, options?: SelectorOptions) => boolean) => {
 	return (handler, deckState, options?: SelectorOptions) =>
-		filters.some((filter) => filter(handler, deckState, options));
+		filters.filter(f => !!f).some((filter) => filter(handler, deckState, options));
 };
 
 export const not = (
@@ -26,7 +26,7 @@ const inZoneId = (zone: string) => (handler: Handler, d?: DeckState, options?: S
 	options?.uniqueZone || handler.zoneProvider()?.id?.toLowerCase() === zone?.toLowerCase();
 const inZoneName = (zone: string) => (handler: Handler, d?: DeckState, options?: SelectorOptions): boolean =>
 	handler.deckCardProvider()?.zone?.toLowerCase() === zone?.toLowerCase();
-export const inDeck = inZoneId('deck');
+export const inDeck = or(inZoneId('deck'), inZoneId('deck-top'), inZoneId('deck-bottom'));
 export const inHand = inZoneId('hand');
 export const inOther = inZoneId('other');
 export const inGraveyard = inZoneName('GRAVEYARD');

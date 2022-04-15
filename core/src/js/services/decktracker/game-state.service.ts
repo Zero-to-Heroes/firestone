@@ -38,6 +38,7 @@ import { CardChangedInHandParser } from './event-parser/card-changed-in-hand-par
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
+import { CardDredgedParser } from './event-parser/card-dredged-parser';
 import { CardOnBoardAtGameStart } from './event-parser/card-on-board-at-game-start-parser';
 import { CardPlayedByEffectParser } from './event-parser/card-played-by-effect';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
@@ -379,7 +380,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -561,6 +562,8 @@ export class GameStateService {
 			new ShuffleDeckParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
+			new CardDredgedParser(this.helper, this.allCards, this.i18n),
+
 			new ReconnectStartParser(),
 			new ReconnectOverParser(this.deckHandler),
 		];

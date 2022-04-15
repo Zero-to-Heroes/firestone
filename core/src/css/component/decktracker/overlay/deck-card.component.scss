@@ -154,6 +154,7 @@
 
 	.number-of-copies,
 	.position-from-bottom,
+	.position-from-top,
 	.legendary-symbol,
 	.icon-symbol,
 	.gift-symbol {
@@ -214,6 +215,18 @@
 
 		span {
 			color: #916ca7;
+		}
+	}
+
+	.position-from-top {
+		border: 1px solid #ffffff;
+
+		.inner-border {
+			border: 1px solid #ffffff;
+		}
+
+		span {
+			color: #ffffff;
 		}
 	}
 

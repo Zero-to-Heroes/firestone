@@ -78,6 +78,8 @@ export class DeckListByZoneComponent implements OnDestroy {
 	private _showGlobalEffectsZone: boolean;
 	private _hideGeneratedCardsInOtherZone: boolean;
 	private _sortCardsByManaCostInOtherZone: boolean;
+	private _showBottomCardsSeparately = true;
+	private _showTopCardsSeparately = true;
 	private _deckState: DeckState;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
@@ -110,10 +112,35 @@ export class DeckListByZoneComponent implements OnDestroy {
 			);
 		}
 
+		let cardsInDeckZone = this._deckState.deck;
+		if (this._showTopCardsSeparately && this._deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
+			zones.push(
+				this.buildZone(
+					this._deckState.deck.filter((c) => c.positionFromTop != undefined),
+					'deck-top',
+					this.i18n.translateString('decktracker.zones.top-of-deck'),
+					(a, b) => a.positionFromTop - b.positionFromTop,
+					null,
+				),
+			);
+			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
+		}
+		let bottomZone = null;
+		if (this._showBottomCardsSeparately && this._deckState.deck.filter((c) => c.positionFromBottom != undefined).length) {
+			bottomZone = this.buildZone(
+				this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
+				'deck-bottom',
+				this.i18n.translateString('decktracker.zones.bottom-of-deck'),
+				(a, b) => b.positionFromBottom - a.positionFromBottom,
+				null,
+			);
+			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
+		}
+
 		zones.push(
 			Object.assign(
 				this.buildZone(
-					this._deckState.deck,
+					cardsInDeckZone,
 					'deck',
 					this.i18n.translateString('decktracker.zones.in-deck'),
 					null,
@@ -124,6 +151,10 @@ export class DeckListByZoneComponent implements OnDestroy {
 				} as DeckZone,
 			),
 		);
+		if (bottomZone) {
+			zones.push(bottomZone);
+		}
+
 		zones.push(
 			this.buildZone(
 				this._deckState.hand,

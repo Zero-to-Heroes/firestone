@@ -754,6 +754,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'CARD_DREDGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_DREDGED, gameEvent, {
+						dredgedByEntityId: gameEvent.Value.AdditionalProps.DredgedByEntityId,
+						dredgedByCardId: gameEvent.Value.AdditionalProps.DredgedByCardId,
+					}),
+				);
+				break;
 			case 'ARMOR_CHANGED':
 				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(

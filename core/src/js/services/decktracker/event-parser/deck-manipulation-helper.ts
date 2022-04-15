@@ -371,6 +371,21 @@ export class DeckManipulationHelper {
 		return newZone;
 	}
 
+	public empiricReplaceCardInZone(
+		zone: readonly DeckCard[],
+		newCard: DeckCard,
+		removeFillerCard: boolean,
+	): readonly DeckCard[] {
+		const [newZone, removedCard] = this.removeSingleCardFromZone(
+			zone,
+			newCard.cardId,
+			newCard.entityId,
+			removeFillerCard,
+		);
+		const updatedZone = this.addSingleCardToZone(newZone, newCard);
+		return updatedZone;
+	}
+
 	// We can't always make a connection between the card in hand and the card that started in the deck
 	// when we are facing an opponent with a known decklist (like is the case with the AI for instance)
 	// There are some cases where we know that a card in hand is a specific card coming from the deck:
