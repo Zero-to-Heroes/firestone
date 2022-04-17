@@ -9,7 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -79,6 +79,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[darkenUsedCards]="darkenUsedCards$ | async"
 								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone$ | async"
 								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone$ | async"
+								[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
+								[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 								[side]="player"
 							>
 							</decktracker-deck-list>
@@ -102,6 +104,8 @@ export class DeckTrackerOverlayRootComponent
 	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
 	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
+	@Input() showBottomCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
+	@Input() showTopCardsSeparatelyExtractor : (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	// @Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -133,6 +137,8 @@ export class DeckTrackerOverlayRootComponent
 	darkenUsedCards$: Observable<boolean>;
 	hideGeneratedCardsInOtherZone$: Observable<boolean>;
 	sortCardsByManaCostInOtherZone$: Observable<boolean>;
+	showBottomCardsSeparately$: Observable<boolean>;
+	showTopCardsSeparately$: Observable<boolean>;
 	active = true;
 	windowId: string;
 	activeTooltip: string;
@@ -254,6 +260,12 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.sortCardsByManaCostInOtherZone$ = this.listenForBasicPref$((preferences) =>
 			this.sortCardsByManaCostInOtherZoneExtractor(preferences),
+		);
+		this.showBottomCardsSeparately$ = this.listenForBasicPref$((preferences) =>
+			this.showBottomCardsSeparatelyExtractor(preferences),
+		);
+		this.showTopCardsSeparately$ = this.listenForBasicPref$((preferences) =>
+			this.showTopCardsSeparatelyExtractor(preferences),
 		);
 		this.store
 			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)

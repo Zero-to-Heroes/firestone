@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	Optional,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { Subscription } from 'rxjs';
@@ -43,6 +43,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[showStatsChange]="showStatsChange"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
+					[showTopCardsSeparately]="showTopCardsSeparately"
+					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[tooltipPosition]="_tooltipPosition"
 					[side]="side"
 				>
@@ -82,6 +84,8 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() darkenUsedCards: boolean;
 	@Input() hideGeneratedCardsInOtherZone: boolean;
 	@Input() sortCardsByManaCostInOtherZone: boolean;
+	@Input() showBottomCardsSeparately: boolean;
+	@Input() showTopCardsSeparately: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {

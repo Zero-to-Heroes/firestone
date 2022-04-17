@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Optional,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -87,6 +87,11 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
+			<div class="icon-symbol dredged" *ngIf="isDredged" [helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate">
+				<div class="inner-border">
+					<div class="icon" inlineSVG="assets/svg/dredged.svg"></div> 
+				</div>
+			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
 					<i>
@@ -120,15 +125,6 @@ import { uuid } from '../../../services/utils';
 							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
 						</svg>
 					</i>
-				</div>
-			</div>
-			<div
-				class="icon-symbol dreedged"
-				*ngIf="isGraveyard"
-				[helpTooltip]="'decktracker.card-dredged' | owTranslate"
-			>
-				<div class="inner-border">
-					<i inlineSVG="assets/svg/dredged.svg"></i>
 				</div>
 			</div>
 			<!-- <div class="position-from-top" *ngIf="positionFromTop">
@@ -233,6 +229,7 @@ export class DeckCardComponent implements OnDestroy {
 	isDiscarded: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
+	isDredged: boolean;
 	manaCostReduction: boolean;
 	mouseOverRight = 0;
 	_showUnknownCards = true;
@@ -323,6 +320,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
 		this.highlight = this._card.highlight;
+		this.isDredged = this._card.dredged && !this._card.zone;
 
 		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
 		this.isDiscarded = this._card.zone === 'DISCARD';

@@ -57,6 +57,20 @@ import { Knob } from '../preference-slider.component';
 				<preference-toggle
 					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
 					class="indented"
+					field="overlayShowTopCardsSeparately"
+					[label]="'settings.decktracker.opponent-deck.show-top-cards-separately-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.show-top-cards-separately-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					class="indented"
+					field="overlayShowBottomCardsSeparately"
+					[label]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					class="indented"
 					field="overlayHideGeneratedCardsInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.hide-generated-cards-tooltip' | owTranslate"

@@ -22,7 +22,7 @@ import { ChartsModule } from 'ng2-charts';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG,
+	PERFECT_SCROLLBAR_CONFIG
 } from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBattleRecapComponent } from '../../components/battlegrounds/battles/bgs-battle-recap.component';
@@ -136,7 +136,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=39');
+	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=40');
 }
 
 // Include everything that is needed for both Twitch and the standard app here

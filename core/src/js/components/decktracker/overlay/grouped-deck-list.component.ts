@@ -5,12 +5,12 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	Output,
+	Output
 } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 
@@ -174,10 +174,15 @@ export class GroupedDeckListComponent implements OnDestroy {
 		this.zone = {
 			id: 'single-zone',
 			name: undefined,
-			cards: base,
-			sortingFunction: sortingFunction,
 			numberOfCards: base.length,
 			showWarning: this.showWarning,
+			sections: [
+				{
+					header: undefined,
+					cards: base,
+					sortingFunction: sortingFunction,
+				},
+			] as readonly DeckZoneSection[],
 		} as DeckZone;
 	}
 

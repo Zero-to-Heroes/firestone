@@ -187,48 +187,51 @@
 			color: #9fb6d7;
 		}
 
-		i {
+		i,
+		.icon {
 			width: 13px;
 			height: 12px;
 		}
 
 		&.discard {
-			i {
+			i,
+			.icon {
 				width: 13px;
 				height: 17px;
 			}
 		}
 		&.graveyard {
-			i {
+			i,
+			.icon {
 				width: 13px;
 				height: 16px;
 			}
 		}
 	}
 
-	.position-from-bottom {
-		border: 1px solid #6a109e;
+	// .position-from-bottom {
+	// 	border: 1px solid #6a109e;
 
-		.inner-border {
-			border: 1px solid #916ca7;
-		}
+	// 	.inner-border {
+	// 		border: 1px solid #916ca7;
+	// 	}
 
-		span {
-			color: #916ca7;
-		}
-	}
+	// 	span {
+	// 		color: #916ca7;
+	// 	}
+	// }
 
-	.position-from-top {
-		border: 1px solid #ffffff;
+	// .position-from-top {
+	// 	border: 1px solid #ffffff;
 
-		.inner-border {
-			border: 1px solid #ffffff;
-		}
+	// 	.inner-border {
+	// 		border: 1px solid #ffffff;
+	// 	}
 
-		span {
-			color: #ffffff;
-		}
-	}
+	// 	span {
+	// 		color: #ffffff;
+	// 	}
+	// }
 
 	.mouse-over {
 		position: absolute;

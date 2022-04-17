@@ -47,6 +47,27 @@
 		}
 	}
 
+	.section {
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			height: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			background: #07081f;
+			position: relative;
+
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 15px;
+			color: #9fb6d7;
+		}
+	}
+
 	.card-list li {
 		display: flex;
 

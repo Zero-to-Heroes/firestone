@@ -7,10 +7,10 @@ import {
 	Input,
 	Optional,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -44,19 +44,22 @@ import { groupByFunction } from '../../../services/utils';
 				</i>
 			</div>
 			<ul class="card-list" *ngIf="open">
-				<li *ngFor="let card of cards; trackBy: trackCard">
-					<deck-card
-						[card]="card"
-						[tooltipPosition]="_tooltipPosition"
-						[colorManaCost]="colorManaCost"
-						[showUnknownCards]="showUnknownCards"
-						[showUpdatedCost]="_showUpdatedCost"
-						[showStatsChange]="_showStatsChange"
-						[zone]="_zone"
-						[side]="side"
-						(cardClicked)="onCardClicked($event)"
-					></deck-card>
-				</li>
+				<div *ngFor="let section of cardSections; trackBy: trackBySection" class="section">
+					<div class="header" *ngIf="section.header">{{ section.header }}</div>
+					<li *ngFor="let card of section.cards; trackBy: trackCard">
+						<deck-card
+							[card]="card"
+							[tooltipPosition]="_tooltipPosition"
+							[colorManaCost]="colorManaCost"
+							[showUnknownCards]="showUnknownCards"
+							[showUpdatedCost]="_showUpdatedCost"
+							[showStatsChange]="_showStatsChange"
+							[zone]="_zone"
+							[side]="side"
+							(cardClicked)="onCardClicked($event)"
+						></deck-card>
+					</li>
+				</div>
 			</ul>
 		</div>
 	`,
@@ -87,6 +90,16 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	@Input() set showBottomCardsSeparately(value: boolean) {
+		this._showBottomCardsSeparately = value;
+		this.refreshZone();
+	}
+
+	@Input() set showTopCardsSeparately(value: boolean) {
+		this._showTopCardsSeparately = value;
+		this.refreshZone();
+	}
+
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		this.refreshZone();
@@ -106,7 +119,8 @@ export class DeckZoneComponent implements AfterViewInit {
 	zoneName: string;
 	showWarning: boolean;
 	cardsInZone = 0;
-	cards: readonly VisualDeckCard[];
+	cardSections: readonly DeckZoneSection[] = [];
+	// cards: readonly VisualDeckCard[];
 	open = true;
 
 	private _showGiftsSeparately = true;
@@ -144,6 +158,10 @@ export class DeckZoneComponent implements AfterViewInit {
 		return card.cardId;
 	}
 
+	trackBySection(index: number, item: DeckZoneSection) {
+		return item.header;
+	}
+
 	private refreshZone() {
 		if (!this._zone) {
 			return;
@@ -152,34 +170,42 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.zoneName = this._zone.name;
 		this.showWarning = this._zone.showWarning;
 		this.cardsInZone = this._zone.numberOfCards;
-		const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(this._zone.cards);
-		const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
-			this.buildGroupingKey(card, quantitiesLeftForCard),
-		)(this._zone.cards);
 
-		this.cards = Object.keys(grouped)
-			.map((groupingKey) => {
-				const cards = grouped[groupingKey];
-				const creatorCardIds: readonly string[] = [
-					...new Set(
-						cards
-							.map((card) => card.creatorCardIds)
-							.reduce((a, b) => a.concat(b), [])
-							.filter((creator) => creator),
-					),
-				];
+		this.cardSections = this._zone.sections.map((section) => {
+			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards);
+			const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
+				this.buildGroupingKey(card, quantitiesLeftForCard),
+			)(section.cards);
+			let cards = Object.keys(grouped)
+				.map((groupingKey) => {
+					const cards = grouped[groupingKey];
+					const creatorCardIds: readonly string[] = [
+						...new Set(
+							cards
+								.map((card) => card.creatorCardIds)
+								.reduce((a, b) => a.concat(b), [])
+								.filter((creator) => creator),
+						),
+					];
 
-				return Object.assign(new VisualDeckCard(), cards[0], {
-					totalQuantity: cards.length,
-					creatorCardIds: creatorCardIds,
-					isMissing: groupingKey.includes('missing'),
-				} as VisualDeckCard);
-			})
-			.sort((a, b) => this.compare(a, b))
-			.sort((a, b) => this.sortByIcon(a, b));
-		if (this._zone.sortingFunction) {
-			this.cards = [...this.cards].sort(this._zone.sortingFunction);
-		}
+					return Object.assign(new VisualDeckCard(), cards[0], {
+						totalQuantity: cards.length,
+						creatorCardIds: creatorCardIds,
+						isMissing: groupingKey.includes('missing'),
+					} as VisualDeckCard);
+				})
+				.sort((a, b) => this.compare(a, b))
+				.sort((a, b) => this.sortByIcon(a, b));
+			if (section.sortingFunction) {
+				cards = [...cards].sort(section.sortingFunction);
+			}
+			return {
+				header: section.header,
+				cards: cards,
+				sortingFunction: section.sortingFunction,
+			} as DeckZoneSection;
+		});
+		console.debug('final sections', this.cardSections);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -277,18 +303,4 @@ export class DeckZoneComponent implements AfterViewInit {
 		}
 		return 0;
 	}
-
-	// private groupBy(list, keyGetter): Map<string, VisualDeckCard[]> {
-	// 	const map = new Map();
-	// 	list.forEach(item => {
-	// 		const key = keyGetter(item);
-	// 		const collection = map.get(key);
-	// 		if (!collection) {
-	// 			map.set(key, [item]);
-	// 		} else {
-	// 			collection.push(item);
-	// 		}
-	// 	});
-	// 	return map;
-	// }
 }

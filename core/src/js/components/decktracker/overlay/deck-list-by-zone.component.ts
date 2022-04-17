@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } fr
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -24,6 +24,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[showStatsChange]="showStatsChange"
+					[showTopCardsSeparately]="_showTopCardsSeparately"
+					[showBottomCardsSeparately]="_showBottomCardsSeparately"
 					[side]="side"
 				></deck-zone>
 			</li>
@@ -59,6 +61,23 @@ export class DeckListByZoneComponent implements OnDestroy {
 		this._sortCardsByManaCostInOtherZone = value;
 		this.updateInfo();
 	}
+
+	@Input() set showBottomCardsSeparately(value: boolean) {
+		if (value === this._showBottomCardsSeparately) {
+			return;
+		}
+		this._showBottomCardsSeparately = value;
+		this.updateInfo();
+	}
+
+	@Input() set showTopCardsSeparately(value: boolean) {
+		if (value === this._showTopCardsSeparately) {
+			return;
+		}
+		this._showTopCardsSeparately = value;
+		this.updateInfo();
+	}
+
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
@@ -104,6 +123,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 			zones.push(
 				this.buildZone(
 					this._deckState.globalEffects,
+					null,
 					'global-effects',
 					this.i18n.translateString('decktracker.zones.global-effects'),
 					null,
@@ -112,38 +132,42 @@ export class DeckListByZoneComponent implements OnDestroy {
 			);
 		}
 
+		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = this._deckState.deck;
 		if (this._showTopCardsSeparately && this._deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
-			zones.push(
-				this.buildZone(
-					this._deckState.deck.filter((c) => c.positionFromTop != undefined),
-					'deck-top',
-					this.i18n.translateString('decktracker.zones.top-of-deck'),
-					(a, b) => a.positionFromTop - b.positionFromTop,
-					null,
-				),
-			);
+			deckSections.push({
+				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
+				sortingFunction: (a, b) => a.positionFromTop - b.positionFromTop,
+				cards: this._deckState.deck.filter((c) => c.positionFromTop != undefined),
+				order: -1,
+			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
 		}
-		let bottomZone = null;
 		if (
 			this._showBottomCardsSeparately &&
 			this._deckState.deck.filter((c) => c.positionFromBottom != undefined).length
 		) {
-			bottomZone = this.buildZone(
-				this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
-				'deck-bottom',
-				this.i18n.translateString('decktracker.zones.bottom-of-deck'),
-				(a, b) => b.positionFromBottom - a.positionFromBottom,
-				null,
-			);
+			deckSections.push({
+				header: this.i18n.translateString('decktracker.zones.bottom-of-deck'),
+				sortingFunction: (a, b) => b.positionFromBottom - a.positionFromBottom,
+				cards: this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
+				order: 1,
+			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
 		}
+		deckSections.push({
+			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
+			cards: cardsInDeckZone,
+			sortingFunction: null,
+			order: 0,
+		});
+		console.debug('sections', deckSections);
 
 		zones.push(
 			Object.assign(
 				this.buildZone(
-					cardsInDeckZone,
+					null,
+					deckSections.sort((a, b) => a.order - b.order),
 					'deck',
 					this.i18n.translateString('decktracker.zones.in-deck'),
 					null,
@@ -154,13 +178,11 @@ export class DeckListByZoneComponent implements OnDestroy {
 				} as DeckZone,
 			),
 		);
-		if (bottomZone) {
-			zones.push(bottomZone);
-		}
 
 		zones.push(
 			this.buildZone(
 				this._deckState.hand,
+				null,
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
 				null,
@@ -175,6 +197,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 			zones.push(
 				this.buildZone(
 					otherZone,
+					null,
 					'other',
 					this.i18n.translateString('decktracker.zones.other'),
 					this._sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : null,
@@ -206,21 +229,27 @@ export class DeckListByZoneComponent implements OnDestroy {
 		return {
 			id: zone.id,
 			name: zone.name,
-			cards: zone.cards.map((card) =>
-				Object.assign(new VisualDeckCard(), card, {
-					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-					lastAffectedByCardIds: (card.lastAffectedByCardId
-						? [card.lastAffectedByCardId]
-						: []) as readonly string[],
-				} as VisualDeckCard),
-			),
+			sections: [
+				{
+					header: null,
+					cards: zone.cards.map((card) =>
+						Object.assign(new VisualDeckCard(), card, {
+							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+							lastAffectedByCardIds: (card.lastAffectedByCardId
+								? [card.lastAffectedByCardId]
+								: []) as readonly string[],
+						} as VisualDeckCard),
+					),
+					sortingFunction: sortingFunction,
+				},
+			],
 			numberOfCards: zone.cards.length,
-			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}
 
 	private buildZone(
 		cards: readonly DeckCard[],
+		zones: readonly InternalDeckZoneSection[],
 		id: string,
 		name: string,
 		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
@@ -228,23 +257,52 @@ export class DeckListByZoneComponent implements OnDestroy {
 		filterFunction?: (a: VisualDeckCard) => boolean,
 		highlight?: string,
 	): DeckZone {
-		const cardsInZone = cards
-			.map((card) =>
-				Object.assign(new VisualDeckCard(), card, {
-					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-					lastAffectedByCardIds: (card.lastAffectedByCardId
-						? [card.lastAffectedByCardId]
-						: []) as readonly string[],
-					highlight: highlight,
-				} as VisualDeckCard),
-			)
-			.filter((card) => !filterFunction || filterFunction(card));
+		let sections: DeckZoneSection[] = [];
+		if (zones == null) {
+			sections.push({
+				header: null,
+				cards: cards
+					.map((card) =>
+						Object.assign(new VisualDeckCard(), card, {
+							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+							lastAffectedByCardIds: (card.lastAffectedByCardId
+								? [card.lastAffectedByCardId]
+								: []) as readonly string[],
+							highlight: highlight,
+						} as VisualDeckCard),
+					)
+					.filter((card) => !filterFunction || filterFunction(card)),
+				sortingFunction: sortingFunction,
+			});
+		} else if (cards == null) {
+			sections = zones.map((zone) => ({
+				header: zone.header,
+				cards: zone.cards
+					.map((card) =>
+						Object.assign(new VisualDeckCard(), card, {
+							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+							lastAffectedByCardIds: (card.lastAffectedByCardId
+								? [card.lastAffectedByCardId]
+								: []) as readonly string[],
+							highlight: highlight,
+						} as VisualDeckCard),
+					)
+					.filter((card) => !filterFunction || filterFunction(card)),
+				sortingFunction: zone.sortingFunction,
+			}));
+		}
 		return {
 			id: id,
 			name: name,
-			cards: cardsInZone,
-			sortingFunction: sortingFunction,
-			numberOfCards: numberOfCards != null ? numberOfCards : cardsInZone.length,
+			numberOfCards: numberOfCards != null ? numberOfCards : sections.flatMap((section) => section.cards).length,
+			sections: sections,
 		} as DeckZone;
 	}
+}
+
+interface InternalDeckZoneSection {
+	header: string;
+	cards: readonly DeckCard[];
+	sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number;
+	order?: number;
 }
