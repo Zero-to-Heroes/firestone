@@ -3,13 +3,11 @@ import {
 	ARENAS,
 	CardClass,
 	GameFormat,
-	GameType,
-	normalizeDuelsHeroCardId,
-	PRACTICE_ALL,
+	GameType, normalizeDuelsHeroCardIdForDeckCode, PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -280,8 +278,9 @@ export class DeckParserService {
 			heroes: deckFromMemory.HeroCardId
 				? [
 						normalizeDeckHeroDbfId(
-							// normalize, so that we have the "base" Vanndar / DrekThar
-							this.allCards.getCard(normalizeDuelsHeroCardId(deckFromMemory.HeroCardId))?.dbfId,
+							// normalize for Duels
+							// Still doesn't work for neutral heroes though
+							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))?.dbfId,
 							this.allCards,
 						),
 				  ]

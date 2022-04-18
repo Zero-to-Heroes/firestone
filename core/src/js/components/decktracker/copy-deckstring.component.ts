@@ -82,12 +82,23 @@ export class CopyDesckstringComponent {
 }
 
 export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: CardsFacadeService): DeckDefinition => {
-	deckDefinition.heroes = deckDefinition.heroes.map((hero) => normalizeDeckHeroDbfId(hero, allCards));
 	// Filter for Duels - remove the signature treasure, as it breaks the HS deck builder
 	const newCards = deckDefinition.cards.filter(([cardDbfId, quantity]) => {
 		const card = allCards.getCardFromDbfId(cardDbfId);
 		return !allDuelsSignatureTreasures.includes(card.id as CardIds);
 	});
+	const duelsSignatureTreasures = deckDefinition.cards
+		.map(([cardDbfId, quantity]) => {
+			const card = allCards.getCardFromDbfId(cardDbfId);
+			return allDuelsSignatureTreasures.includes(card.id as CardIds) ? card : null;
+		})
+		.filter((card) => !!card);
+	console.debug('sanitize deck defnition', deckDefinition);
+	const duelsClass = !duelsSignatureTreasures?.length ? null : duelsSignatureTreasures[0].playerClass;
+	deckDefinition.heroes = deckDefinition.heroes.map((hero) =>
+		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
+		normalizeDeckHeroDbfId(hero, allCards, duelsClass),
+	);
 	deckDefinition.cards = newCards;
 	return deckDefinition;
 };
