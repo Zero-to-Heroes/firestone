@@ -25,6 +25,8 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.FriendOfAFriend1,
 	CardIds.FriendOfAFriend2,
 	CardIds.Onyxia_OnyxianWhelpToken,
+	CardIds.MurlocWarleaderCore,
+	CardIds.MurlocWarleaderVanilla,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
