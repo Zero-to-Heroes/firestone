@@ -21,11 +21,13 @@ export class BgsMajordomoCounterDefinition implements CounterDefinition {
 		i18n: LocalizationFacadeService,
 	): BgsMajordomoCounterDefinition {
 		const deck = side === 'player' ? deckState.playerDeck : deckState.opponentDeck;
-		const value = deck.cardsPlayedThisTurn
-			.map((card) => allCards.getCard(card.cardId).race)
-			.filter((race) =>
-				[Race.ELEMENTAL, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
-			).length;
+		const value =
+			1 +
+			deck.cardsPlayedThisTurn
+				.map((card) => allCards.getCard(card.cardId).race)
+				.filter((race) =>
+					[Race.ELEMENTAL, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
+				).length;
 		return {
 			type: 'bgsMajordomo',
 			value: value,

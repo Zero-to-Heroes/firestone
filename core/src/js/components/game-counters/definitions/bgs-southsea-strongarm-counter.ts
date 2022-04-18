@@ -23,11 +23,13 @@ export class BgsSouthseaStrongarmCounterDefinition implements CounterDefinition 
 		const boughtInfo = gameState.currentGame.liveStats.minionsBoughtOverTurn.find(
 			(info) => info.turn === gameState.currentGame.currentTurn,
 		);
-		const numberOfStrongarms = (boughtInfo?.cardIds ?? [])
-			.map((cardId) => allCards.getCard(cardId).race)
-			.filter((race) =>
-				[Race.PIRATE, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
-			).length;
+		const numberOfStrongarms =
+			1 +
+			(boughtInfo?.cardIds ?? [])
+				.map((cardId) => allCards.getCard(cardId).race)
+				.filter((race) =>
+					[Race.PIRATE, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
+				).length;
 		return {
 			type: 'bgsSouthsea',
 			value: numberOfStrongarms,
