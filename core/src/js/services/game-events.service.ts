@@ -481,6 +481,8 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						revealedFromBlock: gameEvent.Value.AdditionalProps.RevealedFromBlock,
+						indexInBlock: gameEvent.Value.AdditionalProps.IndexInBlock,
 					}),
 				);
 				break;

@@ -251,12 +251,6 @@ export class DeckZoneComponent implements AfterViewInit {
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
-		if ((a.positionFromBottom ?? 99) < (b.positionFromBottom ?? 99)) {
-			return 1;
-		}
-		if ((a.positionFromBottom ?? 99) > (b.positionFromBottom ?? 99)) {
-			return -1;
-		}
 		if (this.getCost(a) < this.getCost(b)) {
 			return -1;
 		}

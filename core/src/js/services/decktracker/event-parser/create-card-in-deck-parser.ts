@@ -34,6 +34,7 @@ export class CreateCardInDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const positionFromBottom = buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
+		//console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -95,8 +96,7 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.AzsharanVessel:
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser
 		case CardIds.Bottomfeeder:
-			// So that it gets bumped to 1 in the later cleaning phase, and 0 is always free
-			return 0;
+			return DeckCard.deckIndexFromBottom++;
 	}
 	return undefined;
 };

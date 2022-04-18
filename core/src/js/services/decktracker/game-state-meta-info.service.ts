@@ -15,27 +15,15 @@ export class GameStateMetaInfoService {
 	}
 
 	private cleanBottomPositions(deck: readonly DeckCard[]): readonly DeckCard[] {
-		return [...deck]
-			.sort((a, b) =>
-				a.positionFromBottom == null
-					? 1
-					: b.positionFromBottom == null
-					? -1
-					: a.positionFromBottom - b.positionFromBottom,
-			)
-			.map((card, index) =>
-				card.update({
-					positionFromBottom: card.positionFromBottom == undefined ? undefined : index + 1,
-				}),
-			)
-			.sort((a, b) =>
-				a.positionFromTop == null ? -1 : b.positionFromTop == null ? 1 : b.positionFromTop - a.positionFromTop,
-			)
+		const result = [...deck]
+			.sort((a, b) => (a.positionFromBottom ?? 0) - (b.positionFromBottom ?? 0))
+			.sort((a, b) => (a.positionFromTop ?? 0) - (b.positionFromTop ?? 0))
 			.map((card, index) =>
 				card.update({
 					positionFromTop: card.positionFromTop == undefined ? undefined : index + 1,
 				}),
 			);
+		return result;
 	}
 
 	// If the card goes back to deck / board, we want to reset the counter, as it doesn't

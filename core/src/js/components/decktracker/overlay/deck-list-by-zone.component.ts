@@ -149,7 +149,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 		) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.bottom-of-deck'),
-				sortingFunction: (a, b) => b.positionFromBottom - a.positionFromBottom,
+				sortingFunction: (a, b) => a.positionFromBottom - b.positionFromBottom,
 				cards: this._deckState.deck.filter((c) => c.positionFromBottom != undefined),
 				order: 1,
 			});

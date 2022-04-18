@@ -52,7 +52,10 @@ export class DeckManipulationHelper {
 		if (!normalizedCardId) {
 			// If there are some "filler" cards (ie cards that exist only so that the deck has the right amount
 			// of cards), we remove one
-			if (zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
+			if (
+				removeFillerCard &&
+				zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)
+			) {
 				let hasRemovedOnce = false;
 				const result = [];
 				let removedCard = undefined;
@@ -235,21 +238,27 @@ export class DeckManipulationHelper {
 		}
 
 		return deck.update({
-			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId),
-			board: this.updateCardInZone(deck.board, card.entityId, card.cardId),
-			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId),
-			otherZone: this.updateCardInZone(deck.otherZone, card.entityId, card.cardId),
+			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card),
+			board: this.updateCardInZone(deck.board, card.entityId, card.cardId, card),
+			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId, card),
+			otherZone: this.updateCardInZone(deck.otherZone, card.entityId, card.cardId, card),
 		} as DeckState);
 	}
 
-	public updateCardInZone(zone: readonly DeckCard[], entityId: number, cardId: string): readonly DeckCard[] {
+	public updateCardInZone(
+		zone: readonly DeckCard[],
+		entityId: number,
+		cardId: string,
+		newCard: DeckCard,
+	): readonly DeckCard[] {
 		if (!cardId) {
 			return zone;
 		}
 		return zone.map((card) =>
 			card.entityId !== entityId
 				? card
-				: card.update({
+				: card.update(newCard).update({
+						entityId: entityId,
 						cardId: cardId,
 						cardName: this.i18n.getCardName(cardId),
 				  } as DeckCard),

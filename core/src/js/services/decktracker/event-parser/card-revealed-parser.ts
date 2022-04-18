@@ -1,4 +1,4 @@
-import { GameTag, ReferenceCard } from '@firestone-hs/reference-data';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -40,20 +40,23 @@ export class CardRevealedParser implements EventParser {
 			zone: 'SETASIDE',
 			temporaryCard: true,
 			lastAffectedByCardId: gameEvent.additionalData.creatorCardId,
-			positionFromBottom: this.isDredge(gameEvent.additionalData.creatorCardId) ? 0 : undefined,
+			positionFromBottom:
+				gameEvent.additionalData.revealedFromBlock === 'DREDGE'
+					? DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock
+					: undefined,
 		} as DeckCard);
+		//console.debug('[debug]', 'card revealed', card, DeckCard.deckIndexFromBottom, gameEvent);
 
-		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);
+		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
+		// bottom of the deck with another card previously)
+		const newOther: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(deck.otherZone, card, false);
+		//console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
-	}
-
-	private isDredge(creatorCardId: string): boolean {
-		return this.cards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.DREDGE]);
 	}
 
 	event(): string {

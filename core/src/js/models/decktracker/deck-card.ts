@@ -3,6 +3,8 @@ import { NonFunctionProperties } from '@services/utils';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
+	public static deckIndexFromBottom: number = 0;
+
 	readonly cardId: string;
 	readonly entityId: number;
 	readonly cardName: string;
@@ -59,6 +61,9 @@ export class DeckCard {
 	}
 
 	public update(newCard: Partial<NonFunctionProperties<DeckCard>>): DeckCard {
+		if (!newCard) {
+			return this;
+		}
 		if (newCard?.cardId && !newCard?.cardName) {
 			console.warn('updating deck card without name', newCard, newCard?.cardId, new Error().stack);
 		}

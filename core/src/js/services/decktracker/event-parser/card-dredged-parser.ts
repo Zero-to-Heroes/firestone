@@ -44,6 +44,7 @@ export class CardDredgedParser implements EventParser {
 				.map((c) => c.entityId),
 		});
 		console.debug('[debug]', 'dredged card', entityId, cardId, card);
+		DeckCard.deckIndexFromBottom += 4;
 
 		const newDeck: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(
 			deck.deck,
