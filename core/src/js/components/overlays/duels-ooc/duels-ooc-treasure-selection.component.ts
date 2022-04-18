@@ -53,9 +53,7 @@ export class DuelsOutOfCombatTreasureSelectionComponent
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
-		if (!event.shiftKey) {
-			this.highlightService.onMouseLeave(cardId);
-		}
+		this.highlightService.onMouseLeave(cardId);
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {
