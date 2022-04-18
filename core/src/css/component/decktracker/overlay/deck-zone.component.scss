@@ -52,12 +52,13 @@
 		flex-direction: column;
 
 		.header {
-			height: 25px;
+			height: 30px;
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
 			background: #07081f;
 			position: relative;
+			padding-left: 10px;
 
 			font-family: Sumana;
 			font-style: normal;

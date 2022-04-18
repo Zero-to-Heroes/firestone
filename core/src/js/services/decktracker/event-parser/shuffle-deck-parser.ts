@@ -18,6 +18,7 @@ export class ShuffleDeckParser implements EventParser {
 			card.update({
 				...card,
 				positionFromBottom: undefined,
+				positionFromTop: undefined,
 			}),
 		);
 		const newPlayerDeck = deck.update({

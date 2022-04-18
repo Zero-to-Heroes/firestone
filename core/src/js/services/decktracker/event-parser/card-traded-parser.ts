@@ -52,9 +52,17 @@ export class CardTradedParser implements EventParser {
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
 			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
+		// Because we don't know where the card is inserted, we reset the positions
+		const deckWithResetPositions: readonly DeckCard[] = newDeck.map((card) =>
+			card.update({
+				...card,
+				positionFromBottom: undefined,
+				positionFromTop: undefined,
+			}),
+		);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			deck: newDeck,
+			deck: deckWithResetPositions,
 			hand: newHand,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
