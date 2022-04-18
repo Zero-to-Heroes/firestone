@@ -70,31 +70,31 @@ export class AchievementsState {
 		return [
 			{
 				value: 'ALL_ACHIEVEMENTS',
-				label: i18n.translateString('all.achievements.filters.all'),
+				label: i18n.translateString('app.achievements.filters.all'),
 				filterFunction: (a) => true,
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: i18n.translateString('all.achievements.filters.all-empty-state-title'),
-				emptyStateText: i18n.translateString('all.achievements.filters.all-empty-state-text'),
+				emptyStateTitle: i18n.translateString('app.achievements.filters.all-empty-state-title'),
+				emptyStateText: i18n.translateString('app.achievements.filters.all-empty-state-text'),
 			},
 			{
 				value: 'ONLY_MISSING',
-				label: i18n.translateString('all.achievements.filters.missing'),
+				label: i18n.translateString('app.achievements.filters.missing'),
 				filterFunction: (a: VisualAchievement) => {
 					return a.completionSteps.some((step) => step.numberOfCompletions === 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: i18n.translateString('all.achievements.filters.missing-empty-state-title'),
-				emptyStateText: i18n.translateString('all.achievements.filters.missing-empty-state-text'),
+				emptyStateTitle: i18n.translateString('app.achievements.filters.missing-empty-state-title'),
+				emptyStateText: i18n.translateString('app.achievements.filters.missing-empty-state-text'),
 			},
 			{
 				value: 'ONLY_COMPLETED',
-				label: i18n.translateString('all.achievements.filters.completed'),
+				label: i18n.translateString('app.achievements.filters.completed'),
 				filterFunction: (a: VisualAchievement) => {
 					return a.completionSteps.every((step) => step.numberOfCompletions > 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: i18n.translateString('all.achievements.filters.missing-empty-state-title'),
-				emptyStateText: i18n.translateString('all.achievements.filters.missing-empty-state-text'),
+				emptyStateTitle: i18n.translateString('app.achievements.filters.missing-empty-state-title'),
+				emptyStateText: i18n.translateString('app.achievements.filters.missing-empty-state-text'),
 			},
 		];
 	}
