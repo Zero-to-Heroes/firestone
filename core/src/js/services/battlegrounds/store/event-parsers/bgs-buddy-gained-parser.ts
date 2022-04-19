@@ -36,6 +36,11 @@ export class BgsBuddyGainedParser implements EventParser {
 			}
 			return currentState;
 		}
+		// Can happen with Aranna getting their new HP - it sends a new Buddy Gained event
+		if (event.totalBuddies === playerToUpdate.buddyTurns.length) {
+			return currentState;
+		}
+		
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		const newPlayer = playerToUpdate.update({
 			buddyTurns: [...playerToUpdate.buddyTurns, turn],
