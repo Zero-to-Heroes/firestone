@@ -1,13 +1,9 @@
 import { ReferenceSet } from '../../models/collection/reference-set';
 
 export const standardSets: readonly string[] = [
+	'core',
 	'wailing_caverns',
 	'the_barrens',
-	'darkmoon_races',
-	'darkmoon_faire',
-	'scholomance',
-	'core',
-	'black_temple',
 	'stormwind',
 	'deadmines',
 	'alterac_valley',
