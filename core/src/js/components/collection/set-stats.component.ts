@@ -8,7 +8,7 @@ import {
 	dustForPremium,
 	dustToCraftFor,
 	dustToCraftForPremium,
-	getPackDustValue,
+	getPackDustValue
 } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -110,12 +110,17 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 			this.set$$.asObservable(),
 			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
 		).pipe(
-			this.mapData(
-				([set, [packStats]]) =>
-					[...packStats]
-						.filter((pack) => pack.setId === set.id)
-						.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0],
-			),
+			this.mapData(([set, [packStats]]) => {
+				const resultForSetId = [...packStats]
+					.filter((pack) => pack.setId === set.id)
+					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0];
+				const resultForBoosterId = [...packStats]
+					.filter((pack) => boosterIdToSetId(pack.boosterId) === set.id)
+					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))[0];
+				// Needed for old data, from before the boosterId was supported
+				const finalResult = resultForBoosterId ?? resultForSetId;
+				return finalResult;
+			}),
 		);
 		this.bestKnownPackDust$ = this.bestKnownPack$.pipe(
 			this.mapData((bestKnownPack) => (!!bestKnownPack ? getPackDustValue(bestKnownPack) : 0)),
