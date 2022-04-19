@@ -3,7 +3,7 @@ import { NonFunctionProperties } from '@services/utils';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
-	public static deckIndexFromBottom: number = 0;
+	public static deckIndexFromBottom = 0;
 
 	readonly cardId: string;
 	readonly entityId: number;

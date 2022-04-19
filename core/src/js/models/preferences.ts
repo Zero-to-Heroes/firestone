@@ -9,7 +9,7 @@ import {
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 	CollectionPortraitCategoryFilter,
-	CollectionPortraitOwnedFilter
+	CollectionPortraitOwnedFilter,
 } from './collection/filter-types';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
@@ -35,7 +35,7 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType
+	MercenariesStarterFilterType,
 } from './mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';

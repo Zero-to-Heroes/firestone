@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	Optional,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -87,9 +87,13 @@ import { uuid } from '../../../services/utils';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol dredged" *ngIf="isDredged" [helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate">
+			<div
+				class="icon-symbol dredged"
+				*ngIf="isDredged"
+				[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
+			>
 				<div class="inner-border">
-					<div class="icon" inlineSVG="assets/svg/dredged.svg"></div> 
+					<div class="icon" inlineSVG="assets/svg/dredged.svg"></div>
 				</div>
 			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">

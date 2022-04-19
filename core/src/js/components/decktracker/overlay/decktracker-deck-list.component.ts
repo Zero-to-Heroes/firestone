@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	Optional,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { Subscription } from 'rxjs';

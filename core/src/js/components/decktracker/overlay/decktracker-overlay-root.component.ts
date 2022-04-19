@@ -9,7 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -105,7 +105,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() showBottomCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
-	@Input() showTopCardsSeparatelyExtractor : (prefs: Preferences) => boolean;
+	@Input() showTopCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	// @Input() trackerPositionUpdater: (left: number, top: number) => void;

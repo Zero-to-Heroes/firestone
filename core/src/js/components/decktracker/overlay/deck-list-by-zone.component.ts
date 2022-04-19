@@ -78,7 +78,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 		this.updateInfo();
 	}
 
-
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 	}

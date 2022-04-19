@@ -3,11 +3,13 @@ import {
 	ARENAS,
 	CardClass,
 	GameFormat,
-	GameType, normalizeDuelsHeroCardIdForDeckCode, PRACTICE_ALL,
+	GameType,
+	normalizeDuelsHeroCardIdForDeckCode,
+	PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -280,7 +282,8 @@ export class DeckParserService {
 						normalizeDeckHeroDbfId(
 							// normalize for Duels
 							// Still doesn't work for neutral heroes though
-							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))?.dbfId,
+							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))
+								?.dbfId,
 							this.allCards,
 						),
 				  ]
