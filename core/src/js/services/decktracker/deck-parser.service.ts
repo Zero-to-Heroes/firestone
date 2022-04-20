@@ -9,7 +9,7 @@ import {
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
@@ -56,6 +56,12 @@ export class DeckParserService {
 		private readonly duelsService: DuelsStateBuilderService,
 	) {
 		this.init();
+		window['getCurrentDeck'] = (gameType: GameType, formatType: GameFormat) =>
+			this.retrieveCurrentDeck(false, {
+				gameType: gameType ?? GameType.GT_PVPDR,
+				formatType: formatType ?? GameFormat.FT_WILD,
+				scenarioId: ScenarioId.WIZARD_DUELS,
+			});
 	}
 
 	public async getCurrentDeck(timeout?: number): Promise<DeckInfo> {
@@ -273,6 +279,7 @@ export class DeckParserService {
 
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
+		console.debug('[deck-parser] updating deck', deckFromMemory);
 		const deckDefinition: DeckDefinition = {
 			format: deckFromMemory.FormatType || GameFormat.FT_WILD,
 			cards: this.explodeDecklist(decklist),

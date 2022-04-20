@@ -620,7 +620,18 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	}
 };
 
+// TODO: this is becoming a mess - refactor
 export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeService, inputClass?: string): number => {
+	const cardFromHeroDbfId = cards.getCardFromDbfId(heroDbfId);
+	// Don't normalize the dual-class heroes
+	switch (cardFromHeroDbfId.id) {
+		case CardIds.SirFinleyTavernBrawl5:
+		case CardIds.EliseStarseekerTavernBrawl4:
+		case CardIds.RenoJacksonTavernBrawl5:
+		case CardIds.BrannBronzebeardTavernBrawl5:
+			return heroDbfId;
+	}
+	
 	const playerClass: string = inputClass ?? cards.getCardFromDbfId(heroDbfId)?.playerClass;
 	// console.debug('matching playerClass', playerClass, heroDbfId);
 	switch (playerClass) {
