@@ -1338,14 +1338,18 @@ export class GameEvents {
 		return this.catchingUp;
 	}
 
+	private spectateLineToEnqueue: string;
+
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
 	public receiveExistingLogLine(existingLine: string) {
 		if (existingLine.indexOf('Begin Spectating') !== -1) {
 			console.log('[game-events] [existing] begin spectating', existingLine);
+			this.spectateLineToEnqueue = existingLine;
 		}
 		if (existingLine.indexOf('End Spectator Mode') !== -1) {
 			console.log('[game-events] [existing] end spectating', existingLine);
+			this.spectateLineToEnqueue = null;
 		}
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
@@ -1374,6 +1378,10 @@ export class GameEvents {
 
 	private async triggerCatchUp() {
 		this.catchingUp = true;
+		if (this.spectateLineToEnqueue) {
+			this.existingLogLines = [this.spectateLineToEnqueue, ...(this.existingLogLines ?? [])];
+			this.spectateLineToEnqueue = null;
+		}
 		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
 		console.log(
 			'[game-events] [existing] last line timestamp',
