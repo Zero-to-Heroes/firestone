@@ -7,13 +7,15 @@
 	color: var(--default-text-color);
 
 	.warning {
-		padding-left: 20px;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		margin-right: -20px;
 		z-index: 1; // To cover the probas that have moved left
 		max-width: 20px;
 		max-height: 20px;
+		align-self: center;
+		margin-left: 10px;
 	}
 
 	.probas {
