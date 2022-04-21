@@ -97,19 +97,6 @@ export class DeckParserService {
 			return null;
 		}
 
-		// The only case where we want to reuse cached deck is when we have Restart option
-		const shouldUseCachedDeck =
-			metadata.gameType === GameType.GT_VS_AI && !SCENARIO_WITHOUT_RESTART.includes(metadata.scenarioId);
-		if (
-			shouldUseCachedDeck &&
-			this.currentDeck?.deck &&
-			// When selecting the deck in the deck selection screen, we don't have any sceanrio ID
-			(this.selectedDeckId || this.currentDeck.scenarioId === metadata.scenarioId)
-		) {
-			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata, this.selectedDeckId);
-			return this.currentDeck;
-		}
-
 		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
 		// need to regenerate the deck
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
@@ -138,9 +125,20 @@ export class DeckParserService {
 		);
 		let deckInfo: DeckInfo;
 
+		// The only case where we want to reuse cached deck is when we have Restart option
+		const shouldUseCachedDeck =
+			metadata.gameType === GameType.GT_VS_AI && !SCENARIO_WITHOUT_RESTART.includes(metadata.scenarioId);
 		if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 			deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId, metadata.gameType);
+		} else if (
+			shouldUseCachedDeck &&
+			this.currentDeck?.deck &&
+			// When selecting the deck in the deck selection screen, we don't have any sceanrio ID
+			(this.selectedDeckId || this.currentDeck.scenarioId === metadata.scenarioId)
+		) {
+			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata, this.selectedDeckId);
+			return this.currentDeck;
 		} else if (this.isDeckLogged(metadata.scenarioId)) {
 			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
 			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId, metadata.gameType);
@@ -230,6 +228,8 @@ export class DeckParserService {
 			// Only reset when moving away from the scene where selecting a deck is possible
 			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
 				this.selectedDeckId = null;
+				// Reset the cached deck, as it should only be used when restarting the match
+				this.currentDeck = null;
 			}
 			if (changes.CurrentScene) {
 				this.currentNonGamePlayScene =
