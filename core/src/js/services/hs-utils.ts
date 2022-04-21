@@ -233,6 +233,7 @@ export const publicCardCreators = [
 	CardIds.ForgeOfSouls,
 	CardIds.FreeAdmission,
 	CardIds.FrostweaveDungeoneer,
+	CardIds.FullBlownEvil,
 	CardIds.FungalFortunes,
 	CardIds.GalakrondTheNightmare,
 	CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken,
