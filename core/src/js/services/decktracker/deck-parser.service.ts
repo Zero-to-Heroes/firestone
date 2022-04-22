@@ -9,7 +9,7 @@ import {
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
-	SOLO_SCENARIO_WITH_LOGGED_DECKLIST
+	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';

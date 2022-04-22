@@ -40,7 +40,7 @@ export class BgsBuddyGainedParser implements EventParser {
 		if (event.totalBuddies === playerToUpdate.buddyTurns.length) {
 			return currentState;
 		}
-		
+
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		const newPlayer = playerToUpdate.update({
 			buddyTurns: [...playerToUpdate.buddyTurns, turn],

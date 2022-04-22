@@ -8,7 +8,7 @@ import {
 	dustForPremium,
 	dustToCraftFor,
 	dustToCraftForPremium,
-	getPackDustValue
+	getPackDustValue,
 } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';

@@ -632,7 +632,7 @@ export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeServ
 		case CardIds.BrannBronzebeardTavernBrawl5:
 			return heroDbfId;
 	}
-	
+
 	const playerClass: string = inputClass ?? cards.getCardFromDbfId(heroDbfId)?.playerClass;
 	// console.debug('matching playerClass', playerClass, heroDbfId);
 	switch (playerClass) {
