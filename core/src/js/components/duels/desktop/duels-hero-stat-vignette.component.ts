@@ -34,7 +34,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 						class="win-distribution"
 						[data]="globalWinDistribution"
 						[id]="'duels-hero-vignette' + _stat.cardId"
-						tooltipTitle="Win distribution"
+						[tooltipTitle]="'app.duels.hero-stat.wins-distribution-tooltip' | owTranslate"
 					></basic-bar-chart>
 					<div class="item winrate">
 						<div class="label" [owTranslate]="'app.duels.hero-stat.global-winrate'"></div>

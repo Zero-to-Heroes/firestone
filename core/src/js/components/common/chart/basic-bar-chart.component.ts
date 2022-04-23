@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SimpleBarChartData } from './simple-bar-chart-data';
 
 @Component({
@@ -37,9 +38,9 @@ export class BasicBarChartComponent {
 	_preventEmptyValues: boolean;
 
 	private _data: SimpleBarChartData;
-	private _tooltipTitle = 'Title';
+	private _tooltipTitle = this.i18n.translateString('app.global.graph.tooltip-title');
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	udpateStats() {
 		if (!this._data) {
@@ -47,15 +48,23 @@ export class BasicBarChartComponent {
 		}
 
 		const max: number = Math.max(...this._data.data.map((data) => data.value));
-		this.bars = this._data.data.map((data) => ({
-			height: (100 * data.value) / max,
-			tooltip: `
+		this.bars = this._data.data.map((data) => {
+			const label = this.i18n.translateString('app.global.graph.wins-label', {
+				value: data.label
+			});
+			const value = this.i18n.translateString('app.global.graph.wins-value', {
+				value: (+data.value).toFixed(1)
+			})
+			return {
+				height: (100 * data.value) / max,
+				tooltip: `
 				<div class="body">
 					<div class="title">${this._tooltipTitle}</div>
-					<div class="label">${data.label} wins</div>
-					<div class="value">${(+data.value).toFixed(1)}% of runs</div>
+					<div class="label">${label}</div>
+					<div class="value">${value}</div>
 				</div>`,
-		}));
+			};
+		});
 		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();
 		// }

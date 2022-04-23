@@ -7,10 +7,11 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipModel } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SimpleBarChartData } from './simple-bar-chart-data';
 
 @Component({
@@ -137,6 +138,7 @@ export class SimpleBarChartComponent {
 				// Set Text
 				if (tooltip.body) {
 					const dataPoint = tooltip.dataPoints[0];
+					this.i18n.translateString('')
 					const innerHtml = `
 						<div class="body">
 							<div class="title">${this.tooltipTitle}</div>
@@ -193,6 +195,7 @@ export class SimpleBarChartComponent {
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly appRef: ApplicationRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	onActivate(event) {

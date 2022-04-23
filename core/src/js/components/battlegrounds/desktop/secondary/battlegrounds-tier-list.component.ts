@@ -115,12 +115,15 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 						].sort((a, b) => a.averagePosition - b.averagePosition),
 					},
 				].filter((tier) => !!tier.heroes?.length);
+				const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {
+					totalMatches: totalMatches.toLocaleString('en-US')
+				})
 				return {
 					tiers: tiers,
 					totalMatches: totalMatches,
 					tooltip: `
 						<div class="content">
-							<div class="title">Built from ${totalMatches.toLocaleString('en-US')} matches filtering for:</div>
+							<div class="title">${title}</div>
 							<ul class="filters">
 								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null, this.i18n)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(
