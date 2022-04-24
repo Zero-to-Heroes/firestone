@@ -87,7 +87,6 @@
 	"devDependencies": {
 		"@angular-eslint/eslint-plugin": "^4.2.0",
 		"@angular/compiler-cli": "11.2.11",
-		"@babel/preset-env": "^7.8.3",
 		"@calebmer/extract-text-webpack-plugin": "4.0.2",
 		"@ngtools/webpack": "^11.2.10",
 		"@overwolf/types": "^2.48.0",
