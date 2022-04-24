@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.4.9',
+		version: '9.4.10',
 		sections: [
 			{
 				type: 'intro',
@@ -56,6 +56,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where spectating friends would make the matches count towards your own stats.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an info leak where you could see the cards plundered by Pirate Captain Hooktusk.`,
+							},
 						],
 					},
 				],
@@ -67,6 +71,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `Reword the Executus / Southsea Strongarm counters to make it less confusing when multiple copies are in play, or when the golden version of these minions are in play.`,
+							},
 							{
 								type: 'bug',
 								text: `Fix a simulation issue where Sefin could grant poisonous to an already poisonous minion.`,
@@ -102,7 +110,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix an issue where some secrets would incorrectly be grayed out after a spell has been countered.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix an issue where having two repeatable cards in hand would cause the number of cards in hand to be incorrectly displayed.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix incorrect handling of the deck names when they contain some non-ASCII characters.`,
 							},
 						],
 					},
@@ -130,6 +146,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix the "best pack for set" stat sometimes taking into account a Standard pack.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix broken filters.`,
 							},
 						],
 					},
