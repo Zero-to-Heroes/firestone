@@ -50,11 +50,11 @@ export class BasicBarChartComponent {
 		const max: number = Math.max(...this._data.data.map((data) => data.value));
 		this.bars = this._data.data.map((data) => {
 			const label = this.i18n.translateString('app.global.graph.wins-label', {
-				value: data.label
+				value: data.label,
 			});
 			const value = this.i18n.translateString('app.global.graph.wins-value', {
-				value: (+data.value).toFixed(1)
-			})
+				value: (+data.value).toFixed(1),
+			});
 			return {
 				height: (100 * data.value) / max,
 				tooltip: `

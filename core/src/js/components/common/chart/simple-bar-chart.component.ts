@@ -7,7 +7,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipModel } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -138,7 +138,7 @@ export class SimpleBarChartComponent {
 				// Set Text
 				if (tooltip.body) {
 					const dataPoint = tooltip.dataPoints[0];
-					this.i18n.translateString('')
+					this.i18n.translateString('');
 					const innerHtml = `
 						<div class="body">
 							<div class="title">${this.tooltipTitle}</div>

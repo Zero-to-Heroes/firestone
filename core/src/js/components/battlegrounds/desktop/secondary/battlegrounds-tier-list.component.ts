@@ -116,8 +116,8 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					},
 				].filter((tier) => !!tier.heroes?.length);
 				const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {
-					totalMatches: totalMatches.toLocaleString('en-US')
-				})
+					totalMatches: totalMatches.toLocaleString('en-US'),
+				});
 				return {
 					tiers: tiers,
 					totalMatches: totalMatches,
