@@ -4,7 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { cardsRevealedWhenDrawn, publicCardCreators } from '../../hs-utils';
+import { cardsRevealedWhenDrawn, forcedHiddenCardCreators, publicCardCreators } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -34,15 +34,24 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
-		const lastInfluencedByCardId =
+		const lastInfluencedByCardId: CardIds =
 			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isCardInfoPublic =
 			isPlayer ||
-			cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-			publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
-		// console.debug('[receive-card-in-hand] isCardInfoPublic', isCardInfoPublic);
+			(!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
+				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+					publicCardCreators.includes(lastInfluencedByCardId)));
+		// console.debug(
+		// 	'[receive-card-in-hand] isCardInfoPublic',
+		// 	isCardInfoPublic,
+		// 	isPlayer,
+		// 	cardsRevealedWhenDrawn.includes(cardId as CardIds),
+		// 	cardId,
+		// 	publicCardCreators.includes(lastInfluencedByCardId),
+		// 	lastInfluencedByCardId,
+		// );
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
@@ -74,11 +83,11 @@ export class ReceiveCardInHandParser implements EventParser {
 			boardCard ||
 			otherCardWithObfuscation ||
 			DeckCard.create({
-				cardId: cardId,
+				cardId: isCardInfoPublic ? cardId : null,
 				entityId: entityId,
-				cardName: cardData && this.i18n.getCardName(cardId, cardData.name),
-				manaCost: cardData && cardData.cost,
-				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
+				cardName: isCardInfoPublic && cardData ? this.i18n.getCardName(cardId, cardData.name) : null,
+				manaCost: isCardInfoPublic && cardData ? cardData.cost : null,
+				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
 		// console.debug(
@@ -107,7 +116,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// here
 			true,
 		);
-		//console.debug('[receive-card-in-hand] new hand', newHand);
+		// console.debug('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,

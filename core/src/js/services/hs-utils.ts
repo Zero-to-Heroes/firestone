@@ -165,7 +165,14 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.YseraUnleashed_DreamPortalToken,
 ];
 
-export const forcedHiddenCardCreators = [CardIds.MaskOfMimicry, CardIds.MaskOfMimicryTavernBrawl];
+export const forcedHiddenCardCreators = [
+	CardIds.MaskOfMimicry,
+	CardIds.MaskOfMimicryTavernBrawl,
+	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
+	CardIds.PirateAdmiralHooktusk_TakeTheirGoldToken,
+	CardIds.PirateAdmiralHooktusk_TakeTheirShipToken,
+	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
+];
 
 export const forceHideInfoWhenDrawnInfluencers = [
 	// Doesn't trigger Mankrik's Wife, so it probably behaves like Secret Passage
