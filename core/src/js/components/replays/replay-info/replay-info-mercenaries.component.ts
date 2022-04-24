@@ -32,27 +32,29 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				</div>
 
 				<div class="group mercenaries-player-images">
-					<replay-info-merc-player
-						class="portrait player bench"
-						*ngFor="let hero of playerBench"
-						[hero]="hero"
-					></replay-info-merc-player>
-					<replay-info-merc-player
-						class="portrait player"
-						*ngFor="let hero of playerStartingTeam"
-						[hero]="hero"
-					></replay-info-merc-player>
-					<div class="vs" [owTranslate]="'app.replays.replay-info.versus' | owTranslate"></div>
-					<replay-info-merc-player
-						class="portrait opponent"
-						*ngFor="let hero of opponentStartingTeam"
-						[hero]="hero"
-					></replay-info-merc-player>
-					<replay-info-merc-player
-						class="portrait opponent bench"
-						*ngFor="let hero of opponentBench"
-						[hero]="hero"
-					></replay-info-merc-player>
+					<div class="images">
+						<replay-info-merc-player
+							class="portrait player bench"
+							*ngFor="let hero of playerBench"
+							[hero]="hero"
+						></replay-info-merc-player>
+						<replay-info-merc-player
+							class="portrait player"
+							*ngFor="let hero of playerStartingTeam"
+							[hero]="hero"
+						></replay-info-merc-player>
+						<div class="vs" [owTranslate]="'app.replays.replay-info.versus' | owTranslate"></div>
+						<replay-info-merc-player
+							class="portrait opponent"
+							*ngFor="let hero of opponentStartingTeam"
+							[hero]="hero"
+						></replay-info-merc-player>
+						<replay-info-merc-player
+							class="portrait opponent bench"
+							*ngFor="let hero of opponentBench"
+							[hero]="hero"
+						></replay-info-merc-player>
+					</div>
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 

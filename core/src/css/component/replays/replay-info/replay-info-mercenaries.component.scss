@@ -2,8 +2,18 @@
 	height: 60px;
 
 	.mercenaries-player-images {
-		width: 700px;
+		.images {
+			display: flex;
+			align-items: center;
+			width: 325px;
+		}
 		height: calc(100% + 20px);
+	}
+
+	&.show-merc-details {
+		.mercenaries-player-images .images {
+			width: 600px;
+		}
 	}
 
 	::ng-deep replay-info-merc-player {
