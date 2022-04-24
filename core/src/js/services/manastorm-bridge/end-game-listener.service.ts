@@ -118,6 +118,7 @@ export class EndGameListenerService {
 						this.currentScenarioId,
 						this.currentBuildNumber,
 						this.currentGameMode,
+						this.currentDeckname,
 					);
 
 					// Keep the await / long processes here to a minimum, since
@@ -154,12 +155,14 @@ export class EndGameListenerService {
 	private listening: boolean;
 
 	private async listenToDeckUpdate() {
+		console.log('[manastorm-bridge] listening to deck updates');
 		// Wait for a while to make sure the deck has been parsed
 		await sleep(15_000);
 		// This in fact doesn't work, because if the deckService still has a deck in memory from
 		// last game, it will be used instead of the current one.
 		this.listening = true;
 		const currentDeck = await Promise.race([this.deckService.getCurrentDeck(10000), this.listenerTimeout()]);
+		console.log('[manastorm-bridge] got currentDeck', currentDeck);
 		if (!currentDeck?.deckstring) {
 			if (
 				this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
@@ -172,12 +175,8 @@ export class EndGameListenerService {
 		}
 		this.currentDeckstring = currentDeck.deckstring;
 		console.log('[manastorm-bridge] got local player info, adding deckstring', this.currentDeckstring, currentDeck);
-		// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
-		this.currentDeckname = currentDeck?.name
-			?.normalize('NFKD')
-			// Allow some characters
-			?.replace(/[^\w^\{^\}^\[^\]$^/^\s]/g, '')
-			?.replace(/[^\x20-\x7E]/g, '');
+		// Don't normalize the deck name - it will be encoded during upload
+		this.currentDeckname = currentDeck?.name;
 	}
 
 	private stopListenToDeckUpdates() {

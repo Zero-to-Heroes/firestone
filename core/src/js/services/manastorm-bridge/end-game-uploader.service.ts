@@ -344,7 +344,14 @@ export class EndGameUploaderService {
 		game.scenarioId = gameResult.ScenarioID; // scenarioId;
 		game.xpForGame = xpForGame;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
-			console.log('[manastorm-bridge]', currentReviewId, 'adding deckstring', deckstring, game.gameMode);
+			console.log(
+				'[manastorm-bridge]',
+				currentReviewId,
+				'adding deckstring',
+				deckstring,
+				game.gameMode,
+				deckName,
+			);
 			game.deckstring = deckstring;
 			game.deckName = deckName;
 		} else {
