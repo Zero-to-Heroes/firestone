@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { FilterOption } from '../../../models/filter-option';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -26,7 +27,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
 			class="achievements-completed-filter-dropdown"
-			[options]="options"
+			[options]="options$ | async"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
