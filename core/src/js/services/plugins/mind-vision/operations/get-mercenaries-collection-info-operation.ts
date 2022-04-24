@@ -9,8 +9,7 @@ export class GetMercenariesCollectionInfoOperation extends MindVisionOperationFa
 			ow,
 			'getMercenariesCollectionInfo',
 			(forceReset?: boolean) => mindVision.getMercenariesCollectionInfo(forceReset),
-			// Technically speaking it's possible to not have any visitors, but it's more of an outlier case for now
-			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length || !info.Visitors?.length,
+			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length,
 			(info: MemoryMercenariesCollectionInfo) => info,
 			5,
 			2000,
