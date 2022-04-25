@@ -53,6 +53,10 @@ export const updates: readonly Update[] = [
 								text: `Add support for Dredge and for cards at the bottom of the deck.`,
 							},
 							{
+								type: 'feature',
+								text: `Cards played by effects (eg Nagaling) now properly trigger Global Effects and Secret Helper.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where spectating friends would make the matches count towards your own stats.`,
 							},
@@ -77,6 +81,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a simulation issue where lethal chances would sometimes ignore the opponent's current damage`,
+							},
+							{
+								type: 'bug',
 								text: `Fix a simulation issue where Sefin could grant poisonous to an already poisonous minion.`,
 							},
 							{
@@ -90,10 +98,6 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Aranna's upgrading her hero power would trick the app into believing that she also had upgraded her buddy.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix the counter value for Southsea Strongarm and Majordomo Executus.`,
 							},
 						],
 					},
@@ -119,6 +123,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix incorrect handling of the deck names when they contain some non-ASCII characters.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where spells without spell schools would be highlighted for Magister Dawngrasp.`,
 							},
 						],
 					},
