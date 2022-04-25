@@ -322,27 +322,28 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_PLAYED':
-				const props = gameEvent.Value.AdditionalProps
-					? {
-							targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
-							targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							transientCard: gameEvent.Value.AdditionalProps.TransientCard,
-					  }
-					: {};
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
-				break;
-			case 'CARD_PLAYED_BY_EFFECT':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(
-						GameEvent.CARD_PLAYED_BY_EFFECT,
+						GameEvent.CARD_PLAYED,
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
+									targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
 							  }
 							: {},
 					),
+				);
+				break;
+			case 'CARD_PLAYED_BY_EFFECT':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_PLAYED_BY_EFFECT, gameEvent, {
+						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
 				);
 				break;
 			case 'MINION_SUMMONED_FROM_HAND':
