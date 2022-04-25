@@ -159,13 +159,11 @@ export class MainWindowComponent
 			.listen$(([main, nav, prefs]) => nav.currentApp)
 			.pipe(this.mapData(([currentApp]) => currentApp));
 		this.activeTheme$ = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.showFtue,
-				([main, nav, prefs]) => nav.currentApp,
-			),
+			this.showFtue$,
+			this.store.listen$(([main, nav, prefs]) => nav.currentApp),
 			this.displayingNewVersion.asObservable(),
 		).pipe(
-			this.mapData(([[showFtue, currentApp], displayingNewVersion]) =>
+			this.mapData(([showFtue, [currentApp], displayingNewVersion]) =>
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
 		);

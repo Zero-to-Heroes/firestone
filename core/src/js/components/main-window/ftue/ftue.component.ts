@@ -47,18 +47,28 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 				<div
 					class="previous-ftue ftue-nav-link"
+					tabindex="0"
 					(click)="previous()"
 					*ngIf="currentIndex > 0"
 					growOnClick
 					[owTranslate]="'ftue.previous-button'"
 				></div>
-				<div class="next-ftue ftue-nav-link" (click)="next()" growOnClick>
-					{{
-						currentIndex === ftueSteps.length - 1
-							? "'ftue.done-button' | owTranslate"
-							: "'ftue.next-button' | owTranslate"
-					}}
-				</div>
+				<div
+					class="next-ftue ftue-nav-link"
+					tabindex="0"
+					*ngIf="currentIndex === ftueSteps.length - 1"
+					(click)="next()"
+					growOnClick
+					[owTranslate]="'ftue.done-button'"
+				></div>
+				<div
+					class="next-ftue ftue-nav-link"
+					tabindex="0"
+					*ngIf="currentIndex !== ftueSteps.length - 1"
+					(click)="next()"
+					growOnClick
+					[owTranslate]="'ftue.next-button'"
+				></div>
 			</div>
 		</div>
 	`,

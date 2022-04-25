@@ -31,7 +31,7 @@ declare let amplitude;
 	template: `
 		<nav class="menu-selection main-menu">
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.constructed-header' | owTranslate"
@@ -45,7 +45,7 @@ declare let amplitude;
 				</div>
 			</button>
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.battlegrounds-header' | owTranslate"
@@ -60,7 +60,7 @@ declare let amplitude;
 			</button>
 
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.mercenaries-header' | owTranslate"
@@ -75,7 +75,7 @@ declare let amplitude;
 			</button>
 
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.duels-header' | owTranslate"
@@ -89,7 +89,7 @@ declare let amplitude;
 				</div>
 			</button>
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.arena-header' | owTranslate"
@@ -104,7 +104,7 @@ declare let amplitude;
 			</button>
 			<li class="main-menu-separator"></li>
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.replays-header' | owTranslate"
@@ -118,7 +118,7 @@ declare let amplitude;
 				</div>
 			</button>
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.achievements-header' | owTranslate"
@@ -132,7 +132,7 @@ declare let amplitude;
 				</div>
 			</button>
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.collection-header' | owTranslate"
@@ -163,7 +163,7 @@ declare let amplitude;
 			<li class="push-down"></li>
 			<ng-container *ngIf="showGoPremium">
 				<button
-					tabindex="0"
+					[attr.tabindex]="tabIndex$ | async"
 					type="button"
 					class="menu-item go-premium"
 					[attr.aria-label]="'app.menu.go-premium-header' | owTranslate"
@@ -179,10 +179,10 @@ declare let amplitude;
 			</ng-container>
 
 			<button
-				tabindex="0"
+				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item login-info"
-				[attr.aria-label]="'Login / Logout button'"
+				[attr.aria-label]="'Login / Logout'"
 				(click)="login()"
 			>
 				<img class="avatar" [src]="avatarUrl$ | async" />
@@ -206,6 +206,7 @@ declare let amplitude;
 export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
+	tabIndex$: Observable<number>;
 
 	@Input() selectedModule: string;
 
@@ -230,6 +231,9 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 		this.avatarUrl$ = this.store
 			.listen$(([main, nav, prefs]) => main.currentUser)
 			.pipe(this.mapData(([currentUser]) => currentUser?.avatar ?? 'assets/images/social-share-login.png'));
+		this.tabIndex$ = this.store
+			.listen$(([main, nav]) => main.showFtue)
+			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
 	}
 
 	async ngAfterViewInit() {
