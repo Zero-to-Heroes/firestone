@@ -8,7 +8,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		`../../../css/component/controls/control-share.component.scss`,
 	],
 	template: `
-		<button class="button-container">
+		<!-- TODO: remove -1 tabindex once the menu is converted to using ngIf instead of CSS -->
+		<button class="button-container" tabindex="-1" [attr.aria-label]="'Social share'">
 			<div class="icon" inlineSVG="assets/svg/social/share.svg"></div>
 			<div class="share-container">
 				<div class="header" [owTranslate]="'app.share.title'"></div>

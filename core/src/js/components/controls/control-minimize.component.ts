@@ -13,7 +13,7 @@ declare let amplitude;
 		`../../../css/component/controls/control-minimize.component.scss`,
 	],
 	template: `
-		<button (mousedown)="minimizeWindow()">
+		<button (mousedown)="minimizeWindow()" [attr.aria-label]="'Minimize app'">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

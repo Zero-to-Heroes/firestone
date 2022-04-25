@@ -69,6 +69,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							</div>
 						</section>
 						<section
+							role="main"
 							class="content-container"
 							*ngIf="!value.showFtue"
 							[ngClass]="{ 'hide-ads': !value.showAds }"

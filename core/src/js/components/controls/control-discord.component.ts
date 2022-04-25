@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			(mousedown)="preventMiddleClick($event)"
 			(click)="preventMiddleClick($event)"
 			(auxclick)="preventMiddleClick($event)"
+			[attr.aria-label]="'Discord server'"
 		>
 			<svg class="svg-icon-fill">
 				<use

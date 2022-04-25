@@ -23,7 +23,7 @@ declare let amplitude;
 		`../../../css/component/controls/control-maximize.component.scss`,
 	],
 	template: `
-		<button (click)="toggleMaximizeWindow()">
+		<button (click)="toggleMaximizeWindow()" [attr.aria-label]="'Go fullscreen'">
 			<svg class="svg-icon-fill" *ngIf="!maximized">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

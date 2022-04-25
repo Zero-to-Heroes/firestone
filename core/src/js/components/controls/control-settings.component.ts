@@ -10,7 +10,7 @@ import { PreferencesService } from '../../services/preferences.service';
 		`../../../css/component/controls/control-settings.component.scss`,
 	],
 	template: `
-		<button (mousedown)="showSettings()">
+		<button (click)="showSettings()" [attr.aria-label]="'Settings'">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

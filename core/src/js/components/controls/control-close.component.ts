@@ -15,7 +15,12 @@ declare let amplitude;
 		`../../../css/component/controls/control-close.component.scss`,
 	],
 	template: `
-		<button confirmationTooltip [askConfirmation]="askConfirmation" (onConfirm)="closeWindow()">
+		<button
+			confirmationTooltip
+			[askConfirmation]="askConfirmation"
+			(onConfirm)="closeWindow()"
+			[attr.aria-label]="'Close app'"
+		>
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

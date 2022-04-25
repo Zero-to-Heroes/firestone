@@ -2,7 +2,8 @@
 	flex-direction: column;
 	font-family: 'Open Sans', sans-serif;
 
-	li {
+	li,
+	button.menu-item {
 		width: 100%;
 		top: 0;
 		border: none;
@@ -73,7 +74,8 @@
 		height: 35px;
 	}
 
-	li {
+	li,
+	button.menu-item {
 		&.arena {
 			.icon {
 				width: 40px;

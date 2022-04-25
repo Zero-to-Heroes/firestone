@@ -29,94 +29,162 @@ declare let amplitude;
 		`../../css/component/main-menu.component.scss`,
 	],
 	template: `
-		<ul class="menu-selection main-menu">
-			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
+		<nav class="menu-selection main-menu">
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.constructed-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'decktracker' }"
+				(click)="selectModule('decktracker')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/decktracker.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.constructed-header'"></div>
 				</div>
-			</li>
-			<li
+			</button>
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.battlegrounds-header' | owTranslate"
 				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
-				(mousedown)="selectModule('battlegrounds')"
+				(click)="selectModule('battlegrounds')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.battlegrounds-header'"></div>
 				</div>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'mercenaries' }" (mousedown)="selectModule('mercenaries')">
+			</button>
+
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.mercenaries-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'mercenaries' }"
+				(click)="selectModule('mercenaries')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.mercenaries-header'"></div>
 				</div>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'duels' }" (mousedown)="selectModule('duels')">
+			</button>
+
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.duels-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'duels' }"
+				(click)="selectModule('duels')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.duels-header'"></div>
 				</div>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'arena' }" (mousedown)="selectModule('arena')">
+			</button>
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.arena-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'arena' }"
+				(click)="selectModule('arena')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/arena.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.arena-header'"></div>
 				</div>
-			</li>
+			</button>
 			<li class="main-menu-separator"></li>
-			<li
-				class="arena"
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.replays-header' | owTranslate"
 				[ngClass]="{ 'selected': selectedModule === 'replays' }"
-				(mousedown)="selectModule('replays')"
+				(click)="selectModule('replays')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/replays.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.replays-header'"></div>
 				</div>
-			</li>
-			<li
+			</button>
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.achievements-header' | owTranslate"
 				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
-				(mousedown)="selectModule('achievements')"
+				(click)="selectModule('achievements')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/achievements.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.achievements-header'"></div>
 				</div>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
+			</button>
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.collection-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'collection' }"
+				(click)="selectModule('collection')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/collection.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.collection-header'"></div>
 				</div>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'stats' }" (mousedown)="selectModule('stats')">
+			</button>
+			<button
+				tabindex="-1"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.stats-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'stats' }"
+				(click)="selectModule('stats')"
+			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/stats.svg"></div>
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header" [owTranslate]="'app.menu.stats-header'"></div>
 				</div>
-			</li>
+			</button>
 
 			<li class="push-down"></li>
 			<ng-container *ngIf="showGoPremium">
-				<li class="go-premium" (click)="goPremium()">
+				<button
+					tabindex="0"
+					type="button"
+					class="menu-item go-premium"
+					[attr.aria-label]="'app.menu.go-premium-header' | owTranslate"
+					(click)="goPremium()"
+				>
 					<div class="icon" inlineSVG="assets/svg/whatsnew/go_premium.svg"></div>
 					<div class="text">
 						<div class="text-background"></div>
 						<div class="menu-header" [owTranslate]="'app.menu.go-premium-header'"></div>
 					</div>
-				</li>
+				</button>
 				<li class="main-menu-separator"></li>
 			</ng-container>
-			<li class="login-info" (click)="login()">
+
+			<button
+				tabindex="0"
+				type="button"
+				class="menu-item login-info"
+				[attr.aria-label]="'Login / Logout button'"
+				(click)="login()"
+			>
 				<img class="avatar" [src]="avatarUrl$ | async" />
 				<div class="text">
 					<div class="text-background"></div>
@@ -129,8 +197,8 @@ declare let amplitude;
 						[translateParams]="{ value: value.userName }"
 					></div>
 				</div>
-			</li>
-		</ul>
+			</button>
+		</nav>
 	`,
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
