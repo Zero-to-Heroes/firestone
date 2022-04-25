@@ -34,6 +34,7 @@ import {
 	freeze,
 	frenzy,
 	frost,
+	hasSpellSchool,
 	healthBiggerThanAttack,
 	holy,
 	inDeck,
@@ -295,7 +296,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.MagisterUnchainedTavernBrawlToken:
 				return and(inDeck, spell);
 			case CardIds.MagisterDawngrasp:
-				return and(inOther, spell, spellPlayedThisMatch);
+				return and(inOther, spell, hasSpellSchool, spellPlayedThisMatch);
 			case CardIds.NzothGodOfTheDeep:
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.race);
 			case CardIds.NzothTheCorruptor:

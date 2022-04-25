@@ -88,6 +88,9 @@ export const frost = spellSchool(SpellSchool.FROST);
 export const holy = spellSchool(SpellSchool.HOLY);
 export const nature = spellSchool(SpellSchool.NATURE);
 export const shadow = spellSchool(SpellSchool.SHADOW);
+export const hasSpellSchool = (handler: Handler): boolean => {
+	return !!handler.referenceCardProvider()?.spellSchool;
+};
 
 export const cardType = (type: CardType) => (handler: Handler): boolean => {
 	return (
