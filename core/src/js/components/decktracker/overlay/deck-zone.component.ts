@@ -205,7 +205,7 @@ export class DeckZoneComponent implements AfterViewInit {
 				sortingFunction: section.sortingFunction,
 			} as DeckZoneSection;
 		});
-		console.debug('final sections', this.cardSections);
+		// console.debug('final sections', this.cardSections);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
