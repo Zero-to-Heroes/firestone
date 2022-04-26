@@ -39,7 +39,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.VaporizeVanilla,
 		CardIds.AutodefenseMatrix1,
 		CardIds.NobleSacrificeCore,
-		CardIds.NobleSacrificeCore,
+		CardIds.NobleSacrificeLegacy,
 		CardIds.NobleSacrificeVanilla,
 		CardIds.JudgmentOfJustice,
 		CardIds.Bamboozle,
