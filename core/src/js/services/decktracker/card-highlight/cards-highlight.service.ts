@@ -348,6 +348,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:
 				return and(minion, inGraveyard, deathrattle);
+			case CardIds.TortollanPilgrim:
+				return and(inDeck, spell);
 			case CardIds.Tuskpiercer:
 				return and(inDeck, deathrattle);
 			case CardIds.TwilightsCall:
