@@ -72,6 +72,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 										[src]="card.imagePath"
 										[cardTooltip]="card.cardId"
 										class="real-card"
+										(click)="addCard(card)"
 									/>
 								</div>
 							</div>
@@ -181,6 +182,10 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 
 	trackByCardId(index: number, item: DeckBuilderCard) {
 		return item.cardId;
+	}
+
+	addCard(card: DeckBuilderCard) {
+		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
 	}
 
 	handleKeyPress(event: KeyboardEvent, activeCards: readonly DeckBuilderCard[]) {
