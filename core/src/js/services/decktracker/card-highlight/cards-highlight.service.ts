@@ -13,6 +13,7 @@ import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.serv
 import {
 	and,
 	arcane,
+	baseCostEqual,
 	battlecry,
 	beast,
 	cardsPlayedThisMatch,
@@ -329,6 +330,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.Shudderwock:
 				return and(cardsPlayedThisMatch, minion, battlecry);
+			case CardIds.SkulkingGeist:
+				return and(or(inDeck, inHand), spell, baseCostEqual(1));
 			case CardIds.Smokescreen:
 				return and(inDeck, deathrattle);
 			case CardIds.SpiritGuide:

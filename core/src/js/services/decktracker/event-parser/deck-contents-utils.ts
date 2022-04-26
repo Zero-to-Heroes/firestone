@@ -350,7 +350,7 @@ const handleSkulkingGeist = (
 	return updateCardInDeckAndHand(
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
-		(card, refCard) => refCard?.cost == 1,
+		(card, refCard) => refCard?.cost == 1 && refCard?.type === 'Spell',
 		(card) => null,
 		deckState,
 		allCards,

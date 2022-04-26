@@ -43,6 +43,10 @@ export const effectiveCostEqual = (cost: number) => (handler: Handler): boolean 
 	return handler.deckCardProvider()?.getEffectiveManaCost() === cost;
 };
 
+export const baseCostEqual = (cost: number) => (handler: Handler): boolean => {
+	return handler.deckCardProvider()?.manaCost === cost;
+};
+
 export const notInInitialDeck = (handler: Handler): boolean => {
 	return handler.deckCardProvider().creatorCardId != null || handler.deckCardProvider().creatorCardIds?.length > 0;
 };
