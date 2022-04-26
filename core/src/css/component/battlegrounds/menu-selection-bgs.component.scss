@@ -1,7 +1,8 @@
 .menu-selection {
 	color: var(--menu-selection-color);
 
-	li {
+	li,
+	button.menu-item {
 		margin-right: 25px;
 		padding-bottom: 14px;
 

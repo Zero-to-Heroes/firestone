@@ -26,15 +26,20 @@ i {
 	display: none !important;
 }
 
-// buttons
 button {
 	border: none;
 	font-family: inherit;
 	background-color: inherit;
+	font: inherit;
+	color: inherit;
 }
 
 button:focus {
 	outline: none;
+}
+
+*:focus {
+	// outline: red solid 2px !important;
 }
 
 svg {
@@ -52,11 +57,7 @@ svg {
 	height: 100%;
 }
 
-// i, button {
 i {
-	// --icon-color: rgb(204, 162, 179);
-	// --icon-bg: transparent;
-
 	color: var(--icon-color);
 	background-color: var(--icon-bg);
 
@@ -78,42 +79,6 @@ i {
 	// 	user-select: none;
 	// }
 }
-
-// button:hover {
-//   --icon-color: var(--icon-color-hover);
-//   --icon-bg: var(--icon-bg-hover);
-
-// }
-
-// .pink-button {
-//   --icon-color-hover: #cca2b3;
-//   --icon-bg-hover: #513b48;
-
-//   // &:hover {
-//   //   color: var(--icon-color-hover);
-//   //   background-color: var(--icon-bg-hover);
-//   // }
-// }
-
-// .close-button {
-//   --icon-color-hover: #fff;
-//   --icon-bg-hover: #c21913;
-
-//   // &:hover {
-//   //   color: var(--icon-color-hover);
-//   //   background-color: var(--icon-bg-hover);
-//   // }
-// }
-
-// .sound-button {
-//   --icon-color-hover: #d9c3ab;
-//   --icon-bg-hover: transparent;
-
-//   // &:hover {
-//   //   color: var(--icon-color-hover);
-//   //   background-color: var(--icon-bg-hover);
-//   // }
-// }
 
 .svg-icon-fill {
 	fill: currentcolor;

@@ -3,7 +3,8 @@
 .menu-selection {
 	color: var(--menu-selection-color);
 
-	li {
+	li,
+	button.menu-item {
 		&:hover {
 			&:not(.disabled) {
 				color: var(--on-menu-selection-color);

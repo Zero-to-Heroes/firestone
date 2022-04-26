@@ -28,15 +28,17 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
 						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
-						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
-							<li
+						<nav class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
+							<button
+								class="menu-item"
+								tabindex="0"
 								*ngFor="let cat of categories$ | async"
 								[ngClass]="{ 'selected': cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
-							</li>
-						</ul>
+							</button>
+						</nav>
 						<battlegrounds-filters> </battlegrounds-filters>
 						<battlegrounds-category-details
 							*ngIf="(currentView$ | async) === 'list'"

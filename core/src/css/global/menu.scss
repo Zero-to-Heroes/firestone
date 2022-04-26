@@ -10,7 +10,8 @@
 	position: relative;
 	width: 100%;
 
-	li {
+	li,
+	button.menu-item {
 		position: relative;
 		top: 2px;
 	}
