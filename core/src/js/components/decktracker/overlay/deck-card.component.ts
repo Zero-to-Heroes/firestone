@@ -28,6 +28,8 @@ import { uuid } from '../../../services/utils';
 	],
 	template: `
 		<div
+			tabindex="0"
+			[attr.aria-label]="cardName"
 			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }}"
 			*ngIf="!isUnknownCard || _showUnknownCards"
 			[ngClass]="{

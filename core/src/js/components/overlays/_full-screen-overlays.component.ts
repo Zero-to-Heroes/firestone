@@ -4,8 +4,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	HostListener,
 	OnDestroy,
+	Renderer2,
+	ViewChild,
 	ViewEncapsulation,
 } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
@@ -38,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<current-session-widget-wrapper></current-session-widget-wrapper>
 
 			<!-- "Constructed" -->
-			<decktracker-player-widget-wrapper></decktracker-player-widget-wrapper>
+			<decktracker-player-widget-wrapper #container tabindex="0"></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
@@ -98,16 +101,19 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 export class FullScreenOverlaysComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy {
+	@ViewChild('container', { static: false }) container: ElementRef;
+
 	activeTheme$: Observable<CurrentAppType>;
 	windowId: string;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly init_DebugService: DebugService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly init_DebugService: DebugService,
+		private readonly renderer: Renderer2,
 	) {
 		super(store, cdr);
 	}
@@ -131,6 +137,23 @@ export class FullScreenOverlaysComponent
 				}
 			}),
 		);
+
+		this.ow.addKeyDownListener((info) => {
+			console.debug('keydown', info);
+			// F11
+			if (info.key === '122') {
+				const element: HTMLElement = this.container.nativeElement;
+				console.debug('element', element);
+				setTimeout(() => {
+					element.focus();
+					element.click();
+					console.debug('set focus', element, document.activeElement);
+				});
+			}
+			setTimeout(() => {
+				console.debug('current focus', document.activeElement);
+			});
+		});
 	}
 
 	async ngAfterViewInit() {

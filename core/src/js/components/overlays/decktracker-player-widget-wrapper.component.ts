@@ -22,6 +22,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	],
 	template: `
 		<decktracker-overlay-player
+			tabindex="0"
 			class="widget"
 			*ngIf="showWidget$ | async"
 			cdkDrag
