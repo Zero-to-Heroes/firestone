@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		`../../../../../css/component/battlegrounds/desktop/filters/_battlegrounds-filters.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-filters">
+		<div class="battlegrounds-filters" [attr.aria-label]="'Battlegrounds filters'" role="list">
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>

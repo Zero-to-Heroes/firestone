@@ -39,7 +39,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								<span>{{ cat.name }} </span>
 							</button>
 						</nav>
-						<battlegrounds-filters> </battlegrounds-filters>
+						<!-- hidden until proper support for dropdown is added -->
+						<battlegrounds-filters aria-hidden="true"> </battlegrounds-filters>
 						<battlegrounds-category-details
 							*ngIf="(currentView$ | async) === 'list'"
 							[ngClass]="{

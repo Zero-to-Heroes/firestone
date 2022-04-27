@@ -25,13 +25,18 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-personal-stats-heroes">
+		<section
+			class="battlegrounds-personal-stats-heroes"
+			[attr.aria-label]="'Battlegrounds personal hero stats'"
+			role="list"
+		>
 			<battlegrounds-stats-hero-vignette
 				*ngFor="let stat of stats$ | async; trackBy: trackByFn"
+				role="listitem"
 				[stat]="stat"
 				(click)="seeDetailedHeroStats(stat.id)"
 			></battlegrounds-stats-hero-vignette>
-		</div>
+		</section>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

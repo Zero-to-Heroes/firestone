@@ -17,7 +17,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			scrollable
 			*ngIf="selectedCategoryId$ | async as selectedCategoryId"
 		>
-			<battlegrounds-personal-stats-heroes *ngIf="selectedCategoryId === 'bgs-category-personal-heroes'">
+			<battlegrounds-personal-stats-heroes
+				*ngIf="selectedCategoryId === 'bgs-category-personal-heroes'"
+				role="region"
+			>
 			</battlegrounds-personal-stats-heroes>
 			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>

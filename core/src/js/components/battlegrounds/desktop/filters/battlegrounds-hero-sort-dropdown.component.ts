@@ -30,6 +30,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
 			class="battlegrounds-hero-sort-dropdown"
+			[attr.aria-label]="'Sort by'"
 			[options]="options"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
