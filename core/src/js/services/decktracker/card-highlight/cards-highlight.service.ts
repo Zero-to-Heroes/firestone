@@ -279,7 +279,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 				return and(demon, inGraveyard, minion);
 			case CardIds.Kazakusan1:
-				return and(inDeck, minion, not(dragon));
+				return and(inDeck, minion, dragon);
 			case CardIds.KnightOfAnointment:
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra1:
