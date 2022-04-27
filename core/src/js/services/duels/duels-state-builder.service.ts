@@ -91,12 +91,14 @@ export class DuelsStateBuilderService {
 			if (changes.IsDuelsMainRunScreen || (this.isOnMainScreen.value && changes.DuelsCurrentCardsInDeck)) {
 				const duelsInfo = await this.memory.getDuelsInfo();
 				console.debug('[duels-state-builder] duels info', duelsInfo);
-				this.duelsDeck.next({
-					...duelsInfo,
-					// Give priority to the cardIds, as this is what we get when reading the duels deck
-					// from the main Duels manager, instead of the dungeon run scene
-					DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-				});
+				if (duelsInfo) {
+					this.duelsDeck.next({
+						...duelsInfo,
+						// Give priority to the cardIds, as this is what we get when reading the duels deck
+						// from the main Duels manager, instead of the dungeon run scene
+						DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
+					});
+				}
 			}
 			// null simply means "no change"
 			if (changes.IsDuelsMainRunScreen === true) {

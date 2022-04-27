@@ -298,7 +298,13 @@ export class DeckParserService {
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],
 		};
-		console.log('[deck-parser] built deck definition', deckDefinition);
+		console.log(
+			'[deck-parser] built deck definition',
+			deckFromMemory.HeroCardId,
+			deckFromMemory.HeroClass,
+			deckDefinition,
+			JSON.stringify(deckDefinition),
+		);
 		const deckString = deckDefinition.cards.some((pair) => pair[0] == null) ? null : encode(deckDefinition);
 		console.log('[deck-parser] built deckstring', deckString);
 		const currentDeck: DeckInfo = {

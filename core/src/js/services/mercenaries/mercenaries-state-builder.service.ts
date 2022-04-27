@@ -25,17 +25,17 @@ export class MercenariesStateBuilderService {
 
 	public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		console.debug(
-			'merc global',
-			globalStats,
-			globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
-			globalStats.pvp.compositions
-				// .filter((stat) => stat.mmrPercentile === 100)
-				.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
-				.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
-				.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
-				.sort((a, b) => b.totalMatches - a.totalMatches),
-		);
+		// console.debug(
+		// 	'merc global',
+		// 	globalStats,
+		// 	globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
+		// 	globalStats.pvp.compositions
+		// 		// .filter((stat) => stat.mmrPercentile === 100)
+		// 		.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
+		// 		.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
+		// 		.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
+		// 		.sort((a, b) => b.totalMatches - a.totalMatches),
+		// );
 		return globalStats;
 	}
 
