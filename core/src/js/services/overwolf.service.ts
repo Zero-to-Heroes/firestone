@@ -324,11 +324,12 @@ export class OverwolfService {
 		});
 	}
 
-	public async bringToFront(windowId: string) {
+	public async bringToFront(windowId: string, grabFocus = false) {
 		return new Promise<any>((resolve) => {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
-				overwolf.windows.bringToFront(windowId, false, (result) => {
+				overwolf.windows.bringToFront(windowId, grabFocus, (result) => {
+					console.debug('brought to front', result);
 					resolve(result);
 				});
 			} catch (e) {

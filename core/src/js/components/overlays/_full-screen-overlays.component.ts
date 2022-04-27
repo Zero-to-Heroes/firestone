@@ -36,12 +36,17 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		'../../../css/component/overlays/full-screen-overlays.component.scss',
 	],
 	template: `
-		<div class="full-screen-overlays drag-boundary overlay-container-parent" [activeTheme]="activeTheme$ | async">
+		<div
+			id="container"
+			tabindex="0"
+			class="full-screen-overlays drag-boundary overlay-container-parent"
+			[activeTheme]="activeTheme$ | async"
+		>
 			<!-- Global -->
 			<current-session-widget-wrapper></current-session-widget-wrapper>
 
 			<!-- "Constructed" -->
-			<decktracker-player-widget-wrapper #container tabindex="0"></decktracker-player-widget-wrapper>
+			<decktracker-player-widget-wrapper class="focusable" tabindex="0"></decktracker-player-widget-wrapper>
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
@@ -114,6 +119,7 @@ export class FullScreenOverlaysComponent
 		private readonly ow: OverwolfService,
 		private readonly init_DebugService: DebugService,
 		private readonly renderer: Renderer2,
+		private readonly el: ElementRef,
 	) {
 		super(store, cdr);
 	}
@@ -138,15 +144,21 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 
-		this.ow.addKeyDownListener((info) => {
+		this.ow.addKeyDownListener(async (info) => {
+			return;
 			console.debug('keydown', info);
 			// F11
 			if (info.key === '122') {
-				const element: HTMLElement = this.container.nativeElement;
-				console.debug('element', element);
+				await this.ow.bringToFront(this.windowId, true);
+				const element: HTMLElement = this.renderer.selectRootElement('#container', true);
+				const focusable = this.el.nativeElement.querySelectorAll('.root');
+				const element2 = focusable[0];
+				console.debug('element', element, element2, focusable);
 				setTimeout(() => {
 					element.focus();
 					element.click();
+					element2.focus();
+					element2.click();
 					console.debug('set focus', element, document.activeElement);
 				});
 			}

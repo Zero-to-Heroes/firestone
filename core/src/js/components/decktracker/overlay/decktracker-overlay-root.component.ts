@@ -33,6 +33,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div
 			class="root {{ player }}"
+			tabindex="0"
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity$ | async"
 			[ngClass]="{ 'active': active }"

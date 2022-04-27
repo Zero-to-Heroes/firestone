@@ -8,6 +8,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	styleUrls: [],
 	template: `
 		<decktracker-overlay-root
+			tabindex="0"
 			[overlayWidthExtractor]="overlayWidthExtractor"
 			[overlayDisplayModeExtractor]="overlayDisplayModeExtractor"
 			[opacityExtractor]="opacityExtractor"
