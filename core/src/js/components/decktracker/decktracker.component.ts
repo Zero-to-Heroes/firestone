@@ -22,8 +22,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						<global-header *ngIf="value.menuDisplayType === 'breadcrumbs'"></global-header>
 						<menu-selection-decktracker class="menu-selection" *ngIf="value.menuDisplayType === 'menu'">
 						</menu-selection-decktracker>
-						<decktracker-filters></decktracker-filters>
-						<decktracker-decks *ngIf="value.currentView === 'decks'"></decktracker-decks>
+						<!-- hidden until proper support for dropdown is added -->
+						<decktracker-filters aria-hidden="true"></decktracker-filters>
+						<decktracker-decks *ngIf="value.currentView === 'decks'" role="region"></decktracker-decks>
 						<decktracker-ladder-stats
 							*ngIf="value.currentView === 'ladder-stats'"
 						></decktracker-ladder-stats>

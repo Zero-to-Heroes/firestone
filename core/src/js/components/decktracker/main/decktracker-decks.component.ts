@@ -13,9 +13,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="decktracker-decks" *ngIf="decks$ | async as decks">
-			<ul class="deck-list" scrollable>
+			<ul class="deck-list" scrollable [attr.aria-label]="'Constructed deck stats'" role="list">
 				<li *ngFor="let deck of decks">
-					<decktracker-deck-summary [deck]="deck"></decktracker-deck-summary>
+					<decktracker-deck-summary [deck]="deck" role="listitem"></decktracker-deck-summary>
 				</li>
 			</ul>
 			<section class="empty-state" *ngIf="!decks || decks.length === 0">

@@ -11,12 +11,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component.scss`,
 	],
 	template: `
-		<div
-			class="battlegrounds-stats-hero-vignette"
-			tabindex="0"
-			[ngClass]="{ 'unused': gamesPlayed === 0 }"
-			[attr.aria-label]=""
-		>
+		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ 'unused': gamesPlayed === 0 }" tabindex="0">
 			<div class="wrapper-for-flip">
 				<div class="box-side">
 					<div class="hero-name">{{ heroName }}</div>

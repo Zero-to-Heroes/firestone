@@ -23,20 +23,32 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		`../../../../css/component/decktracker/main/menu-selection-decktracker.component.scss`,
 	],
 	template: `
-		<ul class="menu-selection" *ngIf="selectedTab$ | async as selectedTab">
-			<li [ngClass]="{ 'selected': selectedTab === 'decks' }" (mousedown)="selectStage('decks')">
+		<nav class="menu-selection" *ngIf="selectedTab$ | async as selectedTab">
+			<button
+				class="menu-item"
+				tabindex="0"
+				[ngClass]="{ 'selected': selectedTab === 'decks' }"
+				(mousedown)="selectStage('decks')"
+			>
 				<span [owTranslate]="'app.decktracker.menu.decks-header'"></span>
-			</li>
-			<li [ngClass]="{ 'selected': selectedTab === 'ladder-stats' }" (mousedown)="selectStage('ladder-stats')">
+			</button>
+			<button
+				class="menu-item"
+				tabindex="0"
+				[ngClass]="{ 'selected': selectedTab === 'ladder-stats' }"
+				(mousedown)="selectStage('ladder-stats')"
+			>
 				<span [owTranslate]="'app.decktracker.menu.stats-header'"></span>
-			</li>
-			<li
+			</button>
+			<button
+				class="menu-item"
+				tabindex="0"
 				[ngClass]="{ 'selected': selectedTab === 'ladder-ranking' }"
 				(mousedown)="selectStage('ladder-ranking')"
 			>
 				<span [owTranslate]="'app.decktracker.menu.ranking-header'"></span>
-			</li>
-		</ul>
+			</button>
+		</nav>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

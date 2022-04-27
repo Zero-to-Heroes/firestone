@@ -18,9 +18,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }" (click)="selectDeck($event)">
+		<div
+			class="decktracker-deck-summary"
+			tabindex="0"
+			[ngClass]="{ 'hidden': hidden }"
+			(click)="selectDeck($event)"
+		>
 			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
-			<div class="deck-image">
+			<div class="deck-image" aria-hidden="true">
 				<img class="skin" [src]="skin" />
 				<img class="frame" src="assets/images/deck/hero_frame.png" />
 				<img class="decoration {{ format }}" *ngIf="decoration" [src]="decoration" />
@@ -30,17 +35,22 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					class="text total-games"
 					[owTranslate]="'app.decktracker.deck-summary.total-games'"
 					[translateParams]="{ value: totalGames }"
+					[attr.aria-label]="'app.decktracker.deck-summary.total-games' | owTranslate: { value: totalGames }"
 				></div>
 				<div
 					class="text win-rate"
 					*ngIf="winRatePercentage != null"
 					[owTranslate]="'app.decktracker.deck-summary.winrate'"
 					[translateParams]="{ value: winRatePercentage }"
+					[attr.aria-label]="
+						'app.decktracker.deck-summary.winrate' | owTranslate: { value: winRatePercentage }
+					"
 				></div>
 				<div
 					class="last-used"
 					[owTranslate]="'app.decktracker.deck-summary.last-used'"
 					[translateParams]="{ value: lastUsed }"
+					[attr.aria-label]="'app.decktracker.deck-summary.last-used' | owTranslate: { value: lastUsed }"
 				></div>
 			</div>
 			<button
@@ -48,6 +58,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!hidden"
+				aria-hidden="true"
 			>
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#bin"></use>
@@ -58,6 +69,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
 				(mousedown)="restoreDeck($event)"
 				*ngIf="hidden"
+				aria-hidden="true"
 			>
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
