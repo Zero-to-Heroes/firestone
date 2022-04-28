@@ -166,9 +166,16 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 			? this.allCards.getCard(info.playerCardId)
 			: this.allCards.getCard(info.opponentCardId);
 		const name = heroCard.name;
+		const encodedDeckName = info.playerDeckName;
+		let decodedTeamName: string = null;
+		try {
+			decodedTeamName = decodeURIComponent(encodedDeckName);
+		} catch (e) {
+			console.error('Could not decode deck name', encodedDeckName, e);
+		}
 		const deckName = info.playerDeckName
 			? this.i18n.translateString('app.replays.replay-info.deck-name-tooltip', {
-					value: decodeURIComponent(info.playerDeckName),
+					value: decodedTeamName,
 			  })
 			: '';
 		const tooltip = isPlayer ? `${name} ${deckName}` : null;

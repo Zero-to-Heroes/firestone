@@ -207,9 +207,15 @@ export class DecksStateBuilderService {
 			? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 			: undefined;
 		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(statsWithReset);
+		let decodedDeckName: string = null;
+		try {
+			decodedDeckName = decodeURIComponent(deckName);
+		} catch (e) {
+			console.error('Could not decode deck name', deckName, e);
+		}
 		return Object.assign(new DeckSummary(), {
 			class: deckClass,
-			deckName: decodeURIComponent(deckName),
+			deckName: decodedDeckName,
 			deckArchetype: deckArchetype,
 			deckstring: deckstring,
 			lastUsedTimestamp: lastUsed,

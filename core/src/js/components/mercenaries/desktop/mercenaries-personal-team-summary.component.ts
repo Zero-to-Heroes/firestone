@@ -81,11 +81,17 @@ export class MercenariesPersonalTeamSummaryComponent {
 		this.teamId = value.id;
 		this.hidden = value.hidden;
 		const gamesForTeam = value.games;
-		// Because we can't pass non ISU-8859-1 to AWS S3 metadata, so the deck name has to be encoded
-		this.teamName = decodeURIComponent(
+		const encodedTeamName =
 			gamesForTeam.filter((stat) => !!stat.playerDeckName)[0]?.playerDeckName ??
-				this.i18n.translateString('mercenaries.teams.unnamed-team'),
-		);
+			this.i18n.translateString('mercenaries.teams.unnamed-team');
+		let decodedTeamName: string = null;
+		try {
+			decodedTeamName = decodeURIComponent(encodedTeamName);
+		} catch (e) {
+			console.error('Could not decode deck name', encodedTeamName, e);
+		}
+		// Because we can't pass non ISU-8859-1 to AWS S3 metadata, so the deck name has to be encoded
+		this.teamName = decodeURIComponent(decodedTeamName);
 		this.teamNameTooltip = `${this.teamName}`;
 		this.totalGames = gamesForTeam.length;
 		const totalWins = gamesForTeam.filter((stat) => stat.result === 'won').length;
