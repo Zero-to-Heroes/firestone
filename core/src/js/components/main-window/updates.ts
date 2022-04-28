@@ -32,15 +32,15 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.4.10',
+		version: '9.4.18',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					Hello everyone! I'm just back from vacation with my family, so the pace of updates should pick up again. This first release fixes quite a few bugs and adds some missing features for the 23.0 Hearthstone release.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		Hello everyone! I'm just back from vacation with my family, so the pace of updates should pick up again. This first release fixes quite a few bugs and adds some missing features for the 23.0 Hearthstone release.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -50,19 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add support for Dredge and for cards at the bottom of the deck.`,
-							},
-							{
-								type: 'feature',
-								text: `Cards played by effects (eg Nagaling) now properly trigger Global Effects and Secret Helper.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where spectating friends would make the matches count towards your own stats.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an info leak where you could see the cards plundered by Pirate Captain Hooktusk.`,
+								text: `Dredge and for cards at the bottom of the deck now also work in the "grouped" display mode.`,
 							},
 						],
 					},
@@ -76,28 +64,8 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Reword the Executus / Southsea Strongarm counters to make it less confusing when multiple copies are in play, or when the golden version of these minions are in play.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix a simulation issue where lethal chances would sometimes ignore the opponent's current damage`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Sefin could grant poisonous to an already poisonous minion.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Witching Nestmatron was considered Avenge (4).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the simulation warnings would not be displayed anymore (these appear when the board contains some unsupported compositions or minions, typically Piloted Whirl-O-Tron or Secrets).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Aranna's upgrading her hero power would trick the app into believing that she also had upgraded her buddy.`,
+								text: `Fix an issue where making a wager with Lord Barov would trigger multiple battles to start.`,
 							},
 						],
 					},
@@ -105,64 +73,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Properly tracks Full-Blown Evil copies in the opponent's hand.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where the app would sometimes not detect a deck change when playing some adventures against the AI.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some secrets would incorrectly be grayed out after a spell has been countered.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where having two repeatable cards in hand would cause the number of cards in hand to be incorrectly displayed.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix incorrect handling of the deck names when they contain some non-ASCII characters.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where spells without spell schools would be highlighted for Magister Dawngrasp.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix some deck codes not being properly copied. This is not fully retroactive, so expect some bugs for decks created before this update (and it won't fix the Neutral Vanndar and Drek'Thar deck codes, as these are not yet supported by HS itself)`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix some instances of the mercenaries info not updating.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix the "best pack for set" stat sometimes taking into account a Standard pack.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix broken filters.`,
+								text: `Fix an issue where Whizbang decks were not working anymore.`,
 							},
 						],
 					},
