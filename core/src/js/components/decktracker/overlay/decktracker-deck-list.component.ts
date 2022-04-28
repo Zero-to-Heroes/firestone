@@ -60,6 +60,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[cardsGoToBottom]="cardsGoToBottom"
 					[darkenUsedCards]="darkenUsedCards"
 					[tooltipPosition]="_tooltipPosition"
+					[showTopCardsSeparately]="showTopCardsSeparately"
+					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[collection]="collection"
 					[side]="side"
 					(cardClicked)="onCardClicked($event)"

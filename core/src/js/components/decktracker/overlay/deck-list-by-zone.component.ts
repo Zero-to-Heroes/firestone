@@ -299,7 +299,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 	}
 }
 
-interface InternalDeckZoneSection {
+export interface InternalDeckZoneSection {
 	header: string;
 	cards: readonly DeckCard[];
 	sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number;
