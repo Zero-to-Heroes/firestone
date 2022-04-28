@@ -39,8 +39,8 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					[helpTooltip]="
 						_showTribesHighlight
 							? !highlighted
-								? 'Click to highlight all ' + title + 's in the tavern'
-								: 'Click to remove the ' + title + 's highlight in the tavern'
+								? highlightTribeOnTooltip
+								: highlightTribeOffTooltip
 							: null
 					"
 					[helpTooltipPosition]="'left'"
@@ -68,8 +68,8 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						[helpTooltip]="
 							_showTribesHighlight
 								? !minion.highlighted
-									? 'Pin this minion to highlight it in the tavern'
-									: 'Unpin this minion to remove the highlight in the tavern'
+									? highlightMinionOnTooltip
+									: highlightMinionOffTooltip
 								: null
 						"
 						[helpTooltipPosition]="'left'"
@@ -105,6 +105,11 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	minions: readonly Minion[] = [];
 	_group: BgsMinionsGroup;
 	_showTribesHighlight: boolean;
+
+	highlightTribeOnTooltip: string;
+	highlightTribeOffTooltip: string;
+	highlightMinionOnTooltip: string;
+	highlightMinionOffTooltip: string;
 
 	private _showGoldenCards = true;
 
@@ -156,6 +161,27 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		// Doesn't happen with a trackByFn?
 		// setTimeout(() => {
 		this.title = this.buildTitle(this._group.tribe);
+		this.highlightTribeOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-tribe', {
+			value: this.title,
+		});
+		this.highlightTribeOffTooltip = this.i18n.translateString(
+			'battlegrounds.in-game.minions-list.unhighlight-tribe',
+			{
+				value: this.title,
+			},
+		);
+		this.highlightMinionOnTooltip = this.i18n.translateString(
+			'battlegrounds.in-game.minions-list.highlight-minion',
+			{
+				value: this.title,
+			},
+		);
+		this.highlightMinionOffTooltip = this.i18n.translateString(
+			'battlegrounds.in-game.minions-list.unhighlight-minion',
+			{
+				value: this.title,
+			},
+		);
 		this.highlighted =
 			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
 		this.minions = this._group.minions
