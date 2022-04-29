@@ -17,6 +17,9 @@ export const modifyDeckForSpecialCards = (
 			return handleEmbiggen(deckState, allCards, i18n);
 		case CardIds.DeckOfLunacy:
 			return handleDeckOfLunacy(deckState, allCards, i18n);
+		case CardIds.FrizzKindleroost:
+		case CardIds.DragonAffinityTavernBrawl:
+			return handleFrizzKindleroost(deckState, allCards, i18n);
 		case CardIds.TheFiresOfZinAzshari:
 			return handleFiresOfZinAzshari(deckState, allCards, i18n);
 		case CardIds.IncantersFlow:
@@ -35,8 +38,6 @@ export const modifyDeckForSpecialCards = (
 			return handleDeckOfChaos(deckState, allCards, i18n);
 		case CardIds.ExploreUngoro:
 			return handleExploreUngoro(deckState, allCards, i18n);
-		case CardIds.FrizzKindleroost:
-			return handleFrizzKindleroost(deckState, allCards, i18n);
 		case CardIds.HemetJungleHunter:
 			return handleHemet(deckState, allCards, i18n);
 		case CardIds.LadyPrestor1:
@@ -153,7 +154,7 @@ const handleFrizzKindleroost = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.race === Race.DRAGON.toString(),
+		(card, refCard) => refCard?.race === Race.DRAGON.toString() || refCard?.race === Race.ALL.toString(),
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,

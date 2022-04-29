@@ -256,6 +256,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, fel);
 			case CardIds.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
+			case CardIds.FrizzKindleroost:
+				return and(inDeck, dragon);
 			case CardIds.FungalFortunes:
 				return and(inDeck, minion);
 			case CardIds.GuardianAnimals:
