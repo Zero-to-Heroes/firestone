@@ -6,6 +6,7 @@ import { LocalizationService } from '@services/localization.service';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
+import { DuelsDeckbuilderGoBackEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-go-back-event';
 import { DuelsDeckbuilderHeroPowerSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-power-selected-decks-event';
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
@@ -16,6 +17,7 @@ import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/
 import { DuelsChoosingHeroParser } from '@services/mainwindow/store/processors/duels/duels-choosing-hero-parser';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
 import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/duels/duels-current-option-parser';
+import { DuelsDeckbuilderGoBackProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-go-back-parser';
 import { DuelsDeckbuilderHeroPowerSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-power-selected-parser';
 import { DuelsDeckbuilderHeroSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-selected-parser';
 import { DuelsDeckbuilderSignatureTreasureSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
@@ -895,6 +897,9 @@ export class MainWindowStoreService {
 
 			DuelsExploreDecksEvent.eventName(),
 			new DuelsExploreDecksParser(this.prefs),
+
+			DuelsDeckbuilderGoBackEvent.eventName(),
+			new DuelsDeckbuilderGoBackProcessor(),
 
 			DuelsDeckbuilderHeroSelectedEvent.eventName(),
 			new DuelsDeckbuilderHeroSelectedProcessor(),

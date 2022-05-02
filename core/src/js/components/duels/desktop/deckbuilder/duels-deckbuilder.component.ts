@@ -10,9 +10,6 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder.component.scss`],
 	template: `
 		<div class="duels-deckbuilder">
-			<!-- First intermediate screen where you select Hero, Hero Power and Signature Treasure  -->
-			<!-- Once these are selected, you're brought to the builder proper -->
-			<!-- Header should recap this info, add a way to discard the current deck -->
 			<!-- Area to the right should recap the mana curve and maybe other stats -->
 			<!-- Need an area to at least search for cards or browse them all by class. Add at least 
 			search keywords (like cost:2+ or school:fire) to avoid having too many icons, at least 
@@ -24,6 +21,8 @@ export const DEFAULT_CARD_HEIGHT = 221;
 			<!-- Don't forget to only include the sets that are allowed in Duels -->
 			<!-- Remove banned cards -->
 			<!-- Filter by collection? -->
+			<!-- TODO: translationd, tooltips -->
+			<duels-deckbuilder-breadcrumbs></duels-deckbuilder-breadcrumbs>
 			<ng-container [ngSwitch]="currentStep$ | async">
 				<ng-container *ngSwitchCase="'hero'"> <duels-deckbuilder-hero></duels-deckbuilder-hero></ng-container>
 				<ng-container *ngSwitchCase="'hero-power'">

@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollectionCardClassFilterDropdownComponent } from '@components/collection/filters/card-class-filter.component';
 import { CollectionCardOwnedFilterDropdownComponent } from '@components/collection/filters/card-owned-filter.component';
 import { CollectionCardRarityFilterDropdownComponent } from '@components/collection/filters/card-rarity-filter.component';
+import { DuelsDeckbuilderBreadcrumbsComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-breadcrumbs.component';
 import { DuelsDeckbuilderCardsComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-cards.component';
 import { DuelsDeckbuilderHeroPowerComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero-power.component';
 import { DuelsDeckbuilderHeroComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero.component';
@@ -789,6 +790,7 @@ const components = [
 		DuelsHeroSearchComponent,
 		DuelsLeaderboardComponent,
 		DuelsDeckbuilderComponent,
+		DuelsDeckbuilderBreadcrumbsComponent,
 		DuelsDeckbuilderCardsComponent,
 		DuelsDeckbuilderHeroComponent,
 		DuelsDeckbuilderHeroPowerComponent,
