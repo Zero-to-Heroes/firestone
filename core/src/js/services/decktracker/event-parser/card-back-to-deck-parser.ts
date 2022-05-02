@@ -1,4 +1,4 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -8,6 +8,7 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const CARD_SENDING_TO_BOTTOM = [CardIds.BootstrapSunkeneer];
 export class CardBackToDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -44,9 +45,17 @@ export class CardBackToDeckParser implements EventParser {
 					lastAffectedByCardId: undefined,
 			  } as DeckCard)
 			: card;
+		const cardWithInfluenceBack = cardWithoutInfluence.update({
+			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
+		});
+		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
+			? cardWithInfluenceBack.update({
+					positionFromBottom: DeckCard.deckIndexFromBottom++,
+			  })
+			: cardWithInfluenceBack;
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
-			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
+			: this.helper.addSingleCardToZone(previousDeck, cardWithPosition);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
@@ -73,6 +82,7 @@ export class CardBackToDeckParser implements EventParser {
 			result = this.helper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
 		// console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
+
 		const dbCard = (cardId && this.allCards.getCard(cardId)) || ({} as ReferenceCard);
 		return (
 			result ??

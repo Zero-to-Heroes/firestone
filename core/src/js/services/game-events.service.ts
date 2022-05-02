@@ -680,6 +680,8 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_BACK_TO_DECK, gameEvent, {
 						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
+						influencedByEntityId: gameEvent.Value.AdditionalProps.InfluencedByEntityId,
+						influencedByCardId: gameEvent.Value.AdditionalProps.InfluencedByCardId,
 					}),
 				);
 				break;
