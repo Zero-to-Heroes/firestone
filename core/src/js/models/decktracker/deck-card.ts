@@ -46,6 +46,7 @@ export class DeckCard {
 	readonly positionFromBottom?: number;
 	readonly positionFromTop?: number;
 	readonly dredged?: boolean;
+	readonly createdByJoust?: boolean;
 	readonly linkedEntityIds?: readonly number[] = [];
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 

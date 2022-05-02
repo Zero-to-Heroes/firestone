@@ -557,6 +557,8 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
 						creatorEntityId:
 							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorEntityId,
+						createdByJoust:
+							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatedByJoust,
 					}),
 				);
 				break;

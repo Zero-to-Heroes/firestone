@@ -209,6 +209,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 					// for technical reasons
 					(a: VisualDeckCard) =>
 						!a.temporaryCard &&
+						!a.createdByJoust &&
 						!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
 						!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
 				),

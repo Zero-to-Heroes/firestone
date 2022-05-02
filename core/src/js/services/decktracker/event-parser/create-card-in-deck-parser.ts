@@ -35,6 +35,7 @@ export class CreateCardInDeckParser implements EventParser {
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const positionFromBottom = buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
 		//console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck);
+		const createdByJoust = gameEvent.additionalData.createdByJoust;
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -46,6 +47,7 @@ export class CreateCardInDeckParser implements EventParser {
 				? buildAttributeChange(deck.findCard(gameEvent.additionalData.creatorEntityId))
 				: null,
 			positionFromBottom: positionFromBottom,
+			createdByJoust: createdByJoust,
 		} as DeckCard);
 		//console.debug('[debug]', 'adding card', card);
 
