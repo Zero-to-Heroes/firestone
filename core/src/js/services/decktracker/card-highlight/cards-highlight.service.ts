@@ -391,6 +391,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.WingCommanderIchman1:
 				return and(inDeck, minion, beast);
+			case CardIds.WitchingHour:
+				return and(inGraveyard, minion, beast);
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
 
