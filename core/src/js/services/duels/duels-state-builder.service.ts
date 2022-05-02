@@ -5,6 +5,7 @@ import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { DuelsConfig } from '@models/duels/duels-config';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
 import { AdventuresInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
@@ -58,6 +59,7 @@ const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
+const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -214,11 +216,18 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
+	public async loadConfig(): Promise<DuelsConfig> {
+		const result: DuelsConfig = await this.api.callGetApi(DUELS_CONFIG_URL);
+		console.log('[duels-state-builder] loaded duels config');
+		return result;
+	}
+
 	public initState(
 		globalStats: DuelsStat,
 		globalStatsDecks: DuelsStatDecks,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
+		duelsConfig: DuelsConfig,
 		leaderboard: DuelsLeaderboard,
 		collectionState: BinderState,
 		adventuresInfo: AdventuresInfo,
@@ -231,6 +240,7 @@ export class DuelsStateBuilderService {
 		return DuelsState.create({
 			categories: categories,
 			globalStats: globalStats,
+			config: duelsConfig,
 			topDecks: topDecks,
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,

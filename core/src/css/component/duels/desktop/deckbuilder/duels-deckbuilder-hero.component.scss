@@ -1,0 +1,29 @@
+:host() {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+}
+
+.duels-deckbuilder-hero {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+	flex-wrap: wrap;
+	overflow: auto;
+
+	.hero {
+		width: 15vw;
+		display: flex;
+		position: relative;
+		max-width: 250px;
+		opacity: 0.8;
+
+		.portrait {
+			width: 100%;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}

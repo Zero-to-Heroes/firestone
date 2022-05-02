@@ -1,37 +1,23 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { sortByProperties } from '@services/utils';
+import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
 @Component({
-	selector: 'duels-deckbuilder',
-	styleUrls: [`../../../../css/component/duels/desktop/duels-deckbuilder.component.scss`],
+	selector: 'duels-deckbuilder-cards',
+	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder-cards.component.scss`],
 	template: `
-		<div class="duels-deckbuilder">
-			<!-- First intermediate screen where you select Hero, Hero Power and Signature Treasure  -->
-			<!-- Once these are selected, you're brought to the builder proper -->
-			<!-- Header should recap this info, add a way to discard the current deck -->
-			<!-- Arena to the right should recap the mana curve and maybe other stats -->
-			<!-- Need an area to at least search for cards or browse them all by class. Add at least 
-			search keywords (like cost:2+ or school:fire) to avoid having too many icons, at least 
-			at the beginning -->
-			<!-- Need a way to see the buckets that will be offered with the current cards selection -->
-			<!-- Need a way to import a deck code -->
-			<!-- Need a way to use only your own collection -->
-			<!-- Abillity to click on a card in the tracker and automatically filter the cards that synergize with it? -->
-			<!-- Don't forget to only include the sets that are allowed in Duels -->
-			<!-- Remove banned cards -->
-			<!-- Filter by collection? -->
-
+		<div class="duels-deckbuilder-cards">
 			<ng-container *ngIf="{ activeCards: activeCards$ | async } as value">
 				<div class="decklist-container">
 					<div class="card-search">
@@ -55,6 +41,18 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						(cardClicked)="onDecklistCardClicked($event)"
 					>
 					</deck-list>
+					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
+						<copy-deckstring
+							class="copy-deckcode"
+							*ngIf="exportValue.valid"
+							[deckstring]="deckstring$ | async"
+							[copyText]="'Export deck code'"
+						>
+						</copy-deckstring>
+						<div class="invalid-text" *ngIf="!exportValue.valid">
+							Ongoing ({{ (currentDeckCards$ | async)?.length || 0 }} / 15)
+						</div>
+					</div>
 				</div>
 				<div class="results-container">
 					<div class="menu"></div>
@@ -71,6 +69,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 										*ngIf="card?.imagePath"
 										[src]="card.imagePath"
 										[cardTooltip]="card.cardId"
+										[cardTooltipPosition]="'right'"
 										class="real-card"
 										(click)="addCard(card)"
 									/>
@@ -84,10 +83,12 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentDeckCards$: Observable<readonly string[]>;
 	activeCards$: Observable<readonly DeckBuilderCard[]>;
 	highRes$: Observable<boolean>;
+	deckValid$: Observable<boolean>;
+	deckstring$: Observable<string>;
 
 	cardWidth: number;
 	cardHeight: number;
@@ -107,7 +108,6 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 	}
 
 	ngAfterContentInit() {
-		console.debug('azftr');
 		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
@@ -120,13 +120,37 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 					this.cdr.detectChanges();
 				}
 			});
-		const allCards$ = from([this.allCards.getCards()]).pipe(
-			this.mapData((cards) =>
+		const allCards$ = combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.duels.config,
+				([main, nav]) => main.duels.deckbuilder.currentClasses,
+			),
+			from([this.allCards.getCards()]),
+		).pipe(
+			this.mapData(([[config, currentClasses], cards]) =>
 				cards
 					.filter((card) => card.collectible)
+					.filter(
+						(card) => !config.includedSets?.length || config.includedSets.includes(card.set?.toLowerCase()),
+					)
+					.filter(
+						(card) =>
+							!config.bannedCardsFromDeckbuilding?.length ||
+							!config.bannedCardsFromDeckbuilding.includes(card.id),
+					)
+					.filter((card) => {
+						const cardClasses = !!currentClasses?.length
+							? [...currentClasses, CardClass.NEUTRAL]
+							: [CardClass.NEUTRAL];
+						return (
+							card.cardClass &&
+							(cardClasses.includes(CardClass[card.cardClass]) ||
+								cardClasses.some((c) => (card.classes ?? []).includes(CardClass[c])))
+						);
+					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase())
 					// Remove hero skins
-					.filter((card) => card.set !== 'Hero_skins')
+					// .filter((card) => card.set !== 'Hero_skins')
 					// Filter "duplicates" between Core / Legacy / Vanilla
 					.filter((card) => !card?.deckDuplicateDbfId),
 			),
@@ -139,11 +163,23 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
-		this.activeCards$ = combineLatest(allCards$, collection$, searchString$, this.highRes$).pipe(
+		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
+			this.mapData((cards) => {
+				return cards;
+			}),
+		);
+		this.activeCards$ = combineLatest(
+			allCards$,
+			collection$,
+			searchString$,
+			this.currentDeckCards$,
+			this.highRes$,
+		).pipe(
 			this.mapData(
-				([allCards, collection, searchString, highRes]) => {
+				([allCards, collection, searchString, deckCards, highRes]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
 					const searchResult = allCards
+						.filter((card) => !(deckCards ?? []).includes(card.id))
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
 						.sort(sortByProperties((card: ReferenceCard) => [card.cost, card.playerClass, card.name]))
 						.map((card) => {
@@ -162,9 +198,27 @@ export class DuelsDeckbuilderComponent extends AbstractSubscriptionComponent imp
 				50,
 			),
 		);
-		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
+		this.deckValid$ = this.currentDeckCards$.pipe(
 			this.mapData((cards) => {
-				return cards;
+				return cards?.length === 15 && cards.length === new Set(cards).size;
+			}),
+		);
+		this.deckstring$ = combineLatest(
+			this.currentDeckCards$,
+			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentHeroCardId),
+		).pipe(
+			this.mapData(([cards, [hero]]) => {
+				const cardDbfIds = cards
+					.map((cardId) => this.allCards.getCard(cardId).dbfId)
+					.map((dbfId) => [dbfId, 1] as [number, number]);
+				const heroDbfId = this.allCards.getCard(hero).dbfId ?? 7;
+				const deckDefinition: DeckDefinition = {
+					format: GameFormat.FT_WILD,
+					cards: cardDbfIds,
+					heroes: [heroDbfId],
+				};
+				const deckstring = encode(deckDefinition);
+				return deckstring;
 			}),
 		);
 

@@ -3,6 +3,8 @@ import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { DuelsConfig } from '@models/duels/duels-config';
+import { DuelsDeckbuilder } from '@models/duels/duels-deckbuilder';
 import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
 import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/memory/memory-duels';
 import { NonFunctionProperties } from '../../services/utils';
@@ -16,6 +18,7 @@ import { DuelsRun } from './duels-run';
 export class DuelsState {
 	readonly loading: boolean = true;
 	readonly categories: readonly DuelsCategory[];
+	readonly config: DuelsConfig;
 	readonly duelsRunInfos: readonly DuelsRunInfo[];
 	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
 	readonly runs: readonly DuelsRun[];
@@ -29,6 +32,8 @@ export class DuelsState {
 	// it will be erased every time we recompute everything from the global stats
 	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
 	readonly currentDuelsMetaPatch: PatchInfo;
+
+	readonly deckbuilder: DuelsDeckbuilder = new DuelsDeckbuilder();
 
 	readonly currentDuelsDeck: DeckInfoFromMemory;
 	readonly tempDuelsDeck: DuelsDeck;

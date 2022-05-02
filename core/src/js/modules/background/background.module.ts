@@ -16,7 +16,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollectionCardClassFilterDropdownComponent } from '@components/collection/filters/card-class-filter.component';
 import { CollectionCardOwnedFilterDropdownComponent } from '@components/collection/filters/card-owned-filter.component';
 import { CollectionCardRarityFilterDropdownComponent } from '@components/collection/filters/card-rarity-filter.component';
-import { DuelsDeckbuilderComponent } from '@components/duels/desktop/duels-deckbuilder.component';
+import { DuelsDeckbuilderCardsComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-cards.component';
+import { DuelsDeckbuilderHeroPowerComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero-power.component';
+import { DuelsDeckbuilderHeroComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero.component';
+import { DuelsDeckbuilderSignatureTreasureComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-signature-treasure.component';
+import { DuelsDeckbuilderComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder.component';
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
@@ -785,6 +789,10 @@ const components = [
 		DuelsHeroSearchComponent,
 		DuelsLeaderboardComponent,
 		DuelsDeckbuilderComponent,
+		DuelsDeckbuilderCardsComponent,
+		DuelsDeckbuilderHeroComponent,
+		DuelsDeckbuilderHeroPowerComponent,
+		DuelsDeckbuilderSignatureTreasureComponent,
 		DuelsFiltersComponent,
 		DuelsGameModeFilterDropdownComponent,
 		DuelsTreasuresSortDropdownComponent,
