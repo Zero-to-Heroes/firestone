@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { DeckCard } from '../../../models/decktracker/deck-card';
@@ -75,7 +76,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	private gameState: GameState;
 	private options: SelectorOptions;
 
-	constructor(private readonly prefs: PreferencesService, protected readonly store: AppUiStoreFacadeService) {
+	constructor(
+		private readonly prefs: PreferencesService,
+		protected readonly store: AppUiStoreFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super(store);
 		this.setup();
 		window['cardsHighlightService'] = this;
@@ -186,7 +191,18 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
 			case CardIds.AbyssalDepths:
-				return and(inDeck, minion);
+				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
+					const cheapestMinions = [...deckState.deck]
+						.filter((c) => this.allCards.getCard(c.cardId).type === 'Minion')
+						.sort((a, b) => a.manaCost - b.manaCost)
+						.slice(0, 2);
+					const secondCheapestMinionCost = (cheapestMinions[1] ?? cheapestMinions[0])?.manaCost ?? 0;
+					return (
+						minion(handler) &&
+						inDeck(handler) &&
+						handler.deckCardProvider()?.getEffectiveManaCost() <= secondCheapestMinionCost
+					);
+				};
 			case CardIds.AllianceBannerman:
 				return and(inDeck, minion);
 			case CardIds.AmuletOfUndying:
