@@ -489,7 +489,7 @@ export class GameStateService {
 			new CardBackToDeckParser(this.helper, this.allCards, this.i18n),
 			new CardTradedParser(this.helper, this.allCards, this.i18n),
 			new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
-			new CardRemovedFromDeckParser(this.helper),
+			new CardRemovedFromDeckParser(this.helper, this.allCards),
 			new CardRemovedFromHandParser(this.helper),
 			new CardRemovedFromBoardParser(this.helper),
 			new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n),
