@@ -8,7 +8,12 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const CARD_SENDING_TO_BOTTOM = [CardIds.BootstrapSunkeneer, CardIds.SirFinleySeaGuide];
+const CARD_SENDING_TO_BOTTOM = [
+	CardIds.BootstrapSunkeneer,
+	CardIds.SirFinleySeaGuide,
+	CardIds.PhasingPortal,
+	CardIds.ForgottenDepthsTavernBrawl,
+];
 export class CardBackToDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
