@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.4.18',
+		version: '9.5.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'duels',
 						details: [
 							{
 								type: 'feature',
-								text: `Dredge and for cards at the bottom of the deck now also work in the "grouped" display mode.`,
+								text: `First (very basic) iteration of the deckbuilder. For now it only has the bare minimum, and I'll need your feedback to decide what exactly to add to it :)`,
 							},
 						],
 					},
@@ -61,20 +61,27 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where making a wager with Lord Barov would trigger multiple battles to start.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Add card highlights for Witching Hour and Frizz Kindleroost.`,
+							},
+							{
+								type: 'feature',
+								text: `Card highlight for Abyssal Depths now only impacts your two lowest-cost minions.`,
+							},
+							{
+								type: 'feature',
+								text: `Now tracks the cards in deck revealed by the Joust mechanic (i.e. "reveal a card in each deck", that was introduced in TGT).`,
+							},
+							{
+								type: 'feature',
+								text: `Add "bottom of deck" support for From the Depths, Sir Finley Sea Guide, Bootstrap Sunkeneer, Phasing Portal and Forgotten Depths`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue where Whizbang decks were not working anymore.`,
+								text: `Fix an issue where the player minion summoned by an enemy Dirty Rat would be treated as a played card (and mess up with some features like the Brilliant Macaw counter)`,
 							},
 						],
 					},
