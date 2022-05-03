@@ -17,6 +17,24 @@
 		.deck-list {
 			margin-top: 15px;
 			padding-right: 20px;
+			margin-bottom: 10px;
+
+			::ng-deep decktracker-deck-list {
+				min-height: 418px;
+				background: rgba(255, 255, 255, 0.08);
+
+				.ps-content {
+					padding-bottom: 0;
+				}
+			}
+		}
+
+		.export-deck {
+			color: var(--color-1);
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
 		}
 	}
 

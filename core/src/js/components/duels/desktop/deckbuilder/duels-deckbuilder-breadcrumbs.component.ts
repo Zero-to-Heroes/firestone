@@ -15,13 +15,19 @@ export const DEFAULT_CARD_HEIGHT = 221;
 		<div class="duels-deckbuilder-breadcrumbs">
 			<div class="current-step">{{ currentStep$ | async }}</div>
 			<div class="recap">
-				<div class="recap-item recap-hero" *ngIf="currentHero$ | async as currentHero" (click)="goBack('hero')">
+				<div
+					class="recap-item recap-hero"
+					*ngIf="currentHero$ | async as currentHero"
+					(click)="goBack('hero')"
+					[helpTooltip]="heroTooltip('hero', currentHero)"
+				>
 					<img [src]="currentHero.image" [alt]="currentHero.name" />
 				</div>
 				<div
 					class="recap-item recap-hero-power"
 					*ngIf="currentHeroPower$ | async as currentHeroPower"
 					(click)="goBack('hero-power')"
+					[helpTooltip]="heroTooltip('hero-power', currentHeroPower)"
 				>
 					<img [src]="currentHeroPower.image" [alt]="currentHeroPower.name" />
 				</div>
@@ -29,6 +35,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					class="recap-item recap-signature-treasure"
 					*ngIf="currentSignatureTreasure$ | async as currentSignatureTreasure"
 					(click)="goBack('signature-treasure')"
+					[helpTooltip]="heroTooltip('signature-treasure', currentSignatureTreasure)"
 				>
 					<img [src]="currentSignatureTreasure.image" [alt]="currentSignatureTreasure.name" />
 				</div>
@@ -110,6 +117,22 @@ export class DuelsDeckbuilderBreadcrumbsComponent extends AbstractSubscriptionCo
 
 	goBack(step: 'hero' | 'hero-power' | 'signature-treasure') {
 		this.store.send(new DuelsDeckbuilderGoBackEvent(step));
+	}
+
+	heroTooltip(step: 'hero' | 'hero-power' | 'signature-treasure', cardId: string) {
+		const cardName = this.allCards.getCard(cardId).name;
+		switch (step) {
+			case 'hero':
+				return this.i18n.translateString('app.duels.deckbuilder.go-back-hero', { selectedCardName: cardName });
+			case 'hero-power':
+				return this.i18n.translateString('app.duels.deckbuilder.go-back-hero-power', {
+					selectedCardName: cardName,
+				});
+			case 'signature-treasure':
+				return this.i18n.translateString('app.duels.deckbuilder.go-back-signature-treasure', {
+					selectedCardName: cardName,
+				});
+		}
 	}
 }
 

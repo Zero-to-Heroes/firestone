@@ -18,8 +18,6 @@ export const DEFAULT_CARD_HEIGHT = 221;
 			<!-- Need a way to import a deck code -->
 			<!-- Need a way to use only your own collection -->
 			<!-- Abillity to click on a card in the tracker and automatically filter the cards that synergize with it? -->
-			<!-- Don't forget to only include the sets that are allowed in Duels -->
-			<!-- Remove banned cards -->
 			<!-- Filter by collection? -->
 			<!-- TODO: translationd, tooltips -->
 			<duels-deckbuilder-breadcrumbs></duels-deckbuilder-breadcrumbs>

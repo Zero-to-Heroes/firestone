@@ -49,9 +49,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							[copyText]="'Export deck code'"
 						>
 						</copy-deckstring>
-						<div class="invalid-text" *ngIf="!exportValue.valid">
-							Ongoing ({{ (currentDeckCards$ | async)?.length || 0 }} / 15)
-						</div>
+						<div class="invalid-text" *ngIf="!exportValue.valid">{{ ongoingText$ | async }}</div>
 					</div>
 				</div>
 				<div class="results-container">
@@ -89,6 +87,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	highRes$: Observable<boolean>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
+	ongoingText$: Observable<string>;
 
 	cardWidth: number;
 	cardHeight: number;
@@ -220,6 +219,14 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				const deckstring = encode(deckDefinition);
 				return deckstring;
 			}),
+		);
+		this.ongoingText$ = this.currentDeckCards$.pipe(
+			this.mapData((cards) =>
+				this.i18n.translateString('app.duels.deckbuilder.ongoing-deck-building', {
+					currentCards: cards?.length ?? 0,
+					maxCards: 15,
+				}),
+			),
 		);
 
 		this.searchShortcutsTooltip = `
