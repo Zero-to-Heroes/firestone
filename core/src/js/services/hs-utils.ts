@@ -1,4 +1,4 @@
-import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
+import { BoosterType, CardIds, COIN_IDS, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
@@ -332,6 +332,8 @@ export const publicCardCreators = [
 	CardIds.TaelanFordringCore,
 	CardIds.TamsinRoame1,
 	CardIds.TentacledMenace,
+	// For some reason the coin is flagged as created by the coin...
+	...COIN_IDS,
 	CardIds.TheCurator,
 	CardIds.TheLobotomizer,
 	CardIds.ThistleTea,
