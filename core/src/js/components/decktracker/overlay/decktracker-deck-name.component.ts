@@ -45,7 +45,10 @@ export class DeckTrackerDeckNameComponent {
 		this.deckName =
 			value.name ||
 			(value.hero
-				? value.hero.playerName || value.hero.name
+				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
+						playerName: value.hero.playerName || value.hero.name,
+						playerClass: this.i18n.translateString(`global.class.${value.hero.playerClass}`),
+				  })
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 		this.deckstring = value.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
