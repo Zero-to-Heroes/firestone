@@ -26,6 +26,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								class="icon"
 								inlineSVG="assets/svg/search.svg"
 								[helpTooltip]="searchShortcutsTooltip"
+								helpTooltipClasses="duels-deckbuilder-cards-search-tooltip"
 							></div>
 							<input
 								[formControl]="searchForm"
@@ -138,14 +139,15 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 							!config.bannedCardsFromDeckbuilding.includes(card.id),
 					)
 					.filter((card) => {
-						const cardClasses = !!currentClasses?.length
+						const searchCardClasses: readonly CardClass[] = !!currentClasses?.length
 							? [...currentClasses, CardClass.NEUTRAL]
 							: [CardClass.NEUTRAL];
-						return (
-							card.cardClass &&
-							(cardClasses.includes(CardClass[card.cardClass]) ||
-								cardClasses.some((c) => (card.classes ?? []).includes(CardClass[c])))
-						);
+						const cardCardClasses: readonly CardClass[] = card.classes
+							? card.classes.map((c) => CardClass[c])
+							: !!card.cardClass
+							? [CardClass[card.cardClass]]
+							: [];
+						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase())
 					// Remove hero skins
@@ -180,7 +182,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					const searchResult = allCards
 						.filter((card) => !(deckCards ?? []).includes(card.id))
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
-						.sort(sortByProperties((card: ReferenceCard) => [card.cost, card.playerClass, card.name]))
+						.sort(
+							sortByProperties((card: ReferenceCard) => [
+								this.sorterForCardClass(card.cardClass),
+								card.cost,
+								card.name,
+							]),
+						)
 						.map((card) => {
 							const result: DeckBuilderCard = {
 								cardId: card.id,
@@ -282,6 +290,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		this.currentDeckCards.next(deckCards);
 	}
 
+	private sorterForCardClass(cardClass: string): number {
+		const cardClassAsEnum: CardClass = CardClass[cardClass];
+		switch (cardClassAsEnum) {
+			case CardClass.NEUTRAL:
+				return 99;
+			default:
+				return cardClass.charCodeAt(0);
+		}
+	}
+
 	private doesCardMatchSearchFilters(card: ReferenceCard, searchFilters: SearchFilters): boolean {
 		if (!searchFilters) {
 			return true;
@@ -291,11 +309,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			return false;
 		}
 
-		if (!searchFilters?.name?.length) {
+		if (!searchFilters?.text?.length) {
 			return true;
 		}
 
-		return card.name.toLowerCase().includes(searchFilters.name);
+		return (
+			card.name.toLowerCase().includes(searchFilters.text) ||
+			card.text?.toLowerCase().includes(searchFilters.text) ||
+			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
+			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
+		);
 	}
 
 	private extractSearchFilters(searchString: string): SearchFilters {
@@ -322,7 +345,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			searchTerms.push(fragment);
 		}
 
-		result.name = searchTerms.join(' ');
+		result.text = searchTerms.join(' ');
 		console.debug('search filters', result, fragments);
 		return result;
 	}
@@ -336,5 +359,5 @@ interface DeckBuilderCard {
 
 interface SearchFilters {
 	class: string;
-	name: string;
+	text: string;
 }

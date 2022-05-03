@@ -130,3 +130,29 @@
 		}
 	}
 }
+
+.help-tooltip.duels-deckbuilder-cards-search-tooltip {
+	text-align: left;
+
+	::ng-deep .text {
+		max-width: 350px;
+		width: 350px;
+
+		& > div {
+			max-width: 100%;
+			width: 100%;
+		}
+
+		.tooltip-container {
+			display: flex;
+			flex-direction: column;
+			max-width: 100%;
+			width: 100%;
+			padding-left: 10px;
+
+			.shortcuts {
+				margin-top: 5px;
+			}
+		}
+	}
+}
