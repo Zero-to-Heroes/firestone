@@ -1,9 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -30,7 +30,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decks$: Observable<readonly DuelsDeckSummary[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -60,23 +64,16 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 							return {
 								...deck,
 								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, patch, 0),
-								deckName: deckNames[deck.initialDeckList] ?? deck.deckName,
+								deckName:
+									deckNames[deck.initialDeckList] ??
+									deck.deckName ??
+									this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
 								hidden: hiddenCodes?.includes(deck.initialDeckList),
 							};
 						})
-						.filter((deck) => !!deck.runs.length),
+						.filter((deck) => !!deck.runs?.length || deck.isPersonalDeck),
 				),
-				map((decks) => (!!decks.length ? decks : null)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting personal decks in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData((decks) => (!!decks.length ? decks : null)),
 			);
 	}
 

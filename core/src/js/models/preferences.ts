@@ -1,4 +1,5 @@
 import { allDuelsHeroes, Race } from '@firestone-hs/reference-data';
+import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { ArenaClassFilterType } from './arena/arena-class-filter.type';
@@ -410,6 +411,7 @@ export class Preferences {
 	readonly duelsOocTrackerPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocDeckSelectPosition: { left: number; top: number };
+	readonly duelsPersonalAdditionalDecks: readonly DuelsDeckSummary[] = [];
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

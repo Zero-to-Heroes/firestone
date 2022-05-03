@@ -13,7 +13,8 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const deck = currentState.duels.personalDeckStats.find((stat) => stat.initialDeckList === event.deckstring);
 		console.debug('deck', deck, currentState, event);
-		const expandedRunIds: readonly string[] = [deck.runs[0].id];
+		const firstRun = deck.runs?.length ? deck.runs[0] : null;
+		const expandedRunIds: readonly string[] = !!firstRun ? [firstRun.id] : [];
 		return [
 			null,
 			navigationState.update({
@@ -26,14 +27,8 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					treasureSearchString: null,
 					heroSearchString: null,
 				} as NavigationDuels),
-				text: this.getDeckName(currentState, event.deckstring),
+				text: deck.deckName ?? 'Unnamed deck',
 			} as NavigationState),
 		];
-	}
-
-	private getDeckName(currentState: MainWindowState, deckstring: string): string {
-		const deck = currentState?.duels?.personalDeckStats?.find((deck) => deck.initialDeckList === deckstring);
-
-		return deck?.deckName;
 	}
 }

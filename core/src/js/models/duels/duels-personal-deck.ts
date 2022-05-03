@@ -13,6 +13,7 @@ export interface DuelsDeckSummary {
 	readonly deckStatsForTypes: readonly DuelsDeckSummaryForType[];
 	readonly runs: readonly DuelsRun[];
 	readonly hidden: boolean;
+	readonly isPersonalDeck?: boolean;
 }
 
 export interface DuelsDeckSummaryForType {

@@ -4,6 +4,7 @@ import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/re
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
@@ -47,9 +48,19 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							class="copy-deckcode"
 							*ngIf="exportValue.valid"
 							[deckstring]="deckstring$ | async"
-							[copyText]="'Export deck code'"
+							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
 						>
 						</copy-deckstring>
+						<ng-container *ngIf="deckstring$ | async as deckstring">
+							<button
+								class="save-deckcode"
+								*ngIf="exportValue.valid"
+								[helpTooltip]="'app.duels.deckbuilder.save-deckcode-button-tooltip' | owTranslate"
+								(click)="saveDeck(deckstring)"
+							>
+								{{ saveDeckcodeButtonLabel }}
+							</button></ng-container
+						>
 						<div class="invalid-text" *ngIf="!exportValue.valid">{{ ongoingText$ | async }}</div>
 					</div>
 				</div>
@@ -89,6 +100,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
+
+	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
 	cardWidth: number;
 	cardHeight: number;
@@ -288,6 +301,20 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			1,
 		);
 		this.currentDeckCards.next(deckCards);
+	}
+
+	saveDeck(deckstring: string) {
+		this.store.send(new DuelsDeckbuilderSaveDeckEvent(deckstring));
+		this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.deck-saved-info');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 2000);
 	}
 
 	private sorterForCardClass(cardClass: string): number {

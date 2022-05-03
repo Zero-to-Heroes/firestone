@@ -254,7 +254,7 @@ export class DuelsStateBuilderService {
 		matchStats: GameStats,
 		currentDuelsMetaPatch?: PatchInfo,
 	): Promise<DuelsState> {
-		const duelMatches = matchStats?.stats?.filter((match) => match.isDuels()).filter((match) => match.runId);
+		const duelMatches = matchStats?.stats?.filter((match) => match.isDuels()).filter((match) => match.runId) ?? [];
 		const matchesByRun = groupByFunction((match: GameStat) => match.runId)(duelMatches);
 		const runIds = Object.keys(matchesByRun);
 		const runs: readonly DuelsRun[] = runIds
@@ -394,12 +394,12 @@ export class DuelsStateBuilderService {
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => run.initialDeckList,
 		)(runs.filter((run) => run.initialDeckList));
-		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
+		const decks: DuelsDeckSummary[] = Object.keys(groupedByDecklist)
 			.filter((deckstring) => deckstring)
 			.map((deckstring) => {
 				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 					(run: DuelsRun) => run.type,
-				)(groupedByDecklist[deckstring]);
+				)(groupedByDecklist[deckstring] ?? []);
 
 				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map((type) => {
 					return {
@@ -428,6 +428,12 @@ export class DuelsStateBuilderService {
 					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;
 			});
+		for (const personalDeck of prefs.duelsPersonalAdditionalDecks) {
+			if (decks.find((deck) => deck.initialDeckList === personalDeck.initialDeckList)) {
+				continue;
+			}
+			decks.push(personalDeck);
+		}
 		console.log('[duels-state-builder] personal decks', decks?.length);
 		return decks;
 	}

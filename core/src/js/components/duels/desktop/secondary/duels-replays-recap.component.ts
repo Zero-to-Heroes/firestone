@@ -44,6 +44,7 @@ export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent im
 					decks
 						.map((deck) => deck.runs)
 						.reduce((a, b) => a.concat(b), [])
+						.filter((run) => run)
 						.map((run) => run.steps)
 						.reduce((a, b) => a.concat(b), [])
 						.filter((step) => (step as GameStat).opponentCardId)

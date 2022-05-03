@@ -9,6 +9,7 @@ import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels
 import { DuelsDeckbuilderGoBackEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-go-back-event';
 import { DuelsDeckbuilderHeroPowerSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-power-selected-decks-event';
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
+import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
@@ -20,6 +21,7 @@ import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/
 import { DuelsDeckbuilderGoBackProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-go-back-parser';
 import { DuelsDeckbuilderHeroPowerSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-power-selected-parser';
 import { DuelsDeckbuilderHeroSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-selected-parser';
+import { DuelsDeckbuilderSaveDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-save-deck-processor';
 import { DuelsDeckbuilderSignatureTreasureSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
 import { DuelsExploreDecksParser } from '@services/mainwindow/store/processors/duels/duels-explore-decks-parser';
 import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-deck-building-lobby-screen-processor';
@@ -909,6 +911,9 @@ export class MainWindowStoreService {
 
 			DuelsDeckbuilderSignatureTreasureSelectedEvent.eventName(),
 			new DuelsDeckbuilderSignatureTreasureSelectedProcessor(this.cards),
+
+			DuelsDeckbuilderSaveDeckEvent.eventName(),
+			new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsBuilder),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

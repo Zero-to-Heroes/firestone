@@ -91,8 +91,8 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		// const heroCardName = this.allCards.getCard(value.heroCardId)?.name;
 		this.deckName = value.deckName;
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`;
-		this.totalRuns = value.global.totalRunsPlayed;
-		this.avgWins = value.global.averageWinsPerRun;
+		this.totalRuns = value.global?.totalRunsPlayed ?? 0;
+		this.avgWins = value.global?.averageWinsPerRun ?? 0;
 		this.deckstring = value.initialDeckList;
 		this.hidden = value.hidden;
 	}
