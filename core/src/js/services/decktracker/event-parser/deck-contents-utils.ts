@@ -154,7 +154,7 @@ const handleFrizzKindleroost = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.race === Race.DRAGON.toString() || refCard?.race === Race.ALL.toString(),
+		(card, refCard) => refCard?.race === Race[Race.DRAGON] || refCard?.race === Race[Race.ALL],
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,
