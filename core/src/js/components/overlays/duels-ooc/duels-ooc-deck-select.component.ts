@@ -11,6 +11,7 @@ import { DuelsDeck } from '@models/memory/memory-duels';
 import { SetCard } from '@models/set';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { isPassive } from '@services/duels/duels-utils';
+import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { topDeckApplyFilters } from '@services/ui-store/duels-ui-helper';
@@ -45,6 +46,16 @@ import { filter } from 'rxjs/operators';
 						[helpTooltip]="'duels.deck-select.explore-decks-tooltip' | owTranslate"
 					>
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
+					</div>
+				</div>
+				<div class="deck-container item-4 build-decks-widget">
+					<div
+						class="vignette"
+						[ngClass]="{ 'inactive': currentActiveDeck != null }"
+						(click)="buildDeck(value.tempDuelsDeck)"
+						[helpTooltip]="'duels.deck-select.build-decks-tooltip' | owTranslate"
+					>
+						<div class="icon" inlineSVG="assets/svg/loot.svg"></div>
 					</div>
 				</div>
 			</ng-container>
@@ -153,6 +164,12 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
 		console.debug('explore decks', referenceDeck, heroCardId, heroPowerCardId, signatureTreasureCardId);
 		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
+	}
+
+	buildDeck(referenceDeck: DuelsDeck) {
+		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
+		console.debug('build deck', referenceDeck, heroCardId, heroPowerCardId, signatureTreasureCardId);
+		this.store.send(new DuelsBuildDeckEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 
 	private extractPickInfos(

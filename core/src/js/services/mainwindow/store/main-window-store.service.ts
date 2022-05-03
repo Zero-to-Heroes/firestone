@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationService } from '@services/localization.service';
+import { DuelsBuildDeckEvent } from '@services/mainwindow/store/events/duels/duels-build-deck-event';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
@@ -15,6 +16,7 @@ import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
+import { DuelsBuildDeckParser } from '@services/mainwindow/store/processors/duels/duels-build-deck-parser';
 import { DuelsChoosingHeroParser } from '@services/mainwindow/store/processors/duels/duels-choosing-hero-parser';
 import { DuelsCurrentDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-current-deck-processor';
 import { DuelsCurrentOptionParser } from '@services/mainwindow/store/processors/duels/duels-current-option-parser';
@@ -899,6 +901,9 @@ export class MainWindowStoreService {
 
 			DuelsExploreDecksEvent.eventName(),
 			new DuelsExploreDecksParser(this.prefs),
+
+			DuelsBuildDeckEvent.eventName(),
+			new DuelsBuildDeckParser(this.cards),
 
 			DuelsDeckbuilderGoBackEvent.eventName(),
 			new DuelsDeckbuilderGoBackProcessor(),

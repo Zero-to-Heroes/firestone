@@ -28,24 +28,53 @@
 			top: 20vh;
 		}
 
+		&.item-4 {
+			left: 0vh;
+			top: 20vh;
+		}
+
 		&.inactive {
 			filter: grayscale(1);
 			opacity: 0.5;
 		}
 	}
 
-	.explore-decks-widget {
+	.explore-decks-widget,
+	.build-decks-widget {
 		width: 10vh;
 		height: 10vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		--icon-color: var(--color-2);
 		background-color: var(--color-6);
 		clip-path: circle(4vh at 50% 50%);
 		transition: all 0.2s linear;
 
+		.vignette {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.icon {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
 		&:hover {
 			--icon-color: var(--color-1);
 			background-color: var(--color-5);
 			transform: scale(1.1);
+		}
+	}
+
+	.build-decks-widget {
+		.icon {
+			width: 65%;
+			height: 65%;
 		}
 	}
 }
