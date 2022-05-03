@@ -317,6 +317,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			card.name.toLowerCase().includes(searchFilters.text) ||
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
+			card.race?.toLowerCase().includes(searchFilters.text) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
 		);
 	}
