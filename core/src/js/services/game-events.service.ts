@@ -1296,6 +1296,11 @@ export class GameEvents {
 					GameEvent.build(GameEvent.MERCENARIES_ABILITY_UNQUEUED, gameEvent),
 				);
 				break;
+			case 'SPECIAL_CARD_POWER_TRIGGERED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SPECIAL_CARD_POWER_TRIGGERED, gameEvent),
+				);
+				break;
 			default:
 				console.warn('unsupported game event', gameEvent);
 		}
