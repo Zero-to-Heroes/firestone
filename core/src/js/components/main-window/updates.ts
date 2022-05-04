@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.5.1',
+		version: '9.5.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -67,6 +67,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'feature',
+								text: `Add card oracle for Commander Sivara.`,
+							},
 							{
 								type: 'feature',
 								text: `Add card highlights for Witching Hour, Tess Greymane and Frizz Kindleroost.`,
