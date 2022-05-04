@@ -52,6 +52,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `First (very basic) iteration of the deckbuilder. For now it only has the bare minimum, and I'll need your feedback to decide what exactly to add to it :)`,
 							},
+							{
+								type: 'feature',
+								text: `Now displays the opponent's class when mousing over the opponent's name at the top of their tracker.`,
+							},
 						],
 					},
 				],
@@ -65,7 +69,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add card highlights for Witching Hour and Frizz Kindleroost.`,
+								text: `Add card highlights for Witching Hour, Tess Greymane and Frizz Kindleroost.`,
 							},
 							{
 								type: 'feature',
@@ -77,11 +81,48 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Add "bottom of deck" support for From the Depths, Sir Finley Sea Guide, Bootstrap Sunkeneer, Phasing Portal and Forgotten Depths`,
+								text: `Add "bottom of deck" support for From the Depths, Sir Finley Sea Guide, Bootstrap Sunkeneer, Phasing Portal and Forgotten Depths.`,
+							},
+							{
+								type: 'feature',
+								text: `Parrrley is now properly tracked when added to your opponent's deck.`,
+							},
+							{
+								type: 'feature',
+								text: `Lorekeeper Polkelt now resets the Bottom and Top sections of the tracker.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the player minion summoned by an enemy Dirty Rat would be treated as a played card (and mess up with some features like the Brilliant Macaw counter)`,
+								text: `Fix an issue where the player minion summoned by an enemy Dirty Rat would be treated as a played card (and mess up with some features like the Brilliant Macaw counter).`,
+							},
+							{
+								type: 'bug',
+								text: `Card highlight for Contraband Stash now doesn't include neutral cards.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where The Coin would not appear in the Hand section of your opponent's tracker.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the cost of Dragons in your deck would not be updated after playing Frizz Kindleroost.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where stats (including battle simulation, warband stats and winrate) were not updated when facing the ghost.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue about the interaction between Southsea Captain and "attack immediately" minions.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Aranna's health would jump back to 40 after her hero power activates.`,
 							},
 						],
 					},
