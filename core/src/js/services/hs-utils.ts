@@ -217,6 +217,7 @@ export const publicCardCreators = [
 	CardIds.CavernShinyfinder,
 	CardIds.ClawMachine,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
+	CardIds.CommanderSivara,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.CorsairCache,
 	CardIds.CountessAshmore,
