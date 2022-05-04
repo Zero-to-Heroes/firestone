@@ -247,7 +247,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(inOther, not(rogue));
+				return and(inOther, and(not(rogue), not(neutral)));
 			case CardIds.CrushclawEnforcer:
 				return and(inDeck, naga);
 			case CardIds.CutlassCourier:
