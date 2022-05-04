@@ -247,7 +247,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(inOther, and(not(rogue), not(neutral)));
+				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
 			case CardIds.CrushclawEnforcer:
 				return and(inDeck, naga);
 			case CardIds.CutlassCourier:
@@ -545,6 +545,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), notInInitialDeck);
 			case CardIds.SunstridersCrownTavernBrawl:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.TessGreymane1:
+			case CardIds.TessGreymaneCore:
+				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
 			case CardIds.TerrorscaleStalker:
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TotemOfTheDead2:
