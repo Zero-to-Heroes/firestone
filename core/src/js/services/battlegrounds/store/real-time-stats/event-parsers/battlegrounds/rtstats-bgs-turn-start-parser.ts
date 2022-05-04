@@ -22,7 +22,8 @@ export class RTStatBgsTurnStartParser implements EventParser {
 		const newCurrentTurn = Math.ceil(gameEvent.additionalData.turnNumber / 2);
 		const hpOverTurn = currentState.hpOverTurn;
 		for (const hero of Object.keys(hpOverTurn)) {
-			const existingStats = hpOverTurn[hero];
+			const normalizedHero = normalizeHeroCardId(hero, this.allCards);
+			const existingStats = hpOverTurn[normalizedHero];
 			// This is just for the first turn, when opponents are not revealed yet
 			// We shouldn't even get to that safeguard, since opponents aren't added
 			// to the history, but it's just in case the order of events get
@@ -31,7 +32,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 				continue;
 			}
 
-			const { currentHp, currentArmor } = this.getHpForHero(hero, heroesFromGame);
+			const { currentHp, currentArmor } = this.getHpForHero(normalizedHero, heroesFromGame);
 			const newStats: readonly HpTurnInfo[] = [
 				...existingStats.filter((stat) => stat.turn !== newCurrentTurn),
 				{
@@ -40,7 +41,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 					armor: currentArmor ?? 0,
 				},
 			];
-			hpOverTurn[hero] = newStats;
+			hpOverTurn[normalizedHero] = newStats;
 		}
 
 		return currentState.update({

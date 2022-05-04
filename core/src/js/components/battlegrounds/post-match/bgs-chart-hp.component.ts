@@ -380,7 +380,7 @@ export class BgsChartHpComponent {
 			return;
 		}
 
-		const playerOrder: readonly string[] = this.buildPlayerOrder();
+		const playerOrder: readonly string[] = this.buildPlayerOrder(this._stats.hpOverTurn);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
@@ -436,20 +436,15 @@ export class BgsChartHpComponent {
 		}
 	}
 
-	private buildPlayerOrder(): readonly string[] {
-		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
+	private buildPlayerOrder(hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] }): readonly string[] {
+		const turnAtWhichEachPlayerDies = Object.keys(hpOverTurn)
 			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
 			.map((playerCardId) => {
-				const info = this._stats.hpOverTurn[playerCardId];
+				const info = hpOverTurn[playerCardId];
 				return {
 					playerCardId: playerCardId,
 					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
 					lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
-					// Not populated???
-					// lastKnownPosition:
-					// 	this._stats.leaderboardPositionOverTurn[playerCardId][
-					// 		this._stats.leaderboardPositionOverTurn[playerCardId].length - 1
-					// 	]?.value ?? 99,
 				};
 			});
 		let playerOrder: string[] = turnAtWhichEachPlayerDies
