@@ -324,9 +324,10 @@ export class GameStateService {
 			};
 			console.log('[game-state] secret will trigger in reaction to', this.secretWillTrigger);
 		} else if (gameEvent.type === GameEvent.MINIONS_WILL_DIE) {
+			const minionsWillDieEvent = gameEvent as MinionsDiedEvent;
 			this.minionsWillDie = [
 				...this.minionsWillDie,
-				...gameEvent.additionalData.deadMinions?.map((minion) => ({
+				...minionsWillDieEvent.additionalData.deadMinions?.map((minion) => ({
 					entityId: minion.EntityId,
 					cardId: minion.CardId,
 				})),
