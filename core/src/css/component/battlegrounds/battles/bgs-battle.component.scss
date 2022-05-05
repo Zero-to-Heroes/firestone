@@ -44,6 +44,10 @@
 			::ng-deep {
 				.battle-simulation {
 					align-items: center;
+					.warning {
+						position: relative;
+						left: -15px;
+					}
 				}
 				.probas,
 				.damage-container {
