@@ -194,7 +194,8 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		console.debug('setting faceOff', value);
-		this._faceOff = value;
+		// Make sure we have an instance of the class, and not just a data structure
+		this._faceOff = BgsFaceOffWithSimulation.create(value);
 		if (!this._faceOff) {
 			return;
 		}
@@ -300,7 +301,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.sub$$.unsubscribe();
+		this.sub$$?.unsubscribe();
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {
@@ -460,6 +461,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		const existingSide =
 			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
 		modalRef.instance.currentMinion = existingSide.board[event.index];
+		console.debug('onMinionUpdateRequested', this._faceOff);
 		modalRef.instance.entityId = this._faceOff.getNextEntityId();
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
