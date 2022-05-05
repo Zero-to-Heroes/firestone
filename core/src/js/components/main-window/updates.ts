@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.5.3',
+		version: '9.5.5',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -58,6 +58,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where Reckoning would be greyed out if the attacking minion died in the exchange.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -70,6 +79,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add card oracle for Commander Sivara.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a counter for Grey Sage Parrot.`,
 							},
 							{
 								type: 'feature',
@@ -126,7 +139,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a sim issue where the alternate skins of minions (like Amalgam / Fish of N'Zoth) would not work properly.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix an issue where Aranna's health would jump back to 40 after her hero power activates.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where updating a minion in the simulator coming from the Replays tab would freeze the simulator.`,
 							},
 						],
 					},
