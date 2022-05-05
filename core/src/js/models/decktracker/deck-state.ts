@@ -245,6 +245,10 @@ export class DeckState {
 		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
 	}
 
+	public hasGreySageParrot() {
+		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
+	}
+
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {
 		if (!this.cardsPlayedThisTurn?.length) {
 			return null;

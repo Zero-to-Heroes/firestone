@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BgsMajordomoCounterDefinition } from '@components/game-counters/definitions/bgs-majordomo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
 import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
+import { GreySageParrotCounterDefinition } from '@components/game-counters/definitions/grey-sage-parrot-counter';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -127,6 +128,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'greySageParrot':
+				return GreySageParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'multicaster':
 				return MulticasterCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'coralKeeper':

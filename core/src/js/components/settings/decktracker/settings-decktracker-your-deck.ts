@@ -158,6 +158,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerGreySageParrotCounter"
+					[label]="'settings.decktracker.your-deck.counters.grey-sage-parrot-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerMulticasterCounter"
 					[label]="'settings.decktracker.your-deck.counters.multicaster-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.multicaster-tooltip' | owTranslate"
