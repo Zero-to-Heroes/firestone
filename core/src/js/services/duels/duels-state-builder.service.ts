@@ -2,6 +2,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
@@ -34,7 +35,7 @@ import {
 } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
-import { DuelsState } from '../../models/duels/duels-state';
+import { DuelsBucketsData, DuelsState } from '../../models/duels/duels-state';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -59,7 +60,8 @@ const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
-const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
+const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=2';
+const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels-bucket-cards.json';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -168,6 +170,21 @@ export class DuelsStateBuilderService {
 		return results?.results;
 	}
 
+	public async loadBuckets(): Promise<readonly DuelsBucketsData[]> {
+		const result: readonly DuelsBucketsData[] = await this.api.callGetApi(DUELS_BUCKETS_URL);
+		console.log('[duels-state-builder] loaded buckets data', result?.length);
+		console.debug('[duels-state-builder] loaded buckets data', result);
+		return result
+			.map(
+				(bucket) =>
+					({
+						...bucket,
+						bucketClass: CardClass[(bucket.bucketClass as any) as string],
+					} as DuelsBucketsData),
+			)
+			.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl);
+	}
+
 	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
 		const user = await this.ow.getCurrentUser();
 		const input: Input = {
@@ -229,6 +246,7 @@ export class DuelsStateBuilderService {
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
 		duelsConfig: DuelsConfig,
 		leaderboard: DuelsLeaderboard,
+		bucketsData: readonly DuelsBucketsData[],
 		collectionState: BinderState,
 		adventuresInfo: AdventuresInfo,
 	): DuelsState {
@@ -244,6 +262,7 @@ export class DuelsStateBuilderService {
 			topDecks: topDecks,
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,
+			bucketsData: bucketsData,
 			leaderboard: leaderboard,
 			adventuresInfo: adventuresInfo,
 		} as DuelsState);

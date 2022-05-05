@@ -2,10 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormControl } from '@angular/forms';
 import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
+import { DuelsDeckbuilderTabType } from '@models/duels/duels-deckbuilder';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { FeatureFlags } from '@services/feature-flags';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
-import { sortByProperties } from '@services/utils';
+import { DuelsDeckbuilderSelectTabEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-select-tab-event';
+import { groupByFunction, sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -19,7 +22,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder-cards.component.scss`],
 	template: `
 		<div class="duels-deckbuilder-cards">
-			<ng-container *ngIf="{ activeCards: activeCards$ | async } as value">
+			<ng-container *ngIf="{ activeCards: activeCards$ | async, buckets: possibleBuckets$ | async } as value">
 				<div class="decklist-container">
 					<div class="card-search">
 						<label class="search-label">
@@ -65,27 +68,71 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					</div>
 				</div>
 				<div class="results-container">
-					<div class="menu"></div>
-					<div class="results">
-						<virtual-scroller #scroll [items]="value.activeCards" bufferAmount="5" scrollable>
+					<nav class="tab-select" *ngIf="enableDuelsBuckets">
+						<button
+							class="tab tab-select-cards"
+							[ngClass]="{ 'active': (currentTab$ | async) === 'cards' }"
+							(click)="selectTab('cards')"
+						>
+							<span>Cards</span>
+						</button>
+						<button
+							class="tab tab-select-buckets"
+							[ngClass]="{ 'active': (currentTab$ | async) === 'buckets' }"
+							(click)="selectTab('buckets')"
+						>
+							<span>Buckets</span>
 							<div
-								*ngFor="let card of scroll.viewPortItems; trackBy: trackByCardId"
-								class="card-container"
-								[style.width.px]="cardWidth"
-								[style.height.px]="cardHeight"
+								class="info"
+								[helpTooltip]="
+									'[EXPERIMENTAL] (TODO description) Shows the synergy card buckets you can be offered based on the cards in your deck. The assumption is that the synergy buckets being offered are based on your current deck cards in the following way: 1) build all the list of buckets that contain at least one card from your deck, and 2) pick one of these to be offered.'
+								"
 							>
-								<div class="card">
-									<img
-										*ngIf="card?.imagePath"
-										[src]="card.imagePath"
-										[cardTooltip]="card.cardId"
-										[cardTooltipPosition]="'right'"
-										class="real-card"
-										(click)="addCard(card)"
-									/>
-								</div>
+								<svg>
+									<use xlink:href="assets/svg/sprite.svg#info" />
+								</svg>
 							</div>
-						</virtual-scroller>
+						</button>
+					</nav>
+					<div class="results">
+						<ng-container [ngSwitch]="currentTab$ | async">
+							<ng-container *ngSwitchCase="'cards'">
+								<virtual-scroller #scroll [items]="value.activeCards" bufferAmount="5" scrollable>
+									<div
+										*ngFor="let card of scroll.viewPortItems; trackBy: trackByCardId"
+										class="card-container"
+										[style.width.px]="cardWidth"
+										[style.height.px]="cardHeight"
+									>
+										<div class="card">
+											<img
+												*ngIf="card?.imagePath"
+												[src]="card.imagePath"
+												[cardTooltip]="card.cardId"
+												[cardTooltipPosition]="'right'"
+												class="real-card"
+												(click)="addCard(card)"
+											/>
+										</div>
+									</div>
+								</virtual-scroller>
+							</ng-container>
+							<ng-container *ngSwitchCase="'buckets'">
+								<div class="buckets-container">
+									<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
+										<div class="bucket-name">{{ bucket.bucketName }}</div>
+										<img
+											[src]="bucket.bucketClassImage"
+											class="bucket-class"
+											[helpTooltip]="bucket.bucketClassName"
+										/>
+										<div class="bucket-cards">
+											<deck-list [cards]="bucket.bucketCardIds"></deck-list>
+										</div>
+									</div>
+								</div>
+							</ng-container>
+						</ng-container>
 					</div>
 				</div>
 			</ng-container>
@@ -94,8 +141,12 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	enableDuelsBuckets = FeatureFlags.ENABLE_DUELS_DECK_BUILDER_BUCKETS;
+
+	currentTab$: Observable<DuelsDeckbuilderTabType>;
 	currentDeckCards$: Observable<readonly string[]>;
 	activeCards$: Observable<readonly DeckBuilderCard[]>;
+	possibleBuckets$: Observable<readonly BucketData[]>;
 	highRes$: Observable<boolean>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
@@ -140,12 +191,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 			from([this.allCards.getCards()]),
 		).pipe(
-			this.mapData(([[config, currentClasses], cards]) =>
-				cards
+			this.mapData(([[config, currentClasses], cards]) => {
+				const cardsWithDuplicates: readonly ReferenceCard[] = cards
 					.filter((card) => card.collectible)
-					.filter(
-						(card) => !config.includedSets?.length || config.includedSets.includes(card.set?.toLowerCase()),
-					)
+					.filter((card) => config.includedSets?.includes(card.set?.toLowerCase()))
 					.filter(
 						(card) =>
 							!config.bannedCardsFromDeckbuilding?.length ||
@@ -163,11 +212,25 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
 					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase())
-					// Remove hero skins
-					// .filter((card) => card.set !== 'Hero_skins')
 					// Filter "duplicates" between Core / Legacy / Vanilla
-					.filter((card) => !card?.deckDuplicateDbfId),
-			),
+					.filter(
+						(card) =>
+							!card?.deckDuplicateDbfId ||
+							// If the card is a duplicate of another card NOT included in the config, we keep it
+							!config.includedSets?.includes(
+								this.allCards.getCardFromDbfId(card.deckDuplicateDbfId).set?.toLowerCase(),
+							),
+					);
+				const groupedByName = groupByFunction((card: ReferenceCard) => card.name)(cardsWithDuplicates);
+				const result = Object.values(groupedByName).map((cards) => {
+					if (cards.length === 1) {
+						return cards[0];
+					}
+					console.debug('same card names', cards);
+					return cards[0];
+				});
+				return result;
+			}),
 		);
 		const collection$ = this.store
 			.listen$(([main, nav]) => main.binder.collection)
@@ -177,6 +240,9 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
+		this.currentTab$ = this.store
+			.listen$(([main, nav]) => main.duels.deckbuilder.currentTab)
+			.pipe(this.mapData(([tab]) => tab));
 		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
 			this.mapData((cards) => {
 				return cards;
@@ -217,6 +283,47 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				null,
 				50,
 			),
+		);
+		this.possibleBuckets$ = combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.duels.bucketsData,
+				([main, nav]) => main.duels.deckbuilder.currentClasses,
+			),
+			this.currentDeckCards$,
+		).pipe(
+			this.mapData(([[buckets, currentClasses], deckCardIds]) => {
+				const candidateBuckets = buckets
+					.filter(
+						(bucket) =>
+							bucket.bucketClass === CardClass.NEUTRAL ||
+							(currentClasses ?? []).includes(bucket.bucketClass),
+					)
+					.filter((bucket) => {
+						return bucket.cardIds.some((bucketCardId) => deckCardIds.includes(bucketCardId));
+					});
+				return candidateBuckets.map((bucket) => {
+					const bucketData: BucketData = {
+						bucketId: bucket.bucketId,
+						bucketClass: bucket.bucketClass,
+						bucketName: this.allCards.getCard(bucket.bucketId)?.name,
+						bucketClassName: this.i18n.translateString(
+							`global.class.${CardClass[bucket.bucketClass].toLowerCase()}`,
+						),
+						bucketClassImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[
+							bucket.bucketClass
+						].toLowerCase()}.png`,
+						bucketCardIds: bucket.cardIds,
+						bucketCards: bucket.cardIds.map((cardId) => {
+							const bucketCard: BucketCard = {
+								cardId: cardId,
+								cardName: this.allCards.getCard(cardId)?.name,
+							};
+							return bucketCard;
+						}),
+					};
+					return bucketData;
+				});
+			}),
 		);
 		this.deckValid$ = this.currentDeckCards$.pipe(
 			this.mapData((cards) => {
@@ -317,6 +424,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}, 2000);
 	}
 
+	selectTab(tab: DuelsDeckbuilderTabType) {
+		this.store.send(new DuelsDeckbuilderSelectTabEvent(tab));
+	}
+
 	private sorterForCardClass(cardClass: string): number {
 		const cardClassAsEnum: CardClass = CardClass[cardClass];
 		switch (cardClassAsEnum) {
@@ -388,4 +499,19 @@ interface DeckBuilderCard {
 interface SearchFilters {
 	class: string;
 	text: string;
+}
+
+interface BucketData {
+	readonly bucketId: string;
+	readonly bucketName: string;
+	readonly bucketClass: CardClass;
+	readonly bucketClassName: string;
+	readonly bucketClassImage: string;
+	readonly bucketCards: readonly BucketCard[];
+	readonly bucketCardIds: readonly string[];
+}
+
+interface BucketCard {
+	readonly cardId: string;
+	readonly cardName: string;
 }

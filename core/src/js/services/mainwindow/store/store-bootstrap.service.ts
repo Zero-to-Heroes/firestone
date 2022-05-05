@@ -117,6 +117,7 @@ export class StoreBootstrapService {
 				duelsGlobalStatsDecks,
 				duelsConfig,
 				duelsLeaderboard,
+				duelsBucketsData,
 				adventuresInfo,
 			],
 			[arenaRewards],
@@ -143,6 +144,7 @@ export class StoreBootstrapService {
 				this.duels.loadTopDecks(),
 				this.duels.loadConfig(),
 				this.duels.loadLeaderboard(),
+				this.duels.loadBuckets(),
 				this.duelsMemoryCache.getAdventuresInfo(),
 			]),
 			Promise.all([this.arena.loadRewards()]),
@@ -217,6 +219,7 @@ export class StoreBootstrapService {
 			duelsRewardsInfo,
 			duelsConfig,
 			duelsLeaderboard,
+			duelsBucketsData,
 			collectionState,
 			adventuresInfo,
 		);

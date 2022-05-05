@@ -1,6 +1,6 @@
 import { DuelsStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
-import { DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, DungeonCrawlOptionType, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsConfig } from '@models/duels/duels-config';
@@ -25,6 +25,7 @@ export class DuelsState {
 	readonly globalStats: DuelsStat;
 	readonly topDecks: readonly DuelsGroupedDecks[] = [];
 	readonly personalDeckStats: readonly DuelsDeckSummary[] = [];
+	readonly bucketsData: readonly DuelsBucketsData[] = [];
 	// readonly playerStats: DuelsPlayerStats;
 	readonly leaderboard: DuelsLeaderboard;
 	// Used to store additional deck data loaded during the course of the app's use,
@@ -62,4 +63,11 @@ export class DuelsState {
 
 export interface TreasureSelection {
 	readonly treasures: readonly ReferenceCard[];
+}
+
+// Tmp
+export interface DuelsBucketsData {
+	readonly bucketId: string;
+	readonly cardIds: readonly string[];
+	readonly bucketClass: CardClass;
 }

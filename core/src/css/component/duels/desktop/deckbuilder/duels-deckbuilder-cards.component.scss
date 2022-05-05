@@ -9,10 +9,40 @@
 	min-height: 0;
 	flex-grow: 1;
 
+	.tab-select {
+		display: flex;
+		color: var(--color-2);
+		font-size: 14px;
+		justify-content: flex-end;
+		padding-right: 20px;
+		--icon-color: currentColor;
+
+		.tab {
+			display: flex;
+			align-items: center;
+			margin-left: 20px;
+
+			.info {
+				width: 17px;
+				height: 17px;
+				margin-left: 5px;
+			}
+
+			&.active {
+				color: var(--color-1);
+			}
+
+			&:hover {
+				color: var(--color-1);
+			}
+		}
+	}
+
 	.decklist-container {
 		width: 200px;
 		display: flex;
 		flex-direction: column;
+		flex-shrink: 0;
 
 		.deck-list {
 			margin-top: 15px;
@@ -101,6 +131,46 @@
 
 		.results {
 			flex-grow: 1;
+		}
+
+		.buckets-container {
+			display: flex;
+			flex-wrap: wrap;
+			margin-top: 25px;
+			margin-left: 20px;
+			margin-right: 20px;
+			min-height: 1px;
+			overflow: scroll;
+
+			.bucket {
+				position: relative;
+				background: rgba(255, 255, 255, 0.08);
+				padding: 10px;
+				width: 240px;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				flex-shrink: 0;
+				margin-right: 10px;
+				margin-bottom: 10px;
+
+				.bucket-class {
+					position: absolute;
+					width: 30px;
+					height: 30px;
+					top: 5px;
+					left: 5px;
+				}
+
+				.bucket-cards {
+					margin-top: 10px;
+
+					deck-list {
+						width: 90%;
+						max-height: 210px;
+					}
+				}
+			}
 		}
 
 		.card-container {
