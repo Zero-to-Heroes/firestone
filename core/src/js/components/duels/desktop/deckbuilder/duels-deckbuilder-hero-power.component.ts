@@ -50,7 +50,6 @@ export class DuelsDeckbuilderHeroPowerComponent extends AbstractSubscriptionComp
 							name: this.allCards.getCard(heroPower).name,
 						};
 					});
-					console.debug('hero power options', result);
 					return result;
 				}),
 			);
@@ -61,7 +60,6 @@ export class DuelsDeckbuilderHeroPowerComponent extends AbstractSubscriptionComp
 	}
 
 	onHeroPowerCardClicked(heroPower: HeroPowerOption) {
-		console.debug('clicked on', heroPower);
 		this.store.send(new DuelsDeckbuilderHeroPowerSelectedEvent(heroPower.cardId));
 	}
 }

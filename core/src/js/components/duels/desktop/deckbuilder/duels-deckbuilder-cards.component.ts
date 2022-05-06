@@ -72,14 +72,10 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					<preference-toggle
 						class="show-buckets-link"
 						field="duelsDeckbuilderShowBuckets"
-						[label]="'Show buckets'"
-						[tooltip]="
-							'[EXPERIMENTAL] (TODO description) Shows the synergy card buckets you can be offered based on the cards in your deck. The assumption is that the synergy buckets being offered are based on your current deck cards in the following way: 1) build all the list of buckets that contain at least one card from your deck, and 2) pick one of these to be offered.'
-						"
+						[label]="'app.duels.deckbuilder.show-buckets-button-label' | owTranslate"
+						[tooltip]="'app.duels.deckbuilder.show-buckets-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<div class="results">
-						<!-- <ng-container [ngSwitch]="currentTab$ | async">
-							<ng-container *ngSwitchCase="'cards'"> -->
 						<virtual-scroller
 							class="cards-container"
 							#scroll
@@ -121,35 +117,13 @@ export const DEFAULT_CARD_HEIGHT = 221;
 									inlineSVG="assets/svg/created_by.svg"
 									[ngClass]="{ 'highlighted': isHighlighted(bucket.bucketId) }"
 									(click)="toggleFilter(bucket.bucketId)"
-									[helpTooltip]="
-										'Filter by bucket. The cards list will only include cards that belong to at least one of the selected buckets'
-									"
+									[helpTooltip]="'app.duels.deckbuilder.bucket-filter-button-tooltip' | owTranslate"
 								></button>
 								<div class="bucket-cards">
 									<deck-list [cards]="bucket.bucketCardIds"></deck-list>
 								</div>
 							</div>
 						</div>
-						<!-- </ng-container>
-							<ng-container *ngSwitchCase="'buckets'">
-								<div class="buckets-container">
-									<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
-										<div class="bucket-name">{{ bucket.bucketName }}</div>
-										<div class="class-images">
-											<img
-												*ngFor="let bucketClass of bucket.bucketClasses"
-												[src]="bucketClass.image"
-												class="bucket-class"
-												[helpTooltip]="bucketClass.name"
-											/>
-										</div>
-										<div class="bucket-cards">
-											<deck-list [cards]="bucket.bucketCardIds"></deck-list>
-										</div>
-									</div>
-								</div>
-							</ng-container>
-						</ng-container> -->
 					</div>
 				</div>
 			</ng-container>
@@ -396,11 +370,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 
 		this.searchShortcutsTooltip = `
 			<div class="tooltip-container">
-				You can use the following shortcuts to search:
+				${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.text')}
 				<ul class="shortcuts">
-					<li>Enter: add the first result to your list</li>
-					<li>Shift + Enter: add the first result to your list and clear the search box</li>
-					<li>"class:<class>": search only cards from that class (eg "class:mage" or "class:neutral")</li>
+					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-1')}</li>
+					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-2')}</li>
+					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-3')}</li>
 				</ul>
 			</div>
 		`;
@@ -464,10 +438,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			}
 		}, 2000);
 	}
-
-	// selectTab(tab: DuelsDeckbuilderTabType) {
-	// 	this.store.send(new DuelsDeckbuilderSelectTabEvent(tab));
-	// }
 
 	isHighlighted(bucketId: string): boolean {
 		return this.toggledBucketFilters.value.includes(bucketId);

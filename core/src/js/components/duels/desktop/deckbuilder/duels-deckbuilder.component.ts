@@ -11,7 +11,6 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	template: `
 		<div class="duels-deckbuilder">
 			<!-- Area to the right should recap the mana curve and maybe other stats -->
-			<!-- Need a way to see the buckets that will be offered with the current cards selection -->
 			<!-- Need a way to import a deck code -->
 			<!-- Need a way to use only your own collection -->
 			<!-- Abillity to click on a card in the tracker and automatically filter the cards that synergize with it? -->

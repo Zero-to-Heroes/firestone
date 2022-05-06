@@ -61,7 +61,7 @@ const DUELS_GLOBAL_STATS_DECKS =
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=2';
-const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucket-cards.json';
+const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucket-cards.json?v=2';
 
 @Injectable()
 export class DuelsStateBuilderService {

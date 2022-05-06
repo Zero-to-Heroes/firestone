@@ -19,7 +19,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					class="recap-item recap-hero"
 					*ngIf="currentHero$ | async as currentHero"
 					(click)="goBack('hero')"
-					[helpTooltip]="heroTooltip('hero', currentHero)"
+					[helpTooltip]="heroTooltip('hero', currentHero.name)"
 				>
 					<img [src]="currentHero.image" [alt]="currentHero.name" />
 				</div>
@@ -27,7 +27,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					class="recap-item recap-hero-power"
 					*ngIf="currentHeroPower$ | async as currentHeroPower"
 					(click)="goBack('hero-power')"
-					[helpTooltip]="heroTooltip('hero-power', currentHeroPower)"
+					[helpTooltip]="heroTooltip('hero-power', currentHeroPower.name)"
 				>
 					<img [src]="currentHeroPower.image" [alt]="currentHeroPower.name" />
 				</div>
@@ -35,7 +35,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					class="recap-item recap-signature-treasure"
 					*ngIf="currentSignatureTreasure$ | async as currentSignatureTreasure"
 					(click)="goBack('signature-treasure')"
-					[helpTooltip]="heroTooltip('signature-treasure', currentSignatureTreasure)"
+					[helpTooltip]="heroTooltip('signature-treasure', currentSignatureTreasure.name)"
 				>
 					<img [src]="currentSignatureTreasure.image" [alt]="currentSignatureTreasure.name" />
 				</div>
@@ -119,8 +119,7 @@ export class DuelsDeckbuilderBreadcrumbsComponent extends AbstractSubscriptionCo
 		this.store.send(new DuelsDeckbuilderGoBackEvent(step));
 	}
 
-	heroTooltip(step: 'hero' | 'hero-power' | 'signature-treasure', cardId: string) {
-		const cardName = this.allCards.getCard(cardId).name;
+	heroTooltip(step: 'hero' | 'hero-power' | 'signature-treasure', cardName: string) {
 		switch (step) {
 			case 'hero':
 				return this.i18n.translateString('app.duels.deckbuilder.go-back-hero', { selectedCardName: cardName });

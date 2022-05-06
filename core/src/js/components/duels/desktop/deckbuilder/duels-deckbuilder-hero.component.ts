@@ -74,7 +74,6 @@ export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionComponent
 	}
 
 	onHeroCardClicked(hero: HeroOption) {
-		console.debug('clicked on', hero);
 		this.store.send(new DuelsDeckbuilderHeroSelectedEvent(hero.cardId));
 	}
 

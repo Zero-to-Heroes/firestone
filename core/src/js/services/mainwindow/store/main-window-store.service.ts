@@ -925,9 +925,6 @@ export class MainWindowStoreService {
 			DuelsDeckbuilderSaveDeckEvent.eventName(),
 			new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsBuilder),
 
-			// DuelsDeckbuilderSelectTabEvent.eventName(),
-			// new DuelsDeckbuilderSelectTabProcessor(),
-
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),
 			new ArenaTimeFilterSelectedProcessor(this.prefs),

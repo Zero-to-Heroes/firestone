@@ -70,7 +70,6 @@ export class DuelsDeckbuilderSignatureTreasureComponent
 	}
 
 	onSignatureTreasureCardClicked(signatureTreasure: SignatureTreasureOption) {
-		console.debug('clicked on', signatureTreasure);
 		this.store.send(new DuelsDeckbuilderSignatureTreasureSelectedEvent(signatureTreasure.cardId));
 	}
 }
