@@ -2,7 +2,7 @@ import { CardClass } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@services/utils';
 
 export class DuelsDeckbuilder {
-	readonly currentTab: DuelsDeckbuilderTabType = 'cards';
+	// readonly currentTab: DuelsDeckbuilderTabType = 'cards';
 	readonly currentHeroCardId: string;
 	readonly currentHeroPowerCardId: string;
 	readonly currentSignatureTreasureCardId: string;

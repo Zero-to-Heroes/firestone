@@ -14,7 +14,7 @@ export class DuelsDeckbuilderSelectTabProcessor implements Processor {
 			currentState.update({
 				duels: currentState.duels.update({
 					deckbuilder: currentState.duels.deckbuilder.update({
-						currentTab: event.tab,
+						// currentTab: event.tab,
 					}),
 				}),
 			}),

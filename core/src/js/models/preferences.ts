@@ -416,6 +416,7 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocDeckSelectPosition: { left: number; top: number };
 	readonly duelsPersonalAdditionalDecks: readonly DuelsDeckSummary[] = [];
+	readonly duelsDeckbuilderShowBuckets: boolean;
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

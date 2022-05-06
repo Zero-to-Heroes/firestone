@@ -39,16 +39,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ 'enabled': value }">
 				<p class="settings-p">
 					{{ label }}
-					<i class="info" *ngIf="tooltip">
+					<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip" [helpTooltipPosition]="tooltipPosition">
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>
-						<div class="zth-tooltip right">
-							<p>{{ tooltip }}</p>
-							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-								<polygon points="0,0 8,-9 16,0" />
-							</svg>
-						</div>
 					</i>
 				</p>
 				<b></b>
@@ -67,6 +61,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
+	@Input() tooltipPosition = 'right';
 	@Input() messageWhenToggleValue: string;
 	@Input() valueToDisplayMessageOn: string | boolean | number;
 	@Input() toggleFunction: (newValue: boolean) => void;

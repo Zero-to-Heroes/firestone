@@ -69,5 +69,5 @@ export interface TreasureSelection {
 export interface DuelsBucketsData {
 	readonly bucketId: string;
 	readonly cardIds: readonly string[];
-	readonly bucketClass: CardClass;
+	readonly bucketClasses: readonly CardClass[];
 }
