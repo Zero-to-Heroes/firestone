@@ -60,7 +60,7 @@ const DUELS_GLOBAL_STATS_DECKS =
 	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
-const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=2';
+const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=3';
 const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucket-cards.json?v=2';
 
 @Injectable()

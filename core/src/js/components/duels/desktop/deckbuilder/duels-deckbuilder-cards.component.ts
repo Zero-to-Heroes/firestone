@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormControl } from '@angular/forms';
 import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
+import { DuelsBucketsData } from '@models/duels/duels-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { FeatureFlags } from '@services/feature-flags';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -244,7 +245,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			)
 			.pipe(
 				this.mapData(([buckets, currentClasses]) => {
-					const candidateBuckets = buckets.filter(
+					const candidateBuckets: readonly DuelsBucketsData[] = buckets.filter(
 						(bucket) =>
 							bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
 							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
@@ -294,10 +295,12 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			searchString$,
 			this.currentDeckCards$,
 			cardIdsForMatchingBucketToggles$,
+			allBuckets$,
 		).pipe(
 			this.mapData(
-				([allCards, collection, searchString, deckCards, cardIdsForMatchingBucketToggles]) => {
+				([allCards, collection, searchString, deckCards, cardIdsForMatchingBucketToggles, allBuckets]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
+					const allCardIdsInBuckets = allBuckets.flatMap((bucket) => bucket.bucketCardIds);
 					const searchResult = allCards
 						.filter((card) => !(deckCards ?? []).includes(card.id))
 						.filter(
@@ -305,7 +308,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								!cardIdsForMatchingBucketToggles?.length ||
 								cardIdsForMatchingBucketToggles.includes(card.id),
 						)
-						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
+						.filter((card) => this.doesCardMatchSearchFilters(card, allCardIdsInBuckets, searchFilters))
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
 								this.sorterForCardClass(card.cardClass),
@@ -375,6 +378,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-1')}</li>
 					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-2')}</li>
 					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-3')}</li>
+					<li>${this.i18n.translateString('app.duels.deckbuilder.search-tooltip.info-4')}</li>
 				</ul>
 			</div>
 		`;
@@ -465,7 +469,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}
 	}
 
-	private doesCardMatchSearchFilters(card: ReferenceCard, searchFilters: SearchFilters): boolean {
+	private doesCardMatchSearchFilters(
+		card: ReferenceCard,
+		allCardIdsInBuckets: readonly string[],
+		searchFilters: SearchFilters,
+	): boolean {
 		if (!searchFilters) {
 			return true;
 		}
@@ -474,11 +482,12 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			return false;
 		}
 
-		if (!searchFilters?.text?.length) {
-			return true;
+		if (searchFilters.bucket === 'none') {
+			return !allCardIdsInBuckets.includes(card.id);
 		}
 
 		return (
+			!searchFilters?.text?.length ||
 			card.name.toLowerCase().includes(searchFilters.text) ||
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
@@ -492,28 +501,57 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			return null;
 		}
 
-		const result: SearchFilters = {} as SearchFilters;
+		let result: SearchFilters = {} as SearchFilters;
 
 		const fragments = searchString.split(' ');
 		const searchTerms: string[] = [];
 
+		const fragmentProcessors = [
+			{
+				name: 'class',
+				updater: (result: SearchFilters, fragment) => ({ ...result, class: fragment.toLowerCase() }),
+			},
+			{
+				name: 'bucket',
+				updater: (result: SearchFilters, fragment) => ({ ...result, bucket: fragment.toLowerCase() }),
+			},
+		];
+
 		for (const fragment of fragments) {
-			console.debug('fragment', fragment);
-			const classSearch = fragment.match(/class:([^\s]+)/);
-			console.debug('classSearch', classSearch, fragment);
-			const classArg = !!classSearch ? classSearch[1] : null;
-			console.debug('classArg', classArg, classSearch);
-			if (classArg?.length) {
-				result.class = classArg.toLowerCase();
-				continue;
+			let updated = false;
+			for (const processor of fragmentProcessors) {
+				const [newResult, newUpdated] = this.handleSearchFragment(
+					result,
+					fragment,
+					processor.name,
+					processor.updater,
+				);
+				result = newResult;
+				updated = updated || newUpdated;
 			}
 
-			searchTerms.push(fragment);
+			if (!updated) {
+				searchTerms.push(fragment);
+			}
 		}
 
-		result.text = searchTerms.join(' ');
-		console.debug('search filters', result, fragments);
+		result = { ...result, text: searchTerms.join(' ') };
 		return result;
+	}
+
+	private handleSearchFragment(
+		currentResult: SearchFilters,
+		fragment: string,
+		fragmentName: string,
+		updater: (currentResult: SearchFilters, fragment: any) => SearchFilters,
+	): [SearchFilters, boolean] {
+		const regex = new RegExp(`${fragmentName}:([^\s]+)`);
+		const search = fragment.match(regex);
+		const arg = !!search ? search[1] : null;
+		if (arg?.length) {
+			return [updater(currentResult, arg), true];
+		}
+		return [currentResult, false];
 	}
 }
 
@@ -524,8 +562,9 @@ interface DeckBuilderCard {
 }
 
 interface SearchFilters {
-	class: string;
-	text: string;
+	readonly class: string;
+	readonly text: string;
+	readonly bucket: 'none';
 }
 
 interface BucketData {
