@@ -12,6 +12,7 @@ import { DuelsDeckbuilderHeroPowerSelectedEvent } from '@services/mainwindow/sto
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
+import { DuelsDeletePersonalDeckSummaryEvent } from '@services/mainwindow/store/events/duels/duels-delete-personal-deck-summary-event';
 import { DuelsExploreDecksEvent } from '@services/mainwindow/store/events/duels/duels-explore-decks-event';
 import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-deck-building-lobby-screen-event';
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
@@ -25,6 +26,7 @@ import { DuelsDeckbuilderHeroPowerSelectedProcessor } from '@services/mainwindow
 import { DuelsDeckbuilderHeroSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-hero-selected-parser';
 import { DuelsDeckbuilderSaveDeckProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-save-deck-processor';
 import { DuelsDeckbuilderSignatureTreasureSelectedProcessor } from '@services/mainwindow/store/processors/duels/duels-deckbuilder-signature-treasure-selected-parser';
+import { DuelsDeletePersonalDeckSummaryProcessor } from '@services/mainwindow/store/processors/duels/duels-delete-personal-deck-summary-processor';
 import { DuelsExploreDecksParser } from '@services/mainwindow/store/processors/duels/duels-explore-decks-parser';
 import { DuelsIsOnDeckBuildingLobbyScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-deck-building-lobby-screen-processor';
 import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/processors/duels/duels-is-on-main-screen-processor';
@@ -865,6 +867,9 @@ export class MainWindowStoreService {
 
 			DuelsHidePersonalDeckSummaryEvent.eventName(),
 			new DuelsHidePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsDeletePersonalDeckSummaryEvent.eventName(),
+			new DuelsDeletePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsRestorePersonalDeckSummaryEvent.eventName(),
 			new DuelsRestorePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),

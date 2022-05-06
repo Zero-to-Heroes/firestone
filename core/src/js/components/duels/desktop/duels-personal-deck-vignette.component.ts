@@ -7,6 +7,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { DuelsDeletePersonalDeckSummaryEvent } from '@services/mainwindow/store/events/duels/duels-delete-personal-deck-summary-event';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { DuelsHidePersonalDeckSummaryEvent } from '../../../services/mainwindow/store/events/duels/duels-hide-personal-deck-summary-event';
 import { DuelsPersonalDeckRenameEvent } from '../../../services/mainwindow/store/events/duels/duels-personal-deck-rename-event';
@@ -62,7 +64,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</div>
 			<button
 				class="close-button"
-				[helpTooltip]="'app.duels.deck-stat.archive-deck-tooltip' | owTranslate"
+				[helpTooltip]="archiveDeckTooltip"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!renaming && !hidden"
 				inlineSVG="assets/svg/bin.svg"
@@ -95,6 +97,9 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		this.avgWins = value.global?.averageWinsPerRun ?? 0;
 		this.deckstring = value.initialDeckList;
 		this.hidden = value.hidden;
+		this.archiveDeckTooltip = !this.totalRuns
+			? this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip')
+			: this.i18n.translateString('app.duels.deck-stat.archive-deck-tooltip');
 	}
 
 	_deck: DuelsDeckSummary;
@@ -104,12 +109,17 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	avgWins: number;
 	deckstring: string;
 	hidden: boolean;
+	archiveDeckTooltip: string;
 
 	renaming: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -118,7 +128,9 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	hideDeck(event: MouseEvent) {
 		event.stopPropagation();
 		event.preventDefault();
-		this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
+		!this.totalRuns
+			? this.stateUpdater.next(new DuelsDeletePersonalDeckSummaryEvent(this.deckstring))
+			: this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
 	}
 
 	restoreDeck(event: MouseEvent) {
