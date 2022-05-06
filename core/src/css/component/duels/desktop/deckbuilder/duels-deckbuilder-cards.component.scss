@@ -64,35 +64,6 @@
 		}
 	}
 
-	// .tab-select {
-	// 	display: flex;
-	// 	color: var(--color-2);
-	// 	font-size: 14px;
-	// 	justify-content: flex-end;
-	// 	padding-right: 20px;
-	// 	--icon-color: currentColor;
-
-	// 	.tab {
-	// 		display: flex;
-	// 		align-items: center;
-	// 		margin-left: 20px;
-
-	// 		.info {
-	// 			width: 17px;
-	// 			height: 17px;
-	// 			margin-left: 5px;
-	// 		}
-
-	// 		&.active {
-	// 			color: var(--color-1);
-	// 		}
-
-	// 		&:hover {
-	// 			color: var(--color-1);
-	// 		}
-	// 	}
-	// }
-
 	.decklist-container {
 		width: 200px;
 		display: flex;
@@ -200,6 +171,7 @@
 			flex-shrink: 0;
 			width: 260px;
 			align-items: flex-start;
+			height: fit-content;
 
 			.bucket {
 				position: relative;
@@ -236,13 +208,16 @@
 					width: 26px;
 					max-width: 26px;
 					background: none;
+					opacity: 0.8;
 
 					&:hover {
 						--icon-color: var(--color-1);
+						opacity: 1;
 					}
 
 					&.highlighted {
 						--icon-color: var(--default-title-color);
+						opacity: 1;
 
 						&:hover {
 							--icon-secondary-color: var(--color-4);
