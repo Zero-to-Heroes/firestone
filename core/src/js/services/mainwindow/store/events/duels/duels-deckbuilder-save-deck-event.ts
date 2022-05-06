@@ -5,7 +5,7 @@ export class DuelsDeckbuilderSaveDeckEvent implements MainWindowStoreEvent {
 		return 'DuelsDeckbuilderSaveDeckEvent';
 	}
 
-	constructor(public readonly deckstring: string) {}
+	constructor(public readonly deckstring: string, public readonly deckName: string) {}
 
 	public eventName(): string {
 		return 'DuelsDeckbuilderSaveDeckEvent';

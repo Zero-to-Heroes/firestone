@@ -20,6 +20,9 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder-cards.component.scss`],
 	template: `
 		<div class="duels-deckbuilder-cards">
+			<div class="deck-rename-container">
+				<input class="name-input" [(ngModel)]="deckName" (mousedown)="preventDrag($event)" />
+			</div>
 			<ng-container *ngIf="{ activeCards: activeCards$ | async, buckets: possibleBuckets$ | async } as value">
 				<div class="decklist-container">
 					<div class="card-search">
@@ -174,6 +177,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	searchForm = new FormControl();
 
 	searchShortcutsTooltip: string;
+	deckName: string = this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 
 	private currentDeckCards = new BehaviorSubject<readonly string[]>([]);
 	private toggledBucketFilters = new BehaviorSubject<readonly string[]>([]);
@@ -448,7 +452,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	}
 
 	saveDeck(deckstring: string) {
-		this.store.send(new DuelsDeckbuilderSaveDeckEvent(deckstring));
+		this.store.send(new DuelsDeckbuilderSaveDeckEvent(deckstring, this.deckName));
 		this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.deck-saved-info');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -475,6 +479,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			? existingFilters.filter((filter) => filter !== bucketId)
 			: [...existingFilters, bucketId];
 		this.toggledBucketFilters.next(newFilters);
+	}
+
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
 	}
 
 	private sorterForCardClass(cardClass: string): number {

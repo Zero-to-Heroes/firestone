@@ -20,9 +20,12 @@ export class DuelsDeckbuilderSaveDeckProcessor implements Processor {
 			heroCardId: currentState.duels.deckbuilder.currentHeroCardId,
 			initialDeckList: event.deckstring,
 			isPersonalDeck: true,
+			deckName: event.deckName,
 		} as DuelsDeckSummary;
-		const newDecks: readonly DuelsDeckSummary[] = [...prefs.duelsPersonalAdditionalDecks, newDeck];
-		await this.prefs.savePreferences({ ...prefs, duelsPersonalAdditionalDecks: newDecks });
+		const existingDecks = [...prefs.duelsPersonalAdditionalDecks, newDeck].map((deck) =>
+			deck.initialDeckList !== event.deckstring ? deck : { ...deck, ...newDeck },
+		);
+		await this.prefs.savePreferences({ ...prefs, duelsPersonalAdditionalDecks: existingDecks });
 		const newDuelsState = await this.stateBuilder.updateState(currentState.duels, currentState.stats.gameStats);
 		return [
 			currentState.update({
