@@ -198,6 +198,30 @@
 					}
 				}
 
+				.filter-button {
+					--icon-color: var(--color-2);
+					--icon-secondary-color: var(--color-7);
+					position: absolute;
+					right: 10px;
+					top: 7px;
+					padding: 5px;
+					width: 26px;
+					max-width: 26px;
+					background: none;
+
+					&:hover {
+						--icon-color: var(--color-1);
+					}
+
+					&.highlighted {
+						--icon-color: var(--default-title-color);
+
+						&:hover {
+							--icon-secondary-color: var(--color-4);
+						}
+					}
+				}
+
 				.bucket-cards {
 					margin-top: 10px;
 

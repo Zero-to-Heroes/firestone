@@ -2,12 +2,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormControl } from '@angular/forms';
 import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { DuelsDeckbuilderTabType } from '@models/duels/duels-deckbuilder';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { FeatureFlags } from '@services/feature-flags';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
-import { DuelsDeckbuilderSelectTabEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-select-tab-event';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
@@ -115,6 +113,15 @@ export const DEFAULT_CARD_HEIGHT = 221;
 										[helpTooltip]="bucketClass.name"
 									/>
 								</div>
+								<button
+									class="filter-button"
+									inlineSVG="assets/svg/created_by.svg"
+									[ngClass]="{ 'highlighted': isHighlighted(bucket.bucketId) }"
+									(click)="toggleFilter(bucket.bucketId)"
+									[helpTooltip]="
+										'Filter by bucket. The cards list will only include cards that belong to at least one of the selected buckets'
+									"
+								></button>
 								<div class="bucket-cards">
 									<deck-list [cards]="bucket.bucketCardIds"></deck-list>
 								</div>
@@ -152,6 +159,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 
 	showBuckets$: Observable<boolean>;
 	currentDeckCards$: Observable<readonly string[]>;
+	toggledBucketFilters$: Observable<readonly string[]>;
 	activeCards$: Observable<readonly DeckBuilderCard[]>;
 	possibleBuckets$: Observable<readonly BucketData[]>;
 	highRes$: Observable<boolean>;
@@ -168,6 +176,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	searchShortcutsTooltip: string;
 
 	private currentDeckCards = new BehaviorSubject<readonly string[]>([]);
+	private toggledBucketFilters = new BehaviorSubject<readonly string[]>([]);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -248,9 +257,57 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
 		this.showBuckets$ = this.listenForBasicPref$((prefs) => prefs.duelsDeckbuilderShowBuckets);
-		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
-			this.mapData((cards) => {
-				return cards;
+		this.currentDeckCards$ = this.currentDeckCards.asObservable();
+		this.toggledBucketFilters$ = this.toggledBucketFilters.asObservable();
+		const allBuckets$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.bucketsData,
+				([main, nav]) => main.duels.deckbuilder.currentClasses,
+			)
+			.pipe(
+				this.mapData(([buckets, currentClasses]) => {
+					const candidateBuckets = buckets.filter(
+						(bucket) =>
+							bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
+							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
+					);
+					return candidateBuckets.map((bucket) => {
+						const bucketData: BucketData = {
+							bucketId: bucket.bucketId,
+							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
+							bucketClasses: bucket.bucketClasses.map((bucketClass) => ({
+								class: bucketClass,
+								name: this.i18n.translateString(`global.class.${CardClass[bucketClass].toLowerCase()}`),
+								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[
+									bucketClass
+								].toLowerCase()}.png`,
+							})),
+							bucketCardIds: bucket.cardIds,
+							bucketCards: bucket.cardIds.map((cardId) => {
+								const bucketCard: BucketCard = {
+									cardId: cardId,
+									cardName: this.allCards.getCard(cardId)?.name,
+								};
+								return bucketCard;
+							}),
+						};
+						return bucketData;
+					});
+				}),
+			);
+		const cardIdsForMatchingBucketToggles$: Observable<readonly string[]> = combineLatest(
+			this.toggledBucketFilters$,
+			allBuckets$,
+		).pipe(
+			this.mapData(([toggledBucketFilters, allBuckets]) => {
+				if (!toggledBucketFilters?.length) {
+					return [];
+				}
+				const bucketsMatchingToggle = allBuckets.filter((bucket) =>
+					toggledBucketFilters.includes(bucket.bucketId),
+				);
+				const allCardIds = bucketsMatchingToggle.flatMap((bucket) => bucket.bucketCardIds);
+				return [...new Set(allCardIds)];
 			}),
 		);
 		this.activeCards$ = combineLatest(
@@ -258,13 +315,18 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			collection$,
 			searchString$,
 			this.currentDeckCards$,
-			this.highRes$,
+			cardIdsForMatchingBucketToggles$,
 		).pipe(
 			this.mapData(
-				([allCards, collection, searchString, deckCards, highRes]) => {
+				([allCards, collection, searchString, deckCards, cardIdsForMatchingBucketToggles]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
 					const searchResult = allCards
 						.filter((card) => !(deckCards ?? []).includes(card.id))
+						.filter(
+							(card) =>
+								!cardIdsForMatchingBucketToggles?.length ||
+								cardIdsForMatchingBucketToggles.includes(card.id),
+						)
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
@@ -289,46 +351,12 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				50,
 			),
 		);
-		this.possibleBuckets$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.duels.bucketsData,
-				([main, nav]) => main.duels.deckbuilder.currentClasses,
+		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
+			this.mapData(([validBuckets, deckCardIds]) =>
+				validBuckets.filter((bucket) => {
+					return bucket.bucketCardIds.some((bucketCardId) => deckCardIds.includes(bucketCardId));
+				}),
 			),
-			this.currentDeckCards$,
-		).pipe(
-			this.mapData(([[buckets, currentClasses], deckCardIds]) => {
-				const candidateBuckets = buckets
-					.filter(
-						(bucket) =>
-							bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
-							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
-					)
-					.filter((bucket) => {
-						return bucket.cardIds.some((bucketCardId) => deckCardIds.includes(bucketCardId));
-					});
-				return candidateBuckets.map((bucket) => {
-					const bucketData: BucketData = {
-						bucketId: bucket.bucketId,
-						bucketName: this.allCards.getCard(bucket.bucketId)?.name,
-						bucketClasses: bucket.bucketClasses.map((bucketClass) => ({
-							class: bucketClass,
-							name: this.i18n.translateString(`global.class.${CardClass[bucketClass].toLowerCase()}`),
-							image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${CardClass[
-								bucketClass
-							].toLowerCase()}.png`,
-						})),
-						bucketCardIds: bucket.cardIds,
-						bucketCards: bucket.cardIds.map((cardId) => {
-							const bucketCard: BucketCard = {
-								cardId: cardId,
-								cardName: this.allCards.getCard(cardId)?.name,
-							};
-							return bucketCard;
-						}),
-					};
-					return bucketData;
-				});
-			}),
 		);
 		this.deckValid$ = this.currentDeckCards$.pipe(
 			this.mapData((cards) => {
@@ -376,6 +404,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 
 	trackByCardId(index: number, item: DeckBuilderCard) {
 		return item.cardId;
+	}
+
+	trackByBucketId(index: number, item: BucketData) {
+		return item.bucketId;
 	}
 
 	addCard(card: DeckBuilderCard) {
@@ -429,8 +461,20 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}, 2000);
 	}
 
-	selectTab(tab: DuelsDeckbuilderTabType) {
-		this.store.send(new DuelsDeckbuilderSelectTabEvent(tab));
+	// selectTab(tab: DuelsDeckbuilderTabType) {
+	// 	this.store.send(new DuelsDeckbuilderSelectTabEvent(tab));
+	// }
+
+	isHighlighted(bucketId: string): boolean {
+		return this.toggledBucketFilters.value.includes(bucketId);
+	}
+
+	toggleFilter(bucketId: string) {
+		const existingFilters = this.toggledBucketFilters.value;
+		const newFilters = existingFilters.includes(bucketId)
+			? existingFilters.filter((filter) => filter !== bucketId)
+			: [...existingFilters, bucketId];
+		this.toggledBucketFilters.next(newFilters);
 	}
 
 	private sorterForCardClass(cardClass: string): number {
