@@ -333,11 +333,30 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 		);
 		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
-			this.mapData(([validBuckets, deckCardIds]) =>
-				validBuckets.filter((bucket) => {
-					return bucket.bucketCardIds.some((bucketCardId) => deckCardIds.includes(bucketCardId));
-				}),
-			),
+			this.mapData(([validBuckets, deckCardIds]) => {
+				// Handle the cases of Core cards also present in the buckets
+				const deckCardIdsWithDuplicates = deckCardIds
+					.map((cardId) => this.allCards.getCard(cardId))
+					.flatMap((card) =>
+						card.deckDuplicateDbfId
+							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+							: [card],
+					)
+					.map((card) => card.id);
+				return validBuckets.filter((bucket) => {
+					const cardIdsWithDuplicates = bucket.bucketCardIds
+						.map((cardId) => this.allCards.getCard(cardId))
+						.flatMap((card) =>
+							card.deckDuplicateDbfId
+								? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+								: [card],
+						)
+						.map((card) => card.id);
+					return cardIdsWithDuplicates.some((bucketCardId) =>
+						deckCardIdsWithDuplicates.includes(bucketCardId),
+					);
+				});
+			}),
 		);
 		this.deckValid$ = this.currentDeckCards$.pipe(
 			this.mapData((cards) => {
