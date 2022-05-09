@@ -289,18 +289,58 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				return [...new Set(allCardIds)];
 			}),
 		);
+		const allCardIdsInBucketsWithDuplicates$ = allBuckets$.pipe(
+			this.mapData((allBuckets) =>
+				allBuckets
+					.flatMap((bucket) => bucket.bucketCardIds)
+					.map((cardId) => this.allCards.getCard(cardId))
+					.flatMap((card) =>
+						card.deckDuplicateDbfId
+							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+							: [card],
+					)
+					.map((card) => card.id)
+					.filter((cardId) => !!cardId),
+			),
+		);
 		this.activeCards$ = combineLatest(
 			allCards$,
 			collection$,
 			searchString$,
 			this.currentDeckCards$,
 			cardIdsForMatchingBucketToggles$,
-			allBuckets$,
+			allCardIdsInBucketsWithDuplicates$,
 		).pipe(
 			this.mapData(
-				([allCards, collection, searchString, deckCards, cardIdsForMatchingBucketToggles, allBuckets]) => {
+				([
+					allCards,
+					collection,
+					searchString,
+					deckCards,
+					cardIdsForMatchingBucketToggles,
+					allCardIdsInBucketsWithDuplicates,
+				]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
-					const allCardIdsInBuckets = allBuckets.flatMap((bucket) => bucket.bucketCardIds);
+					console.debug(
+						'BT_480',
+						allCardIdsInBucketsWithDuplicates.filter((cardId) => cardId.includes('BT_480')),
+					);
+					// Handle the cases of Core cards also present in the buckets
+					// const deckCardIdsWithDuplicates = deckCardIds
+					// 	.map((cardId) => this.allCards.getCard(cardId))
+					// 	.flatMap((card) =>
+					// 		card.deckDuplicateDbfId
+					// 			? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+					// 			: [card],
+					// 	)
+					// 	.map((card) => card.id);
+					// Handle duplicate cards for buckets
+					// const cardIdsWithDuplicates = allCardIdsInBuckets;
+					// return validBuckets.filter((bucket) => {
+					// 	return cardIdsWithDuplicates.some((bucketCardId) =>
+					// 		deckCardIdsWithDuplicates.includes(bucketCardId),
+					// 	);
+					// });
 					const searchResult = allCards
 						.filter((card) => !(deckCards ?? []).includes(card.id))
 						.filter(
@@ -308,7 +348,9 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								!cardIdsForMatchingBucketToggles?.length ||
 								cardIdsForMatchingBucketToggles.includes(card.id),
 						)
-						.filter((card) => this.doesCardMatchSearchFilters(card, allCardIdsInBuckets, searchFilters))
+						.filter((card) =>
+							this.doesCardMatchSearchFilters(card, allCardIdsInBucketsWithDuplicates, searchFilters),
+						)
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
 								this.sorterForCardClass(card.cardClass),
@@ -502,7 +544,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}
 
 		if (searchFilters.bucket === 'none') {
-			return !allCardIdsInBuckets.includes(card.id);
+			card.id.includes('BT_480') &&
+				console.debug(
+					'filtering',
+					card,
+					allCardIdsInBuckets.filter((c) => c.includes('BT_480')),
+				);
+			const allRelatedCardIds = [card.id, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)?.id].filter(
+				(cardId) => cardId,
+			);
+			return allRelatedCardIds.every((cardId) => !allCardIdsInBuckets.includes(cardId));
 		}
 
 		return (
