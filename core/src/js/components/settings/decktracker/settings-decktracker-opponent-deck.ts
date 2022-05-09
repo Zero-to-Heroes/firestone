@@ -169,7 +169,6 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="opponentElwynnBoarCounter"
-					field="opponentLibramCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.elwynn-boar-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip' | owTranslate"
 				></preference-toggle>
