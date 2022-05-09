@@ -23,6 +23,7 @@ import { DuelsDeckbuilderHeroComponent } from '@components/duels/desktop/deckbui
 import { DuelsDeckbuilderSignatureTreasureComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-signature-treasure.component';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder.component';
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
+import { HeroPowerOverlayComponent } from '@components/overlays/board/hero-power-overlay.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
 import { PlayerCoralKeeperWidgetWrapperComponent } from '@components/overlays/counters/player-coral-keeper-widget-wrapper.component';
@@ -44,6 +45,7 @@ import { DuelsOutOfCombatHeroSelectionComponent } from '@components/overlays/due
 import { DuelsOutOfCombatSignatureTreasureSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component';
 import { DuelsOutOfCombatTreasureSelectionComponent } from '@components/overlays/duels-ooc/duels-ooc-treasure-selection.component';
 import { DuelsSignatureTreasureInfoComponent } from '@components/overlays/duels-ooc/duels-signature-treasure-info.component';
+import { PlayerHeroPowerWidgetWrapperComponent } from '@components/overlays/player-hero-power-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from '@components/overlays/session/current-session-widget.component';
 import { ReplayInfoBattlegroundsComponent } from '@components/replays/replay-info/replay-info-battlegrounds.component';
@@ -175,12 +177,6 @@ import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainerComponent } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { TheCoinsComponent } from '../../components/collection/the-coins.component';
-import { ConstructedContentComponent } from '../../components/constructed/constructed-content.component';
-import { ConstructedMenuSelectionComponent } from '../../components/constructed/constructed-menu-selection.component';
-import { ConstructedComponent } from '../../components/constructed/constructed.component';
-import { InGameAchievementRecapComponent } from '../../components/constructed/in-game-achievement-recap.component';
-import { InGameAchievementsRecapComponent } from '../../components/constructed/in-game-achievements-recap.component';
-import { InGameOpponentRecapComponent } from '../../components/constructed/in-game-opponent-recap.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 import { DeckManaCurveBarComponent } from '../../components/decktracker/main/deck-mana-curve-bar.component';
 import { DeckManaCurveComponent } from '../../components/decktracker/main/deck-mana-curve.component';
@@ -303,6 +299,7 @@ import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/overlay
 import { BgsLeaderboardWidgetWrapperComponent } from '../../components/overlays/bgs-leaderboard-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
+import { MinionOnBoardOverlayComponent } from '../../components/overlays/board/minion-on-board-overlay.component';
 import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
@@ -339,7 +336,6 @@ import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overla
 import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
 import { MercsPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-player-team-widget-wrapper.component';
 import { MercsTreasureSelectionWidgetWrapperComponent } from '../../components/overlays/mercs-treasure-selection-widget-wrapper.component';
-import { MinionOnBoardOverlayComponent } from '../../components/overlays/minions-on-board/minion-on-board-overlay.component';
 import { OpponentHandWidgetWrapperComponent } from '../../components/overlays/opponent-hand-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/overlays/opponenthand/opponent-card-info.component';
@@ -552,7 +548,7 @@ const components = [
 	BgsBannedTribesComponent,
 	BgsSimulationOverlayComponent,
 	BgsHeroSelectionOverlayComponent,
-	ConstructedComponent,
+	// ConstructedComponent,
 	DeckTrackerOverlayPlayerComponent,
 	DeckTrackerOverlayOpponentComponent,
 	GameCountersComponent,
@@ -616,12 +612,12 @@ const components = [
 		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
 		CurrentSessionBgsBoardTooltipComponent,
 
-		ConstructedComponent,
-		ConstructedContentComponent,
-		InGameAchievementsRecapComponent,
-		InGameAchievementRecapComponent,
-		InGameOpponentRecapComponent,
-		ConstructedMenuSelectionComponent,
+		// ConstructedComponent,
+		// ConstructedContentComponent,
+		// InGameAchievementsRecapComponent,
+		// InGameAchievementRecapComponent,
+		// InGameOpponentRecapComponent,
+		// ConstructedMenuSelectionComponent,
 
 		CurrentSessionWidgetComponent,
 		DuelsMaxLifeWidgetComponent,
@@ -865,8 +861,10 @@ const components = [
 		SecretsHelperWidgetWrapperComponent,
 		OpponentHandWidgetWrapperComponent,
 		ConstructedBoardWidgetWrapperComponent,
+		PlayerHeroPowerWidgetWrapperComponent,
 		CurrentSessionWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
+		HeroPowerOverlayComponent,
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
 		DuelsDecktrackerOocComponent,

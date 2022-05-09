@@ -16,7 +16,7 @@ import { ShortCard } from '../../models/decktracker/game-state';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { BoardCardOverlay } from './minions-on-board/board-card-overlay';
+import { BoardCardOverlay } from './board/board-card-overlay';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({

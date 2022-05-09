@@ -41,6 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
 			<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
 			<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
+			<player-hero-power-widget-wrapper></player-hero-power-widget-wrapper>
 
 			<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
 

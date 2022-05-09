@@ -2,7 +2,7 @@ import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { sleep } from '@services/utils';
 import { Observable, pipe, UnaryFunction } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -52,7 +52,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				return visible;
 			}),
 			this.mapData((visible) => visible),
-			tap((info) => this.debug && console.debug('after mapData', info)),
 		);
 	}
 
