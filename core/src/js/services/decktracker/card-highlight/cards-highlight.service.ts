@@ -396,6 +396,30 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
 
+			// Hero powers
+			case CardIds.Assembly:
+			case CardIds.Assembly_Assembly:
+				return and(inDeck, minion);
+			case CardIds.HarnessTheElementsTavernBrawl:
+				return and(inDeck, spell);
+			case CardIds.ItsRainingFin:
+				return and(inDeck, murloc);
+			case CardIds.PileOnHeroic:
+				return and(inDeck, minion);
+			case CardIds.Plunder:
+				return and(inDeck, weapon);
+			case CardIds.RunningWild:
+			case CardIds.RunningWild_RunningWild:
+				return and(inDeck, minion);
+			case CardIds.ScrollSavvy:
+				return and(inDeck, spell);
+			case CardIds.SecretStudiesTavernBrawl:
+				return and(inDeck, secret);
+			case CardIds.TangledWrath:
+				return and(inDeck, spell);
+			case CardIds.WarCommandsTavernBrawl:
+				return and(inDeck, minion, neutral, effectiveCostLess(4));
+
 			// Duels passives
 			case CardIds.AllShallServeTavernBrawl:
 				return and(minion, demon);
