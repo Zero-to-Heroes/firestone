@@ -273,6 +273,8 @@ export const publicCardCreators = [
 	CardIds.KingsElekk,
 	CardIds.KnightOfAnointment,
 	CardIds.KronxDragonhoof,
+	CardIds.LorewalkerCho,
+	CardIds.LorewalkerChoLegacy,
 	CardIds.LunarVisions,
 	CardIds.Mankrik,
 	CardIds.MoonlitGuidance,

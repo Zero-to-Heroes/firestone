@@ -1,3 +1,5 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { publicCardCreators } from '@services/hs-utils';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -24,11 +26,16 @@ export class EntityUpdateParser implements EventParser {
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		const cardInOther = this.helper.findCardInZone(deck.otherZone, null, entityId);
 
-		const newCardInHand =
+		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
-			cardInHand && cardInHand.cardId !== cardId && isPlayer
-				? cardInHand.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
-				: null;
+			cardInHand &&
+			cardInHand.cardId !== cardId &&
+			// Introduced for Lorewalker Cho
+			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
+
+		const newCardInHand = shouldShowCardIdInHand
+			? cardInHand.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
+			: null;
 
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId
