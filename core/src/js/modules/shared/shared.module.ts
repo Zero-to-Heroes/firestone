@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BgsBuddiesComponent } from '@components/battlegrounds/in-game/bgs-buddies.component';
 import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
@@ -243,7 +242,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
-		BgsBuddiesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,
@@ -378,7 +376,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
-		BgsBuddiesComponent,
 		BgsHeroTribesComponent,
 		MinionIconComponent,
 		BgsHeroTierComponent,

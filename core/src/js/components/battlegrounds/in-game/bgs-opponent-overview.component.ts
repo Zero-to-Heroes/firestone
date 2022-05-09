@@ -53,7 +53,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
-			<bgs-buddies [buddies]="buddies"></bgs-buddies>
+			<!-- <bgs-buddies [buddies]="buddies"></bgs-buddies> -->
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
 				class="last-opponent-icon"
@@ -77,7 +77,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	debug = false;
-	buddies: readonly number[];
+	// buddies: readonly number[];
 
 	@Input() showLastOpponentIcon: boolean;
 
@@ -105,7 +105,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
-		this.buddies = value.buddyTurns;
+		// this.buddies = value.buddyTurns;
 	}
 
 	private _opponent: BgsPlayer;

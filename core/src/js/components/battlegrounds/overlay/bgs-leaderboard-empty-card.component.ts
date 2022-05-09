@@ -43,9 +43,9 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 
 				<div class="short-recap" [ngClass]="{ 'active': showLiveInfo$ | async }">
 					<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
-					<div class="buddy {{ buddyClass }}">
+					<!-- <div class="buddy {{ buddyClass }}">
 						<img class="icon" [src]="buddyImage" />
-					</div>
+					</div> -->
 					<div class="triples">
 						<img class="icon" [src]="triplesImage" />
 						<div class="value">{{ triples }}</div>
@@ -126,8 +126,8 @@ export class BgsLeaderboardEmptyCardComponent
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 	damage: number;
 	debuff: boolean;
-	buddyImage: string;
-	buddyClass: string;
+	// buddyImage: string;
+	// buddyClass: string;
 
 	private callbackHandle;
 
@@ -187,7 +187,7 @@ export class BgsLeaderboardEmptyCardComponent
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
-				buddyTurns: this._previousPlayer?.buddyTurns ?? [],
+				// buddyTurns: this._previousPlayer?.buddyTurns ?? [],
 			}),
 			currentTurn: this._currentTurn,
 			isLastOpponent: this.isLastOpponent,
@@ -205,12 +205,12 @@ export class BgsLeaderboardEmptyCardComponent
 			this.damage = -this.damage;
 		}
 		this.debuff = this.damage < 0;
-		const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
-		this.buddyImage =
-			this._previousPlayer.buddyTurns.length > 1
-				? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
-				: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
-		this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
+		// const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
+		// this.buddyImage =
+		// 	this._previousPlayer.buddyTurns.length > 1
+		// 		? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
+		// 		: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
+		// this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

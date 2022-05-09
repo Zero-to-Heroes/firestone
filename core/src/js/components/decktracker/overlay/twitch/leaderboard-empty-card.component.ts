@@ -74,7 +74,7 @@ export class LeaderboardEmptyCardComponent {
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
 				boardHistory: boardHistory,
-				buddyTurns: this._previousPlayer.buddyTurns,
+				// buddyTurns: this._previousPlayer.buddyTurns,
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
 			showLogo: false,

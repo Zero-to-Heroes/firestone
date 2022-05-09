@@ -9,8 +9,7 @@ import {
 } from '@angular/core';
 import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { CardIds } from '@firestone-hs/reference-data';
-import { getBuddy, getHeroPower } from '@services/battlegrounds/bgs-utils';
+import { getHeroPower } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { from, Observable } from 'rxjs';
@@ -35,14 +34,12 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 					[currentTurn]="currentTurn"
 					tavernTitle="Latest upgrade"
 					[showTavernsIfEmpty]="false"
-					buddiesTitle="Latest buddy"
-					[showBuddiesIfEmpty]="false"
 				></bgs-opponent-overview-big>
 			</div>
 			<div class="cards" *ngIf="showHeroCards$ | async">
 				<img class="card normal" [src]="heroPowerImage" />
-				<img class="card buddy normal" [src]="buddyCardImage" />
-				<img class="card buddy golden" [src]="buddyCardGoldenImage" />
+				<!-- <img class="card buddy normal" [src]="buddyCardImage" />
+				<img class="card buddy golden" [src]="buddyCardGoldenImage" /> -->
 			</div>
 		</div>
 	`,
@@ -55,8 +52,8 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 	currentTurn: number;
 	showLogo = true;
 	heroPowerImage: string;
-	buddyCardImage: string;
-	buddyCardGoldenImage: string;
+	// buddyCardImage: string;
+	// buddyCardGoldenImage: string;
 	leaderboardPositionClass: string;
 
 	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
@@ -64,18 +61,18 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
 		this.leaderboardPositionClass = `position-${value.player.leaderboardPlace}`;
-		const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
-		const buddyCard = this.cards.getCard(buddyCardId);
-		const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
-		this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
-			isBgs: true,
-			isHighRes: true,
-		});
-		this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
-			isBgs: true,
-			isPremium: true,
-			isHighRes: true,
-		});
+		// const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
+		// const buddyCard = this.cards.getCard(buddyCardId);
+		// const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
+		// this.buddyCardImage = this.i18n.getCardImage(buddyCardId, {
+		// 	isBgs: true,
+		// 	isHighRes: true,
+		// });
+		// this.buddyCardGoldenImage = this.i18n.getCardImage(buddyCardGolden.id, {
+		// 	isBgs: true,
+		// 	isPremium: true,
+		// 	isHighRes: true,
+		// });
 		const heroPowerCardId = getHeroPower(value.player?.cardId, this.cards);
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,

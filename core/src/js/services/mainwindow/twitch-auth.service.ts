@@ -256,7 +256,7 @@ export class TwitchAuthService {
 					: null,
 			tripleHistory: player.tripleHistory,
 			tavernUpgradeHistory: player.tavernUpgradeHistory,
-			buddyTurns: player.buddyTurns,
+			// buddyTurns: player.buddyTurns,
 		};
 	}
 

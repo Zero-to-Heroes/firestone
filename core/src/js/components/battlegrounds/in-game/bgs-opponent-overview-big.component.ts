@@ -23,11 +23,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<bgs-board [entities]="boardMinions" [currentTurn]="currentTurn" [boardTurn]="boardTurn"></bgs-board>
 				<div class="bottom-info">
 					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
-					<bgs-buddies
+					<!-- <bgs-buddies
 						[buddies]="buddies"
 						[title]="buddiesTitle"
 						*ngIf="showBuddiesIfEmpty || buddies?.length"
-					></bgs-buddies>
+					></bgs-buddies> -->
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
@@ -58,7 +58,7 @@ export class BgsOpponentOverviewBigComponent {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
-	buddies: readonly number[];
+	// buddies: readonly number[];
 
 	@Input() rating: number;
 	@Input() debug: boolean;
@@ -67,9 +67,9 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() nextBattle: BgsFaceOffWithSimulation;
 	@Input() maxBoardHeight = 1;
 	@Input() tavernTitle = this.i18n.translateString('battlegrounds.in-game.opponents.tavern-upgrade-title');
-	@Input() buddiesTitle: string;
+	// @Input() buddiesTitle: string;
 	@Input() showTavernsIfEmpty = true;
-	@Input() showBuddiesIfEmpty = true;
+	// @Input() showBuddiesIfEmpty = true;
 	@Input() showLastOpponentIcon: boolean;
 
 	@Input() set opponent(value: BgsPlayer) {
@@ -86,7 +86,7 @@ export class BgsOpponentOverviewBigComponent {
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
-		this.buddies = value.buddyTurns;
+		// this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

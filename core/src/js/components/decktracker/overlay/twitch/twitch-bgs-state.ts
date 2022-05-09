@@ -28,7 +28,7 @@ export interface TwitchBgsPlayer {
 	readonly initialHealth: number;
 	readonly damageTaken: number;
 	readonly leaderboardPlace: number;
-	readonly buddyTurns: readonly number[];
+	// readonly buddyTurns: readonly number[];
 }
 
 export interface TwitchBgsBoard {
