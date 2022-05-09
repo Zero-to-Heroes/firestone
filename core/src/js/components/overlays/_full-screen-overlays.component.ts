@@ -84,6 +84,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
 			<player-multicaster-widget-wrapper></player-multicaster-widget-wrapper>
+			<player-coral-keeper-widget-wrapper></player-coral-keeper-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
