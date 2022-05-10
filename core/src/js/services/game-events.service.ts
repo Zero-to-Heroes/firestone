@@ -1162,6 +1162,17 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'ENTITY_CHOSEN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ENTITY_CHOSEN, gameEvent, {
+						originalEntityId: gameEvent.Value.AdditionalProps?.OriginalEntityId,
+						context: {
+							creatorEntityId: gameEvent.Value.AdditionalProps?.Context?.CreatorEntityId,
+							creatorCardId: gameEvent.Value.AdditionalProps?.Context?.CreatorCardId,
+						},
+					}),
+				);
+				break;
 			case 'ZONE_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ZONE_CHANGED, gameEvent, {

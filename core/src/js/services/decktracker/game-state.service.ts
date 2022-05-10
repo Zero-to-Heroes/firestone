@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { EntityChosenParser } from '@services/decktracker/event-parser/entity-chosen-parser';
 import { HeroRevealedParser } from '@services/decktracker/event-parser/hero-revealed-parser';
 import { ReconnectStartParser } from '@services/decktracker/event-parser/reconnect-start-parser';
 import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-deck-parser';
@@ -562,6 +563,7 @@ export class GameStateService {
 			new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			new CopiedFromEntityIdParser(this.helper, this.i18n),
 			new ShuffleDeckParser(),
+			new EntityChosenParser(this.helper),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),
