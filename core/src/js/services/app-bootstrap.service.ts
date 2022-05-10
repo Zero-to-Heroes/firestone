@@ -376,7 +376,8 @@ export class AppBootstrapService {
 		if (prefs.showSessionRecapOnExit && this.stateUpdater) {
 			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
 		} else {
-			this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
+			// Don't close Firestone when leaving HS
+			// this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
 		}
 	}
 
