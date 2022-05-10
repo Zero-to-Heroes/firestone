@@ -69,6 +69,10 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 		case Race.ELEMENTAL:
 			referenceCardId = CardIds.Sellemental;
 			break;
+		case 'naga':
+		case Race.NAGA:
+			referenceCardId = CardIds.MiniMyrmidon;
+			break;
 		case 'quilboar':
 		case Race.QUILBOAR:
 			referenceCardId = CardIds.SunBaconRelaxer;
@@ -263,6 +267,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.AmbassadorFaelin_ExpeditionPlans;
 		case CardIds.IniStormcoil2:
 			return CardIds.IniStormcoil_Mechgyver;
+		case CardIds.QueenAzshara3:
+			return CardIds.QueenAzshara_AzsharasAmbition;
 
 		case '':
 			return null; // new heroes
@@ -278,6 +284,8 @@ export const normalizeHeroCardId = (heroCardId: string, allCards: CardsFacadeSer
 	switch (normalizedAfterSkin) {
 		case 'TB_BaconShop_HERO_59t':
 			return 'TB_BaconShop_HERO_59';
+		case CardIds.QueenAzshara_NagaQueenAzsharaToken:
+			return CardIds.QueenAzshara3;
 		default:
 			return normalizedAfterSkin;
 	}
@@ -344,8 +352,8 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.WrathWeaver:
 		case CardIds.WrathWeaverBattlegrounds:
 			return Race.DEMON;
-		case CardIds.SeafoodSlinger:
-		case CardIds.SeafoodSlingerBattlegrounds:
+		case CardIds.SeafoodSlinger1:
+		case CardIds.SeafoodSlinger2:
 			return Race.MURLOC;
 		case CardIds.NadinaTheRed:
 		case CardIds.NadinaTheRedBattlegrounds:
@@ -373,6 +381,9 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.AgamagganTheGreatBoarBattlegrounds:
 		case CardIds.ProphetOfTheBoar:
 		case CardIds.ProphetOfTheBoarBattlegrounds:
+			return Race.QUILBOAR;
+		case CardIds.OrgozoaTheTender:
+		case CardIds.OrgozoaTheTenderBattlegrounds:
 			return Race.QUILBOAR;
 		default:
 			return getEffectiveTribeEnum(card);
@@ -612,6 +623,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 394;
 		case CardIds.IniStormcoil2:
 			return 401;
+		case CardIds.QueenAzshara3:
+			return 406;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;

@@ -134,10 +134,10 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ElvenBanner4Lettuce:
 		case CardIds.ElvenBanner5Lettuce:
 			return or(nightelf, bloodelf);
-		case CardIds.EnchantedRaven1Lettuce:
-		case CardIds.EnchantedRaven2Lettuce:
-		case CardIds.EnchantedRaven3Lettuce:
-			return arcane;
+		// case CardIds.EnchantedRaven1:
+		// case CardIds.EnchantedRaven2Lettuce:
+		// case CardIds.EnchantedRaven3Lettuce:
+		// 	return arcane;
 		case CardIds.FamilyJusticeLettuce:
 		case CardIds.FamilyDefenseLettuce:
 			return (card: ReferenceCard) =>

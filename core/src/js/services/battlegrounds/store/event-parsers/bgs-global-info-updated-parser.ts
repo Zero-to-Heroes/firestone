@@ -138,6 +138,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			Race.PIRATE,
 			Race.ELEMENTAL,
 			Race.QUILBOAR,
+			Race.NAGA,
 		];
 		return [
 			allRaces.filter((race) => availableRaces.includes(race)),

@@ -57,6 +57,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="node"></div>
 				{{ 'global.tribe.quilboar' | owTranslate }}
 			</div>
+			<div class="item naga" *ngIf="isTribe('naga')">
+				<div class="node"></div>
+				{{ 'global.tribe.naga' | owTranslate }}
+			</div>
 			<div class="item blank">
 				<div class="node"></div>
 				{{ 'battlegrounds.post-match-stats.composition.blank-tribe' | owTranslate }}
@@ -282,16 +286,17 @@ export class BgsChartWarbandCompositionComponent {
 			.map((history) => ({
 				name: history.turn,
 				series: [
-					this.buildSeries(this.i18n.translateString('global.tribes.beast'), 'beast', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.mech'), 'mech', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.dragon'), 'dragon', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.demon'), 'demon', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.murloc'), 'murloc', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.pirate'), 'pirate', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.elemental'), 'elemental', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.quilboar'), 'quilboar', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.all'), 'all', history),
-					this.buildSeries(this.i18n.translateString('global.tribes.blank'), null, history),
+					this.buildSeries(this.i18n.translateString('global.tribe.beast'), 'beast', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.mech'), 'mech', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.dragon'), 'dragon', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.demon'), 'demon', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.murloc'), 'murloc', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.pirate'), 'pirate', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.elemental'), 'elemental', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.quilboar'), 'quilboar', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.naga'), 'naga', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.all'), 'all', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.blank'), null, history),
 				],
 			}));
 	}
