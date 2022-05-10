@@ -286,7 +286,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					toggledBucketFilters.includes(bucket.bucketId),
 				);
 				const allCardIds = bucketsMatchingToggle.flatMap((bucket) => bucket.bucketCardIds);
-				return [...new Set(allCardIds)];
+				const withDupes = allCardIds
+					.map((cardId) => this.allCards.getCard(cardId))
+					.flatMap((card) =>
+						card.deckDuplicateDbfId
+							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+							: [card],
+					)
+					.map((card) => card.id)
+					.filter((cardId) => !!cardId);
+				return [...new Set(withDupes)];
 			}),
 		);
 		const allCardIdsInBucketsWithDuplicates$ = allBuckets$.pipe(
@@ -321,26 +330,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					allCardIdsInBucketsWithDuplicates,
 				]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
-					console.debug(
-						'BT_480',
-						allCardIdsInBucketsWithDuplicates.filter((cardId) => cardId.includes('BT_480')),
-					);
-					// Handle the cases of Core cards also present in the buckets
-					// const deckCardIdsWithDuplicates = deckCardIds
-					// 	.map((cardId) => this.allCards.getCard(cardId))
-					// 	.flatMap((card) =>
-					// 		card.deckDuplicateDbfId
-					// 			? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
-					// 			: [card],
-					// 	)
-					// 	.map((card) => card.id);
-					// Handle duplicate cards for buckets
-					// const cardIdsWithDuplicates = allCardIdsInBuckets;
-					// return validBuckets.filter((bucket) => {
-					// 	return cardIdsWithDuplicates.some((bucketCardId) =>
-					// 		deckCardIdsWithDuplicates.includes(bucketCardId),
-					// 	);
-					// });
 					const searchResult = allCards
 						.filter((card) => !(deckCards ?? []).includes(card.id))
 						.filter(
