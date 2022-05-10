@@ -10,7 +10,7 @@ import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
@@ -399,6 +399,15 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					);
 				});
 			}),
+			// Clean up eye icon for removed buckets
+			tap((buckets: readonly BucketData[]) => {
+				const activeBucketIds = this.toggledBucketFilters.value;
+				const newBuckets = activeBucketIds.filter((activeBucketId) =>
+					buckets.some((bucket) => bucket.bucketId === activeBucketId),
+				);
+				this.toggledBucketFilters.next(newBuckets);
+			}),
+			takeUntil(this.destroyed$),
 		);
 		this.deckValid$ = this.currentDeckCards$.pipe(
 			this.mapData((cards) => {
