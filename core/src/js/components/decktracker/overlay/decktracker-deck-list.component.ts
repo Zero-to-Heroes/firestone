@@ -46,6 +46,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[tooltipPosition]="_tooltipPosition"
+					[darkenUsedCards]="darkenUsedCards"
 					[side]="side"
 				>
 				</deck-list-by-zone>

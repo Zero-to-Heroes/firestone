@@ -24,7 +24,7 @@ import { groupByFunction } from '../../../services/utils';
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-zone {{ className }}">
+		<div class="deck-zone {{ className }}" [ngClass]="{ 'darken-used-cards': _darkenUsedCards }">
 			<div class="zone-name-container" *ngIf="zoneName" (mousedown)="toggleZone()">
 				<div class="zone-name">
 					<span>{{ zoneName }} ({{ cardsInZone }})</span>
@@ -110,11 +110,19 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	@Input() set darkenUsedCards(value: boolean) {
+		this._darkenUsedCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() side: 'player' | 'opponent';
 
 	_tooltipPosition: CardTooltipPositionType;
 	_collection: readonly SetCard[];
 	_showUpdatedCost = true;
+	_darkenUsedCards = true;
 	className: string;
 	zoneName: string;
 	showWarning: boolean;

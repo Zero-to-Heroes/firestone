@@ -36,7 +36,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					class="indented"
-					field="overlayOverlayDarkenUsedCards"
+					field="overlayDarkenUsedCards"
 					[label]="'settings.decktracker.opponent-deck.darken-used-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.darken-used-cards-tooltip' | owTranslate"
 				></preference-toggle>

@@ -26,6 +26,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showStatsChange]="showStatsChange"
 					[showTopCardsSeparately]="_showTopCardsSeparately"
 					[showBottomCardsSeparately]="_showBottomCardsSeparately"
+					[darkenUsedCards]="_darkenUsedCards"
 					[side]="side"
 				></deck-zone>
 			</li>
@@ -90,6 +91,10 @@ export class DeckListByZoneComponent implements OnDestroy {
 		this.updateInfo();
 	}
 
+	@Input() set darkenUsedCards(value: boolean) {
+		this._darkenUsedCards = value;
+	}
+
 	zones: readonly DeckZone[];
 	_tooltipPosition: CardTooltipPositionType;
 
@@ -98,6 +103,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 	private _sortCardsByManaCostInOtherZone: boolean;
 	private _showBottomCardsSeparately = true;
 	private _showTopCardsSeparately = true;
+	private _darkenUsedCards = true;
 	private _deckState: DeckState;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
