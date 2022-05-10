@@ -251,6 +251,14 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
 					);
 					return candidateBuckets.map((bucket) => {
+						const bucketCards = bucket.cardIds.map((cardId) => {
+							const bucketCard: BucketCard = {
+								cardId: cardId,
+								cardName: this.allCards.getCard(cardId)?.name,
+								quantity: 1,
+							};
+							return bucketCard;
+						});
 						const bucketData: BucketData = {
 							bucketId: bucket.bucketId,
 							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
@@ -262,13 +270,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								].toLowerCase()}.png`,
 							})),
 							bucketCardIds: bucket.cardIds,
-							bucketCards: bucket.cardIds.map((cardId) => {
-								const bucketCard: BucketCard = {
-									cardId: cardId,
-									cardName: this.allCards.getCard(cardId)?.name,
-								};
-								return bucketCard;
-							}),
+							bucketCards: bucketCards,
 						};
 						return bucketData;
 					});
@@ -652,4 +654,5 @@ interface BucketClass {
 interface BucketCard {
 	readonly cardId: string;
 	readonly cardName: string;
+	readonly quantity: number;
 }
