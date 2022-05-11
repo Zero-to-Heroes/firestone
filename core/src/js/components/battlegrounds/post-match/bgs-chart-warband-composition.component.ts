@@ -114,7 +114,7 @@ export class BgsChartWarbandCompositionComponent {
 	chartData: any[];
 	colorScheme = {
 		domain: [
-			'#A2CCB0',
+			'#26a024',
 			'#404ED3',
 			'#E9A943',
 			'#A276AF',
@@ -122,6 +122,7 @@ export class BgsChartWarbandCompositionComponent {
 			'#43403d',
 			'#DE5959',
 			'#c56700',
+			'#13928c',
 			'#D9C3AB',
 			'#D9C3AB',
 		],
@@ -259,7 +260,6 @@ export class BgsChartWarbandCompositionComponent {
 
 		setTimeout(() => {
 			this.chartData = this.buildChartData(this._stats);
-
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
