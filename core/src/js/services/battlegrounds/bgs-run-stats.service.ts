@@ -154,7 +154,11 @@ export class BgsRunStatsService {
 	): [BgsPostMatchStats, readonly BgsBestStat[]] {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...realTimeStatsState,
-			boardHistory: input.mainPlayer?.boardHistory || [],
+			boardHistory: !!realTimeStatsState?.boardHistory?.length
+				? realTimeStatsState?.boardHistory
+				: input.mainPlayer?.boardHistory?.length
+				? input.mainPlayer?.boardHistory
+				: [],
 			tripleTimings:
 				input.mainPlayer && realTimeStatsState.triplesPerHero[input.mainPlayer.cardId]
 					? new Array(realTimeStatsState.triplesPerHero[input.mainPlayer.cardId])
