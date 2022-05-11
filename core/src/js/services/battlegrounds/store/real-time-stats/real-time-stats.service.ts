@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RTStatsBgsLeaderboardPositionUpdatedParser } from '@services/battlegrounds/store/real-time-stats/event-parsers/battlegrounds/rtstats-bgs-leaderboard-position-updated-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
@@ -138,6 +139,7 @@ export class RealTimeStatsService {
 			new RTStatBgsMinionsSoldParser(),
 			new RTStatBgsEnemyHeroKilledParser(),
 			new RTStatBgsAttackFirstParser(this.allCards),
+			new RTStatsBgsLeaderboardPositionUpdatedParser(this.allCards),
 		];
 	}
 

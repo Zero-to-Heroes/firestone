@@ -8,7 +8,6 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
@@ -380,11 +379,13 @@ export class BgsChartHpComponent {
 			return;
 		}
 
-		const playerOrder: readonly string[] = this.buildPlayerOrder(this._stats.hpOverTurn);
+		const playerOrder: readonly string[] = this.buildPlayerOrder(this._stats.leaderboardPositionOverTurn);
+		console.debug('[hp-chart] playerOrder', playerOrder, this._stats);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
+		console.debug('[hp-chart] hpOverTurn', hpOverTurn);
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerCardIds = [...playerOrder].sort();
@@ -398,6 +399,7 @@ export class BgsChartHpComponent {
 					?.filter((turnInfo) => turnInfo)
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
+		console.debug('[hp-chart] players', players);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
@@ -407,6 +409,7 @@ export class BgsChartHpComponent {
 			shown: true,
 			color: player.color,
 		}));
+		console.debug('[hp-chart] legend', this.legend);
 		const newChartData: ChartDataSets[] = players.map((player) => ({
 			data: player.hpOverTurn,
 			cardId: player.cardId,
@@ -436,41 +439,55 @@ export class BgsChartHpComponent {
 		}
 	}
 
-	private buildPlayerOrder(hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] }): readonly string[] {
-		const turnAtWhichEachPlayerDies = Object.keys(hpOverTurn)
-			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
+	private buildPlayerOrder(leaderboardPositionOverTurn: {
+		[playerCardId: string]: readonly NumericTurnInfo[];
+	}): readonly string[] {
+		const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
+		return Object.keys(leaderboardPositionOverTurn)
 			.map((playerCardId) => {
-				const info = hpOverTurn[playerCardId];
+				const positionAtLastTurn = leaderboardPositionOverTurn[playerCardId][lastTurn];
 				return {
 					playerCardId: playerCardId,
-					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
-					lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
+					position: positionAtLastTurn?.value ?? 0,
 				};
-			});
-		let playerOrder: string[] = turnAtWhichEachPlayerDies
-			.sort(
-				(a, b) =>
-					b.turnDeath - a.turnDeath ||
-					// a.lastKnownPosition - b.lastKnownPosition ||
-					b.lastKnownHp - a.lastKnownHp,
-			)
-			.map((playerInfo) => playerInfo.playerCardId);
-		// Legacy issue - the heroes that were offered during the hero selection phase are
-		// also proposed there
-		if (playerOrder.length > 8) {
-			const candidatesToRemove = turnAtWhichEachPlayerDies
-				.filter((info) => info.turnDeath === 99)
-				.filter((info) =>
-					info.playerCardId === CardIds.PatchwerkBattlegrounds
-						? info.lastKnownHp === 55
-						: info.lastKnownHp === 40,
-				)
-				.filter((info) => info.playerCardId !== this._mainPlayerCardId);
-			playerOrder = playerOrder.filter(
-				(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
-			);
-		}
-		return playerOrder;
+			})
+			.sort((a, b) => a.position - b.position)
+			.map((info) => info.playerCardId);
+
+		// const turnAtWhichEachPlayerDies = Object.keys(leaderboardPositionOverTurn)
+		// 	.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
+		// 	.map((playerCardId) => {
+		// 		const info = leaderboardPositionOverTurn[playerCardId];
+		// 		return {
+		// 			playerCardId: playerCardId,
+		// 			turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
+		// 			lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
+		// 		};
+		// 	});
+		// let playerOrder: string[] = turnAtWhichEachPlayerDies
+		// 	.sort(
+		// 		(a, b) =>
+		// 			b.turnDeath - a.turnDeath ||
+		// 			// a.lastKnownPosition - b.lastKnownPosition ||
+		// 			b.lastKnownHp - a.lastKnownHp,
+		// 	)
+		// 	.map((playerInfo) => playerInfo.playerCardId);
+		// // Legacy issue - the heroes that were offered during the hero selection phase are
+		// // also proposed there
+		// if (playerOrder.length > 8) {
+		// 	const candidatesToRemove = turnAtWhichEachPlayerDies
+		// 		.filter((info) => info.turnDeath === 99)
+		// 		.filter((info) =>
+		// 			info.playerCardId === CardIds.PatchwerkBattlegrounds
+		// 				? info.lastKnownHp === 55
+		// 				: info.lastKnownHp === 40,
+		// 		)
+		// 		.filter((info) => info.playerCardId !== this._mainPlayerCardId);
+		// 	playerOrder = playerOrder.filter(
+		// 		(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
+		// 	);
+		// }
+		// return playerOrder;
 	}
 
 	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {
