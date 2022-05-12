@@ -18,12 +18,15 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
 	readonly battleInfoMesage: BattleInfoMessage;
 
-	public static create(base: BgsFaceOff): BgsFaceOffWithSimulation {
+	public static create(base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>): BgsFaceOffWithSimulation {
 		return Object.assign(new BgsFaceOffWithSimulation(), { id: uuid() }, base);
 	}
 
 	public update(base: Partial<NonFunctionProperties<BgsFaceOffWithSimulation>>): BgsFaceOffWithSimulation {
-		return Object.assign(new BgsFaceOffWithSimulation(), this, base);
+		return Object.assign(new BgsFaceOffWithSimulation(), this, base, {
+			// Keep the original id
+			id: this.id ?? base.id,
+		});
 	}
 
 	public checkIntegrity(gameState: BgsGame) {

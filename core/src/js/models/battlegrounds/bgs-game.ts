@@ -57,8 +57,12 @@ export class BgsGame {
 		return mainPlayer;
 	}
 
-	public updateLastFaceOff(opponentHeroCardId: string, faceOff: BgsFaceOffWithSimulation): BgsGame {
-		if (!this.faceOffs?.length) {
+	public updateLastFaceOff(
+		opponentHeroCardId: string,
+		faceOff: BgsFaceOffWithSimulation,
+		createIfMissing = false,
+	): BgsGame {
+		if (!this.faceOffs?.length && !createIfMissing) {
 			console.error(
 				'[face-off] [bgs-next-opponent] trying to update non-existing face-off',
 				this.faceOffs,
@@ -67,8 +71,16 @@ export class BgsGame {
 			return this;
 		}
 
+		console.debug(
+			'[face-off] trying to update face-off',
+			opponentHeroCardId,
+			createIfMissing,
+			faceOff,
+			this.faceOffs,
+		);
 		const matchingFaceOffs = this.faceOffs
 			.filter((f) => f.opponentCardId === opponentHeroCardId)
+			.filter((f) => (!!faceOff.turn ? f.turn === faceOff.turn || !f.turn : true))
 			.filter((f) => {
 				if (faceOff.battleInfo) {
 					return !f.battleInfo;
@@ -83,19 +95,26 @@ export class BgsGame {
 			})
 			.reverse();
 		if (!matchingFaceOffs.length) {
-			// Stop logging these as errors, as they happen pretty often during reconnects
-			console.warn(
-				'[face-off] [bgs-next-opponent] no matching face-off',
-				opponentHeroCardId,
-				this.faceOffs.map(
-					(f) =>
-						`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${f.battleInfo != null}, ${
-							f.battleResult != null
-						}`,
-				),
-				new Error().stack,
-			);
-			return this;
+			if (!createIfMissing) {
+				// Stop logging these as errors, as they happen pretty often during reconnects
+				console.warn(
+					'[face-off] [bgs-next-opponent] no matching face-off',
+					opponentHeroCardId,
+					this.faceOffs.map(
+						(f) =>
+							`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${
+								f.battleInfo != null
+							}, ${f.battleResult != null}`,
+					),
+					new Error().stack,
+				);
+				return this;
+			} else {
+				// Create a new faceOff
+				return this.update({
+					faceOffs: [...this.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
+				} as BgsGame);
+			}
 		}
 
 		const lastFaceOff = matchingFaceOffs[0];
@@ -109,7 +128,7 @@ export class BgsGame {
 		);
 		const updatedFaceOff = lastFaceOff.update(faceOff);
 		updatedFaceOff.checkIntegrity(this);
-		console.debug('[bgs-next-opponent] updated face-off', updatedFaceOff);
+		console.debug('[bgs-next-opponent] updated face-off', updatedFaceOff, this.faceOffs);
 		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = this.faceOffs.map((f) =>
 			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);

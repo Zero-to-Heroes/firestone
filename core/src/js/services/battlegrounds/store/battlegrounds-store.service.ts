@@ -462,12 +462,9 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			console.debug('emitting new BGS state', this.state);
+			// console.debug('emitting new BGS state', gameEvent.type, this.state, gameEvent);
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
-
 			this.updateOverlay();
-		} else {
-			//console.debug('no new state', newState);
 		}
 	}
 

@@ -38,10 +38,10 @@ export class BgsBattleResultParser implements EventParser {
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			// If we're facing the ghost, the plugin returns the original hero card id here
 			normalizeHeroCardId(event.opponentCardId, this.allCards),
-			{
+			BgsFaceOffWithSimulation.create({
 				result: event.result,
 				damage: event.damage,
-			} as BgsFaceOffWithSimulation,
+			}),
 		);
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,

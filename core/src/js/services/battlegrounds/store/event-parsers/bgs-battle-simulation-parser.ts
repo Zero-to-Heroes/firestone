@@ -24,10 +24,10 @@ export class BgsBattleSimulationParser implements EventParser {
 
 		const gameAfterFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentHeroCardId, this.allCards),
-			{
+			BgsFaceOffWithSimulation.create({
 				battleResult: event.result,
 				battleInfoStatus: 'done',
-			} as BgsFaceOffWithSimulation,
+			}),
 		);
 		return currentState.update({
 			currentGame: gameAfterFaceOff,

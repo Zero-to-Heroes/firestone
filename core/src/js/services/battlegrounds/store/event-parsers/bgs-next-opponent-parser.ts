@@ -3,7 +3,6 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
@@ -37,6 +36,7 @@ export class BgsNextOpponentParser implements EventParser {
 		}
 
 		console.debug('[bgs-next-opponent] face off players', mainPlayer, opponent, currentState);
+
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: mainPlayer?.cardId,
@@ -73,9 +73,7 @@ export class BgsNextOpponentParser implements EventParser {
 			.updatePanel(newBattlesPanel)
 			.updatePanel(newNextOpponentPanel)
 			.update({
-				currentGame: currentState.currentGame.update({
-					faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
-				} as BgsGame),
+				currentGame: currentState.currentGame.updateLastFaceOff(faceOff.opponentCardId, faceOff, true),
 			} as BattlegroundsState);
 		console.debug('[bgs-next-opponent]result', result);
 		return result;

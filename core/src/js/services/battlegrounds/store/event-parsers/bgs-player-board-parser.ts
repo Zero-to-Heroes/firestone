@@ -59,10 +59,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			return currentState.update({
 				currentGame: currentState.currentGame.updateLastFaceOff(
 					normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
-					{
+					BgsFaceOffWithSimulation.create({
 						battleInfoStatus: 'empty',
 						battleInfoMesage: undefined,
-					} as BgsFaceOffWithSimulation,
+					}),
 				),
 			} as BattlegroundsState);
 		}
@@ -105,11 +105,11 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
-			{
+			BgsFaceOffWithSimulation.create({
 				battleInfo: battleInfo,
 				battleInfoStatus: 'waiting-for-result',
 				battleInfoMesage: isSupported.reason,
-			} as BgsFaceOffWithSimulation,
+			}),
 		);
 		const newGame = stateAfterFaceOff.update({
 			players: newPlayers,
