@@ -7,7 +7,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { FeatureFlags } from '@services/feature-flags';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
-import { groupByFunction, sortByProperties } from '@services/utils';
+import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
@@ -251,11 +251,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
 					);
 					return candidateBuckets.map((bucket) => {
-						const bucketCards = bucket.cardIds.map((cardId) => {
+						const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
+						const bucketCards = bucket.cards.map((card) => {
+							const totalBuckets = candidateBuckets.filter((b) =>
+								b.cards.map((c) => c.cardId).includes(card.cardId),
+							).length;
 							const bucketCard: BucketCard = {
-								cardId: cardId,
-								cardName: this.allCards.getCard(cardId)?.name,
-								quantity: 1,
+								cardId: card.cardId,
+								cardName: card.cardName,
+								offeringRate: (100 * card.totalOffered) / totalCardsOffered,
+								totalBuckets: totalBuckets,
 							};
 							return bucketCard;
 						});
@@ -269,7 +274,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 									bucketClass
 								].toLowerCase()}.png`,
 							})),
-							bucketCardIds: bucket.cardIds,
+							bucketCardIds: bucketCards.map((c) => c.cardId),
 							bucketCards: bucketCards,
 						};
 						return bucketData;
@@ -654,5 +659,6 @@ interface BucketClass {
 interface BucketCard {
 	readonly cardId: string;
 	readonly cardName: string;
-	readonly quantity: number;
+	readonly offeringRate: number;
+	readonly totalBuckets: number;
 }
