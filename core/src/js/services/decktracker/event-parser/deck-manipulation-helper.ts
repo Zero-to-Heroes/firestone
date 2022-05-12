@@ -36,10 +36,10 @@ export class DeckManipulationHelper {
 		}
 
 		// We have the entityId, so we just remove it
-		if (zone.some((card) => card.entityId === entityId)) {
+		if (!!entityId && zone.some((card) => card.entityId === entityId)) {
 			if (debug) {
 				console.debug(
-					'removing',
+					'removing 2',
 					zone.find((card: DeckCard) => card.entityId === entityId),
 				);
 			}

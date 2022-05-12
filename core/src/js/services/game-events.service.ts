@@ -1309,7 +1309,9 @@ export class GameEvents {
 				break;
 			case 'SPECIAL_CARD_POWER_TRIGGERED':
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.SPECIAL_CARD_POWER_TRIGGERED, gameEvent),
+					GameEvent.build(GameEvent.SPECIAL_CARD_POWER_TRIGGERED, gameEvent, {
+						relatedCards: gameEvent.Value.AdditionalProps.RelatedCards,
+					}),
 				);
 				break;
 			default:
