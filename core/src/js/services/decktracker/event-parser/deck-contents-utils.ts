@@ -18,7 +18,6 @@ export const modifyDeckForSpecialCards = (
 		case CardIds.DeckOfLunacy:
 			return handleDeckOfLunacy(deckState, allCards, i18n);
 		case CardIds.FrizzKindleroost:
-		case CardIds.DragonAffinityTavernBrawl:
 			return handleFrizzKindleroost(deckState, allCards, i18n);
 		case CardIds.TheFiresOfZinAzshari:
 			return handleFiresOfZinAzshari(deckState, allCards, i18n);
