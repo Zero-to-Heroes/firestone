@@ -1,21 +1,16 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@services/cards-facade.service';
+import { PreferencesService } from '@services/preferences.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 const CARDS_THAT_IMPROVE_WHEN_TRADED = [CardIds.AmuletOfUndying, CardIds.BlacksmithingHammer, CardIds.WickedShipment];
 
 export class CardTradedParser implements EventParser {
-	constructor(
-		private readonly helper: DeckManipulationHelper,
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-	) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly prefs: PreferencesService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.TRADE_CARD;
@@ -52,14 +47,18 @@ export class CardTradedParser implements EventParser {
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
 			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
+
+		const prefs = await this.prefs.getPreferences();
 		// Because we don't know where the card is inserted, we reset the positions
-		const deckWithResetPositions: readonly DeckCard[] = newDeck.map((card) =>
-			card.update({
-				...card,
-				positionFromBottom: undefined,
-				positionFromTop: undefined,
-			}),
-		);
+		const deckWithResetPositions: readonly DeckCard[] = prefs.overlayResetDeckPositionAfterTrade
+			? newDeck.map((card) =>
+					card.update({
+						...card,
+						positionFromBottom: undefined,
+						positionFromTop: undefined,
+					}),
+			  )
+			: newDeck;
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: deckWithResetPositions,

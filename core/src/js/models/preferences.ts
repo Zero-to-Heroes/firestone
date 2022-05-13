@@ -151,6 +151,7 @@ export class Preferences {
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;
+	readonly overlayResetDeckPositionAfterTrade: boolean = true;
 	readonly overlayShowStatsChange: boolean = true;
 	readonly overlayShowDeckWinrate: boolean = true;
 	readonly overlayShowMatchupWinrate: boolean = true;
