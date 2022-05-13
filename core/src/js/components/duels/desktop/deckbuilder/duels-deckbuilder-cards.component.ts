@@ -263,7 +263,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 									cardName: card.cardName,
 									manaCost: this.allCards.getCard(card.cardId).cost,
 									rarity: this.allCards.getCard(card.cardId).rarity?.toLowerCase(),
-									offeringRate: (100 * card.totalOffered) / totalCardsOffered,
+									offeringRate: card.totalOffered / totalCardsOffered,
 									totalBuckets: totalBuckets,
 								};
 								return bucketCard;

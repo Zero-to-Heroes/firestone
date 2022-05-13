@@ -1,5 +1,6 @@
 :host() {
 	width: 100%;
+	display: flex;
 }
 
 .card {
@@ -8,6 +9,7 @@
 	height: 26px;
 	position: relative;
 	overflow: hidden;
+	flex-grow: 1;
 
 	&:hover {
 		transform: scale(1.1);
@@ -132,4 +134,16 @@
 			background: #ae7014;
 		}
 	}
+}
+
+.additional-info {
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 5px;
+	width: 35px;
+	flex-shrink: 0;
+	flex-grow: 0;
+	margin-right: 5px;
 }

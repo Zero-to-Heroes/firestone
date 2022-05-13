@@ -44,6 +44,11 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				</div>
 			</div> -->
 		</div>
+		<div class="additional-info">
+			<div class="offering-rate" [helpTooltip]="'app.duels.deckbuilder.card-offering-rate-tooltip' | owTranslate">
+				{{ offeringRate }}
+			</div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +62,7 @@ export class DuelsBucketCardComponent {
 	manaCost: number;
 	rarity: string;
 	cardImage: string;
+	offeringRate: string;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -70,5 +76,10 @@ export class DuelsBucketCardComponent {
 		this.manaCost = card.manaCost;
 		this.rarity = card.rarity;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=3)`;
+		this.offeringRate = card.offeringRate?.toLocaleString(this.i18n.formatCurrentLocale(), {
+			maximumFractionDigits: 1,
+			minimumFractionDigits: 1,
+			style: 'percent',
+		});
 	}
 }
