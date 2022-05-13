@@ -258,6 +258,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DeadRinger:
 				return and(inDeck, minion, deathrattle);
+			case CardIds.DeepwaterEvoker:
+				return and(inDeck, spell);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DoubleJump:
