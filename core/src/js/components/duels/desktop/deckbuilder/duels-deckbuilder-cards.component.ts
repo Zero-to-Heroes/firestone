@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
 import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { DuelsBucketsData } from '@models/duels/duels-state';
@@ -121,7 +122,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 									[helpTooltip]="'app.duels.deckbuilder.bucket-filter-button-tooltip' | owTranslate"
 								></button>
 								<div class="bucket-cards">
-									<deck-list [cards]="bucket.bucketCardIds"></deck-list>
+									<duels-bucket-cards-list [cards]="bucket.bucketCards"></duels-bucket-cards-list>
 								</div>
 							</div>
 						</div>
@@ -252,18 +253,22 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					);
 					return candidateBuckets.map((bucket) => {
 						const totalCardsOffered = sumOnArray(bucket.cards, (card) => card.totalOffered);
-						const bucketCards = bucket.cards.map((card) => {
-							const totalBuckets = candidateBuckets.filter((b) =>
-								b.cards.map((c) => c.cardId).includes(card.cardId),
-							).length;
-							const bucketCard: BucketCard = {
-								cardId: card.cardId,
-								cardName: card.cardName,
-								offeringRate: (100 * card.totalOffered) / totalCardsOffered,
-								totalBuckets: totalBuckets,
-							};
-							return bucketCard;
-						});
+						const bucketCards = bucket.cards
+							.map((card) => {
+								const totalBuckets = candidateBuckets.filter((b) =>
+									b.cards.map((c) => c.cardId).includes(card.cardId),
+								).length;
+								const bucketCard: BucketCard = {
+									cardId: card.cardId,
+									cardName: card.cardName,
+									manaCost: this.allCards.getCard(card.cardId).cost,
+									rarity: this.allCards.getCard(card.cardId).rarity?.toLowerCase(),
+									offeringRate: (100 * card.totalOffered) / totalCardsOffered,
+									totalBuckets: totalBuckets,
+								};
+								return bucketCard;
+							})
+							.sort((a, b) => a.manaCost - b.manaCost || (a.cardName < b.cardName ? -1 : 1));
 						const bucketData: BucketData = {
 							bucketId: bucket.bucketId,
 							bucketName: this.allCards.getCard(bucket.bucketId)?.name,
@@ -654,11 +659,4 @@ interface BucketClass {
 	readonly class: CardClass;
 	readonly name: string;
 	readonly image: string;
-}
-
-interface BucketCard {
-	readonly cardId: string;
-	readonly cardName: string;
-	readonly offeringRate: number;
-	readonly totalBuckets: number;
 }

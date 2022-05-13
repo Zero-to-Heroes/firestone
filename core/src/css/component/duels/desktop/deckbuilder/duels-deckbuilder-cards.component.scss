@@ -229,9 +229,11 @@
 				.bucket-cards {
 					margin-top: 10px;
 
-					deck-list {
+					deck-list,
+					duels-bucket-cards-list {
 						width: 90%;
 						max-height: 210px;
+						height: 210px;
 					}
 				}
 			}
