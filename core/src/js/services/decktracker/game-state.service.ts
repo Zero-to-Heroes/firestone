@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { EntityChosenParser } from '@services/decktracker/event-parser/entity-chosen-parser';
 import { HeroRevealedParser } from '@services/decktracker/event-parser/hero-revealed-parser';
 import { ReconnectStartParser } from '@services/decktracker/event-parser/reconnect-start-parser';
@@ -8,7 +9,6 @@ import { ShuffleDeckParser } from '@services/decktracker/event-parser/shuffle-de
 import { SpecialCardPowerTriggeredParser } from '@services/decktracker/event-parser/special-card-power-triggered-parser';
 import { SphereOfSapienceParser } from '@services/decktracker/event-parser/special-cases/sphere-of-sapience-parser';
 import { BehaviorSubject } from 'rxjs';
-import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -169,6 +169,7 @@ export class GameStateService {
 		private readonly memory: MemoryInspectionService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly owUtils: OwUtilsService,
+		private readonly attackOnBoardService: AttackOnBoardService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -425,44 +426,14 @@ export class GameStateService {
 			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({
 				...card,
-				dormant: this.hasTag(entity, GameTag.DORMANT),
+				dormant: hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
-		const numberOfVoidtouchedAttendants =
-			newBoard.filter((entity) => entity.cardId === CardIds.VoidtouchedAttendant).length || 0;
-		const entitiesOnBoardThatCanAttack = newBoard
-			.map((card) => playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId))
-			.filter((entity) => entity)
-			.filter((entity) => this.canAttack(entity, stateWithMetaInfos.isActivePlayer))
-			.filter((entity) => entity.attack > 0);
-		const totalAttackOnBoard = entitiesOnBoardThatCanAttack
-			.map((entity) => this.windfuryMultiplier(entity) * (numberOfVoidtouchedAttendants + entity.attack))
-			.reduce((a, b) => a + b, 0);
-		const baseHeroAttack = stateWithMetaInfos.isActivePlayer
-			? Math.max(playerFromTracker?.Hero?.attack || 0, 0)
-			: Math.max(playerFromTracker?.Weapon?.attack || 0, 0);
-		const heroAttack =
-			baseHeroAttack > 0 && this.canAttack(playerFromTracker.Hero, stateWithMetaInfos.isActivePlayer)
-				? this.windfuryMultiplier(playerFromTracker.Hero) * (numberOfVoidtouchedAttendants + baseHeroAttack)
-				: 0;
 		return playerDeckWithZonesOrdered.update({
 			board: newBoard,
 			cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
-			totalAttackOnBoard: {
-				board: totalAttackOnBoard,
-				hero: heroAttack,
-			} as AttackOnBoard,
+			totalAttackOnBoard: this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker),
 		} as DeckState);
-	}
-
-	private windfuryMultiplier(entity): number {
-		if (this.hasTag(entity, GameTag.MEGA_WINDFURY) || this.hasTag(entity, GameTag.WINDFURY, 3)) {
-			return 4;
-		}
-		if (this.hasTag(entity, GameTag.WINDFURY)) {
-			return 2;
-		}
-		return 1;
 	}
 
 	private async buildEventEmitters() {
@@ -491,7 +462,7 @@ export class GameStateService {
 			new CardDrawParser(this.helper, this.allCards, this.i18n),
 			new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n),
 			new CardBackToDeckParser(this.helper, this.allCards, this.i18n),
-			new CardTradedParser(this.helper, this.allCards, this.i18n),
+			new CardTradedParser(this.helper, this.prefs),
 			new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
 			new CardRemovedFromDeckParser(this.helper, this.allCards),
 			new CardRemovedFromHandParser(this.helper),
@@ -582,39 +553,5 @@ export class GameStateService {
 		}
 
 		return parsers;
-	}
-
-	// TODO: this should move elsewhere
-	// On the opponent's turn, we show the total attack, except for dormant minions
-	private canAttack(entity, isActivePlayer: boolean): boolean {
-		const impossibleToAttack =
-			this.hasTag(entity, GameTag.DORMANT) ||
-			(isActivePlayer &&
-				this.hasTag(entity, GameTag.EXHAUSTED) &&
-				!this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) ||
-			// Here technically it's not totally correct, as you'd have to know if the
-			// frozen minion will unfreeze in the opponent's turn
-			(isActivePlayer && this.hasTag(entity, GameTag.FROZEN)) ||
-			this.hasTag(entity, GameTag.CANT_ATTACK);
-
-		// 	'can attack?',
-		// 	!impossibleToAttack,
-		// 	entity?.cardId,
-		// 	this.hasTag(entity, GameTag.EXHAUSTED),
-		// 	this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH),
-		// 	this.hasTag(entity, GameTag.CANT_ATTACK),
-		// 	entity,
-		// );
-		// charge / rush?
-		return !impossibleToAttack;
-	}
-
-	// TODO: this should move elsewhere
-	private hasTag(entity, tag: number, value = 1): boolean {
-		if (!entity?.tags) {
-			return false;
-		}
-		const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
-		return matches;
 	}
 }

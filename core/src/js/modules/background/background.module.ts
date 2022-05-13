@@ -68,6 +68,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { AttackOnBoardService } from '@services/decktracker/attack-on-board.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -1052,6 +1053,7 @@ const components = [
 		SecretsParserService,
 		GameStateService,
 		DeckManipulationHelper,
+		AttackOnBoardService,
 
 		BattlegroundsStoreService,
 		BgsInitService,
