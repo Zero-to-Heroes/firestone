@@ -43,22 +43,17 @@ export class SphereOfSapienceParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		console.debug('[sphere-of-sapience-parser] event', gameEvent);
-
 		if (gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK) {
-			console.debug('[sphere-of-sapience-parser] card drawn, resetting');
 			this.lastSpecialPowerEvent = null;
 			this.lastEntityChosenEvent = null;
 			return currentState;
 		}
 
 		if (gameEvent.type === GameEvent.SPECIAL_CARD_POWER_TRIGGERED) {
-			console.debug('[sphere-of-sapience-parser]', gameEvent);
 			if (CardIds.SphereOfSapience === cardId) {
 				this.lastSpecialPowerEvent = gameEvent;
 				// If it's not the active player, we don't know what they did, so we just reset the top/bottom states
 				if (!isPlayer) {
-					console.debug('[sphere-of-sapience-parser] not player');
 					return currentState.update({
 						[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
 							deck: deck.deck.map((card) =>
@@ -73,7 +68,6 @@ export class SphereOfSapienceParser implements EventParser {
 			}
 		}
 		if (gameEvent.type === GameEvent.ENTITY_CHOSEN) {
-			console.debug('[sphere-of-sapience-parser]', gameEvent);
 			this.lastEntityChosenEvent = gameEvent;
 		}
 
@@ -87,13 +81,6 @@ export class SphereOfSapienceParser implements EventParser {
 			// Handled as soon as the SPECIAL_CARD_POWER_TRIGGERED event is received
 			return currentState;
 		}
-
-		console.debug(
-			'[sphere-of-sapience-parser] handling SphereOfSapience',
-			isPlayer,
-			cardId,
-			this.lastSpecialPowerEvent,
-		);
 
 		const newDeck = this.handleSphereOfSapience(deck);
 		return currentState.update({
@@ -110,16 +97,13 @@ export class SphereOfSapienceParser implements EventParser {
 			const otherCard = relatedCards.find(
 				(relatedCard) => relatedCard.CardId !== this.lastEntityChosenEvent.cardId,
 			);
-			console.debug('[sphere-of-sapience-parser] relatedCards', relatedCards, otherCard);
 			if (otherCard) {
 				const originalEntityId = otherCard.OriginalEntityId === -1 ? null : otherCard.OriginalEntityId;
 				const cardInDeck = this.helper.findCardInZone(deck.deck, otherCard.CardId, originalEntityId);
 				const updatedCard = cardInDeck.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
 				});
-				console.debug('[sphere-of-sapience-parser] updatedCard', updatedCard, deck.deck);
 				const newDeck = this.helper.empiricReplaceCardInZone(deck.deck, updatedCard, true);
-				console.debug('[sphere-of-sapience-parser] newDeck', newDeck);
 				return deck.update({
 					deck: newDeck,
 				});
