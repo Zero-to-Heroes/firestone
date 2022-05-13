@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -55,7 +56,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 					([decks, timeFilter, classFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
 						!!decks?.length,
 				),
-				map(([decks, timeFilter, classFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
+				map(([decks, timeFilter, heroesFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
 					decks
 						.filter(
 							(deck) => !hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
@@ -63,7 +64,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 						.map((deck) => {
 							return {
 								...deck,
-								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, patch, 0),
+								runs: filterDuelsRuns(deck.runs, timeFilter, heroesFilter, gameMode, patch, 0),
 								deckName:
 									deckNames[deck.initialDeckList] ??
 									deck.deckName ??
@@ -71,7 +72,14 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 								hidden: hiddenCodes?.includes(deck.initialDeckList),
 							};
 						})
-						.filter((deck) => !!deck.runs?.length || deck.isPersonalDeck),
+						.filter((deck) => {
+							const matchesHero = !heroesFilter?.length
+								? false
+								: heroesFilter.some(
+										(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
+								  );
+							return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
+						}),
 				),
 				this.mapData((decks) => (!!decks.length ? decks : null)),
 			);
