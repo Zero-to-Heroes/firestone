@@ -344,7 +344,7 @@ const filterType = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: 
 };
 
 export const getMmrThreshold = (rankFilter: BgsRankFilterType, mmrPercentiles: readonly MmrPercentile[]): number => {
-	const percentile = mmrPercentiles.find((p) => p.percentile === rankFilter);
+	const percentile = mmrPercentiles?.find((p) => p.percentile === rankFilter);
 	return percentile?.mmr ?? 0;
 };
 

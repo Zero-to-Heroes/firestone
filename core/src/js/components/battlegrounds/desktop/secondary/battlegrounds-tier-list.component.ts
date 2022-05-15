@@ -127,7 +127,9 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 							<ul class="filters">
 								<li class="filter time">${getBgsTimeFilterLabelFor(info.timeFilter, null, this.i18n)}</li>
 								<li class="filter rank">${getBgsRankFilterLabelFor(
-									info.mmrPercentiles.find((percentile) => percentile.percentile === info.rankFilter),
+									info.mmrPercentiles?.find(
+										(percentile) => percentile.percentile === info.rankFilter,
+									),
 									this.i18n,
 								)}</li>
 								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
