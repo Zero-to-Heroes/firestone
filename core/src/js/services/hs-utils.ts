@@ -633,8 +633,13 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	}
 };
 
-// TODO: this is becoming a mess - refactor
-export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeService, inputClass?: string): number => {
+export const normalizeDeckHeroDbfId = (
+	heroDbfId: number,
+	cards: CardsFacadeService,
+	inputClass?: string,
+	deckClass?: CardClass,
+): number => {
+	console.debug('normalizing', heroDbfId, cards, inputClass, deckClass);
 	const cardFromHeroDbfId = cards.getCardFromDbfId(heroDbfId);
 	// Don't normalize the dual-class heroes
 	switch (cardFromHeroDbfId.id) {
@@ -643,6 +648,35 @@ export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeServ
 		case CardIds.RenoJacksonTavernBrawl5:
 		case CardIds.BrannBronzebeardTavernBrawl5:
 			return heroDbfId;
+		// Sometimes a neutral hero is provided even though the deck has class cards
+		case CardIds.VanndarStormpikeTavernBrawl:
+			switch (deckClass) {
+				case CardClass.DEMONHUNTER:
+					return cards.getCard(CardIds.IllidanStormrageHeroSkins).dbfId;
+				case CardClass.HUNTER:
+					return cards.getCard(CardIds.RexxarHeroSkins).dbfId;
+				case CardClass.PALADIN:
+					return cards.getCard(CardIds.UtherLightbringerHeroSkins).dbfId;
+				case CardClass.PRIEST:
+					return cards.getCard(CardIds.AnduinWrynnHeroSkins).dbfId;
+				case CardClass.ROGUE:
+					return cards.getCard(CardIds.ValeeraSanguinarHeroSkins).dbfId;
+			}
+			break;
+		case CardIds.DrektharTavernBrawl:
+			switch (deckClass) {
+				case CardClass.DRUID:
+					return cards.getCard(CardIds.MalfurionStormrageHeroSkins).dbfId;
+				case CardClass.MAGE:
+					return cards.getCard(CardIds.JainaProudmooreHeroSkins).dbfId;
+				case CardClass.SHAMAN:
+					return cards.getCard(CardIds.ThrallHeroSkins).dbfId;
+				case CardClass.WARLOCK:
+					return cards.getCard(CardIds.GuldanHeroSkins).dbfId;
+				case CardClass.WARRIOR:
+					return cards.getCard(CardIds.GarroshHellscreamHeroSkins).dbfId;
+			}
+			break;
 	}
 
 	const playerClass: string = inputClass ?? cards.getCardFromDbfId(heroDbfId)?.playerClass;

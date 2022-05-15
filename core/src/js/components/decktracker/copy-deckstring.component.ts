@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
-import { allDuelsSignatureTreasures, CardIds } from '@firestone-hs/reference-data';
+import { allDuelsSignatureTreasures, CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { DeckDefinition, decode, encode } from 'deckstrings';
@@ -93,12 +93,18 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 			return allDuelsSignatureTreasures.includes(card.id as CardIds) ? card : null;
 		})
 		.filter((card) => !!card);
-	console.debug('sanitize deck defnition', deckDefinition);
 	const duelsClass = !duelsSignatureTreasures?.length ? null : duelsSignatureTreasures[0].playerClass;
+	const deckClass = deckDefinition.cards
+		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
+		.map((card) => card?.cardClass)
+		.map((cardClass) => CardClass[cardClass.toUpperCase()] as CardClass)
+		.filter((cardClass: CardClass) => cardClass !== CardClass.NEUTRAL)[0];
+	console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) =>
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
-		normalizeDeckHeroDbfId(hero, allCards, duelsClass),
+		normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass),
 	);
 	deckDefinition.cards = newCards;
+	console.debug('after sanitize', deckDefinition);
 	return deckDefinition;
 };
