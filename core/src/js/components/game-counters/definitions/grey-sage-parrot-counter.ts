@@ -28,7 +28,8 @@ export class GreySageParrotCounterDefinition implements CounterDefinition {
 		const candidate: ReferenceCard = gameState
 			.getSpellsPlayedForPlayer(allCards, side)
 			.map((cardId) => allCards.getCard(cardId))
-			.filter((card) => card.cost >= costThreshold)[0];
+			.filter((card) => card.cost >= costThreshold)
+			.pop();
 		if (!candidate?.id) {
 			return null;
 		}
