@@ -6,6 +6,7 @@ import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { DuelsBucketsData } from '@models/duels/duels-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { FeatureFlags } from '@services/feature-flags';
+import { normalizeDeckHeroDbfId } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderSaveDeckEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-save-deck-event';
 import { groupByFunction, sortByProperties, sumOnArray } from '@services/utils';
@@ -417,13 +418,19 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		);
 		this.deckstring$ = combineLatest(
 			this.currentDeckCards$,
-			this.store.listen$(([main, nav]) => main.duels.deckbuilder.currentHeroCardId),
+			this.store.listen$(
+				([main, nav]) => main.duels.deckbuilder.currentHeroCardId,
+				([main, nav]) => main.duels.deckbuilder.currentSignatureTreasureCardId,
+			),
 		).pipe(
-			this.mapData(([cards, [hero]]) => {
+			this.mapData(([cards, [hero, currentSignatureTreasureCardId]]) => {
 				const cardDbfIds = cards
 					.map((cardId) => this.allCards.getCard(cardId).dbfId)
 					.map((dbfId) => [dbfId, 1] as [number, number]);
-				const heroDbfId = this.allCards.getCard(hero).dbfId ?? 7;
+				const treasureCard = this.allCards.getCard(currentSignatureTreasureCardId);
+				const duelsClass = treasureCard.cardClass;
+				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
+				console.debug('heroDbfId', heroDbfId, duelsClass, treasureCard, hero);
 				const deckDefinition: DeckDefinition = {
 					format: GameFormat.FT_WILD,
 					cards: cardDbfIds,

@@ -1,4 +1,4 @@
-import { BoosterType, CardIds, COIN_IDS, GameType } from '@firestone-hs/reference-data';
+import { BoosterType, CardClass, CardIds, COIN_IDS, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
@@ -646,28 +646,31 @@ export const normalizeDeckHeroDbfId = (heroDbfId: number, cards: CardsFacadeServ
 	}
 
 	const playerClass: string = inputClass ?? cards.getCardFromDbfId(heroDbfId)?.playerClass;
-	// console.debug('matching playerClass', playerClass, heroDbfId);
-	switch (playerClass) {
-		case 'DemonHunter':
-		case 'Demonhunter':
+	if (!playerClass) {
+		return heroDbfId;
+	}
+
+	console.debug('matching playerClass', playerClass, heroDbfId);
+	switch (CardClass[playerClass?.toUpperCase()]) {
+		case CardClass.DEMONHUNTER:
 			return 56550;
-		case 'Druid':
+		case CardClass.DRUID:
 			return 274;
-		case 'Hunter':
+		case CardClass.HUNTER:
 			return 31;
-		case 'Mage':
+		case CardClass.MAGE:
 			return 637;
-		case 'Paladin':
+		case CardClass.PALADIN:
 			return 671;
-		case 'Priest':
+		case CardClass.PRIEST:
 			return 813;
-		case 'Rogue':
+		case CardClass.ROGUE:
 			return 930;
-		case 'Shaman':
+		case CardClass.SHAMAN:
 			return 1066;
-		case 'Warlock':
+		case CardClass.WARLOCK:
 			return 893;
-		case 'Warrior':
+		case CardClass.WARRIOR:
 			return 7;
 		default:
 			// Keep the neutral heroes
