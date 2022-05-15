@@ -160,6 +160,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		if (!this.replayInfo) {
 			return;
 		}
+
 		this.gameMode = this.replayInfo.gameMode;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
 
@@ -190,8 +191,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.tribesTooltip = this.i18n.translateString('app.replays.replay-info.bgs-available-tribes-tooltip', {
 			value: this.availableTribes.map((tribe) => tribe.tooltip).join(', '),
 		});
-		this.bgsPerfectGame =
-			this.result === this.i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
+		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
 		this.finalWarband = this.buildFinalWarband();
 	}
 
