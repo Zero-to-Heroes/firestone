@@ -8,6 +8,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
@@ -442,52 +443,55 @@ export class BgsChartHpComponent {
 	private buildPlayerOrder(leaderboardPositionOverTurn: {
 		[playerCardId: string]: readonly NumericTurnInfo[];
 	}): readonly string[] {
-		const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
-		return Object.keys(leaderboardPositionOverTurn)
+		if (!!leaderboardPositionOverTurn?.length) {
+			const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
+			return Object.keys(leaderboardPositionOverTurn)
+				.map((playerCardId) => {
+					const positionAtLastTurn = leaderboardPositionOverTurn[playerCardId][lastTurn];
+					return {
+						playerCardId: playerCardId,
+						position: positionAtLastTurn?.value ?? 0,
+					};
+				})
+				.sort((a, b) => a.position - b.position)
+				.map((info) => info.playerCardId);
+		}
+
+		// Fallback which uses the total health + armor instead of the leaderboard position
+		const turnAtWhichEachPlayerDies = Object.keys(leaderboardPositionOverTurn)
+			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
 			.map((playerCardId) => {
-				const positionAtLastTurn = leaderboardPositionOverTurn[playerCardId][lastTurn];
+				const info = leaderboardPositionOverTurn[playerCardId];
 				return {
 					playerCardId: playerCardId,
-					position: positionAtLastTurn?.value ?? 0,
+					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
+					lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
 				};
-			})
-			.sort((a, b) => a.position - b.position)
-			.map((info) => info.playerCardId);
-
-		// const turnAtWhichEachPlayerDies = Object.keys(leaderboardPositionOverTurn)
-		// 	.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
-		// 	.map((playerCardId) => {
-		// 		const info = leaderboardPositionOverTurn[playerCardId];
-		// 		return {
-		// 			playerCardId: playerCardId,
-		// 			turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
-		// 			lastKnownHp: (info[info.length - 1]?.value ?? 99) + ((info[info.length - 1] as any)?.armor ?? 0),
-		// 		};
-		// 	});
-		// let playerOrder: string[] = turnAtWhichEachPlayerDies
-		// 	.sort(
-		// 		(a, b) =>
-		// 			b.turnDeath - a.turnDeath ||
-		// 			// a.lastKnownPosition - b.lastKnownPosition ||
-		// 			b.lastKnownHp - a.lastKnownHp,
-		// 	)
-		// 	.map((playerInfo) => playerInfo.playerCardId);
-		// // Legacy issue - the heroes that were offered during the hero selection phase are
-		// // also proposed there
-		// if (playerOrder.length > 8) {
-		// 	const candidatesToRemove = turnAtWhichEachPlayerDies
-		// 		.filter((info) => info.turnDeath === 99)
-		// 		.filter((info) =>
-		// 			info.playerCardId === CardIds.PatchwerkBattlegrounds
-		// 				? info.lastKnownHp === 55
-		// 				: info.lastKnownHp === 40,
-		// 		)
-		// 		.filter((info) => info.playerCardId !== this._mainPlayerCardId);
-		// 	playerOrder = playerOrder.filter(
-		// 		(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
-		// 	);
-		// }
-		// return playerOrder;
+			});
+		let playerOrder: string[] = turnAtWhichEachPlayerDies
+			.sort(
+				(a, b) =>
+					b.turnDeath - a.turnDeath ||
+					// a.lastKnownPosition - b.lastKnownPosition ||
+					b.lastKnownHp - a.lastKnownHp,
+			)
+			.map((playerInfo) => playerInfo.playerCardId);
+		// Legacy issue - the heroes that were offered during the hero selection phase are
+		// also proposed there
+		if (playerOrder.length > 8) {
+			const candidatesToRemove = turnAtWhichEachPlayerDies
+				.filter((info) => info.turnDeath === 99)
+				.filter((info) =>
+					info.playerCardId === CardIds.PatchwerkBattlegrounds
+						? info.lastKnownHp === 55
+						: info.lastKnownHp === 40,
+				)
+				.filter((info) => info.playerCardId !== this._mainPlayerCardId);
+			playerOrder = playerOrder.filter(
+				(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
+			);
+		}
+		return playerOrder;
 	}
 
 	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {

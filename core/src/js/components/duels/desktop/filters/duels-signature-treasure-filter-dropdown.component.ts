@@ -107,8 +107,8 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 							return 0;
 						}
 
-						const aName = aCard.name.toLowerCase();
-						const bName = bCard.name.toLowerCase();
+						const aName = aCard.name?.toLowerCase();
+						const bName = bCard.name?.toLowerCase();
 						if (aName < bName) {
 							return -1;
 						}
@@ -124,8 +124,8 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 							return 0;
 						}
 
-						const aClassName = aCard.playerClass.toLowerCase();
-						const bClassName = bCard.playerClass.toLowerCase();
+						const aClassName = aCard.playerClass?.toLowerCase();
+						const bClassName = bCard.playerClass?.toLowerCase();
 						if (aClassName < bClassName) {
 							return -1;
 						}
