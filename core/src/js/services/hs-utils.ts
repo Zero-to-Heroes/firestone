@@ -601,6 +601,7 @@ export const COUNTERSPELLS = [
 	CardIds.CounterspellVanilla,
 	CardIds.OhMyYogg,
 	CardIds.IceTrap,
+	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 	// Even though it's a specific enchantment that counters the spell, the trigger entity is the minion itself
 	CardIds.BlademasterOkani,
 ];
