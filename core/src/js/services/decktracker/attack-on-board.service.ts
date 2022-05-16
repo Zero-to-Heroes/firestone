@@ -45,7 +45,7 @@ export class AttackOnBoardService {
 		const cantAttack = hasTag(entity, GameTag.CANT_ATTACK);
 		// Here technically it's not totally correct, as you'd have to know if the
 		// frozen minion will unfreeze in the opponent's turn
-		const isFrozen = isActivePlayer && hasTag(entity, GameTag.FROZEN);
+		const isFrozen = hasTag(entity, GameTag.FROZEN);
 		const hasSummoningSickness =
 			isActivePlayer &&
 			hasTag(entity, GameTag.EXHAUSTED) &&
