@@ -299,15 +299,16 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					toggledBucketFilters.includes(bucket.bucketId),
 				);
 				const allCardIds = bucketsMatchingToggle.flatMap((bucket) => bucket.bucketCardIds);
-				const withDupes = allCardIds
+				const withDupeCards: readonly ReferenceCard[] = allCardIds
 					.map((cardId) => this.allCards.getCard(cardId))
 					.flatMap((card) =>
 						card.deckDuplicateDbfId
 							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
-							: [card],
+							: [card, ...this.allCards.getCards().filter((c) => c.deckDuplicateDbfId === card.dbfId)],
 					)
-					.map((card) => card.id)
-					.filter((cardId) => !!cardId);
+					.filter((card) => !!card);
+				console.debug(withDupeCards.filter((c) => c.name?.includes('Quick Shot')));
+				const withDupes = withDupeCards.map((card) => card.id).filter((cardId) => !!cardId);
 				return [...new Set(withDupes)];
 			}),
 		);
