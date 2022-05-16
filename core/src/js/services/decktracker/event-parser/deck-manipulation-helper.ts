@@ -106,9 +106,12 @@ export class DeckManipulationHelper {
 		let removedCard = null;
 		const result = [];
 		// By default, we don't want to remove a card with a known entity ID, as the entityId is some useful info
-		// on the card. We only do so if a) we find a card that matches our input card id and b) all such cards
-		// have a valid entityId (typically the case with Soul Fragments)
+		// on the card. We only do so if:
+		// a) no card matches the known entityId,
+		// b) we find a card that matches our input card id and
+		// c) all such cards have a valid entityId (typically the case with Soul Fragments)
 		const shouldIgnoreEntityId =
+			!zone.filter((card) => card.entityId === entityId).length &&
 			zone.some((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
 			zone
 				.filter((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId)
@@ -118,7 +121,7 @@ export class DeckManipulationHelper {
 			const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 			// Here we don't want to remove a card with a known entity id, as it might conflict
 			// with another
-			if (refCardId === normalizedCardId && (shouldIgnoreEntityId || !card.entityId) && !hasRemovedOnce) {
+			if (!hasRemovedOnce && refCardId === normalizedCardId && (shouldIgnoreEntityId || !card.entityId)) {
 				if (debug) {
 					console.debug('removing card', card);
 				}
@@ -384,13 +387,19 @@ export class DeckManipulationHelper {
 		zone: readonly DeckCard[],
 		newCard: DeckCard,
 		removeFillerCard: boolean,
+		debug = false,
 	): readonly DeckCard[] {
+		// If the
+		// Why not force a remove by entityId here?
 		const [newZone, removedCard] = this.removeSingleCardFromZone(
 			zone,
 			newCard.cardId,
 			newCard.entityId,
 			removeFillerCard,
+			false,
+			debug,
 		);
+		debug && console.debug('removed card', newZone, removedCard);
 		const updatedZone = this.addSingleCardToZone(newZone, newCard);
 		return updatedZone;
 	}

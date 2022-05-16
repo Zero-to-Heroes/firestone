@@ -49,7 +49,16 @@ export class CardRevealedParser implements EventParser {
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
-		const newOther: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(deck.otherZone, card, false);
+		// The issue here is that we used "REVEALED" for both when a new card arrives, and when we show an existing card
+		// If the entityId already exists, we remove then add back. Otherwise, we just add
+		const newOther: readonly DeckCard[] =
+			// Replacing doesn't work when we resurrect a minion: if we replace, we will find a card ith the same cardId
+			// and dfifferent entityId, and will remove the previous one.
+			// However, that's exactly the behavior we want to have for dredge.
+			// So for now, let's keep this hack and only replace in case of Dredge
+			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
+				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false, true)
+				: this.helper.addSingleCardToZone(deck.otherZone, card);
 		//console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
