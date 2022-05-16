@@ -91,6 +91,7 @@ export const globalEffectCards = [
 	CardIds.NeeruFireblade1,
 	CardIds.PrinceKeleseth,
 	CardIds.RadiantLightspawn,
+	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.ReductomaraToken,
 	CardIds.RenounceDarkness,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
@@ -100,6 +101,7 @@ export const globalEffectCards = [
 	CardIds.SurvivalOfTheFittest2,
 	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
+	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
 	CardIds.UpgradedPackMule,
 	// CardIds.VanndarStormpike,
 	CardIds.Wildfire,
@@ -197,6 +199,8 @@ export const publicCardCreators = [
 	CardIds.ArcanologistCore,
 	CardIds.ArchmageArugal,
 	CardIds.AxeBerserker,
+	CardIds.BagOfCoins,
+	CardIds.BagOfCoinsTavernBrawl,
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane1,
 	CardIds.BattleVicar,
@@ -219,11 +223,13 @@ export const publicCardCreators = [
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
 	CardIds.CommanderSivara,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
+	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.CorsairCache,
 	CardIds.CountessAshmore,
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
 	CardIds.DeadRinger,
+	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DeepwaterEvoker,
 	CardIds.DragonbaneShot,
 	CardIds.DivingGryphon,
@@ -237,7 +243,9 @@ export const publicCardCreators = [
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger,
 	CardIds.FelLordBetrug1,
+	CardIds.FinalShowdown_CloseThePortalToken, // Demonslayer Kurtrus
 	CardIds.FindTheImposter_SpyOMaticToken,
+	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.ForgeOfSouls,
 	CardIds.FreeAdmission,
 	CardIds.FrostweaveDungeoneer,
@@ -275,6 +283,7 @@ export const publicCardCreators = [
 	CardIds.KronxDragonhoof,
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
+	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.LunarVisions,
 	CardIds.Mankrik,
 	CardIds.MoonlitGuidance,
@@ -299,6 +308,7 @@ export const publicCardCreators = [
 	CardIds.RavenFamiliar1,
 	CardIds.Reconnaissance,
 	CardIds.RingmasterWhatley,
+	CardIds.RiseToTheOccasion_AvengeTheFallenToken, // Lightborn Cariel
 	CardIds.RollTheBones,
 	CardIds.RunicHelmTavernBrawl,
 	CardIds.SalhetsPride,
@@ -310,12 +320,14 @@ export const publicCardCreators = [
 	CardIds.SecretPassage_SecretEntranceEnchantment,
 	CardIds.SeekGuidance,
 	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
+	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
 	CardIds.SenseDemonsLegacy,
 	CardIds.SenseDemonsVanilla1,
 	CardIds.ShroudOfConcealment,
 	CardIds.SketchyInformation,
 	CardIds.Sleetbreaker,
 	CardIds.SmallTimeRecruits,
+	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
 	CardIds.Spellcoiler,
 	CardIds.Starscryer,
 	CardIds.Switcheroo,
