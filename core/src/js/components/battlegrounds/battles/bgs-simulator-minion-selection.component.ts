@@ -343,11 +343,12 @@ export class BgsSimulatorMinionSelectionComponent
 		if (value) {
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
-				: this.allCards.getCardFromDbfId(this.ref.battlegroundsPremiumDbfId).id;
+				: // Default when the card doesn't have a golden version
+				  this.allCards.getCardFromDbfId(this.ref.battlegroundsPremiumDbfId).id ?? this.cardId;
 		} else {
 			this.cardId = this.ref.battlegroundsPremiumDbfId
 				? this.ref.id
-				: this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id;
+				: this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id ?? this.cardId;
 		}
 		// Check if the user changed the stats of the base card. If not, we just use the stats
 		// from the premium card instead
