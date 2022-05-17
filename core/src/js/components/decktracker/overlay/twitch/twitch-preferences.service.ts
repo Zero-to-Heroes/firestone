@@ -11,13 +11,22 @@ export class TwitchPreferencesService {
 	}
 
 	public async init(): Promise<void> {
-		const prefsStr = localStorage.getItem('firestone-twitch-preferences');
+		let prefsStr: string = null;
+		try {
+			prefsStr = localStorage.getItem('firestone-twitch-preferences');
+		} catch (e) {
+			console.warn('could not load prefs', e);
+		}
 		const prefs = prefsStr ? Object.assign(new TwitchPreferences(), JSON.parse(prefsStr)) : new TwitchPreferences();
 		this.prefs.next(prefs);
 	}
 
 	public async savePrefs(value: TwitchPreferences): Promise<void> {
-		localStorage.setItem('firestone-twitch-preferences', JSON.stringify(value));
+		try {
+			localStorage.setItem('firestone-twitch-preferences', JSON.stringify(value));
+		} catch (e) {
+			console.warn('could not save prefs', e);
+		}
 		this.prefs.next(value);
 	}
 }
