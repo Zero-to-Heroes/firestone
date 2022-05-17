@@ -335,7 +335,7 @@ export class GameStateService {
 					cardId: minion.CardId,
 				})),
 			];
-			console.log('[game-state] minions will die', this.minionsWillDie);
+			console.debug('[game-state] minions will die', this.minionsWillDie);
 		}
 
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, {
@@ -385,7 +385,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
