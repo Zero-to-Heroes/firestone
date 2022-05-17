@@ -29,9 +29,8 @@ export class WhizbangDeckParser implements EventParser {
 
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
-			new DeckstringOverrideEvent(deck.name, deck.deckstring),
+			new DeckstringOverrideEvent(deck.name, deck.deckstring, 'player'),
 			null,
-			'player',
 		);
 		return stateAfterPlayerDeckUpdate;
 	}

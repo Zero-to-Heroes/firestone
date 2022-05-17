@@ -27,10 +27,10 @@ export class DeckstringOverrideParser implements EventParser {
 				entityId: number;
 			}[];
 		},
-		playerOrOpponent: 'player' | 'opponent' = 'opponent',
 	): Promise<GameState> {
 		const deckName = gameEvent.deckName;
 		const deckstring = gameEvent.deckstring;
+		const playerOrOpponent = gameEvent.playerOrOpponent;
 		const initialDeck = playerOrOpponent === 'opponent' ? currentState.opponentDeck : currentState.playerDeck;
 
 		if (!deckstring) {

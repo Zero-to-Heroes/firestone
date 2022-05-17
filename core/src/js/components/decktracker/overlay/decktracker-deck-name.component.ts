@@ -20,7 +20,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[showTooltip]="true"
 			>
 			</copy-deckstring>
-			<import-deckstring *ngIf="!deckstring || missingInitialDeckstring" [tooltipPosition]="_tooltipPosition">
+			<import-deckstring
+				*ngIf="!deckstring || missingInitialDeckstring"
+				[side]="side"
+				[tooltipPosition]="_tooltipPosition"
+			>
 			</import-deckstring>
 		</div>
 	`,
@@ -32,6 +36,7 @@ export class DeckTrackerDeckNameComponent {
 	copyText: string;
 	_tooltipPosition: CardTooltipPositionType;
 	missingInitialDeckstring: boolean;
+	side: 'player' | 'opponent';
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
@@ -52,6 +57,7 @@ export class DeckTrackerDeckNameComponent {
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 		this.deckstring = value.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
+		this.side = value.isOpponent ? 'opponent' : 'player';
 		if (this.missingInitialDeckstring === undefined) {
 			this.missingInitialDeckstring = this.deckstring == null;
 		}
