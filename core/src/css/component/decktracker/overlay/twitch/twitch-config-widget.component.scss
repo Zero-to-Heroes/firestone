@@ -91,7 +91,6 @@
 		position: absolute;
 		right: 0;
 		top: 0;
-		background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
 		border-left: 1px solid var(--default-title-color);
 		// background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
@@ -104,9 +103,17 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		pointer-events: none;
 
 		.text {
 			transform: rotate(90deg);
+			width: 100px;
+			display: flex;
+			flex-shrink: 0;
+			align-items: center;
+			justify-content: center;
+			background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
+			pointer-events: all;
 		}
 	}
 }
