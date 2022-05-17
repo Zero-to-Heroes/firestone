@@ -250,6 +250,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					const candidateBuckets: readonly DuelsBucketsData[] = buckets.filter(
 						(bucket) =>
 							bucket.bucketClasses.includes(CardClass.NEUTRAL) ||
+							bucket.bucketClasses.includes(CardClass.DEATHKNIGHT) ||
 							(currentClasses ?? []).some((currentClass) => bucket.bucketClasses.includes(currentClass)),
 					);
 					return candidateBuckets.map((bucket) => {
