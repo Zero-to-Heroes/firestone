@@ -36,6 +36,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@Input() componentTooltipBackdropClass: string;
+
 	@Input('componentTooltipPosition') set position(
 		value:
 			| 'bottom'
@@ -104,7 +106,11 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 
 		// Connect position strategy
-		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
+		this.overlayRef = this.overlay.create({
+			positionStrategy: this.positionStrategy,
+			backdropClass: this.componentTooltipBackdropClass,
+			hasBackdrop: !!this.componentTooltipBackdropClass,
+		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

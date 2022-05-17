@@ -20,6 +20,7 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 			[componentType]="componentType"
 			[componentInput]="_bgsPlayer"
 			[componentTooltipPosition]="position"
+			[componentTooltipBackdropClass]="'twitch-leaderboard-backdrop'"
 		>
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
