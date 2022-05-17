@@ -290,6 +290,7 @@ export const publicCardCreators = [
 	CardIds.MastersCall,
 	CardIds.MurlocTastyfin,
 	CardIds.NecriumApothecary,
+	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.NorthwatchCommander,
 	CardIds.PackKodo,
 	CardIds.Parrrley,
