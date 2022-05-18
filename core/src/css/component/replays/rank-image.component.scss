@@ -33,6 +33,11 @@
 		bottom: -2px;
 		left: 5%;
 	}
+
+	&.ranked.legend .rank-text {
+		bottom: 7px;
+		font-size: 20px;
+	}
 }
 
 .icon {

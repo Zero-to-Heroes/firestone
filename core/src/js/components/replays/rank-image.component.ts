@@ -9,6 +9,7 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 		<div
 			class="rank-image {{ gameMode }}"
 			[helpTooltip]="rankTooltip ? rankTooltip : playerRank ? playerRankImageTooltip : rankIssueTooltip"
+			[ngClass]="{ 'legend': isLegend }"
 		>
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
 				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />
@@ -27,6 +28,7 @@ export class RankImageComponent {
 		}
 
 		this.playerRank = value.playerRank;
+		this.isLegend = value.playerRank?.startsWith('legend');
 		const rankImage = value.buildPlayerRankImage(this.i18n);
 		this.playerRankImage = rankImage.frameImage;
 		this.playerRankArt = rankImage.medalImage;
@@ -43,6 +45,7 @@ export class RankImageComponent {
 	playerRankArt: string;
 	playerRankDecoration: string;
 	playerRankImageTooltip: string;
+	isLegend: boolean;
 	rankText: string;
 	rankIssueTooltip = this.i18n.translateString('app.replays.replay-info.rank-issue-tooltip');
 
