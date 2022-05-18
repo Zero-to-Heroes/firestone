@@ -380,7 +380,10 @@ export class BgsChartHpComponent {
 			return;
 		}
 
-		const playerOrder: readonly string[] = this.buildPlayerOrder(this._stats.leaderboardPositionOverTurn);
+		const playerOrder: readonly string[] = this.buildPlayerOrder(
+			this._stats.leaderboardPositionOverTurn,
+			this._stats.hpOverTurn,
+		);
 		console.debug('[hp-chart] playerOrder', playerOrder, this._stats);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
@@ -440,17 +443,18 @@ export class BgsChartHpComponent {
 		}
 	}
 
-	private buildPlayerOrder(leaderboardPositionOverTurn: {
-		[playerCardId: string]: readonly NumericTurnInfo[];
-	}): readonly string[] {
-		if (!!leaderboardPositionOverTurn?.length) {
+	private buildPlayerOrder(
+		leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] },
+		hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] },
+	): readonly string[] {
+		if (!!leaderboardPositionOverTurn && Object.keys(leaderboardPositionOverTurn)?.length) {
 			const lastTurn = leaderboardPositionOverTurn[0]?.length ?? 0;
 			return Object.keys(leaderboardPositionOverTurn)
 				.map((playerCardId) => {
 					const positionAtLastTurn = leaderboardPositionOverTurn[playerCardId][lastTurn];
 					return {
 						playerCardId: playerCardId,
-						position: positionAtLastTurn?.value ?? 0,
+						position: positionAtLastTurn?.value ?? 99,
 					};
 				})
 				.sort((a, b) => a.position - b.position)
@@ -458,10 +462,10 @@ export class BgsChartHpComponent {
 		}
 
 		// Fallback which uses the total health + armor instead of the leaderboard position
-		const turnAtWhichEachPlayerDies = Object.keys(leaderboardPositionOverTurn)
+		const turnAtWhichEachPlayerDies = Object.keys(hpOverTurn)
 			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
 			.map((playerCardId) => {
-				const info = leaderboardPositionOverTurn[playerCardId];
+				const info = hpOverTurn[playerCardId];
 				return {
 					playerCardId: playerCardId,
 					turnDeath: info.find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
