@@ -20,6 +20,25 @@ empty-card {
 	pointer-events: none;
 }
 
+.players-recap-icon {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	margin-top: 1vh;
+
+	.icon {
+		width: 45px;
+		height: 45px;
+		pointer-events: all;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-2);
+		background-color: var(--color-5);
+		clip-path: circle(20px at 50% 50%);
+	}
+}
+
 .board {
 	position: absolute;
 	width: 100%;

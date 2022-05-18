@@ -256,6 +256,9 @@ export class TwitchAuthService {
 					: null,
 			tripleHistory: player.tripleHistory,
 			tavernUpgradeHistory: player.tavernUpgradeHistory,
+			currentWinStreak: player.currentWinStreak,
+			lastKnownComposition: player.getLastKnownComposition(),
+			lastKnownBattleHistory: player.getLastKnownBattleHistory(),
 			// buddyTurns: player.buddyTurns,
 		};
 	}

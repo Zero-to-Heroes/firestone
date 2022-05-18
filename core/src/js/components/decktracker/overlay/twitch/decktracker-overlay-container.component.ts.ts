@@ -113,10 +113,8 @@ export class DeckTrackerOverlayContainerComponent
 			console.log('mapped to HS locale', language);
 			await this.i18n.setLocale(language);
 			console.log('finished setting up locale', language, this.i18n);
-			// TODO: use prefs
 			await this.translate.use(language).toPromise();
 			this.localeInit = true;
-			// this.fetchInitialState();
 			this.twitch.listen('broadcast', async (target, contentType, event) => {
 				await this.waitForLocaleInit();
 				const deckEvent: TwitchEvent = JSON.parse(inflate(event, { to: 'string' }));

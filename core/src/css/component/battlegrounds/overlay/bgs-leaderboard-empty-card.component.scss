@@ -29,80 +29,9 @@
 		position: absolute;
 		height: 100%;
 		left: 14vh;
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-		background-image: url('/Files/assets/images/backgrounds/bg-opponent-mouse-over.png');
-		border-width: 1px;
-		border-style: solid;
-		// border-image-slice: 1;
-		border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
 
 		&.active {
 			display: flex;
-		}
-
-		& > * {
-			margin-right: -15px;
-			height: 70px;
-			width: 70px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			&:last-child {
-				margin-right: 20px;
-			}
-
-			.icon {
-				width: 80%;
-				height: 80%;
-			}
-
-			.value {
-				font-family: Passion One;
-				font-style: normal;
-				font-weight: normal;
-				font-size: 28px;
-				text-align: center;
-				color: white;
-				text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000,
-					2px 2px 0 #000;
-				position: absolute;
-				height: 100%;
-				width: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			&.debuff {
-				.value {
-					color: #ff4747;
-				}
-			}
-		}
-
-		tavern-level-icon {
-			padding: 10px;
-			position: relative;
-			top: 5px;
-		}
-
-		.tribes {
-			.icon {
-				clip-path: ellipse(35% 35% at 50% 50%);
-			}
-		}
-
-		.buddy {
-			.icon {
-			}
-
-			&.missing {
-				.icon {
-					opacity: 0.3;
-				}
-			}
 		}
 	}
 }

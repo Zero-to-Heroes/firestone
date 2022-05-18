@@ -3,10 +3,11 @@
 	height: 100%;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	background-image: url('/Files/assets/images/backgrounds/bg-opponent-mouse-over.png');
+	background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
 	border-width: 1px;
 	border-style: solid;
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	padding-right: 1.8vh;
 
 	&.active {
 		display: flex;

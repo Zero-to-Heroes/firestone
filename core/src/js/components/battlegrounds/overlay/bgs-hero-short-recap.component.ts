@@ -8,20 +8,20 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	],
 	template: `
 		<div class="short-recap">
-			<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
-			<div class="triples">
+			<tavern-level-icon [level]="tavernTier" class="element tavern" *ngIf="tavernTier"></tavern-level-icon>
+			<div class="element triples">
 				<img class="icon" [src]="triplesImage" />
 				<div class="value">{{ triples }}</div>
 			</div>
-			<div class="win-streak">
+			<div class="element win-streak">
 				<img class="icon" [src]="winStreakImage" />
 				<div class="value">{{ winStreak }}</div>
 			</div>
-			<div class="tribes">
+			<div class="element tribes">
 				<img class="icon" [src]="tribeImage" />
 				<div class="value">{{ tribeCount }}</div>
 			</div>
-			<div class="damage" [ngClass]="{ 'debuff': damage < 0 }">
+			<div class="element damage" [ngClass]="{ 'debuff': damage < 0 }">
 				<img class="icon" [src]="damageImage" />
 				<div class="value">{{ damage }}</div>
 			</div>

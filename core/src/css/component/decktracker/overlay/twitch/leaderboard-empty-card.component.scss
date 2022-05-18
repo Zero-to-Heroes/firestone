@@ -9,10 +9,41 @@
 	height: 100%;
 	width: 100%;
 	position: relative;
+	display: flex;
 	// background: rgba(0, 0, 0, 0.5); // dev
 
 	img {
 		height: 100%;
 		width: 100%;
+	}
+
+	.short-recap {
+		display: none;
+		position: absolute;
+		height: 86%;
+		top: 7%;
+		left: 14vh;
+
+		&.active {
+			display: flex;
+		}
+	}
+
+	::ng-deep bgs-hero-short-recap {
+		.short-recap .element {
+			height: 7vh;
+			width: 7vh;
+			margin-right: -1.8vh;
+			position: relative;
+			top: 0.3vh;
+
+			&.tavern {
+				top: 0.8vh;
+			}
+
+			.value {
+				font-size: 3vh;
+			}
+		}
 	}
 }

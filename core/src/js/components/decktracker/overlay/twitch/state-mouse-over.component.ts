@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { Map } from 'immutable';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 
@@ -16,8 +27,18 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
+					[showLiveInfo]="showLiveInfo$ | async"
 				>
 				</leaderboard-empty-card>
+				<div class="players-recap-icon" *ngIf="bgsPlayers.length === 8">
+					<svg
+						class="svg-icon-fill icon"
+						(mouseenter)="toggleLiveInfo(true)"
+						(mouseleave)="toggleLiveInfo(false)"
+					>
+						<use xlink:href="assets/svg/sprite.svg#search" />
+					</svg>
+				</div>
 			</ul>
 			<ul class="hero top-hero">
 				<div class="weapon">
@@ -64,31 +85,15 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StateMouseOverComponent {
+export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
+	showLiveInfo$: Observable<boolean>;
+
 	@Input() set overlayLeftOffset(value: number) {
 		this.horizontalOffset = value ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
-
-	isBgs: boolean;
-
-	_gameState: GameState;
-	_bgsState: TwitchBgsState;
-	horizontalOffset = 0;
-
-	topHeroPowerCard: string;
-	topWeaponCard: string;
-	topBoardCards: readonly string[];
-	bottomBoardCards: readonly string[];
-	bottomHeroPowerCard: string;
-	bottomWeaponCard: string;
-	bottomHandCards: readonly string[];
-	bgsPlayers: readonly TwitchBgsPlayer[];
-	currentTurn: number;
-
-	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
 	@Input() set bgsState(value: TwitchBgsState) {
 		if (value === this._bgsState) {
@@ -118,20 +123,50 @@ export class StateMouseOverComponent {
 		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower && this._gameState.playerDeck.heroPower.cardId;
 		this.bottomWeaponCard = this._gameState.playerDeck?.weapon && this._gameState.playerDeck.weapon.cardId;
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
-		console.debug(
-			'bottom cards info',
-			this.bottomHeroPowerCard,
-			this.bottomWeaponCard,
-			this.bottomBoardCards,
-			this.bottomHandCards,
-			this._gameState,
-		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
+	isBgs: boolean;
+
+	_gameState: GameState;
+	_bgsState: TwitchBgsState;
+	horizontalOffset = 0;
+
+	topHeroPowerCard: string;
+	topWeaponCard: string;
+	topBoardCards: readonly string[];
+	bottomBoardCards: readonly string[];
+	bottomHeroPowerCard: string;
+	bottomWeaponCard: string;
+	bottomHandCards: readonly string[];
+	bgsPlayers: readonly TwitchBgsPlayer[];
+	currentTurn: number;
+
+	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
+	private showLiveInfo = new BehaviorSubject<boolean>(false);
+
+	private destroyed$ = new Subject<void>();
+
 	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	ngAfterContentInit(): void {
+		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(takeUntil(this.destroyed$));
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		this.destroyed$.next();
+		this.destroyed$.complete();
+	}
+
+	toggleLiveInfo(value: boolean) {
+		this.showLiveInfo.next(value);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	trackByLeaderboard(index: number, player: TwitchBgsPlayer) {
 		return player.cardId;

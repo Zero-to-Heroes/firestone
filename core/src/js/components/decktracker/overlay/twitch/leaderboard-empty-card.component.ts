@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { getTribeIcon } from '@services/battlegrounds/bgs-utils';
 import { fromJS } from 'immutable';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
@@ -24,6 +25,17 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 		>
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+
+			<bgs-hero-short-recap
+				class="short-recap"
+				[ngClass]="{ 'active': _showLiveInfo }"
+				[tavernTier]="tavernTier"
+				[triples]="triples"
+				[winStreak]="winStreak"
+				[tribeImage]="tribeImage"
+				[tribeCount]="tribeCount"
+				[damage]="damage"
+			></bgs-hero-short-recap>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,16 +43,10 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 export class LeaderboardEmptyCardComponent {
 	componentType: ComponentType<any> = TwitchBgsHeroOverviewComponent;
 
-	_bgsPlayer: {
-		player: BgsPlayer;
-		currentTurn: number;
-		showLogo: boolean;
-	};
-
-	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
-	_currentTurn: number;
-
 	@Input() position: 'global-top-center' | 'right' = 'right';
+	@Input() set showLiveInfo(value: boolean) {
+		this._showLiveInfo = value;
+	}
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -57,6 +63,22 @@ export class LeaderboardEmptyCardComponent {
 		this._previousPlayer = value;
 		this.updateInfo();
 	}
+
+	_bgsPlayer: {
+		player: BgsPlayer;
+		currentTurn: number;
+		showLogo: boolean;
+	};
+
+	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
+	_currentTurn: number;
+	_showLiveInfo: boolean;
+	tavernTier: number;
+	triples: number;
+	winStreak: number;
+	tribeImage: string;
+	tribeCount: number;
+	damage: number;
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -80,6 +102,23 @@ export class LeaderboardEmptyCardComponent {
 			currentTurn: this._currentTurn,
 			showLogo: false,
 		};
+		this.tavernTier = [...(this._previousPlayer.tavernUpgradeHistory ?? [])].pop()?.tavernTier ?? 1;
+		this.triples = (this._previousPlayer.tripleHistory ?? []).length;
+		this.winStreak = this._previousPlayer.currentWinStreak;
+		const lastKnownComposition = (this._previousPlayer as BgsPlayer).getLastKnownComposition
+			? (this._previousPlayer as BgsPlayer).getLastKnownComposition()
+			: (this._previousPlayer as TwitchBgsPlayer).lastKnownComposition;
+		const tribe = lastKnownComposition?.tribe;
+		// The game doesn't show any count when it's mixed minions
+		this.tribeCount = tribe === 'mixed' ? null : lastKnownComposition?.count ?? 0;
+		this.tribeImage = getTribeIcon(tribe);
+		const lastKnownBattleHistory = (this._previousPlayer as BgsPlayer).getLastKnownBattleHistory
+			? (this._previousPlayer as BgsPlayer).getLastKnownBattleHistory()
+			: (this._previousPlayer as TwitchBgsPlayer).lastKnownBattleHistory;
+		this.damage = lastKnownBattleHistory?.damage ?? 0;
+		if (this.winStreak === 0 && this.damage > 0) {
+			this.damage = -this.damage;
+		}
 	}
 
 	private extractBoardHistory(): readonly BgsBoard[] {
