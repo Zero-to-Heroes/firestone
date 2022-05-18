@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.5.15',
+		version: '9.5.18',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -50,29 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where sometimes the app would stop tracking the game.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to not reset the "Top of Deck" and "Bottom of Deck" sections after trading a Tradeable card.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a bug where sometimes the Coin was not detected in the opponent's hand.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `The buckets (in the Deckbuilder) now show the offering rates of each card in it.`,
+								text: `Fix a simulation issue with Leeroy not properly handling indirect damage (like bombs from Kaboom Bot).`,
 							},
 						],
 					},
@@ -87,11 +65,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where Orgozoa was being incorrectly attached to Quilboars.`,
+								text: `Fix an issue where the order of players in the HP Graph's legend was reversed.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Perfect Games were not flagged as "Perfect" in the replays tab.`,
+								text: `Fix an issue when selecting some golden minions in the simulator.`,
 							},
 						],
 					},
@@ -100,23 +78,27 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add card highlight for Deepwater Evoker.`,
+								text: `Add card oracle (flag cards in opponent's hand) for Nellie's Ship.`,
+							},
+							{
+								type: 'feature',
+								text: `Add card oracle for quest rewards.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where resurrected minions would disappear from the Other zone.`,
+								text: `Fix a bug where Commander Sivara's oracle would show minions instead of spells.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where secrets countered by Improved Ice Trap would still cause the secrets helper to show.`,
+								text: `Fix buggy filter for "Top 500 Legend".`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Grey Sage Parrot's widget would show the first spell cast instead of the last one.`,
+								text: `Fix an issue where Frozen minions would sometimes be counted in the total attack on board.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Charge minions were not being taken into account in the total attack widget.`,
+								text: `Fix an issue where you couldn't import a deck when spectating a friend.`,
 							},
 						],
 					},
@@ -125,20 +107,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Improve deck code import / export overall. There are still some limitations caused by HS itself though (neutral Vanndar / Drek'Thar and the League of Explorers heroes).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the hero filter would not apply to your "draft decks" (the ones you created with the deckbuilder that don't have any run yet).`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add missing treasures synergies highlights.`,
+								text: `Add missing buckets in Deckbuilder.`,
 							},
 						],
 					},
