@@ -160,22 +160,6 @@ export class DeckTrackerOverlayContainerComponent
 		}
 	}
 
-	private fetchInitialState() {
-		console.log('retrieving initial state');
-		const options = {
-			headers: { 'Authorization': 'Bearer ' + this.token },
-		};
-		this.http.get(EBS_URL, options).subscribe(
-			(result: any) => {
-				console.log('successfully retrieved initial state', result);
-				this.processEvent(result);
-			},
-			(error) => {
-				console.log('could not retrieve initial state, waiting for EBS update');
-			},
-		);
-	}
-
 	private async processEvent(event: TwitchEvent) {
 		console.log('received event', event);
 		this.bgsState = event?.bgs;
@@ -194,6 +178,10 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	private async addDebugGameState() {
+		if (process.env.NODE_ENV === 'production') {
+			return;
+		}
+
 		await this.i18n.setLocale('enUS');
 		console.log('finished setting up locale', 'enUS', this.i18n);
 		// TODO: use prefs
