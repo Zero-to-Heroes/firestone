@@ -145,7 +145,7 @@ export class DecksStateBuilderService {
 	private isValidRank(stat: GameStat, rankFilter: DeckRankFilterType): boolean {
 		const legendRank =
 			stat.playerRank && stat.playerRank.indexOf('legend-') > -1
-				? parseInt(stat.playerRank.split('legend-')[0])
+				? parseInt(stat.playerRank.split('legend-')[1])
 				: null;
 		const leagueId =
 			!legendRank && stat.playerRank && stat.playerRank.indexOf('-') > -1

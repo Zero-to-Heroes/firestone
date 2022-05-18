@@ -28,7 +28,7 @@ export class RankImageComponent {
 		}
 
 		this.playerRank = value.playerRank;
-		this.isLegend = value.playerRank?.startsWith('legend');
+		this.isLegend = value.playerRank != null ? `${value.playerRank}`?.startsWith('legend') : false;
 		const rankImage = value.buildPlayerRankImage(this.i18n);
 		this.playerRankImage = rankImage.frameImage;
 		this.playerRankArt = rankImage.medalImage;
