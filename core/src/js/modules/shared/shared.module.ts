@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BattlegroundsMinionsTiersViewOverlayComponent } from '@components/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component';
 import { BattlegroundsMinionsGroupComponent } from '@components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '@components/battlegrounds/minions-tiers/minions-list.component';
+import { BgsHeroShortRecapComponent } from '@components/battlegrounds/overlay/bgs-hero-short-recap.component';
 import { NumericInputComponent } from '@components/settings/numeric-input.component';
 import { PreferenceDropdownComponent } from '@components/settings/preference-dropdown.component';
 import { PreferenceNumericInputComponent } from '@components/settings/preference-numeric-input.component';
@@ -273,6 +274,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
 		BgsLeaderboardEmptyCardComponent,
+		BgsHeroShortRecapComponent,
 		BgsOverlayHeroOverviewComponent,
 
 		GraphWithComparisonComponent,

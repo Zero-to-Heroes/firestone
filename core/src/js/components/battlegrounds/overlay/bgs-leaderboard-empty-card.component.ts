@@ -41,28 +41,16 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
 
-				<div class="short-recap" [ngClass]="{ 'active': showLiveInfo$ | async }">
-					<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
-					<!-- <div class="buddy {{ buddyClass }}">
-						<img class="icon" [src]="buddyImage" />
-					</div> -->
-					<div class="triples">
-						<img class="icon" [src]="triplesImage" />
-						<div class="value">{{ triples }}</div>
-					</div>
-					<div class="win-streak">
-						<img class="icon" [src]="winStreakImage" />
-						<div class="value">{{ winStreak }}</div>
-					</div>
-					<div class="tribes">
-						<img class="icon" [src]="tribeImage" />
-						<div class="value">{{ tribeCount }}</div>
-					</div>
-					<div class="damage" [ngClass]="{ 'debuff': debuff }">
-						<img class="icon" [src]="damageImage" />
-						<div class="value">{{ damage }}</div>
-					</div>
-				</div>
+				<bgs-hero-short-recap
+					class="short-recap"
+					[ngClass]="{ 'active': showLiveInfo$ | async }"
+					[tavernTier]="tavernTier"
+					[triples]="triples"
+					[winStreak]="winStreak"
+					[tribeImage]="tribeImage"
+					[tribeCount]="tribeCount"
+					[damage]="damage"
+				></bgs-hero-short-recap>
 			</div>
 		</div>
 	`,
@@ -125,9 +113,6 @@ export class BgsLeaderboardEmptyCardComponent
 	tribeImage: string;
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 	damage: number;
-	debuff: boolean;
-	// buddyImage: string;
-	// buddyClass: string;
 
 	private callbackHandle;
 
@@ -204,13 +189,6 @@ export class BgsLeaderboardEmptyCardComponent
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;
 		}
-		this.debuff = this.damage < 0;
-		// const buddyImageRoot = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images`;
-		// this.buddyImage =
-		// 	this._previousPlayer.buddyTurns.length > 1
-		// 		? `${buddyImageRoot}/bgs_buddies_meter_frame_golden.png`
-		// 		: `${buddyImageRoot}/bgs_buddies_meter_frame.png`;
-		// this.buddyClass = this._previousPlayer.buddyTurns.length === 0 ? 'missing' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
