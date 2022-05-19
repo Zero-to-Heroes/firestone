@@ -26,7 +26,13 @@ export const DEFAULT_CARD_HEIGHT = 221;
 			<div class="deck-rename-container">
 				<input class="name-input" [(ngModel)]="deckName" (mousedown)="preventDrag($event)" />
 			</div>
-			<ng-container *ngIf="{ activeCards: activeCards$ | async, buckets: possibleBuckets$ | async } as value">
+			<ng-container
+				*ngIf="{
+					activeCards: activeCards$ | async,
+					buckets: possibleBuckets$ | async,
+					showRelatedCards: showRelatedCards$ | async
+				} as value"
+			>
 				<div class="decklist-container">
 					<div class="card-search">
 						<label class="search-label">
@@ -98,6 +104,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 										[src]="card.imagePath"
 										[cardTooltip]="card.cardId"
 										[cardTooltipPosition]="'right'"
+										[cardTooltipShowRelatedCards]="value.showRelatedCards"
 										class="real-card"
 										(click)="addCard(card)"
 									/>
@@ -143,6 +150,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	activeCards$: Observable<readonly DeckBuilderCard[]>;
 	possibleBuckets$: Observable<readonly BucketData[]>;
 	highRes$: Observable<boolean>;
+	showRelatedCards$: Observable<boolean>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
@@ -170,6 +178,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 
 	ngAfterContentInit() {
 		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
+		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
 			.pipe(this.mapData(([pref]) => pref))
