@@ -9,7 +9,11 @@ import { groupByFunction } from '../../services/utils';
 	selector: 'card-tooltip',
 	styleUrls: [`../../../css/component/tooltip/card-tooltip.component.scss`],
 	template: `
-		<div class="card-tooltip {{ card.additionalClass }}" *ngFor="let card of cards">
+		<div
+			class="card-tooltip {{ card.additionalClass }}"
+			*ngFor="let card of cards"
+			[ngClass]="{ 'hidden': !_relativePosition }"
+		>
 			<div *ngIf="card.createdBy" class="created-by">Created by</div>
 			<img *ngIf="card.image" [src]="card.image" (onload)="refresh()" class="tooltip-image" />
 			<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
@@ -33,7 +37,11 @@ import { groupByFunction } from '../../services/utils';
 		</div>
 		<div
 			class="related-cards-container"
-			[ngClass]="{ 'wide': relatedCards.length > 6 }"
+			[ngClass]="{
+				'wide': relatedCards.length > 6,
+				'left': _relativePosition === 'left',
+				'hidden': !_relativePosition
+			}"
 			*ngIf="relatedCards.length"
 		>
 			<div class="related-cards">
@@ -49,6 +57,7 @@ export class CardTooltipComponent {
 	cards: readonly InternalCard[];
 	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
+	_relativePosition: 'left' | 'right';
 
 	// private image: string;
 	// private _text: string;
@@ -76,6 +85,14 @@ export class CardTooltipComponent {
 
 	@Input() set cardTooltipBgs(value: boolean) {
 		this.isBgs = value;
+	}
+
+	// Position of the tooltip relative to its origin element
+	@Input() set relativePosition(value: 'left' | 'right') {
+		this._relativePosition = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@Input() localized = true;

@@ -36,6 +36,14 @@
 	&.wide .related-cards {
 		max-width: 570px;
 	}
+
+	&.left {
+		order: -1;
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
 }
 
 .card-tooltip {
@@ -49,6 +57,10 @@
 	&:not(:first-child) {
 		margin-left: -35px;
 		margin-right: -35px;
+	}
+
+	&.hidden {
+		opacity: 0;
 	}
 
 	.created-by {

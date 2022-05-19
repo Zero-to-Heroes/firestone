@@ -36,6 +36,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"
 					[colorManaCost]="colorManaCost"
+					[showRelatedCards]="showRelatedCards"
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
@@ -54,6 +55,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
 					[deckState]="_deckState"
 					[colorManaCost]="colorManaCost"
+					[showRelatedCards]="showRelatedCards"
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
@@ -78,6 +80,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 
 	@Input() displayMode: string;
 	@Input() colorManaCost: boolean;
+	@Input() showRelatedCards: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGlobalEffectsZone: boolean;
 	@Input() showGiftsSeparately: boolean;

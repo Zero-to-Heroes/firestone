@@ -238,6 +238,12 @@ export class CardTooltipDirective implements OnDestroy {
 		}
 
 		this.positionStrategy.apply();
+		setTimeout(() => {
+			const tooltipRect = tooltipRef.location.nativeElement.getBoundingClientRect();
+			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
+			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
+			tooltipRef.instance.relativePosition = relativePosition;
+		});
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while

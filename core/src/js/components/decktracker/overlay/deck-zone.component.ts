@@ -51,6 +51,7 @@ import { groupByFunction } from '../../../services/utils';
 							[card]="card"
 							[tooltipPosition]="_tooltipPosition"
 							[colorManaCost]="colorManaCost"
+							[showRelatedCards]="showRelatedCards"
 							[showUnknownCards]="showUnknownCards"
 							[showUpdatedCost]="_showUpdatedCost"
 							[showStatsChange]="_showStatsChange"
@@ -69,6 +70,7 @@ export class DeckZoneComponent implements AfterViewInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() colorManaCost: boolean;
+	@Input() showRelatedCards: boolean;
 	@Input() showUnknownCards: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {

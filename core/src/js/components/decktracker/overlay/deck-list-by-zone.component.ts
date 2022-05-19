@@ -20,6 +20,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[zone]="zone"
 					[tooltipPosition]="_tooltipPosition"
 					[colorManaCost]="colorManaCost"
+					[showRelatedCards]="showRelatedCards"
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
@@ -36,6 +37,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 })
 export class DeckListByZoneComponent implements OnDestroy {
 	@Input() colorManaCost: boolean;
+	@Input() showRelatedCards: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showGiftsSeparately: boolean;

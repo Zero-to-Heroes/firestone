@@ -29,6 +29,7 @@ import { SetCard } from '../../../models/set';
 				[zone]="zone"
 				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
+				[showRelatedCards]="showRelatedCards"
 				[showUnknownCards]="showUnknownCards"
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately"
@@ -47,6 +48,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() colorManaCost: boolean;
+	@Input() showRelatedCards: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;

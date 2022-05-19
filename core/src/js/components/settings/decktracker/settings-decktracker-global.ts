@@ -33,6 +33,11 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="overlayShowRarityColors"
+						[label]="'settings.collection.general.show-related-cards-label' | owTranslate"
+						[tooltip]="'settings.collection.general.show-related-cards-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="overlayShowRelatedCards"
 						[label]="'settings.decktracker.global.show-rarity-color' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-rarity-color-tooltip' | owTranslate"
 					></preference-toggle>
