@@ -20,7 +20,7 @@ export class CardsInitService {
 		const prefs = await this.prefs.getPreferences();
 		const fileName = this.getFileName(prefs.locale);
 		console.log('initializing cards db with', fileName);
-		await this.cards.initializeCardsDb(CARDS_VERSION, fileName);
+		await this.cards.initializeCardsDb(CARDS_VERSION, fileName, false);
 		window['cards'] = this.cards;
 	}
 
