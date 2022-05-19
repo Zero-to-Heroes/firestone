@@ -47,7 +47,11 @@ export class SocialShareButtonComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().centerVertically();
-		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
+		this.overlayRef = this.overlay.create({
+			positionStrategy: this.positionStrategy,
+			hasBackdrop: true,
+			backdropClass: 'social-share-backdrop',
+		});
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
 	}
 

@@ -2,6 +2,28 @@
 	display: flex;
 }
 
+.related-cards-container {
+	background: var(--confirmation-backdrop-color);
+	opacity: 0.95;
+	filter: drop-shadow(0px 0px 5px var(--confirmation-backdrop-color))
+		drop-shadow(0px 0px 5px var(--confirmation-backdrop-color));
+
+	.related-cards {
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 450px;
+		height: auto;
+
+		img {
+			width: 150px;
+			height: auto;
+			margin-right: -15px;
+			margin-bottom: -15px;
+			filter: drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5)) drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5));
+		}
+	}
+}
+
 .card-tooltip {
 	display: flex;
 	flex-direction: column;

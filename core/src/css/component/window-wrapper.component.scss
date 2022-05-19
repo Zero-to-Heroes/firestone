@@ -60,7 +60,16 @@ body {
 		&.cdk-overlay-backdrop-showing {
 			background: var(--confirmation-backdrop-color);
 			opacity: 0.9;
-			pointer-events: all !important;
+
+			// Not sure exactly why this was needed, but at least now it's limited to social shares
+			&.social-share-backdrop {
+				pointer-events: all !important;
+			}
+		}
+
+		&.card-tooltip-backdrop {
+			opacity: 0.8;
+			// pointer-events: none !important;
 		}
 	}
 }

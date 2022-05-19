@@ -23,6 +23,11 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.collection.general.high-resolution-images-label' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="collectionShowRelatedCards"
+					[label]="'settings.collection.general.show-related-cards-label' | owTranslate"
+					[tooltip]="'settings.collection.general.show-related-cards-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="collectionEnableNotifications"
 					[label]="'settings.collection.general.notifications-label' | owTranslate"
 				></preference-toggle>

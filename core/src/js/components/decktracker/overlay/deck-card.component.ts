@@ -40,6 +40,7 @@ import { uuid } from '../../../services/utils';
 			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="'auto'"
+			[cardTooltipShowRelatedCards]="_showRelatedCards"
 			(mouseenter)="onMouseEnter($event)"
 			(mouseleave)="onMouseLeave($event)"
 			(click)="onCardClicked($event)"
@@ -185,6 +186,13 @@ export class DeckCardComponent implements OnDestroy {
 		}
 	}
 
+	@Input() set showRelatedCards(value: boolean) {
+		this._showRelatedCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() set colorClassCards(value: boolean) {
 		this._colorClassCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -227,6 +235,7 @@ export class DeckCardComponent implements OnDestroy {
 	isLinkedCardHighlight: boolean;
 	_colorManaCost: boolean;
 	_colorClassCards: boolean;
+	_showRelatedCards: boolean;
 	_isMissing: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];

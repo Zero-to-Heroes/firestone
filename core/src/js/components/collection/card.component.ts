@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -8,6 +9,9 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { Observable } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -23,7 +27,12 @@ import { CollectionReferenceCard } from './collection-reference-card';
 			class="card-container {{ secondaryClass }}"
 			[ngClass]="{ 'missing': missing, 'showing-placeholder': showPlaceholder }"
 		>
-			<div class="perspective-wrapper" [cardTooltip]="tooltips && _card.id" rotateOnMouseOver>
+			<div
+				class="perspective-wrapper"
+				[cardTooltip]="tooltips && _card.id"
+				[cardTooltipShowRelatedCards]="showRelatedCards$ | async"
+				rotateOnMouseOver
+			>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
 				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
 				<div class="count" *ngIf="!showPlaceholder && showCounts">
@@ -62,8 +71,8 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardComponent implements AfterViewInit {
-	// @Output() imageLoaded: EventEmitter<string> = new EventEmitter<string>();
+export class CardComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+	showRelatedCards$: Observable<boolean>;
 
 	@Input() set card(card: SetCard) {
 		this._card = card;
@@ -134,10 +143,17 @@ export class CardComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
 		private readonly ow: OverwolfService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

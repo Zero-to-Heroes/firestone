@@ -31,16 +31,25 @@ import { groupByFunction } from '../../services/utils';
 				</div>
 			</div>
 		</div>
+		<div class="related-cards-container">
+			<div class="related-cards">
+				<div class="related-card" *ngFor="let card of relatedCards">
+					<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+				</div>
+			</div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTooltipComponent {
 	cards: readonly InternalCard[];
+	relatedCards: readonly InternalCard[];
 	_displayBuffs: boolean;
 
 	// private image: string;
 	// private _text: string;
 	private _cardIds: string[];
+	private _relatedCardIds: readonly string[];
 	private isBgs: boolean;
 	private _additionalClass: string;
 	private createdBy: boolean;
@@ -51,6 +60,10 @@ export class CardTooltipComponent {
 	@Input() set cardId(value: string) {
 		this._cardIds = value?.length ? value.split(',') : [];
 		this.updateInfos();
+	}
+
+	@Input() set relatedCardIds(value: readonly string[]) {
+		this._relatedCardIds = value;
 	}
 
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
@@ -148,6 +161,20 @@ export class CardTooltipComponent {
 				};
 				return result;
 			});
+		this.relatedCards = this._relatedCardIds.map((cardId) => {
+			const image = !!cardId
+				? this.localized
+					? this.i18n.getCardImage(cardId, {
+							isBgs: this.isBgs,
+					  })
+					: this.i18n.getNonLocalizedCardImage(cardId)
+				: null;
+			return {
+				cardId: cardId,
+				image: image,
+				cardType: 'NORMAL',
+			};
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

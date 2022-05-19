@@ -113,6 +113,7 @@ export class Preferences {
 	readonly collectionCardRarityFilter: CollectionCardRarityFilterType = 'all';
 	readonly collectionCardClassFilter: CollectionCardClassFilterType = 'all';
 	readonly collectionCardOwnedFilter: CollectionCardOwnedFilterType = 'all';
+	readonly collectionShowRelatedCards: boolean = true;
 
 	readonly desktopDeckFilters: DeckFilters;
 	readonly desktopDeckShowHiddenDecks: boolean = false;

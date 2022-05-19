@@ -10,6 +10,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
@@ -19,7 +20,6 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements OnDestroy {
-	@Input('cardTooltip') cardId = undefined;
 	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 	@Input() cardTooltipCard: DeckCard = undefined;
 	@Input() cardTooltipText = undefined;
@@ -27,6 +27,15 @@ export class CardTooltipDirective implements OnDestroy {
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
 	@Input() cardTooltipLocalized = true;
+	@Input() cardTooltipShowRelatedCards: boolean;
+	@Input() cardTooltipRelatedCardIds: readonly string[] = [];
+
+	@Input() set cardTooltip(value: string) {
+		this.cardId = value;
+		this.relatedCardIds =
+			this.allCards.getCard(this.cardId)?.relatedCardDbfIds?.map((r) => this.allCards.getCardFromDbfId(r)?.id) ??
+			[];
+	}
 
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		if (value !== this._position) {
@@ -34,6 +43,10 @@ export class CardTooltipDirective implements OnDestroy {
 			this.positionStrategyDirty = true;
 		}
 	}
+
+	cardId: string;
+
+	private relatedCardIds: readonly string[];
 
 	private _position: CardTooltipPositionType;
 	private tooltipPortal;
@@ -43,10 +56,11 @@ export class CardTooltipDirective implements OnDestroy {
 	private positionStrategyDirty = true;
 
 	constructor(
-		private overlayPositionBuilder: OverlayPositionBuilder,
-		private elementRef: ElementRef,
-		private overlay: Overlay,
-		private cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly elementRef: ElementRef,
+		private readonly overlay: Overlay,
+		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	private updatePositionStrategy() {
@@ -165,10 +179,9 @@ export class CardTooltipDirective implements OnDestroy {
 			.withPositions(positions);
 
 		// Connect position strategy
-		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
+		this.overlayRef = this.overlay.create({
+			positionStrategy: this.positionStrategy,
+		});
 	}
 
 	private hideTimeout;
@@ -199,11 +212,26 @@ export class CardTooltipDirective implements OnDestroy {
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
 		// Attach tooltip portal to overlay
+		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this.cardTooltipRelatedCardIds?.length;
 		const tooltipRef: ComponentRef<CardTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-
 		tooltipRef.instance.additionalClass = this.cardTooltipClass;
+		tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
+			? []
+			: this.cardTooltipRelatedCardIds?.length
+			? this.cardTooltipRelatedCardIds
+			: this.relatedCardIds;
+		console.debug(
+			'related card ids',
+			this.cardId,
+			this.cardTooltipCard?.cardId,
+			this.cardTooltipShowRelatedCards,
+			this.cardTooltipRelatedCardIds,
+			tooltipRef.instance.relatedCardIds,
+			this.allCards.getCard(this.cardId),
+		);
+
 		if (this.cardTooltipCard) {
 			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
 			tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
@@ -219,10 +247,6 @@ export class CardTooltipDirective implements OnDestroy {
 		}
 
 		this.positionStrategy.apply();
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
