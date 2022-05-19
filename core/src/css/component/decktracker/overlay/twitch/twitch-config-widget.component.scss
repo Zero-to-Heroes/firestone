@@ -12,7 +12,8 @@
 
 .twitch-config-widget {
 	display: flex;
-	background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
+	background-image: var(--window-background-image-backup);
+
 	// background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 	// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png?v=2');
 	// border-image-slice: 1;
@@ -32,12 +33,27 @@
 	.settings {
 		display: flex;
 		flex-direction: column;
-		padding: 10px 20px;
+		padding: 10px 10px;
 		font-size: 14px;
+
+		section {
+			display: flex;
+			flex-direction: column;
+
+			&:not(:last-child) {
+				margin-bottom: 20px;
+			}
+
+			.section-title {
+				font-size: 16px;
+				margin-bottom: 10px;
+			}
+		}
 
 		.group {
 			display: flex;
 			flex-direction: column;
+			padding: 0 10px;
 
 			&:not(:last-child) {
 				margin-bottom: 5px;
@@ -49,7 +65,7 @@
 		}
 
 		.indented {
-			margin-left: 40px;
+			margin-left: 22px;
 		}
 
 		checkbox ::ng-deep {
@@ -112,7 +128,7 @@
 			flex-shrink: 0;
 			align-items: center;
 			justify-content: center;
-			background-image: radial-gradient(340px at 50% 50%, rgb(94, 11, 70) 0%, rgb(43, 24, 39) 100%);
+			background-image: var(--window-background-image-backup);
 			pointer-events: all;
 		}
 	}

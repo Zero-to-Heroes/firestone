@@ -32,12 +32,14 @@
 
 	::ng-deep {
 		numeric-input {
-			// Because double clicking on the arrow will always toggle the full screen mode
-			.buttons {
-				display: none;
-			}
-			input {
-				width: 45px;
+			.numeric-input.numeric-input.numeric-input {
+				// Because double clicking on the arrow will always toggle the full screen mode
+				.buttons {
+					display: none;
+				}
+				input {
+					width: 45px;
+				}
 			}
 		}
 	}

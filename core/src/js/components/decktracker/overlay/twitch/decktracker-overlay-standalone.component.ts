@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -10,7 +11,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
+import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { ResizedEvent } from 'angular-resize-event';
+import { from, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../../models/decktracker/game-state';
 
@@ -44,6 +48,7 @@ import { GameState } from '../../../../models/decktracker/game-state';
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
 							[tooltipPosition]="tooltipPosition"
+							[showRelatedCards]="showRelatedCards$ | async"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -53,16 +58,33 @@ import { GameState } from '../../../../models/decktracker/game-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
+export class DeckTrackerOverlayStandaloneComponent
+	extends AbstractSubscriptionTwitchComponent
+	implements AfterContentInit, AfterViewInit {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 	@Input('gameState') gameState: GameState;
+
+	showRelatedCards$ = new Observable<boolean>();
 
 	displayMode: string;
 	dragging: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
-	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(
+		protected cdr: ChangeDetectorRef,
+		private el: ElementRef,
+		private renderer: Renderer2,
+		private prefs: TwitchPreferencesService,
+	) {
+		super(cdr);
+	}
+
+	ngAfterContentInit() {
+		this.showRelatedCards$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.showRelatedCards),
+		);
+	}
 
 	ngAfterViewInit() {
 		this.displayMode = 'DISPLAY_MODE_GROUPED';

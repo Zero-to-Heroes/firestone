@@ -34,7 +34,7 @@
 		"@firestone-hs/bgs-global-stats": "^1.0.14",
 		"@firestone-hs/build-global-stats": "^1.0.7",
 		"@firestone-hs/categorize-deck": "^1.0.4",
-		"@firestone-hs/coliseum-components": "0.0.19",
+		"@firestone-hs/coliseum-components": "0.0.20",
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",

@@ -6,4 +6,5 @@ export class TwitchPreferences {
 	readonly battleSimScale: number = 100;
 	readonly minionsListScale: number = 100;
 	readonly heroBoardScale: number = 100;
+	readonly showRelatedCards: boolean = true;
 }

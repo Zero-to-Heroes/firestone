@@ -29,12 +29,19 @@ declare let amplitude;
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
+		`../../../../../css/themes/decktracker-theme.scss`,
 		`../../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
 		// '../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
-		<div class="container drag-boundary overlay-container-parent battlegrounds-theme">
+		<div
+			class="container drag-boundary overlay-container-parent"
+			[ngClass]="{
+				'battlegrounds-theme': currentDisplayMode === 'battlegrounds',
+				'decktracker-theme': currentDisplayMode === 'decktracker'
+			}"
+		>
 			<state-mouse-over
 				*ngIf="gameState || bgsState"
 				[gameState]="gameState"
@@ -70,6 +77,7 @@ export class DeckTrackerOverlayContainerComponent
 	activeTooltip: string;
 	showDecktracker: boolean;
 	horizontalOffset: number;
+	currentDisplayMode: 'decktracker' | 'battlegrounds' = 'battlegrounds';
 
 	private twitch;
 	private token: string;
@@ -151,7 +159,7 @@ export class DeckTrackerOverlayContainerComponent
 				}
 			}
 		});
-		// await this.addDebugGameState();
+		await this.addDebugGameState();
 		console.log('init done');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -170,6 +178,11 @@ export class DeckTrackerOverlayContainerComponent
 			!this.bgsState?.inGame &&
 			!this.gameState.gameEnded &&
 			(!!this.gameState.playerDeck?.deckList?.length || !!this.gameState.playerDeck?.deck?.length);
+		this.currentDisplayMode = !!this.bgsState?.inGame
+			? 'battlegrounds'
+			: this.showDecktracker
+			? 'decktracker'
+			: this.currentDisplayMode;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -186,7 +199,13 @@ export class DeckTrackerOverlayContainerComponent
 		await this.translate.use('enUS').toPromise();
 		this.gameState = fakeState as any;
 		this.bgsState = fakeBgsState as any;
-		console.log('loaded fake state', this.gameState, this.bgsState);
+		this.showDecktracker =
+			!!this.gameState &&
+			!this.bgsState?.inGame &&
+			!this.gameState.gameEnded &&
+			(!!this.gameState.playerDeck?.deckList?.length || !!this.gameState.playerDeck?.deck?.length);
+		this.currentDisplayMode = this.showDecktracker ? 'decktracker' : 'battlegrounds';
+		console.log('loaded fake state', this.currentDisplayMode, this.showDecktracker, this.gameState, this.bgsState);
 	}
 
 	private waitForLocaleInit(): Promise<void> {

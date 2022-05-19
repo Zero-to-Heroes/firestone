@@ -7,7 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
 import { TwitchConfigWidgetComponent } from '@components/decktracker/overlay/twitch/twitch-config-widget.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { AllCardsService } from '@firestone-hs/reference-data';
+import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { init } from '@sentry/browser';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AngularResizedEventModule } from 'angular-resize-event';
@@ -65,7 +66,7 @@ console.log('version is', process.env.APP_VERSION);
 	bootstrap: [DeckTrackerOverlayContainerComponent],
 	providers: [
 		Events,
-		AllCardsService,
+		RefCards,
 		BgsBattleSimulationService,
 		OverwolfService,
 		LocalizationStandaloneService,
@@ -76,6 +77,8 @@ console.log('version is', process.env.APP_VERSION);
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: AppUiStoreFacadeService, useFactory: () => null },
 		{ provide: CardsHighlightFacadeService, useFactory: () => null },
+		// For coliseum-components
+		{ provide: AllCardsService, useExisting: CardsFacadeStandaloneService },
 	],
 })
 export class DeckTrackerTwitchModule {}

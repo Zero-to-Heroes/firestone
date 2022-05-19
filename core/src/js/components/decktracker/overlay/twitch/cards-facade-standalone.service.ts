@@ -14,11 +14,14 @@ export class CardsFacadeStandaloneService {
 		console.log('initializing cards db with', fileName);
 		await this.service.initializeCardsDb(CARDS_VERSION, fileName);
 		console.log('cards initialized', this.service.getCards()[0]);
+		this.service['debug'] = 'tretre';
+		console.debug('BT_010 cards facade service', this);
 	}
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
 	// is the first thing we do
 	public getCard(id: string, errorWhenUndefined = true): ReferenceCard {
+		console.debug('getting card', id, new Error());
 		return this.service.getCard(id, errorWhenUndefined);
 	}
 
