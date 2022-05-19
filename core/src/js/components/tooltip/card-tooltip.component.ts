@@ -31,7 +31,11 @@ import { groupByFunction } from '../../services/utils';
 				</div>
 			</div>
 		</div>
-		<div class="related-cards-container">
+		<div
+			class="related-cards-container"
+			[ngClass]="{ 'wide': relatedCards.length > 6 }"
+			*ngIf="relatedCards.length"
+		>
 			<div class="related-cards">
 				<div class="related-card" *ngFor="let card of relatedCards">
 					<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -43,13 +47,13 @@ import { groupByFunction } from '../../services/utils';
 })
 export class CardTooltipComponent {
 	cards: readonly InternalCard[];
-	relatedCards: readonly InternalCard[];
+	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
 
 	// private image: string;
 	// private _text: string;
 	private _cardIds: string[];
-	private _relatedCardIds: readonly string[];
+	private _relatedCardIds: readonly string[] = [];
 	private isBgs: boolean;
 	private _additionalClass: string;
 	private createdBy: boolean;
@@ -63,7 +67,7 @@ export class CardTooltipComponent {
 	}
 
 	@Input() set relatedCardIds(value: readonly string[]) {
-		this._relatedCardIds = value;
+		this._relatedCardIds = value ?? [];
 	}
 
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {

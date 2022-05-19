@@ -4,15 +4,25 @@
 
 .related-cards-container {
 	background: var(--confirmation-backdrop-color);
-	opacity: 0.95;
+	opacity: 1;
 	filter: drop-shadow(0px 0px 5px var(--confirmation-backdrop-color))
 		drop-shadow(0px 0px 5px var(--confirmation-backdrop-color));
+	margin-left: -10px;
+	margin-right: -10px;
+	display: flex;
+	height: fit-content;
 
 	.related-cards {
 		display: flex;
 		flex-wrap: wrap;
-		max-width: 450px;
+		max-width: 435px;
+		max-height: 800px;
+		overflow: hidden;
+		// overflow: auto;
+		// pointer-events: all;
 		height: auto;
+		padding-right: 25px;
+		padding-bottom: 25px;
 
 		img {
 			width: 150px;
@@ -21,6 +31,10 @@
 			margin-bottom: -15px;
 			filter: drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5)) drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5));
 		}
+	}
+
+	&.wide .related-cards {
+		max-width: 570px;
 	}
 }
 

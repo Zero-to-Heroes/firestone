@@ -222,15 +222,6 @@ export class CardTooltipDirective implements OnDestroy {
 			: this.cardTooltipRelatedCardIds?.length
 			? this.cardTooltipRelatedCardIds
 			: this.relatedCardIds;
-		console.debug(
-			'related card ids',
-			this.cardId,
-			this.cardTooltipCard?.cardId,
-			this.cardTooltipShowRelatedCards,
-			this.cardTooltipRelatedCardIds,
-			tooltipRef.instance.relatedCardIds,
-			this.allCards.getCard(this.cardId),
-		);
 
 		if (this.cardTooltipCard) {
 			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
