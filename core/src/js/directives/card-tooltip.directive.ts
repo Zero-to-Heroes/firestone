@@ -32,9 +32,17 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@Input() set cardTooltip(value: string) {
 		this.cardId = value;
-		this.relatedCardIds =
-			this.allCards.getCard(this.cardId)?.relatedCardDbfIds?.map((r) => this.allCards.getCardFromDbfId(r)?.id) ??
-			[];
+
+		if (!!this.cardId?.length) {
+			this.relatedCardIds = this.cardId
+				.split(',')
+				.flatMap(
+					(cardId) =>
+						this.allCards
+							.getCard(cardId)
+							?.relatedCardDbfIds?.map((r) => this.allCards.getCardFromDbfId(r)?.id) ?? [],
+				);
+		}
 	}
 
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
