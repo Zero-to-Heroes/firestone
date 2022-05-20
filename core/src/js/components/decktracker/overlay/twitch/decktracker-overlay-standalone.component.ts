@@ -49,6 +49,7 @@ import { GameState } from '../../../../models/decktracker/game-state';
 							[displayMode]="displayMode"
 							[tooltipPosition]="tooltipPosition"
 							[showRelatedCards]="showRelatedCards$ | async"
+							[darkenUsedCards]="true"
 						>
 						</decktracker-deck-list>
 					</div>
