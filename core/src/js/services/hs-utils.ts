@@ -653,7 +653,6 @@ export const normalizeDeckHeroDbfId = (
 	inputClass?: string,
 	deckClass?: CardClass,
 ): number => {
-	console.debug('normalizing', heroDbfId, cards, inputClass, deckClass);
 	const cardFromHeroDbfId = cards.getCardFromDbfId(heroDbfId);
 	// Don't normalize the dual-class heroes
 	switch (cardFromHeroDbfId.id) {
@@ -698,7 +697,6 @@ export const normalizeDeckHeroDbfId = (
 		return heroDbfId;
 	}
 
-	console.debug('matching playerClass', playerClass, heroDbfId);
 	switch (CardClass[playerClass?.toUpperCase()]) {
 		case CardClass.DEMONHUNTER:
 			return 56550;

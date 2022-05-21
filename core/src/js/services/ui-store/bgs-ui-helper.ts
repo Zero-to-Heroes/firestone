@@ -20,6 +20,7 @@ export const buildHeroStats = (
 	allCards: CardsFacadeService,
 ): readonly BgsHeroStat[] => {
 	if (!globalStats.heroStats?.length) {
+		console.log('[bgs] no hero stats');
 		return [];
 	}
 	// TODO: add tribe filters

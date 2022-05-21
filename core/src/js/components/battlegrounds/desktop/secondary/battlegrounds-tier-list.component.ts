@@ -63,7 +63,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		).pipe(
-			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats),
+			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats?.length),
 			map(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,
 				mmrPercentiles: mmrPercentiles,

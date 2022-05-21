@@ -12,7 +12,7 @@ export class BgsGlobalStatsService {
 	constructor(private readonly api: ApiRunner) {}
 
 	public async loadGlobalStats(tribes: readonly Race[]): Promise<BgsStats> {
-		const suffix = !tribes?.length || tribes?.length === 8 ? 'all-tribes' : [...tribes].sort().join('-');
+		const suffix = !tribes?.length || tribes?.length === 9 ? 'all-tribes' : [...tribes].sort().join('-');
 		const url = BGS_STATS_RETRIEVE_URL.replace('%suffix%', suffix);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
 		const globalStats = BgsStats.create(result as BgsStats);
