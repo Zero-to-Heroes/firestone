@@ -34,8 +34,16 @@ export class CreateCardInDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const positionFromBottom = buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
-		//console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck);
+		//console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
+		const creatorEntityId = gameEvent.additionalData.creatorEntityId
+			? +gameEvent.additionalData.creatorEntityId
+			: null;
+		const creatorEntity = creatorEntityId
+			? // Because sometimes the entityId is reversed in the Other zone
+			  deck.findCard(creatorEntityId) ?? deck.findCard(-creatorEntityId)
+			: null;
+		//console.debug('[debug]', 'creatorEntity', creatorEntity, gameEvent.additionalData.creatorEntityId, deck);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -43,9 +51,7 @@ export class CreateCardInDeckParser implements EventParser {
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
-			mainAttributeChange: gameEvent.additionalData.creatorEntityId
-				? buildAttributeChange(deck.findCard(gameEvent.additionalData.creatorEntityId))
-				: null,
+			mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
 			positionFromBottom: positionFromBottom,
 			createdByJoust: createdByJoust,
 		} as DeckCard);
@@ -104,11 +110,12 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 };
 
 const buildAttributeChange = (card: DeckCard): number => {
+	//console.debug('building attribute change', card);
 	if (card?.cardId === CardIds.Ignite) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
 	if (card?.cardId === CardIds.Bottomfeeder) {
-		return 2 + (card.mainAttributeChange ?? 0);
+		return 1 + (card.mainAttributeChange ?? 0);
 	}
 	return null;
 };

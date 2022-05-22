@@ -206,6 +206,7 @@ export const publicCardCreators = [
 	CardIds.BattleVicar,
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
+	CardIds.Bottomfeeder,
 	CardIds.BrightEyedScout,
 	CardIds.BwonsamdiTheDead,
 	CardIds.BuildASnowman,
