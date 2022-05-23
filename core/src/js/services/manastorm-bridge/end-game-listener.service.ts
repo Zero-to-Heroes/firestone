@@ -104,7 +104,7 @@ export class EndGameListenerService {
 					console.debug('[manastorm-bridge] bgsHasPrizes', this.bgsHasPrizes);
 					break;
 				case GameEvent.GAME_END:
-					console.log('[manastorm-bridge] end game, uploading?', gameEvent);
+					console.log('[manastorm-bridge] end game, uploading?');
 					if (gameEvent.additionalData.spectating) {
 						console.log('[manastorm-bridge] spectate game, not uploading');
 						return;
