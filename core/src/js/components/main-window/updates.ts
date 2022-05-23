@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.5.18',
+		version: '9.6.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Mousing over cards (in the collection, Duels deckbuilder or deck tracker) now also shows "related cards", like the appendages for Colossal minions, or tokens that the card can create. You can turn this off from the settings (there are separate settings for the main app and the decktracker)`,
+							},
+						],
+					},
+					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a simulation issue with Leeroy not properly handling indirect damage (like bombs from Kaboom Bot).`,
+								text: `Fix an issue where the Hero Stats tab would be empty if all tribe filters were selected.`,
 							},
 						],
 					},
@@ -65,11 +74,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the order of players in the HP Graph's legend was reversed.`,
+								text: `Fix a sim issue with Leeroy when indirect damage was dealt (like Wildfire Elemental, or combos involving Macaw like Macaw + Ghoul).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue when selecting some golden minions in the simulator.`,
+								text: `Fix an issue where the player's order in the Live Stats' HP graph could sometimes be incorrect.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the simulator would not handle some golden minions (like Amalgam).`,
 							},
 						],
 					},
@@ -78,27 +91,31 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add card oracle (flag cards in opponent's hand) for Nellie's Ship.`,
+								text: `Bottomfeeders created in deck now also indicate how many times their bonus has been applied.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card oracle for quest rewards.`,
+								text: `Add Nellie's Pirate Ship to the Card Oracle (flagging cards in your opponent's hand).`,
+							},
+							{
+								type: 'feature',
+								text: `Add Quest rewards to the Card Oracle.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a bug where Commander Sivara's oracle would show minions instead of spells.`,
+								text: `Fix an issue where the Card Oracle would flag minions for Commander Sivara.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix buggy filter for "Top 500 Legend".`,
+								text: `Fix an issue where filtering for Top 500 legend was not working.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Frozen minions would sometimes be counted in the total attack on board.`,
+								text: `Fix an issue where you couldn't import a deck code when spectating a friend.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where you couldn't import a deck when spectating a friend.`,
+								text: `Fix an issue where the attack on board counter would sometimes count the attack of frozen minions.`,
 							},
 						],
 					},
@@ -107,7 +124,20 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Add missing buckets in Deckbuilder.`,
+								text: `Add the missing "Why? Why Not?" bucket to the deckbuilder.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some cards would not appear in the cards list after activating a bucket filter.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'ui',
+								text: `Improve display for the Legend rank icon and text.`,
 							},
 						],
 					},
