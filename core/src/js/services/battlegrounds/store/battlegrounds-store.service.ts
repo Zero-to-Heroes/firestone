@@ -4,6 +4,7 @@ import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parser
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -99,6 +100,7 @@ export class BattlegroundsStoreService {
 	public state: BattlegroundsState = new BattlegroundsState();
 
 	private mainWindowState: MainWindowState;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private deckState: GameState;
 	private eventParsers: readonly EventParser[] = [];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
@@ -177,6 +179,8 @@ export class BattlegroundsStoreService {
 			deckEventBus.subscribe((event) => {
 				this.deckState = event?.state as GameState;
 			});
+
+			this.stateUpdater = window['mainWindowStoreUpdater'];
 		});
 	}
 
@@ -197,8 +201,11 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.RECONNECT_OVER) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(false));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
+				// Order is important here, so that when the MMR is set the races are already populated
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
-				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
+				this.battlegroundsUpdater.next(
+					new BgsInitMmrEvent(this.mainWindowState.battlegrounds?.globalStats?.mmrPercentiles),
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId, gameEvent.additionalData));
 				this.startMemoryReading();
@@ -530,7 +537,7 @@ export class BattlegroundsStoreService {
 			new BgsRecruitStartParser(this.owUtils, this.prefs),
 			new BgsGlobalInfoUpdatedParser(this.allCards),
 			new BgsStartComputingPostMatchStatsParser(),
-			new BgsInitMmrParser(this.memory, this.gameStateService),
+			new BgsInitMmrParser(this.memory, this.gameStateService, this.prefs, () => this.stateUpdater),
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
 			new BgsToggleHighlightMinionOnBoardParser(),

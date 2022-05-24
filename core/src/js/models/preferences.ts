@@ -377,6 +377,8 @@ export class Preferences {
 	readonly bgsMinionListShowGoldenCard: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
+	readonly bgsUseTribeFilterInHeroSelection: boolean = false;
+	readonly bgsUseMmrFilterInHeroSelection: boolean = false;
 	readonly bgsShowOverlayButton: boolean = true;
 	readonly bgsOpponentOverlayAtTop: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

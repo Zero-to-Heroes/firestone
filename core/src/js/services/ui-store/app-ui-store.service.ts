@@ -12,7 +12,7 @@ import {
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
@@ -349,9 +349,9 @@ export class AppUiStoreService {
 						] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('ready for duels hero stats', info)),
+				// tap((info) => console.debug('ready for duels hero stats', info)),
 				map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-				tap((info) => console.debug('after duels hero stats', info)),
+				// tap((info) => console.debug('after duels hero stats', info)),
 			)
 			.subscribe((stats) => this.duelsHeroStats.next(stats));
 	}
@@ -390,7 +390,7 @@ export class AppUiStoreService {
 				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
 					return buildHeroStats(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
 				}),
-				tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
+				// tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
 	}

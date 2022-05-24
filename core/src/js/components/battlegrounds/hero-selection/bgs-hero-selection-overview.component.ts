@@ -59,6 +59,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
 			takeUntil(this.destroyed$),
 		);
+
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(([main, nav]) => main.achievements),
