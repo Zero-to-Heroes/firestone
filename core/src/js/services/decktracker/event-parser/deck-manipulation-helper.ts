@@ -19,7 +19,7 @@ export class DeckManipulationHelper {
 		cardId: string,
 		entityId: number,
 		removeFillerCard = false,
-		normalizeUpgradedCards = false,
+		normalizeUpgradedCards = true,
 		debug = false,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
@@ -272,7 +272,7 @@ export class DeckManipulationHelper {
 		zone: readonly DeckCard[],
 		cardId: string,
 		entityId: number,
-		normalizeUpgradedCards = false,
+		normalizeUpgradedCards = true,
 	): DeckCard {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		// Explicit search by entity id
