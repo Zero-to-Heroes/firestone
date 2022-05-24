@@ -16,6 +16,7 @@ export class FatigueCounterDefinition implements CounterDefinition {
 			return null;
 		}
 
+		// Last fatigue damage
 		const fatigue = deck.fatigue || 0;
 		return {
 			type: 'fatigue',

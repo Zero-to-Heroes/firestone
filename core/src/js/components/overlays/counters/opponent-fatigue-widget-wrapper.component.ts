@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -37,7 +38,9 @@ export class OpponentFatigueWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentFatigueCounter;
-		this.deckStateExtractor = (state) => !!state.opponentDeck?.fatigue;
+		this.deckStateExtractor = (state) =>
+			!!state.opponentDeck?.fatigue ||
+			!!state.opponentDeck.deck?.find((c) => c.cardId === CardIds.CurseOfAgony_AgonyToken);
 		super.ngAfterContentInit();
 	}
 }
