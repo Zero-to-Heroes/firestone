@@ -29,7 +29,7 @@ export class WeaponEquippedParser implements EventParser {
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 		} as DeckCard);
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			weapon: card,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {

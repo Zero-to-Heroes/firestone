@@ -27,7 +27,9 @@ export class MinionDiedParser implements EventParser {
 			const card = this.helper.findCardInZone(deck.board, cardId, entityId);
 			const cardWithZone = card.update({
 				zone: 'GRAVEYARD',
-				entityId: -card.entityId, // If we keep the same entityId, our safeguards prevent us from adding it twice to the other zone
+				// If we keep the same entityId, our safeguards prevent us from adding it twice to the other zone
+				// Why do we want to add it twice to the other zone again?
+				entityId: -card.entityId,
 			} as DeckCard);
 			//console.debug('cardWithZone', cardWithZone);
 

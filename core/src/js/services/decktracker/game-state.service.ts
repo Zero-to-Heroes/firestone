@@ -385,7 +385,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -496,7 +496,7 @@ export class GameStateService {
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.allCards, this.i18n),
 			new WeaponEquippedParser(this.allCards, this.i18n),
-			new WeaponDestroyedParser(),
+			new WeaponDestroyedParser(this.helper),
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(
