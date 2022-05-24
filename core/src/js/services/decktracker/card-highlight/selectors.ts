@@ -61,7 +61,12 @@ export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 		.includes(handler.deckCardProvider()?.entityId);
 };
 export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
-	return deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(handler.deckCardProvider()?.entityId);
+	return (
+		deckState?.cardsPlayedThisMatch.map((card) => card.entityId).includes(handler.deckCardProvider()?.entityId) ||
+		deckState?.cardsPlayedThisMatch
+			.map((card) => card.entityId)
+			.includes(-(handler.deckCardProvider()?.entityId ?? 0))
+	);
 };
 
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
