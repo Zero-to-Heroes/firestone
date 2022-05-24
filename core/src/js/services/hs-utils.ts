@@ -237,6 +237,7 @@ export const publicCardCreators = [
 	CardIds.DragonbaneShot,
 	CardIds.DivingGryphon,
 	CardIds.DunBaldarBunker,
+	CardIds.Duplicate,
 	CardIds.ElementalAllies,
 	CardIds.ElementaryReaction,
 	CardIds.ElvenMinstrel,
@@ -373,6 +374,7 @@ export const publicCardCreators = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion1,
+	CardIds.YseraTheDreamerCore,
 	CardIds.Zaqul,
 ];
 
