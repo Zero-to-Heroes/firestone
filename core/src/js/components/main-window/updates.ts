@@ -50,16 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Mousing over cards (in the collection, Duels deckbuilder or deck tracker) now also shows "related cards", like the appendages for Colossal minions, or tokens that the card can create. You can turn this off from the settings (there are separate settings for the main app and the decktracker)`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the Hero Stats tab would be empty if all tribe filters were selected.`,
+								text: `Add counter for Abyssal Curses`,
 							},
 						],
 					},
@@ -70,74 +61,23 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Leeroy when indirect damage was dealt (like Wildfire Elemental, or combos involving Macaw like Macaw + Ghoul).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the player's order in the Live Stats' HP graph could sometimes be incorrect.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the simulator would not handle some golden minions (like Amalgam).`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Bottomfeeders created in deck now also indicate how many times their bonus has been applied.`,
-							},
-							{
-								type: 'feature',
-								text: `Add Nellie's Pirate Ship to the Card Oracle (flagging cards in your opponent's hand).`,
-							},
-							{
-								type: 'feature',
-								text: `Add Quest rewards to the Card Oracle.`,
+								text: `Show the Fatigue counter is an "Agony" is in the deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Card Oracle would flag minions for Commander Sivara.`,
+								text: `Fix an issue with the Card Oracle (flagging the card in your opponent's hand) for Ysera, the Dreamer and Duplicate.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where filtering for Top 500 legend was not working.`,
+								text: `Fix an issue where destroyed weapons would not appear in the Other zone.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where you couldn't import a deck code when spectating a friend.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the attack on board counter would sometimes count the attack of frozen minions.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Add the missing "Why? Why Not?" bucket to the deckbuilder.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some cards would not appear in the cards list after activating a bucket filter.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'ui',
-								text: `Improve display for the Legend rank icon and text.`,
+								text: `Fix an issue where dead minions would not be highlighted by Tess and Counterfeit Stock.`,
 							},
 						],
 					},
