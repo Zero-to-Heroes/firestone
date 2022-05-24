@@ -76,6 +76,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-jade-widget-wrapper></player-jade-widget-wrapper>
 			<player-galakrond-widget-wrapper></player-galakrond-widget-wrapper>
 			<player-fatigue-widget-wrapper></player-fatigue-widget-wrapper>
+			<player-abyssal-curse-widget-wrapper></player-abyssal-curse-widget-wrapper>
 			<player-elwynn-boar-widget-wrapper></player-elwynn-boar-widget-wrapper>
 			<player-elemental-widget-wrapper></player-elemental-widget-wrapper>
 			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
@@ -93,6 +94,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<opponent-jade-widget-wrapper></opponent-jade-widget-wrapper>
 			<opponent-galakrond-widget-wrapper></opponent-galakrond-widget-wrapper>
 			<opponent-fatigue-widget-wrapper></opponent-fatigue-widget-wrapper>
+			<opponent-abyssal-curse-widget-wrapper></opponent-abyssal-curse-widget-wrapper>
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-hero-power-damage-widget-wrapper></opponent-hero-power-damage-widget-wrapper>

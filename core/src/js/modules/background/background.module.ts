@@ -26,6 +26,8 @@ import { DuelsDeckbuilderSignatureTreasureComponent } from '@components/duels/de
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder.component';
 import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { HeroPowerOverlayComponent } from '@components/overlays/board/hero-power-overlay.component';
+import { OpponentAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
+import { PlayerAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
 import { PlayerBgsMajordomoWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-majordomo-widget-wrapper.component';
 import { PlayerBgsSouthseaWidgetWrapperComponent } from '@components/overlays/counters/player-bgs-southsea-widget-wrapper.component';
 import { PlayerCoralKeeperWidgetWrapperComponent } from '@components/overlays/counters/player-coral-keeper-widget-wrapper.component';
@@ -912,6 +914,7 @@ const components = [
 		PlayerHeroPowerDamageWidgetWrapperComponent,
 		PlayerGalakrondWidgetWrapperComponent,
 		PlayerFatigueWidgetWrapperComponent,
+		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
@@ -929,6 +932,7 @@ const components = [
 		OpponentJadeWidgetWrapperComponent,
 		OpponentGalakrondWidgetWrapperComponent,
 		OpponentFatigueWidgetWrapperComponent,
+		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,

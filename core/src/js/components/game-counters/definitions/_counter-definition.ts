@@ -16,6 +16,7 @@ export type CounterType =
 	| 'jadeGolem'
 	| 'cthun'
 	| 'fatigue'
+	| 'abyssalCurse'
 	| 'spells'
 	| 'elemental'
 	| 'watchpost'

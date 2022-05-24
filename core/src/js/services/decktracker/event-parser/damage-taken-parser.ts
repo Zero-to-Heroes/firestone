@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -18,6 +19,12 @@ export class DamageTakenParser implements EventParser {
 			damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId
 				? damageForLocalPlayer.Damage
 				: 0;
+		const playerAbyssalCurseDamage =
+			damageForLocalPlayer &&
+			damageForLocalPlayer.TargetControllerId === localPlayerId &&
+			gameEvent.additionalData.sourceCardId === CardIds.SirakessCultist_AbyssalCurseToken
+				? damageForLocalPlayer.Damage
+				: 0;
 
 		const opponentPlayerCardId = gameEvent.opponentPlayer?.CardID;
 		const opponentPlayerId = gameEvent.opponentPlayer?.PlayerId;
@@ -26,12 +33,26 @@ export class DamageTakenParser implements EventParser {
 			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
 				? damageForOpponentPlayer.Damage
 				: 0;
+		const opponentAbyssalCurseDamage =
+			damageForOpponentPlayer &&
+			damageForOpponentPlayer.TargetControllerId === opponentPlayerId &&
+			gameEvent.additionalData.sourceCardId === CardIds.SirakessCultist_AbyssalCurseToken
+				? damageForOpponentPlayer.Damage
+				: 0;
 
 		const playerDeck = currentState.playerDeck.update({
 			damageTakenThisTurn: (currentState.playerDeck.damageTakenThisTurn ?? 0) + localPlayerDamage,
+			highestAbyssalCurseDamage: Math.max(
+				currentState.playerDeck.highestAbyssalCurseDamage ?? 0,
+				playerAbyssalCurseDamage,
+			),
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
 			damageTakenThisTurn: (currentState.opponentDeck.damageTakenThisTurn ?? 0) + opponentPlayerDamage,
+			highestAbyssalCurseDamage: Math.max(
+				currentState.opponentDeck.highestAbyssalCurseDamage ?? 0,
+				opponentAbyssalCurseDamage,
+			),
 		} as DeckState);
 
 		return Object.assign(new GameState(), currentState, {

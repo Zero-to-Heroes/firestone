@@ -265,6 +265,13 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerAbyssalCurseCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerAbyssalCurseCounterWidgetPosition: { left: number; top: number };
+	readonly opponentAbyssalCurseCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentAbyssalCurseCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerSpellCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };

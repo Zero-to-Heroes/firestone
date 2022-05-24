@@ -108,10 +108,11 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
 				: cardWithDefault;
+		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
-			otherCardWithBuffs,
+			cardWithAdditionalAttributes,
 			// We keep the buffs for Secret Passage. If this causes an info leak, it should be documented
 			// here
 			true,
@@ -126,6 +127,22 @@ export class ReceiveCardInHandParser implements EventParser {
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+	}
+
+	private addAdditionalAttribues(card: DeckCard, deck: DeckState) {
+		switch (card?.cardId) {
+			case CardIds.SirakessCultist_AbyssalCurseToken:
+				const knownCurses = deck
+					.getAllCardsInDeck()
+					.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
+				const highestAttribute = !!knownCurses.length
+					? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
+					: -1;
+				return card.update({
+					mainAttributeChange: highestAttribute + 1,
+				});
+		}
+		return card;
 	}
 
 	event(): string {

@@ -189,6 +189,7 @@ export const forceHideInfoWhenDrawnInfluencers = [
 ];
 
 export const publicCardCreators = [
+	CardIds.AbyssalWave,
 	CardIds.AkaliTheRhino,
 	CardIds.AllianceBannerman,
 	CardIds.AncientMysteries,
@@ -232,6 +233,7 @@ export const publicCardCreators = [
 	CardIds.DeadRinger,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DeepwaterEvoker,
+	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
 	CardIds.DivingGryphon,
 	CardIds.DunBaldarBunker,
@@ -327,6 +329,7 @@ export const publicCardCreators = [
 	CardIds.SenseDemonsVanilla1,
 	CardIds.ShroudOfConcealment,
 	CardIds.SketchyInformation,
+	CardIds.SirakessCultist,
 	CardIds.Sleetbreaker,
 	CardIds.SmallTimeRecruits,
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
@@ -370,6 +373,7 @@ export const publicCardCreators = [
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion1,
+	CardIds.Zaqul,
 ];
 
 export const getGalakrondCardFor = (className: string, invokeCount: number): string => {

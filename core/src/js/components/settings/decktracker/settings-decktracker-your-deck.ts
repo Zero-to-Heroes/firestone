@@ -113,6 +113,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.fatigue-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerAbyssalCurseCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.abyssal-curse-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.abyssal-curse-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerAttackCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.attack-on-board-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.attack-on-board-tooltip' | owTranslate"

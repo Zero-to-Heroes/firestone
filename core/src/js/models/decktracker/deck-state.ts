@@ -67,6 +67,7 @@ export class DeckState {
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
+	readonly highestAbyssalCurseDamage: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly watchpostsPlayedThisMatch: number = 0;
