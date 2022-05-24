@@ -77,8 +77,26 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 	@Input() enableMouseOver: boolean;
 	@Input() showGoldenCards: boolean;
 
+	@Input() set tavernTier(value: number) {
+		if (!value) {
+			return;
+		}
+
+		// Only update the tavern tier if it's locked to the current tavern tier
+		// so that we don't change the display if the user wants to keep the focus on another
+		// tier (eg tier 5 or 6 to see their endgame options)
+		if (!!this.lockedTier && this.lockedTier.tavernTier === this.currentTavernTier) {
+			this.lockedTier = this.tiers.find((t) => t.tavernTier === value);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
+		this.currentTavernTier = value;
+	}
+
 	displayedTier: Tier;
 	lockedTier: Tier;
+	currentTavernTier: number;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 

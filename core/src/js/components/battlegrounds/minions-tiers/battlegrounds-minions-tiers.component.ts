@@ -29,6 +29,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<battlegrounds-minions-tiers-view
 				[tiers]="tiers$ | async"
 				[currentTurn]="currentTurn$ | async"
+				[tavernTier]="tavernTier$ | async"
 				[showMinionsList]="showMinionsList$ | async"
 				[showTribesHighlight]="showTribesHighlight$ | async"
 				[highlightedMinions]="highlightedMinions$ | async"
@@ -51,6 +52,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMinions$: Observable<readonly string[]>;
 	currentTurn$: Observable<number>;
+	tavernTier$: Observable<number>;
 	showTribesHighlight$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
 	showTurnNumber$: Observable<boolean>;
@@ -87,6 +89,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
 			.pipe(this.mapData(([currentTurn]) => currentTurn));
+		this.tavernTier$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.getMainPlayer()?.getCurrentTavernTier())
+			.pipe(this.mapData(([tavernTier]) => tavernTier));
 		this.showTribesHighlight$ = this.listenForBasicPref$((prefs) => prefs.bgsShowTribesHighlight);
 		this.showMinionsList$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
 		this.showTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableTurnNumbertOverlay);
