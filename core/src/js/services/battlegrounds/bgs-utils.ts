@@ -382,6 +382,9 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.ProphetOfTheBoar:
 		case CardIds.ProphetOfTheBoarBattlegrounds:
 			return Race.QUILBOAR;
+		case CardIds.OrgozoaTheTender:
+		case CardIds.OrgozoaTheTenderBattlegrounds:
+			return Race.NAGA;
 		default:
 			return getEffectiveTribeEnum(card);
 	}
