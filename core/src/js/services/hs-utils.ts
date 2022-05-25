@@ -209,6 +209,7 @@ export const publicCardCreators = [
 	CardIds.BookOfSpecters,
 	CardIds.Bottomfeeder,
 	CardIds.BrightEyedScout,
+	CardIds.BronzeHerald,
 	CardIds.BwonsamdiTheDead,
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
