@@ -1,4 +1,4 @@
-import { CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
+import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsHeroFilterType } from '@models/duels/duels-hero-filter.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -20,6 +20,27 @@ export class DuelsHeroFilterSelectedProcessor implements Processor {
 			...new Set(event.value.map((hero) => normalizeDuelsHeroCardId(hero) as CardIds)),
 		];
 		await this.prefs.updateDuelsHeroFilter(uniqueNormalizedHeroes);
+		// Update hero power and signature treasure filters if not compatible with the new hero selection
+		const prefs = await this.prefs.getPreferences();
+		const configForSelectedHeroes = duelsHeroConfigs.filter((config) =>
+			uniqueNormalizedHeroes.includes(normalizeDuelsHeroCardId(config.hero) as CardIds),
+		);
+		if (prefs.duelsActiveHeroPowerFilter !== 'all') {
+			const conf = configForSelectedHeroes.find((conf) =>
+				conf.heroPowers.includes(prefs.duelsActiveHeroPowerFilter as CardIds),
+			);
+			if (!conf) {
+				await this.prefs.updateDuelsHeroPowerFilter('all');
+			}
+		}
+		if (prefs.duelsActiveSignatureTreasureFilter !== 'all') {
+			const conf = configForSelectedHeroes.find((conf) =>
+				conf.signatureTreasures.includes(prefs.duelsActiveSignatureTreasureFilter as CardIds),
+			);
+			if (!conf) {
+				await this.prefs.updateDuelsSignatureTreasureFilter('all');
+			}
+		}
 		return [null, null];
 	}
 }
