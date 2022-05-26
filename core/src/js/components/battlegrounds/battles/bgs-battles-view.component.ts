@@ -53,6 +53,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[additionalClass]="'inline'"
 							[simulationUpdater]="simulationUpdater"
 							[simulationReset]="simulationReset"
+							[allowKeyboardControl]="false"
 						></bgs-battle>
 						<button class="i-30 close-button" (mousedown)="closeBattle()">
 							<svg class="svg-icon-fill">

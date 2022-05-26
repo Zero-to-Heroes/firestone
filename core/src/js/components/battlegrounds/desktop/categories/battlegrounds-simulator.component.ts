@@ -26,6 +26,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				[showTavernTier]="true"
 				[simulationUpdater]="simulationUpdater"
 				[simulationReset]="simulationReset"
+				[allowKeyboardControl]="true"
 			></bgs-battle>
 		</div>
 	`,

@@ -10,6 +10,10 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import {
+	BgsSimulatorKeyboardControl,
+	BgsSimulatorKeyboardControls,
+} from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -246,6 +250,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	@Input() allowClickToAdd = false;
 	@Input() closeOnMinion = false;
 	@Input() showTavernTier = false;
+	@Input() allowKeyboardControl = false;
 	@Input() additionalClass: string;
 
 	turnNumber: number;
@@ -281,6 +286,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
+		private readonly simulatorKeyboardControls: BgsSimulatorKeyboardControls,
 	) {}
 
 	async ngAfterViewInit() {
@@ -294,6 +300,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		});
 
 		this.tooltip = this.i18n.translateString('battlegrounds.sim.simulate-button-tooltip');
+		this.initKeyboardControls();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -301,7 +308,30 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		this.simulatorKeyboardControls.tearDown();
 		this.sub$$?.unsubscribe();
+	}
+
+	private initKeyboardControls() {
+		console.debug('keyboard controls allowed?', this.allowKeyboardControl);
+		this.simulatorKeyboardControls
+			.init(this.allowKeyboardControl)
+			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'));
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	handleKeyboardControl(event: KeyboardEvent) {
+		// console.debug('handling key event', event);
+		if (!this.allowKeyboardControl) {
+			return;
+		}
+
+		// console.debug('overlayRef', this.overlayRef, this.overlayRef.hasAttached());
+		// Control is back to the overlay
+		if (this.overlayRef.hasAttached()) {
+			return;
+		}
+		this.simulatorKeyboardControls.handleKeyDown(event);
 	}
 
 	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {

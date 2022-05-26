@@ -62,6 +62,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<input
 							[formControl]="searchForm"
 							(mousedown)="onMouseDown($event)"
+							tabindex="0"
+							[autofocus]="true"
 							[placeholder]="'battlegrounds.sim.search-heroes-placeholder' | owTranslate"
 						/>
 					</label>
@@ -194,6 +196,19 @@ export class BgsSimulatorHeroSelectionComponent
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.subscription.unsubscribe();
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	handleKeyboardControl(event: KeyboardEvent) {
+		if (event.key === 'Enter' && (event.ctrlKey || event.shiftKey || event.altKey)) {
+			this.validate();
+		}
+		if (event.key === 'Enter' && !!this.allHeroes?.length) {
+			this.selectHero(this.allHeroes[0]);
+		}
+		if (event.key === 'Escape') {
+			this.close();
+		}
 	}
 
 	selectHero(hero: Hero) {

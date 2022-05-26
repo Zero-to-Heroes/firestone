@@ -13,6 +13,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BgsSimulatorKeyboardControls } from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
 import { CollectionCardClassFilterDropdownComponent } from '@components/collection/filters/card-class-filter.component';
 import { CollectionCardOwnedFilterDropdownComponent } from '@components/collection/filters/card-owned-filter.component';
 import { CollectionCardRarityFilterDropdownComponent } from '@components/collection/filters/card-rarity-filter.component';
@@ -64,6 +65,7 @@ import { ReplaysListViewComponent } from '@components/replays/replays-list-view.
 import { SettingsBattlegroundsOverlayComponent } from '@components/settings/battlegrounds/settings-battlegrounds-overlay.component';
 import { SettingsBattlegroundsSessionComponent } from '@components/settings/battlegrounds/settings-battlegrounds-session.component';
 import { SettingsDecktrackerDuelsComponent } from '@components/settings/decktracker/settings-decktracker-duels.component';
+import { AutofocusDirective } from '@directives/autofocus.directive';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -991,6 +993,7 @@ const components = [
 
 		AdvancedSettingDirective,
 		MercenariesHighlightDirective,
+		AutofocusDirective,
 	],
 	entryComponents: [
 		BgsCardTooltipComponent,
@@ -1068,6 +1071,7 @@ const components = [
 		BgsBestUserStatsService,
 		RealTimeStatsService,
 		BgsCustomSimulationService,
+		BgsSimulatorKeyboardControls,
 
 		MercenariesMemoryUpdateService,
 		MercenariesMemoryCacheService,
