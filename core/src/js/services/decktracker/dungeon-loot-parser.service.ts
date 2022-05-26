@@ -373,6 +373,9 @@ export class DungeonLootParserService {
 	private isMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
 		if (!additionalResult) {
 			this.log('isLastMatchInRun', 'no additional result', additionalResult, result);
+			// This can happen when quitting HS and restarting it during a match
+			// Because of the Brann bug this is can happen pretty frequently
+			// The solution might be to allow users to themselves decide to merge runs together
 			return false;
 		}
 
