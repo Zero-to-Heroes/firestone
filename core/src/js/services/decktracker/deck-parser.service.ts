@@ -344,6 +344,7 @@ export class DeckParserService {
 			ScenarioId.WIZARD_DUELS,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,
+			ScenarioId.TAVERN_BRAWL_BRAWLISEUM,
 		];
 		return loggingSCenarios.includes(scenarioId);
 	}
