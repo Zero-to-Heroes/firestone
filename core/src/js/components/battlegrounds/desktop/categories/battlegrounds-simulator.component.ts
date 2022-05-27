@@ -1,4 +1,9 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	BgsSimulatorKeyboardControl,
+	BgsSimulatorKeyboardControls,
+} from '@components/battlegrounds/battles/simulator-keyboard-controls.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter, takeUntil, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -15,6 +20,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="battlegrounds-simulator">
+			<div class="info" [helpTooltip]="helpTooltip" [helpTooltipClasses]="'bgs-simulator-help-tooltip'">
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#info" />
+				</svg>
+			</div>
 			<bgs-battle
 				class="battle"
 				[faceOff]="faceOff$ | async"
@@ -40,7 +50,13 @@ export class BattlegroundsSimulatorComponent
 
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	helpTooltip: string = this.buildHelpTooltip();
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
@@ -62,5 +78,32 @@ export class BattlegroundsSimulatorComponent
 		this.simulationReset = (faceOffId: string) => {
 			this.store.send(new BgsCustomSimulationResetEvent(faceOffId));
 		};
+	}
+
+	private buildHelpTooltip(): string {
+		return `
+			<div class="content">
+				<div class="title">${this.i18n.translateString('battlegrounds.sim.simulator-help-tooltip.title')}</div>
+				<ul class="controls">
+					<li class="control">${this.i18n.translateString('battlegrounds.sim.simulator-help-tooltip.control-hero', {
+						playerKey: BgsSimulatorKeyboardControls.getKeyName(BgsSimulatorKeyboardControl.PlayerHero),
+						opponentKey: BgsSimulatorKeyboardControls.getKeyName(BgsSimulatorKeyboardControl.OpponentHero),
+					})}</li> 
+					<li class="control">${this.i18n.translateString('battlegrounds.sim.simulator-help-tooltip.control-hero-power', {
+						playerKey: BgsSimulatorKeyboardControls.getKeyName(BgsSimulatorKeyboardControl.PlayerHeroPower),
+						opponentKey: BgsSimulatorKeyboardControls.getKeyName(
+							BgsSimulatorKeyboardControl.OpponentHeroPower,
+						),
+					})}</li>
+					<li class="control">${this.i18n.translateString('battlegrounds.sim.simulator-help-tooltip.control-minion', {
+						playerKey: BgsSimulatorKeyboardControls.getKeyName(BgsSimulatorKeyboardControl.PlayerAddMinion),
+						opponentKey: BgsSimulatorKeyboardControls.getKeyName(
+							BgsSimulatorKeyboardControl.OpponentAddMinion,
+						),
+					})}</li>
+					<li class="control">${this.i18n.translateString('battlegrounds.sim.simulator-help-tooltip.control-general')}</li>
+				</ul>
+			</div>
+		`;
 	}
 }

@@ -202,11 +202,9 @@ export class BgsSimulatorHeroSelectionComponent
 	handleKeyboardControl(event: KeyboardEvent) {
 		if (event.key === 'Enter' && (event.ctrlKey || event.shiftKey || event.altKey)) {
 			this.validate();
-		}
-		if (event.key === 'Enter' && !!this.allHeroes?.length) {
+		} else if (event.key === 'Enter' && !!this.allHeroes?.length) {
 			this.selectHero(this.allHeroes[0]);
-		}
-		if (event.key === 'Escape') {
+		} else if (event.key === 'Escape') {
 			this.close();
 		}
 	}

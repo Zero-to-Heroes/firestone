@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
@@ -575,6 +576,7 @@ const components = [
 @NgModule({
 	imports: [
 		AngularResizedEventModule,
+		A11yModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		ChartsModule,

@@ -156,3 +156,17 @@
 		}
 	}
 }
+
+.help-tooltip.bgs-simulator-help-tooltip {
+	.text {
+		max-width: 350px;
+
+		::ng-deep .content {
+			text-align: left;
+
+			li {
+				margin-left: 30px;
+			}
+		}
+	}
+}

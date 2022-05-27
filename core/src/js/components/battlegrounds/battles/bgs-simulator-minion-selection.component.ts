@@ -31,177 +31,191 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="container">
-			<button class="i-30 close-button" (mousedown)="close()">
-				<svg class="svg-icon-fill">
-					<use
-						xmlns:xlink="https://www.w3.org/1999/xlink"
-						xlink:href="assets/svg/sprite.svg#window-control_close"
-					></use>
-				</svg>
-			</button>
+			<div class="content-container" cdkTrapFocus cdkTrapFocusAutoCapture>
+				<button class="i-30 close-button" tabindex="-1" (mousedown)="close()">
+					<svg class="svg-icon-fill">
+						<use
+							xmlns:xlink="https://www.w3.org/1999/xlink"
+							xlink:href="assets/svg/sprite.svg#window-control_close"
+						></use>
+					</svg>
+				</button>
 
-			<div class="title" [owTranslate]="'battlegrounds.sim.update-minion-title'"></div>
-			<div class="current-hero">
-				<div *ngIf="card" class="hero-portrait-frame">
-					<bgs-card-tooltip [config]="card" [visible]="true"></bgs-card-tooltip>
-				</div>
-				<div *ngIf="!card" class="hero-portrait-frame empty">
-					<div class="empty-hero" inlineSVG="assets/svg/bg_empty_minion_full.svg"></div>
-				</div>
-				<div class="abilities" [ngClass]="{ 'disabled': !card }">
-					<div class="stats">
-						<div class="input attack">
-							<div class="label" [owTranslate]="'global.hs-terms.attack'"></div>
-							<input
-								type="number"
-								[ngModel]="attack"
-								(ngModelChange)="onAttackChanged($event)"
-								(mousedown)="preventDrag($event)"
-							/>
-							<div class="buttons">
-								<button
-									class="arrow up"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="incrementAttack()"
-								></button>
-								<button
-									class="arrow down"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="decrementAttack()"
-								></button>
+				<div class="title" [owTranslate]="'battlegrounds.sim.update-minion-title'"></div>
+				<div class="current-hero">
+					<div *ngIf="card" class="hero-portrait-frame">
+						<bgs-card-tooltip [config]="card" [visible]="true"></bgs-card-tooltip>
+					</div>
+					<div *ngIf="!card" class="hero-portrait-frame empty">
+						<div class="empty-hero" inlineSVG="assets/svg/bg_empty_minion_full.svg"></div>
+					</div>
+					<div class="abilities" [ngClass]="{ 'disabled': !card }">
+						<div class="stats">
+							<div class="input attack">
+								<div class="label" [owTranslate]="'global.hs-terms.attack'"></div>
+								<input
+									type="number"
+									tabindex="0"
+									[ngModel]="attack"
+									(ngModelChange)="onAttackChanged($event)"
+									(mousedown)="preventDrag($event)"
+								/>
+								<div class="buttons">
+									<button
+										class="arrow up"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="incrementAttack()"
+									></button>
+									<button
+										class="arrow down"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="decrementAttack()"
+									></button>
+								</div>
+							</div>
+							<div class="input health">
+								<div class="label" [owTranslate]="'global.hs-terms.health'"></div>
+								<input
+									type="number"
+									tabindex="0"
+									[ngModel]="health"
+									(ngModelChange)="onHealthChanged($event)"
+									(mousedown)="preventDrag($event)"
+								/>
+								<div class="buttons">
+									<button
+										class="arrow up"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="incrementHealth()"
+									></button>
+									<button
+										class="arrow down"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="decrementHealth()"
+									></button>
+								</div>
 							</div>
 						</div>
-						<div class="input health">
-							<div class="label" [owTranslate]="'global.hs-terms.health'"></div>
-							<input
-								type="number"
-								[ngModel]="health"
-								(ngModelChange)="onHealthChanged($event)"
-								(mousedown)="preventDrag($event)"
-							/>
-							<div class="buttons">
-								<button
-									class="arrow up"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="incrementHealth()"
-								></button>
-								<button
-									class="arrow down"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="decrementHealth()"
-								></button>
+						<div class="attributes">
+							<checkbox
+								[label]="'global.hs-terms.golden' | owTranslate"
+								[value]="premium"
+								(valueChanged)="onPremiumChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.divine-shield' | owTranslate"
+								[value]="divineShield"
+								(valueChanged)="onDivineShieldChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.poisonous' | owTranslate"
+								[value]="poisonous"
+								(valueChanged)="onPoisonousChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.reborn' | owTranslate"
+								[value]="reborn"
+								(valueChanged)="onRebornChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.taunt' | owTranslate"
+								[value]="taunt"
+								(valueChanged)="onTauntChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.windfury' | owTranslate"
+								[value]="windfury"
+								(valueChanged)="onWindfuryChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'global.hs-terms.mega-windfury' | owTranslate"
+								[value]="megaWindfury"
+								(valueChanged)="onMegaWindfuryChanged($event)"
+							></checkbox>
+							<checkbox
+								[label]="'battlegrounds.sim.summon-mechs' | owTranslate"
+								[value]="summonMechs"
+								(valueChanged)="onSummonMechsChanged($event)"
+								[helpTooltip]="'battlegrounds.sim.summon-mechs-tooltip' | owTranslate"
+							></checkbox>
+							<checkbox
+								[label]="'battlegrounds.sim.summon-plants' | owTranslate"
+								[value]="summonPlants"
+								(valueChanged)="onSummonPlantsChanged($event)"
+								[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | owTranslate"
+							></checkbox>
+							<div class="input health">
+								<div
+									class="label"
+									[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
+									[owTranslate]="'battlegrounds.sim.sneed-deathrattle'"
+								></div>
+								<input
+									type="number"
+									tabindex="0"
+									[ngModel]="sneeds"
+									(ngModelChange)="onSneedChanged($event)"
+									(mousedown)="preventDrag($event)"
+								/>
+								<div class="buttons">
+									<button
+										class="arrow up"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="incrementSneed()"
+									></button>
+									<button
+										class="arrow down"
+										tabindex="-1"
+										inlineSVG="assets/svg/arrow.svg"
+										(click)="decrementSneed()"
+									></button>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="attributes">
-						<checkbox
-							[label]="'global.hs-terms.golden' | owTranslate"
-							[value]="premium"
-							(valueChanged)="onPremiumChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.divine-shield' | owTranslate"
-							[value]="divineShield"
-							(valueChanged)="onDivineShieldChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.poisonous' | owTranslate"
-							[value]="poisonous"
-							(valueChanged)="onPoisonousChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.reborn' | owTranslate"
-							[value]="reborn"
-							(valueChanged)="onRebornChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.taunt' | owTranslate"
-							[value]="taunt"
-							(valueChanged)="onTauntChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.windfury' | owTranslate"
-							[value]="windfury"
-							(valueChanged)="onWindfuryChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'global.hs-terms.mega-windfury' | owTranslate"
-							[value]="megaWindfury"
-							(valueChanged)="onMegaWindfuryChanged($event)"
-						></checkbox>
-						<checkbox
-							[label]="'battlegrounds.sim.summon-mechs' | owTranslate"
-							[value]="summonMechs"
-							(valueChanged)="onSummonMechsChanged($event)"
-							[helpTooltip]="'battlegrounds.sim.summon-mechs-tooltip' | owTranslate"
-						></checkbox>
-						<checkbox
-							[label]="'battlegrounds.sim.summon-plants' | owTranslate"
-							[value]="summonPlants"
-							(valueChanged)="onSummonPlantsChanged($event)"
-							[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | owTranslate"
-						></checkbox>
-						<div class="input health">
-							<div
-								class="label"
-								[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
-								[owTranslate]="'battlegrounds.sim.sneed-deathrattle'"
-							></div>
+				</div>
+				<div class="hero-selection">
+					<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
+					<div class="search">
+						<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
+						<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
+						<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
+							<div class="icon" inlineSVG="assets/svg/search.svg"></div>
 							<input
-								type="number"
-								[ngModel]="sneeds"
-								(ngModelChange)="onSneedChanged($event)"
+								[formControl]="searchForm"
 								(mousedown)="preventDrag($event)"
+								tabindex="0"
+								cdkFocusInitial
+								[autofocus]="true"
+								[placeholder]="'battlegrounds.sim.search-minion-placeholder' | owTranslate"
 							/>
-							<div class="buttons">
-								<button
-									class="arrow up"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="incrementSneed()"
-								></button>
-								<button
-									class="arrow down"
-									inlineSVG="assets/svg/arrow.svg"
-									(click)="decrementSneed()"
-								></button>
-							</div>
+						</label>
+					</div>
+					<div class="heroes" scrollable>
+						<div
+							*ngFor="let minion of allMinions"
+							class="hero-portrait-frame"
+							[ngClass]="{ 'selected': minion.id === _currentMinion?.id }"
+							(click)="selectMinion(minion)"
+							[cardTooltip]="minion.id"
+						>
+							<img class="icon" [src]="minion.icon" />
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="hero-selection">
-				<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
-				<div class="search">
-					<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
-					<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
-					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
-						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
-						<input
-							[formControl]="searchForm"
-							(mousedown)="preventDrag($event)"
-							[placeholder]="'battlegrounds.sim.search-minion-placeholder' | owTranslate"
-						/>
-					</label>
-				</div>
-				<div class="heroes" scrollable>
+				<div class="controls">
 					<div
-						*ngFor="let minion of allMinions"
-						class="hero-portrait-frame"
-						[ngClass]="{ 'selected': minion.id === _currentMinion?.id }"
-						(click)="selectMinion(minion)"
-						[cardTooltip]="minion.id"
-					>
-						<img class="icon" [src]="minion.icon" />
-					</div>
+						class="button"
+						(click)="validate()"
+						[ngClass]="{ 'disabled': !card }"
+						[owTranslate]="'battlegrounds.sim.select-button'"
+					></div>
 				</div>
-			</div>
-			<div class="controls">
-				<div
-					class="button"
-					(click)="validate()"
-					[ngClass]="{ 'disabled': !card }"
-					[owTranslate]="'battlegrounds.sim.select-button'"
-				></div>
 			</div>
 		</div>
 	`,
@@ -336,6 +350,17 @@ export class BgsSimulatorMinionSelectionComponent
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.subscription.unsubscribe();
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	handleKeyboardControl(event: KeyboardEvent) {
+		if (event.key === 'Enter' && (event.ctrlKey || event.shiftKey || event.altKey)) {
+			this.validate();
+		} else if (event.key === 'Enter' && !!this.allMinions?.length) {
+			this.selectMinion(this.allMinions[0]);
+		} else if (event.key === 'Escape') {
+			this.close();
+		}
 	}
 
 	onPremiumChanged(value: boolean) {

@@ -1,7 +1,19 @@
 import { Injectable } from '@angular/core';
 
+export enum BgsSimulatorKeyboardControl {
+	PlayerHero,
+	OpponentHero,
+	PlayerHeroPower,
+	OpponentHeroPower,
+	PlayerAddMinion,
+	OpponentAddMinion,
+}
 @Injectable()
 export class BgsSimulatorKeyboardControls {
+	private static CONTROL_KEYS = Object.values(BgsSimulatorKeyboardControl)
+		.filter((key) => typeof key !== 'string')
+		.map((key) => key as BgsSimulatorKeyboardControl);
+
 	private allowControl: boolean;
 	private controls: {
 		[key: string]: () => void | Promise<void>;
@@ -12,9 +24,12 @@ export class BgsSimulatorKeyboardControls {
 		return this;
 	}
 
-	public control(key: BgsSimulatorKeyboardControl, handler: () => void | Promise<void>) {
-		console.debug('registering control', key, handler, this.allowControl);
+	public control(
+		key: BgsSimulatorKeyboardControl,
+		handler: () => void | Promise<void>,
+	): BgsSimulatorKeyboardControls {
 		this.controls[key] = handler;
+		return this;
 	}
 
 	public handleKeyDown(event: KeyboardEvent) {
@@ -23,7 +38,6 @@ export class BgsSimulatorKeyboardControls {
 		}
 
 		const key = this.getKey(event);
-		console.debug('retrieved key', key, event, this.controls);
 		if (key != null && !!this.controls[key]) {
 			this.controls[key]();
 		}
@@ -33,15 +47,26 @@ export class BgsSimulatorKeyboardControls {
 		this.controls = {};
 	}
 
-	private getKey(event: KeyboardEvent): BgsSimulatorKeyboardControl {
-		// Opponnet
-		if (event.key === 'H') {
-			return BgsSimulatorKeyboardControl.OpponentHero;
+	public static getKeyName(key: BgsSimulatorKeyboardControl): string {
+		switch (key) {
+			case BgsSimulatorKeyboardControl.PlayerHero:
+				return 'h';
+			case BgsSimulatorKeyboardControl.OpponentHero:
+				return 'H';
+			case BgsSimulatorKeyboardControl.PlayerHeroPower:
+				return 'p';
+			case BgsSimulatorKeyboardControl.OpponentHeroPower:
+				return 'P';
+			case BgsSimulatorKeyboardControl.PlayerAddMinion:
+				return 'm';
+			case BgsSimulatorKeyboardControl.OpponentAddMinion:
+				return 'M';
 		}
-		return null;
 	}
-}
 
-export enum BgsSimulatorKeyboardControl {
-	OpponentHero,
+	private getKey(event: KeyboardEvent): BgsSimulatorKeyboardControl {
+		return BgsSimulatorKeyboardControls.CONTROL_KEYS.find(
+			(key) => BgsSimulatorKeyboardControls.getKeyName(key) === event.key,
+		);
+	}
 }

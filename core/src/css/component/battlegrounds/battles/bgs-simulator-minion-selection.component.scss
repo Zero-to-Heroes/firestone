@@ -5,18 +5,26 @@
 }
 
 .container {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	width: 710px;
-	min-height: 580px;
-	max-height: calc(100% - 100px);
-	color: var(--default-text-color);
 	background: var(--popup-background-image);
 	font-size: 14px;
 	font-family: Open Sans;
 	pointer-events: all;
+	width: 710px;
+	min-height: 580px;
+	max-height: calc(100% - 100px);
+	height: 100%;
+	color: var(--default-text-color);
 	padding: 15px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+
+	.content-container {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
 
 	.close-button {
 		position: absolute;
@@ -69,10 +77,18 @@
 							color: var(--default-text-color);
 						}
 
-						&:hover {
+						&:hover,
+						&:focus {
 							i {
 								--icon-color: var(--color-1);
 							}
+						}
+					}
+				}
+				checkbox:focus {
+					::ng-deep label {
+						i {
+							--icon-color: var(--color-1);
 						}
 					}
 				}
