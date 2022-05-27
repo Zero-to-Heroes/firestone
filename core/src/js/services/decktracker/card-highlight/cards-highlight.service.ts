@@ -487,6 +487,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, fire);
 			case CardIds.GlacialDownpourTavernBrawl:
 				return and(or(inDeck, inHand), spell, frost);
+			case CardIds.GorlocRavager:
+				return and(inDeck, murloc);
 			case CardIds.GreedyGainsTavernBrawl:
 				return and(or(inDeck, inHand), minion);
 			case CardIds.GrommashsArmguardsTavernBrawl:
