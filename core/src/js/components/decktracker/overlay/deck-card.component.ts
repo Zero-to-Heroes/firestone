@@ -41,6 +41,7 @@ import { uuid } from '../../../services/utils';
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="'auto'"
 			[cardTooltipShowRelatedCards]="_showRelatedCards"
+			[cardTooltipRelatedCardIds]="relatedCardIds"
 			(mouseenter)="onMouseEnter($event)"
 			(mouseleave)="onMouseLeave($event)"
 			(click)="onCardClicked($event)"
@@ -239,6 +240,7 @@ export class DeckCardComponent implements OnDestroy {
 	_isMissing: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];
+	relatedCardIds: readonly string[];
 	giftTooltip: string;
 	isBurned: boolean;
 	isDiscarded: boolean;
@@ -336,6 +338,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.updateGiftTooltip();
 		this.highlight = this._card.highlight;
 		this.isDredged = this._card.dredged && !this._card.zone;
+		this.relatedCardIds = this._card.relatedCardIds;
 
 		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
 		this.isDiscarded = this._card.zone === 'DISCARD';

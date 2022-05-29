@@ -108,7 +108,7 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
 				: cardWithDefault;
-		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck);
+		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
@@ -129,7 +129,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		});
 	}
 
-	private addAdditionalAttribues(card: DeckCard, deck: DeckState) {
+	private addAdditionalAttribues(card: DeckCard, deck: DeckState, gameEvent: GameEvent) {
 		switch (card?.cardId) {
 			case CardIds.SirakessCultist_AbyssalCurseToken:
 				const knownCurses = deck
@@ -140,6 +140,13 @@ export class ReceiveCardInHandParser implements EventParser {
 					: -1;
 				return card.update({
 					mainAttributeChange: highestAttribute + 1,
+				});
+			case CardIds.SchoolTeacher_NagalingToken:
+				return card.update({
+					relatedCardIds: [
+						...card.relatedCardIds,
+						this.allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
+					].filter((id) => !!id),
 				});
 		}
 		return card;

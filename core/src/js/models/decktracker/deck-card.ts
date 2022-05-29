@@ -48,6 +48,7 @@ export class DeckCard {
 	readonly dredged?: boolean;
 	readonly createdByJoust?: boolean;
 	readonly linkedEntityIds?: readonly number[] = [];
+	readonly relatedCardIds?: readonly string[] = [];
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {

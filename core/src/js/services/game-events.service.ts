@@ -521,6 +521,7 @@ export class GameEvents {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
+						additionalPlayInfo: gameEvent.Value.AdditionalProps.AdditionalPlayInfo,
 					}),
 				);
 				break;
