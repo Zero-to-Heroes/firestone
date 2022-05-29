@@ -46,9 +46,8 @@ export class ApiRunner {
 				(error) => {
 					// Some users have a VPN / ISP config that prevents them from accessing our static
 					// data, so there's nothing we can do unless they contact us directly
-					if (!url.includes('.json')) {
-						console.error('Could not execute GET call', url, error);
-					}
+					// We still log an error though, because it can be useful when debugging other things
+					console.error('Could not execute GET call', url, error);
 					resolve(null);
 				},
 			);
