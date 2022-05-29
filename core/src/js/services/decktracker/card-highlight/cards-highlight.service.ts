@@ -571,6 +571,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, beast);
 			case CardIds.StickyFingersTavernBrawl:
 				return and(or(inDeck, inHand), notInInitialDeck);
+			case CardIds.Swordfish:
+				return and(inDeck, pirate);
 			case CardIds.SunstridersCrownTavernBrawl:
 				return and(or(inDeck, inHand), spell);
 			case CardIds.TessGreymane1:
