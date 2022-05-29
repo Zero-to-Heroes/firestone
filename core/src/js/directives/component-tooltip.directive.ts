@@ -122,8 +122,13 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		this.onMouseLeave(true);
 	}
 
+	private hideTimeout;
+
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (this.hideTimeout) {
+			clearTimeout(this.hideTimeout);
+		}
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(this._componentType);
 
@@ -138,10 +143,21 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+
+		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
+		// on screen.
+		// So we add a timeout to hide the card automatically after a while
+		this.hideTimeout = setTimeout(() => {
+			this.onMouseLeave();
+		}, 15_000);
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
+		if (this.hideTimeout) {
+			clearTimeout(this.hideTimeout);
+		}
+
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!willBeDestroyed) {
