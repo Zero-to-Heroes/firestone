@@ -248,6 +248,7 @@ export const publicCardCreators = [
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger,
 	CardIds.FelLordBetrug1,
+	CardIds.FelsoulJailerCore,
 	CardIds.FinalShowdown_CloseThePortalToken, // Demonslayer Kurtrus
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
@@ -377,6 +378,8 @@ export const publicCardCreators = [
 	CardIds.Wrathion1,
 	CardIds.YseraTheDreamerCore,
 	CardIds.Zaqul,
+	CardIds.ZolaTheGorgon,
+	CardIds.ZolaTheGorgonCore,
 ];
 
 export const getGalakrondCardFor = (className: string, invokeCount: number): string => {
