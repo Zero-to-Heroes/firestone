@@ -333,10 +333,16 @@ export class DeckManipulationHelper {
 		}
 		// Search by cardId only
 		if (cardId) {
-			const found = zone.find((card) => {
-				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
-				return refCardId === normalizedCardId && !card.entityId;
-			});
+			const found =
+				// Avoid picking card at the bottom of the deck first if possible
+				zone.find((card) => {
+					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+					return refCardId === normalizedCardId && !card.entityId && card.positionFromBottom == null;
+				}) ??
+				zone.find((card) => {
+					const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+					return refCardId === normalizedCardId && !card.entityId;
+				});
 			if (!found) {
 				const card = this.allCards.getCard(cardId);
 				return DeckCard.create({
