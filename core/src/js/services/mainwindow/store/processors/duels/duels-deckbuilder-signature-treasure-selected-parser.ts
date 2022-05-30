@@ -1,9 +1,11 @@
-import { CardClass } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
 import { Processor } from '@services/mainwindow/store/processors/processor';
+
+const NEUTRAL_HEROES = [CardIds.VanndarStormpikeTavernBrawl, CardIds.DrektharTavernBrawl];
 
 export class DuelsDeckbuilderSignatureTreasureSelectedProcessor implements Processor {
 	constructor(private readonly allCards: CardsFacadeService) {}
@@ -16,8 +18,12 @@ export class DuelsDeckbuilderSignatureTreasureSelectedProcessor implements Proce
 	): Promise<[MainWindowState, NavigationState]> {
 		const signatureTreasureCardId = event.signatureTreasureCardId;
 		let classes = currentState.duels.deckbuilder.currentClasses;
-		// Neutral heroes
-		if (!classes?.length) {
+		// Neutral heroes' class is determined by their signature treasure
+		if (
+			NEUTRAL_HEROES.includes(
+				normalizeDuelsHeroCardId(currentState.duels.deckbuilder.currentHeroCardId) as CardIds,
+			)
+		) {
 			classes = extractDuelsClasses(event.signatureTreasureCardId, this.allCards);
 		}
 		return [
