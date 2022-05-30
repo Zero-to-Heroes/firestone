@@ -20,11 +20,14 @@ export class ArenaRewardsUpdatedProcessor implements Processor {
 			return [null, null];
 		}
 
-		const rewards: readonly ArenaRewardInfo[] = this.buildRewards(event.rewards);
+		const newRewards: readonly ArenaRewardInfo[] = [
+			...(currentState.arena.rewards ?? []),
+			...this.buildRewards(event.rewards),
+		];
 		const result = [
 			Object.assign(new MainWindowState(), currentState, {
 				arena: currentState.arena.update({
-					rewards: rewards,
+					rewards: newRewards,
 				} as ArenaState),
 			} as MainWindowState),
 			null,
