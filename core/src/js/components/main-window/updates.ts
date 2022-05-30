@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.6.0',
+		version: '9.7.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,37 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add keyboard controls for the simulator. The goal is the make the simulator feel lighter and snappiere to use.`,
+							},
+							{
+								type: 'feature',
+								text: `After upgrading the tavern, automatically show the minions list for that tavern tier if the list was currently being displayed.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some users would not see any hero stats at the start of the game.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add counter for Abyssal Curses`,
+								text: `Show the full card learned by Nagaling when mousing over it in the decklist (for people like me with short attention spans that quickly forgot what they chose and can't remember the card by its name).`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a bug where hero power / signature treasure filters were not reset when changing the hero filter, which could lead to no results being shown without any clear reason why.`,
 							},
 						],
 					},
@@ -61,23 +87,81 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an option to restrict the stats shown at the start of the game based on the current game's MMR / available tribes. WARNING: this usually leads to very low sample sizes, so only use it if you know what you're doing :)`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Orgozoa could appear in the minions list when Nagas were banned.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Yo-Ho Ogre "attack immediately" timing could not go off between windfury attacks.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Wildfire Elemental excess damage would propagate to neighbours.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the minion sacrificed by Tamsin's Hero Power could still be attacked on the first attack phase.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue when handling Southsea Captain dying when they had Reborn from The Lich King's hero power.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the board's composition (for Start of Combat triggers like Red Whelps) would only be computed after Illidan's Hero Power triggered (which would cause dead minions to not be counted).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where minions who died after being attacked by Illidan's hero power could still be attacked in the next normal attack phase.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where the turn order would get messed up after Illidan's hero power activation.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Illidan's second attacker bonus would transfer to another minion if the second attacker died before being able to attack (e.g. when killed by a Ghoul going off).`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Show the Fatigue counter is an "Agony" is in the deck.`,
+								text: `Mousing over Kazalusan in the decklist now also highlights dragons that were played this game (in the Other zone).`,
+							},
+							{
+								type: 'feature',
+								text: `Add Card Oracle (flagging the card in the opponent's hand) for Felsoul Jailer.`,
+							},
+							{
+								type: 'feature',
+								text: `Add card highlight for Swordfish and Gorloc Ravager.`,
+							},
+							{
+								type: 'feature',
+								text: `Add decklist support for Heroic Brawliseum.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue with the Card Oracle (flagging the card in your opponent's hand) for Ysera, the Dreamer and Duplicate.`,
+								text: `Fix Card Oracle for Zola the Gorgon and Bronze Herald.`,
 							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where destroyed weapons would not appear in the Other zone.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where dead minions would not be highlighted by Tess and Counterfeit Stock.`,
+								text: `Fix an issue where some Mercs replays would not upload properly.`,
 							},
 						],
 					},
