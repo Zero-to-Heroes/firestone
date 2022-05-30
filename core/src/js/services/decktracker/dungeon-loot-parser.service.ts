@@ -179,6 +179,8 @@ export class DungeonLootParserService {
 		}
 
 		if (!this.duelsInfo) {
+			// This can happen when quitting / rejoining during a game, as we don't go through
+			// the Duels intermediate pages, which are the ones populating the info
 			console.error('Could not retrieve duels info', this.currentDuelsRunId);
 			return;
 		}

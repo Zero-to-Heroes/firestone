@@ -304,6 +304,7 @@ export class DeckParserService {
 			deckFromMemory.HeroClass,
 			deckDefinition,
 			JSON.stringify(deckDefinition),
+			deckDefinition.cards.some((pair) => pair[0] == null),
 		);
 		const deckString = deckDefinition.cards.some((pair) => pair[0] == null) ? null : encode(deckDefinition);
 		console.log('[deck-parser] built deckstring', deckString);

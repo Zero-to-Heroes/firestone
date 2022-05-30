@@ -109,8 +109,8 @@ export class DuelsHeroPowerFilterDropdownComponent
 							return 0;
 						}
 
-						const aName = aCard.name.toLowerCase();
-						const bName = bCard.name.toLowerCase();
+						const aName = aCard.name?.toLowerCase();
+						const bName = bCard.name?.toLowerCase();
 						if (aName < bName) {
 							return -1;
 						}
@@ -126,8 +126,8 @@ export class DuelsHeroPowerFilterDropdownComponent
 							return 0;
 						}
 
-						const aClassName = aCard.playerClass.toLowerCase();
-						const bClassName = bCard.playerClass.toLowerCase();
+						const aClassName = aCard.playerClass?.toLowerCase();
+						const bClassName = bCard.playerClass?.toLowerCase();
 						if (aClassName < bClassName) {
 							return -1;
 						}
@@ -140,7 +140,7 @@ export class DuelsHeroPowerFilterDropdownComponent
 						const card = this.allCards.getCard(heroPowerCardId);
 						return {
 							value: heroPowerCardId,
-							label: `${card?.name ?? heroPowerCardId} (${formatClass(card.playerClass, this.i18n)})`,
+							label: `${card?.name ?? heroPowerCardId} (${formatClass(card?.playerClass, this.i18n)})`,
 						};
 					}),
 			]),
