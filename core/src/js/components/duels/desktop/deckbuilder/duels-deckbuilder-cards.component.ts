@@ -279,7 +279,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								};
 								return bucketCard;
 							})
-							.sort((a, b) => a.manaCost - b.manaCost || (a.cardName < b.cardName ? -1 : 1));
+							.sort(
+								(a, b) =>
+									a.manaCost - b.manaCost ||
+									(a.cardName?.toLowerCase() < b.cardName?.toLowerCase() ? -1 : 1),
+							);
 						const bucketData: BucketData = {
 							bucketId: bucket.bucketId,
 							bucketName: this.allCards.getCard(bucket.bucketId)?.name,

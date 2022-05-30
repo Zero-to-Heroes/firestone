@@ -267,10 +267,10 @@ export class DeckZoneComponent implements AfterViewInit {
 		if (this.getCost(a) > this.getCost(b)) {
 			return 1;
 		}
-		if (a.cardName < b.cardName) {
+		if (a.cardName?.toLowerCase() < b.cardName?.toLowerCase()) {
 			return -1;
 		}
-		if (a.cardName > b.cardName) {
+		if (a.cardName?.toLowerCase() > b.cardName?.toLowerCase()) {
 			return 1;
 		}
 		if (a.creatorCardIds.length === 0) {
