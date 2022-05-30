@@ -174,17 +174,19 @@ export class DuelsStateBuilderService {
 		const result: readonly DuelsBucketsData[] = await this.api.callGetApi(DUELS_BUCKETS_URL);
 		console.log('[duels-state-builder] loaded buckets data', result?.length);
 		console.debug('[duels-state-builder] loaded buckets data', result);
-		return result
-			.map(
-				(bucket) =>
-					({
-						...bucket,
-						bucketClasses: bucket.bucketClasses.map(
-							(bucketClass) => CardClass[(bucketClass as any) as string],
-						),
-					} as DuelsBucketsData),
-			)
-			.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl);
+		return (
+			result
+				?.map(
+					(bucket) =>
+						({
+							...bucket,
+							bucketClasses: bucket.bucketClasses.map(
+								(bucketClass) => CardClass[(bucketClass as any) as string],
+							),
+						} as DuelsBucketsData),
+				)
+				.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl) ?? []
+		);
 	}
 
 	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
