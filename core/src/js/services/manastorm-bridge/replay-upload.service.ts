@@ -13,7 +13,29 @@ const BUCKET = 'com.zerotoheroes.batch';
 
 @Injectable()
 export class ReplayUploadService {
-	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {}
+	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {
+		const fakeGame: GameForUpload = {
+			buildNumber: 139719,
+			durationTimeSeconds: 0,
+			durationTurns: 0,
+			forceOpponentName: '已腐蚀的鱼人 (5 / 9)',
+			gameFormat: 'wild',
+			gameMode: 'mercenaries-pve',
+			mercsBountyId: 168,
+			newPlayerRank: undefined,
+			opponent: undefined,
+			opponentRank: undefined,
+			player: undefined,
+			playerRank: 'normal',
+			result: 'won',
+			reviewId: 'b87af202-23a3-4d54-b655-8bd51598e761',
+			runId: '刷图-354877727-1383232357',
+			scenarioId: 3790,
+			title: '乐满满#5404 vs 乐满满#5404',
+			uncompressedXmlReplay: '',
+		} as GameForUpload;
+		// window['debugUpload'] = () => this.uploadGame(fakeGame);
+	}
 
 	public async uploadGame(game: GameForUpload) {
 		if (!game.reviewId) {
@@ -80,7 +102,7 @@ export class ReplayUploadService {
 			'mercs-bounty-id': '' + game.mercsBountyId,
 			// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
 			// better name ourselves
-			'force-opponent-name': game.forceOpponentName,
+			'force-opponent-name': encodeURIComponent(game.forceOpponentName),
 		};
 		const params = {
 			Bucket: BUCKET,
@@ -95,7 +117,7 @@ export class ReplayUploadService {
 
 	private performReplayUpload(game: GameForUpload, reviewId: string, params, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
-			console.error('[manastorm-bridge] Could not upload replay', game);
+			console.error('[manastorm-bridge] Could not upload replay', { ...game, uncompressedXmlReplay: '...' });
 			return;
 		}
 		const s3 = new S3();
