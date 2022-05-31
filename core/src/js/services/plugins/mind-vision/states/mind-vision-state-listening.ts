@@ -6,6 +6,8 @@ import { MindVisionState } from '@services/plugins/mind-vision/states/_mind-visi
 import { sleep } from '@services/utils';
 
 export class MindVisionStateListening implements MindVisionState {
+	private abortController = new AbortController();
+
 	constructor(
 		private readonly mindVision: MindVisionFacadeService,
 		private readonly dispatcher: (action: Action) => Promise<void>,
@@ -14,17 +16,19 @@ export class MindVisionStateListening implements MindVisionState {
 
 	stateId = () => CurrentState.LISTENING;
 
-	onExit = async () => {};
+	onExit = async () => {
+		this.log('triggering state abort');
+		this.abortController?.abort();
+		this.abortController = null;
+	};
 
 	async onEnter(): Promise<void> {
+		if (!this.abortController) {
+			this.abortController = new AbortController();
+		}
 		this.log('onEnter, plugin init starting');
 		this.log('running sanity checks');
-		let collection = await this.mindVision.getCollection();
-		while (!collection?.length) {
-			await sleep(500);
-			this.log('waiting for collection to be populated');
-			collection = await this.mindVision.getCollection();
-		}
+		await this.loadCollection(this.abortController.signal);
 		this.log('sanity check ok, listening');
 		await this.mindVision.listenForUpdates();
 		this.log('plugin ready');
@@ -43,6 +47,26 @@ export class MindVisionStateListening implements MindVisionState {
 	async apiCall<T>(apiCall: () => Promise<T | 'reset'>): Promise<T | 'reset'> {
 		this.error('not able to call API');
 		return null;
+	}
+
+	private async loadCollection(abortSignal: AbortSignal): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			let abortProcess = false;
+			abortSignal.addEventListener('abort', () => {
+				this.log('aborting');
+				abortProcess = true;
+				reject('aborted');
+			});
+
+			let collection = await this.mindVision.getCollection();
+			// TODO: there is an issue if we're leaving the state while this is ongoing
+			while (!collection?.length && !abortProcess) {
+				await sleep(500);
+				this.log('waiting for collection to be populated');
+				collection = await this.mindVision.getCollection();
+			}
+			resolve();
+		});
 	}
 
 	private error(...args: any[]) {
