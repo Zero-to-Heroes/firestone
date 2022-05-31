@@ -28,6 +28,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 			</div>
 			<ng-container
 				*ngIf="{
+					allowedCards: allowedCards$ | async,
 					activeCards: activeCards$ | async,
 					buckets: possibleBuckets$ | async,
 					showRelatedCards: showRelatedCards$ | async
@@ -130,7 +131,10 @@ export const DEFAULT_CARD_HEIGHT = 221;
 									[helpTooltip]="'app.duels.deckbuilder.bucket-filter-button-tooltip' | owTranslate"
 								></button>
 								<div class="bucket-cards">
-									<duels-bucket-cards-list [cards]="bucket.bucketCards"></duels-bucket-cards-list>
+									<duels-bucket-cards-list
+										[cards]="bucket.bucketCards"
+										(cardClick)="onBucketCardClick($event, value.allowedCards)"
+									></duels-bucket-cards-list>
 								</div>
 							</div>
 						</div>
@@ -154,6 +158,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
+	allowedCards$: Observable<ReferenceCard[]>;
 
 	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
@@ -190,7 +195,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					this.cdr.detectChanges();
 				}
 			});
-		const allCards$ = combineLatest(
+		this.allowedCards$ = combineLatest(
 			this.store.listen$(
 				([main, nav]) => main.duels.config,
 				([main, nav]) => main.duels.deckbuilder.currentClasses,
@@ -341,7 +346,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 		);
 		this.activeCards$ = combineLatest(
-			allCards$,
+			this.allowedCards$,
 			collection$,
 			searchString$,
 			this.currentDeckCards$,
@@ -486,6 +491,20 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	}
 
 	addCard(card: DeckBuilderCard) {
+		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
+	}
+
+	onBucketCardClick(card: BucketCard, allowedCards: readonly ReferenceCard[]) {
+		console.debug('adding card', card);
+		// TODO: also handle the case where the card is not part of the cards allowed for deckbuilding?
+		if (this.currentDeckCards.value.includes(card.cardId)) {
+			return;
+		}
+		// Because of duplicates, we use the name
+		if (!allowedCards.map((c) => c.name).includes(card.cardName)) {
+			return;
+		}
+
 		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
 	}
 

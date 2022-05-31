@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { SetCard } from '@models/set';
 
 @Component({
@@ -14,12 +22,14 @@ import { SetCard } from '@models/set';
 				class="card"
 				*ngFor="let card of _cards; trackBy: trackByCard"
 				[card]="card"
+				(click)="onBucketCardClick(card)"
 			></duels-bucket-card>
 		</perfect-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsBucketCardsListComponent {
+	@Output() cardClick = new EventEmitter<BucketCard>();
 	@Input() set cards(value: readonly BucketCard[]) {
 		this._cards = value;
 	}
@@ -33,6 +43,11 @@ export class DuelsBucketCardsListComponent {
 
 	trackByCard(index: number, item: BucketCard) {
 		return item.cardId;
+	}
+
+	onBucketCardClick(card: BucketCard) {
+		console.debug('clicking on card', card);
+		this.cardClick.next(card);
 	}
 }
 
