@@ -152,7 +152,33 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a bug where the tracker would incorrectly remove a "Bottom of deck" card after drawing another copy from the deck.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix Card Oracle for Zola the Gorgon and Bronze Herald.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Remove the Uldum Disks of Legends passive from the stats.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a deckbuilder issue where switching Signature Treasures for one of the neutral heroes would not update the available cards pool.`,
+							},
+						],
+					},
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a bug where rewards would disappera from the Arena Runs list after completing a new run.`,
 							},
 						],
 					},
