@@ -55,7 +55,7 @@ export class MindVisionStateListening implements MindVisionState {
 			abortSignal.addEventListener('abort', () => {
 				this.log('aborting');
 				abortProcess = true;
-				reject('aborted');
+				resolve();
 			});
 
 			let collection = await this.mindVision.getCollection();
