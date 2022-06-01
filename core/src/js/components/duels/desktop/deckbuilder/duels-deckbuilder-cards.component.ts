@@ -222,22 +222,26 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 							: [];
 						return searchCardClasses.some((c) => cardCardClasses.includes(c));
 					})
-					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase())
-					// Filter "duplicates" between Core / Legacy / Vanilla
-					.filter(
-						(card) =>
-							!card?.deckDuplicateDbfId ||
-							// If the card is a duplicate of another card NOT included in the config, we keep it
-							!config.includedSets?.includes(
-								this.allCards.getCardFromDbfId(card.deckDuplicateDbfId).set?.toLowerCase(),
-							),
-					);
+					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
 				const groupedByName = groupByFunction((card: ReferenceCard) => card.name)(cardsWithDuplicates);
 				const result = Object.values(groupedByName).map((cards) => {
 					if (cards.length === 1) {
 						return cards[0];
 					}
-					console.debug('same card names', cards);
+					const allowed = cards.filter((c) => config.includedSets?.includes(c.set?.toLowerCase()));
+					if (allowed.length === 1) {
+						return allowed[0];
+					}
+					const original = allowed.filter((c) => !!c.deckDuplicateDbfId);
+					if (original.length === 1) {
+						return original[0];
+					}
+					// Core will probably always be allowed in deckbuilding
+					const core = allowed.filter((c) => c.set?.toLowerCase() === 'core');
+					if (core.length === 1) {
+						return core[0];
+					}
+
 					return cards[0];
 				});
 				return result;
@@ -521,7 +525,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			const newDeckCards = [...this.currentDeckCards.value, activeCards[0].cardId];
 			this.currentDeckCards.next(newDeckCards);
 
-			if (event.shiftKey) {
+			if (event.shiftKey || activeCards.length === 1) {
 				this.searchForm.setValue(null);
 			}
 		}
