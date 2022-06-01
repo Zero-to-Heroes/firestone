@@ -349,7 +349,7 @@ export class BgsSimulatorMinionSelectionComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
-		this.subscription.unsubscribe();
+		this.subscription?.unsubscribe();
 	}
 
 	@HostListener('document:keyup', ['$event'])
