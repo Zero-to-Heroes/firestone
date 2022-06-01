@@ -21,8 +21,9 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { DeckDefinition, decode } from 'deckstrings';
+import { DeckDefinition, decode, encode } from 'deckstrings';
 import { BehaviorSubject } from 'rxjs';
+import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import {
 	DuelsDeckStatInfo,
@@ -61,7 +62,7 @@ const DUELS_GLOBAL_STATS_DECKS =
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=3';
-const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucket-cards-v2.json?v=5';
+const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-buckets.gz.json?v=2';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -440,18 +441,38 @@ export class DuelsStateBuilderService {
 					playerClass: formatClass(playerClass, this.i18n),
 					gameMode: getDuelsModeName(firstMatch.type, this.i18n),
 				});
-				return {
+
+				// Make sure the decklist doesn't include signature treasures
+				const deckDefinition = decode(firstMatch.initialDeckList);
+				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+				const sanitizedDeckstring = encode(updatedDeckDefinition);
+				console.debug(
+					'[debug] sanitizedDeckstring',
+					sanitizedDeckstring,
+					deckDefinition,
+					prefs.duelsPersonalAdditionalDecks,
+				);
+				return ({
 					...mainStats,
-					initialDeckList: firstMatch.initialDeckList,
+					initialDeckList: sanitizedDeckstring,
 					heroCardId: heroCardId,
 					playerClass: playerClass,
 					deckStatsForTypes: decksForTypes,
 					// FIXME: use prefs in component to override deck name
-					deckName: this.getDeckName(firstMatch.initialDeckList, prefs) ?? defaultDeckName,
+					deckName: this.getDeckName(sanitizedDeckstring, prefs) ?? defaultDeckName,
 					runs: groupedByDecklist[deckstring],
-				} as DuelsDeckSummary;
+					debug1: deckDefinition,
+					debug2: updatedDeckDefinition,
+				} as any) as DuelsDeckSummary;
 			});
 		for (const personalDeck of prefs.duelsPersonalAdditionalDecks) {
+			console.debug(
+				'[debug] personalDeck',
+				personalDeck?.deckName,
+				personalDeck,
+				decode(personalDeck.initialDeckList),
+				decks,
+			);
 			if (decks.find((deck) => deck.initialDeckList === personalDeck.initialDeckList)) {
 				continue;
 			}
