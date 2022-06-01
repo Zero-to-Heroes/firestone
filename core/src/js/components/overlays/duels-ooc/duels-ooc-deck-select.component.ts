@@ -251,12 +251,19 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			return null;
 		}
 
-		const validRuns = runs
-			.filter((run) => run.heroCardId === heroCardId)
+		const runsWithSteps = runs.filter((run) => run.heroCardId === heroCardId).filter((run) => !!run.steps?.length);
+		let validRuns = runsWithSteps
 			.filter((run) => run.heroPowerCardId === heroPowerCardId)
 			.filter((run) => run.signatureTreasureCardId === signatureTreasureCardId)
-			.filter((run) => !!run.steps?.length)
 			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
+		if (!validRuns.length) {
+			validRuns = runsWithSteps
+				.filter((run) => !run.heroPowerCardId || run.heroPowerCardId === heroPowerCardId)
+				.filter(
+					(run) => !run.signatureTreasureCardId || run.signatureTreasureCardId === signatureTreasureCardId,
+				)
+				.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
+		}
 		console.debug('replaysWithCorrectDeckAndOptions', validRuns);
 		const candidate = validRuns[0];
 		if (!candidate) {

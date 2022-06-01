@@ -656,6 +656,12 @@ export class DuelsStateBuilderService {
 			...(sortedInfo || []),
 		].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
 		const [wins, losses] = this.extractWins(sortedMatches);
+		let normalizedDeckstring = firstMatch?.playerDecklist;
+		if (!!firstMatch?.playerDecklist) {
+			const deckDefinition = decode(firstMatch?.playerDecklist);
+			const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
+			normalizedDeckstring = encode(updatedDeckDefinition);
+		}
 		return DuelsRun.create({
 			id: runId,
 			type: this.getDuelsType(steps[0]),
@@ -664,7 +670,7 @@ export class DuelsStateBuilderService {
 			heroCardId: this.extractHeroCardId(sortedMatches),
 			heroPowerCardId: this.extractHeroPowerCardId(sortedInfo),
 			signatureTreasureCardId: this.extractSignatureTreasureCardId(sortedInfo),
-			initialDeckList: firstMatch?.playerDecklist,
+			initialDeckList: normalizedDeckstring,
 			wins: wins,
 			losses: losses,
 			ratingAtStart: this.extractRatingAtStart(sortedMatches),
