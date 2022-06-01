@@ -495,11 +495,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	}
 
 	onBucketCardClick(card: BucketCard, allowedCards: readonly ReferenceCard[]) {
-		console.debug('adding card', card);
-		// TODO: also handle the case where the card is not part of the cards allowed for deckbuilding?
 		if (this.currentDeckCards.value.includes(card.cardId)) {
 			return;
 		}
+
 		// Because of duplicates, we use the name
 		if (!allowedCards.map((c) => c.name).includes(card.cardName)) {
 			return;
