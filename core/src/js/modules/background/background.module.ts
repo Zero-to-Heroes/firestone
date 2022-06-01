@@ -510,6 +510,7 @@ console.log('is local test? ' + process.env.LOCAL_TEST);
 
 overwolf.settings.getExtensionSettings((settings) => {
 	const sampleRate = settings?.settings?.channel === 'beta' ? 1 : 0.1;
+	process.env.APP_CHANNEL = settings?.settings?.channel;
 	console.log('init Sentry with sampleRate', sampleRate, settings?.settings?.channel, settings);
 	init({
 		dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',

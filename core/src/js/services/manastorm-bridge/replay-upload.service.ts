@@ -90,6 +90,7 @@ export class ReplayUploadService {
 			'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 			'should-zip': 'true',
 			'app-version': '' + process.env.APP_VERSION,
+			'app-channel': '' + process.env.APP_CHANNEL,
 			'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
 			'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
 			'bgs-has-prizes': JSON.stringify(!!game.hasBgsPrizes),
