@@ -342,6 +342,7 @@ export class DungeonLootParserService {
 			appVersion: process.env.APP_VERSION,
 		};
 		this.log('sending loot into', input);
+		this.debug('duels info', this.duelsInfo);
 		this.api.callPostApi(DUNGEON_LOOT_INFO_URL, input);
 		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
