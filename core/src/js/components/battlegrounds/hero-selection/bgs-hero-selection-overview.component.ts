@@ -1,16 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { VisualAchievementCategory } from '../../../models/visual-achievement-category';
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -55,9 +53,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 	ngAfterContentInit(): void {
 		this.tiers$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats),
-			map((stats) => this.buildTiers(stats)),
-			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
+			this.mapData((stats) => this.buildTiers(stats)),
 		);
 
 		this.heroOverviews$ = combineLatest(
@@ -68,44 +64,34 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
-			// tap((info) => console.debug('info in hero selection', info)),
-			map(
-				([stats, [achievements], [panels, showAchievements]]) =>
-					[
-						panels.find(
-							(panel) => panel.id === 'bgs-hero-selection-overview',
-						) as BgsHeroSelectionOverviewPanel,
-						achievements.findCategory('hearthstone_game_sub_13'),
-						stats,
-						showAchievements,
-					] as [BgsHeroSelectionOverviewPanel, VisualAchievementCategory, readonly BgsHeroStat[], boolean],
-			),
-			filter(
-				([panel, heroesAchievementCategory, stats, showAchievements]) =>
-					!!panel && !!heroesAchievementCategory && !!stats?.length,
-			),
-			map(
-				([panel, heroesAchievementCategory, stats, showAchievements]) =>
-					[
-						panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null),
-						heroesAchievementCategory,
-						stats,
-						showAchievements,
-					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
-			),
-			filter(
-				([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => !!selectionOptions?.length,
-			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
-				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
+			this.mapData(([stats, [achievements], [panels, showAchievements]]) => {
+				// console.debug('selection info', stats, achievements, panels, showAchievements);
+				const panel = panels.find(
+					(panel) => panel.id === 'bgs-hero-selection-overview',
+				) as BgsHeroSelectionOverviewPanel;
+				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
+				// console.debug('panel & category', panel, heroesAchievementCategory);
+				if (!panel || !heroesAchievementCategory) {
+					return [];
+				}
+
+				const selectionOptions =
+					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
+				// console.debug('selectionOptions', selectionOptions);
+				if (!selectionOptions?.length) {
+					return [];
+				}
+
+				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory.retrieveAllAchievements();
+				// console.debug('heroAchievements', heroAchievements);
 				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
-					const existingStat = stats.find((overview) => overview.id === normalized);
-					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
+					const existingStat = stats?.find((overview) => overview.id === normalized);
+					const statWithDefault = existingStat ?? BgsHeroStat.create({ id: normalized } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
+					// console.debug('achievements for hero', achievementsForHero);
 					return {
 						...statWithDefault,
 						id: cardId,
@@ -123,10 +109,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					return heroOverviews;
 				}
 			}),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 
 		this.init();

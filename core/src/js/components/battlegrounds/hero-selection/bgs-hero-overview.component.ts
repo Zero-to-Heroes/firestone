@@ -37,7 +37,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 					[cardTooltip]="_hero.heroPowerCardId"
 					[cardTooltipClass]="'bgs-hero-select'"
 				></bgs-hero-portrait>
-				<div class="achievements" *ngIf="achievementsToDisplay?.length">
+				<div class="achievements">
 					<div
 						class="achievement"
 						*ngFor="let achievement of achievementsToDisplay; let i = index; trackBy: trackByFn"
@@ -74,7 +74,7 @@ export class BgsHeroOverviewComponent {
 	player: BgsPlayer;
 	health: number;
 	tier: BgsHeroTier;
-	achievementsToDisplay: readonly InternalAchievement[];
+	achievementsToDisplay: readonly InternalAchievement[] = [];
 
 	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
