@@ -13,6 +13,7 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.SirFinleySeaGuide,
 	CardIds.PhasingPortal,
 	CardIds.ForgottenDepthsTavernBrawl,
+	CardIds.Drown,
 ];
 export class CardBackToDeckParser implements EventParser {
 	constructor(
