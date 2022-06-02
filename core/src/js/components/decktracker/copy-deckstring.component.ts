@@ -101,6 +101,7 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 	const deckClass = deckDefinition.cards
 		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
 		.map((card) => card?.cardClass)
+		.filter((cardClass) => !!cardClass)
 		.map((cardClass) => CardClass[cardClass.toUpperCase()] as CardClass)
 		.filter((cardClass: CardClass) => cardClass !== CardClass.NEUTRAL)[0];
 	console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
