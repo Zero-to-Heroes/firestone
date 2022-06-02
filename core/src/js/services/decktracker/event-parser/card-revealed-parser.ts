@@ -5,6 +5,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -28,7 +29,7 @@ export class CardRevealedParser implements EventParser {
 			return currentState;
 		}
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = this.cards.getCard(cardId, false) ?? ({} as ReferenceCard);
 		const card = DeckCard.create({

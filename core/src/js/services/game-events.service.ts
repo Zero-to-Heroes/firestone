@@ -767,6 +767,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_DREDGED, gameEvent, {
 						dredgedByEntityId: gameEvent.Value.AdditionalProps.DredgedByEntityId,
 						dredgedByCardId: gameEvent.Value.AdditionalProps.DredgedByCardId,
+						lastInfluencedByCardId: gameEvent.Value.AdditionalProps.LastInfluencedByCardId,
 					}),
 				);
 				break;

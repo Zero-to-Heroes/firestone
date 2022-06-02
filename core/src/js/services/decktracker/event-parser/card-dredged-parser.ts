@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -19,8 +20,14 @@ export class CardDredgedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		console.debug('[debug] card dredged', cardId, controllerId, localPlayer, entityId, gameEvent, currentState);
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer = reverseIfNeeded(
+			controllerId === localPlayer.PlayerId,
+			gameEvent.additionalData.lastInfluencedByCardId,
+		);
+		// Because of the way the info is in the logs, when we dredge for our opponent, the card itself
+		// is flagged as belonging to the player who dredged
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const card = (
@@ -75,3 +82,13 @@ export class CardDredgedParser implements EventParser {
 		return this.i18n.getUnknownCardName();
 	}
 }
+
+export const reverseIfNeeded = (isPlayer: boolean, lastInfluencedByCardId: string): boolean => {
+	console.debug('should reverse?', isPlayer, lastInfluencedByCardId);
+	switch (lastInfluencedByCardId) {
+		case CardIds.DisarmingElemental:
+			return !isPlayer;
+		default:
+			return isPlayer;
+	}
+};
