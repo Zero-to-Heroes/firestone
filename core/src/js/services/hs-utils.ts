@@ -290,6 +290,7 @@ export const publicCardCreators = [
 	CardIds.KingsElekk,
 	CardIds.KnightOfAnointment,
 	CardIds.KronxDragonhoof,
+	CardIds.LoanShark,
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
