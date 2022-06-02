@@ -8,6 +8,7 @@ export const standardSets: readonly string[] = [
 	'deadmines',
 	'alterac_valley',
 	'onyxias_lair',
+	'the_sunken_city',
 	'throne_of_tides',
 ];
 
