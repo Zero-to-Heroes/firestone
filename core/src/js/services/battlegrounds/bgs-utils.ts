@@ -637,7 +637,9 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 		case CardIds.Ozumat3:
 			return 407;
 		default:
-			console.error('missing achievements section for ', heroCardId);
+			if (heroCardId !== CardIds.Diablo) {
+				console.error('missing achievements section for ', heroCardId);
+			}
 			return null;
 	}
 };
