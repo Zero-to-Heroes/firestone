@@ -8,10 +8,15 @@ export const standardSets: readonly string[] = [
 	'deadmines',
 	'alterac_valley',
 	'onyxias_lair',
-	'the_sunken_city',
+	'throne_of_tides',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'throne_of_tides',
+		name: `Throne of the Tides`,
+		launchDate: new Date('2022-06-01'),
+	},
 	{
 		id: 'the_sunken_city',
 		name: `The Sunken City`,

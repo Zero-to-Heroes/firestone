@@ -93,13 +93,15 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.AmbassadorFaelin1:
 		case CardIds.AzsharanDefector:
 		case CardIds.AzsharanGardens:
-		case CardIds.AzsharanMooncatcher:
+		case CardIds.AzsharanMooncatcher1:
+		case CardIds.AzsharanMooncatcher2:
 		case CardIds.AzsharanRitual:
 		case CardIds.AzsharanSaber:
 		case CardIds.AzsharanScavenger:
 		case CardIds.AzsharanScroll:
 		case CardIds.AzsharanSentinel:
-		case CardIds.AzsharanSweeper:
+		case CardIds.AzsharanSweeper1:
+		case CardIds.AzsharanSweeper2:
 		case CardIds.AzsharanTrident:
 		case CardIds.AzsharanVessel:
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser

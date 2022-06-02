@@ -134,6 +134,7 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 };
 
 export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
+	// CardIds.AdventurersPackLettuceEnchantment,
 	CardIds.AmuletOfSwiftnessLettuceEnchantment,
 	CardIds.BootsOfHasteLettuceEnchantment,
 	CardIds.CenarionSurgeLettuceEnchantment,
@@ -150,7 +151,6 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.ManaBlinkLettuceEnchantment,
 	CardIds.ProtectorHasteLettuceEnchantment,
 	CardIds.RingOfHasteLettuceEnchantment,
-	// CardIds.ShadowDaggerLettuceEnchantment,
 	CardIds.SlipperyWhenWetLettuceEnchantment2,
 	CardIds.StringOfFateLettuceEnchantment,
 	CardIds.UnnaturalSmokeLettuceEnchantment,
@@ -163,7 +163,9 @@ export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.FlurryLettuceEnchantment,
 	CardIds.FrostbiteLettuceEnchantment,
 	CardIds.MuddyFootingLettuceEnchantment,
+	// CardIds.RingOfSluggishnessLettuceEnchantment,
 	CardIds.ShadowShockLettuceEnchantment,
 	CardIds.StaggeredLettuceEnchantment,
 	CardIds.ThunderStruckLettuceEnchantment,
+	CardIds.VaingloriousRebukeLettuceEnchantment,
 ];

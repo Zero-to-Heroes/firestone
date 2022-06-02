@@ -49,7 +49,8 @@ export class AttackOnBoardService {
 		const hasSummoningSickness =
 			isActivePlayer &&
 			hasTag(entity, GameTag.EXHAUSTED) &&
-			!hasTag(entity, GameTag.ATTACKABLE_BY_RUSH) &&
+			// Ignore rush minions in the attack counter
+			// !hasTag(entity, GameTag.ATTACKABLE_BY_RUSH) &&
 			!hasTag(entity, GameTag.CHARGE);
 		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack;
 	}

@@ -27,6 +27,13 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.Onyxia_OnyxianWhelpToken,
 	CardIds.MurlocWarleaderCore,
 	CardIds.MurlocWarleaderVanilla,
+	// 23.4, probably not needed since they are already tokens
+	CardIds.Tentacular_OzumatsTentacleToken1,
+	CardIds.Tentacular_OzumatsTentacleToken2,
+	CardIds.Tentacular_OzumatsTentacleToken3,
+	CardIds.Tentacular_OzumatsTentacleToken4,
+	CardIds.Tentacular_OzumatsTentacleToken5,
+	CardIds.Tentacular_OzumatsTentacleToken6,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
@@ -269,6 +276,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.IniStormcoil_Mechgyver;
 		case CardIds.QueenAzshara3:
 			return CardIds.QueenAzshara_AzsharasAmbition;
+		case CardIds.Ozumat3:
+			return CardIds.Ozumat_Tentacular;
 
 		case '':
 			return null; // new heroes
@@ -625,6 +634,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 401;
 		case CardIds.QueenAzshara3:
 			return 406;
+		case CardIds.Ozumat3:
+			return 407;
 		default:
 			console.error('missing achievements section for ', heroCardId);
 			return null;

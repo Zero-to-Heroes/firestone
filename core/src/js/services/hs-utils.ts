@@ -3,7 +3,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '2022-05-19-10-24';
+export const CARDS_VERSION = '2022-05-19-10-26';
 
 export const classes = [
 	'demonhunter',
@@ -200,7 +200,8 @@ export const publicCardCreators = [
 	CardIds.ArcanologistCore,
 	CardIds.ArchmageArugal,
 	CardIds.AxeBerserker,
-	CardIds.BagOfCoins,
+	CardIds.BagOfCoins1,
+	CardIds.BagOfCoins2,
 	CardIds.BagOfCoinsTavernBrawl,
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane1,
@@ -224,7 +225,8 @@ export const publicCardCreators = [
 	CardIds.CavernShinyfinder,
 	CardIds.ClawMachine,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
-	CardIds.CommanderSivara,
+	CardIds.CommanderSivara1,
+	CardIds.CommanderSivara2,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.CorsairCache,
@@ -243,7 +245,8 @@ export const publicCardCreators = [
 	CardIds.ElementaryReaction,
 	CardIds.ElvenMinstrel,
 	CardIds.EncumberedPackMule,
-	CardIds.ExcavationSpecialist,
+	CardIds.ExcavationSpecialist1,
+	CardIds.ExcavationSpecialist2,
 	CardIds.FarSightLegacy,
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger,
@@ -292,14 +295,16 @@ export const publicCardCreators = [
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.LunarVisions,
 	CardIds.Mankrik,
-	CardIds.MoonlitGuidance,
+	CardIds.MoonlitGuidance1,
+	CardIds.MoonlitGuidance2,
 	CardIds.MastersCall,
 	CardIds.MurlocTastyfin,
 	CardIds.NecriumApothecary,
-	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
+	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.NorthwatchCommander,
 	CardIds.PackKodo,
-	CardIds.Parrrley,
+	CardIds.Parrrley1,
+	CardIds.Parrrley2,
 	CardIds.Peon1,
 	CardIds.PredatoryInstincts,
 	CardIds.PrimalDungeoneer,
@@ -307,7 +312,8 @@ export const publicCardCreators = [
 	CardIds.PrismaticLens,
 	CardIds.QueenAzshara2,
 	CardIds.HornOfAncients,
-	CardIds.RadarDetector,
+	CardIds.RadarDetector1,
+	CardIds.RadarDetector2,
 	CardIds.RaidingParty,
 	CardIds.RaidNegotiator,
 	CardIds.RaidTheDocks,
@@ -323,7 +329,8 @@ export const publicCardCreators = [
 	CardIds.ScavengersIngenuity,
 	CardIds.SchoolTeacher,
 	CardIds.Scrapsmith,
-	CardIds.SeafloorGateway,
+	CardIds.SeafloorGateway1,
+	CardIds.SeafloorGateway2,
 	CardIds.SecretPassage_SecretEntranceEnchantment,
 	CardIds.SeekGuidance,
 	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
@@ -342,7 +349,8 @@ export const publicCardCreators = [
 	CardIds.Swindle,
 	CardIds.SorcerersGambit,
 	CardIds.SorcerersGambit_StallForTimeToken,
-	CardIds.SouthseaScoundrel,
+	CardIds.SouthseaScoundrel1,
+	CardIds.SouthseaScoundrel2,
 	CardIds.SpiritGuide,
 	CardIds.SpiritOfTheFrog,
 	CardIds.StageDive,
@@ -364,7 +372,8 @@ export const publicCardCreators = [
 	CardIds.TolvirWarden,
 	CardIds.ToothOfNefarian,
 	CardIds.TownCrier1,
-	CardIds.TrenchSurveyor,
+	CardIds.TrenchSurveyor1,
+	CardIds.TrenchSurveyor2,
 	CardIds.Ursatron,
 	CardIds.UtgardeGrapplesniper,
 	CardIds.VarianKingOfStormwind,
@@ -377,7 +386,8 @@ export const publicCardCreators = [
 	CardIds.WondrousWand,
 	CardIds.Wrathion1,
 	CardIds.YseraTheDreamerCore,
-	CardIds.Zaqul,
+	CardIds.Zaqul1,
+	CardIds.Zaqul2,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
 ];
@@ -593,6 +603,7 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'onyxias_lair':
 			return BoosterType.ALTERAC_VALLEY;
 		case 'the_sunken_city':
+		case 'throne_of_tides':
 			return BoosterType.THE_SUNKEN_CITY;
 		default:
 			console.warn('no default booster type for set id', setId);

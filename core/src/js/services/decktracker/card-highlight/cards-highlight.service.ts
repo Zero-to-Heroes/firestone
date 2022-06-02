@@ -274,8 +274,13 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, fel);
 			case CardIds.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
+			case CardIds.FossilFanatic:
+				return and(inDeck, spell, fel);
 			case CardIds.FrizzKindleroost:
 				return and(inDeck, dragon);
+			case CardIds.FrontLines1:
+			case CardIds.FrontLines2:
+				return and(inDeck, minion);
 			case CardIds.FungalFortunes:
 				return and(inDeck, minion);
 			case CardIds.GuardianAnimals:
@@ -296,6 +301,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
 			case CardIds.JewelOfNzoth:
 				return and(minion, inGraveyard, deathrattle);
+			case CardIds.K90tron:
+				return and(inDeck, minion, effectiveCostEqual(1));
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 				return and(demon, inGraveyard, minion);
 			case CardIds.Kazakusan1:
@@ -304,7 +311,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra1:
 				return and(spell, spellSchool(SpellSchool.NATURE));
-			case CardIds.LadyAshvane:
+			case CardIds.LadyAshvane1:
+			case CardIds.LadyAshvane2:
 				return and(inDeck, weapon);
 			case CardIds.LadyVashj_VashjPrimeToken:
 				return and(inDeck, spell);
@@ -354,6 +362,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, baseCostEqual(1));
 			case CardIds.Smokescreen:
 				return and(inDeck, deathrattle);
+			case CardIds.Snapdragon:
+				return and(inDeck, minion, battlecry);
 			case CardIds.SpiritGuide:
 				return and(inDeck, spell, or(shadow, holy));
 			case CardIds.SpringTheTrap:
