@@ -112,7 +112,7 @@ export const spell = cardType(CardType.SPELL);
 export const weapon = cardType(CardType.WEAPON);
 
 export const race = (race: Race) => (handler: Handler): boolean => {
-	return handler.referenceCardProvider()?.race === Race[race];
+	return handler.referenceCardProvider()?.race === Race[race] || handler.referenceCardProvider()?.race === Race[Race.ALL];
 };
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
