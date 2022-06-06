@@ -26,7 +26,15 @@ export class CardDrawParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
+		const cardsWithMatchingCardId = deck.deck.filter((e) => e.cardId);
+		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
+		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
+		// about it. This could change (via a whitelist?) if there are cards that start drawing from
+		// the bottom of the deck
+		const shouldUseEntityId =
+			cardsWithMatchingCardId.length === 1 ||
+			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
+		const card = this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
