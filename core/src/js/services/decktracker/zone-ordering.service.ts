@@ -25,7 +25,7 @@ export class ZoneOrderingService {
 		// const trackerEntityIds = stateFromTracker.map((entity) => entity.entityId);
 		// console.debug('trackerEntityIds', trackerEntityIds);
 		if (zone.some((card) => !card.entityId)) {
-			console.error('Trying to order zone without entityId', zone);
+			console.warn('Trying to order zone without entityId', zone);
 		}
 		if (zone.length !== stateFromTracker.length) {
 			// console.warn('invalid zone length', zone.length, stateFromTracker.length, zone, stateFromTracker);

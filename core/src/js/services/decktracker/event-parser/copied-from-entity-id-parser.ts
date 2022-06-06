@@ -40,7 +40,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const updatedCardId = newCopy?.cardId ?? copiedCard.cardId;
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
-		// Also, simply hiding the information
+		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
+		// the battlecry is repeated with the Macaw, the player isn't even given the view of the cards. So technically, they shouldn't
+		// be able to know anything new about the opponent's cards in hand, but if we show the info in the tracker they do
+		// So we just hide everything
 		const obfuscatedCardId =
 			forcedHiddenCardCreators.includes(newCopy.lastAffectedByCardId as CardIds) ||
 			forcedHiddenCardCreators.includes(newCopy.creatorCardId as CardIds)
