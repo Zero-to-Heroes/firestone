@@ -48,7 +48,7 @@ export class AttackOnBoardService {
 		const isFrozen = hasTag(entity, GameTag.FROZEN);
 		const hasSummoningSickness =
 			isActivePlayer &&
-			hasTag(entity, GameTag.EXHAUSTED) &&
+			(hasTag(entity, GameTag.EXHAUSTED) || hasTag(entity, GameTag.JUST_PLAYED)) &&
 			// Ignore rush minions in the attack counter
 			// !hasTag(entity, GameTag.ATTACKABLE_BY_RUSH) &&
 			!hasTag(entity, GameTag.CHARGE);
