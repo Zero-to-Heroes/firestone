@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -5,6 +6,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
+import { forcedHiddenCardCreators } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -36,9 +38,26 @@ export class CopiedFromEntityIdParser implements EventParser {
 		}
 
 		const updatedCardId = newCopy?.cardId ?? copiedCard.cardId;
+		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
+		// kind of granular information
+		// Also, simply hiding the information
+		const obfuscatedCardId =
+			forcedHiddenCardCreators.includes(newCopy.lastAffectedByCardId as CardIds) ||
+			forcedHiddenCardCreators.includes(newCopy.creatorCardId as CardIds)
+				? copiedCard.cardId
+				: updatedCardId;
+		console.debug(
+			'obfuscatedCardId',
+			obfuscatedCardId,
+			copiedCard,
+			newCopy,
+			forcedHiddenCardCreators,
+			updatedCardId,
+			gameEvent,
+		);
 		const updatedCopiedCard = copiedCard.update({
-			cardId: updatedCardId,
-			cardName: this.i18n.getCardName(updatedCardId, copiedCard.cardId),
+			cardId: obfuscatedCardId,
+			cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardId),
 		} as DeckCard);
 		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard);
 
