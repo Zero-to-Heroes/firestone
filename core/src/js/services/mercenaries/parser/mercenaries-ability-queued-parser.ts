@@ -1,7 +1,7 @@
-import { sortBy } from 'lodash';
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
+import { sortByProperties } from '../../utils';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesAbilityQueuedParser implements MercenariesParser {
@@ -35,11 +35,15 @@ export class MercenariesAbilityQueuedParser implements MercenariesParser {
 			ownerEntityId: entityId,
 			speed: abilitySpeed,
 		};
-		const actionQueue: readonly MercenariesAction[] = sortBy(
+		const actionQueue: readonly MercenariesAction[] =
 			// No "unqueue" event is emitted when we simply change the chosen action
-			[...battleState.actionQueue.filter((a) => a.ownerEntityId !== action.ownerEntityId), action],
-			(action: MercenariesAction) => action.speed,
-		);
+			[...battleState.actionQueue.filter((a) => a.ownerEntityId !== action.ownerEntityId), action].sort(
+				sortByProperties((action: MercenariesAction) => [
+					// First sort by speed, and in case of speed ties the player actions first
+					action.speed,
+					action.side === 'player' ? 1 : 2,
+				]),
+			);
 		return battleState.update({
 			actionQueue: actionQueue,
 		} as MercenariesBattleState);

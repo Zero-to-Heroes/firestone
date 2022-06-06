@@ -72,10 +72,10 @@ export class MercenariesActionsQueueComponent
 				map(([actionQueue]) => actionQueue),
 				distinctUntilChanged(),
 				map((actionQueue) => {
-					const speeds = actionQueue.map((action) => action.speed);
-					return actionQueue.map((action) => ({
+					// const speeds = actionQueue.map((action) => action.speed);
+					return actionQueue.map((action, index) => ({
 						...action,
-						actionOrder: speeds.indexOf(action.speed) + 1,
+						actionOrder: index + 1,
 					}));
 				}),
 				// FIXME
