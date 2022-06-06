@@ -53,7 +53,7 @@ import { filter } from 'rxjs/operators';
 						class="vignette"
 						[ngClass]="{ 'inactive': currentActiveDeck != null }"
 						(click)="buildDeck(value.tempDuelsDeck)"
-						[helpTooltip]="'duels.deck-select.build-decks-tooltip' | owTranslate"
+						[helpTooltip]="'duels.deck-select.build-deck-tooltip' | owTranslate"
 					>
 						<div class="icon" inlineSVG="assets/svg/loot.svg"></div>
 					</div>
