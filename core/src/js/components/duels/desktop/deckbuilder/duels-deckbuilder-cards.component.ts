@@ -452,7 +452,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					.map((cardId) => this.allCards.getCard(cardId).dbfId)
 					.map((dbfId) => [dbfId, 1] as [number, number]);
 				const treasureCard = this.allCards.getCard(currentSignatureTreasureCardId);
-				const duelsClass = treasureCard.cardClass;
+				const duelsClass = treasureCard.classes?.length > 1 ? null : treasureCard.cardClass;
 				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
 				console.debug('heroDbfId', heroDbfId, duelsClass, treasureCard, hero);
 				const deckDefinition: DeckDefinition = {
