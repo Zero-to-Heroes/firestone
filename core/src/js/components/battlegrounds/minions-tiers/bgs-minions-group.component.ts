@@ -190,7 +190,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const result = {
 					cardId: minion.id,
 					displayedCardIds: this.buildAllCardIds(minion.id, this._showGoldenCards),
-					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
+					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg?v=2`,
 					name: card.name,
 					highlighted: this._group.highlightedMinions.includes(minion.id),
 					techLevel: card.techLevel,

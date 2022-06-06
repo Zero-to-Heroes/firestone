@@ -320,7 +320,7 @@ export class DeckCardComponent implements OnDestroy {
 		}
 
 		this.cardId = this._card.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=4)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
 		this.cardName =

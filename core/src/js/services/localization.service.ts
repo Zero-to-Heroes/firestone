@@ -49,7 +49,7 @@ export class LocalizationService {
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
-		return `${base}/${suffix}?v=2`;
+		return `${base}/${suffix}?v=3`;
 	}
 
 	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
