@@ -36,7 +36,7 @@ export class TotalDamageTakenReq implements Requirement {
 	}
 
 	private handleDamageEvent(gameEvent: DamageGameEvent) {
-		const localPlayerCardId = gameEvent.localPlayer?.CardID;
+		const localPlayerCardId = gameEvent.gameState?.Player?.Hero?.cardId ?? gameEvent.localPlayer?.CardID;
 		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const damageForLocalPlayer = Object.values(gameEvent.additionalData.targets).find(
 			(target) => target.TargetCardId === localPlayerCardId,

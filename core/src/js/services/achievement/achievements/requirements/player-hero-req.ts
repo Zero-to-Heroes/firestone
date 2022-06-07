@@ -34,7 +34,8 @@ export class PlayerHeroReq implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer?.CardID && localPlayer.CardID.indexOf(this.cardId) !== -1) {
+		const cardId = gameEvent.gameState?.Player?.Hero?.cardId ?? localPlayer?.CardID;
+		if (cardId && cardId.indexOf(this.cardId) !== -1) {
 			this.isCorrectPlayerHero = true;
 		}
 	}
