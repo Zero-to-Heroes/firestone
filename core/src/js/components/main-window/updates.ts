@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.7.9',
+		version: '9.7.11',
 		sections: [
 			{
 				type: 'intro',
@@ -75,6 +75,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add Bottom of Deck support for Disarming Elemental and Drown.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Abyssal Curse counter would stop working after the opponent transformed into another hero.`,
 							},
 							{
 								type: 'bug',
