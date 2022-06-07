@@ -227,9 +227,19 @@ export class DeckParserService {
 			// will have a null selected deck)
 			// Only reset when moving away from the scene where selecting a deck is possible
 			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
-				this.selectedDeckId = null;
-				// Reset the cached deck, as it should only be used when restarting the match
-				this.currentDeck = null;
+				if (!!this.selectedDeckId || !!this.currentDeck) {
+					console.debug('[deck-parser] resetting current deck?', changes.CurrentScene, this.currentDeck);
+					// Don't reset if we're reconnecting
+					const lines: readonly string[] = await this.readAllLogLines();
+					// ignore everythine if the lines don't contain any "finding game with deck"
+					// this means that we're reconnecting and that have just received the full list of decks
+					if (lines.some((line) => line.includes('Finding Game With Deck'))) {
+						console.debug('[deck-parser] resetting current deck');
+						this.selectedDeckId = null;
+						// Reset the cached deck, as it should only be used when restarting the match
+						this.currentDeck = null;
+					}
+				}
 			}
 			if (changes.CurrentScene) {
 				this.currentNonGamePlayScene =
@@ -354,21 +364,16 @@ export class DeckParserService {
 		scenarioId: number,
 		gameType: GameType,
 		targetDeckName: string = null,
-		fileName = 'Decks.log',
 	): Promise<DeckInfo> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!this.ow.gameRunning(gameInfo)) {
+		const lines: readonly string[] = await this.readAllLogLines();
+
+		// ignore everythine if the lines don't contain any "finding game with deck"
+		// this means that we're reconnecting and that have just received the full list of decks
+		// TODO: test other languages
+		if (!lines.some((line) => line.includes('Finding Game With Deck'))) {
+			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
 			return;
 		}
-		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
-		const logsContents = await this.ow.readTextFile(logsLocation);
-		if (!logsContents) {
-			return;
-		}
-		const lines = logsContents
-			.split('\n')
-			.filter((line) => line && line.length > 0)
-			.map((line) => line.trim());
 
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
@@ -399,6 +404,24 @@ export class DeckParserService {
 				deck: !!deckstring ? decode(deckstring) : undefined,
 			} as DeckInfo;
 		}
+	}
+
+	private async readAllLogLines(): Promise<readonly string[]> {
+		const fileName = 'Decks.log';
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!this.ow.gameRunning(gameInfo)) {
+			return null;
+		}
+		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
+		const logsContents = await this.ow.readTextFile(logsLocation);
+		if (!logsContents) {
+			return null;
+		}
+		const lines = logsContents
+			.split('\n')
+			.filter((line) => line && line.length > 0)
+			.map((line) => line.trim());
+		return lines;
 	}
 
 	private async isDuelsDeck(logLine: string): Promise<boolean> {
