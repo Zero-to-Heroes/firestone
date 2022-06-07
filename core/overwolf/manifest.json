@@ -208,20 +208,19 @@
 			"matches": [
 				"http://*.overwolf.com",
 				"https://*.overwolf.com",
+				"http://static.zerotoheroes.com",
+				"https://static.zerotoheroes.com",
+				"https://*.firestoneapp.com",
 				"http://www.zerotoheroes.com",
 				"https://www.googletagmanager.com",
 				"https://*.execute-api.us-west-2.amazonaws.com",
 				"https://localhost",
-				"https://*.firestoneapp.com",
 				"http://*.amazonaws.com",
 				"https://*.amazonaws.com",
-				"http://static.zerotoheroes.com",
-				"https://static.zerotoheroes.com",
 				"https://api.twitch.tv",
 				"http://*.twitch.tv",
 				"https://*.twitch.tv",
 				"https://*.outof.cards",
-				"https://*.firestoneapp.com",
 				"https://*.pastebin.com"
 			]
 		},

@@ -627,7 +627,7 @@ export class DuelsStateBuilderService {
 			.filter((card) => card)
 			.map((card) => {
 				const out = collectionState.getCard(card.id);
-				if (!out) {
+				if (!out && !!this.allCards.getCards()?.length) {
 					console.warn('[duels-state-builder] Could not find card for', card.id, deck);
 				}
 				return out;
