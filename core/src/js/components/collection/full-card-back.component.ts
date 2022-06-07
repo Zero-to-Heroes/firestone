@@ -43,7 +43,8 @@ export class FullCardBackComponent extends AbstractSubscriptionComponent impleme
 		this._cardBack = {
 			...value,
 			image: `https://static.firestoneapp.com/cardbacks/512/${value.id}.png?v=2`,
-			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
+			// animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
+			animatedImage: null,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

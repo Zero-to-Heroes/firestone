@@ -81,7 +81,8 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 				cardBacks?.filter(this.filterCardsOwned(filter)).map((cardBack) => ({
 					...cardBack,
 					image: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.png?v=3`,
-					animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
+					// animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
+					animatedImage: null,
 				})),
 			),
 		);
