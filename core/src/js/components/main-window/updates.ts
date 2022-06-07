@@ -86,11 +86,11 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix info leak where cards burned by Immolate would be revealed in the Other zone.`,
+								text: `Fix an info leak where cards burned by Immolate would be revealed in the Other zone.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix info leak where Coilfang Constrictor would reveal too much information. As a result, you won't even see the revealed cards in the "In Hand" section, as showing this info while managing the memory leak would lead to too much spaghetti code.`,
+								text: `Fix an info leak where Coilfang Constrictor would reveal too much information. As a result, you won't even see the revealed cards in the "In Hand" section, as showing this info while managing the memory leak would lead to too much spaghetti code.`,
 							},
 							{
 								type: 'bug',
@@ -112,6 +112,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a bug where deck codes for heroes with dual-class signature treasures would sometimes be incorrect.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Remove speed ties in the action queue in PvE (to match how it actually behaves since patch 23.4).`,
 							},
 						],
 					},
