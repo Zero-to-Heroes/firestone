@@ -16,25 +16,25 @@ export class EntityChosenParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('[entity-chosen]', cardId, controllerId, localPlayer, entityId, gameEvent);
+		// console.debug('[entity-chosen]', cardId, controllerId, localPlayer, entityId, gameEvent);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const originCreatorCardId = gameEvent.additionalData?.context?.creatorCardId;
 		if (!CARDS_THAT_PUT_ON_TOP.includes(originCreatorCardId)) {
-			console.debug('[entity-chosen] not implemented', originCreatorCardId);
+			// console.debug('[entity-chosen] not implemented', originCreatorCardId);
 			return currentState;
 		}
 
 		const cardInDeck = this.helper.findCardInZone(deck.deck, cardId, gameEvent.additionalData?.originalEntityId);
 		if (!cardInDeck) {
-			console.debug(
-				'[entity-chosen] card not found in deck',
-				cardId,
-				gameEvent.additionalData?.originalEntityId,
-				deck.deck,
-			);
+			// console.debug(
+			// 	'[entity-chosen] card not found in deck',
+			// 	cardId,
+			// 	gameEvent.additionalData?.originalEntityId,
+			// 	deck.deck,
+			// );
 			return currentState;
 		}
 

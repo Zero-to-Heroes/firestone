@@ -34,6 +34,9 @@ export class CardDrawParser implements EventParser {
 		const shouldUseEntityId =
 			cardsWithMatchingCardId.length === 1 ||
 			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
+		if (!shouldUseEntityId) {
+			console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
+		}
 		const card = this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;

@@ -104,13 +104,13 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 		.filter((cardClass) => !!cardClass)
 		.map((cardClass) => CardClass[cardClass.toUpperCase()] as CardClass)
 		.filter((cardClass: CardClass) => cardClass !== CardClass.NEUTRAL)[0];
-	console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
+	// console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
 		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass);
 		return result;
 	});
 	deckDefinition.cards = newCards;
-	console.debug('after sanitize', deckDefinition);
+	// console.debug('after sanitize', deckDefinition);
 	return deckDefinition;
 };

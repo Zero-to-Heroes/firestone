@@ -84,7 +84,6 @@ export class CardDredgedParser implements EventParser {
 }
 
 export const reverseIfNeeded = (isPlayer: boolean, lastInfluencedByCardId: string): boolean => {
-	console.debug('should reverse?', isPlayer, lastInfluencedByCardId);
 	switch (lastInfluencedByCardId) {
 		case CardIds.DisarmingElemental:
 			return !isPlayer;
