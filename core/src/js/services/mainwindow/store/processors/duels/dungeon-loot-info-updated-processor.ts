@@ -16,7 +16,10 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const dungeonLootInfo = event.dungeonLootInfo;
 		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, currentState.duels.duelsRunInfos);
-		const rewards: readonly DuelsRewardsInfo[] = this.buildRewards(dungeonLootInfo.rewards);
+		const rewards: readonly DuelsRewardsInfo[] = [
+			...(currentState.duels.duelsRewardsInfo ?? []),
+			...this.buildRewards(dungeonLootInfo.rewards),
+		];
 
 		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
 		const newDuels = currentState.duels.update({
