@@ -42,6 +42,6 @@ export class CardsFacadeStandaloneService {
 	}
 
 	private getFileName(locale: string) {
-		return `cards_${locale}.json`;
+		return `cards_${locale}.gz.json`;
 	}
 }
