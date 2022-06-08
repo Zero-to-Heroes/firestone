@@ -36,6 +36,8 @@ import { BgsBattleSimulationUpdateParser } from './event-parsers/bgs-battle-simu
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
+import { BgsFilterLiveMmrParser } from './event-parsers/bgs-filter-live-mmr-parser';
+import { BgsFilterLiveTribesParser } from './event-parsers/bgs-filter-live-tribes-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsGameSettingsParser } from './event-parsers/bgs-game-settings-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
@@ -538,6 +540,8 @@ export class BattlegroundsStoreService {
 			new BgsGlobalInfoUpdatedParser(this.allCards),
 			new BgsStartComputingPostMatchStatsParser(),
 			new BgsInitMmrParser(this.memory, this.gameStateService, this.prefs, () => this.stateUpdater),
+			new BgsFilterLiveTribesParser(this.prefs, () => this.stateUpdater),
+			new BgsFilterLiveMmrParser(this.prefs, () => this.stateUpdater),
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
 			new BgsToggleHighlightMinionOnBoardParser(),

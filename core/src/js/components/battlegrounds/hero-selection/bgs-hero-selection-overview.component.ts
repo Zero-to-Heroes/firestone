@@ -21,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="left">
-				<battlegrounds-tier-list></battlegrounds-tier-list>
+				<battlegrounds-tier-list [showFilters]="true"></battlegrounds-tier-list>
 			</div>
 			<div class="hero-selection-overview">
 				<bgs-hero-overview

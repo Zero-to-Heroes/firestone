@@ -1,10 +1,24 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
+import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
+import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-mmr-event';
+import { BgsFilterLiveTribesEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-tribes-event';
+import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
+import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
@@ -31,6 +45,20 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 					</svg>
 				</div>
 			</div>
+			<div class="filters" *ngIf="showFilters">
+				<preference-toggle
+					field="bgsUseTribeFilterInHeroSelection"
+					[label]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-label-short' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-tooltip' | owTranslate"
+					[toggleFunction]="toggleUseTribeFilter"
+				></preference-toggle>
+				<preference-toggle
+					field="bgsUseMmrFilterInHeroSelection"
+					[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label-short' | owTranslate"
+					[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
+					[toggleFunction]="toggleUseMmrFilter"
+				></preference-toggle>
+			</div>
 			<div class="heroes">
 				<bgs-hero-tier
 					*ngFor="let tier of stats.tiers || []; trackBy: trackByTierFn"
@@ -41,18 +69,36 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsTierListComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, AfterContentInit {
+	@Input() showFilters: boolean;
+
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;
 
+	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	private percentiles: readonly MmrPercentile[] = [];
+
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
 
+	async ngAfterViewInit() {
+		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
+	}
+
 	ngAfterContentInit() {
+		this.store
+			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles)
+			.pipe(this.mapData(([percentiles]) => percentiles))
+			.subscribe((percentiles) => {
+				this.percentiles = percentiles;
+			});
 		this.stats$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(
@@ -154,6 +200,14 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 	trackByTierFn(index, item: HeroTier) {
 		return item.tier;
 	}
+
+	toggleUseTribeFilter = (newValue: boolean) => {
+		this.battlegroundsUpdater?.next(new BgsFilterLiveTribesEvent(newValue));
+	};
+
+	toggleUseMmrFilter = (newValue: boolean) => {
+		this.battlegroundsUpdater?.next(new BgsFilterLiveMmrEvent(newValue, this.percentiles));
+	};
 
 	private buildTribesFilterText(tribesFilter: readonly Race[], allTribes: readonly Race[]): string {
 		if (!tribesFilter?.length || tribesFilter.length === allTribes.length) {

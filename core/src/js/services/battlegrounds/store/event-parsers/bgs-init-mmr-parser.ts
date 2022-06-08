@@ -8,6 +8,7 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
+import { allBgsRaces } from '../../bgs-utils';
 import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -36,24 +37,18 @@ export class BgsInitMmrParser implements EventParser {
 
 		const prefs = await this.prefs.getPreferences();
 		const stateUpdater = this.stateUpdaterProvider();
-		if (prefs.bgsUseTribeFilterInHeroSelection) {
-			if (!!currentState.currentGame?.availableRaces?.length) {
-				stateUpdater.next(new BgsTribesFilterSelectedEvent(currentState.currentGame.availableRaces));
-			} else {
-				console.warn('[bgs-mmr] no available races', currentState?.currentGame?.availableRaces);
-			}
-		}
 
-		if (prefs.bgsUseMmrFilterInHeroSelection) {
-			const percentile = [...event.mmrPercentiles]
-				.sort((a, b) => a.mmr - b.mmr)
-				.find((percentile) => percentile.mmr <= (mmr ?? 0));
-			if (!!percentile) {
-				stateUpdater.next(new BgsRankFilterSelectedEvent(percentile.percentile));
-			} else {
-				console.warn('[bgs-mmr] no available percentile', event.mmrPercentiles, mmr);
-			}
-		}
+		const races = prefs.bgsUseTribeFilterInHeroSelection
+			? !!currentState.currentGame.availableRaces?.length
+				? currentState.currentGame.availableRaces
+				: allBgsRaces
+			: allBgsRaces;
+		stateUpdater.next(new BgsTribesFilterSelectedEvent(races));
+
+		const percentile = prefs.bgsUseMmrFilterInHeroSelection
+			? [...event.mmrPercentiles].sort((a, b) => b.mmr - a.mmr).find((percentile) => percentile.mmr <= (mmr ?? 0))
+			: null;
+		stateUpdater.next(new BgsRankFilterSelectedEvent(percentile?.percentile ?? 100));
 
 		return currentState.update({
 			currentGame: currentState.currentGame.update({

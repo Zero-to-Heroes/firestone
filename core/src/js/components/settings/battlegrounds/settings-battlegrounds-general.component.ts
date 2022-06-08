@@ -82,20 +82,6 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.battlegrounds.general.popup-hero-selection-screen-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
-						field="bgsUseTribeFilterInHeroSelection"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						[label]="'settings.battlegrounds.general.use-tribe-filter-for-live-stats-label' | owTranslate"
-						[tooltip]="
-							'settings.battlegrounds.general.use-tribe-filter-for-live-stats-tooltip' | owTranslate
-						"
-					></preference-toggle>
-					<preference-toggle
-						field="bgsUseMmrFilterInHeroSelection"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
-						[label]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-label' | owTranslate"
-						[tooltip]="'settings.battlegrounds.general.use-mmr-filter-for-live-stats-tooltip' | owTranslate"
-					></preference-toggle>
-					<preference-toggle
 						field="bgsShowNextOpponentRecapSeparately"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.show-next-opponent-recap-label' | owTranslate"

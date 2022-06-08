@@ -8,6 +8,18 @@ import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-messag
 import { VisualAchievement } from '../../models/visual-achievement';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
+export const allBgsRaces = [
+	Race.BEAST,
+	Race.DEMON,
+	Race.DRAGON,
+	Race.MECH,
+	Race.MURLOC,
+	Race.PIRATE,
+	Race.ELEMENTAL,
+	Race.QUILBOAR,
+	Race.NAGA,
+];
+
 export const NON_BUYABLE_MINION_IDS = [
 	CardIds.CuddlgamBattlegrounds,
 	CardIds.ArgentBraggart,

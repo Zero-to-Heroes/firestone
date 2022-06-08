@@ -8,7 +8,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBattleHistory } from '../../../../models/battlegrounds/in-game/bgs-battle-history';
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { normalizeHeroCardId } from '../../bgs-utils';
+import { allBgsRaces, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -129,20 +129,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			console.warn('[bgs-info-updater] no tribe info read from memory');
 			return [null, null];
 		}
-		const allRaces = [
-			Race.BEAST,
-			Race.DEMON,
-			Race.DRAGON,
-			Race.MECH,
-			Race.MURLOC,
-			Race.PIRATE,
-			Race.ELEMENTAL,
-			Race.QUILBOAR,
-			Race.NAGA,
-		];
 		return [
-			allRaces.filter((race) => availableRaces.includes(race)),
-			allRaces.filter((race) => !availableRaces.includes(race)),
+			allBgsRaces.filter((race) => availableRaces.includes(race)),
+			allBgsRaces.filter((race) => !availableRaces.includes(race)),
 		];
 	}
 }
