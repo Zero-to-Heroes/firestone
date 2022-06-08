@@ -39,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ 'enabled': value }">
 				<p class="settings-p">
 					{{ label }}
-					<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip" [helpTooltipPosition]="tooltipPosition">
+					<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip">
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>
