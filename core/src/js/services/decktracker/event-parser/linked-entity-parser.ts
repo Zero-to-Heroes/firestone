@@ -38,6 +38,7 @@ export class LinkedEntityParser implements EventParser {
 		if (originalCard) {
 			const updatedCard = originalCard.update({
 				cardId: newCard.cardId,
+				cardName: this.i18n.getCardName(cardId),
 				// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
