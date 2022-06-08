@@ -134,7 +134,9 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		return replays
 			.filter((replay) => this.gameModeFilter(replay, gameModeFilter))
 			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter))
-			.filter((replay) => this.deckstringFilter(replay, deckstringFilter))
+			.filter((replay) =>
+				!gameModeFilter || gameModeFilter === 'all' ? true : this.deckstringFilter(replay, deckstringFilter),
+			)
 			.filter((replay) => this.playerClassFilter(replay, playerClassFilter))
 			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter));
 	}
