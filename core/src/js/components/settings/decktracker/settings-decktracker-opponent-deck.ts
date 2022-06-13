@@ -155,7 +155,7 @@ import { Knob } from '../preference-slider.component';
 				<preference-toggle
 					field="opponentAbyssalCurseCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.abyssal-curse-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.abyssal-curse-tooltip' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.counters.abyssal-curse-tooltip-2' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="opponentAttackCounter"

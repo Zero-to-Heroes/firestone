@@ -76,7 +76,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newOther = otherCardWithObfuscation
 			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)[0]
 			: deck.otherZone;
-		//console.debug('[receive-card-in-hand] new board', newBoard, newOther);
+		// console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
@@ -123,6 +123,10 @@ export class ReceiveCardInHandParser implements EventParser {
 			hand: newHand,
 			board: newBoard,
 			otherZone: newOther,
+			abyssalCurseHighestValue:
+				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
+					? Math.max(deck.abyssalCurseHighestValue ?? 0, cardWithAdditionalAttributes.mainAttributeChange + 1)
+					: deck.abyssalCurseHighestValue,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

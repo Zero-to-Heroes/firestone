@@ -18,7 +18,7 @@ export class AbyssalCurseCounterDefinition implements CounterDefinition {
 			return null;
 		}
 
-		const lastCurseDamage = deck.highestAbyssalCurseDamage ?? 0;
+		const lastCurseDamage = deck.abyssalCurseHighestValue ?? 0;
 		const totalDamageFromCursesInHand = sumOnArray(
 			deck.hand.filter((c) => c.cardId == CardIds.SirakessCultist_AbyssalCurseToken),
 			(c) => c.mainAttributeChange + 1,
@@ -28,7 +28,7 @@ export class AbyssalCurseCounterDefinition implements CounterDefinition {
 			value: `${lastCurseDamage}/${totalDamageFromCursesInHand}`,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SirakessCultist_AbyssalCurseToken}.jpg`,
 			cssClass: 'abyssal-curse-counter',
-			tooltip: i18n.translateString(`counters.abyssal-curse.${side}`, {
+			tooltip: i18n.translateString(`counters.abyssal-curse-2.${side}`, {
 				value: lastCurseDamage,
 				totalDamageFromCursesInHand: totalDamageFromCursesInHand,
 			}),

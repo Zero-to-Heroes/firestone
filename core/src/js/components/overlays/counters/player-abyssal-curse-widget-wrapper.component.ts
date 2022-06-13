@@ -40,7 +40,7 @@ export class PlayerAbyssalCurseWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.playerAbyssalCurseCounter;
 		this.deckStateExtractor = (state) =>
-			!!state.playerDeck?.highestAbyssalCurseDamage ||
+			!!state.playerDeck?.abyssalCurseHighestValue ||
 			!!sumOnArray(
 				state.playerDeck?.hand.filter((c) => c.cardId == CardIds.SirakessCultist_AbyssalCurseToken),
 				(c) => c.mainAttributeChange + 1,
