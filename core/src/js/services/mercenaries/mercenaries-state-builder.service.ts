@@ -17,7 +17,7 @@ export class MercenariesStateBuilderService {
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
 		const prefs = await this.prefs.getPreferences();
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
-			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json?v=14`,
+			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json?v=15`,
 		);
 		console.debug('[mercs] reference data', referenceData);
 		return referenceData;
