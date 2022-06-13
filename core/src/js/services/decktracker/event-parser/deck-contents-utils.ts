@@ -79,14 +79,12 @@ const handleCelestialAlignment = (
 		(card) => 1,
 		deckState,
 		allCards,
-		i18n,
 	);
 	return updateCostInHand(
 		(card, refCard) => true,
 		(card) => 1,
 		withDeck,
 		allCards,
-		i18n,
 	);
 };
 
@@ -100,7 +98,6 @@ const handleEmbiggen = (
 		(card) => Math.min(10, card.getEffectiveManaCost() + 1),
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -115,7 +112,6 @@ const handleLibram = (
 		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -129,7 +125,6 @@ const handleIncantersFlow = (
 		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -143,7 +138,6 @@ const handleVanndarStormpike = (
 		(card) => Math.max(0, card.getEffectiveManaCost() - 3),
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -157,7 +151,6 @@ const handleFrizzKindleroost = (
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -171,7 +164,6 @@ const handleLunasPocketGalaxy = (
 		(card) => 1,
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -185,7 +177,6 @@ const handleScepterOfSummoning = (
 		(card) => 5,
 		deckState,
 		allCards,
-		i18n,
 	);
 };
 
@@ -338,7 +329,6 @@ const handleOoopsAllSpells = (
 		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
 		stateWithoutSpells,
 		allCards,
-		i18n,
 	);
 };
 
@@ -404,7 +394,6 @@ const updateCostInDeck = (
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const currentDeck = deckState.deck;
 	const newDeck: readonly DeckCard[] = currentDeck.map((card) => {
@@ -426,7 +415,6 @@ const updateCostInHand = (
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const currentHand = deckState.hand;
 	const newHand: readonly DeckCard[] = currentHand.map((card) => {
