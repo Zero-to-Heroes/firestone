@@ -113,12 +113,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
-					const tooltipPosition =
-						selectionOptions.length === 4 && index <= 1
-							? 'right'
-							: selectionOptions.length === 2 && index === 0
-							? 'right'
-							: 'left';
+					const tooltipPosition = 'fixed-top-center';
 					return {
 						...statWithDefault,
 						id: cardId,

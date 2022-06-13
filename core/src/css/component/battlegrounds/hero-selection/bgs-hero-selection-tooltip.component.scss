@@ -79,10 +79,10 @@
 }
 
 .hero-selection-tooltip.hero-selection-overlay {
-	width: 300px;
-	top: -50px;
+	// width: 300px;
+	// top: -50px;
 
-	.hero-power,
+	// .hero-power,
 	.buddy {
 		display: none;
 	}
@@ -91,12 +91,33 @@
 		width: 100%;
 	}
 
+	::ng-deep bgs-hero-stats {
+		.stats {
+			flex-direction: row;
+			.placement {
+				width: 200px;
+				flex-shrink: 0;
+
+				.placement-distribution {
+					height: 111px;
+					margin-top: 0;
+				}
+			}
+			.winrate {
+				width: 200px;
+				flex-shrink: 0;
+				margin-top: 0;
+				margin-left: 25px;
+			}
+		}
+	}
+
 	// Position it to the other side of the hero
 	// Doesn't work because there isn't enough room to the right/left
-	&.left {
-		left: 375px;
-	}
-	&.right {
-		right: 375px;
-	}
+	// &.left {
+	// 	left: 375px;
+	// }
+	// &.right {
+	// 	right: 375px;
+	// }
 }

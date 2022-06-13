@@ -17,43 +17,45 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 	],
 	template: `
 		<div class="stats">
-			<div class="title" [owTranslate]="'battlegrounds.hero-stats.finishes-title'"></div>
-			<basic-bar-chart-2
-				class="placement-distribution"
-				[data]="placementChartData$ | async"
-				[id]="'placementDistribution' + cardId"
-				[midLineValue]="100 / 8"
-			></basic-bar-chart-2>
-			<div class="entry">
-				<div
-					class="label"
-					[helpTooltip]="'battlegrounds.hero-stats.avg-position-tooltip' | owTranslate"
-					[owTranslate]="'battlegrounds.hero-stats.avg-position-label'"
-				></div>
-				<div
-					class="global-value"
-					[helpTooltip]="'battlegrounds.hero-stats.avg-position-global-tooltip' | owTranslate"
-				>
-					{{ buildValue(averagePosition) }}
+			<div class="placement">
+				<div class="title" [owTranslate]="'battlegrounds.hero-stats.finishes-title'"></div>
+				<basic-bar-chart-2
+					class="placement-distribution"
+					[data]="placementChartData$ | async"
+					[id]="'placementDistribution' + cardId"
+					[midLineValue]="100 / 8"
+				></basic-bar-chart-2>
+				<div class="entry">
+					<div
+						class="label"
+						[helpTooltip]="'battlegrounds.hero-stats.avg-position-tooltip' | owTranslate"
+						[owTranslate]="'battlegrounds.hero-stats.avg-position-label'"
+					></div>
+					<div
+						class="global-value"
+						[helpTooltip]="'battlegrounds.hero-stats.avg-position-global-tooltip' | owTranslate"
+					>
+						{{ buildValue(averagePosition) }}
+					</div>
+					<div
+						class="player-value"
+						[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
+					>
+						({{ buildValue(playerAveragePosition) }})
+					</div>
 				</div>
-				<div
-					class="player-value"
-					[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
-				>
-					({{ buildValue(playerAveragePosition) }})
-				</div>
-			</div>
-			<div class="entry">
-				<div
-					class="label"
-					[helpTooltip]="'battlegrounds.hero-stats.matches-played-tooltip' | owTranslate"
-					[owTranslate]="'battlegrounds.hero-stats.matches-played-label'"
-				></div>
-				<div
-					class="player-value"
-					[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
-				>
-					{{ totalPlayerMatches }}
+				<div class="entry">
+					<div
+						class="label"
+						[helpTooltip]="'battlegrounds.hero-stats.matches-played-tooltip' | owTranslate"
+						[owTranslate]="'battlegrounds.hero-stats.matches-played-label'"
+					></div>
+					<div
+						class="player-value"
+						[helpTooltip]="'battlegrounds.hero-stats.avg-position-your-tooltip' | owTranslate"
+					>
+						{{ totalPlayerMatches }}
+					</div>
 				</div>
 			</div>
 			<div class="winrate">

@@ -37,7 +37,8 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@Input('componentTooltipCssClass') cssClass: string;
 
-	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'auto' = 'right';
+	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'fixed-top-center' | 'auto' =
+		'right';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -70,12 +71,17 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			this.overlayRef.detach();
 			this.overlayRef.dispose();
 		}
-		const positions: ConnectedPosition[] = this.buildPositions();
-		this.positionStrategy = this.overlayPositionBuilder
-			// Create position attached to the elementRef
-			.flexibleConnectedTo(this.elementRef)
-			// Describe how to connect overlay to the elementRef
-			.withPositions(positions);
+
+		if (this.position === 'fixed-top-center') {
+			this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().top('2vh');
+		} else {
+			const positions: ConnectedPosition[] = this.buildPositions();
+			this.positionStrategy = this.overlayPositionBuilder
+				// Create position attached to the elementRef
+				.flexibleConnectedTo(this.elementRef)
+				// Describe how to connect overlay to the elementRef
+				.withPositions(positions);
+		}
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
