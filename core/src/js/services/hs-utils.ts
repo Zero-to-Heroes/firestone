@@ -77,6 +77,7 @@ export const globalEffectCards = [
 	// CardIds.GrandTotemEysor, // We handle the effects triggered instead of the card played
 	CardIds.GraniteForgeborn,
 	CardIds.HemetJungleHunter,
+	CardIds.HornsOfFlameTavernBrawlToken,
 	CardIds.HumbleBlessingsTavernBrawl,
 	CardIds.IncantersFlow,
 	CardIds.InfiniteArcaneTavernBrawlToken,
@@ -195,6 +196,7 @@ export const publicCardCreators = [
 	CardIds.AllianceBannerman,
 	CardIds.AncientMysteries,
 	CardIds.Ancharrr,
+	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.ArcaneBrilliance,
 	CardIds.ArcaneFletcher,
 	CardIds.Arcanologist,
@@ -207,6 +209,7 @@ export const publicCardCreators = [
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane1,
 	CardIds.BattleVicar,
+	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
 	CardIds.Bottomfeeder,
