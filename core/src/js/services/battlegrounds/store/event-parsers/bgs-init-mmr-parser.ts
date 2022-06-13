@@ -36,6 +36,15 @@ export class BgsInitMmrParser implements EventParser {
 		console.log('[bgs-mmr] mmrAtStart', reviewId, mmr);
 
 		const prefs = await this.prefs.getPreferences();
+
+		// Save the previous prefs so we can set them back to their original values once the game ends
+		const savedPrefs = {
+			...prefs,
+			bgsSavedRankFilter: prefs.bgsActiveRankFilter,
+			bgsSavedTribesFilter: prefs.bgsActiveTribesFilter,
+		};
+		await this.prefs.savePreferences(savedPrefs);
+
 		const stateUpdater = this.stateUpdaterProvider();
 
 		const races = prefs.bgsUseTribeFilterInHeroSelection

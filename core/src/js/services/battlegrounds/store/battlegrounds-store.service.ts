@@ -526,7 +526,7 @@ export class BattlegroundsStoreService {
 			new BgsTripleCreatedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(this.logsUploader, this.i18n),
-			new BgsGameEndParser(this.prefs, this.memory, this.i18n),
+			new BgsGameEndParser(this.prefs, this.i18n, () => this.stateUpdater),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.allCards, this.gameEventsService),
 			// new BgsResetBattleStateParser(),

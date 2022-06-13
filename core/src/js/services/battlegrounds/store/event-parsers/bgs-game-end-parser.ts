@@ -1,3 +1,4 @@
+import { EventEmitter } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -9,7 +10,9 @@ import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-ba
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { Preferences } from '../../../../models/preferences';
-import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
+import { BgsRankFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
+import { BgsTribesFilterSelectedEvent } from '../../../mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
+import { MainWindowStoreEvent } from '../../../mainwindow/store/events/main-window-store-event';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -19,8 +22,8 @@ import { EventParser } from './_event-parser';
 export class BgsGameEndParser implements EventParser {
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly memory: MemoryInspectionService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly stateUpdaterProvider: () => EventEmitter<MainWindowStoreEvent>,
 	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
@@ -38,6 +41,18 @@ export class BgsGameEndParser implements EventParser {
 		}
 
 		const prefs: Preferences = await this.prefs.getPreferences();
+
+		// Restore previous filter values
+		const savedPrefs = {
+			...prefs,
+			bgsActiveRankFilter: prefs.bgsSavedRankFilter ?? prefs.bgsActiveRankFilter,
+			bgsActiveTribesFilter: prefs.bgsSavedTribesFilter ?? prefs.bgsActiveTribesFilter,
+		};
+		await this.prefs.savePreferences(savedPrefs);
+		const stateUpdater = this.stateUpdaterProvider();
+		stateUpdater.next(new BgsTribesFilterSelectedEvent(savedPrefs.bgsActiveTribesFilter));
+		stateUpdater.next(new BgsRankFilterSelectedEvent(savedPrefs.bgsActiveRankFilter));
+
 		console.log('will build post-match info', prefs.bgsForceShowPostMatchStats);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
 		const newPostMatchStatsStage: BgsPostMatchStatsPanel = this.buildPostMatchPanel(
