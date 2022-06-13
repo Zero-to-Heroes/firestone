@@ -45,19 +45,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// be able to know anything new about the opponent's cards in hand, but if we show the info in the tracker they do
 		// So we just hide everything
 		const obfuscatedCardId =
-			forcedHiddenCardCreators.includes(newCopy.lastAffectedByCardId as CardIds) ||
-			forcedHiddenCardCreators.includes(newCopy.creatorCardId as CardIds)
+			forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
+			forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)
 				? copiedCard.cardId
 				: updatedCardId;
-		console.debug(
-			'obfuscatedCardId',
-			obfuscatedCardId,
-			copiedCard,
-			newCopy,
-			forcedHiddenCardCreators,
-			updatedCardId,
-			gameEvent,
-		);
 		const updatedCopiedCard = copiedCard.update({
 			cardId: obfuscatedCardId,
 			cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardId),
