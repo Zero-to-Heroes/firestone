@@ -284,7 +284,7 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.Onyxia_Broodmother;
 		case CardIds.AmbassadorFaelin2:
 			return CardIds.AmbassadorFaelin_ExpeditionPlans;
-		case CardIds.IniStormcoil2:
+		case CardIds.IniStormcoil5:
 			return CardIds.IniStormcoil_Mechgyver;
 		case CardIds.QueenAzshara3:
 			return CardIds.QueenAzshara_AzsharasAmbition;
