@@ -5,10 +5,24 @@
 .hero-selection-tooltip {
 	display: flex;
 	background: var(--color-4);
-	height: 460px;
-	width: 750px;
+
+	background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/decktracker_bg.png');
+	background-size: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+
+	border-image-source: linear-gradient(to bottom right, #ffb948 100%, #ffb948 100%);
+	border-radius: 25px;
+	border-width: 1px;
+	border-style: solid;
+	border-image-slice: 1;
+	margin-top: 3px;
+
+	// height: 460px;
+	// width: 750px;
 	align-items: center;
-	padding: 10px;
+	padding: 10px 30px;
 	position: relative;
 	font-family: Open Sans;
 	font-style: normal;
