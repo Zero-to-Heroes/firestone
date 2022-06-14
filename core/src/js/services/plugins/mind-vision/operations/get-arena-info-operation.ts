@@ -9,7 +9,7 @@ export class GetArenaInfoOperation extends MindVisionOperationFacade<ArenaInfo> 
 			ow,
 			'getArenaInfo',
 			() => mindVision.getArenaInfo(),
-			(arenaInfo) => arenaInfo.Wins == null || arenaInfo.Wins < 0,
+			(arenaInfo) => arenaInfo.Wins == null || arenaInfo.Wins < 0 || !arenaInfo.HeroCardId,
 			(arenaInfo) =>
 				Object.assign(new ArenaInfo(), {
 					wins: arenaInfo.Wins,

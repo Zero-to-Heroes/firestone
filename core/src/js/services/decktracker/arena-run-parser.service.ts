@@ -235,12 +235,12 @@ export class ArenaRunParserService {
 				return true;
 			}
 
-			const heroCard = this.allCards.getCard(this.arenaInfo.heroCardId);
+			const heroCard = this.allCards.getCard(arenaInfo.heroCardId);
 			const heroClass: string = heroCard?.playerClass?.toLowerCase();
 			if (!this.lastArenaMatch.playerClass || heroClass !== this.lastArenaMatch.playerClass.toLowerCase()) {
 				this.log(
 					'different player class, starting new run',
-					this.arenaInfo.heroCardId,
+					arenaInfo.heroCardId,
 					heroClass,
 					this.lastArenaMatch.playerCardId,
 					this.lastArenaMatch.playerClass,
