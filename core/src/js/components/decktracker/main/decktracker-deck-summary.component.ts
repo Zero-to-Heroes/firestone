@@ -48,9 +48,17 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				></div>
 				<div
 					class="last-used"
+					*ngIf="totalGames > 0"
 					[owTranslate]="'app.decktracker.deck-summary.last-used'"
 					[translateParams]="{ value: lastUsed }"
 					[attr.aria-label]="'app.decktracker.deck-summary.last-used' | owTranslate: { value: lastUsed }"
+				></div>
+				<div
+					class="last-used"
+					*ngIf="totalGames == 0"
+					[owTranslate]="'app.decktracker.deck-summary.created-on'"
+					[translateParams]="{ value: lastUsed }"
+					[attr.aria-label]="'app.decktracker.deck-summary.created-on' | owTranslate: { value: lastUsed }"
 				></div>
 			</div>
 			<button
@@ -85,7 +93,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.deckName = value.deckName || this.i18n.translateString('app.decktracker.deck-summary.default-deck-name');
 		this.format = value.format;
 		this.deckNameTooltip = `${this.deckName} (${this.i18n.translateString('global.format.' + this.format)})`;
-		this.totalGames = value.totalGames;
+		this.totalGames = value.totalGames ?? 0;
 		this.winRatePercentage =
 			value.winRatePercentage != null
 				? parseFloat('' + value.winRatePercentage).toLocaleString(this.i18n.formatCurrentLocale(), {

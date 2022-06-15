@@ -80,7 +80,12 @@ export class DecktrackerDeckSortDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: !['deck-details', 'ladder-stats', 'ladder-ranking'].includes(currentView),
+						visible: ![
+							'deck-details',
+							'ladder-stats',
+							'ladder-ranking',
+							'constructed-deckbuilder',
+						].includes(currentView),
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),

@@ -108,6 +108,10 @@ import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank
 import { ChangeDeckRankGroupEvent } from './events/decktracker/change-deck-rank-group-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
+import { ConstructedDeckbuilderClassSelectedEvent } from './events/decktracker/constructed-deckbuilder-class-selected-event';
+import { ConstructedDeckbuilderFormatSelectedEvent } from './events/decktracker/constructed-deckbuilder-format-selected-event';
+import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/constructed-deckbuilder-go-back-event';
+import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
@@ -233,6 +237,10 @@ import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-d
 import { ChangeDeckRankGroupProcessor } from './processors/decktracker/change-deck-rank-group-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
+import { ConstructedDeckbuilderClassSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-class-selected-processor';
+import { ConstructedDeckbuilderFormatSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-format-selected-processor';
+import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/constructed-deckbuilder-go-back-processor';
+import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
 import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
@@ -699,6 +707,18 @@ export class MainWindowStoreService {
 
 			ToggleShowHiddenDecksEvent.eventName(),
 			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
+
+			ConstructedDeckbuilderGoBackEvent.eventName(),
+			new ConstructedDeckbuilderGoBackProcessor(),
+
+			ConstructedDeckbuilderFormatSelectedEvent.eventName(),
+			new ConstructedDeckbuilderFormatSelectedProcessor(),
+
+			ConstructedDeckbuilderClassSelectedEvent.eventName(),
+			new ConstructedDeckbuilderClassSelectedProcessor(),
+
+			ConstructedDeckbuilderSaveDeckEvent.eventName(),
+			new ConstructedDeckbuilderSaveDeckProcessor(this.prefs, this.decksStateBuilder),
 
 			// Battlegrounds
 			SelectBattlegroundsCategoryEvent.eventName(),

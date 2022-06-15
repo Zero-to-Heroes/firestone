@@ -48,7 +48,9 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			)
 			.pipe(
 				this.mapData(([decks, sort]) =>
-					(decks?.filter((deck) => deck.totalGames > 0) ?? []).sort(this.getSortFunction(sort)),
+					(decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []).sort(
+						this.getSortFunction(sort),
+					),
 				),
 			);
 	}

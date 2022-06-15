@@ -2,7 +2,7 @@ import { GameStat } from '../stats/game-stat';
 import { MatchupStat } from '../stats/matchup-stat';
 import { StatGameFormatType } from '../stats/stat-game-format.type';
 
-export class DeckSummary {
+export interface DeckSummary {
 	readonly deckstring: string;
 	readonly deckName: string;
 	readonly deckArchetype: string;
@@ -16,4 +16,5 @@ export class DeckSummary {
 	// Format of the deck. A Standard deck can have Wild matches attached to it
 	readonly format: StatGameFormatType;
 	readonly replays: readonly GameStat[];
+	readonly isPersonalDeck?: boolean;
 }

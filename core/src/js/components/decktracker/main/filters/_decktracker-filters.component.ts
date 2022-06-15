@@ -74,7 +74,12 @@ export class DecktrackerFiltersComponent
 			)
 			.pipe(
 				filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
-				map(([currentView, hiddenDeckCodes]) => currentView !== 'deck-details' && hiddenDeckCodes.length > 0),
+				map(
+					([currentView, hiddenDeckCodes]) =>
+						currentView !== 'deck-details' &&
+						currentView !== 'constructed-deckbuilder' &&
+						hiddenDeckCodes.length > 0,
+				),
 				tap((info) => cdLog('emitting hidden deck codes in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);

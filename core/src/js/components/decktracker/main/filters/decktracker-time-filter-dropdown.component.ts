@@ -94,7 +94,7 @@ export class DecktrackerTimeFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: true,
+						visible: !['deck-details', 'constructed-deckbuilder'].includes(currentView),
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),

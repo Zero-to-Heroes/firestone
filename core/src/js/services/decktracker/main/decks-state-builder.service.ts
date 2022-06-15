@@ -12,20 +12,25 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { classes } from '../../hs-utils';
 import { groupByFunction } from '../../utils';
 
 @Injectable()
 export class DecksStateBuilderService {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	public buildState(
 		stats: StatsState,
 		filters: DeckFilters,
 		patch: PatchInfo,
-		prefs: Preferences = null,
+		prefs: Preferences,
 	): readonly DeckSummary[] {
+		const personalDecks = prefs.constructedPersonalAdditionalDecks ?? [];
+		console.debug('building decks', personalDecks);
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats.gameStats?.stats?.length) {
-			return [];
+			return personalDecks;
 		}
 		const rankedStats = stats.gameStats.stats
 			.filter((stat) => stat.gameMode === 'ranked')
@@ -42,9 +47,29 @@ export class DecksStateBuilderService {
 			),
 		);
 
-		// .sort(this.getSortFunction(filters.sort));
-
-		return decks;
+		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
+		const finalPersonalDecks = personalDecks
+			.filter((deck) => !deckstrings.includes(deck.deckstring))
+			// Still need to filter these
+			.filter((deck) => filters.gameFormat === 'all' || filters.gameFormat === deck.format)
+			.map((deck) => {
+				const deckDefinition = decode(deck.deckstring);
+				return {
+					...deck,
+					skin: this.allCards.getCardFromDbfId(deckDefinition.heroes[0]).id,
+					matchupStats: classes.map(
+						(oppClass) =>
+							({
+								opponentClass: oppClass,
+								totalGames: 0,
+							} as MatchupStat),
+					),
+					replays: [],
+					totalGames: 0,
+				} as DeckSummary;
+			});
+		console.debug('final personal decks', finalPersonalDecks);
+		return [...decks, ...finalPersonalDecks];
 	}
 
 	private buildValidReplays(
@@ -213,7 +238,7 @@ export class DecksStateBuilderService {
 		} catch (e) {
 			console.error('Could not decode deck name', deckName, e);
 		}
-		return Object.assign(new DeckSummary(), {
+		return {
 			class: deckClass,
 			deckName: decodedDeckName,
 			deckArchetype: deckArchetype,
@@ -226,7 +251,7 @@ export class DecksStateBuilderService {
 			matchupStats: matchupStats,
 			format: this.buildFormat(deckstring),
 			replays: statsWithReset,
-		} as DeckSummary);
+		} as DeckSummary;
 	}
 
 	private buildFormat(deckstring: string): StatGameFormatType {

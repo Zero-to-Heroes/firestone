@@ -23,7 +23,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						<menu-selection-decktracker class="menu-selection" *ngIf="value.menuDisplayType === 'menu'">
 						</menu-selection-decktracker>
 						<!-- hidden until proper support for dropdown is added -->
-						<decktracker-filters aria-hidden="true"></decktracker-filters>
+						<decktracker-filters
+							aria-hidden="true"
+							*ngIf="value.currentView !== 'constructed-deckbuilder'"
+						></decktracker-filters>
 						<decktracker-decks *ngIf="value.currentView === 'decks'" role="region"></decktracker-decks>
 						<decktracker-ladder-stats
 							*ngIf="value.currentView === 'ladder-stats'"
@@ -34,6 +37,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						<decktracker-rating-graph
 							*ngIf="value.currentView === 'ladder-ranking'"
 						></decktracker-rating-graph>
+						<constructed-deckbuilder
+							*ngIf="value.currentView === 'constructed-deckbuilder'"
+						></constructed-deckbuilder>
 					</div>
 				</with-loading>
 			</section>

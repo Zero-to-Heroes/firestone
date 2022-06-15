@@ -1,0 +1,38 @@
+.constructed-deckbuilder-breadcrumbs {
+	height: 30px;
+	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
+	color: var(--color-3);
+	font-family: Open Sans;
+
+	.current-step {
+		font-size: 16px;
+		margin-right: 20px;
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+
+	.recap {
+		display: flex;
+
+		.recap-item {
+			position: relative;
+			display: flex;
+			align-items: center;
+			opacity: 0.8;
+
+			img {
+				width: 45px;
+				height: 45px;
+				clip-path: ellipse(35% 35% at 50% 50%);
+				position: relative;
+			}
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+}

@@ -97,7 +97,7 @@ export class DecktrackerRankFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: currentView !== 'ladder-ranking',
+						visible: !['ladder-ranking', 'constructed-deckbuilder'].includes(currentView),
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),

@@ -109,6 +109,7 @@ export class StoreBootstrapService {
 				collectionState,
 				currentScene,
 			],
+			[constructedConfig],
 			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
 			[
@@ -132,6 +133,7 @@ export class StoreBootstrapService {
 				this.collectionBootstrap.initCollectionState(),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
+			Promise.all([this.decktrackerStateLoader.loadConfig()]),
 			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
@@ -181,6 +183,7 @@ export class StoreBootstrapService {
 		const decktracker = this.decktrackerStateLoader.buildState(
 			new DecktrackerState(),
 			newStatsState,
+			constructedConfig,
 			currentRankedMetaPatch,
 			mergedPrefs,
 		);

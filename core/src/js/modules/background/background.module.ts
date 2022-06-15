@@ -190,6 +190,11 @@ import { DeckManaCurveBarComponent } from '../../components/decktracker/main/dec
 import { DeckManaCurveComponent } from '../../components/decktracker/main/deck-mana-curve.component';
 import { DeckMatchupInfoComponent } from '../../components/decktracker/main/deck-matchup-info.component';
 import { DeckWinrateMatrixComponent } from '../../components/decktracker/main/deck-winrate-matrix.component';
+import { ConstructedDeckbuilderBreadcrumbsComponent } from '../../components/decktracker/main/deckbuilder/constructed-deckbuilder-breadcrumbs.component';
+import { ConstructedDeckbuilderCardsComponent } from '../../components/decktracker/main/deckbuilder/constructed-deckbuilder-cards.component';
+import { ConstructedDeckbuilderClassComponent } from '../../components/decktracker/main/deckbuilder/constructed-deckbuilder-class.component';
+import { ConstructedDeckbuilderFormatComponent } from '../../components/decktracker/main/deckbuilder/constructed-deckbuilder-format.component';
+import { ConstructedDeckbuilderComponent } from '../../components/decktracker/main/deckbuilder/constructed-deckbuilder.component';
 import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/main/decktracker-deck-details.component';
 import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main/decktracker-deck-recap.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
@@ -715,6 +720,11 @@ const components = [
 		DecktrackerDeckSortDropdownComponent,
 		DecktrackerRankGroupDropdownComponent,
 		DecktrackerRankCategoryDropdownComponent,
+		ConstructedDeckbuilderComponent,
+		ConstructedDeckbuilderBreadcrumbsComponent,
+		ConstructedDeckbuilderFormatComponent,
+		ConstructedDeckbuilderClassComponent,
+		ConstructedDeckbuilderCardsComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

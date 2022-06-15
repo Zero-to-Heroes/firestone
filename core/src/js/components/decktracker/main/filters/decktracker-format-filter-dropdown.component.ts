@@ -83,7 +83,7 @@ export class DecktrackerFormatFilterDropdownComponent
 						filter: filter,
 						options: options,
 						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: currentView !== 'deck-details',
+						visible: !['deck-details', 'constructed-deckbuilder'].includes(currentView),
 					};
 				}),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),

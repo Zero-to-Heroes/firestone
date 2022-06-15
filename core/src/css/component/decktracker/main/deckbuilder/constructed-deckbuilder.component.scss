@@ -1,0 +1,102 @@
+:host() {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+}
+
+.constructed-deckbuilder {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+	flex-direction: column;
+
+	.decklist-container {
+		width: 200px;
+		display: flex;
+		flex-direction: column;
+
+		.deck-list {
+			margin-top: 15px;
+			padding-right: 20px;
+		}
+	}
+
+	.card-search {
+		position: relative;
+		width: 100%;
+
+		label {
+			width: 100%;
+			outline: 1px solid var(--color-3);
+			display: flex;
+
+			&:focus-within,
+			&:hover {
+				// outline: none;
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
+
+		input {
+			background: transparent;
+			border: none;
+			cursor: text;
+			flex-grow: 1;
+			color: var(--default-text-color);
+			font-family: 'Open Sans';
+			font-size: 12px;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		label.search-active {
+			input {
+				outline: none;
+			}
+		}
+	}
+
+	.results-container {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		margin-left: 15px;
+
+		.results {
+			flex-grow: 1;
+		}
+
+		.card-container {
+			display: flex;
+			position: relative;
+			margin-right: -20px;
+
+			.card {
+				width: 100%;
+				height: 100%;
+				display: flex;
+
+				.real-card {
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+
+		::ng-deep virtual-scroller {
+			width: 100%;
+			display: flex;
+			flex-grow: 1;
+			height: 100%;
+
+			.scrollable-content {
+				width: 100%;
+				height: auto;
+				display: flex;
+				flex-wrap: wrap;
+			}
+		}
+	}
+}
