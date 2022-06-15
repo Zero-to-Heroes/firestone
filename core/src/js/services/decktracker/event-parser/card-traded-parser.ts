@@ -4,10 +4,9 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { CARDS_THAT_IMPROVE_WHEN_TRADED } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-
-const CARDS_THAT_IMPROVE_WHEN_TRADED = [CardIds.AmuletOfUndying, CardIds.BlacksmithingHammer, CardIds.WickedShipment];
 
 export class CardTradedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly prefs: PreferencesService) {}
@@ -41,6 +40,8 @@ export class CardTradedParser implements EventParser {
 			? card.update({
 					lastAffectedByCardId: undefined,
 					mainAttributeChange: buildAttributeChange(card),
+					positionFromTop: undefined,
+					positionFromBottom: undefined,
 			  } as DeckCard)
 			: card;
 

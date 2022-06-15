@@ -49,6 +49,8 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithoutInfluence = card
 			? card.update({
 					lastAffectedByCardId: undefined,
+					positionFromTop: undefined,
+					positionFromBottom: undefined,
 			  } as DeckCard)
 			: card;
 		const cardWithInfluenceBack = cardWithoutInfluence.update({
