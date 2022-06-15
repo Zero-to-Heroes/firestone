@@ -4,7 +4,12 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { CardsFacadeService } from '../../cards-facade.service';
-import { cardsRevealedWhenDrawn, forceHideInfoWhenDrawnInfluencers, publicCardCreators } from '../../hs-utils';
+import {
+	cardsRevealedWhenDrawn,
+	forceHideInfoWhenDrawnInfluencers,
+	publicCardCreators,
+	supportedAdditionalData,
+} from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -26,7 +31,14 @@ export class CardDrawParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const cardsWithMatchingCardId = deck.deck.filter((e) => e.cardId);
+		const cardsWithMatchingCardId = deck.deck
+			.filter((e) => e.cardId === cardId)
+			.filter((e) =>
+				!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
+					? e.mainAttributeChange - 1 === gameEvent.additionalData.dataTag1
+					: true,
+			);
+		// console.debug('cards with matching card id', cardsWithMatchingCardId);
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
@@ -61,8 +73,7 @@ export class CardDrawParser implements EventParser {
 					(!isTradable && publicCardCreators.includes(lastInfluencedByCardId))));
 		const isCreatorPublic =
 			isCardInfoPublic || (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
-
-		//console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
+		// console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 		const cardWithCreator = card.update({
@@ -73,7 +84,7 @@ export class CardDrawParser implements EventParser {
 			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
 		} as DeckCard);
-		//console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
+		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
@@ -87,6 +98,7 @@ export class CardDrawParser implements EventParser {
 			deck: newDeck,
 			hand: newHand,
 		});
+		// console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

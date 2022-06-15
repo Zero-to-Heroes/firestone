@@ -397,6 +397,19 @@ export const publicCardCreators = [
 	CardIds.ZolaTheGorgonCore,
 ];
 
+export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
+	CardIds.AmuletOfUndying,
+	CardIds.BlacksmithingHammer,
+	CardIds.WickedShipment,
+];
+
+export const supportedAdditionalData = [
+	CardIds.Ignite,
+	CardIds.Bottomfeeder,
+	CardIds.SirakessCultist_AbyssalCurseToken,
+	...CARDS_THAT_IMPROVE_WHEN_TRADED,
+];
+
 export const getGalakrondCardFor = (className: string, invokeCount: number): string => {
 	switch (className) {
 		case 'priest':

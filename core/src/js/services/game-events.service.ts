@@ -667,6 +667,7 @@ export class GameEvents {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
+						dataTag1: gameEvent.Value.AdditionalProps?.DataTag1,
 					}),
 				);
 				break;
