@@ -95,6 +95,7 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 								timeFilter,
 								classFilter,
 								gameMode,
+								null,
 								patch,
 								0,
 								heroPowerFilter,

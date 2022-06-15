@@ -339,6 +339,7 @@ export class AppUiStoreService {
 								timeFilter,
 								heroFilter,
 								gameMode,
+								null,
 								patch,
 								0,
 								heroPowerFilter,

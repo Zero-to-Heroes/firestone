@@ -31,6 +31,9 @@
 		&.rename-button {
 			top: 30px;
 		}
+		&.delete-button {
+			top: 60px;
+		}
 	}
 
 	.restore-button,
@@ -40,6 +43,12 @@
 			background: var(--on-close-button-background-color); // #2F0D0D;
 			color: var(--on-close-button-color); //#CCA2B3;
 			--icon-color: var(--on-close-button-color); //#CCA2B3;
+		}
+	}
+
+	.delete-button {
+		&:hover {
+			background: #d73524;
 		}
 	}
 

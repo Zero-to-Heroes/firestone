@@ -108,7 +108,7 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 			.pipe(
 				filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
 				map(([runs, timeFilter, classFilter, gameMode, patch]) =>
-					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
+					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, null, patch, 0),
 				),
 				map((runs) => {
 					return {

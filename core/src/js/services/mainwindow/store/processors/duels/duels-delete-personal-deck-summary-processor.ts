@@ -2,7 +2,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
 import { PreferencesService } from '../../../../preferences.service';
-import { DuelsHidePersonalDeckSummaryEvent } from '../../events/duels/duels-hide-personal-deck-summary-event';
+import { DuelsDeletePersonalDeckSummaryEvent } from '../../events/duels/duels-delete-personal-deck-summary-event';
 import { Processor } from '../processor';
 
 export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
@@ -12,7 +12,7 @@ export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
 	) {}
 
 	public async process(
-		event: DuelsHidePersonalDeckSummaryEvent,
+		event: DuelsDeletePersonalDeckSummaryEvent,
 		currentState: MainWindowState,
 		stateHistory,
 		navigationState: NavigationState,
@@ -22,6 +22,10 @@ export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
 			(deck) => deck.initialDeckList !== event.deckstring,
 		);
 		await this.prefs.savePreferences({ ...currentPrefs, duelsPersonalAdditionalDecks: newDecks });
+
+		const deletedDeckDates: readonly number[] = currentPrefs.duelsDeckDeletes[event.deckstring] ?? [];
+		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
+		const newPrefs = await this.prefs.setDuelsDeckDeleteDates(event.deckstring, newDeleteDates);
 		const newState = await this.duelsStateBuilder.updateState(currentState.duels, currentState.stats.gameStats);
 		return [
 			currentState.update({

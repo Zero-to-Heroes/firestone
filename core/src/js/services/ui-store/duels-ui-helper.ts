@@ -112,6 +112,7 @@ export const filterDuelsRuns = (
 	timeFilter: DuelsTimeFilterType,
 	heroesFilter: DuelsHeroFilterType,
 	gameMode: DuelsGameModeFilterType,
+	duelsDeckDeletes: { [deckstring: string]: readonly number[] },
 	patch: PatchInfo,
 	mmrFilter: number,
 	heroPowerFilter: 'all' | string = 'all',
@@ -122,28 +123,38 @@ export const filterDuelsRuns = (
 		return [];
 	}
 
-	return runs
-		.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
-		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
-		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
-		.filter((run) =>
-			!heroesFilter?.length
-				? false
-				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
-		)
-		.filter((stat) =>
-			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
-			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-			heroPowerFilter === 'all' || statType !== 'signature-treasure'
-				? true
-				: stat.heroPowerCardId === heroPowerFilter,
-		)
-		.filter((stat) =>
-			// Similar
-			signatureTreasureFilter === 'all' || statType !== 'hero-power'
-				? true
-				: stat.signatureTreasureCardId === signatureTreasureFilter,
-		);
+	return (
+		runs
+			// Keep only runs that have been created after the deck's initial deletion date
+			.filter(
+				(run) =>
+					!duelsDeckDeletes ||
+					!duelsDeckDeletes[run.initialDeckList]?.length ||
+					duelsDeckDeletes[run.initialDeckList][duelsDeckDeletes[run.initialDeckList].length - 1] <
+						run.creationTimestamp,
+			)
+			.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
+			.filter((run) => isCorrectRunDate(run, timeFilter, patch))
+			.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
+			.filter((run) =>
+				!heroesFilter?.length
+					? false
+					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
+			)
+			.filter((stat) =>
+				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
+				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
+				heroPowerFilter === 'all' || statType !== 'signature-treasure'
+					? true
+					: stat.heroPowerCardId === heroPowerFilter,
+			)
+			.filter((stat) =>
+				// Similar
+				signatureTreasureFilter === 'all' || statType !== 'hero-power'
+					? true
+					: stat.signatureTreasureCardId === signatureTreasureFilter,
+			)
+	);
 };
 
 export const buildDuelsHeroTreasurePlayerStats = (
@@ -279,6 +290,7 @@ export const getCurrentDeck = (
 	timeFilter: DuelsTimeFilterType,
 	heroFilter: DuelsHeroFilterType,
 	gameMode: DuelsGameModeFilterType,
+	duelsDeckDeletes: { [deckstring: string]: readonly number[] },
 	patch: PatchInfo,
 	mmrFilter: number,
 	deckDetails: readonly DuelsDeckStat[] = [],
@@ -288,7 +300,7 @@ export const getCurrentDeck = (
 		if (!deck) {
 			return null;
 		}
-		const runs = filterDuelsRuns(deck.runs, timeFilter, heroFilter, gameMode, patch, mmrFilter);
+		const runs = filterDuelsRuns(deck.runs, timeFilter, heroFilter, gameMode, duelsDeckDeletes, patch, mmrFilter);
 		return {
 			personal: true,
 			run: null,

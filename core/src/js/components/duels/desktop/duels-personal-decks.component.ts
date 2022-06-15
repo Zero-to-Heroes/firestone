@@ -49,37 +49,55 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsPersonalDeckNames,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckShowHiddenDecks,
+				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
-				filter(
-					([decks, timeFilter, classFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
-						!!decks?.length,
-				),
-				map(([decks, timeFilter, heroesFilter, gameMode, deckNames, hiddenCodes, showHidden, patch]) =>
-					decks
-						.filter(
-							(deck) => !hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
-						)
-						.map((deck) => {
-							return {
-								...deck,
-								runs: filterDuelsRuns(deck.runs, timeFilter, heroesFilter, gameMode, patch, 0),
-								deckName:
-									deckNames[deck.initialDeckList] ??
-									deck.deckName ??
-									this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
-								hidden: hiddenCodes?.includes(deck.initialDeckList),
-							};
-						})
-						.filter((deck) => {
-							const matchesHero = !heroesFilter?.length
-								? false
-								: heroesFilter.some(
-										(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
-								  );
-							return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
-						}),
+				filter(([decks]) => !!decks?.length),
+				map(
+					([
+						decks,
+						timeFilter,
+						heroesFilter,
+						gameMode,
+						deckNames,
+						hiddenCodes,
+						showHidden,
+						duelsDeckDeletes,
+						patch,
+					]) =>
+						decks
+							.filter(
+								(deck) =>
+									!hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
+							)
+							.map((deck) => {
+								return {
+									...deck,
+									runs: filterDuelsRuns(
+										deck.runs,
+										timeFilter,
+										heroesFilter,
+										gameMode,
+										duelsDeckDeletes,
+										patch,
+										0,
+									),
+									deckName:
+										deckNames[deck.initialDeckList] ??
+										deck.deckName ??
+										this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
+									hidden: hiddenCodes?.includes(deck.initialDeckList),
+								};
+							})
+							.filter((deck) => {
+								const matchesHero = !heroesFilter?.length
+									? false
+									: heroesFilter.some(
+											(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
+									  );
+								return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
+							}),
 				),
 				this.mapData((decks) => (!!decks.length ? decks : null)),
 			);

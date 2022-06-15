@@ -83,6 +83,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				(mousedown)="startDeckRename($event)"
 				inlineSVG="assets/svg/rename.svg"
 			></button>
+			<button
+				class="delete-button"
+				[helpTooltip]="deleteDeckTooltip"
+				confirmationTooltip
+				[askConfirmation]="true"
+				[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | owTranslate"
+				[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | owTranslate"
+				[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | owTranslate"
+				[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | owTranslate"
+				(onConfirm)="deleteDeck()"
+				*ngIf="!renaming"
+				inlineSVG="assets/svg/bin.svg"
+			></button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,9 +110,8 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		this.avgWins = value.global?.averageWinsPerRun ?? 0;
 		this.deckstring = value.initialDeckList;
 		this.hidden = value.hidden;
-		this.archiveDeckTooltip = !this.totalRuns
-			? this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip')
-			: this.i18n.translateString('app.duels.deck-stat.archive-deck-tooltip');
+		this.archiveDeckTooltip = this.i18n.translateString('app.duels.deck-stat.archive-deck-tooltip');
+		this.deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
 	}
 
 	_deck: DuelsDeckSummary;
@@ -110,6 +122,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	deckstring: string;
 	hidden: boolean;
 	archiveDeckTooltip: string;
+	deleteDeckTooltip: string;
 
 	renaming: boolean;
 
@@ -128,9 +141,11 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	hideDeck(event: MouseEvent) {
 		event.stopPropagation();
 		event.preventDefault();
-		!this.totalRuns
-			? this.stateUpdater.next(new DuelsDeletePersonalDeckSummaryEvent(this.deckstring))
-			: this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
+		this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
+	}
+
+	deleteDeck(event: MouseEvent) {
+		this.stateUpdater.next(new DuelsDeletePersonalDeckSummaryEvent(this.deckstring));
 	}
 
 	restoreDeck(event: MouseEvent) {

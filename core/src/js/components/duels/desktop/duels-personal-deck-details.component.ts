@@ -132,6 +132,7 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
@@ -139,19 +140,32 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 				),
-				map(([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, heroesFilter, gameMode, patch]) =>
-					getCurrentDeck(
+				map(
+					([
 						decks,
-						deckstring,
 						topDecks,
+						deckDetails,
+						deckstring,
 						deckId,
 						timeFilter,
 						heroesFilter,
 						gameMode,
+						duelsDeckDeletes,
 						patch,
-						0,
-						deckDetails,
-					),
+					]) =>
+						getCurrentDeck(
+							decks,
+							deckstring,
+							topDecks,
+							deckId,
+							timeFilter,
+							heroesFilter,
+							gameMode,
+							duelsDeckDeletes,
+							patch,
+							0,
+							deckDetails,
+						),
 				),
 				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),

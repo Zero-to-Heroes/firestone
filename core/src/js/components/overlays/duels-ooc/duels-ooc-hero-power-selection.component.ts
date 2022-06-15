@@ -14,7 +14,7 @@ import {
 } from '@services/ui-store/duels-ui-helper';
 import { groupByFunction, sleep, uuid } from '@services/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-hero-power-selection',
@@ -111,6 +111,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 									'last-patch',
 									allDuelsHeroes,
 									'all',
+									null,
 									patch,
 									0,
 									currentHeroPowerCardId,

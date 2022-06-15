@@ -109,6 +109,7 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 									'last-patch',
 									allDuelsHeroes,
 									'all',
+									null,
 									patch,
 									0,
 									'all',

@@ -70,26 +70,40 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent imple
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
 				filter(
-					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
+					([decks, topDecks, deckDetails, deckstring, deckId]) =>
 						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 				),
-				map(([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
-					getCurrentDeck(
+				map(
+					([
 						decks,
-						deckstring,
 						topDecks,
+						deckDetails,
+						deckstring,
 						deckId,
 						timeFilter,
 						classFilter,
 						gameMode,
+						duelsDeckDeletes,
 						patch,
-						0,
-						deckDetails,
-					),
+					]) =>
+						getCurrentDeck(
+							decks,
+							deckstring,
+							topDecks,
+							deckId,
+							timeFilter,
+							classFilter,
+							gameMode,
+							duelsDeckDeletes,
+							patch,
+							0,
+							deckDetails,
+						),
 				),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),

@@ -576,6 +576,18 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
+	public async setDuelsDeckDeleteDates(deckstring: string, newDeleteDates: readonly number[]) {
+		const prefs = await this.getPreferences();
+		const newDelete = {
+			...prefs.duelsDeckDeletes,
+			[deckstring]: newDeleteDates,
+		};
+		console.debug('newDelete', newDelete);
+		const newPrefs: Preferences = { ...prefs, duelsDeckDeletes: newDelete };
+		await this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };

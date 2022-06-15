@@ -127,6 +127,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 									'last-patch',
 									allDuelsHeroes,
 									'all',
+									null,
 									patch,
 									0,
 									selectedHeroPower,

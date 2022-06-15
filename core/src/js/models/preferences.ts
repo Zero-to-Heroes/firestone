@@ -433,6 +433,7 @@ export class Preferences {
 	readonly duelsOocDeckSelectPosition: { left: number; top: number };
 	readonly duelsPersonalAdditionalDecks: readonly DuelsDeckSummary[] = [];
 	readonly duelsDeckbuilderShowBuckets: boolean;
+	readonly duelsDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';

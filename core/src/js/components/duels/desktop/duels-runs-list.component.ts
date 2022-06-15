@@ -80,14 +80,25 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 				// TODO: MMR filter
 			),
 			this.deckstring$.asObservable(),
 		).pipe(
-			filter(([[runs, timeFilter, classFilter, gameMode, patch], deckstring]) => !!runs?.length),
-			this.mapData(([[runs, timeFilter, classFilter, gameMode, patch], deckstring]) => {
-				const filteredRuns = filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0);
+			filter(
+				([[runs, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => !!runs?.length,
+			),
+			this.mapData(([[runs, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => {
+				const filteredRuns = filterDuelsRuns(
+					runs,
+					timeFilter,
+					classFilter,
+					gameMode,
+					duelsDeckDeletes,
+					patch,
+					0,
+				);
 				const runsForDeckstring = !deckstring?.length
 					? filteredRuns
 					: filteredRuns.filter((run) => run.initialDeckList === deckstring);
