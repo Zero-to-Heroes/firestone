@@ -107,6 +107,16 @@
 		}
 	}
 
+	.delete-button {
+		width: 30px;
+		height: 30px;
+		top: 30px;
+
+		&:hover {
+			background: #d73524;
+		}
+	}
+
 	&.hidden {
 		opacity: 0.7;
 	}

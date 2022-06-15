@@ -61,7 +61,9 @@ export class AskConfirmationDirective implements OnDestroy {
 	}
 
 	@HostListener('click', ['$event'])
-	onClick() {
+	onClick(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
 		if (!this.askConfirmation) {
 			this.confirm();
 			return;

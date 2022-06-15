@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
@@ -83,6 +84,18 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
 				</svg>
 			</button>
+			<button
+				class="delete-button"
+				[helpTooltip]="deleteDeckTooltip"
+				confirmationTooltip
+				[askConfirmation]="true"
+				[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | owTranslate"
+				[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | owTranslate"
+				[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | owTranslate"
+				[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | owTranslate"
+				(onConfirm)="deleteDeck()"
+				inlineSVG="assets/svg/bin.svg"
+			></button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -119,6 +132,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	decoration: string;
 	format: StatGameFormatType;
 
+	deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
@@ -137,6 +152,10 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
 		event.stopPropagation();
 		event.preventDefault();
+	}
+
+	deleteDeck() {
+		this.stateUpdater.next(new DecktrackerDeleteDeckEvent(this._deck?.deckstring));
 	}
 
 	selectDeck(event: MouseEvent) {

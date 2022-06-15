@@ -50,8 +50,10 @@ export class DecksStateBuilderService {
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
 		const finalPersonalDecks = personalDecks
 			.filter((deck) => !deckstrings.includes(deck.deckstring))
+			.filter((deck) => !Object.keys(prefs.desktopDeckDeletes).includes(deck.deckstring))
 			// Still need to filter these
 			.filter((deck) => filters.gameFormat === 'all' || filters.gameFormat === deck.format)
+
 			.map((deck) => {
 				const deckDefinition = decode(deck.deckstring);
 				return {
@@ -66,6 +68,7 @@ export class DecksStateBuilderService {
 					),
 					replays: [],
 					totalGames: 0,
+					hidden: prefs.desktopDeckHiddenDeckCodes.includes(deck.deckstring),
 				} as DeckSummary;
 			});
 		console.debug('final personal decks', finalPersonalDecks);

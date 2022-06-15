@@ -110,8 +110,6 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		this.avgWins = value.global?.averageWinsPerRun ?? 0;
 		this.deckstring = value.initialDeckList;
 		this.hidden = value.hidden;
-		this.archiveDeckTooltip = this.i18n.translateString('app.duels.deck-stat.archive-deck-tooltip');
-		this.deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
 	}
 
 	_deck: DuelsDeckSummary;
@@ -121,8 +119,8 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	avgWins: number;
 	deckstring: string;
 	hidden: boolean;
-	archiveDeckTooltip: string;
-	deleteDeckTooltip: string;
+	archiveDeckTooltip = this.i18n.translateString('app.duels.deck-stat.archive-deck-tooltip');
+	deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
 
 	renaming: boolean;
 
@@ -144,7 +142,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
 	}
 
-	deleteDeck(event: MouseEvent) {
+	deleteDeck() {
 		this.stateUpdater.next(new DuelsDeletePersonalDeckSummaryEvent(this.deckstring));
 	}
 
