@@ -13,7 +13,6 @@ import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { getDuelsModeName } from '@services/duels/duels-utils';
-import { FeatureFlags } from '@services/feature-flags';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
@@ -373,18 +372,21 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-deckbuilder',
+				name: this.i18n.translateString('app.duels.menu.deckbuilder'),
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-buckets',
+				name: this.i18n.translateString('app.duels.menu.buckets'),
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
 		];
-		if (FeatureFlags.ENABLE_DUELS_DECK_BUILDER) {
-			result.push(
-				DuelsCategory.create({
-					id: 'duels-deckbuilder',
-					name: this.i18n.translateString('app.duels.menu.deckbuilder'),
-					enabled: true,
-					icon: undefined,
-					categories: null,
-				} as DuelsCategory),
-			);
-		}
 		return result;
 	}
 

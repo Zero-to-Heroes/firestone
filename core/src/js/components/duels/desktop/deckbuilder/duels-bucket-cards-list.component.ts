@@ -8,6 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { SetCard } from '@models/set';
+import { sortByProperties } from '../../../../services/utils';
 
 @Component({
 	selector: 'duels-bucket-cards-list',
@@ -21,6 +22,7 @@ import { SetCard } from '@models/set';
 			<duels-bucket-card
 				class="card"
 				*ngFor="let card of _cards; trackBy: trackByCard"
+				[ngClass]="{ 'dimmed': card.dimmed }"
 				[card]="card"
 				(click)="onBucketCardClick(card)"
 			></duels-bucket-card>
@@ -31,7 +33,7 @@ import { SetCard } from '@models/set';
 export class DuelsBucketCardsListComponent {
 	@Output() cardClick = new EventEmitter<BucketCard>();
 	@Input() set cards(value: readonly BucketCard[]) {
-		this._cards = value;
+		this._cards = [...value].sort(sortByProperties((c: BucketCard) => [c.dimmed]));
 	}
 
 	@Input() collection: readonly SetCard[];
@@ -46,7 +48,6 @@ export class DuelsBucketCardsListComponent {
 	}
 
 	onBucketCardClick(card: BucketCard) {
-		console.debug('clicking on card', card);
 		this.cardClick.next(card);
 	}
 }
@@ -58,4 +59,5 @@ export interface BucketCard {
 	readonly rarity: string;
 	readonly offeringRate: number;
 	readonly totalBuckets: number;
+	readonly dimmed?: boolean;
 }

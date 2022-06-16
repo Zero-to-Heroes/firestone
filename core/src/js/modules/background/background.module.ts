@@ -215,6 +215,7 @@ import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/
 import { DeckTrackerOverlayOpponentComponent } from '../../components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
+import { DuelsBucketsComponent } from '../../components/duels/desktop/duels-buckets.component';
 import { DuelsDeckStatVignetteComponent } from '../../components/duels/desktop/duels-deck-stat-vignette.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
 import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-empty-state.component';
@@ -812,6 +813,7 @@ const components = [
 		DuelsDeckbuilderHeroComponent,
 		DuelsDeckbuilderHeroPowerComponent,
 		DuelsDeckbuilderSignatureTreasureComponent,
+		DuelsBucketsComponent,
 		DuelsBucketCardsListComponent,
 		DuelsBucketCardComponent,
 		DuelsFiltersComponent,

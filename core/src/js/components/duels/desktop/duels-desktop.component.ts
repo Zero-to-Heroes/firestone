@@ -15,7 +15,6 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -58,6 +57,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<duels-top-decks *ngIf="category.value?.id === 'duels-top-decks'"> </duels-top-decks>
 						<duels-leaderboard *ngIf="category.value?.id === 'duels-leaderboard'"></duels-leaderboard>
 						<duels-deckbuilder *ngIf="category.value?.id === 'duels-deckbuilder'"></duels-deckbuilder>
+						<duels-buckets *ngIf="category.value?.id === 'duels-buckets'"></duels-buckets>
 					</div>
 				</with-loading>
 			</section>
@@ -112,14 +112,7 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.duels.categories)
-			.pipe(
-				map(([categories]) => categories ?? []),
-				// Subcategories are not displayed in the menu
-				map((categories) => categories.filter((cat) => !!cat.name)),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([categories]) => (categories ?? []).filter((cat) => !!cat.name)));
 		this.category$ = this.store
 			.listen$(
 				([main, nav]) => main.duels,

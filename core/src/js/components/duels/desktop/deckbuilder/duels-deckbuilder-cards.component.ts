@@ -86,13 +86,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						[tooltip]="'app.duels.deckbuilder.show-buckets-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<div class="results">
-						<virtual-scroller
-							class="cards-container"
-							#scroll
-							[items]="value.activeCards"
-							bufferAmount="5"
-							scrollable
-						>
+						<virtual-scroller class="cards-container" #scroll [items]="value.activeCards" scrollable>
 							<div
 								*ngFor="let card of scroll.viewPortItems; trackBy: trackByCardId"
 								class="card-container"
@@ -691,7 +685,7 @@ interface SearchFilters {
 	readonly bucket: 'none';
 }
 
-interface BucketData {
+export interface BucketData {
 	readonly bucketId: string;
 	readonly bucketName: string;
 	readonly bucketClasses: readonly BucketClass[];
@@ -699,7 +693,7 @@ interface BucketData {
 	readonly bucketCardIds: readonly string[];
 }
 
-interface BucketClass {
+export interface BucketClass {
 	readonly class: CardClass;
 	readonly name: string;
 	readonly image: string;
