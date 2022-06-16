@@ -34,9 +34,6 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
-		const cardWithZone = card.update({
-			zone: 'SECRET',
-		} as DeckCard);
 
 		const isCardCountered =
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
@@ -44,6 +41,11 @@ export class QuestPlayedFromHandParser implements EventParser {
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+
+		const cardWithZone = card.update({
+			zone: 'SECRET',
+			countered: isCardCountered,
+		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
 		const previousOtherZone = deck.otherZone;

@@ -39,6 +39,7 @@ export class DeckCard {
 	// Not sure exactly what the best way is to show the milled cards. As far as HS is concerned, the
 	// "milled" status doesn't exist, so we need a special flag
 	readonly milled?: boolean;
+	readonly countered?: boolean;
 	// Store state for cards like Ignite. Similar state info will be added for attack / health (maybe
 	// other things too)
 	readonly mainAttributeChange?: number;

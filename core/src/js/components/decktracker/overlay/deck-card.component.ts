@@ -123,6 +123,19 @@ import { uuid } from '../../../services/utils';
 				</div>
 			</div>
 			<div
+				class="icon-symbol countered"
+				*ngIf="isCountered"
+				[helpTooltip]="'decktracker.card-countered' | owTranslate"
+			>
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_burned" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div
 				class="icon-symbol graveyard"
 				*ngIf="isGraveyard"
 				[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
@@ -244,6 +257,7 @@ export class DeckCardComponent implements OnDestroy {
 	giftTooltip: string;
 	isBurned: boolean;
 	isDiscarded: boolean;
+	isCountered: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
 	isDredged: boolean;
@@ -342,6 +356,7 @@ export class DeckCardComponent implements OnDestroy {
 
 		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
 		this.isDiscarded = this._card.zone === 'DISCARD';
+		this.isCountered = this._card.countered;
 		this.isGraveyard = this._card.zone === 'GRAVEYARD';
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
 		this._isMissing = this._card.isMissing;
@@ -375,6 +390,9 @@ export class DeckCardComponent implements OnDestroy {
 			this.mouseOverRight += 25;
 		}
 		if (this.isDiscarded) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isCountered) {
 			this.mouseOverRight += 25;
 		}
 		if (this.isGraveyard) {

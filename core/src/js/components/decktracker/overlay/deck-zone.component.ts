@@ -198,11 +198,12 @@ export class DeckZoneComponent implements AfterViewInit {
 						),
 					];
 
-					return Object.assign(new VisualDeckCard(), cards[0], {
+					const result = Object.assign(new VisualDeckCard(), cards[0], {
 						totalQuantity: cards.length,
 						creatorCardIds: creatorCardIds,
 						isMissing: groupingKey.includes('missing'),
 					} as VisualDeckCard);
+					return result;
 				})
 				.sort((a, b) => this.compare(a, b))
 				.sort((a, b) => this.sortByIcon(a, b));
@@ -303,6 +304,12 @@ export class DeckZoneComponent implements AfterViewInit {
 			return -1;
 		}
 		if (a.zone !== 'DISCARD' && b.zone === 'DISCARD') {
+			return 1;
+		}
+		if (a.countered && !b.countered) {
+			return -1;
+		}
+		if (!a.countered && b.countered) {
 			return 1;
 		}
 		return 0;

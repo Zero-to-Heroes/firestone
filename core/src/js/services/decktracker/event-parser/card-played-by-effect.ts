@@ -41,9 +41,16 @@ export class CardPlayedByEffectParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
+		const isCardCountered =
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
-		const isOnBoard = refCard && refCard.type === 'Minion';
+		const isOnBoard = !isCardCountered && refCard && refCard.type === 'Minion';
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
 			cardId: cardId,
@@ -53,6 +60,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			zone: isOnBoard ? 'PLAY' : null,
 			temporaryCard: false,
 			playTiming: isOnBoard ? GameState.playTiming++ : null,
+			countered: isCardCountered,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
 		const newBoard: readonly DeckCard[] = isOnBoard
@@ -61,13 +69,6 @@ export class CardPlayedByEffectParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
-
-		const isCardCountered =
-			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
-				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
-				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
-					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(cardId as CardIds)) {

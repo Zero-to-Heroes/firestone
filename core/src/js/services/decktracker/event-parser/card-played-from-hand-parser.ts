@@ -68,9 +68,16 @@ export class CardPlayedFromHandParser implements EventParser {
 			}
 		}
 
+		const isCardCountered =
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
-		const isOnBoard = refCard && refCard.type === 'Minion';
+		const isOnBoard = !isCardCountered && refCard && refCard.type === 'Minion';
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
@@ -78,6 +85,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
+				countered: isCardCountered,
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
@@ -88,14 +96,9 @@ export class CardPlayedFromHandParser implements EventParser {
 				zone: isOnBoard ? 'PLAY' : null,
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
+				countered: isCardCountered,
 			} as DeckCard);
-
-		const isCardCountered =
-			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
-				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
-				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
-					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+		// console.debug('cardWithZone', cardWithZone, isCardCountered, additionalInfo);
 
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardWithZone) : deck.board;
@@ -111,6 +114,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						  } as DeckCard)
 						: cardWithZone,
 			  );
+		// console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId as CardIds)) {
@@ -144,6 +148,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 		} as DeckState);
+		// console.debug('newPlayerDeck', newPlayerDeck);
 
 		const newCardPlayedThisMatch: ShortCard = {
 			entityId: cardWithZone.entityId,
@@ -158,6 +163,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						newCardPlayedThisMatch,
 					] as readonly ShortCard[],
 			  });
+		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
