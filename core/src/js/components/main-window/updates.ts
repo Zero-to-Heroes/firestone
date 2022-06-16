@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.7.19',
+		version: '9.8.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,24 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'duels',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a "Buckets" tab that lets you browse the contents of all available buckets`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a basic deckbuilder for constructed. It's still an early version, so please let me know what other features you'd like to see in there :).`,
+							},
+							{
 								type: 'bug',
-								text: `The issue that some of you were experiencing and that was preventing the app from loading should now be properly fixed, and in a way that should be future-proof. Sorry again for the inconvenience of these past couple of weeks if you were affected by it.`,
+								text: `Fix an issue where the bonus from Amulet of Undying would disappear when dredged.`,
 							},
 						],
 					},
@@ -61,44 +74,15 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add toggle buttons on the Hero Selection screen to activate live filters for tribe and MMR (i.e. use the tribes and MMR of your current game, instead of the app's current values).`,
-							},
-							{
-								type: 'ui',
-								text: `Improve the display of the hero stats overlay when mousing over the various hero choices.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Ini Stormcoil's hero power was missing.`,
-							},
-							{
-								type: 'bug',
-								text: `If you're using the "live tribes" and "live MMR" filters for hero stats, the value of the filter is now properly reset to its previous value after leaving a BG game.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Properly flag cards created by Remote Controlled Golem in deck.`,
-							},
-							{
-								type: 'feature',
-								text: `Show Nellie's Pirate Ship Crew when mousing over the card in the tracker (for those like me who keep forgetting what you picked).`,
-							},
-							{
-								type: 'feature',
-								text: `Add a few of Diablo's treasures in Duels to the Global Effects section.`,
+								text: `Add a way to delete decks directly from the "Decks" page, without having to go into each deck individually.`,
 							},
 							{
 								type: 'bug',
-								text: `Slightly change how the Abyssal Curses counter works to solve an issue that would arise when facing Cariel. The counter now gives you the highest damage curse your opponent has received.`,
+								text: `Fix a, issue where a card that was previously at the Top or Bottom of deck would appear again in that zone after going back to the deck from your hand.`,
 							},
 						],
 					},
@@ -106,17 +90,8 @@ export const updates: readonly Update[] = [
 						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the rewards on the Runs screen would reset after completing a new run.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where some bounties were missing the "Heroic" label when looking at where to farm specific merc coins.`,
+								type: 'feature',
+								text: `Add a way to delete decks directly from the "Decks" page.`,
 							},
 						],
 					},
