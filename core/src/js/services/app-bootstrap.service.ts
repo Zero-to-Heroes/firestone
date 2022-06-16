@@ -382,13 +382,25 @@ export class AppBootstrapService {
 	}
 
 	private async addAnalytics() {
+		const toRemovePrefix = [
+			'overlayZoneToggle',
+			'duelsPersonalDeckNames',
+			'desktopDeckStatsReset',
+			'desktopDeckDeletes',
+			'duelsDeckDeletes',
+		];
+		const toRemoveSuffix = ['.top', '.bottom'];
 		const prefs = await this.prefs.getPreferences();
 		// Log an event for each of the prefs
 		console.log('no-format', 'pref status', prefs);
 		const prefsToSend = { ...new Preferences() };
 		for (const prop in prefs) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSend, prop);
-			if (!meta) {
+			if (
+				!meta &&
+				!toRemovePrefix.some((propToRemove) => prop.startsWith(propToRemove)) &&
+				!toRemoveSuffix.some((propToRemove) => prop.endsWith(propToRemove))
+			) {
 				prefsToSend[prop] = prefs[prop];
 			}
 		}
