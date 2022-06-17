@@ -482,7 +482,7 @@ export class GameStateService {
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards, this.i18n),
 			new CardRevealedParser(this.helper, this.allCards, this.i18n),
-			new HeroRevealedParser(),
+			new HeroRevealedParser(this.allCards),
 			new LinkedEntityParser(this.helper, this.i18n),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
