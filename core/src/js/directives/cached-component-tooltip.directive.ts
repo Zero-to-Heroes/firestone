@@ -40,11 +40,19 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'fixed-top-center' | 'auto' =
 		'right';
 
+	@Input('componentTooltipForceHide') set hideTooltip(value: boolean) {
+		this.forceHide = value;
+		if (this.forceHide) {
+			this.onMouseLeave();
+		}
+	}
+
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
 	private positionDirty = true;
+	private forceHide: boolean;
 
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
@@ -103,6 +111,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (this.forceHide) {
+			return;
+		}
 		if (this.positionDirty) {
 			this.updatePositionStrategy();
 			this.positionDirty = false;

@@ -54,6 +54,7 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					[componentType]="componentType"
 					[componentInput]="entity"
 					[componentTooltipPosition]="'right'"
+					[componentTooltipForceHide]="forceTooltipHidden"
 				>
 					<card-on-board
 						class="minion"
@@ -122,6 +123,7 @@ export class BgsBattleSideComponent {
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
+	forceTooltipHidden = false;
 
 	entities: readonly Entity[];
 
@@ -133,6 +135,10 @@ export class BgsBattleSideComponent {
 
 	preventAppDrag(event: MouseEvent) {
 		event.stopPropagation();
+		this.forceTooltipHidden = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	drop(event: CdkDragDrop<number>) {
@@ -142,6 +148,7 @@ export class BgsBattleSideComponent {
 		entitiesWithoutMovedElement.splice(movedElementNewIndex, 0, movedElement);
 		this.entities = entitiesWithoutMovedElement;
 		this.entitiesUpdated.next(this.entities);
+		this.forceTooltipHidden = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
