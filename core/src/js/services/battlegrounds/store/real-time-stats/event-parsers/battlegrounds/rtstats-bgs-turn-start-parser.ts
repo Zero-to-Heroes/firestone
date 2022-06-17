@@ -54,7 +54,11 @@ export class RTStatBgsTurnStartParser implements EventParser {
 			(h) => normalizeHeroCardId(h.CardId, this.allCards) === normalizeHeroCardId(heroCardId, this.allCards),
 		);
 		if (!hero) {
-			console.warn('could not find hero', heroCardId, heroes);
+			console.warn(
+				'could not find hero',
+				heroCardId,
+				heroes.map((h) => h.CardId),
+			);
 		}
 		return {
 			currentHp: hero?.Health,
