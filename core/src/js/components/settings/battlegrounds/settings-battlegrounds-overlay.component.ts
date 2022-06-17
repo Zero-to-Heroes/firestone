@@ -109,9 +109,21 @@ import { Knob } from '../preference-slider.component';
 				<preference-toggle
 					class="banned-tribes-vertical"
 					field="bgsBannedTribesShowVertically"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
 					[label]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="bgsShowAvailableTribesOverlay"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
+					[label]="'settings.battlegrounds.overlay.show-available-tribes-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.show-available-tribes-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="bgsTribesOverlaySingleRow"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
+					[label]="'settings.battlegrounds.overlay.banned-tribes-single-row-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.banned-tribes-single-row-tooltip' | owTranslate"
 				></preference-toggle>
 				<div
 					class="slider-label"

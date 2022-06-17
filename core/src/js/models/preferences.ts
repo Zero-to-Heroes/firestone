@@ -346,6 +346,8 @@ export class Preferences {
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
 	readonly bgsShowBannedTribesOverlay = true;
+	readonly bgsShowAvailableTribesOverlay = false;
+	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats = true;
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsEnableSimulation = true;

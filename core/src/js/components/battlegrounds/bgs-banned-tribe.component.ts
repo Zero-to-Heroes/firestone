@@ -14,7 +14,7 @@ import { getTribeIcon } from '../../services/battlegrounds/bgs-utils';
 		<div class="bgs-banned-tribe" *ngIf="image">
 			<div class="background"></div>
 			<img class="icon" [src]="image" />
-			<div class="center-wrapper">
+			<div class="center-wrapper" *ngIf="!available">
 				<div class="cross-container-outer">
 					<div class="cross-container-inner">
 						<img
@@ -38,4 +38,6 @@ export class BgsBannedTribeComponent {
 		}
 		this.image = getTribeIcon(value);
 	}
+
+	@Input() available: boolean;
 }

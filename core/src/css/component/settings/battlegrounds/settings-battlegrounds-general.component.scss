@@ -6,13 +6,21 @@
 	overflow: auto;
 
 	.slider-label {
-		margin-top: 10px;
-		margin-bottom: 10px;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		font-size: 14px;
 	}
 
 	.disabled {
 		opacity: 0.4;
 		pointer-events: none;
+	}
+
+	.enable-bgs {
+		::ng-deep .preference-slider {
+			margin-bottom: 15px;
+			margin-top: 0;
+		}
 	}
 
 	::ng-deep .settings-p.settings-p.settings-p {
@@ -21,15 +29,6 @@
 
 	::ng-deep .preference-slider {
 		width: 320px;
-	}
-
-	.enable-bgs,
-	.banned-tribes-vertical,
-	.opponent-board-top {
-		::ng-deep .preference-toggle {
-			margin-bottom: 15px;
-			margin-top: 0;
-		}
 	}
 
 	::ng-deep preference-toggle.disabled .preference-toggle,

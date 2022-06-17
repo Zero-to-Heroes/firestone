@@ -1,28 +1,48 @@
-:host() {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-}
-
-.root {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-}
-
 .banned-tribes {
 	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+
+	bgs-banned-tribe {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+
+	&.row {
+		max-width: 240px;
+	}
 
 	&.column {
-		flex-direction: column;
+		// https://stackoverflow.com/questions/33891709/when-flexbox-items-wrap-in-column-mode-container-does-not-grow-its-width
+		// https://stackoverflow.com/questions/23408539/how-can-i-make-a-displayflex-container-expand-horizontally-with-its-wrapped-con/41209546#41209546
+		writing-mode: vertical-lr;
+		max-height: 240px;
 
 		bgs-banned-tribe {
-			margin-right: 0;
-			margin-bottom: 10px;
+			writing-mode: horizontal-tb;
 		}
+	}
+
+	&.available {
+		&.row {
+			max-width: 300px;
+
+			bgs-banned-tribe {
+				margin-bottom: 0;
+				margin-top: -15px;
+			}
+		}
+
+		&.column {
+			max-height: 300px;
+		}
+	}
+
+	&.single-row {
+		max-width: 100%;
+		max-height: 100%;
+		flex-wrap: nowrap;
 	}
 }
 
