@@ -42,6 +42,7 @@ export class CardTradedParser implements EventParser {
 					mainAttributeChange: buildAttributeChange(card),
 					positionFromTop: undefined,
 					positionFromBottom: undefined,
+					dredged: undefined,
 			  } as DeckCard)
 			: card;
 
@@ -57,6 +58,7 @@ export class CardTradedParser implements EventParser {
 						...card,
 						positionFromBottom: undefined,
 						positionFromTop: undefined,
+						dredged: undefined,
 					}),
 			  )
 			: newDeck;

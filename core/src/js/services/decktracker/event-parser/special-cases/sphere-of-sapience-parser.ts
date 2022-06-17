@@ -60,6 +60,7 @@ export class SphereOfSapienceParser implements EventParser {
 								card.update({
 									positionFromBottom: undefined,
 									positionFromTop: undefined,
+									dredged: undefined,
 								}),
 							),
 						}),

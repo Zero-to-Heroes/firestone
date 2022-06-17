@@ -48,6 +48,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 						card.update({
 							positionFromBottom: undefined,
 							positionFromTop: undefined,
+							dredged: undefined,
 						}),
 					),
 				});
