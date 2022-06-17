@@ -153,6 +153,7 @@ export class CardTooltipComponent {
 		if (!this._cardIds?.length) {
 			return;
 		}
+		const highRes = (await this.prefs?.getPreferences())?.collectionUseHighResImages;
 		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
 		this.cards = this._cardIds
 			// Empty card IDs are necessary when showing buff only
@@ -167,6 +168,7 @@ export class CardTooltipComponent {
 						? this.i18n.getCardImage(realCardId, {
 								isBgs: this.isBgs,
 								isPremium: isPremium,
+								isHighRes: highRes,
 						  })
 						: this.i18n.getNonLocalizedCardImage(realCardId)
 					: null;
@@ -187,6 +189,7 @@ export class CardTooltipComponent {
 				? this.localized
 					? this.i18n.getCardImage(cardId, {
 							isBgs: this.isBgs,
+							isHighRes: highRes,
 					  })
 					: this.i18n.getNonLocalizedCardImage(cardId)
 				: null;
