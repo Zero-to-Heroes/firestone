@@ -59,55 +59,58 @@ export const colorForClass = (playerClass: string): string => {
 	}
 };
 
-export const globalEffectCards = [
+export const battlecryGlobalEffectCards = [
 	CardIds.AldorAttendant,
 	CardIds.AldorTruthseeker,
 	CardIds.ArchbishopBenedictus,
-	CardIds.CelestialAlignment,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.DarkInquisitorXanesh,
 	CardIds.DarkPharaohTekahn,
-	CardIds.DeckOfChaos,
-	CardIds.DeckOfLunacy,
-	CardIds.TheFiresOfZinAzshari,
 	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.DemonslayerKurtrusToken,
-	CardIds.Embiggen,
 	CardIds.FrizzKindleroost,
-	// CardIds.GrandTotemEysor, // We handle the effects triggered instead of the card played
 	CardIds.GraniteForgeborn,
 	CardIds.HemetJungleHunter,
-	CardIds.HornsOfFlameTavernBrawlToken,
-	CardIds.HumbleBlessingsTavernBrawl,
-	CardIds.IncantersFlow,
-	CardIds.InfiniteArcaneTavernBrawlToken,
-	CardIds.InvigoratingSermon,
 	CardIds.LadyInWhite,
 	CardIds.LadyPrestor1,
 	CardIds.LordaeronAttendantToken,
 	CardIds.LorekeeperPolkelt,
 	CardIds.LothraxionTheRedeemed,
-	CardIds.LunasPocketGalaxy,
-	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.NeeruFireblade1,
 	CardIds.PrinceKeleseth,
 	CardIds.RadiantLightspawn,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
-	CardIds.ReductomaraToken,
-	CardIds.RenounceDarkness,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
 	CardIds.SkulkingGeist,
 	CardIds.SorcerersGambit_ArcanistDawngraspToken,
-	CardIds.SurvivalOfTheFittest2,
-	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
-	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
-	CardIds.UpgradedPackMule,
-	// CardIds.VanndarStormpike,
-	CardIds.Wildfire,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
+];
+
+export const globalEffectCards = [
+	...battlecryGlobalEffectCards,
+	CardIds.CelestialAlignment,
+	CardIds.DeckOfChaos,
+	CardIds.DeckOfLunacy,
+	CardIds.TheFiresOfZinAzshari,
+	CardIds.Embiggen,
+	// CardIds.GrandTotemEysor, // We handle the effects triggered instead of the card played
+	CardIds.HornsOfFlameTavernBrawlToken,
+	CardIds.HumbleBlessingsTavernBrawl,
+	CardIds.IncantersFlow,
+	CardIds.InfiniteArcaneTavernBrawlToken,
+	CardIds.InvigoratingSermon,
+	CardIds.LunasPocketGalaxy,
+	CardIds.MenAtArmsTavernBrawlToken,
+	CardIds.ReductomaraToken,
+	CardIds.RenounceDarkness,
+	CardIds.SurvivalOfTheFittest2,
+	CardIds.TheCavernsBelow_CrystalCoreToken,
+	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
+	CardIds.UpgradedPackMule,
+	CardIds.Wildfire,
 ];
 
 export const globalEffectTriggers = [
