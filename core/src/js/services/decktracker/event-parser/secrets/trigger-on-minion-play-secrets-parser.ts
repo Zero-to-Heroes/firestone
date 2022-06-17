@@ -1,4 +1,4 @@
-import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
@@ -58,7 +58,6 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
-
 		if (enemyBoard.length < 3) {
 			secretsWeCantRuleOut.push(CardIds.SacredTrial);
 		}
@@ -66,6 +65,18 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
+		}
+
+		const isDormant = dbCard.mechanics.includes(GameTag[GameTag.DORMANT]);
+		if (isDormant) {
+			secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
+			secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
+			secretsWeCantRuleOut.push(CardIds.SnipeLegacy);
+			secretsWeCantRuleOut.push(CardIds.SnipeVanilla);
+			secretsWeCantRuleOut.push(CardIds.PotionOfPolymorph);
+			secretsWeCantRuleOut.push(CardIds.RepentanceLegacy);
+			secretsWeCantRuleOut.push(CardIds.RepentanceVanilla);
+			secretsWeCantRuleOut.push(CardIds.SacredTrial);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnMinionPlay.filter(
