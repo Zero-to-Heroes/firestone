@@ -49,7 +49,18 @@ export class CardDrawParser implements EventParser {
 		if (!shouldUseEntityId) {
 			console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
 		}
-		const card = this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
+		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop);
+		const card = useTopOfDeckToIdentifyCard
+			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
+			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
+		// console.debug(
+		// 	'drawing card',
+		// 	card,
+		// 	isPlayer,
+		// 	deck,
+		// 	deck.deck.some((c) => c.positionFromTop),
+		// 	[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
+		// );
 
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
@@ -67,6 +78,7 @@ export class CardDrawParser implements EventParser {
 			// (no idea why it behaves like that)
 			// 3. As a result, the card info is considered public, and we show it
 			isPlayer ||
+			useTopOfDeckToIdentifyCard ||
 			(!isCardDrawnBySecretPassage &&
 				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 					// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
@@ -90,7 +102,7 @@ export class CardDrawParser implements EventParser {
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		//console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
 		//console.debug('added card to hand', newHand);
