@@ -20,7 +20,7 @@ export class CardDredgedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('[debug] card dredged', cardId, controllerId, localPlayer, entityId, gameEvent, currentState);
+		// console.debug('[debug] card dredged', cardId, controllerId, localPlayer, entityId, gameEvent, currentState);
 
 		const isPlayer = reverseIfNeeded(
 			controllerId === localPlayer.PlayerId,
@@ -50,18 +50,19 @@ export class CardDredgedParser implements EventParser {
 				.slice(0, 3)
 				.map((c) => c.entityId),
 		});
-		console.debug('[debug]', 'dredged card', entityId, cardId, card);
+		// console.debug('[debug]', 'dredged card', entityId, cardId, card);
+		const cardAfterDredgeEffect = this.applyDredgerEffect(card);
 		DeckCard.deckIndexFromBottom += 4;
 
 		const newDeck: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(
 			deck.deck,
-			card,
+			cardAfterDredgeEffect,
 			deck.deckList.length === 0,
 		);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
-		console.debug('[debug]', 'newPlayerDeck', newPlayerDeck, deck.deck);
+		// console.debug('[debug]', 'newPlayerDeck', newPlayerDeck, deck.deck);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
@@ -70,6 +71,18 @@ export class CardDredgedParser implements EventParser {
 
 	event(): string {
 		return GameEvent.CARD_DREDGED;
+	}
+
+	private applyDredgerEffect(card: DeckCard): DeckCard {
+		const dredgerCardId = card.lastAffectedByCardId;
+		switch (dredgerCardId) {
+			case CardIds.ExcavationSpecialist1:
+			case CardIds.ExcavationSpecialist2:
+				return card.update({
+					actualManaCost: card.manaCost - 1,
+				});
+		}
+		return card;
 	}
 
 	private buildCardName(card: any, creatorCardId: string): string {
