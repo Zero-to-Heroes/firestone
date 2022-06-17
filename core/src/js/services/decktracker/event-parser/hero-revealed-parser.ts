@@ -1,9 +1,12 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { EventParser } from './event-parser';
 
 export class HeroRevealedParser implements EventParser {
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.HERO_REVEALED;
 	}
@@ -20,6 +23,7 @@ export class HeroRevealedParser implements EventParser {
 			cardId: cardId,
 			entityId: entityId,
 			maxHealth: health,
+			playerClass: this.allCards.getCard(cardId)?.playerClass?.toLowerCase() ?? existingHero.playerClass,
 		});
 		const newPlayerDeck = deck.update({
 			hero: newHero,
