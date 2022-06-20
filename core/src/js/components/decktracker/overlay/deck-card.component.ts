@@ -334,7 +334,7 @@ export class DeckCardComponent implements OnDestroy {
 		}
 
 		this.cardId = this._card.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=4)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
 		this.cardName =
@@ -371,7 +371,7 @@ export class DeckCardComponent implements OnDestroy {
 		if (this.cardId) {
 			const imageUrl =
 				this.i18n?.getCardImage(this.cardId) ??
-				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png?v=3`;
+				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png`;
 			const image = new Image();
 			image.src = imageUrl;
 			this._referenceCard = this.cards.getCard(this.cardId);

@@ -210,7 +210,7 @@ export class FullCardComponent {
 					originalKey: key,
 					files: files,
 					audios: files.map((file) =>
-						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}?v=2`),
+						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}`),
 					),
 				};
 				audioClip.audios.forEach((audio) => audio.load());

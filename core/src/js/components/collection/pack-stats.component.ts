@@ -45,7 +45,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					>
 						<img
 							class="icon"
-							[src]="'https://static.firestoneapp.com/cardPacks/256/' + pack.packType + '.png?v=4'"
+							[src]="'https://static.firestoneapp.com/cardPacks/256/' + pack.packType + '.png'"
 						/>
 					</div>
 					<div class="value">{{ pack.totalObtained }}</div>

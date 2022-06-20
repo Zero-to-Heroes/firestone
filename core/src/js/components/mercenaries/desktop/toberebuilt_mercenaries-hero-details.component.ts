@@ -134,7 +134,7 @@ import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 										<img class="icon" [src]="reward.imageUrl" />
 										<img
 											class="frame"
-											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png"
 										/>
 										<div class="amount">{{ reward.quantity }}</div>
 									</div>
@@ -150,7 +150,7 @@ import { BountyForMerc } from './mercenaries-personal-hero-stats.component';
 										<img class="icon" [src]="reward.imageUrl" />
 										<img
 											class="frame"
-											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+											src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
 										/>
 									</div>
 								</div>
@@ -303,12 +303,12 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 	buildHeroFrame(role: string, premium: 'normal' | 'golden' | 'diamond'): string {
 		switch (premium) {
 			case 'golden':
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`;
 			case 'diamond':
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png`;
 			case 'normal':
 			default:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`;
 		}
 	}
 

@@ -18,7 +18,7 @@ import { CollectionStorageService } from './collection-storage.service';
 import { PackStatsService } from './pack-stats.service';
 import { SetsService } from './sets-service.service';
 
-const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=4';
+const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json';
 
 @Injectable()
 export class CollectionManager {

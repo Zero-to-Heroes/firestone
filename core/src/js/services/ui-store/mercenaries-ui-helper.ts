@@ -183,7 +183,7 @@ export const buildMercenariesTasksList = (
 					taskChainProgress: visitor.TaskChainProgress,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
 					frameUrl: role
-						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`
 						: null,
 				} as Task;
 				return result;

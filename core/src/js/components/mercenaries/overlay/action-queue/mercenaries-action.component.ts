@@ -32,7 +32,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 				<div class="value">{{ speed }}</div>
 				<img
 					class="speed-icon"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png?v=2"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png"
 				/>
 			</div>
 			<div class="name">
@@ -50,14 +50,14 @@ export class MercenariesActionComponent {
 		this.actionOrder = (value as any).actionOrder;
 		this.cardId = value.abilityCardId;
 		this.ownerCardId = value.ownerCardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.abilityCardId}.jpg?v=4)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.abilityCardId}.jpg)`;
 		this.name = abilityCard.name;
 		this.speed = value.speed;
 		this.side = value.side;
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.ownerCardId}.jpg`;
 		this.frameUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${
 			abilityCard.mercenaryRole ?? 'neutral'
-		}.png?v=5`;
+		}.png`;
 	}
 
 	actionOrder: number;

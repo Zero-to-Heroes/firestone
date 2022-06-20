@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 				<img class="icon" [src]="heroIcon" />
 				<img
 					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png?v=3"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png"
 				/>
 				<div class="aspect-ratio"></div>
 			</div>

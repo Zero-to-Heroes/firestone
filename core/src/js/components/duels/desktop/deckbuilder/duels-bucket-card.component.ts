@@ -75,7 +75,7 @@ export class DuelsBucketCardComponent {
 		this.cardName = card.cardName;
 		this.manaCost = card.manaCost;
 		this.rarity = card.rarity;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=4)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
 		this.offeringRate = card.offeringRate?.toLocaleString(this.i18n.formatCurrentLocale(), {
 			maximumFractionDigits: 1,
 			minimumFractionDigits: 1,

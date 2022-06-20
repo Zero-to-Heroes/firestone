@@ -169,7 +169,7 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 					cardId: stat.cardId,
 					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${stat.cardId}.jpg`,
 					secondaryClassIcon: isNeutralHero
-						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png?v=2`
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png`
 						: null,
 				};
 			});

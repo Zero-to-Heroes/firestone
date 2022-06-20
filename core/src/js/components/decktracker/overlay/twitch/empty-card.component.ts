@@ -49,7 +49,7 @@ export class EmptyCardComponent {
 
 	@Input() set cardId(value: string) {
 		this._cardId = value;
-		// const imageUrl = `https://static.firestoneapp.com/cards/enUS/512/${value}.png?v=3`;
+		// const imageUrl = `https://static.firestoneapp.com/cards/enUS/512/${value}.png`;
 		// // Preload
 		// const image = new Image();
 		// image.onload = () => console.debug('[image-preloader] preloaded image', imageUrl);

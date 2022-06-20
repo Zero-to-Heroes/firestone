@@ -78,7 +78,7 @@ export class DuelsHeroStatVignetteComponent {
 			value.cardId.startsWith(CardIds.DrektharTavernBrawl);
 		this.name = isNeutralHero ? `${this.playerClassLoc} ${card?.name}` : card?.name;
 		this.secondaryClassIcon = isNeutralHero
-			? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png?v=2`
+			? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png`
 			: null;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.playerWinrate = value.playerWinrate;

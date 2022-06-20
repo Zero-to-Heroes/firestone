@@ -32,7 +32,7 @@ export class LocalizationStandaloneService {
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
 		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
-		return `${base}/${suffix}?v=2`;
+		return `${base}/${suffix}`;
 	}
 
 	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
@@ -41,7 +41,7 @@ export class LocalizationStandaloneService {
 		}
 		const base = `https://static.firestoneapp.com/cards`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
-		return `${base}/${suffix}?v=2`;
+		return `${base}/${suffix}`;
 	}
 
 	// Because each localization has its own file, we always get the info from the root

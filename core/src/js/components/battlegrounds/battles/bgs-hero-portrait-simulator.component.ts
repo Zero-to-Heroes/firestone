@@ -37,7 +37,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 					<img [src]="heroPowerIcon" class="image" *ngIf="!!heroPowerIcon" />
 					<div class="image empty-icon" *ngIf="!heroPowerIcon"></div>
 					<img
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_power_frame.png?v=3"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_power_frame.png"
 						class="frame"
 					/>
 				</div>

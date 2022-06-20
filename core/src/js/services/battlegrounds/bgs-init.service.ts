@@ -20,7 +20,7 @@ import { OverwolfService } from '../overwolf.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
-const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json?v=5';
+const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json';
 
 @Injectable()
 export class BgsInitService {

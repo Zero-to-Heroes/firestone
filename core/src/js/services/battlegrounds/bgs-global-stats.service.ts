@@ -5,7 +5,7 @@ import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { ApiRunner } from '../api-runner';
 
 // The light version doesn't have tribe filtering
-const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/bgs-global-stats-%suffix%.gz.json?v=13';
+const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/bgs-global-stats-%suffix%.gz.json';
 
 @Injectable()
 export class BgsGlobalStatsService {

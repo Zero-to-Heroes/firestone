@@ -49,7 +49,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					<img class="icon" [src]="portraitUrl" />
 					<img
 						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png"
 					/>
 					<div class="amount">{{ totalCoinsLeft }}</div>
 				</div>
@@ -64,7 +64,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					<img class="icon" [src]="portraitUrl" />
 					<img
 						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png"
 					/>
 					<div class="amount">{{ totalCoinsNeeded }}</div>
 				</div>
@@ -79,7 +79,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					<img class="icon" [src]="portraitUrl" />
 					<img
 						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png"
 					/>
 					<div class="amount">{{ totalCoinsToFarm }}</div>
 				</div>
@@ -100,7 +100,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						<img class="icon" [src]="ability.artUrl" />
 						<img
 							class="frame"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=5"
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
 						/>
 						<div class="speed">
 							<div class="value">{{ ability.speed }}</div>
@@ -108,7 +108,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						<div class="cooldown" *ngIf="!!ability.cooldown">
 							<img
 								class="cooldown-icon"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=5"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png"
 							/>
 							<div class="value">{{ ability.cooldown }}</div>
 						</div>
@@ -129,7 +129,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						<img class="icon" [src]="equipment.artUrl" />
 						<img
 							class="frame"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=5"
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
 						/>
 					</div>
 					<div class="tier" *ngIf="equipment.tier">
@@ -264,11 +264,11 @@ export class MercenariesPersonalHeroStatComponent {
 	buildHeroFrame(role: string, premium: number): string {
 		switch (premium) {
 			case 1:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`;
 			case 2:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png`;
 			case 0:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`;
 		}
 	}
 

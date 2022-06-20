@@ -119,7 +119,7 @@ export class SettingsGeneralThirdPartyComponent
 
 	vs = {
 		title: this.i18n.translateString('settings.general.third-party.vs.title'),
-		icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/vs.png?v=2`,
+		icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/vs.png`,
 		pitch: this.i18n.translateString('settings.general.third-party.vs.pitch', {
 			websiteLink: `<a href="https://www.vicioussyndicate.com" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.vs.website-link',
@@ -130,7 +130,7 @@ export class SettingsGeneralThirdPartyComponent
 	};
 	ooc = {
 		title: this.i18n.translateString('settings.general.third-party.ooc.title'),
-		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png?v=2',
+		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png',
 		pitch: this.i18n.translateString('settings.general.third-party.ooc.pitch', {
 			websiteLink: `<a href="https://outof.cards/hearthstone/" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.ooc.website-link',
@@ -141,7 +141,7 @@ export class SettingsGeneralThirdPartyComponent
 	};
 	d0nkey = {
 		title: this.i18n.translateString('settings.general.third-party.d0nkey.title'),
-		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png?v=2',
+		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png',
 		pitch: this.i18n.translateString('settings.general.third-party.d0nkey.pitch', {
 			websiteLink: `<a href="https://www.d0nkey.top" target="_blank">${this.i18n.translateString(
 				'settings.general.third-party.d0nkey.website-link',

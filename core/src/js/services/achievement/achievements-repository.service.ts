@@ -135,13 +135,13 @@ export class AchievementsRepository {
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
-		const config: any = await this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=12`);
+		const config: any = await this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/_configuration.json`);
 		const prefs = await this.prefs.getPreferences();
 		const fileNames: readonly string[] = config?.categories ?? [];
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
 			fileNames.map((fileName) => {
 				const locFileName = fileName === 'hearthstone_game' ? `hearthstone_game_${prefs.locale}` : fileName;
-				return this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${locFileName}.json?v=18`);
+				return this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${locFileName}.json`);
 			}),
 		)) as any;
 		return {

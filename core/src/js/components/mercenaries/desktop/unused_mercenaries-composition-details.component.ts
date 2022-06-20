@@ -180,7 +180,7 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 							portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
 							frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
 								this.allCards.getCard(cardId).mercenaryRole,
-							)}.png?v=2`,
+							)}.png`,
 						})),
 						globalTotalMatches: globalTotalMatches,
 						globalWinrate:

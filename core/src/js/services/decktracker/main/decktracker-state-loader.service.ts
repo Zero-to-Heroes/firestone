@@ -10,7 +10,7 @@ import { Preferences } from '../../../models/preferences';
 import { ApiRunner } from '../../api-runner';
 import { DecksStateBuilderService } from './decks-state-builder.service';
 
-const CONSTRUCTED_CONFIG_URL = 'https://static.firestoneapp.com/data/constructed-config.json?v=1';
+const CONSTRUCTED_CONFIG_URL = 'https://static.firestoneapp.com/data/constructed-config.json';
 
 @Injectable()
 export class DecktrackerStateLoaderService {

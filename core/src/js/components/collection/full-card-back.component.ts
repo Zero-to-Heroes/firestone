@@ -42,7 +42,7 @@ export class FullCardBackComponent extends AbstractSubscriptionComponent impleme
 		}
 		this._cardBack = {
 			...value,
-			image: `https://static.firestoneapp.com/cardbacks/512/${value.id}.png?v=2`,
+			image: `https://static.firestoneapp.com/cardbacks/512/${value.id}.png`,
 			// animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
 			animatedImage: null,
 		};

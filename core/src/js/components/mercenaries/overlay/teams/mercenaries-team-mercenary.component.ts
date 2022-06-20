@@ -53,11 +53,11 @@ export class MercenariesTeamMercenaryComponent {
 	@Input() set mercenary(value: BattleMercenary) {
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
 		this.mercCardId = value.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg?v=4)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg)`;
 		this.roleIcon =
 			!value.role || value.role === TagRole[TagRole.NEUTRAL] || value.role === TagRole[TagRole.INVALID]
 				? null
-				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
+				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png`;
 		this.name = value.cardId
 			? refMercenaryCard.name ?? this.i18n.translateString('mercenaries.team-widget.unrecognized-mercenary')
 			: this.i18n.translateString('mercenaries.team-widget.unknown-mercenary');
@@ -68,8 +68,8 @@ export class MercenariesTeamMercenaryComponent {
 				type: 'ability',
 				cardId: ability.cardId,
 				cardImage: ability.isTreasure
-					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
-					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
+					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png)`
+					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png)`,
 				name: abilityCard.name,
 				speed: ability.speed ?? abilityCard.cost,
 				cooldown: ability.cooldown ?? abilityCard.mercenaryAbilityCooldown,
@@ -84,7 +84,7 @@ export class MercenariesTeamMercenaryComponent {
 			? ({
 					type: 'equipment',
 					cardId: value.equipment.cardId,
-					cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_background.png?v=2)`,
+					cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_background.png)`,
 					name: this.allCards.getCard(value.equipment.cardId).name,
 			  } as Ability)
 			: null;

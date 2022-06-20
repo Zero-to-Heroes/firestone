@@ -27,7 +27,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 						src="{{
 							'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
 								card.cardId +
-								'.webm?v=3'
+								'.webm'
 						}}"
 						type="video/webm"
 					/>

@@ -167,8 +167,8 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponen
 					equipmentCardId: equipment?.equipmentCardId,
 					equipmentUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${equipment?.equipmentCardId}.jpg`,
 					frameUrl: role
-						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=2`
-						: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_neutral.png?v=3`,
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`
+						: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_neutral.png`,
 					role: role,
 				};
 			});
@@ -205,7 +205,7 @@ interface MercenaryHero {
 				<img class="icon" [src]="hero.equipmentUrl" />
 				<img
 					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
 				/>
 			</div>
 		</div>

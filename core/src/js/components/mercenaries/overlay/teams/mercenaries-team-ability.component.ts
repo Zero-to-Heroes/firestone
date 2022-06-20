@@ -24,14 +24,14 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 				<img class="icon" [src]="buildAbilityArtUrl(cardId)" />
 				<img
 					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
 				/>
 			</div>
 			<div class="equipment-item-icon" [cardTooltip]="cardId" *ngIf="type === 'equipment'">
 				<img class="icon" [src]="buildAbilityArtUrl(cardId)" />
 				<img
 					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
 				/>
 			</div>
 			<div
@@ -43,7 +43,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 				<div class="value">{{ speed }}</div>
 				<img
 					class="speed-icon"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png?v=2"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png"
 				/>
 			</div>
 			<div class="name">
@@ -56,7 +56,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			>
 				<img
 					class="cooldown-icon"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png"
 				/>
 				<div class="value">{{ cooldownLeft }}</div>
 			</div>

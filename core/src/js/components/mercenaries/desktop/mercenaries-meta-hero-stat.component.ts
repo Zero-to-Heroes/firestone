@@ -63,7 +63,7 @@ export class MercenariesMetaHeroStatComponent {
 		this.role = this.i18n.translateString(`global.role.${value.role}`);
 		this.name = value.name;
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
-		this.frameUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${value.role}.png?v=2`;
+		this.frameUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${value.role}.png`;
 		this.numberOfGamesTooltip = this.i18n.translateString('mercenaries.hero-stats.number-of-games-tooltip', {
 			totalMatches: value.globalTotalMatches.toLocaleString(),
 			popularity: this.buildPercents(value.globalPopularity),

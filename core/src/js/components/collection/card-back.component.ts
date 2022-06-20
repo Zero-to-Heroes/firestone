@@ -12,7 +12,7 @@ import { InternalCardBack } from './internal-card-back';
 			[helpTooltip]="_cardBack.name"
 		>
 			<div class="perspective-wrapper" rotateOnMouseOver>
-				<img [src]="_cardBack.image + '?v=3'" />
+				<img [src]="_cardBack.image + ''" />
 				<!-- <video
 					#videoPlayer
 					loop="loop"

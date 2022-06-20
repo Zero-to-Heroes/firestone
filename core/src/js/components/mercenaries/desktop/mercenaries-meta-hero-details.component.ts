@@ -79,7 +79,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							<img class="icon" [src]="buildEquipmentArtUrl(equipment.cardId)" />
 							<img
 								class="frame"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
 							/>
 						</div>
 						<!-- <div class="equipment-item-name">{{ equipment.name }}</div> -->
@@ -123,7 +123,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							<img class="icon" [src]="buildAbilityArtUrl(ability.cardId)" />
 							<img
 								class="frame"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
 							/>
 							<div class="speed">
 								<div class="value">{{ ability.speed }}</div>
@@ -131,7 +131,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							<div class="cooldown" *ngIf="!!ability.cooldown">
 								<img
 									class="cooldown-icon"
-									src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
+									src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png"
 								/>
 								<div class="value">{{ ability.cooldown }}</div>
 							</div>
@@ -426,7 +426,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 	}
 
 	buildPortraitFrameUrl(role: string): string {
-		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=2`;
+		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`;
 	}
 
 	buildEquipmentArtUrl(cardId: string): string {

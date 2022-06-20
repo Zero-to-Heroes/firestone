@@ -19,7 +19,7 @@ import { groupByFunction } from '../../services/utils';
 			<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
 				<source
 					src="{{
-						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + card.cardId + '.webm?v=2'
+						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + card.cardId + '.webm'
 					}}"
 					type="video/webm"
 				/>

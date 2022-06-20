@@ -29,7 +29,7 @@ export class PackHistoryItemComponent {
 			return;
 		}
 		const boosterId = pack.boosterId ?? getDefaultBoosterIdForSetId(pack.setId);
-		this.setIcon = `https://static.firestoneapp.com/cardPacks/256/${boosterId}.png?v=3`;
+		this.setIcon = `https://static.firestoneapp.com/cardPacks/256/${boosterId}.png`;
 		this.setName = boosterIdToBoosterName(boosterId, this.i18n);
 		this.dustValue = getPackDustValue(pack);
 		this.creationDate = new Date(pack.creationDate).toLocaleDateString(this.i18n.formatCurrentLocale(), {

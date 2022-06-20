@@ -36,7 +36,7 @@ export class AiDeckService {
 
 	private async getDeckNames(): Promise<readonly string[]> {
 		return new Promise<readonly string[]>((resolve) => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json?v=5`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
 				(result: any[]) => {
 					resolve(result);
 				},
@@ -50,7 +50,7 @@ export class AiDeckService {
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
 		return new Promise<readonly AiDeck[]>((resolve) => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=5`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json`).subscribe(
 				(result: any[]) => {
 					resolve(result);
 				},

@@ -53,15 +53,15 @@ import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-// const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json?v=20';
+// const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
 const DUELS_GLOBAL_STATS_URL_SPLIT =
-	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json?v=21';
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json';
 const DUELS_GLOBAL_STATS_DECKS =
-	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json?v=20';
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
-const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json?v=3';
-const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-buckets.gz.json?v=2';
+const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
+const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-buckets.gz.json';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -303,7 +303,7 @@ export class DuelsStateBuilderService {
 	}
 
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
-		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
+		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}`);
 		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
 		this.mainWindowStateUpdater.next(
 			new DuelsTopDeckRunDetailsLoadedEvent({

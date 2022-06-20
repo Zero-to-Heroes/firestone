@@ -27,7 +27,7 @@ import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';
 
-const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json?v=2`;
+const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json`;
 
 @Injectable()
 export class DeckParserService {

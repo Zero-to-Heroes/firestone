@@ -8,7 +8,7 @@ import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-catego
 import { ApiRunner } from '../api-runner';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=17';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json';
 
 @Injectable()
 export class MercenariesStateBuilderService {
@@ -17,7 +17,7 @@ export class MercenariesStateBuilderService {
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
 		const prefs = await this.prefs.getPreferences();
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
-			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json?v=15`,
+			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json`,
 		);
 		console.debug('[mercs] reference data', referenceData);
 		return referenceData;

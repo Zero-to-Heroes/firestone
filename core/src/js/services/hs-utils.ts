@@ -3,7 +3,10 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const CARDS_VERSION = '139963-1';
+// Don't specify anything by default, so that the "cache refresh" properly refreshes the data
+// (it is query-specific).
+// Only use a string in dev mode, otherwise rely on cache purge
+export const CARDS_VERSION = '';
 
 export const classes = [
 	'demonhunter',

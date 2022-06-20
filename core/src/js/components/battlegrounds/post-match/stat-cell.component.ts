@@ -36,7 +36,7 @@ declare let amplitude: any;
 				<img
 					*ngIf="heroIcon"
 					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroIcon)"
-					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg?v=3'"
+					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg'"
 					class="portrait"
 				/>
 			</div>
