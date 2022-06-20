@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CardIds, formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
+import { CardsFacadeService } from '../cards-facade.service';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
@@ -9,14 +10,20 @@ const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secr
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
 
-	constructor(private readonly http: HttpClient) {
+	constructor(private readonly http: HttpClient, private readonly allCards: CardsFacadeService) {
 		this.init();
 	}
 
 	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
-		// For now hardcode this
+		const mode: string = this.getMode(metadata);
+		const config = this.secretConfigs.find((conf) => conf.mode === mode);
+		if (!this.secretConfigs || this.secretConfigs.length === 0) {
+			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
+			return null;
+		}
+
 		if ([CardIds.BeaststalkerTavish].includes(creatorCardId as CardIds)) {
-			return [
+			const allTavishSecrets = [
 				CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
 				CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
 				CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
@@ -25,18 +32,14 @@ export class SecretConfigService {
 				CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
 				CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
 			];
+			return allTavishSecrets.filter((secret) =>
+				config.sets.includes(this.allCards.getCard(secret).set?.toLowerCase()),
+			);
 		}
 
-		if (!this.secretConfigs || this.secretConfigs.length === 0) {
-			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
-			return null;
-		}
-		const mode: string = this.getMode(metadata);
-		const config = this.secretConfigs.find((conf) => conf.mode === mode);
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
 			.map((secret) => secret.cardId);
-
 		return result;
 	}
 
@@ -102,6 +105,7 @@ export class SecretConfigService {
 
 interface SecretsConfig {
 	readonly mode: string;
+	readonly sets: readonly string[];
 	readonly secrets: readonly SecretConfig[];
 }
 
