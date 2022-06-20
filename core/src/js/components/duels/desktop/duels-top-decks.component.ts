@@ -73,7 +73,7 @@ export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implem
 	}
 
 	private *buildIterator(topDecks: readonly DuelsGroupedDecks[], step = 10): IterableIterator<void> {
-		this.allDecks = topDecks;
+		this.allDecks = topDecks ?? [];
 		const workingRuns = [...this.allDecks];
 		const minShownReplays = 30;
 		while (workingRuns.length > 0) {

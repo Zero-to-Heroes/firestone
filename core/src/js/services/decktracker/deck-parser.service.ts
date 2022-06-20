@@ -410,12 +410,12 @@ export class DeckParserService {
 		const fileName = 'Decks.log';
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!this.ow.gameRunning(gameInfo)) {
-			return null;
+			return [];
 		}
 		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
 		const logsContents = await this.ow.readTextFile(logsLocation);
 		if (!logsContents) {
-			return null;
+			return [];
 		}
 		const lines = logsContents
 			.split('\n')

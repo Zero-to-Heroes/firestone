@@ -67,7 +67,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
 		}
 
-		const isDormant = dbCard.mechanics.includes(GameTag[GameTag.DORMANT]);
+		const isDormant = dbCard.mechanics?.includes(GameTag[GameTag.DORMANT]);
 		if (isDormant) {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);

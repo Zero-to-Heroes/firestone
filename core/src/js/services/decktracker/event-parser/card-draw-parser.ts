@@ -43,7 +43,9 @@ export class CardDrawParser implements EventParser {
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
 		// the bottom of the deck
+		// If no cardId is provided, we use the entityId
 		const shouldUseEntityId =
+			!cardId ||
 			cardsWithMatchingCardId.length === 1 ||
 			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
 		if (!shouldUseEntityId) {
