@@ -56,7 +56,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	private relatedCardIds: readonly string[];
 
-	private _position: CardTooltipPositionType;
+	private _position: CardTooltipPositionType = 'auto';
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -164,7 +164,7 @@ export class CardTooltipDirective implements OnDestroy {
 					overlayY: 'bottom',
 				},
 			];
-		} else if (this._position === 'auto') {
+		} else if (this._position === 'auto' || !this._position) {
 			positions = [
 				{
 					originX: 'start',
