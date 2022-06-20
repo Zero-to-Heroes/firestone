@@ -79,7 +79,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.NeeruFireblade1,
 	CardIds.PrinceKeleseth,
 	CardIds.RadiantLightspawn,
-	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
 	CardIds.SkulkingGeist,
@@ -106,6 +105,7 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.ReductomaraToken,
 	CardIds.RenounceDarkness,
+	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest2,
 	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
