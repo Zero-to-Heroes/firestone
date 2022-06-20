@@ -286,7 +286,7 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.AmbassadorFaelin_ExpeditionPlans;
 		case CardIds.IniStormcoil5:
 			return CardIds.IniStormcoil_Mechgyver;
-		case CardIds.QueenAzshara3:
+		case CardIds.QueenAzshara4:
 			return CardIds.QueenAzshara_AzsharasAmbition;
 		case CardIds.Ozumat3:
 			return CardIds.Ozumat_Tentacular;
@@ -306,7 +306,7 @@ export const normalizeHeroCardId = (heroCardId: string, allCards: CardsFacadeSer
 		case 'TB_BaconShop_HERO_59t':
 			return 'TB_BaconShop_HERO_59';
 		case CardIds.QueenAzshara_NagaQueenAzsharaToken:
-			return CardIds.QueenAzshara3;
+			return CardIds.QueenAzshara4;
 		default:
 			return normalizedAfterSkin;
 	}
@@ -642,9 +642,9 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 379;
 		case CardIds.AmbassadorFaelin2:
 			return 394;
-		case CardIds.IniStormcoil2:
+		case CardIds.IniStormcoil5:
 			return 401;
-		case CardIds.QueenAzshara3:
+		case CardIds.QueenAzshara4:
 			return 406;
 		case CardIds.Ozumat3:
 			return 407;
@@ -817,7 +817,7 @@ export const getBuddy = (heroCardId: CardIds, allCards: CardsFacadeService): Car
 			return CardIds.ManyWhelpsBattlegrounds;
 		case CardIds.AmbassadorFaelin2:
 			return CardIds.SubmersibleChef;
-		case CardIds.IniStormcoil2:
+		case CardIds.IniStormcoil5:
 			return CardIds.SubScrubber;
 		default:
 			console.error('missing buddy section for ', heroCardId);
