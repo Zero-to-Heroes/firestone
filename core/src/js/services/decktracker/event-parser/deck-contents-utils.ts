@@ -39,7 +39,7 @@ export const modifyDeckForSpecialCards = (
 			return handleExploreUngoro(deckState, allCards, i18n);
 		case CardIds.HemetJungleHunter:
 			return handleHemet(deckState, allCards, i18n);
-		case CardIds.LadyPrestor1:
+		case CardIds.LadyPrestor_SW_078:
 			return handleLadyPrestor(deckState, allCards, i18n);
 		case CardIds.OopsAllSpellsTavernBrawl:
 			return handleOoopsAllSpells(deckState, allCards, i18n);
@@ -62,7 +62,7 @@ export const modifyDeckForSpecialCardEffects = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	switch (cardId) {
-		case CardIds.VanndarStormpike1:
+		case CardIds.VanndarStormpike_AV_223:
 			return handleVanndarStormpike(deckState, allCards, i18n);
 		default:
 			return deckState;
@@ -284,7 +284,7 @@ const handleLadyPrestor = (
 			card.update({
 				cardId: undefined,
 				cardName: i18n.getUnknownRaceName(i18n.translateString('global.tribe.dragon')),
-				creatorCardId: CardIds.LadyPrestor1,
+				creatorCardId: CardIds.LadyPrestor_SW_078,
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
 				cardType: 'Minion',

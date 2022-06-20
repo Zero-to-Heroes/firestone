@@ -7,7 +7,11 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsCardPlayedParser implements EventParser {
-	private static POGO_CARD_IDS = [CardIds.PogoHopper1, CardIds.PogoHopper2, CardIds.PogoHopperBattlegrounds];
+	private static POGO_CARD_IDS = [
+		CardIds.PogoHopper_BOT_283,
+		CardIds.PogoHopper_BGS_028,
+		CardIds.PogoHopperBattlegrounds,
+	];
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsCardPlayedEvent';

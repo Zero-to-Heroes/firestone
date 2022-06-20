@@ -27,17 +27,17 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.FreezingTrapLegacy,
 		CardIds.FreezingTrapCore,
 		CardIds.FreezingTrapVanilla,
-		CardIds.VenomstrikeTrap1,
+		CardIds.VenomstrikeTrap_ICC_200,
 		CardIds.WanderingMonster,
 		CardIds.FlameWard,
 		CardIds.IceBarrierLegacy,
 		CardIds.IceBarrierCore,
 		CardIds.IceBarrierVanilla,
 		CardIds.OasisAlly,
-		CardIds.SplittingImage1,
+		CardIds.SplittingImage_TRL_400,
 		CardIds.VaporizeLegacy,
 		CardIds.VaporizeVanilla,
-		CardIds.AutodefenseMatrix1,
+		CardIds.AutodefenseMatrix_BOT_908,
 		CardIds.NobleSacrificeCore,
 		CardIds.NobleSacrificeLegacy,
 		CardIds.NobleSacrificeVanilla,
@@ -140,7 +140,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
-			secretsWeCantRuleOut.push(CardIds.SplittingImage1);
+			secretsWeCantRuleOut.push(CardIds.SplittingImage_TRL_400);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeLegacy);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeCore);
@@ -166,10 +166,10 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedPackTacticsToken);
 			secretsWeCantRuleOut.push(CardIds.PackTactics);
-			secretsWeCantRuleOut.push(CardIds.VenomstrikeTrap1);
-			secretsWeCantRuleOut.push(CardIds.SplittingImage1);
+			secretsWeCantRuleOut.push(CardIds.VenomstrikeTrap_ICC_200);
+			secretsWeCantRuleOut.push(CardIds.SplittingImage_TRL_400);
 			secretsWeCantRuleOut.push(CardIds.OasisAlly);
-			secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix1);
+			secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix_BOT_908);
 			secretsWeCantRuleOut.push(CardIds.Bamboozle);
 			if (enemyBoard.length === 1) {
 				secretsWeCantRuleOut.push(CardIds.SuddenBetrayal);
@@ -193,7 +193,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
 			secretsWeCantRuleOut.push(CardIds.SuddenBetrayal);
 			if (isDefenderDivineShield) {
-				secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix1);
+				secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix_BOT_908);
 			}
 		}
 

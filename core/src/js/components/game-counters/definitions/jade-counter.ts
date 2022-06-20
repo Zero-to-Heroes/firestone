@@ -18,7 +18,7 @@ export class JadeCounterDefinition implements CounterDefinition {
 		}
 
 		const golemSize = deck.jadeGolemSize || 0;
-		const cardId = CardIds.JadeGolemToken1;
+		const cardId = CardIds.JadeGolemToken_CFM_712_t01;
 		return {
 			type: 'jadeGolem',
 			value: golemSize,

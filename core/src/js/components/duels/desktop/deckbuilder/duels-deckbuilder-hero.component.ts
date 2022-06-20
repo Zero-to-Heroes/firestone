@@ -82,10 +82,10 @@ export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionComponent
 			case CardIds.VanndarStormpikeTavernBrawl:
 			case CardIds.DrektharTavernBrawl:
 				return this.i18n.translateString('app.duels.deckbuilder.warning.neutral-hero');
-			case CardIds.BrannBronzebeardTavernBrawl5:
-			case CardIds.RenoJacksonTavernBrawl5:
-			case CardIds.EliseStarseekerTavernBrawl4:
-			case CardIds.SirFinleyTavernBrawl5:
+			case CardIds.BrannBronzebeardTavernBrawl_PVPDR_Hero_Brann:
+			case CardIds.RenoJacksonTavernBrawl_PVPDR_Hero_Reno:
+			case CardIds.EliseStarseekerTavernBrawl_PVPDR_Hero_Elise:
+			case CardIds.SirFinleyTavernBrawl_PVPDR_Hero_Finley:
 				return this.i18n.translateString('app.duels.deckbuilder.warning.loe-hero');
 		}
 	}

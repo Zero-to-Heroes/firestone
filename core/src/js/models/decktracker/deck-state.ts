@@ -27,7 +27,11 @@ export class DeckState {
 		CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 	];
 
-	private static readonly POGO_CARD_IDS = [CardIds.PogoHopper1, CardIds.PogoHopper2, CardIds.PogoHopperBattlegrounds];
+	private static readonly POGO_CARD_IDS = [
+		CardIds.PogoHopper_BOT_283,
+		CardIds.PogoHopper_BGS_028,
+		CardIds.PogoHopperBattlegrounds,
+	];
 
 	private static readonly HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
 
@@ -164,7 +168,7 @@ export class DeckState {
 			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId as CardIds))
 			.some(
 				(card) =>
-					card.cardId === CardIds.Cthun2 ||
+					card.cardId === CardIds.Cthun_OG_280 ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf("C'Thun") !== -1),
@@ -191,7 +195,7 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					card.cardId === CardIds.KargalBattlescar1 ||
+					card.cardId === CardIds.KargalBattlescar_BAR_077 ||
 					(lookAtWatchpostsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&

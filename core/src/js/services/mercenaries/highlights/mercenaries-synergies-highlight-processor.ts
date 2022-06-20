@@ -159,7 +159,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FamilyJusticeLettuce:
 		case CardIds.FamilyDefenseLettuce:
 			return (card: ReferenceCard) =>
-				[CardIds.CarielRoameLettuce1, CardIds.CorneliusRoameLettuce1].includes(
+				[CardIds.CarielRoameLettuce_LETL_020H_01, CardIds.CorneliusRoameLettuce_SWL_06H_01].includes(
 					normalizeMercenariesCardId(card.id) as CardIds,
 				);
 		case CardIds.FelBlast1Lettuce:
@@ -413,11 +413,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SearingStrike4Lettuce:
 		case CardIds.SearingStrike5Lettuce:
 			return fire;
-		case CardIds.Shadowflame1Lettuce1:
-		case CardIds.Shadowflame2Lettuce1:
-		case CardIds.Shadowflame3Lettuce1:
-		case CardIds.Shadowflame4Lettuce1:
-		case CardIds.Shadowflame5Lettuce1:
+		case CardIds.Shadowflame1Lettuce_LT22_011P3_01:
+		case CardIds.Shadowflame2Lettuce_LT22_011P3_02:
+		case CardIds.Shadowflame3Lettuce_LT22_011P3_03:
+		case CardIds.Shadowflame4Lettuce_LT22_011P3_04:
+		case CardIds.Shadowflame5Lettuce_LT22_011P3_05:
 			return dragon;
 		case CardIds.ShadowLance1Lettuce:
 		case CardIds.ShadowLance2Lettuce:

@@ -21,7 +21,7 @@ export class LibramCounterDefinition implements CounterDefinition {
 		return {
 			type: 'libram',
 			value: cardsPlayed,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.LibramOfWisdom1}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.LibramOfWisdom_BT_025}.jpg`,
 			cssClass: 'watchpost',
 			tooltip: i18n.translateString(`counters.libram.${side}`, { value: cardsPlayed }),
 			standardCounter: true,

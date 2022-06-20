@@ -76,8 +76,8 @@ export class CardDredgedParser implements EventParser {
 	private applyDredgerEffect(card: DeckCard): DeckCard {
 		const dredgerCardId = card.lastAffectedByCardId;
 		switch (dredgerCardId) {
-			case CardIds.ExcavationSpecialist1:
-			case CardIds.ExcavationSpecialist2:
+			case CardIds.ExcavationSpecialist_TSC_911:
+			case CardIds.ExcavationSpecialist_Story_11_ExcavationPuzzle:
 				return card.update({
 					actualManaCost: card.manaCost - 1,
 				});

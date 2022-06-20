@@ -29,7 +29,7 @@ export class BgsMajordomoCounterDefinition implements CounterDefinition {
 		return {
 			type: 'bgsMajordomo',
 			value: value,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MajordomoExecutus3}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.MajordomoExecutus_BGS_105}.jpg`,
 			cssClass: 'majordomo-counter',
 			tooltip: i18n.translateString(`counters.bgs-majordomo.${side}`, { value: value }),
 			standardCounter: true,

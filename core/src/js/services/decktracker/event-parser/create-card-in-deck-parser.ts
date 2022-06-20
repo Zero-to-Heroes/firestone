@@ -90,18 +90,18 @@ export class CreateCardInDeckParser implements EventParser {
 export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
 	switch (creatorCardId) {
 		// TODO: radar detector
-		case CardIds.AmbassadorFaelin1:
+		case CardIds.AmbassadorFaelin_TSC_067:
 		case CardIds.AzsharanDefector:
 		case CardIds.AzsharanGardens:
-		case CardIds.AzsharanMooncatcher1:
-		case CardIds.AzsharanMooncatcher2:
+		case CardIds.AzsharanMooncatcher_TSC_644:
+		case CardIds.AzsharanMooncatcher_Story_11_AzsharanMoonPuzzle:
 		case CardIds.AzsharanRitual:
 		case CardIds.AzsharanSaber:
 		case CardIds.AzsharanScavenger:
 		case CardIds.AzsharanScroll:
 		case CardIds.AzsharanSentinel:
-		case CardIds.AzsharanSweeper1:
-		case CardIds.AzsharanSweeper2:
+		case CardIds.AzsharanSweeper_TSC_776:
+		case CardIds.AzsharanSweeper_Story_11_AzsharanSweeper:
 		case CardIds.AzsharanTrident:
 		case CardIds.AzsharanVessel:
 		case CardIds.BootstrapSunkeneer: // TODO: not sure this belongs here in this parser

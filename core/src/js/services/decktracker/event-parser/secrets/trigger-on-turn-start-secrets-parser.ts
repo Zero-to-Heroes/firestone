@@ -8,7 +8,7 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnStartSecretsParser implements EventParser {
 	private secretsTriggeringOnTurnStart = [
-		CardIds.CompetitiveSpirit1,
+		CardIds.CompetitiveSpirit_AT_073,
 		CardIds.OpenTheCages,
 		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
 	];
@@ -33,7 +33,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
-			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit1);
+			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit_AT_073);
 		}
 
 		// Only triggers if board has between 2 and 6 minions

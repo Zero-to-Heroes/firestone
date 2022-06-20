@@ -54,32 +54,33 @@ export const getMercLevelFromExperience = (totalXp: number, referenceData: Merce
 export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeService): string => {
 	const fullName = allCards.getCard(cardId).name;
 	switch (cardId) {
-		case CardIds.CairneBloodhoofLettuce1:
-		case CardIds.CairneBloodhoofLettuce2:
-		case CardIds.CairneBloodhoofLettuce3:
-		case CardIds.JainaProudmooreLettuce1:
-		case CardIds.JainaProudmooreLettuce2:
-		case CardIds.JainaProudmooreLettuce3:
-		case CardIds.NatalieSelineLettuce1:
-		case CardIds.NatalieSelineLettuce2:
-		case CardIds.NatalieSelineLettuce3:
-		case CardIds.TavishStormpikeLettuce1:
-		case CardIds.TavishStormpikeLettuce2:
-		case CardIds.TavishStormpikeLettuce3:
-		case CardIds.VardenDawngraspLettuce1:
-		case CardIds.VardenDawngraspLettuce2:
-		case CardIds.VardenDawngraspLettuce3:
+		case CardIds.CairneBloodhoofLettuce_LETL_034H_01:
+		case CardIds.CairneBloodhoofLettuce_LETL_034H_02:
+		case CardIds.CairneBloodhoofLettuce_LETL_034H_03:
+		case CardIds.JainaProudmooreLettuce_SWL_25H_01:
+		case CardIds.JainaProudmooreLettuce_SWL_25H_02:
+		case CardIds.JainaProudmooreLettuce_SWL_25H_03:
+		case CardIds.NatalieSelineLettuce_LETL_011H_01:
+		case CardIds.NatalieSelineLettuce_LETL_011H_02:
+		case CardIds.NatalieSelineLettuce_LETL_011H_03:
+		case CardIds.TavishStormpikeLettuce_LETL_039H_01:
+		case CardIds.TavishStormpikeLettuce_LETL_039H_02:
+		case CardIds.TavishStormpikeLettuce_LETL_039H_03:
+		case CardIds.TavishStormpikeLettuce_LETL_039H_04:
+		case CardIds.VardenDawngraspLettuce_LETL_017H_01:
+		case CardIds.VardenDawngraspLettuce_LETL_017H_02:
+		case CardIds.VardenDawngraspLettuce_LETL_017H_03:
 			return fullName.split(' ').shift();
-		case CardIds.BlademasterSamuroLettuce1:
-		case CardIds.BlademasterSamuroLettuce2:
-		case CardIds.BlademasterSamuroLettuce3:
-		case CardIds.WarMasterVooneLettuce1:
-		case CardIds.WarMasterVooneLettuce2:
-		case CardIds.WarMasterVooneLettuce3:
+		case CardIds.BlademasterSamuroLettuce_BARL_024H_01:
+		case CardIds.BlademasterSamuroLettuce_BARL_024H_02:
+		case CardIds.BlademasterSamuroLettuce_BARL_024H_03:
+		case CardIds.WarMasterVooneLettuce_BARL_009H_01:
+		case CardIds.WarMasterVooneLettuce_BARL_009H_02:
+		case CardIds.WarMasterVooneLettuce_BARL_009H_03:
 			return fullName.split(' ').pop();
-		case CardIds.TheLichKingLettuce1:
-		case CardIds.TheLichKingLettuce2:
-		case CardIds.TheLichKingLettuce3:
+		case CardIds.TheLichKingLettuce_LETL_041H_01:
+		case CardIds.TheLichKingLettuce_LETL_041H_02:
+		case CardIds.TheLichKingLettuce_LETL_041H_03:
 			return 'Lich King';
 		default:
 			return fullName;
@@ -141,8 +142,8 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.CasterHasteLettuceEnchantment,
 	CardIds.DreadbladesLettuceEnchantment,
 	CardIds.ElunesGraceLettuceEnchantment,
-	CardIds.EnduranceAuraLettuceEnchantment2, // 1 is the taunt
-	CardIds.EnduranceAuraLettuceEnchantment3,
+	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
+	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e3,
 	CardIds.FanOfKnivesLettuceEnchantment, // Check that it's the correct card ID
 	CardIds.FighterHasteLettuceEnchantment,
 	CardIds.HammerOfJusticeLettuceEnchantment,
@@ -151,7 +152,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.ManaBlinkLettuceEnchantment,
 	CardIds.ProtectorHasteLettuceEnchantment,
 	CardIds.RingOfHasteLettuceEnchantment,
-	CardIds.SlipperyWhenWetLettuceEnchantment2,
+	CardIds.SlipperyWhenWetLettuceEnchantment_LT23_024E2e2,
 	CardIds.StringOfFateLettuceEnchantment,
 	CardIds.UnnaturalSmokeLettuceEnchantment,
 ];

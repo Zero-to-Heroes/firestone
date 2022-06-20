@@ -71,7 +71,9 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 		return zone
 			.filter((card) => card.cardId)
 			.some((card) =>
-				[CardIds.MajordomoExecutus3, CardIds.MajordomoExecutusBattlegrounds].includes(card.cardId as CardIds),
+				[CardIds.MajordomoExecutus_BGS_105, CardIds.MajordomoExecutusBattlegrounds].includes(
+					card.cardId as CardIds,
+				),
 			);
 	}
 }
