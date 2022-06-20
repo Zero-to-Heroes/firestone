@@ -39,8 +39,20 @@ export class CollectionManager {
 		this.init();
 	}
 
+	private lastCollectionRetrieveTimestamp = 0;
+	private DEBOUNCE_COLLECTION_RETRIEVE_MS = 5000;
+
 	public async getCollection(skipMemoryReading = false): Promise<readonly Card[]> {
-		console.log('[collection-manager] getting collection', skipMemoryReading);
+		console.log(
+			'[collection-manager] getting collection',
+			skipMemoryReading,
+			Date.now() - this.lastCollectionRetrieveTimestamp,
+		);
+		// So that we don't spam the memory reading when opening packs (where you can 5 new card events pretty quickly)
+		skipMemoryReading =
+			skipMemoryReading ||
+			Date.now() - this.lastCollectionRetrieveTimestamp < this.DEBOUNCE_COLLECTION_RETRIEVE_MS;
+		console.log('[collection-manager] skipMemoryReading', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
 		console.debug('[collection-manager] got collection', collection);
 		if (!collection || collection.length === 0) {
@@ -51,6 +63,7 @@ export class CollectionManager {
 		} else {
 			console.log('[collection-manager] retrieved collection from MindVision, updating collection in db');
 			const savedCollection = await this.db.saveCollection(collection);
+			this.lastCollectionRetrieveTimestamp = Date.now();
 			return savedCollection;
 		}
 	}
