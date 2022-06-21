@@ -110,6 +110,14 @@ export class CardTooltipDirective implements OnDestroy {
 				overlayY: 'top',
 			},
 		];
+		if (this._position === 'auto') {
+			//console.debug('position auto, updating');
+			const windowWidth = window.innerWidth;
+			const elementRect = this.elementRef.nativeElement.getBoundingClientRect();
+			this._position = elementRect.x < windowWidth / 2 ? 'right' : 'left';
+			//console.debug('new position', this._position, windowWidth, elementRect);
+		}
+
 		if (this._position === 'left') {
 			positions = [
 				{
@@ -164,21 +172,6 @@ export class CardTooltipDirective implements OnDestroy {
 					overlayY: 'bottom',
 				},
 			];
-		} else if (this._position === 'auto' || !this._position) {
-			positions = [
-				{
-					originX: 'start',
-					originY: 'center',
-					overlayX: 'end',
-					overlayY: 'center',
-				},
-				{
-					originX: 'end',
-					originY: 'center',
-					overlayX: 'start',
-					overlayY: 'center',
-				},
-			];
 		}
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
@@ -201,6 +194,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		//console.debug('mouseenter', this.positionStrategy, this._position);
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
@@ -216,6 +210,8 @@ export class CardTooltipDirective implements OnDestroy {
 			this.updatePositionStrategy();
 			this.positionStrategyDirty = false;
 		}
+
+		//console.debug('after updating position', this.positionStrategy, this._position);
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
