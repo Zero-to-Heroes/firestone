@@ -1,7 +1,9 @@
 :host() {
 	display: flex;
 	flex-direction: column;
-	height: auto;
+	// height: auto;
+	// We force the height so that we avoid flickering
+	height: 400px;
 }
 
 .container {
@@ -78,6 +80,8 @@
 	// So that the tooltip positioning manages to properly center it
 	height: 290px;
 	z-index: 9;
+	min-height: 290px;
+	flex-shrink: 0;
 
 	.card {
 		width: 220px;

@@ -22,7 +22,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@Input() set componentType(value: ComponentType<any>) {
 		this._componentType = value;
-
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();
 		}
@@ -30,7 +29,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@Input() set componentInput(value: any) {
 		this._componentInput = value;
-
 		if (value && value !== this._componentInput) {
 			this.updatePositionStrategy();
 		}
@@ -126,6 +124,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		// console.log('mouseenter', this._componentInput);
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
@@ -154,6 +153,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
+		// console.log('mouseleave', this._componentInput, new Error().stack);
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}

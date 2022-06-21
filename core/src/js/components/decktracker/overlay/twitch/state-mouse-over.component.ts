@@ -22,7 +22,10 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 	],
 	template: `
 		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
-			<ul class="bgs-leaderboard" *ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded">
+			<ul
+				class="bgs-leaderboard"
+				*ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded && bgsPlayers.length === 8"
+			>
 				<leaderboard-empty-card
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByLeaderboard"
 					[bgsPlayer]="bgsPlayer"
@@ -30,7 +33,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 					[showLiveInfo]="showLiveInfo$ | async"
 				>
 				</leaderboard-empty-card>
-				<div class="players-recap-icon" *ngIf="bgsPlayers.length === 8">
+				<div class="players-recap-icon">
 					<svg
 						class="svg-icon-fill icon"
 						(mouseenter)="toggleLiveInfo(true)"
@@ -162,6 +165,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	}
 
 	toggleLiveInfo(value: boolean) {
+		// console.log('toggling live info', value);
 		this.showLiveInfo.next(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

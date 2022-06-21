@@ -91,15 +91,12 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
-		console.debug('constructor');
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
 		from(this.prefs.prefs.asObservable())
 			.pipe(this.mapData((prefs) => prefs?.heroBoardScale))
 			.subscribe((scale) => {
-				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
 				const element = this.el.nativeElement.querySelector('.scalable');
 				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-				console.log('updated scale', scale);
 			});
 	}
 }
