@@ -55,6 +55,12 @@ export class CollectionManager {
 		console.log('[collection-manager] skipMemoryReading', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
 		console.debug('[collection-manager] got collection', collection);
+		// For debug purposes, can be removed later on
+		console.log(
+			'[collection-manager] golem in collection',
+			collection?.find((c) => c.id === 'SW_097'),
+			collection?.find((c) => c.id === 'Story_11_RemoteControlPuzzle'),
+		);
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();

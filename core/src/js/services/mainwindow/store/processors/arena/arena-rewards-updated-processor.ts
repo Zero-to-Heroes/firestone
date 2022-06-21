@@ -15,7 +15,7 @@ export class ArenaRewardsUpdatedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('processing arena rewards event', event);
 		const runId = event.rewards.runId;
-		if (currentState.arena.rewards.some((reward) => reward.runId === runId)) {
+		if (currentState.arena.rewards?.some((reward) => reward.runId === runId)) {
 			console.log('rewards have already been added', runId);
 			return [null, null];
 		}
