@@ -50,6 +50,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<decktracker-opponent-widget-wrapper></decktracker-opponent-widget-wrapper>
 			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
 			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
+			<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
 
 			<!-- Duels -->
 			<duels-decktracker-ooc-widget-wrapper></duels-decktracker-ooc-widget-wrapper>

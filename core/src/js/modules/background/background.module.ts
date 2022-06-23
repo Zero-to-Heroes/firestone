@@ -357,6 +357,11 @@ import { OpponentCardInfosComponent } from '../../components/overlays/opponentha
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
 import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/secrets-helper-widget-wrapper.component';
+import { TurnTimerWidgetWrapperComponent } from '../../components/overlays/turn-timer-widget-wrapper.component';
+import {
+	TurnTimerPlayerComponent,
+	TurnTimerWidgetComponent,
+} from '../../components/overlays/turntimer/turn-timer-widget.component';
 import { FullScreenOverlaysClickthroughComponent } from '../../components/overlays/_full-screen-overlays-clickthrough.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
@@ -393,6 +398,7 @@ import { SettingsDecktrackerGlobalComponent } from '../../components/settings/de
 import { SettingsDecktrackerLaunchComponent } from '../../components/settings/decktracker/settings-decktracker-launch';
 import { SettingsDecktrackerMenuComponent } from '../../components/settings/decktracker/settings-decktracker-menu.component';
 import { SettingsDecktrackerOpponentDeckComponent } from '../../components/settings/decktracker/settings-decktracker-opponent-deck';
+import { SettingsDecktrackerTurnTimerComponent } from '../../components/settings/decktracker/settings-decktracker-turn-timer.component';
 import { SettingsDecktrackerYourDeckComponent } from '../../components/settings/decktracker/settings-decktracker-your-deck';
 import { SettingsDecktrackerComponent } from '../../components/settings/decktracker/settings-decktracker.component';
 import { LocalizationDropdownComponent } from '../../components/settings/general/localization-dropdown.component';
@@ -636,6 +642,8 @@ const components = [
 		// ConstructedMenuSelectionComponent,
 
 		CurrentSessionWidgetComponent,
+		TurnTimerWidgetComponent,
+		TurnTimerPlayerComponent,
 		DuelsMaxLifeWidgetComponent,
 
 		GenericCountersComponent,
@@ -887,6 +895,7 @@ const components = [
 		ConstructedBoardWidgetWrapperComponent,
 		PlayerHeroPowerWidgetWrapperComponent,
 		CurrentSessionWidgetWrapperComponent,
+		TurnTimerWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		HeroPowerOverlayComponent,
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
@@ -988,6 +997,7 @@ const components = [
 		SettingsBroadcastComponent,
 		SettingsDecktrackerBetaComponent,
 		SettingsDecktrackerDuelsComponent,
+		SettingsDecktrackerTurnTimerComponent,
 
 		SettingsReplaysComponent,
 		SettingsReplaysGeneralComponent,

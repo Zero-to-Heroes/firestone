@@ -98,6 +98,8 @@ export class DeckState {
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
+	readonly turnTimings: readonly TurnTiming[] = [];
+	readonly turnDuration: number;
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);
@@ -269,4 +271,10 @@ export class DeckState {
 
 		return battlecryCards[0];
 	}
+}
+
+export interface TurnTiming {
+	readonly turn: number;
+	readonly startTimestamp: number;
+	readonly endTimestamp: number;
 }

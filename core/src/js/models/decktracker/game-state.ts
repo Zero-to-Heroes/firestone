@@ -19,6 +19,7 @@ export class GameState {
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
 	readonly gameStarted: boolean;
+	readonly matchStartTimestamp: number;
 	readonly gameEnded: boolean;
 	readonly spectating: boolean;
 	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];

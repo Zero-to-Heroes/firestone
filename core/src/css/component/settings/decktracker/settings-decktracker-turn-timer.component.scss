@@ -1,0 +1,21 @@
+.decktracker-appearance {
+	padding-left: 15px;
+	padding-right: 15px;
+	min-height: 0;
+	overflow: auto;
+	height: 100%;
+
+	::ng-deep preference-toggle .preference-toggle label p {
+		width: 260px;
+		font-size: 13px;
+	}
+
+	::ng-deep preference-toggle.disabled .preference-toggle {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+
+	preference-slider {
+		margin-left: 15px;
+	}
+}

@@ -73,16 +73,24 @@ export class Preferences {
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
 	readonly showCurrentSessionWidgetBgs: boolean = false;
+	readonly showTurnTimer: boolean = true;
+	readonly showTurnTimerMatchLength: boolean = true;
 	readonly currentSessionStartDate: Date = null;
 	readonly sessionWidgetShowGroup: boolean = true;
 	readonly sessionWidgetShowMatches: boolean = true;
 	readonly sessionWidgetNumberOfMatchesToShow: number = 5;
-	readonly sessionWidgetScale: number = 100;
 	readonly sessionWidgetOpacity: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly currentSessionWidgetScale: number = 100;
+	readonly sessionWidgetScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly currentSessionWidgetPosition: { left: number; top: number };
+	readonly turnTimerWidgetOpacity: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly turnTimerWidgetScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly turnTimerWidgetWidth: number = 175;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly turnTimerWidgetPosition: { left: number; top: number };
 
 	readonly achievementsEnabled2 = false;
 	readonly achievementsLiveTracking2: boolean = false;

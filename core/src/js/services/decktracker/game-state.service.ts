@@ -108,6 +108,7 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
+import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
@@ -536,6 +537,7 @@ export class GameStateService {
 			new CopiedFromEntityIdParser(this.helper, this.i18n),
 			new ShuffleDeckParser(),
 			new EntityChosenParser(this.helper),
+			new TurnDurationUpdatedParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

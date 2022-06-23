@@ -1,0 +1,119 @@
+.turn-timer-widget {
+	display: flex;
+	flex-direction: column;
+	width: 150px;
+	color: var(--color-2);
+	text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+		-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+	font-family: 'Open Sans';
+	font-size: 13px;
+	padding: 5px 10px;
+
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+
+		// background-image: radial-gradient(44.58% 50% at 50% 50%, rgb(48 35 128) 0%, rgb(24 24 43) 100%),
+		//     url(/Files/assets/images/backgrounds/decktracker_bg.png),
+		//     url('/Files/assets/images/backgrounds/decktracker_bg.png');
+		// background-image: url(/Files/assets/images/backgrounds/decktracker_bg.png);
+		background: var(--color-7);
+	}
+
+	.match-length {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 5px;
+		color: var(--color-1);
+
+		// So that the global timer is hidden if the widget is too small
+		flex-wrap: wrap;
+		overflow: hidden;
+		height: 20px;
+
+		.current-turn {
+			margin-right: 15px;
+		}
+	}
+
+	.players {
+		display: flex;
+		justify-content: space-between;
+
+		.player {
+			width: calc(50% - 10px);
+			flex-shrink: 0;
+			flex-grow: 0;
+		}
+	}
+
+	.close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		display: none;
+	}
+
+	&:hover {
+		.close-button {
+			display: flex;
+		}
+	}
+}
+
+.player-timer {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+
+	&.active {
+		color: var(--color-1);
+	}
+
+	.player-name {
+		max-width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+
+	.turn-length {
+		height: 30px;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&.current {
+			flex-direction: column;
+		}
+	}
+
+	.turn-fuse {
+		height: 2px;
+		width: 100%;
+		max-width: 100%;
+		position: relative;
+		margin-top: 2px;
+
+		.background {
+			height: 100%;
+			width: 100%;
+			background-color: var(--color-3);
+		}
+
+		.fuse {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background-color: var(--default-title-color);
+			max-width: 100%;
+		}
+	}
+}

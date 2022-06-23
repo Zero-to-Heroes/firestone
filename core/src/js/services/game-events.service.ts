@@ -142,6 +142,7 @@ export class GameEvents {
 					type: GameEvent.GAME_START,
 					additionalData: {
 						spectating: gameEvent.Value?.Spectating,
+						timestamp: gameEvent.Value?.Timestamp,
 					},
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
@@ -262,6 +263,9 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MAIN_STEP_READY,
+						additionalData: {
+							timestamp: gameEvent.Value?.Timestamp,
+						},
 					} as GameEvent),
 				);
 				break;
@@ -392,6 +396,13 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+					}),
+				);
+				break;
+			case 'TURN_DURATION_UPDATED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.TURN_DURATION_UPDATED, gameEvent, {
+						newDuration: gameEvent.Value.AdditionalProps?.NewDuration,
 					}),
 				);
 				break;
@@ -904,6 +915,7 @@ export class GameEvents {
 						additionalData: {
 							// Legacy, to avoid regenerating all the tests
 							turnNumber: gameEvent.Value.Turn || gameEvent.Value,
+							timestamp: gameEvent.Value.Timestamp,
 						},
 					} as GameEvent),
 				);
