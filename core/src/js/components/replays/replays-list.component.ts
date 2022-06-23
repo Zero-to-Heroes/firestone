@@ -87,7 +87,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 				([main, nav]) => main.replays.allReplays,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
-				([main, nav, prefs]) => prefs.replaysActiveDeckstringFilter,
+				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
 				([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
 				([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
 			)
@@ -98,7 +98,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 						gameStats,
 						gameModeFilter,
 						bgHeroFilter,
-						deckstringFilter,
+						deckstringsFilter,
 						playerClassFilter,
 						opponentClassFilter,
 					]) => {
@@ -106,7 +106,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 							gameStats ?? [],
 							gameModeFilter,
 							bgHeroFilter,
-							deckstringFilter,
+							deckstringsFilter,
 							playerClassFilter,
 							opponentClassFilter,
 						);
@@ -127,7 +127,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		replays: readonly GameStat[],
 		gameModeFilter: string,
 		bgHeroFilter: string,
-		deckstringFilter: string,
+		deckstringsFilter: readonly string[],
 		playerClassFilter: string,
 		opponentClassFilter: string,
 	): readonly GameStat[] {
@@ -135,7 +135,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 			.filter((replay) => this.gameModeFilter(replay, gameModeFilter))
 			.filter((replay) => this.bgHeroFilter(replay, bgHeroFilter))
 			.filter((replay) =>
-				!gameModeFilter || gameModeFilter === 'all' ? true : this.deckstringFilter(replay, deckstringFilter),
+				!gameModeFilter || gameModeFilter === 'all' ? true : this.deckstringFilter(replay, deckstringsFilter),
 			)
 			.filter((replay) => this.playerClassFilter(replay, playerClassFilter))
 			.filter((replay) => this.opponentClassFilter(replay, opponentClassFilter));
@@ -157,12 +157,12 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		return !filter || stat.opponentClass === filter;
 	}
 
-	private deckstringFilter(stat: GameStat, filter: string): boolean {
+	private deckstringFilter(stat: GameStat, filter: readonly string[]): boolean {
 		if (stat.gameMode !== 'ranked') {
 			return true;
 		}
 
-		return !filter || stat.playerDecklist === filter;
+		return !filter?.length || filter.includes(stat.playerDecklist);
 	}
 
 	private bgHeroFilter(stat: GameStat, filter: string): boolean {

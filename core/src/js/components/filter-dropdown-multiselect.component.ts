@@ -47,7 +47,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							[value]="option.selected"
 							(valueChanged)="select(option, $event)"
 						></checkbox>
-						<img class="icon" [src]="option.image" />
+						<img class="icon" [src]="option.image" [helpTooltip]="option.tooltip" />
 					</div>
 				</div>
 				<div class="controls">
@@ -243,6 +243,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 export interface MultiselectOption extends IOption {
 	readonly image: string;
+	readonly tooltip?: string;
 }
 
 interface InternalOption extends MultiselectOption {

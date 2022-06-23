@@ -16,7 +16,7 @@ export class ShowReplaysProcessor implements Processor {
 		const prefs = await this.prefs.getPreferences();
 		this.prefs.savePreferences({
 			...prefs,
-			replaysActiveDeckstringFilter: event.deckstring,
+			replaysActiveDeckstringsFilter: [event.deckstring],
 			replaysActiveGameModeFilter: event.gameMode,
 		});
 		return [
