@@ -51,12 +51,14 @@ export class ReplaysDeckstringFilterDropdownComponent
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,
+				([main, nav]) => nav.currentApp,
+				([main, nav]) => nav.navigationDecktracker.currentView,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
 			)
 			.pipe(
-				filter(([decks, gameModeFilter, deckstringFilter]) => !!decks),
-				this.mapData(([decks, gameModeFilter, deckstringFilter]) => {
+				filter(([decks, currentApp, currentView, gameModeFilter, deckstringFilter]) => !!decks),
+				this.mapData(([decks, currentApp, currentView, gameModeFilter, deckstringFilter]) => {
 					const options: readonly MultiselectOption[] = [...decks]
 						.sort(sortByProperties((deck: DeckSummary) => [-deck.lastUsedTimestamp]))
 						.map(
@@ -83,9 +85,12 @@ export class ReplaysDeckstringFilterDropdownComponent
 						options: options,
 						selected: deckstringFilter,
 						placeholder: this.i18n.translateString('app.replays.filters.deck.all'),
-						visible: ['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(
-							gameModeFilter,
-						),
+						visible:
+							(currentApp === 'replays' &&
+								['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(
+									gameModeFilter,
+								)) ||
+							(currentApp === 'decktracker' && currentView === 'ladder-stats'),
 					};
 				}),
 			);

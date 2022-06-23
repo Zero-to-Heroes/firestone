@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -38,23 +38,21 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 	}
 
 	ngAfterContentInit() {
-		this.replays$ = this.store
-			.listen$(
+		this.replays$ = combineLatest(
+			this.store.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
-			)
-			.pipe(
-				this.mapData(([decks, selectedDeckstring]) =>
-					((decks?.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []) as GameStat[]) ?? [])
-						.filter((stat) => (selectedDeckstring ? stat.playerDecklist === selectedDeckstring : true))
-						.sort((a: GameStat, b: GameStat) => {
-							if (a.creationTimestamp <= b.creationTimestamp) {
-								return 1;
-							}
-							return -1;
-						})
-						.slice(0, 20),
-				),
-			);
+			),
+			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
+		).pipe(
+			this.mapData(([[decks, selectedDeckstring], [deckstringsFilter]]) =>
+				decks
+					.filter((deck) => (selectedDeckstring ? deck.deckstring === selectedDeckstring : true))
+					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
+					.flatMap((deck) => deck.replays)
+					.sort((a: GameStat, b: GameStat) => (a.creationTimestamp <= b.creationTimestamp ? 1 : -1))
+					.slice(0, 20),
+			),
+		);
 	}
 }

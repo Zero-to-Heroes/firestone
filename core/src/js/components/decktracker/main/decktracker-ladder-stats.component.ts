@@ -1,5 +1,5 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -56,9 +56,17 @@ export class DecktrackerLadderStatsComponent
 	}
 
 	ngAfterContentInit() {
-		this.replays$ = this.store
-			.listen$(([main, nav, prefs]) => main.decktracker.decks)
-			.pipe(this.mapData(([decks]) => decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), [])));
+		this.replays$ = combineLatest(
+			this.store.listen$(([main, nav, prefs]) => main.decktracker.decks),
+			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
+		).pipe(
+			this.mapData(([[decks], [deckstringsFilter]]) =>
+				decks
+					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
+					.map((deck) => deck.replays)
+					.reduce((a, b) => a.concat(b), []),
+			),
+		);
 		this.playerPieChartData$ = this.replays$.pipe(this.mapData((replays) => this.buildPlayerPieChartData(replays)));
 		this.opponentPieChartData$ = this.replays$.pipe(
 			this.mapData((replays) => this.buildOpponentPieChartData(replays)),
