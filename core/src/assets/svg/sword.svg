@@ -1,0 +1,7 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<path d="M11.3162 16.0522L8.94792 13.6839L18.2238 4.40806L21.1842 3.81599L20.5921 6.77637L11.3162 16.0522Z" fill="var(--icon-color, currentcolor)"/>
+	<path d="M13.6496 18.7805L6.18769 11.3185C5.96969 11.1005 5.61625 11.1005 5.39825 11.3185C5.18026 11.5365 5.18026 11.89 5.39825 12.108L12.8602 19.5699C13.0782 19.7879 13.4316 19.7879 13.6496 19.5699C13.8676 19.3519 13.8676 18.9985 13.6496 18.7805Z" fill="var(--icon-color, currentcolor)"/>
+	<path d="M9.50757 16.613L8.35352 15.459L4.99842 18.8141L6.15248 19.9681L9.50757 16.613Z" fill="var(--icon-color, currentcolor)"/>
+	<rect x="4.60547" y="18.1484" width="3.01698" height="1.31579" transform="rotate(45 4.60547 18.1484)" fill="var(--icon-color, currentcolor)"/>
+</svg>

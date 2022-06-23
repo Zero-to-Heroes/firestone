@@ -5,3 +5,5 @@ export type DecktrackerViewType =
 	| 'replays'
 	| 'deck-details'
 	| 'constructed-deckbuilder';
+
+export type ConstructedStatsTab = 'overview' | 'matchups';

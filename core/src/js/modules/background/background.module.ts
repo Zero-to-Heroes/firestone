@@ -199,6 +199,8 @@ import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/ma
 import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main/decktracker-deck-recap.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
+import { DecktrackerLadderStatsMatchupsComponent } from '../../components/decktracker/main/decktracker-ladder-stats-matchups.component';
+import { DecktrackerLadderStatsOverviewComponent } from '../../components/decktracker/main/decktracker-ladder-stats-overview.component';
 import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerRatingGraphComponent } from '../../components/decktracker/main/decktracker-rating-graph.component';
@@ -719,6 +721,8 @@ const components = [
 		DecktrackerReplaysRecapComponent,
 		DecktrackerPersonalStatsRankingComponent,
 		DecktrackerLadderStatsComponent,
+		DecktrackerLadderStatsOverviewComponent,
+		DecktrackerLadderStatsMatchupsComponent,
 		DecktrackerStatsForReplaysComponent,
 		MenuSelectionDecktrackerComponent,
 		DecktrackerRatingGraphComponent,

@@ -1,11 +1,9 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ConstructedStatsTab } from '../../../models/mainwindow/decktracker/decktracker-view.type';
+import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
-import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
 	selector: 'decktracker-ladder-stats',
@@ -14,100 +12,49 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 		`../../../../css/component/decktracker/main/decktracker-ladder-stats.component.scss`,
 	],
 	template: `
-		<div class="decktracker-ladder-stats">
-			<decktracker-stats-for-replays [replays]="replays$ | async"></decktracker-stats-for-replays>
-			<div class="graphs">
-				<div class="graph player-popularity">
-					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-player'"></div>
-					<pie-chart
-						class="chart player-popularity-chart "
-						[data]="playerPieChartData$ | async"
-						[options]="pieChartOptions"
-					></pie-chart>
-				</div>
-				<div class="graph opponents-popularity">
-					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-opponent'"></div>
-					<pie-chart
-						class="chart opponents-popularity-chart"
-						[data]="opponentPieChartData$ | async"
-						[options]="pieChartOptions"
-					></pie-chart>
-				</div>
-			</div>
+		<div class="decktracker-ladder-stats" *ngIf="selectedTab$ | async as selectedTab">
+			<nav class="menu-selection">
+				<button
+					[attr.tabindex]="0"
+					type="button"
+					class="menu-item overview"
+					[attr.aria-label]="'app.decktracker.ladder-stats.tab-selection.overview' | owTranslate"
+					[helpTooltip]="'app.decktracker.ladder-stats.tab-selection.overview' | owTranslate"
+					inlineSVG="assets/svg/created_by.svg"
+					[ngClass]="{ 'selected': selectedTab === 'overview' }"
+					(click)="selectTab('overview')"
+				></button>
+				<button
+					[attr.tabindex]="0"
+					type="button"
+					class="menu-item matchups"
+					[attr.aria-label]="'app.decktracker.ladder-stats.tab-selection.matchups' | owTranslate"
+					[helpTooltip]="'app.decktracker.ladder-stats.tab-selection.matchups' | owTranslate"
+					inlineSVG="assets/svg/sword.svg"
+					[ngClass]="{ 'selected': selectedTab === 'matchups' }"
+					(click)="selectTab('matchups')"
+				></button>
+			</nav>
+			<ng-container [ngSwitch]="selectedTab">
+				<decktracker-ladder-stats-overview *ngSwitchCase="'overview'"></decktracker-ladder-stats-overview>
+				<decktracker-ladder-stats-matchups *ngSwitchCase="'matchups'"></decktracker-ladder-stats-matchups>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerLadderStatsComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
-	replays$: Observable<readonly GameStat[]>;
-	playerPieChartData$: Observable<readonly InputPieChartData[]>;
-	opponentPieChartData$: Observable<readonly InputPieChartData[]>;
+export class DecktrackerLadderStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	selectedTab$: Observable<ConstructedStatsTab>;
 
-	pieChartOptions: InputPieChartOptions;
-
-	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-	) {
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.replays$ = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => main.decktracker.decks),
-			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
-		).pipe(
-			this.mapData(([[decks], [deckstringsFilter]]) =>
-				decks
-					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
-					.map((deck) => deck.replays)
-					.reduce((a, b) => a.concat(b), []),
-			),
-		);
-		this.playerPieChartData$ = this.replays$.pipe(this.mapData((replays) => this.buildPlayerPieChartData(replays)));
-		this.opponentPieChartData$ = this.replays$.pipe(
-			this.mapData((replays) => this.buildOpponentPieChartData(replays)),
-		);
+		this.selectedTab$ = this.listenForBasicPref$((prefs) => prefs.constructedStatsTab);
 	}
 
-	ngAfterViewInit() {
-		this.pieChartOptions = this.buildPieChartOptions();
-	}
-
-	private buildPieChartOptions(): InputPieChartOptions {
-		return {
-			padding: {
-				top: 0,
-				bottom: 50,
-				left: 90,
-				right: 80,
-			},
-			showAllLabels: true,
-			aspectRatio: 1,
-			tooltipFontSize: 16,
-		};
-	}
-
-	private buildPlayerPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
-		return classesForPieChart.map((className) => {
-			return {
-				label: formatClass(className, this.i18n),
-				data: replays.filter((replay) => replay.playerClass === className)?.length ?? 0,
-				color: `${colorForClass(className)}`,
-			};
-		});
-	}
-
-	private buildOpponentPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
-		return classesForPieChart.map((className) => {
-			return {
-				label: formatClass(className, this.i18n),
-				data: replays.filter((replay) => replay.opponentClass === className)?.length ?? 0,
-				color: `${colorForClass(className)}`,
-			};
-		});
+	selectTab(tab: ConstructedStatsTab) {
+		this.store.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, constructedStatsTab: tab })));
 	}
 }

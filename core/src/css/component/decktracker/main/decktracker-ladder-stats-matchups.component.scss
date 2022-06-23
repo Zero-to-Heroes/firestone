@@ -1,0 +1,88 @@
+@import '../../../global/variables';
+@import '../../../global/fonts';
+
+:host {
+	height: 100%;
+	display: flex;
+}
+
+.matchups {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	max-width: 100%;
+	margin-top: 20px;
+	color: var(--default-text-color);
+
+	.cell {
+		width: 70px;
+		background: rgba(255, 255, 255, 0.08);
+		height: 100%;
+		margin-right: 2px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&.empty {
+			opacity: 0.75;
+		}
+	}
+
+	.matrix {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 13px;
+		flex-grow: 1;
+
+		.header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 40px;
+
+			.label {
+				background: transparent;
+			}
+		}
+
+		.row {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 40px;
+			flex-grow: 1;
+			margin-bottom: 2px;
+
+			.icon {
+				width: 30px;
+			}
+
+			.number {
+				display: flex;
+
+				.wins {
+					margin-right: 5px;
+					color: #61ff47;
+				}
+				.losses {
+					margin-left: 5px;
+					color: #ff4747;
+				}
+				.separator {
+					opacity: 0.5;
+				}
+			}
+
+			.cell {
+				&.positive {
+					color: #61ff47;
+				}
+
+				&.negative {
+					color: #ff4747;
+				}
+			}
+		}
+	}
+}

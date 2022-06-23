@@ -12,33 +12,35 @@
 	flex-grow: 1;
 	max-width: 100%;
 
-	.graphs {
-		display: flex;
-		align-items: center;
-		justify-content: space-evenly;
+	.menu-selection {
+		justify-content: flex-end;
 		position: relative;
-		left: -10px;
-		// So taht the graphs are properly centered
-		width: calc(100% + 10px);
-	}
+		top: -35px;
 
-	.graph {
-		width: 50%;
-		max-width: 500px;
-		display: flex;
-		flex-direction: column;
-		font-family: Open Sans;
+		.menu-item {
+			margin-right: 15px;
+			--icon-color: var(--color-2);
+			--icon-secondary-color: var(--color-7);
+			border: 0;
+			z-index: 2;
 
-		.title {
-			color: var(--default-title-color);
-			font-size: 20px;
-			text-align: center;
-			position: relative;
-			top: 15px;
-		}
+			&:not(.selected) {
+				color: var(--color-3);
+			}
 
-		.chart {
-			width: 100%;
+			&:hover,
+			&.selected {
+				color: var(--default-title-color);
+				--icon-color: var(--default-title-color);
+			}
+
+			&.overview {
+				width: 22px;
+			}
+
+			&.matchups {
+				width: 27px;
+			}
 		}
 	}
 }

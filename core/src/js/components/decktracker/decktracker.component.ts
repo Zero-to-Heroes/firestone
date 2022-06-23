@@ -18,7 +18,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		>
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
-					<div class="content main-content">
+					<div class="content main-content {{ value.currentView }}">
 						<global-header *ngIf="value.menuDisplayType === 'breadcrumbs'"></global-header>
 						<menu-selection-decktracker class="menu-selection" *ngIf="value.menuDisplayType === 'menu'">
 						</menu-selection-decktracker>
