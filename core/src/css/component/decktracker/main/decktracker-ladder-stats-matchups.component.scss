@@ -14,6 +14,29 @@
 	margin-top: 20px;
 	color: var(--default-text-color);
 
+	.options {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 20px;
+
+		::ng-deep preference-toggle {
+			align-items: center;
+			justify-content: center;
+
+			.preference-toggle {
+				align-items: center;
+				margin-right: 50px;
+				margin-top: 0;
+
+				p {
+					width: auto;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+
 	.cell {
 		width: 70px;
 		background: rgba(255, 255, 255, 0.08);
@@ -58,6 +81,10 @@
 				width: 30px;
 			}
 
+			.separator {
+				opacity: 0.5;
+			}
+
 			.number {
 				display: flex;
 
@@ -68,9 +95,6 @@
 				.losses {
 					margin-left: 5px;
 					color: #ff4747;
-				}
-				.separator {
-					opacity: 0.5;
 				}
 			}
 

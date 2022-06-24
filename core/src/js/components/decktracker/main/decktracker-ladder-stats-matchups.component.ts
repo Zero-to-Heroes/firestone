@@ -3,6 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classes, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -14,8 +15,26 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		`../../../../css/component/decktracker/main/decktracker-ladder-stats-matchups.component.scss`,
 	],
 	template: `
-		<div class="matchups">
-			<div class="options"></div>
+		<div class="matchups" *ngIf="{ showPercentages: showPercentages$ | async } as value">
+			<div class="options">
+				<preference-toggle
+					class="percentage-toggle"
+					field="desktopDeckShowMatchupAsPercentages"
+					[label]="'app.decktracker.matchup-info.show-as-percent-button-label' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					class="going-first-toggle"
+					field="desktopStatsShowGoingFirstOnly"
+					[label]="'app.decktracker.ladder-stats.going-first-button-label' | owTranslate"
+					[toggleFunction]="toggleShowFirst"
+				></preference-toggle>
+				<preference-toggle
+					class="going-first-toggle"
+					field="desktopStatsShowGoingSecondOnly"
+					[label]="'app.decktracker.ladder-stats.going-second-button-label' | owTranslate"
+					[toggleFunction]="toggleShowSecond"
+				></preference-toggle>
+			</div>
 			<div class="matrix">
 				<div class="row header">
 					<div class="cell label"></div>
@@ -29,15 +48,30 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<img class="icon" [src]="row.icon" [helpTooltip]="row.tooltip" *ngIf="row.icon" />
 						<div class="text" *ngIf="!row.icon" [owTranslate]="'app.decktracker.ladder-stats.total'"></div>
 					</div>
-					<div
-						class="cell winrate number"
-						*ngFor="let matchup of row.matchups"
-						[ngClass]="{ 'empty': matchup.wins === 0 && matchup.losses === 0 }"
-					>
-						<span class="wins" *ngIf="matchup.wins > 0 || matchup.losses > 0">{{ matchup.wins }}</span>
-						<span class="separator">-</span>
-						<span class="losses" *ngIf="matchup.wins > 0 || matchup.losses > 0">{{ matchup.losses }}</span>
-					</div>
+					<ng-container *ngFor="let matchup of row.matchups">
+						<div
+							class="cell winrate number"
+							[ngClass]="{ 'empty': matchup.wins === 0 && matchup.losses === 0 }"
+							*ngIf="!value.showPercentages"
+						>
+							<span class="wins" *ngIf="matchup.wins > 0 || matchup.losses > 0">{{ matchup.wins }}</span>
+							<span class="separator">-</span>
+							<span class="losses" *ngIf="matchup.wins > 0 || matchup.losses > 0">{{
+								matchup.losses
+							}}</span>
+						</div>
+						<div
+							class="cell winrate"
+							[ngClass]="{
+								'empty': matchup.wins === 0 && matchup.losses === 0,
+								'positive': matchup.wins > 0 && matchup.winrate > 51,
+								'negative': matchup.losses > 0 && matchup.winrate < 49
+							}"
+							*ngIf="value.showPercentages"
+						>
+							{{ buildValue(matchup.winrate) }}
+						</div>
+					</ng-container>
 				</div>
 			</div>
 		</div>
@@ -47,6 +81,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 	rows$: Observable<readonly MatchupRow[]>;
+	showPercentages$: Observable<boolean>;
+	showFirstOnly$: Observable<boolean>;
+	showSecondOnly$: Observable<boolean>;
 
 	allClasses: readonly { tooltip: string; icon: string }[];
 
@@ -65,36 +102,73 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			}),
 			icon: `assets/images/deck/classes/${oppClass}.png`,
 		}));
+
+		this.showPercentages$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages);
+		this.showFirstOnly$ = this.listenForBasicPref$((prefs) => prefs.desktopStatsShowGoingFirstOnly);
+		this.showSecondOnly$ = this.listenForBasicPref$((prefs) => prefs.desktopStatsShowGoingSecondOnly);
+
+		// TODO: the standard/wild filter doesn't work, as it gives more result in Standard than in All...
 		this.replays$ = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.decktracker.decks),
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
-			this.mapData(([[decks], [deckstringsFilter]]) =>
-				decks
+			this.mapData(([[decks], [deckstringsFilter]]) => {
+				const result = decks
 					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
 					.flatMap((deck) => deck.replays)
-					.filter((replay) => !!replay.playerClass && !!replay.opponentClass),
-			),
+					.filter((replay) => !!replay.playerClass && !!replay.opponentClass);
+				return result;
+			}),
 		);
-
-		this.rows$ = combineLatest(this.replays$).pipe(
-			this.mapData(([replays]) => {
+		this.rows$ = combineLatest(this.replays$, this.showFirstOnly$, this.showSecondOnly$).pipe(
+			this.mapData(([replays, showFirst, showSecond]) => {
 				const groupedByPlayerClass = groupByFunction((replay: GameStat) => replay.playerClass)(replays);
 				return [...classes, 'total'].map((playerClass) => {
 					const replaysForPlayerClass =
 						playerClass === 'total' ? replays : groupedByPlayerClass[playerClass] ?? [];
-					return this.buildMatchupStatsForPlayerClass(playerClass, replaysForPlayerClass);
+					return this.buildMatchupStatsForPlayerClass(
+						playerClass,
+						replaysForPlayerClass,
+						showFirst,
+						showSecond,
+					);
 				});
 			}),
 		);
 	}
 
+	toggleShowFirst = (newValue: boolean) => {
+		this.store.send(
+			new GenericPreferencesUpdateEvent((prefs) => ({
+				...prefs,
+				desktopStatsShowGoingFirstOnly: newValue,
+				desktopStatsShowGoingSecondOnly: newValue ? undefined : prefs.desktopStatsShowGoingSecondOnly,
+			})),
+		);
+	};
+
+	toggleShowSecond = (newValue: boolean) => {
+		this.store.send(
+			new GenericPreferencesUpdateEvent((prefs) => ({
+				...prefs,
+				desktopStatsShowGoingFirstOnly: newValue ? undefined : prefs.desktopStatsShowGoingFirstOnly,
+				desktopStatsShowGoingSecondOnly: newValue,
+			})),
+		);
+	};
+
+	buildValue(value: number): string {
+		return value == null ? '-' : value.toFixed(0) + '%';
+	}
+
 	private buildMatchupStatsForPlayerClass(
 		playerClass: string,
 		replaysForPlayerClass: readonly GameStat[],
+		showFirst: boolean,
+		showSecond: boolean,
 	): MatchupRow {
 		const matchups: readonly Matchup[] = [...classes, 'total'].map((opponentClass) =>
-			this.buildMatchup(playerClass, opponentClass, replaysForPlayerClass),
+			this.buildMatchup(playerClass, opponentClass, replaysForPlayerClass, showFirst, showSecond),
 		);
 		return {
 			tooltip: this.i18n.translateString('app.decktracker.ladder-stats.player-class-tooltip', {
@@ -109,16 +183,22 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 		playerClass: string,
 		opponentClass: string,
 		replaysForPlayerClass: readonly GameStat[],
+		showFirst: boolean,
+		showSecond: boolean,
 	): Matchup {
 		const replays = replaysForPlayerClass
 			.filter((stat) => (playerClass === 'total' ? true : stat.playerClass === playerClass))
-			.filter((stat) => (opponentClass === 'total' ? true : stat.opponentClass === opponentClass));
+			.filter((stat) => (opponentClass === 'total' ? true : stat.opponentClass === opponentClass))
+			.filter((stat) => (showFirst ? stat.coinPlay === 'play' : showSecond ? stat.coinPlay === 'coin' : true));
+		const wins = replays.filter((stat) => stat.result === 'won').length;
+		const losses = replays.filter((stat) => stat.result === 'lost').length;
 		return {
 			playerClass: playerClass,
 			opponentClass: opponentClass,
-			wins: replays.filter((stat) => stat.result === 'won').length,
-			losses: replays.filter((stat) => stat.result === 'lost').length,
+			wins: wins,
+			losses: losses,
 			ties: replays.filter((stat) => stat.result === 'tied').length,
+			winrate: wins + losses === 0 ? null : 100 * (wins / (wins + losses)),
 		};
 	}
 }
@@ -135,4 +215,5 @@ interface Matchup {
 	readonly wins: number;
 	readonly losses: number;
 	readonly ties: number;
+	readonly winrate: number;
 }

@@ -27,7 +27,6 @@ export class DecksStateBuilderService {
 		prefs: Preferences,
 	): readonly DeckSummary[] {
 		const personalDecks = prefs.constructedPersonalAdditionalDecks ?? [];
-		console.debug('building decks', personalDecks);
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats.gameStats?.stats?.length) {
 			return personalDecks;
@@ -53,7 +52,6 @@ export class DecksStateBuilderService {
 			.filter((deck) => !Object.keys(prefs.desktopDeckDeletes).includes(deck.deckstring))
 			// Still need to filter these
 			.filter((deck) => filters.gameFormat === 'all' || filters.gameFormat === deck.format)
-
 			.map((deck) => {
 				const deckDefinition = decode(deck.deckstring);
 				return {
@@ -71,7 +69,6 @@ export class DecksStateBuilderService {
 					hidden: prefs.desktopDeckHiddenDeckCodes.includes(deck.deckstring),
 				} as DeckSummary;
 			});
-		console.debug('final personal decks', finalPersonalDecks);
 		return [...decks, ...finalPersonalDecks];
 	}
 
@@ -94,51 +91,35 @@ export class DecksStateBuilderService {
 			.filter((stat) => stat.gameMode === filters.gameMode)
 			.filter((stat) => DecksStateBuilderService.isValidDate(stat, filters.time, patch));
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
-		let indexOfFirstGame = replaysForDate.length;
-		if (filters.time === 'season-start') {
-			for (let i = replaysForDate.length - 1; i >= 0; i--) {
-				if (replaysForDate[i]?.playerRank?.includes('5-')) {
-					indexOfFirstGame = i;
-					break;
-				}
-			}
-		}
+		// I think this doesn't work when you're mixing several formats together
+		const replaysForSeasons =
+			filters.time === 'season-start'
+				? [
+						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'standard')),
+						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'wild')),
+						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'classic')),
+				  ]
+				: replaysForDate;
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
-		return replaysForDate
-			.slice(0, indexOfFirstGame + 1)
+		const result = replaysForSeasons
 			.filter((stat) => this.isValidRank(stat, filters.rank))
 			.filter((stat) => stat.playerDecklist && stat.playerDecklist !== 'undefined')
 			.filter(
 				(stat) => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
 			);
+		return result;
 	}
 
-	// private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
-	// 	switch (sort) {
-	// 		case 'games-played':
-	// 			return (a: DeckSummary, b: DeckSummary) => {
-	// 				if (a.totalGames <= b.totalGames) {
-	// 					return 1;
-	// 				}
-	// 				return -1;
-	// 			};
-	// 		case 'winrate':
-	// 			return (a: DeckSummary, b: DeckSummary) => {
-	// 				if (a.winRatePercentage <= b.winRatePercentage) {
-	// 					return 1;
-	// 				}
-	// 				return -1;
-	// 			};
-	// 		case 'last-played':
-	// 		default:
-	// 			return (a: DeckSummary, b: DeckSummary) => {
-	// 				if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
-	// 					return 1;
-	// 				}
-	// 				return -1;
-	// 			};
-	// 	}
-	// }
+	replaysForSeason(replaysForDate: GameStat[]): readonly GameStat[] {
+		let indexOfFirstGame = replaysForDate.length;
+		for (let i = replaysForDate.length - 1; i >= 0; i--) {
+			if (replaysForDate[i]?.playerRank?.includes('5-')) {
+				indexOfFirstGame = i;
+				break;
+			}
+		}
+		return replaysForDate.slice(0, indexOfFirstGame + 1);
+	}
 
 	public static isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType, lastPatch: PatchInfo): boolean {
 		const now = Date.now();
