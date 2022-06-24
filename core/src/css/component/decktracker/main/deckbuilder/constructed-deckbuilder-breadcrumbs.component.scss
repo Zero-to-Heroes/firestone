@@ -3,15 +3,39 @@
 	display: flex;
 	margin-bottom: 20px;
 	align-items: center;
-	color: var(--color-3);
+	color: var(--default-text-color);
 	font-family: Open Sans;
 
 	.current-step {
 		font-size: 16px;
-		margin-right: 20px;
+		margin-right: 10px;
 		height: 100%;
 		display: flex;
 		align-items: center;
+	}
+
+	.import-deck {
+		display: flex;
+		align-items: center;
+		height: 100%;
+
+		.or {
+			margin-right: 10px;
+		}
+
+		.import-button {
+			display: flex;
+			color: var(--color-2);
+			align-items: center;
+
+			.icon {
+				margin-right: 5px;
+			}
+
+			&:hover {
+				color: var(--color-1);
+			}
+		}
 	}
 
 	.recap {

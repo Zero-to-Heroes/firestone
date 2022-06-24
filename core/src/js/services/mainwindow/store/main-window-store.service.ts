@@ -111,6 +111,7 @@ import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time
 import { ConstructedDeckbuilderClassSelectedEvent } from './events/decktracker/constructed-deckbuilder-class-selected-event';
 import { ConstructedDeckbuilderFormatSelectedEvent } from './events/decktracker/constructed-deckbuilder-format-selected-event';
 import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/constructed-deckbuilder-go-back-event';
+import { ConstructedDeckbuilderImportDeckEvent } from './events/decktracker/constructed-deckbuilder-import-deck-event';
 import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
@@ -119,6 +120,7 @@ import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summa
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
+import { DuelsDeckbuilderImportDeckEvent } from './events/duels/duels-deckbuilder-import-deck-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroPowerFilterSelectedEvent } from './events/duels/duels-hero-power-filter-selected-event';
 import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
@@ -240,6 +242,7 @@ import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-d
 import { ConstructedDeckbuilderClassSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-class-selected-processor';
 import { ConstructedDeckbuilderFormatSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-format-selected-processor';
 import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/constructed-deckbuilder-go-back-processor';
+import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
 import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
@@ -248,6 +251,7 @@ import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-de
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
+import { DuelsDeckbuilderImportDeckProcessor } from './processors/duels/duels-deckbuilder-import-deck-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroPowerFilterSelectedProcessor } from './processors/duels/duels-hero-power-filter-selected-processor';
 import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
@@ -720,6 +724,9 @@ export class MainWindowStoreService {
 			ConstructedDeckbuilderSaveDeckEvent.eventName(),
 			new ConstructedDeckbuilderSaveDeckProcessor(this.prefs, this.decksStateBuilder),
 
+			ConstructedDeckbuilderImportDeckEvent.eventName(),
+			new ConstructedDeckbuilderImportDeckProcessor(this.cards),
+
 			// Battlegrounds
 			SelectBattlegroundsCategoryEvent.eventName(),
 			new SelectBattlegroundsCategoryProcessor(),
@@ -944,6 +951,9 @@ export class MainWindowStoreService {
 
 			DuelsDeckbuilderSaveDeckEvent.eventName(),
 			new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsBuilder),
+
+			DuelsDeckbuilderImportDeckEvent.eventName(),
+			new DuelsDeckbuilderImportDeckProcessor(this.cards),
 
 			// Arena
 			ArenaTimeFilterSelectedEvent.eventName(),

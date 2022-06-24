@@ -3,8 +3,11 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-go-back-event';
+import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
+import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { parseClipboardContent } from '../../import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
@@ -16,6 +19,17 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	template: `
 		<div class="constructed-deckbuilder-breadcrumbs">
 			<div class="current-step">{{ currentStep$ | async }}</div>
+			<div class="import-deck" *ngIf="!(currentFormat$ | async)">
+				<div class="or" [owTranslate]="'app.duels.deckbuilder.or'"></div>
+				<button
+					class="import-button"
+					(click)="importDeckFromClickpboard()"
+					[helpTooltip]="'app.decktracker.deckbuilder.import-deck-button-tooltip' | owTranslate"
+				>
+					<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
+					{{ 'app.duels.deckbuilder.import-deck-button-title' | owTranslate }}
+				</button>
+			</div>
 			<div class="recap">
 				<div
 					class="recap-item recap-format"
@@ -49,6 +63,7 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
@@ -108,6 +123,12 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 					className: name,
 				});
 		}
+	}
+
+	async importDeckFromClickpboard() {
+		const clipboardContent = await this.ow.getFromClipboard();
+		const { deckstring, deckName } = parseClipboardContent(clipboardContent);
+		this.store.send(new ConstructedDeckbuilderImportDeckEvent(deckstring, deckName));
 	}
 }
 

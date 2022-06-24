@@ -257,6 +257,11 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				return cards?.length === 30 && Object.values(groupedCards).every((cards) => cards.length <= 2);
 			}),
 		);
+		// Init cards if they already exist in the store (because of a deck import for instance)
+		this.store
+			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentCards)
+			.pipe(this.mapData(([cards]) => cards))
+			.subscribe((cards) => this.currentDeckCards.next(cards));
 		this.deckstring$ = combineLatest(
 			this.currentDeckCards$,
 			this.store.listen$(
