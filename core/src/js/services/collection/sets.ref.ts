@@ -17,6 +17,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'throne_of_tides',
 		name: `Throne of the Tides`,
 		launchDate: new Date('2022-06-01'),
+		isMiniSet: true,
 	},
 	{
 		id: 'the_sunken_city',
@@ -27,6 +28,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'onyxias_lair',
 		name: `Onyxia's Lair`,
 		launchDate: new Date('2022-02-15'),
+		isMiniSet: true,
 	},
 	{
 		id: 'alterac_valley',
@@ -37,6 +39,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'deadmines',
 		name: 'Deadmines',
 		launchDate: new Date('2021-11-02'),
+		isMiniSet: true,
 	},
 	{
 		id: 'stormwind',
@@ -47,6 +50,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'wailing_caverns',
 		name: 'Wailing Caverns',
 		launchDate: new Date('2021-06-03'),
+		isMiniSet: true,
 	},
 	{
 		id: 'the_barrens',
@@ -57,6 +61,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'darkmoon_races',
 		name: 'Darkmoon Races',
 		launchDate: new Date('2021-01-21'),
+		isMiniSet: true,
 	},
 	{
 		id: 'darkmoon_faire',
@@ -82,6 +87,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'yod',
 		name: "Galakrond's Awakening",
 		launchDate: new Date('2020-01-21'),
+		isMiniSet: true,
 	},
 	{
 		id: 'dragons',
