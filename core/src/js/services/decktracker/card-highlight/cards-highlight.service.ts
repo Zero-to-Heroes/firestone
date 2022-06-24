@@ -307,6 +307,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(demon, inGraveyard, minion);
 			case CardIds.Kazakusan_ONY_005:
 				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
+			case CardIds.Kindle_DALA_911:
+			case CardIds.Kindle_ULDA_911:
+				return and(inDeck, spell);
 			case CardIds.KnightOfAnointment:
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.LadyAnacondra_WC_006:
@@ -381,6 +384,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:
 				return and(minion, inGraveyard, deathrattle);
+			case CardIds.TheUpperHand:
+				return and(inDeck, spell);
 			case CardIds.TortollanPilgrim:
 				return and(inDeck, spell);
 			case CardIds.Tuskpiercer:
