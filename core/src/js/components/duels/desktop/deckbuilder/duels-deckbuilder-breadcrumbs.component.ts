@@ -3,8 +3,11 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderGoBackEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-go-back-event';
 import { Observable } from 'rxjs';
+import { DuelsDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/duels/duels-deckbuilder-import-deck-event';
+import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { parseClipboardContent } from '../../../decktracker/import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
@@ -14,6 +17,17 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	template: `
 		<div class="duels-deckbuilder-breadcrumbs">
 			<div class="current-step">{{ currentStep$ | async }}</div>
+			<div class="import-deck" *ngIf="!(currentHero$ | async)">
+				<div class="or" [owTranslate]="'app.duels.deckbuilder.or'"></div>
+				<button
+					class="import-button"
+					(click)="importDeckFromClickpboard()"
+					[helpTooltip]="'app.duels.deckbuilder.import-deck-button-tooltip' | owTranslate"
+				>
+					<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
+					{{ 'app.duels.deckbuilder.import-deck-button-title' | owTranslate }}
+				</button>
+			</div>
 			<div class="recap">
 				<div
 					class="recap-item recap-hero"
@@ -55,6 +69,7 @@ export class DuelsDeckbuilderBreadcrumbsComponent extends AbstractSubscriptionCo
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
@@ -132,6 +147,12 @@ export class DuelsDeckbuilderBreadcrumbsComponent extends AbstractSubscriptionCo
 					selectedCardName: cardName,
 				});
 		}
+	}
+
+	async importDeckFromClickpboard() {
+		const clipboardContent = await this.ow.getFromClipboard();
+		const { deckstring, deckName } = parseClipboardContent(clipboardContent);
+		this.store.send(new DuelsDeckbuilderImportDeckEvent(deckstring, deckName));
 	}
 }
 

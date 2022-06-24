@@ -61,7 +61,7 @@ export class ImportDeckstringComponent implements AfterViewInit {
 
 	async importDeckstring() {
 		const clipboardContent = await this.ow.getFromClipboard();
-		const { deckstring, deckName } = this.parseClipboardContent(clipboardContent);
+		const { deckstring, deckName } = parseClipboardContent(clipboardContent);
 
 		if (!deckstring) {
 			console.warn('invalid clipboard content', clipboardContent);
@@ -95,31 +95,30 @@ export class ImportDeckstringComponent implements AfterViewInit {
 			),
 		);
 	}
+}
 
-	private parseClipboardContent(clipboardContent: string): { deckstring: string; deckName: string } {
-		const lines = clipboardContent.split('\n');
-		const linesReversed = lines.reverse();
-		let deckName = null;
-		let deckstring = null;
-		for (const line of linesReversed) {
-			if (!deckName && line.startsWith('### ')) {
-				deckName = line.split('### ')[1];
-			} else if (!deckstring) {
-				try {
-					decode(line);
-
-					deckstring = line;
-				} catch (e) {
-					// Do nothing, this was not a deckstring line
-				}
-			}
-			if (deckName && deckstring) {
-				break;
+export const parseClipboardContent = (clipboardContent: string): { deckstring: string; deckName: string } => {
+	const lines = clipboardContent.split('\n');
+	const linesReversed = lines.reverse();
+	let deckName = null;
+	let deckstring = null;
+	for (const line of linesReversed) {
+		if (!deckName && line.startsWith('### ')) {
+			deckName = line.split('### ')[1];
+		} else if (!deckstring) {
+			try {
+				decode(line);
+				deckstring = line;
+			} catch (e) {
+				// Do nothing, this was not a deckstring line
 			}
 		}
-		return {
-			deckstring: deckstring,
-			deckName: deckName,
-		};
+		if (deckName && deckstring) {
+			break;
+		}
 	}
-}
+	return {
+		deckstring: deckstring,
+		deckName: deckName,
+	};
+};

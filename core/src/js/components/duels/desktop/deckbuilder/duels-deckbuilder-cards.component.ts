@@ -434,6 +434,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				return cards?.length === 15 && cards.length === new Set(cards).size;
 			}),
 		);
+		// Init cards if they already exist in the store (because of a deck import for instance)
+		this.store
+			.listen$(([main, nav]) => main.duels.deckbuilder.currentCards)
+			.pipe(this.mapData(([cards]) => cards))
+			.subscribe((cards) => this.currentDeckCards.next(cards));
 		this.deckstring$ = combineLatest(
 			this.currentDeckCards$,
 			this.store.listen$(

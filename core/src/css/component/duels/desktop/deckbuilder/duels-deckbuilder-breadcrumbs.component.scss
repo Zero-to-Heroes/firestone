@@ -12,6 +12,31 @@
 		align-items: center;
 	}
 
+	.import-deck {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		margin-left: -10px;
+
+		.or {
+			margin-right: 10px;
+		}
+
+		.import-button {
+			display: flex;
+			color: var(--color-2);
+			align-items: center;
+
+			.icon {
+				margin-right: 5px;
+			}
+
+			&:hover {
+				color: var(--color-1);
+			}
+		}
+	}
+
 	.recap {
 		display: flex;
 
