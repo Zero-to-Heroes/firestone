@@ -52,6 +52,29 @@
 		}
 	}
 
+	.pack-groups {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		max-width: 100%;
+		min-height: 0;
+		overflow: auto;
+		flex-shrink: 0;
+		opacity: 1;
+		transition: opacity 0.2s ease-in-out;
+
+		.pack-group {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 20px;
+
+			.group-name {
+				font-size: 14px;
+				margin-bottom: 5px;
+			}
+		}
+	}
+
 	.packs-container {
 		display: flex;
 		min-width: 0;

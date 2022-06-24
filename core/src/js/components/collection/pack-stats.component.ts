@@ -3,10 +3,11 @@ import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
 import { PackInfo } from '../../models/collection/pack-info';
-import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
+import { sets } from '../../services/collection/sets.ref';
+import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { sumOnArray } from '../../services/utils';
+import { sortByProperties, sumOnArray } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -24,31 +25,32 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					[helpTooltip]="'settings.collection.pack-stats-show-only-buyable-packs-tooltip' | owTranslate"
 				></preference-toggle>
 			</div>
-			<div
-				class="packs-container"
-				*ngIf="{ packs: packs$ | async } as value"
-				[ngClass]="{ 'empty': !value.packs?.length }"
-			>
-				<div
-					class="pack-stat"
-					*ngFor="let pack of value.packs; trackBy: trackByPackFn"
-					[ngClass]="{ 'missing': !pack.totalObtained }"
-				>
-					<div
-						class="icon-container"
-						[style.width.px]="cardWidth"
-						[style.height.px]="cardHeight"
-						[helpTooltip]="
-							'app.collection.pack-stats.pack-stat-tooltip'
-								| owTranslate: { totalPacks: pack.totalObtained, packName: pack.name }
-						"
-					>
-						<img
-							class="icon"
-							[src]="'https://static.firestoneapp.com/cardPacks/256/' + pack.packType + '.png'"
-						/>
+			<div class="pack-groups">
+				<div class="pack-group" *ngFor="let group of packGroups$ | async">
+					<div class="group-name" *ngIf="!(showOnlyBuyablePacks$ | async)">{{ group.name }}</div>
+					<div class="packs-container">
+						<div
+							class="pack-stat"
+							*ngFor="let pack of group.packs; trackBy: trackByPackFn"
+							[ngClass]="{ 'missing': !pack.totalObtained }"
+						>
+							<div
+								class="icon-container"
+								[style.width.px]="cardWidth"
+								[style.height.px]="cardHeight"
+								[helpTooltip]="
+									'app.collection.pack-stats.pack-stat-tooltip'
+										| owTranslate: { totalPacks: pack.totalObtained, packName: pack.name }
+								"
+							>
+								<img
+									class="icon"
+									[src]="'https://static.firestoneapp.com/cardPacks/256/' + pack.packType + '.png'"
+								/>
+							</div>
+							<div class="value">{{ pack.totalObtained }}</div>
+						</div>
 					</div>
-					<div class="value">{{ pack.totalObtained }}</div>
 				</div>
 			</div>
 			<ng-container *ngIf="{ bestPacks: bestPacks$ | async } as value">
@@ -76,7 +78,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 
 	totalPacks$: Observable<number>;
 	showOnlyBuyablePacks$: Observable<boolean>;
-	packs$: Observable<readonly InternalPackInfo[]>;
+	packGroups$: Observable<readonly InternalPackGroup[]>;
 	bestPacks$: Observable<readonly PackResult[]>;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
@@ -92,29 +94,76 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 
 	async ngAfterContentInit() {
 		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
-		this.packs$ = combineLatest(
-			this.showOnlyBuyablePacks$,
+		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest(
 			this.store.listen$(([main, nav, prefs]) => main.binder.packs),
 		).pipe(
-			this.mapData(([showOnlyBuyablePacks, [inputPacks]]) =>
+			this.mapData(([[inputPacks]]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
-					.filter(
-						(boosterId: BoosterType) =>
-							!showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
-					)
 					.map((boosterId: BoosterType) => ({
 						packType: boosterId,
 						totalObtained: inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
 						unopened: 0,
 						name: boosterIdToBoosterName(boosterId, this.i18n),
+						setId: boosterIdToSetId(boosterId),
 					}))
 					.filter((info) => info)
 					.reverse(),
 			),
 		);
-		this.totalPacks$ = this.packs$.pipe(this.mapData((packs) => sumOnArray(packs, (pack) => pack.totalObtained)));
+		this.packGroups$ = combineLatest(this.showOnlyBuyablePacks$, packs$).pipe(
+			this.mapData(([showOnlyBuyablePacks, packs]) => {
+				const mainGroupPacks = packs
+					.map((pack) => ({
+						...pack,
+						set: sets.find((set) => set.id === pack.setId),
+					}))
+					.filter((pack) => !!pack.set || pack.packType === BoosterType.CLASSIC)
+					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
+					.sort(sortByProperties((pack) => [-pack.set?.launchDate?.getTime() ?? 0]));
+				const mainSetsGroup: InternalPackGroup = {
+					name: this.i18n.translateString('app.collection.pack-stats.main-sets-group-name', {
+						totalPacks: sumOnArray(mainGroupPacks, (pack) => pack.totalObtained),
+					}),
+					packs: mainGroupPacks,
+				};
+
+				const nonBuyablePacks = packs
+					.filter((pack) => NON_BUYABLE_BOOSTER_IDS.includes(pack.packType))
+					.sort(sortByProperties((pack) => [pack.name]));
+				const nonBuyableGroup: InternalPackGroup = {
+					name: this.i18n.translateString('app.collection.pack-stats.non-buyable-group-name', {
+						totalPacks: sumOnArray(nonBuyablePacks, (pack) => pack.totalObtained),
+					}),
+					packs: nonBuyablePacks,
+				};
+
+				const packIdsInGroups = [...mainSetsGroup.packs, ...nonBuyableGroup.packs].map((pack) => pack.packType);
+				const otherGroupPacks = packs
+					.filter((pack) => !packIdsInGroups.includes(pack.packType))
+					.sort(sortByProperties((pack) => [-pack.packType]));
+				const otherGroup: InternalPackGroup = {
+					name: this.i18n.translateString('app.collection.pack-stats.other-group-name', {
+						totalPacks: sumOnArray(otherGroupPacks, (pack) => pack.totalObtained),
+					}),
+					packs: otherGroupPacks,
+				};
+				return [
+					mainSetsGroup,
+					showOnlyBuyablePacks ? null : nonBuyableGroup,
+					showOnlyBuyablePacks ? null : otherGroup,
+				].filter((group) => !!group?.packs?.length);
+			}),
+		);
+		this.totalPacks$ = this.packGroups$.pipe(
+			this.mapData((groups) =>
+				sumOnArray(
+					groups.flatMap((group) => group.packs),
+					(pack) => pack.totalObtained,
+				),
+			),
+		);
 		this.bestPacks$ = this.store
 			.listen$(([main, nav, prefs]) => main.binder.packStats)
 			.pipe(
@@ -138,16 +187,25 @@ const EXCLUDED_BOOSTER_IDS = [
 	BoosterType.WAILING_CAVERNS,
 ];
 
-const NON_BUYABLE_BOOSTER_IDS = [
-	BoosterType.INVALID,
-	BoosterType.FIRST_PURCHASE_OLD,
-	BoosterType.FIRST_PURCHASE,
-	BoosterType.SIGNUP_INCENTIVE,
+const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_CLASSIC_PACK,
 	BoosterType.GOLDEN_SCHOLOMANCE,
 	BoosterType.GOLDEN_DARKMOON_FAIRE,
 	BoosterType.GOLDEN_THE_BARRENS,
 	BoosterType.GOLDEN_STORMWIND,
+	BoosterType.GOLDEN_THE_SUNKEN_CITY,
+	BoosterType.GOLDEN_STORMWIND,
+	BoosterType.GOLDEN_THE_BARRENS,
+	BoosterType.GOLDEN_DARKMOON_FAIRE,
+	BoosterType.GOLDEN_ALTERAC_VALLEY,
+];
+
+const NON_BUYABLE_BOOSTER_IDS = [
+	...GOLDEN_SET_PACKS,
+	BoosterType.INVALID,
+	BoosterType.FIRST_PURCHASE_OLD,
+	BoosterType.FIRST_PURCHASE,
+	BoosterType.SIGNUP_INCENTIVE,
 	BoosterType.MAMMOTH_BUNDLE,
 	BoosterType.YEAR_OF_DRAGON,
 	BoosterType.YEAR_OF_PHOENIX,
@@ -166,6 +224,12 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.WILD_PACK,
 ];
 
+interface InternalPackGroup {
+	readonly name: string;
+	readonly packs: readonly InternalPackInfo[];
+}
+
 interface InternalPackInfo extends PackInfo {
 	readonly name: string;
+	readonly setId: string;
 }
