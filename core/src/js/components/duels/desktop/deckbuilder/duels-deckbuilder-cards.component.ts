@@ -272,11 +272,12 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								const totalBuckets = candidateBuckets.filter((b) =>
 									b.cards.map((c) => c.cardId).includes(card.cardId),
 								).length;
+								const refCard = this.allCards.getCard(card.cardId);
 								const bucketCard: BucketCard = {
 									cardId: card.cardId,
-									cardName: card.cardName,
-									manaCost: this.allCards.getCard(card.cardId).cost,
-									rarity: this.allCards.getCard(card.cardId).rarity?.toLowerCase(),
+									cardName: refCard.name,
+									manaCost: refCard.cost,
+									rarity: refCard.rarity?.toLowerCase(),
 									offeringRate: card.totalOffered / totalCardsOffered,
 									totalBuckets: totalBuckets,
 								};
