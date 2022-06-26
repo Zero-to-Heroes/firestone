@@ -216,6 +216,7 @@ export const publicCardCreators = [
 	CardIds.BarakKodobane_BAR_551,
 	CardIds.BattleVicar,
 	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
+	CardIds.BloodsailFlybooter,
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
 	CardIds.Bottomfeeder,
