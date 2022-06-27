@@ -108,8 +108,9 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 			case 'last-patch':
 				// See bgs-ui-helper
 				return (
-					firstMatch.buildNumber >= patch.number ||
-					firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+					!!patch &&
+					(firstMatch.buildNumber >= patch.number ||
+						firstMatch.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
 				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
