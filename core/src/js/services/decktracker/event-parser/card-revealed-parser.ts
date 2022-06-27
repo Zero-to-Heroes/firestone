@@ -46,7 +46,7 @@ export class CardRevealedParser implements EventParser {
 					? DeckCard.deckIndexFromBottom + 3 - gameEvent.additionalData.indexInBlock
 					: undefined,
 		} as DeckCard);
-		//console.debug('[debug]', 'card revealed', card, DeckCard.deckIndexFromBottom, gameEvent);
+		// console.debug('[debug]', 'card revealed', card, DeckCard.deckIndexFromBottom, gameEvent);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
@@ -60,7 +60,7 @@ export class CardRevealedParser implements EventParser {
 			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
 				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false, true)
 				: this.helper.addSingleCardToZone(deck.otherZone, card);
-		//console.debug('[debug]', 'newOther', newOther);
+		// console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
 		} as DeckState);
