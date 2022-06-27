@@ -101,7 +101,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			referenceCardId = CardIds.Amalgadon;
 			break;
 		default:
-			referenceCardId = CardIds.AcolyteOfCthun;
+			referenceCardId = CardIds.TavernTipper;
 			break;
 	}
 	return referenceCardId;
@@ -290,6 +290,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.QueenAzshara_AzsharasAmbition;
 		case CardIds.Ozumat_BG23_HERO_201:
 			return CardIds.Ozumat_Tentacular;
+		case CardIds.LadyVashj_BG23_HERO_304:
+			return CardIds.LadyVashj_RelicsOfTheDeep;
 
 		case '':
 			return null; // new heroes
@@ -648,6 +650,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 406;
 		case CardIds.Ozumat_BG23_HERO_201:
 			return 407;
+		case CardIds.LadyVashj_BG23_HERO_304:
+			return 410;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

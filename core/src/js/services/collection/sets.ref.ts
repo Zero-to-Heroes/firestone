@@ -14,6 +14,11 @@ export const standardSets: readonly string[] = [
 
 export const sets: readonly ReferenceSet[] = [
 	{
+		id: 'castle_nathria',
+		name: `Murder at Castle Nathria`,
+		launchDate: new Date('2022-08-02'),
+	},
+	{
 		id: 'throne_of_tides',
 		name: `Throne of the Tides`,
 		launchDate: new Date('2022-06-01'),
