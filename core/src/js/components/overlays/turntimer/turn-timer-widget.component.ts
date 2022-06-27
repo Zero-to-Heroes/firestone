@@ -13,7 +13,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { combineLatest, interval, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { TurnTiming } from '../../../models/decktracker/deck-state';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { sumOnArray } from '../../../services/utils';
@@ -134,9 +134,9 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 			});
 	}
 
-	closeHandler() {
-		this.store.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, showTurnTimer: false })));
-	}
+	closeHandler = () => {
+		this.store?.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, showTurnTimer: false })));
+	};
 
 	private buildPlayer(playerName: string, turnDuration: number, turnTimings: readonly TurnTiming[]): TurnTimerPlayer {
 		const totalPlayedDurationInMillis = sumOnArray(
