@@ -547,8 +547,9 @@ const topDeckTimeFilter = (deck: DuelsDeckStat, filter: DuelsTimeFilterType, pat
 		case 'last-patch':
 			// See bgs-ui-helper
 			return (
-				deck.buildNumber >= patch.number ||
-				new Date(deck.periodStart).getTime() > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000
+				patch &&
+				(deck.buildNumber >= patch.number ||
+					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
 			);
 		case 'past-seven':
 			return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);

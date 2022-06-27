@@ -5,7 +5,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 export const groupByFunction = <T>(keyExtractor: (obj: T) => string | number) => (
 	array: readonly T[],
 ): { [key: string]: readonly T[] } => {
-	return array.reduce((objectsByKeyValue, obj) => {
+	return (array ?? []).reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
 		return objectsByKeyValue;
