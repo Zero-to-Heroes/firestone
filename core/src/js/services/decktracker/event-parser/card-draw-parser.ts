@@ -49,12 +49,20 @@ export class CardDrawParser implements EventParser {
 			cardsWithMatchingCardId.length === 1 ||
 			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
 		if (!shouldUseEntityId) {
-			console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
+			// console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
 		}
-		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop);
+		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
+		// console.debug(
+		// 	'useTopOfDeckToIdentifyCard',
+		// 	useTopOfDeckToIdentifyCard,
+		// 	isPlayer,
+		// 	deck.deck.filter((c) => c.positionFromTop != null),
+		// 	deck,
+		// );
 		const card = useTopOfDeckToIdentifyCard
 			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
+		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 		// console.debug(
 		// 	'drawing card',
 		// 	card,
@@ -69,8 +77,8 @@ export class CardDrawParser implements EventParser {
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
-		const isTradable = !!this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
-		// console.debug('drawing from deck', isTradable, this.allCards.getCard(cardId));
+		const isTradable = !!this.allCards.getCard(updatedCardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
+		// console.debug('drawing from deck', isTradable, this.allCards.getCard(updatedCardId));
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
@@ -82,19 +90,18 @@ export class CardDrawParser implements EventParser {
 			isPlayer ||
 			useTopOfDeckToIdentifyCard ||
 			(!isCardDrawnBySecretPassage &&
-				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+				(cardsRevealedWhenDrawn.includes(updatedCardId as CardIds) ||
 					// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
 					(!isTradable && publicCardCreators.includes(lastInfluencedByCardId))));
 		const isCreatorPublic =
 			isCardInfoPublic || (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
-		// console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
+		// console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 		const cardWithCreator = card.update({
 			entityId: entityId,
 			creatorCardId: isCardInfoPublic ? creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
-			// cardName: isCardInfoPublic ? card.cardName : undefined,
 			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
 		} as DeckCard);
@@ -102,17 +109,23 @@ export class CardDrawParser implements EventParser {
 		const previousDeck = deck.deck;
 
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
-			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
+			? this.helper.removeSingleCardFromZone(
+					previousDeck,
+					updatedCardId,
+					entityId,
+					deck.deckList.length === 0,
+					true,
+			  )[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
-		//console.debug('added card to hand', newHand);
+		// console.debug('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
 		});
-		// console.debug('new player deck', newPlayerDeck);
+		console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
