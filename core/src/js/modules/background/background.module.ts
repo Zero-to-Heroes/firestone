@@ -552,6 +552,7 @@ if (process.env.LOCAL_TEST) {
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
 	handleError(error) {
+		console.log('capturing error', error);
 		const originalError = error.originalError ?? error;
 		captureException(originalError);
 		throw error;
