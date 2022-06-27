@@ -84,6 +84,7 @@ export class GameStatsUpdaterService {
 			runId: game.runId,
 			bgsAvailableTribes: game.availableTribes,
 			bgsBannedTribes: game.bannedTribes,
+			bgsHasPrizes: game.hasBgsPrizes,
 			// xpGained: game.xpGained,
 		} as GameStat);
 

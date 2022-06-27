@@ -34,6 +34,12 @@ declare let amplitude;
 
 				<div class="group player-images">
 					<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
+					<img
+						class="darkmoon-ticket"
+						*ngIf="hasPrizes"
+						src="assets/images/bgs/ticket.png"
+						[helpTooltip]="'app.replays.replay-info.bgs-prizes-tooltip' | owTranslate"
+					/>
 				</div>
 
 				<div class="group result" *ngIf="result">
@@ -126,6 +132,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	hasMatchStats: boolean;
 	deltaMmr: number;
 
+	hasPrizes: boolean;
 	availableTribes: readonly InternalTribe[];
 	tribesTooltip: string;
 
@@ -193,6 +200,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		});
 		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
 		this.finalWarband = this.buildFinalWarband();
+		this.hasPrizes = this.replayInfo.bgsHasPrizes;
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {

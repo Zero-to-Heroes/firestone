@@ -39,6 +39,7 @@ export class GameStat {
 	readonly bgsBannedTribes: readonly Race[];
 	readonly bgsPerfectGame: boolean;
 	readonly levelAfterMatch: string;
+	readonly bgsHasPrizes: boolean;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
