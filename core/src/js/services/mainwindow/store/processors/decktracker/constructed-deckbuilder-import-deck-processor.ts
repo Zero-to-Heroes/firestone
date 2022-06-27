@@ -2,7 +2,7 @@ import { formatFormat } from '@firestone-hs/reference-data';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { decode } from 'deckstrings';
+import { DeckDefinition, decode } from 'deckstrings';
 import { CardsFacadeService } from '../../../../cards-facade.service';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../events/decktracker/constructed-deckbuilder-import-deck-event';
 
@@ -15,8 +15,15 @@ export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deckDefinition = decode(event.deckstring);
-		console.debug('parsed deck from clipboard', deckDefinition);
+		let deckDefinition: DeckDefinition = null;
+		try {
+			deckDefinition = decode(event.deckstring);
+			console.debug('parsed deck from clipboard', deckDefinition);
+		} catch (e) {
+			console.warn('Could not decode deckstring', event.deckstring, event.deckName, e);
+			return [null, null];
+		}
+
 		return [
 			currentState.update({
 				decktracker: currentState.decktracker.update({

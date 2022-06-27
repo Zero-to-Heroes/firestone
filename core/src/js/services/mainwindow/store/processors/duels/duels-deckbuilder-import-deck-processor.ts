@@ -2,7 +2,7 @@ import { duelsHeroConfigs, normalizeDuelsHeroCardIdForDeckCode } from '@fireston
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { decode } from 'deckstrings';
+import { DeckDefinition, decode } from 'deckstrings';
 import { CardsFacadeService } from '../../../../cards-facade.service';
 import { DuelsDeckbuilderImportDeckEvent } from '../../events/duels/duels-deckbuilder-import-deck-event';
 
@@ -15,7 +15,15 @@ export class DuelsDeckbuilderImportDeckProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deckDefinition = decode(event.deckstring);
+		let deckDefinition: DeckDefinition = null;
+		try {
+			deckDefinition = decode(event.deckstring);
+			console.debug('parsed deck from clipboard', deckDefinition);
+		} catch (e) {
+			console.warn('Could not decode deckstring', event.deckstring, event.deckName, e);
+			return [null, null];
+		}
+
 		const inputHeroCardId = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]).id;
 		const config =
 			duelsHeroConfigs.find(
