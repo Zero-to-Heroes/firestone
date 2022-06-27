@@ -4,6 +4,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -19,22 +20,51 @@ export class LinkedEntityParser implements EventParser {
 
 		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
 
-		const isPlayerForFind = controllerId === localPlayer.PlayerId;
-		const deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
+		let isPlayerForFind = controllerId === localPlayer.PlayerId;
+		// console.debug('[linked-entity-parser] isPlayerForFind', isPlayerForFind, gameEvent);
+		let deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
+
+		let newCard = deckInWhichToFindTheCard.findCard(entityId);
+		// let revert = false;
+		// console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
+		if (!newCard) {
+			// Can happen because of Disarming Elemetal where we dredge in the other player's deck
+			isPlayerForFind = !isPlayerForFind;
+			deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
+			newCard = deckInWhichToFindTheCard.findCard(entityId);
+			// console.debug(
+			// 	'[linked-entity-parser] missing newCard, trying to find in other deck',
+			// 	newCard,
+			// 	entityId,
+			// 	isPlayerForFind,
+			// 	deckInWhichToFindTheCard,
+			// );
+			if (newCard && reverseIfNeeded(false, newCard.lastAffectedByCardId)) {
+				// revert = true;
+			} else {
+				// If we still don't find the card, revert to the initial values
+				// console.debug('[linked-entity-parser] missing newCard');
+				isPlayerForFind = !isPlayerForFind;
+				deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
+				newCard = DeckCard.create({
+					cardId: cardId,
+					cardName: this.i18n.getCardName(cardId),
+					entityId: entityId,
+				} as DeckCard);
+			}
+		}
+
+		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId);
+		// console.debug(
+		// 	'[linked-entity-parser] originalCard',
+		// 	originalCard,
+		// 	gameEvent.additionalData.linkedEntityId,
+		// 	deckInWhichToFindTheCard,
+		// );
+		let newPlayerDeck: DeckState;
 
 		const isPlayerForAdd = linkedEntityControllerId === localPlayer.PlayerId;
 		const deckInWhichToAddTheCard = isPlayerForAdd ? currentState.playerDeck : currentState.opponentDeck;
-
-		let newCard = deckInWhichToFindTheCard.findCard(entityId);
-		if (!newCard) {
-			newCard = DeckCard.create({
-				cardId: cardId,
-				cardName: this.i18n.getCardName(cardId),
-				entityId: entityId,
-			} as DeckCard);
-		}
-		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId);
-		let newPlayerDeck: DeckState;
 		if (originalCard) {
 			const updatedCard = originalCard.update({
 				cardId: newCard.cardId,
@@ -43,9 +73,9 @@ export class LinkedEntityParser implements EventParser {
 				// even ones who already had a position previously
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
 			} as DeckCard);
-			//console.debug('[linked-entity-parser] updating card', updatedCard, newCard, originalCard);
+			// console.debug('[linked-entity-parser] updating card', updatedCard, newCard, originalCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard);
-			//console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
+			// console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
 		} else {
 			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
@@ -57,7 +87,7 @@ export class LinkedEntityParser implements EventParser {
 				entityId: gameEvent.additionalData.linkedEntityId,
 				zone: undefined,
 			} as DeckCard);
-			console.debug('[linked-entity-parser] adding card', updatedCard);
+			// console.debug('[linked-entity-parser] adding card', updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToAddTheCard.deck,
 				updatedCard.cardId,
