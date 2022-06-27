@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.5',
+		version: '9.8.6',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -93,8 +93,37 @@ export const updates: readonly Update[] = [
 								text: `Add card highlight for Kindle and The Upper Hand, two buffs offered by Bob in Dungeon Runs.`,
 							},
 							{
+								type: 'feature',
+								text: `Add the ability to import a deck code in the deckbuilder.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where the Secrets Helper would offer rotated out improved secrets when Tavish was played.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards put at the top of the opponent's deck would never be removed from their deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards dredged by Disarming Element would not appear in the Bottom of the opponent's deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix Card Oracle for Bloodsail Flybooter.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `Add the ability to import a deck code in the deckbuilder.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Bucket cards were not localized.`,
 							},
 						],
 					},
