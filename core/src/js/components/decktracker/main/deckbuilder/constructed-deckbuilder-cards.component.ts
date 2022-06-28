@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDefaultHeroDbfIdForClass } from '@services/hs-utils';
@@ -117,6 +117,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	activeCards$: Observable<readonly DeckBuilderCard[]>;
 	highRes$: Observable<boolean>;
 	showRelatedCards$: Observable<boolean>;
+	maxCardsInDeck$: Observable<number>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
@@ -251,10 +252,14 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				50,
 			),
 		);
-		this.deckValid$ = this.currentDeckCards$.pipe(
-			this.mapData((cards) => {
+		this.maxCardsInDeck$ = this.currentDeckCards$.pipe(
+			this.mapData((cards) => (cards?.includes(CardIds.PrinceRenathal) ? 40 : 30)),
+		);
+
+		this.deckValid$ = combineLatest(this.currentDeckCards$, this.maxCardsInDeck$).pipe(
+			this.mapData(([cards, maxCards]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
-				return cards?.length === 30 && Object.values(groupedCards).every((cards) => cards.length <= 2);
+				return cards?.length === maxCards && Object.values(groupedCards).every((cards) => cards.length <= 2);
 			}),
 		);
 		// Init cards if they already exist in the store (because of a deck import for instance)
@@ -291,11 +296,11 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				return deckstring;
 			}),
 		);
-		this.ongoingText$ = this.currentDeckCards$.pipe(
-			this.mapData((cards) =>
+		this.ongoingText$ = combineLatest(this.currentDeckCards$, this.maxCardsInDeck$).pipe(
+			this.mapData(([cards, maxCards]) =>
 				this.i18n.translateString('app.duels.deckbuilder.ongoing-deck-building', {
 					currentCards: cards?.length ?? 0,
-					maxCards: 30,
+					maxCards: maxCards,
 				}),
 			),
 		);
@@ -317,14 +322,15 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	}
 
 	addCard(card: DeckBuilderCard) {
-		if (this.currentDeckCards.value.includes(card.cardId)) {
+		console.debug('adding card', this.currentDeckCards.value);
+		if (this.currentDeckCards.value?.includes(card.cardId)) {
 			if (this.allCards.getCard(card.cardId).rarity === 'Legendary') {
 				return;
 			} else if (this.currentDeckCards.value.filter((c) => c === card.cardId).length >= 2) {
 				return;
 			}
 		}
-		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
+		this.currentDeckCards.next([...(this.currentDeckCards.value ?? []), card.cardId]);
 	}
 
 	handleKeyPress(event: KeyboardEvent, activeCards: readonly DeckBuilderCard[]) {
@@ -379,7 +385,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	}
 
 	private hasMaximumCopies(cardId: string, deckCards: readonly string[]): boolean {
-		const numberOfCards = deckCards.filter((c) => c === cardId).length;
+		const numberOfCards = deckCards?.filter((c) => c === cardId).length ?? 0;
 		if (numberOfCards === 1 && this.allCards.getCard(cardId).rarity === 'Legendary') {
 			return true;
 		} else if (numberOfCards >= 2) {
