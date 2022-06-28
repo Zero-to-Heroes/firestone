@@ -1,15 +1,12 @@
 import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
-import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../../../../../models/game-event';
+import { isBattlegrounds } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsMinionsSoldParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return (
-			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === GameEvent.BATTLEGROUNDS_MINION_SOLD
-		);
+		return isBattlegrounds(currentState.gameType) && gameEvent.type === GameEvent.BATTLEGROUNDS_MINION_SOLD;
 	}
 
 	parse(

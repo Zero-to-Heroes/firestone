@@ -63,7 +63,12 @@ export class BattlegroundsPersonalStatsRatingComponent
 				map(
 					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
 						[
-							stats.filter((stat) => stat.gameMode === 'battlegrounds').filter((stat) => stat.playerRank),
+							stats
+								.filter(
+									(stat) =>
+										stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
+								)
+								.filter((stat) => stat.playerRank),
 							timeFilter,
 							getMmrThreshold(mmrFilter <= 100 ? mmrFilter : 100, mmrPercentiles),
 							mmrGroupFilter,

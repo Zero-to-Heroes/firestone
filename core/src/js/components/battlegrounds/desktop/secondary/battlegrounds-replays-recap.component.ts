@@ -63,7 +63,10 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 				map(([replays, category]) => {
 					const heroId = (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;
 					return replays
-						.filter((replay) => replay.gameMode === 'battlegrounds')
+						.filter(
+							(replay) =>
+								replay.gameMode === 'battlegrounds' || replay.gameMode === 'battlegrounds-friendly',
+						)
 						.filter((replay) => replay.playerRank != null)
 						.filter(
 							(replay) =>

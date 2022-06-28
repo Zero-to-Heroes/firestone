@@ -139,6 +139,7 @@ export class FullScreenOverlaysComponent
 					case GameType.GT_BATTLEGROUNDS:
 					case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 					case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+					case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
 						return 'battlegrounds';
 					default:
 						if (isBattlegroundsScene(currentScene)) {

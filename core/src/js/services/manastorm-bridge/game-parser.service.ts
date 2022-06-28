@@ -55,8 +55,11 @@ export class GameParserService {
 			case 22:
 				return 'tavern-brawl';
 			case GameType.GT_BATTLEGROUNDS:
-			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 				return 'battlegrounds';
+			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
+			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
+				return 'battlegrounds-friendly';
 			case GameType.GT_MERCENARIES_AI_VS_AI:
 				return 'mercenaries-ai-vs-ai';
 			case GameType.GT_MERCENARIES_FRIENDLY:

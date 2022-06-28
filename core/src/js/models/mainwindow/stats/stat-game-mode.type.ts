@@ -9,6 +9,7 @@ export type StatGameModeType =
 	| 'tutorial'
 	| 'tavern-brawl'
 	| 'battlegrounds'
+	| 'battlegrounds-friendly'
 	| 'duels'
 	| 'mercenaries-ai-vs-ai'
 	| 'mercenaries-pve'

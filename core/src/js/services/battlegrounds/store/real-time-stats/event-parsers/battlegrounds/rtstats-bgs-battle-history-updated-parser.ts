@@ -1,17 +1,14 @@
 import { buildLuckFactor } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameType } from '@firestone-hs/reference-data';
 import { BgsGame } from '../../../../../../models/battlegrounds/bgs-game';
 import { GameEvent } from '../../../../../../models/game-event';
 import { Events } from '../../../../../events.service';
+import { isBattlegrounds } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatsBgsBattleHistoryUpdatedParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return (
-			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === Events.BATTLE_SIMULATION_HISTORY_UPDATED
-		);
+		return isBattlegrounds(currentState.gameType) && gameEvent.type === Events.BATTLE_SIMULATION_HISTORY_UPDATED;
 	}
 
 	parse(

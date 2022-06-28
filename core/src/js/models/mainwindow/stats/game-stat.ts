@@ -60,7 +60,7 @@ export class GameStat {
 	}
 
 	public isBattlegrounds(): boolean {
-		return this.gameMode === 'battlegrounds';
+		return this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly';
 	}
 
 	public buildPlayerRankImage(
@@ -112,7 +112,7 @@ export class GameStat {
 					format: capitalizeEachWord(this.gameFormat),
 				});
 			}
-		} else if (this.gameMode === 'battlegrounds') {
+		} else if (this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly') {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = i18n.translateString('global.game-mode.battlegrounds');
 		} else if (this.gameMode?.startsWith('mercenaries')) {

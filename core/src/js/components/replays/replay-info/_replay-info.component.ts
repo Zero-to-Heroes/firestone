@@ -23,7 +23,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[replay]="replayInfo"
 		></replay-info-ranked>
 		<replay-info-battlegrounds
-			*ngIf="gameMode === 'battlegrounds'"
+			*ngIf="gameMode === 'battlegrounds' || gameMode === 'battlegrounds-friendly'"
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
 			[replay]="replayInfo"
@@ -44,7 +44,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[displayCoin]="displayCoin"
 		></replay-info-duels>
 		<replay-info-generic
-			*ngIf="gameMode !== 'ranked' && gameMode !== 'battlegrounds' && !isMercenaries && !isDuels"
+			*ngIf="
+				gameMode !== 'ranked' &&
+				gameMode !== 'battlegrounds' &&
+				gameMode !== 'battlegrounds-friendly' &&
+				!isMercenaries &&
+				!isDuels
+			"
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
 			[replay]="replayInfo"

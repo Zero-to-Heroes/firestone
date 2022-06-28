@@ -133,7 +133,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	componentType: ComponentType<any> = CurrentSessionBgsBoardTooltipComponent;
 
 	showWidget$: Observable<boolean>;
-	friendlyGameType$: Observable<'battlegrounds'>;
+	friendlyGameType$: Observable<'battlegrounds' | 'battlegrounds-friendly'>;
 	currentDisplayedMode$: Observable<string>;
 	showGroups$: Observable<boolean>;
 	showMatches$: Observable<boolean>;
@@ -324,18 +324,21 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	private getDisplayModeKey(gameType: string): string {
 		switch (gameType) {
 			case 'battlegrounds':
+			case 'battlegrounds-friendly':
 			default:
 				return this.i18n.translateString('session.display-mode.battlegrounds');
 			// return this.i18n.translateString('session.display-mode.unknown');
 		}
 	}
 
-	private toFriendlyGameType(gameType: GameType): 'battlegrounds' | null {
+	private toFriendlyGameType(gameType: GameType): 'battlegrounds' | 'battlegrounds-friendly' | null {
 		switch (gameType) {
 			case GameType.GT_BATTLEGROUNDS:
+				return 'battlegrounds';
 			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
-				return 'battlegrounds';
+			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
+				return 'battlegrounds-friendly';
 			default:
 				return null;
 		}
@@ -344,7 +347,8 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 	private gameModeFilter(stat: GameStat, gameType: string): boolean {
 		switch (gameType) {
 			case 'battlegrounds':
-				return stat.gameMode === 'battlegrounds';
+			case 'battlegrounds-friendly':
+				return stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly';
 			default:
 				return false;
 		}

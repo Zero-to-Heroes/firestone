@@ -1,7 +1,6 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../../models/game-event';
-import { normalizeHeroCardId } from '../../../../bgs-utils';
+import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
@@ -9,10 +8,7 @@ export class RTStatsBgsTriplesCreatedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return (
-			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE
-		);
+		return isBattlegrounds(currentState.gameType) && gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE;
 	}
 
 	parse(

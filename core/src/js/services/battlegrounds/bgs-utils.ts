@@ -977,9 +977,12 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 };
 
 export const isBattlegrounds = (gameType: GameType): boolean => {
-	return [GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY, GameType.GT_BATTLEGROUNDS_AI_VS_AI].includes(
-		gameType,
-	);
+	return [
+		GameType.GT_BATTLEGROUNDS,
+		GameType.GT_BATTLEGROUNDS_FRIENDLY,
+		GameType.GT_BATTLEGROUNDS_AI_VS_AI,
+		GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI,
+	].includes(gameType);
 };
 
 export const isBattlegroundsScene = (scene: SceneMode): boolean => {

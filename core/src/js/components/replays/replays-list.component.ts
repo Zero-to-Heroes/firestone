@@ -166,7 +166,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 	}
 
 	private bgHeroFilter(stat: GameStat, filter: string): boolean {
-		if (stat.gameMode !== 'battlegrounds') {
+		if (stat.gameMode !== 'battlegrounds' && stat.gameMode !== 'battlegrounds-friendly') {
 			return true;
 		}
 

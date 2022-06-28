@@ -111,12 +111,16 @@ export class EndGameUploaderService {
 			matchInfo,
 			xpForGame,
 		] = await Promise.all([
-			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
+			game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly'
+				? this.getBattlegroundsEndGame(currentReviewId)
+				: null,
 			isMercenaries(game.gameMode) ? this.getMercenariesCollectionInfo(currentReviewId) : null,
 			isMercenaries(game.gameMode) ? this.getMercenariesInfo(currentReviewId) : null,
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
 			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
-			isMercenaries(game.gameMode) || game.gameMode === 'battlegrounds'
+			isMercenaries(game.gameMode) ||
+			game.gameMode === 'battlegrounds' ||
+			game.gameMode === 'battlegrounds-friendly'
 				? null
 				: this.memoryInspection.getMatchInfo(),
 			this.rewards.getXpForGameInfo(),
@@ -127,7 +131,7 @@ export class EndGameUploaderService {
 		const opponentInfo = matchInfo?.opponent;
 
 		const replay = parseHsReplayString(replayXml);
-		if (game.gameMode === 'battlegrounds') {
+		if (game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly') {
 			console.log(
 				'[manastorm-bridge]',
 				currentReviewId,
@@ -299,7 +303,12 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (game.gameMode === 'battlegrounds' || game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
+		if (
+			game.gameMode === 'battlegrounds' ||
+			game.gameMode === 'battlegrounds-friendly' ||
+			game.gameMode === 'duels' ||
+			game.gameMode === 'paid-duels'
+		) {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			// const opponentInfo = await this.playersInfo.getOpponentInfo();

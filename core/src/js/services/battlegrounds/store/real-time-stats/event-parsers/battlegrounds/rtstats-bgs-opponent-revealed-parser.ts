@@ -1,8 +1,7 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { NumericTurnInfo } from '@models/battlegrounds/post-match/numeric-turn-info';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../../models/game-event';
-import { normalizeHeroCardId } from '../../../../bgs-utils';
+import { isBattlegrounds, normalizeHeroCardId } from '../../../../bgs-utils';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
@@ -10,10 +9,7 @@ export class RTStatsBgsOpponentRevealedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return (
-			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED
-		);
+		return isBattlegrounds(currentState.gameType) && gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED;
 	}
 
 	parse(

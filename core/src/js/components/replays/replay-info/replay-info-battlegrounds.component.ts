@@ -174,7 +174,8 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.result = this.buildMatchResultText(this.replayInfo);
 		this.reviewId = this.replayInfo.reviewId;
 
-		const isBg = this.replayInfo.gameMode === 'battlegrounds';
+		const isBg =
+			this.replayInfo.gameMode === 'battlegrounds' || this.replayInfo.gameMode === 'battlegrounds-friendly';
 		this.hasMatchStats = isBg;
 		this.visualResult = isBg
 			? this.replayInfo.bgsPerfectGame || parseInt(this.replayInfo.additionalResult) <= 4

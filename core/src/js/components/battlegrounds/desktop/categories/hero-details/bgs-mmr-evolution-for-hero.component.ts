@@ -51,7 +51,10 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionCompone
 				map(
 					([battlegrounds, selectedCategoryId, stats]) =>
 						[
-							stats.filter((stat) => stat.gameMode === 'battlegrounds'),
+							stats.filter(
+								(stat) =>
+									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
+							),
 							currentBgHeroId(battlegrounds, selectedCategoryId),
 						] as [GameStat[], string],
 				),

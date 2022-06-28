@@ -1,4 +1,3 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -6,6 +5,7 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { LogsUploaderService } from '../../../logs-uploader.service';
+import { isBattlegrounds } from '../../bgs-utils';
 import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -33,10 +33,7 @@ export class BgsTurnStartParser implements EventParser {
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
 		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
-		if (
-			currentState.currentGame.players.length !== 8 &&
-			gameState?.metadata?.gameType === GameType.GT_BATTLEGROUNDS
-		) {
+		if (currentState.currentGame.players.length !== 8 && isBattlegrounds(gameState?.metadata?.gameType)) {
 			setTimeout(async () => {
 				const gameLogsKey = await this.logsUploader.uploadGameLogs();
 				console.error(

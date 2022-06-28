@@ -1,7 +1,7 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { BattlegroundsInfo } from '../../../../../models/battlegrounds-info';
 import { GameEvent } from '../../../../../models/game-event';
+import { isBattlegrounds } from '../../../../battlegrounds/bgs-utils';
 import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
 import { Requirement } from '../_requirement';
 
@@ -45,9 +45,7 @@ export class BattlegroundsRankReq implements Requirement {
 	}
 
 	private async handleMetaData(gameEvent: GameEvent) {
-		this.isBgs =
-			gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
-			gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY;
+		this.isBgs = isBattlegrounds(gameEvent.additionalData.metaData.GameType);
 		if (this.isBgs) {
 			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
 

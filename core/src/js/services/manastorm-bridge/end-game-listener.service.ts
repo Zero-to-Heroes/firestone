@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
 import { DuelsInfo } from '@models/memory/memory-duels';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
+import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
@@ -164,11 +164,7 @@ export class EndGameListenerService {
 		const currentDeck = await Promise.race([this.deckService.getCurrentDeck(10000), this.listenerTimeout()]);
 		console.log('[manastorm-bridge] got currentDeck', currentDeck);
 		if (!currentDeck?.deckstring) {
-			if (
-				this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
-				this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
-				!isMercenaries(this.currentGameMode)
-			) {
+			if (!isBattlegrounds(this.currentGameMode) && !isMercenaries(this.currentGameMode)) {
 				console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
 			}
 			return;

@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
 import { BgsBuddyGainedParser } from '@services/battlegrounds/store/event-parsers/bgs-buddy-gained-parser';
 import { BgsBuddyGainedEvent } from '@services/battlegrounds/store/events/bgs-buddy-gained-event';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -29,6 +28,7 @@ import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
+import { isBattlegrounds } from '../bgs-utils';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
@@ -217,10 +217,7 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsGameSettingsEvent(gameEvent));
 			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
 				this.queuedEvents = [];
-				if (
-					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
-					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
-				) {
+				if (isBattlegrounds(gameEvent.additionalData.metaData.GameType)) {
 					this.battlegroundsUpdater.next(
 						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating, false),
 					);

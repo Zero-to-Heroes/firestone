@@ -1,4 +1,5 @@
 import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { DeckState } from './deck-state';
@@ -39,10 +40,7 @@ export class GameState {
 	}
 
 	public isBattlegrounds(): boolean {
-		return (
-			this.metadata.gameType === GameType.GT_BATTLEGROUNDS ||
-			this.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
-		);
+		return isBattlegrounds(this.metadata.gameType);
 	}
 
 	public isMercenaries(): boolean {
