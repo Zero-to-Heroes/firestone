@@ -85,6 +85,15 @@
 				}
 			}
 		}
+
+		.missing-dust {
+			display: flex;
+			margin-top: 10px;
+			color: var(--default-text-color);
+			align-items: center;
+			justify-content: center;
+			--icon-color: currentColor;
+		}
 	}
 
 	.card-search {

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { CardClass, CardIds, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { getDefaultHeroDbfIdForClass } from '@services/hs-utils';
+import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
@@ -78,6 +78,17 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						>
 						<div class="invalid-text" *ngIf="!exportValue.valid">{{ ongoingText$ | async }}</div>
 					</div>
+					<div class="missing-dust" *ngIf="missingDust$ | async as missingDust">
+						<div
+							class="dust-amount"
+							[helpTooltip]="
+								'app.duels.deckbuilder.missing-dust-tooltip' | owTranslate: { value: missingDust }
+							"
+						>
+							{{ missingDust }}
+						</div>
+						<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
+					</div>
 				</div>
 				<div class="results-container">
 					<div class="results">
@@ -125,6 +136,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	ongoingText$: Observable<string>;
 	allowedCards$: Observable<ReferenceCard[]>;
 	collection$: Observable<readonly SetCard[]>;
+	missingDust$: Observable<number>;
 
 	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
@@ -216,16 +228,26 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				return result;
 			}),
 		);
-		const collection$ = this.store
-			.listen$(([main, nav]) => main.binder.collection)
-			.pipe(this.mapData(([collection]) => collection));
+		this.collection$ = this.store
+			.listen$(([main, nav]) => main.binder.allSets)
+			.pipe(
+				this.mapData(
+					([allSets]) =>
+						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
+				),
+			);
 
 		const searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
 		this.currentDeckCards$ = this.currentDeckCards.asObservable();
-		this.activeCards$ = combineLatest(this.allowedCards$, collection$, searchString$, this.currentDeckCards$).pipe(
+		this.activeCards$ = combineLatest(
+			this.allowedCards$,
+			this.collection$,
+			searchString$,
+			this.currentDeckCards$,
+		).pipe(
 			this.mapData(
 				([allCards, collection, searchString, deckCards]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
@@ -307,14 +329,22 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				}),
 			),
 		);
-		this.collection$ = this.store
-			.listen$(([main, nav]) => main.binder.allSets)
-			.pipe(
-				this.mapData(
-					([allSets]) =>
-						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
-				),
-			);
+		this.missingDust$ = combineLatest(this.currentDeckCards$, this.collection$).pipe(
+			this.mapData(([cards, collection]) => {
+				const groupedByCardId = groupByFunction((cardId: string) => cardId)(cards);
+				return Object.keys(groupedByCardId)
+					.map((cardId) => {
+						const neededCards = groupedByCardId[cardId].length;
+						const cardInCollection = collection.find((c) => c.id === cardId);
+						const owned = cardInCollection?.getTotalOwned() ?? 0;
+						const missingCards = Math.max(0, neededCards - owned);
+						const rarity = this.allCards.getCard(cardId).rarity;
+						const totalDust = !!rarity ? missingCards * dustToCraftFor(rarity) : 0;
+						return totalDust;
+					})
+					.reduce((a, b) => a + b, 0);
+			}),
+		);
 
 		this.searchShortcutsTooltip = `
 			<div class="tooltip-container">
