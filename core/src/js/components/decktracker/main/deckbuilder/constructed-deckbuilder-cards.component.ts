@@ -9,6 +9,7 @@ import { groupByFunction, sortByProperties } from '@services/utils';
 import { DeckDefinition, encode } from 'deckstrings';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
+import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -54,6 +55,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						class="deck-list"
 						[cards]="currentDeckCards$ | async"
 						(cardClicked)="onDecklistCardClicked($event)"
+						[collection]="collection$ | async"
 					>
 					</deck-list>
 					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
@@ -122,6 +124,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
 	allowedCards$: Observable<ReferenceCard[]>;
+	collection$: Observable<readonly SetCard[]>;
 
 	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
@@ -304,6 +307,14 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				}),
 			),
 		);
+		this.collection$ = this.store
+			.listen$(([main, nav]) => main.binder.allSets)
+			.pipe(
+				this.mapData(
+					([allSets]) =>
+						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
+				),
+			);
 
 		this.searchShortcutsTooltip = `
 			<div class="tooltip-container">
@@ -346,7 +357,8 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 		if (event.code === 'Enter') {
 			const card = activeCards[0];
 			this.addCard(card);
-			const hasMaxCopies = this.hasMaximumCopies(card.cardId, this.currentDeckCards.value);
+			const hasMaxCopies =
+				this.hasMaximumCopies(card.cardId, this.currentDeckCards.value) && activeCards.length === 1;
 			if (event.shiftKey || hasMaxCopies) {
 				this.searchForm.setValue(null);
 			}
@@ -419,6 +431,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
 			card.race?.toLowerCase().includes(searchFilters.text) ||
+			card.rarity?.toLowerCase().includes(searchFilters.text) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
 		);
 	}
