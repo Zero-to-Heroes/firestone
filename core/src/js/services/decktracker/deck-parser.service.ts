@@ -233,7 +233,13 @@ export class DeckParserService {
 					const lines: readonly string[] = await this.readAllLogLines();
 					// ignore everythine if the lines don't contain any "finding game with deck"
 					// this means that we're reconnecting and that have just received the full list of decks
-					if (lines.some((line) => line.includes('Finding Game With Deck'))) {
+					if (
+						lines.some((line) => line.includes('Finding Game With Deck')) ||
+						// When reconnecting, the sequence of scenes is always the same: LOGIN, then GAMEPLAY
+						// So if we go to through another non-gameplay scene that isn't LOGIN, it means that
+						// we can safely reset
+						changes.CurrentScene !== SceneMode.LOGIN
+					) {
 						console.debug('[deck-parser] resetting current deck');
 						this.selectedDeckId = null;
 						// Reset the cached deck, as it should only be used when restarting the match
