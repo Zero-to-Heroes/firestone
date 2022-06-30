@@ -283,6 +283,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.FungalFortunes:
 				return and(inDeck, minion);
+			case CardIds.GraveDefiler:
+				return and(inDeck, spell, fel);
 			case CardIds.GuardianAnimals:
 				return and(inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.GuffRunetotem_BAR_720:
