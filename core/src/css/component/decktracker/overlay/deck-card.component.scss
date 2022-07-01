@@ -276,7 +276,8 @@
 			border-image: linear-gradient(89.94deg, #9fb6d7 0%, #9fb6d7 40%, rgba(159, 182, 215, 0) 100%) 1;
 		}
 		.mana-cost.mana-cost {
-			background: #bfc1c4;
+			// background: #bfc1c4;
+			opacity: 0.6;
 			position: relative;
 			top: 0px;
 			left: 3px;
@@ -285,7 +286,7 @@
 			padding-right: 3px;
 			padding-bottom: 3px;
 			span {
-				color: #5a5f87;
+				// color: #5a5f87;
 			}
 		}
 		.card-name span {
