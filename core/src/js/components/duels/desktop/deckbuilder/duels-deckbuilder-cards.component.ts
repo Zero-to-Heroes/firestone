@@ -562,6 +562,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		if (event.code === 'Enter') {
 			const newDeckCards = [...(this.currentDeckCards.value ?? []), activeCards[0].cardId];
 			this.currentDeckCards.next(newDeckCards);
+			console.debug('active cards after adding', activeCards);
 
 			if (event.shiftKey || activeCards.length === 1) {
 				this.searchForm.setValue(null);
