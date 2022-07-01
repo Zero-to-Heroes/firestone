@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import S3 from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { ManastormInfo } from './manastorm-info';
@@ -13,7 +13,11 @@ const BUCKET = 'com.zerotoheroes.batch';
 
 @Injectable()
 export class ReplayUploadService {
-	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		private readonly events: Events,
+	) {
 		const fakeGame: GameForUpload = {
 			buildNumber: 139719,
 			durationTimeSeconds: 0,
@@ -72,6 +76,7 @@ export class ReplayUploadService {
 		const replayKey = `hearthstone/replay/${today.getFullYear()}/${
 			today.getMonth() + 1
 		}/${today.getDate()}/${uuid()}.xml.zip`;
+		const prefs = await this.prefs.getPreferences();
 		const metadata = {
 			'review-id': reviewId,
 			'replay-key': replayKey,
@@ -104,6 +109,7 @@ export class ReplayUploadService {
 			// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
 			// better name ourselves
 			'force-opponent-name': encodeURIComponent(game.forceOpponentName),
+			'allow-game-share': '' + prefs.allowGamesShare,
 		};
 		const params = {
 			Bucket: BUCKET,

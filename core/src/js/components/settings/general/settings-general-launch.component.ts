@@ -44,6 +44,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.general.launch.hide-release-notes-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="allowGamesShare"
+					[label]="'settings.general.launch.allow-games-share-label' | owTranslate"
+					[tooltip]="'settings.general.launch.allow-games-share-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="setAllNotifications"
 					[label]="'settings.general.launch.display-notifications-label' | owTranslate"
 					[tooltip]="'settings.general.launch.display-notifications-tooltip' | owTranslate"

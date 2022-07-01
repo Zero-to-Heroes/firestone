@@ -68,6 +68,7 @@ export class Preferences {
 	readonly dontShowNewVersionNotif: boolean = false;
 	readonly globalZoomLevel: number = 100;
 	readonly flashWindowOnYourTurn: boolean = true;
+	readonly allowGamesShare: boolean = true;
 
 	readonly advancedModeToggledOn: boolean;
 
