@@ -418,14 +418,15 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
 			this.mapData(([validBuckets, deckCardIds]) => {
 				// Handle the cases of Core cards also present in the buckets
-				const deckCardIdsWithDuplicates = deckCardIds
-					.map((cardId) => this.allCards.getCard(cardId))
-					.flatMap((card) =>
-						card.deckDuplicateDbfId
-							? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
-							: [card],
-					)
-					.map((card) => card.id);
+				const deckCardIdsWithDuplicates =
+					deckCardIds
+						?.map((cardId) => this.allCards.getCard(cardId))
+						.flatMap((card) =>
+							card.deckDuplicateDbfId
+								? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+								: [card],
+						)
+						.map((card) => card.id) ?? [];
 				return validBuckets.filter((bucket) => {
 					const cardIdsWithDuplicates = bucket.bucketCardIds
 						.map((cardId) => this.allCards.getCard(cardId))
@@ -468,9 +469,10 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 		).pipe(
 			this.mapData(([cards, [hero, currentSignatureTreasureCardId]]) => {
-				const cardDbfIds = cards
-					.map((cardId) => this.allCards.getCard(cardId).dbfId)
-					.map((dbfId) => [dbfId, 1] as [number, number]);
+				const cardDbfIds =
+					cards
+						?.map((cardId) => this.allCards.getCard(cardId).dbfId)
+						.map((dbfId) => [dbfId, 1] as [number, number]) ?? [];
 				const treasureCard = this.allCards.getCard(currentSignatureTreasureCardId);
 				const duelsClass = treasureCard.classes?.length > 1 ? null : treasureCard.cardClass;
 				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
@@ -494,7 +496,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		);
 		this.missingDust$ = combineLatest(this.currentDeckCards$, this.collection$).pipe(
 			this.mapData(([cards, collection]) => {
-				const groupedByCardId = groupByFunction((cardId: string) => cardId)(cards);
+				const groupedByCardId = groupByFunction((cardId: string) => cardId)(cards ?? []);
 				return Object.keys(groupedByCardId)
 					.map((cardId) => {
 						const neededCards = groupedByCardId[cardId].length;
@@ -531,11 +533,11 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	}
 
 	addCard(card: DeckBuilderCard) {
-		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
+		this.currentDeckCards.next([...(this.currentDeckCards.value ?? []), card.cardId]);
 	}
 
 	onBucketCardClick(card: BucketCard, allowedCards: readonly ReferenceCard[]) {
-		if (this.currentDeckCards.value.includes(card.cardId)) {
+		if ((this.currentDeckCards.value ?? []).includes(card.cardId)) {
 			return;
 		}
 
@@ -544,7 +546,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			return;
 		}
 
-		this.currentDeckCards.next([...this.currentDeckCards.value, card.cardId]);
+		this.currentDeckCards.next([...(this.currentDeckCards.value ?? []), card.cardId]);
 	}
 
 	handleKeyPress(event: KeyboardEvent, activeCards: readonly DeckBuilderCard[]) {
@@ -558,7 +560,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}
 
 		if (event.code === 'Enter') {
-			const newDeckCards = [...this.currentDeckCards.value, activeCards[0].cardId];
+			const newDeckCards = [...(this.currentDeckCards.value ?? []), activeCards[0].cardId];
 			this.currentDeckCards.next(newDeckCards);
 
 			if (event.shiftKey || activeCards.length === 1) {
@@ -572,7 +574,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	}
 
 	onDecklistCardClicked(card: VisualDeckCard) {
-		const deckCards = [...this.currentDeckCards.value];
+		const deckCards = [...(this.currentDeckCards.value ?? [])];
 		deckCards.splice(
 			deckCards.findIndex((cardId) => cardId === card.cardId),
 			1,
