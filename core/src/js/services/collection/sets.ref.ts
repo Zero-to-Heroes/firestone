@@ -10,11 +10,12 @@ export const standardSets: readonly string[] = [
 	'onyxias_lair',
 	'the_sunken_city',
 	'throne_of_tides',
+	'revendreth',
 ];
 
 export const sets: readonly ReferenceSet[] = [
 	{
-		id: 'castle_nathria',
+		id: 'revendreth',
 		name: `Murder at Castle Nathria`,
 		launchDate: new Date('2022-08-02'),
 	},
