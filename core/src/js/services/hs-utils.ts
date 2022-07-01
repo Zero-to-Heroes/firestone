@@ -1,6 +1,7 @@
 import { BoosterType, CardClass, CardIds, COIN_IDS, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { isBattlegrounds } from './battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 // Don't specify anything by default, so that the "cache refresh" properly refreshes the data
@@ -81,6 +82,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.LothraxionTheRedeemed,
 	CardIds.NeeruFireblade_BAR_919,
 	CardIds.PrinceKeleseth,
+	CardIds.PrinceRenathal,
 	CardIds.RadiantLightspawn,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
@@ -216,6 +218,7 @@ export const publicCardCreators = [
 	CardIds.BarakKodobane_BAR_551,
 	CardIds.BattleVicar,
 	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
+	CardIds.BlessingOfTheAncients_DAL_351,
 	CardIds.BloodsailFlybooter,
 	CardIds.Bogshaper,
 	CardIds.BookOfSpecters,
@@ -355,6 +358,7 @@ export const publicCardCreators = [
 	CardIds.Sleetbreaker,
 	CardIds.SmallTimeRecruits,
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
+	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
 	CardIds.Starscryer,
 	CardIds.Switcheroo,
@@ -460,7 +464,7 @@ export const getGalakrondCardFor = (className: string, invokeCount: number): str
 };
 
 export const defaultStartingHp = (gameType: GameType, heroCardId: string): number => {
-	if ([GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(gameType)) {
+	if (isBattlegrounds(gameType)) {
 		switch (heroCardId) {
 			case CardIds.PatchwerkBattlegrounds:
 				return 55;
