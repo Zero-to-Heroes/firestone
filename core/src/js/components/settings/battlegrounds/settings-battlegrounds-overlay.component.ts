@@ -186,7 +186,10 @@ import { Knob } from '../preference-slider.component';
 			</div>
 
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.opponent-board-title'"></div>
-			<div class="settings-group" [ngClass]="{ 'disabled': !value.showBannedTribes || !value.bgsFullToggle }">
+			<div
+				class="settings-group"
+				[ngClass]="{ 'disabled': !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
+			>
 				<preference-toggle
 					class="opponent-board-top"
 					field="bgsOpponentOverlayAtTop"
