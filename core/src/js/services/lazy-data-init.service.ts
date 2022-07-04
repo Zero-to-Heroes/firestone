@@ -9,7 +9,7 @@ export class LazyDataInitService {
 		console.debug('requesting load', dataType);
 		switch (dataType) {
 			case 'constructed-meta-decks':
-				this.constructedMetaDecksStateBuilder.init();
+				this.constructedMetaDecksStateBuilder.loadInitialStats();
 		}
 	}
 }

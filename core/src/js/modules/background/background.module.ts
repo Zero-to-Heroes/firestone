@@ -209,6 +209,9 @@ import { DecktrackerPersonalStatsRankingComponent } from '../../components/deckt
 import { DecktrackerRatingGraphComponent } from '../../components/decktracker/main/decktracker-rating-graph.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { DecktrackerStatsForReplaysComponent } from '../../components/decktracker/main/decktracker-stats-for-replays.component';
+import { ConstructedFormatFilterDropdownComponent } from '../../components/decktracker/main/filters/constructed-format-filter-dropdown.component';
+import { ConstructedRankFilterDropdownComponent } from '../../components/decktracker/main/filters/constructed-rank-filter-dropdown.component';
+import { ConstructedTimeFilterDropdownComponent } from '../../components/decktracker/main/filters/constructed-time-filter-dropdown.component';
 import { DecktrackerDeckSortDropdownComponent } from '../../components/decktracker/main/filters/decktracker-deck-sort-dropdown.component';
 import { DecktrackerFormatFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-format-filter-dropdown.component';
 import { DecktrackerRankCategoryDropdownComponent } from '../../components/decktracker/main/filters/decktracker-rank-category-dropdown.component';
@@ -747,6 +750,9 @@ const components = [
 		ConstructedDeckbuilderFormatComponent,
 		ConstructedDeckbuilderClassComponent,
 		ConstructedDeckbuilderCardsComponent,
+		ConstructedRankFilterDropdownComponent,
+		ConstructedFormatFilterDropdownComponent,
+		ConstructedTimeFilterDropdownComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

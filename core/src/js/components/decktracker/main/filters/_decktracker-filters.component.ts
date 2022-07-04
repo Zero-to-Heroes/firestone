@@ -33,6 +33,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<replays-deckstring-filter-dropdown class="filter deckstring-filter"></replays-deckstring-filter-dropdown>
 			<decktracker-deck-sort-dropdown class="filter deck-sort"></decktracker-deck-sort-dropdown>
 
+			<!-- For meta decks -->
+			<constructed-format-filter-dropdown class="filter"></constructed-format-filter-dropdown>
+			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
+			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
+
 			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#info" />
