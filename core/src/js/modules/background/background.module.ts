@@ -8,6 +8,7 @@ import {
 	DoBootstrap,
 	ErrorHandler,
 	Injectable,
+	Injector,
 	NgModule,
 	Type,
 } from '@angular/core';
@@ -186,6 +187,8 @@ import { SetsContainerComponent } from '../../components/collection/sets-contain
 import { SetsComponent } from '../../components/collection/sets.component';
 import { TheCoinsComponent } from '../../components/collection/the-coins.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
+import { ConstructedMetaDeckSummaryComponent } from '../../components/decktracker/main/constructed-meta-deck-summary.component';
+import { ConstructedMetaDecksComponent } from '../../components/decktracker/main/constructed-meta-decks.component';
 import { DeckManaCurveBarComponent } from '../../components/decktracker/main/deck-mana-curve-bar.component';
 import { DeckManaCurveComponent } from '../../components/decktracker/main/deck-mana-curve.component';
 import { DeckMatchupInfoComponent } from '../../components/decktracker/main/deck-matchup-info.component';
@@ -435,6 +438,7 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
+import { setAppInjector } from '../../services/app-injector';
 import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
 import { BgsBattlePositioningService } from '../../services/battlegrounds/bgs-battle-positioning.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
@@ -453,6 +457,7 @@ import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
 import { ArenaRunParserService } from '../../services/decktracker/arena-run-parser.service';
+import { ConstructedMetaDecksStateBuilderService } from '../../services/decktracker/constructed-meta-decks-state-builder.service';
 import { DeckCardService } from '../../services/decktracker/deck-card.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { DungeonLootParserService } from '../../services/decktracker/dungeon-loot-parser.service';
@@ -473,6 +478,7 @@ import { GameEventsEmitterService } from '../../services/game-events-emitter.ser
 import { GameEvents } from '../../services/game-events.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
+import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LocalizationService } from '../../services/localization.service';
@@ -714,6 +720,8 @@ const components = [
 		DecktrackerDecksComponent,
 		DecktrackerDeckSummaryComponent,
 		DecktrackerDeckDetailsComponent,
+		ConstructedMetaDecksComponent,
+		ConstructedMetaDeckSummaryComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
 		DecktrackerDeckRecapComponent,
@@ -1046,6 +1054,7 @@ const components = [
 		UserService,
 		ApiRunner,
 		LocalStorageService,
+		LazyDataInitService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,
@@ -1082,6 +1091,7 @@ const components = [
 		DecktrackerStateLoaderService,
 		DecksStateBuilderService,
 		ReplaysStateBuilderService,
+		ConstructedMetaDecksStateBuilderService,
 
 		EndGameListenerService,
 		EndGameUploaderService,
@@ -1150,7 +1160,9 @@ const components = [
 	// bootstrap: [],
 })
 export class AppModule implements DoBootstrap {
-	constructor(private resolver: ComponentFactoryResolver) {}
+	constructor(private resolver: ComponentFactoryResolver, private injector: Injector) {
+		setAppInjector(injector);
+	}
 
 	ngDoBootstrap(appRef: ApplicationRef) {
 		components.forEach((componentDef: Type<any>) => {

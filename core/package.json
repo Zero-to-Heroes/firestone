@@ -36,6 +36,7 @@
 		"@firestone-hs/categorize-deck": "^1.0.4",
 		"@firestone-hs/coliseum-components": "0.0.21",
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
+		"@firestone-hs/deck-stats": "^1.0.2",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.95",

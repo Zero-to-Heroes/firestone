@@ -19,6 +19,7 @@ import { PackMonitor } from './collection/pack-monitor.service';
 import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
 import { ArenaRunParserService } from './decktracker/arena-run-parser.service';
+import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
@@ -108,6 +109,7 @@ export class AppBootstrapService {
 		private init_LocalizationService: LocalizationService,
 		private init_OWUtilsService: OwUtilsService,
 		private init_CardsHighlightService: CardsHighlightService,
+		private init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
 	) {}
 
 	public async init() {

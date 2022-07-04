@@ -54,6 +54,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			>
 				<span [owTranslate]="'app.decktracker.menu.deckbuilder-header'"></span>
 			</button>
+			<!-- <button
+				class="menu-item"
+				tabindex="0"
+				[ngClass]="{ 'selected': selectedTab === 'constructed-meta-decks' }"
+				(mousedown)="selectStage('constructed-meta-decks')"
+			>
+				<span [owTranslate]="'app.decktracker.menu.meta-decks-header'"></span>
+			</button> -->
 		</nav>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

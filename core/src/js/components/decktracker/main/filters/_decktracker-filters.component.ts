@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<replays-deckstring-filter-dropdown class="filter deckstring-filter"></replays-deckstring-filter-dropdown>
 			<decktracker-deck-sort-dropdown class="filter deck-sort"></decktracker-deck-sort-dropdown>
 
-			<div class="filter-info" [helpTooltip]="helpTooltip">
+			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#info" />
 				</svg>
@@ -53,6 +53,7 @@ export class DecktrackerFiltersComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
 	showHiddenDecksLink$: Observable<boolean>;
+	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -84,6 +85,9 @@ export class DecktrackerFiltersComponent
 				tap((info) => cdLog('emitting hidden deck codes in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
 			);
+		this.showInfo$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
+			.pipe(this.mapData(([currentView]) => currentView !== 'constructed-meta-decks'));
 	}
 
 	ngAfterViewInit() {

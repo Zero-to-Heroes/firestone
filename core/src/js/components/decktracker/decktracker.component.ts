@@ -40,6 +40,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						<constructed-deckbuilder
 							*ngIf="value.currentView === 'constructed-deckbuilder'"
 						></constructed-deckbuilder>
+						<constructed-meta-decks
+							*ngIf="value.currentView === 'constructed-meta-decks'"
+						></constructed-meta-decks>
 					</div>
 				</with-loading>
 			</section>

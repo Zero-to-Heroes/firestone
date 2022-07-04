@@ -1,3 +1,4 @@
+import { FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
 import { allDuelsHeroes, Race } from '@firestone-hs/reference-data';
 import { DuelsDeckSummary } from '@models/duels/duels-personal-deck';
 import 'reflect-metadata';
@@ -137,6 +138,9 @@ export class Preferences {
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 	readonly constructedPersonalAdditionalDecks: readonly DeckSummary[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
+	readonly constructedMetaDecksFormatFilter: FormatForDeckData = 'standard';
+	readonly constructedMetaDecksTimeFilter: TimeForDeckData = 'last-patch';
+	readonly constructedMetaDecksRankFilter: RankForDeckData = 'all';
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

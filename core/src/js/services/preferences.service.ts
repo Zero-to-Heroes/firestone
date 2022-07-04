@@ -672,6 +672,8 @@ export class PreferencesService {
 	private lastSyncPrefs: Preferences;
 
 	private startPrefsSync() {
+		console.warn('prefs are not synced for now');
+		return;
 		setInterval(async () => {
 			console.debug('[preferences] checking prefs update', this.currentSyncDate);
 			const userPrefs = await this.getPreferences();

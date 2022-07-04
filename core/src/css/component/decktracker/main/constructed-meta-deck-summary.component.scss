@@ -1,0 +1,14 @@
+:host() {
+	position: relative;
+}
+
+.constructed-meta-deck-summary {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	position: relative;
+	padding: 10px;
+	padding-bottom: 12px;
+}
