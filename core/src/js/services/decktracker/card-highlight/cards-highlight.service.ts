@@ -297,6 +297,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, pirate);
 			case CardIds.IcebloodTower:
 				return and(inDeck, spell);
+			case CardIds.Insight:
+			case CardIds.Insight_InsightToken:
+				return and(inDeck, minion);
 			case CardIds.InvestmentOpportunity:
 				return and(inDeck, overload);
 			case CardIds.JaceDarkweaver:
@@ -382,6 +385,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.JrTombDiverTavernBrawl:
 			case CardIds.SrTombDiverTavernBrawl:
 				return and(or(inDeck, inHand, inOther), spell, secret);
+			case CardIds.Switcheroo:
+				return and(inDeck, minion);
 			case CardIds.SwordOfTheFallen:
 				return and(inDeck, spell, secret);
 			case CardIds.TamsinsPhylactery:
