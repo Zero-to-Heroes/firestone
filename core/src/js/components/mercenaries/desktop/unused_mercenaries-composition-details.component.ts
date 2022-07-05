@@ -101,7 +101,7 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 	ngAfterContentInit() {
 		this.compositionStat$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.globalStats,
+				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedCompositionId,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,

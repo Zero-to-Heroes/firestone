@@ -186,7 +186,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 	ngAfterContentInit(): void {
 		this.heroStats$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.globalStats,
+				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.mercenaries.referenceData,
 				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedHeroId,

@@ -5,8 +5,6 @@ import { filter, map, tap } from 'rxjs/operators';
 import { ApiRunner } from '../api-runner';
 import { LocalStorageService } from '../local-storage';
 import { ConstructedMetaDecksLoadedEvent } from '../mainwindow/store/events/decktracker/constructed-meta-decks-loaded-event';
-import { OverwolfService } from '../overwolf.service';
-import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/ranked/decks';
@@ -17,8 +15,6 @@ export class ConstructedMetaDecksStateBuilderService {
 
 	constructor(
 		private readonly localStorage: LocalStorageService,
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
 		private readonly api: ApiRunner,
 		private readonly store: AppUiStoreFacadeService,
 	) {

@@ -122,7 +122,7 @@ export class StoreBootstrapService {
 				adventuresInfo,
 			],
 			[arenaRewards],
-			[mercenariesGlobalStats, mercenariesReferenceData, mercenariesCollection],
+			[mercenariesReferenceData, mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -151,7 +151,7 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([
-				this.mercenariesService.loadGlobalStats(),
+				// this.mercenariesService.loadGlobalStats(),
 				this.mercenariesService.loadReferenceData(),
 				this.mercenariesMemory.getMercenariesMergedCollectionInfo(),
 			]),
@@ -238,7 +238,7 @@ export class StoreBootstrapService {
 		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
 
 		const mercenariesState: MercenariesState = await this.mercenariesService.initState(
-			mercenariesGlobalStats,
+			// mercenariesGlobalStats,
 			mercenariesReferenceData,
 			mercenariesCollection,
 		);

@@ -53,7 +53,7 @@ export class MercenariesStarterFilterDropdownComponent
 		);
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.globalStats,
+				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)

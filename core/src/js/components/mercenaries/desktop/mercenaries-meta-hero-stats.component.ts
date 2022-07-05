@@ -56,7 +56,7 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 		// shows/hide data (like role of search string)
 		this.stats$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.globalStats,
+				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.mercenaries.referenceData,
 				([main, nav]) => main.stats.gameStats,
 				([main, nav]) => nav.navigationMercenaries.heroSearchString,

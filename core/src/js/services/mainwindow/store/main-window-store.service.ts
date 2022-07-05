@@ -154,6 +154,7 @@ import { GenericPreferencesUpdateEvent } from './events/generic-preferences-upda
 import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
+import { MercenariesGlobalStatsLoadedEvent } from './events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
@@ -285,6 +286,7 @@ import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
 import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
+import { MercenariesGlobalStatsLoadedProcessor } from './processors/mercenaries/mercenaries-global-stats-loaded-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
@@ -785,6 +787,9 @@ export class MainWindowStoreService {
 			new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
 
 			// Mercenaries
+			MercenariesGlobalStatsLoadedEvent.eventName(),
+			new MercenariesGlobalStatsLoadedProcessor(),
+
 			MercenariesModeFilterSelectedEvent.eventName(),
 			new MercenariesModeFilterSelectedProcessor(this.prefs),
 

@@ -1,3 +1,5 @@
+import { AppInjector } from '../../services/app-injector';
+import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import {
 	MercenariesGlobalStats,
 	MercenariesReferenceData,
@@ -11,12 +13,13 @@ import { MercenariesCategoryId } from './mercenary-category-id.type';
 export class MercenariesState {
 	readonly loading: boolean = true;
 	readonly categoryIds: MercenariesCategoryId[] = [];
-	readonly globalStats: MercenariesGlobalStats;
 	readonly referenceData: MercenariesReferenceData;
 	// Merc-specific collection info from the game's memory
 	readonly collectionInfo: MemoryMercenariesCollectionInfo;
 	readonly mapInfo: MemoryMercenariesInfo;
 	readonly visitorsInfo: readonly MemoryVisitor[];
+
+	readonly globalStats: MercenariesGlobalStats = undefined;
 
 	public static create(base: MercenariesState): MercenariesState {
 		return Object.assign(new MercenariesState(), base);
@@ -24,5 +27,14 @@ export class MercenariesState {
 
 	public update(base: Partial<NonFunctionProperties<MercenariesState>>): MercenariesState {
 		return Object.assign(new MercenariesState(), this, base);
+	}
+
+	public getGlobalStats(): MercenariesGlobalStats {
+		if (this.globalStats === undefined) {
+			console.log('mercs global stats not initialized yet');
+			(this.globalStats as MercenariesGlobalStats) = null;
+			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('mercenaries-global-stats');
+		}
+		return this.globalStats;
 	}
 }

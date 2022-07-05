@@ -46,7 +46,7 @@ export class MercenariesPvpMmrFilterDropdownComponent
 
 	ngAfterContentInit(): void {
 		this.options$ = this.store
-			.listen$(([main, nav, prefs]) => main.mercenaries.globalStats?.pvp?.mmrPercentiles)
+			.listen$(([main, nav, prefs]) => main.mercenaries.getGlobalStats()?.pvp?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
@@ -66,7 +66,7 @@ export class MercenariesPvpMmrFilterDropdownComponent
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.mercenaries.globalStats,
+				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,

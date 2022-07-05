@@ -75,7 +75,7 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 			);
 		this.stats$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.globalStats,
+				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,

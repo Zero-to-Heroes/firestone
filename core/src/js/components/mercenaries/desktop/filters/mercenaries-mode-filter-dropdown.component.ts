@@ -51,7 +51,7 @@ export class MercenariesModeFilterDropdownComponent extends AbstractSubscription
 		);
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.globalStats,
+				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)

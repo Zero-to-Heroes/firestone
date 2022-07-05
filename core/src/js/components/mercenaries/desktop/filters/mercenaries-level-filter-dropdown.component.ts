@@ -52,7 +52,7 @@ export class MercenariesHeroLevelFilterDropdownComponent
 		);
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.globalStats,
+				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)

@@ -6,13 +6,55 @@ import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-merc
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
+import { LocalStorageService } from '../local-storage';
+import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json';
 
 @Injectable()
 export class MercenariesStateBuilderService {
-	constructor(private readonly api: ApiRunner, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly localStorage: LocalStorageService,
+	) {
+		this.init();
+	}
+
+	private async init() {
+		await this.store.initComplete();
+		console.debug('init meta service');
+		// Will be used for ref data
+		// combineLatest(
+		// 	this.store.listenPrefs$(
+		// 		(prefs) => prefs.constructedMetaDecksRankFilter,
+		// 		(prefs) => prefs.constructedMetaDecksTimeFilter,
+		// 		(prefs) => prefs.constructedMetaDecksFormatFilter,
+		// 	),
+		// 	this.requestedInitialLoad.asObservable(),
+		// )
+		// 	.pipe(
+		// 		tap((info) => console.debug('updating meta info', info)),
+		// 		filter(([[rank, time, format], load]) => load),
+		// 		map(([[rank, time, format], load]) => ({ rank, time, format })),
+		// 	)
+		// 	.subscribe(({ rank, time, format }) => this.loadNewDecks(format, time, rank));
+	}
+
+	public async loadInitialGlobalStats() {
+		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>('mercenaries-global-stats');
+		if (!!localInfo) {
+			console.debug('loaded local mercenaries global stats', localInfo);
+			this.store.send(new MercenariesGlobalStatsLoadedEvent(localInfo));
+		}
+
+		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
+		this.localStorage.setItem('mercenaries-global-stats', globalStats);
+		this.store.send(new MercenariesGlobalStatsLoadedEvent(globalStats));
+	}
 
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
 		const prefs = await this.prefs.getPreferences();
@@ -23,24 +65,24 @@ export class MercenariesStateBuilderService {
 		return referenceData;
 	}
 
-	public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
-		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		// console.debug(
-		// 	'merc global',
-		// 	globalStats,
-		// 	globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
-		// 	globalStats.pvp.compositions
-		// 		// .filter((stat) => stat.mmrPercentile === 100)
-		// 		.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
-		// 		.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
-		// 		.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
-		// 		.sort((a, b) => b.totalMatches - a.totalMatches),
-		// );
-		return globalStats;
-	}
+	// public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
+	// 	const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
+	// 	// console.debug(
+	// 	// 	'merc global',
+	// 	// 	globalStats,
+	// 	// 	globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
+	// 	// 	globalStats.pvp.compositions
+	// 	// 		// .filter((stat) => stat.mmrPercentile === 100)
+	// 	// 		.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
+	// 	// 		.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
+	// 	// 		.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
+	// 	// 		.sort((a, b) => b.totalMatches - a.totalMatches),
+	// 	// );
+	// 	return globalStats;
+	// }
 
 	public initState(
-		globalStats: MercenariesGlobalStats,
+		// globalStats: MercenariesGlobalStats,
 		referenceData: MercenariesReferenceData,
 		mercenariesCollection: MemoryMercenariesCollectionInfo,
 	): MercenariesState {
@@ -51,7 +93,7 @@ export class MercenariesStateBuilderService {
 			'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
-			globalStats: globalStats,
+			// globalStats: globalStats,
 			referenceData: referenceData,
 			collectionInfo: mercenariesCollection,
 			categoryIds: categoryIds,

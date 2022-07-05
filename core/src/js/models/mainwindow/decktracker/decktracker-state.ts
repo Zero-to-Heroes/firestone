@@ -21,15 +21,15 @@ export class DecktrackerState {
 	// also keeping the property easy to set via Object.assign.
 	// (getter and setter have the same visibility in Typescript, and I can't have complex logic in the getter)
 	// because it gets called by Object.assign
-	// Important to assign it to null, so that we only call the LazyInit once
-	readonly metaDecks: readonly DeckStat[] = null;
+	// Important to assign it to undefined, so that we only call the LazyInit once
+	readonly metaDecks: readonly DeckStat[] = undefined;
 
 	public update(base: Partial<NonFunctionProperties<DecktrackerState>>): DecktrackerState {
 		return Object.assign(new DecktrackerState(), this, base);
 	}
 
 	public getMetaDecks(): readonly DeckStat[] {
-		if (this.metaDecks === null) {
+		if (this.metaDecks === undefined) {
 			console.log('meta decks not initialized yet');
 			(this.metaDecks as readonly DeckStat[]) = [];
 			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('constructed-meta-decks');
