@@ -309,6 +309,7 @@ export const publicCardCreators = [
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.LunarVisions,
+	CardIds.MailboxDancer,
 	CardIds.Mankrik,
 	CardIds.MoonlitGuidance_DED_002,
 	CardIds.MoonlitGuidance_Story_11_MoonlitGuidance,
