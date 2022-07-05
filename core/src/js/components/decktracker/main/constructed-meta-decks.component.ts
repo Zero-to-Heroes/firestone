@@ -14,11 +14,21 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="constructed-meta-decks" *ngIf="decks$ | async as decks">
 			<with-loading [isLoading]="!decks?.length">
-				<ul class="deck-list" scrollable [attr.aria-label]="'Meta deck stats'" role="list">
-					<li *ngFor="let deck of decks">
-						<constructed-meta-deck-summary [deck]="deck" role="listitem"></constructed-meta-deck-summary>
-					</li>
-				</ul>
+				<virtual-scroller
+					#scroll
+					class="decks-list"
+					[items]="decks"
+					[attr.aria-label]="'Meta deck stats'"
+					role="list"
+					scrollable
+				>
+					<constructed-meta-deck-summary
+						*ngFor="let deck of scroll.viewPortItems; trackBy: trackByDeck"
+						class="deck"
+						[deck]="deck"
+						role="listitem"
+					></constructed-meta-deck-summary>
+				</virtual-scroller>
 			</with-loading>
 		</div>
 	`,
@@ -38,5 +48,9 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 				filter(([decks]) => !!decks?.length),
 				this.mapData(([decks]) => decks),
 			);
+	}
+
+	trackByDeck(index: number, item: DeckStat) {
+		return item.deckstring;
 	}
 }

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -54,14 +55,15 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			>
 				<span [owTranslate]="'app.decktracker.menu.deckbuilder-header'"></span>
 			</button>
-			<!-- <button
+			<button
 				class="menu-item"
 				tabindex="0"
 				[ngClass]="{ 'selected': selectedTab === 'constructed-meta-decks' }"
 				(mousedown)="selectStage('constructed-meta-decks')"
+				*ngIf="enableMetaDecks"
 			>
 				<span [owTranslate]="'app.decktracker.menu.meta-decks-header'"></span>
-			</button> -->
+			</button>
 		</nav>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,6 +71,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class MenuSelectionDecktrackerComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
+	enableMetaDecks = FeatureFlags.ENABLE_CONSTRUCTED_META_DECKS;
+
 	selectedTab$: Observable<string>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
