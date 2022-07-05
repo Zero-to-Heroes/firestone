@@ -16,8 +16,10 @@ export class LazyDataInitService {
 				return this.constructedMetaDecksStateBuilder.loadInitialStats();
 			case 'mercenaries-global-stats':
 				return this.mercenariesStateBuilder.loadInitialGlobalStats();
+			case 'mercenaries-reference-data':
+				return this.mercenariesStateBuilder.loadInitialReferenceData();
 		}
 	}
 }
 
-export type StateDataType = 'constructed-meta-decks' | 'mercenaries-global-stats';
+export type StateDataType = 'constructed-meta-decks' | 'mercenaries-global-stats' | 'mercenaries-reference-data';

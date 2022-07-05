@@ -22,11 +22,11 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 
 	public applies = (battleState: MercenariesBattleState) => battleState != null;
 
-	public parse(
+	public async parse(
 		battleState: MercenariesBattleState,
 		event: GameEvent,
 		mainWindowState: MainWindowState,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState> {
+	): Promise<MercenariesBattleState> {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
 		if (!localPlayer) {
 			console.error('[merc-hero-revealed-parser] no local player present', event);
@@ -37,7 +37,8 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		}
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
-		const refMerc = mainWindowState?.mercenaries?.referenceData?.mercenaries?.find(
+		const refData = await mainWindowState?.mercenaries?.referenceData;
+		const refMerc = refData?.mercenaries?.find(
 			(merc) =>
 				normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) === normalizedCardId,
 		);
@@ -75,10 +76,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 						isTreasure: false,
 					});
 				}),
-				level: getMercLevelFromExperience(
-					event.additionalData.mercenariesExperience,
-					mainWindowState.mercenaries.referenceData,
-				),
+				level: getMercLevelFromExperience(event.additionalData.mercenariesExperience, refData),
 				role: getHeroRole(refMercCard.mercenaryRole),
 				equipment: BattleEquipment.create({
 					entityId: null,

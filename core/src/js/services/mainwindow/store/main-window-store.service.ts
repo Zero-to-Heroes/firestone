@@ -164,6 +164,7 @@ import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercena
 import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
 import { MercenariesPvpMmrFilterSelectedEvent } from './events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
+import { MercenariesReferenceDataLoadedEvent } from './events/mercenaries/mercenaries-reference-data-loaded-event';
 import { MercenariesRestoreTeamSummaryEvent } from './events/mercenaries/mercenaries-restore-team-summary-event';
 import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
 import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
@@ -296,6 +297,7 @@ import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries
 import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
 import { MercenariesPvpMmrFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pvp-mmr-filter-selected-processor';
+import { MercenariesReferenceDataLoadedProcessor } from './processors/mercenaries/mercenaries-reference-data-loaded-processor';
 import { MercenariesRestoreTeamSummaryProcessor } from './processors/mercenaries/mercenaries-restore-team-summary-processor';
 import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
 import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
@@ -789,6 +791,9 @@ export class MainWindowStoreService {
 			// Mercenaries
 			MercenariesGlobalStatsLoadedEvent.eventName(),
 			new MercenariesGlobalStatsLoadedProcessor(),
+
+			MercenariesReferenceDataLoadedEvent.eventName(),
+			new MercenariesReferenceDataLoadedProcessor(),
 
 			MercenariesModeFilterSelectedEvent.eventName(),
 			new MercenariesModeFilterSelectedProcessor(this.prefs),

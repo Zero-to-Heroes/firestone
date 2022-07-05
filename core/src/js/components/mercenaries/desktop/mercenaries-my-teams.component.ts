@@ -43,7 +43,7 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent i
 	ngAfterContentInit() {
 		this.teams$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.referenceData,
+				([main, nav]) => main.mercenaries.getReferenceData(),
 				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,

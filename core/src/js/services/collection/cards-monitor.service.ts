@@ -14,11 +14,14 @@ import { boosterIdToSetId, dustFor, dustForPremium } from '../hs-utils';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { MercenariesReferenceData } from '../mercenaries/mercenaries-state-builder.service';
+import {
+	MercenariesReferenceData,
+	MercenariesStateBuilderService,
+} from '../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { groupByFunction } from '../utils';
+import { groupByFunction, sleep } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
 
@@ -39,6 +42,7 @@ export class CardsMonitorService {
 		private readonly notifications: CardNotificationsService,
 		private readonly memoryService: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 	) {
 		this.init();
 	}
@@ -113,19 +117,26 @@ export class CardsMonitorService {
 
 	private async handleNewPack(pack: PackInfo) {
 		const boosterId = pack.BoosterId;
+		if (boosterId === BoosterType.LETTUCE) {
+			// That's pretty ugly - probably should work with reative streams as well here
+			await this.mercenariesStateBuilder.loadReferenceData();
+			let retriesLeft = 5;
+			while (!this.mainWindowStore.value[0]?.mercenaries?.referenceData && retriesLeft >= 0) {
+				await sleep(100);
+				retriesLeft--;
+			}
+		}
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.getCollection(true);
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
 			if (boosterId === BoosterType.LETTUCE) {
+				const referenceData = this.mainWindowStore.value[0]?.mercenaries?.referenceData;
 				return {
-					cardId: this.getLettuceCardId(card, this.mainWindowStore.value[0]?.mercenaries?.referenceData),
+					cardId: this.getLettuceCardId(card, referenceData),
 					// No diamond card in pack, so we can leave it like this for now
 					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
 					currencyAmount: card.CurrencyAmount,
-					mercenaryCardId: this.getMercenaryCardId(
-						card.MercenaryId,
-						this.mainWindowStore.value[0]?.mercenaries?.referenceData,
-					),
+					mercenaryCardId: this.getMercenaryCardId(card.MercenaryId, referenceData),
 				} as InternalCardInfo;
 			} else {
 				const cardInCollection = collection.find((c) => c.id === card.CardId);
@@ -143,6 +154,7 @@ export class CardsMonitorService {
 				} as InternalCardInfo;
 			}
 		});
+
 		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase() ?? boosterIdToSetId(boosterId);
 		console.log('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 

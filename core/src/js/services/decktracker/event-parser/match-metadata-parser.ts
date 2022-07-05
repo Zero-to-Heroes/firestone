@@ -7,6 +7,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
+import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../preferences.service';
 import { DeckHandlerService } from '../deck-handler.service';
@@ -20,6 +21,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly handler: DeckHandlerService,
 		private readonly allCards: CardsFacadeService,
 		private readonly memory: MemoryInspectionService,
+		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -31,6 +33,9 @@ export class MatchMetadataParser implements EventParser {
 		// in the standard game state.
 		// Also, everything should be handled inside the MercenariesState anyway
 		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
+			// Ensure that the reference data is properly loaded
+			// This lets us use synchronous processes throughout the server / parser code
+			await this.mercenariesStateBuilder.loadReferenceData();
 			return null;
 		}
 

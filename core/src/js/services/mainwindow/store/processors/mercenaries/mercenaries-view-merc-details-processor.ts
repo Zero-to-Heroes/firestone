@@ -10,9 +10,8 @@ export class MercenariesViewMercDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const refMerc = currentState.mercenaries.referenceData.mercenaries.find(
-			(merc) => merc.id === event.mercenaryId,
-		);
+		const refData = await currentState?.mercenaries?.referenceData;
+		const refMerc = refData.mercenaries.find((merc) => merc.id === event.mercenaryId);
 		return [
 			null,
 			navigationState.update({

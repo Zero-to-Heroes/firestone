@@ -151,7 +151,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			);
 		this.unsortedStats$ = this.store
 			.listen$(
-				([main, nav]) => main.mercenaries.referenceData,
+				([main, nav]) => main.mercenaries.getReferenceData(),
 				([main, nav]) => main.mercenaries.collectionInfo,
 			)
 			.pipe(
@@ -168,7 +168,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		this.stats$ = combineLatest(
 			this.unsortedStats$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria,
 				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
 				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,

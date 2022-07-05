@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { MercenarySelector, RewardItemType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationService } from '../../../services/localization.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
@@ -186,7 +187,7 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 		this.merc$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedDetailsMercId,
-				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 			),
 			this.premium.asObservable(),
 			this.skinIndex.asObservable(),
@@ -194,6 +195,10 @@ export class MercenariesHeroDetailsComponent extends AbstractSubscriptionCompone
 			this.equipmentLevels.asObservable(),
 			this.abilityLevels.asObservable(),
 		).pipe(
+			filter(
+				([[mercId, referenceData], premium, skinIndex, level, equipmentLevels, abilityLevels]) =>
+					!!referenceData,
+			),
 			this.mapData(([[mercId, referenceData], premium, skinIndex, level, equipmentLevels, abilityLevels]) => {
 				const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercId);
 				const refMercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);

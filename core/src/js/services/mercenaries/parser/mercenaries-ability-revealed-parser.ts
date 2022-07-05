@@ -12,11 +12,11 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 
 	public applies = (battleState: MercenariesBattleState) => battleState != null;
 
-	public parse(
+	public async parse(
 		battleState: MercenariesBattleState,
 		event: GameEvent,
 		mainWindowState: MainWindowState,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState> {
+	): Promise<MercenariesBattleState> {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
 		if (!localPlayer) {
 			console.error('[merc-ability-revealed-parser] no local player present', event);

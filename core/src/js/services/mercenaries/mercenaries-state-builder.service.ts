@@ -2,12 +2,15 @@
 import { Injectable } from '@angular/core';
 import { MercenarySelector, VillageVisitorType } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@services/preferences.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
 import { LocalStorageService } from '../local-storage';
 import { MercenariesGlobalStatsLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-global-stats-loaded-event';
+import { MercenariesReferenceDataLoadedEvent } from '../mainwindow/store/events/mercenaries/mercenaries-reference-data-loaded-event';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
@@ -15,6 +18,8 @@ const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenarie
 
 @Injectable()
 export class MercenariesStateBuilderService {
+	private requestedInitialRefDataLoad = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,
@@ -27,21 +32,16 @@ export class MercenariesStateBuilderService {
 	private async init() {
 		await this.store.initComplete();
 		console.debug('init meta service');
-		// Will be used for ref data
-		// combineLatest(
-		// 	this.store.listenPrefs$(
-		// 		(prefs) => prefs.constructedMetaDecksRankFilter,
-		// 		(prefs) => prefs.constructedMetaDecksTimeFilter,
-		// 		(prefs) => prefs.constructedMetaDecksFormatFilter,
-		// 	),
-		// 	this.requestedInitialLoad.asObservable(),
-		// )
-		// 	.pipe(
-		// 		tap((info) => console.debug('updating meta info', info)),
-		// 		filter(([[rank, time, format], load]) => load),
-		// 		map(([[rank, time, format], load]) => ({ rank, time, format })),
-		// 	)
-		// 	.subscribe(({ rank, time, format }) => this.loadNewDecks(format, time, rank));
+		combineLatest(
+			this.store.listenPrefs$((prefs) => prefs.locale),
+			this.requestedInitialRefDataLoad.asObservable(),
+		)
+			.pipe(
+				tap((info) => console.debug('updating merc ref data info', info)),
+				filter(([[locale], load]) => load),
+				map(([[locale], load]) => ({ locale })),
+			)
+			.subscribe(({ locale }) => this.loadReferenceData(locale));
 	}
 
 	public async loadInitialGlobalStats() {
@@ -52,38 +52,36 @@ export class MercenariesStateBuilderService {
 		}
 
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
+		console.debug('loaded remove mercenaries global stats', localInfo);
 		this.localStorage.setItem('mercenaries-global-stats', globalStats);
 		this.store.send(new MercenariesGlobalStatsLoadedEvent(globalStats));
 	}
 
-	public async loadReferenceData(): Promise<MercenariesReferenceData> {
-		const prefs = await this.prefs.getPreferences();
+	public loadInitialReferenceData() {
+		this.requestedInitialRefDataLoad.next(true);
+	}
+
+	public async loadReferenceData(locale?: string) {
+		const localInfo = this.localStorage.getItem<MercenariesReferenceData>('mercenaries-reference-data');
+		if (!!localInfo) {
+			console.debug('loaded local mercenaries ref data', localInfo);
+			this.store.send(new MercenariesReferenceDataLoadedEvent(localInfo));
+		}
+
+		locale = locale ?? (await this.prefs.getPreferences()).locale;
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
-			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${prefs.locale}.json`,
+			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
-		console.debug('[mercs] reference data', referenceData);
+		this.localStorage.setItem('mercenaries-reference-data', referenceData);
+		console.debug('loaded remove mercenaries ref data', localInfo);
+		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
 		return referenceData;
 	}
 
-	// public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
-	// 	const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-	// 	// console.debug(
-	// 	// 	'merc global',
-	// 	// 	globalStats,
-	// 	// 	globalStats.pvp.heroStats.filter((stat) => stat.heroCardId.startsWith('LT21_03H_0')),
-	// 	// 	globalStats.pvp.compositions
-	// 	// 		// .filter((stat) => stat.mmrPercentile === 100)
-	// 	// 		.filter((stat) => stat.heroCardIds.includes('LETL_034H_01'))
-	// 	// 		.filter((stat) => stat.heroCardIds.includes('LETL_021H_01'))
-	// 	// 		.filter((stat) => stat.heroCardIds.includes('BARL_024H_01'))
-	// 	// 		.sort((a, b) => b.totalMatches - a.totalMatches),
-	// 	// );
-	// 	return globalStats;
-	// }
-
 	public initState(
+		currentState: MercenariesState,
 		// globalStats: MercenariesGlobalStats,
-		referenceData: MercenariesReferenceData,
+		// referenceData: MercenariesReferenceData,
 		mercenariesCollection: MemoryMercenariesCollectionInfo,
 	): MercenariesState {
 		const categoryIds: readonly MercenariesCategoryId[] = [
@@ -92,9 +90,9 @@ export class MercenariesStateBuilderService {
 			'mercenaries-hero-stats',
 			'mercenaries-compositions-stats',
 		];
-		return MercenariesState.create({
+		return currentState.update({
 			// globalStats: globalStats,
-			referenceData: referenceData,
+			// referenceData: referenceData,
 			collectionInfo: mercenariesCollection,
 			categoryIds: categoryIds,
 			loading: false,

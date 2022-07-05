@@ -10,6 +10,7 @@ import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortBy } from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
@@ -96,8 +97,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 
 	async ngAfterContentInit() {
 		const mercenariesReferenceData$ = this.store
-			.listen$(([main, nav, prefs]) => main.mercenaries.referenceData?.mercenaries)
-			.pipe(this.mapData(([mercs]) => mercs));
+			.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData())
+			.pipe(
+				filter(([mercs]) => !!mercs),
+				this.mapData(([mercs]) => mercs.mercenaries),
+			);
 		const relevantHeroes$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.binder.collection,

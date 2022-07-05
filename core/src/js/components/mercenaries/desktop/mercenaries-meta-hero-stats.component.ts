@@ -57,7 +57,7 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.getGlobalStats(),
-				([main, nav]) => main.mercenaries.referenceData,
+				([main, nav]) => main.mercenaries.getReferenceData(),
 				([main, nav]) => main.stats.gameStats,
 				([main, nav]) => nav.navigationMercenaries.heroSearchString,
 				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
@@ -76,7 +76,7 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 						mmrFilter,
 						starterFilter,
 						levelFilter,
-					]) => !!globalStats?.pvp?.heroStats?.length,
+					]) => !!globalStats?.pvp?.heroStats?.length && !!referenceData,
 				),
 				map(
 					([

@@ -11,11 +11,11 @@ export class MercenariesHeroDiedParser implements MercenariesParser {
 
 	public applies = (battleState: MercenariesBattleState) => battleState != null;
 
-	public parse(
+	public async parse(
 		battleState: MercenariesBattleState,
 		event: GameEvent,
 		mainWindowState: MainWindowState,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState> {
+	): Promise<MercenariesBattleState> {
 		const [, , localPlayer] = event.parse();
 
 		const deadMinions = event.additionalData.deadMinions;

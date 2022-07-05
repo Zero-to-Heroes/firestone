@@ -178,7 +178,7 @@ export class EndGameUploaderService {
 				: null;
 			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? mercenariesInfo?.Map?.BountyId : null;
 
-			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+			const referenceData = await this.mainWindowStore?.state?.mercenaries?.referenceData;
 			const { mercHeroTimings, ...other } = await extractHeroTimings(
 				{ gameMode: game.gameMode },
 				replay,
@@ -454,7 +454,7 @@ export class EndGameUploaderService {
 			return null;
 		}
 
-		const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
 		console.debug('referenceData ', referenceData, bountyId);
 		if (!referenceData) {
 			return null;
@@ -471,7 +471,7 @@ export class EndGameUploaderService {
 	}
 
 	private getMercenariesBountyDifficulty(mercsBountyId: number): 'normal' | 'heroic' | 'legendary' {
-		const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
 		console.debug('referenceData', referenceData, mercsBountyId);
 		if (!referenceData) {
 			return null;

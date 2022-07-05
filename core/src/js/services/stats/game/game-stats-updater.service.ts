@@ -89,7 +89,12 @@ export class GameStatsUpdaterService {
 		} as GameStat);
 
 		const mainStore = this.stateEmitter?.value;
-		if (!isMercenaries(game.gameMode) || !mainStore[0]?.mercenaries?.referenceData) {
+		if (!isMercenaries(game.gameMode)) {
+			return firstGame;
+		}
+
+		const refData = await mainStore[0]?.mercenaries?.referenceData;
+		if (!refData) {
 			return firstGame;
 		}
 
@@ -98,12 +103,7 @@ export class GameStatsUpdaterService {
 			mercOpponentHeroTimings,
 			mercEquipments,
 			mercOpponentEquipments,
-		} = await extractHeroTimings(
-			firstGame,
-			replay,
-			mainStore[0]?.mercenaries?.referenceData,
-			this.allCards.getService(),
-		);
+		} = await extractHeroTimings(firstGame, replay, refData, this.allCards.getService());
 
 		const gameWithMercStats = firstGame.update({
 			mercHeroTimings: mercHeroTimings,

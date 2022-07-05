@@ -18,7 +18,7 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('[task] event', event);
-		const referenceData = currentState.mercenaries.referenceData;
+		const referenceData = await currentState?.mercenaries?.referenceData;
 		const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === event.mercenaryId);
 		const collectionInfo = currentState.mercenaries.collectionInfo;
 		console.debug('[task] collectionInfo', collectionInfo);

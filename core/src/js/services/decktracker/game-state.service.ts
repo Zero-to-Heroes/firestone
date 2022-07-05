@@ -20,6 +20,7 @@ import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
+import { MercenariesStateBuilderService } from '../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { OwUtilsService } from '../plugins/ow-utils.service';
@@ -171,6 +172,7 @@ export class GameStateService {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly attackOnBoardService: AttackOnBoardService,
+		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -457,7 +459,14 @@ export class GameStateService {
 		const parsers: EventParser[] = [
 			new GameStartParser(),
 			new WhizbangDeckParser(this.deckParser, this.deckHandler),
-			new MatchMetadataParser(this.deckParser, this.prefs, this.deckHandler, this.allCards, this.memory),
+			new MatchMetadataParser(
+				this.deckParser,
+				this.prefs,
+				this.deckHandler,
+				this.allCards,
+				this.memory,
+				this.mercenariesStateBuilder,
+			),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),
 			new CardDrawParser(this.helper, this.allCards, this.i18n),

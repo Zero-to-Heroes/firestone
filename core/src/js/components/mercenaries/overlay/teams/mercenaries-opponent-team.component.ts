@@ -49,7 +49,7 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionCompon
 	ngAfterContentInit() {
 		this.tasks$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(

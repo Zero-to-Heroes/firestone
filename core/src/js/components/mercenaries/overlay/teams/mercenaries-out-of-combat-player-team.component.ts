@@ -58,7 +58,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 	ngAfterContentInit() {
 		this.tasks$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
 			)
 			.pipe(
@@ -74,7 +74,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
-				([main, nav, prefs]) => main.mercenaries?.referenceData,
+				([main, nav, prefs]) => main.mercenaries?.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries?.mapInfo,
 			),
 		).pipe(

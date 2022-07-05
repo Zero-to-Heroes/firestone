@@ -23,11 +23,11 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 
 	public applies = (battleState: MercenariesBattleState) => battleState != null;
 
-	public parse(
+	public async parse(
 		battleState: MercenariesBattleState,
 		event: GameEvent,
 		mainWindowState: MainWindowState,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState> {
+	): Promise<MercenariesBattleState> {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
 		if (!localPlayer) {
 			console.error('[merc-hero-revealed-parser] no local player present', event);
@@ -49,8 +49,9 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
+		const refData = await mainWindowState?.mercenaries?.referenceData;
 		const refMerc = normalizedCardId
-			? mainWindowState?.mercenaries?.referenceData?.mercenaries?.find(
+			? refData?.mercenaries?.find(
 					(merc) =>
 						normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) ===
 						normalizedCardId,
@@ -98,10 +99,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			),
 			inPlay: false,
 			level: event.additionalData.mercenariesExperience
-				? getMercLevelFromExperience(
-						event.additionalData.mercenariesExperience,
-						mainWindowState.mercenaries.referenceData,
-				  )
+				? getMercLevelFromExperience(event.additionalData.mercenariesExperience, refData)
 				: null,
 			role: refMercCard?.id ? getHeroRole(refMercCard.mercenaryRole) : null,
 			equipment: refMercEquipment

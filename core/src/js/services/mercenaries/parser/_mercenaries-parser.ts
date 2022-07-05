@@ -9,5 +9,5 @@ export interface MercenariesParser {
 		battleState: MercenariesBattleState,
 		event: GameEvent,
 		mainWindowState: MainWindowState,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState>;
+	): Promise<MercenariesBattleState>;
 }

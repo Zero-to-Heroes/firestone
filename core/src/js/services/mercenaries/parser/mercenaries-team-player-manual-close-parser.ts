@@ -7,10 +7,7 @@ export class MercenariesTeamPlayerManualCloseParser implements MercenariesParser
 
 	public applies = (battleState: MercenariesBattleState) => true;
 
-	public parse(
-		battleState: MercenariesBattleState,
-		event: GameEvent,
-	): MercenariesBattleState | PromiseLike<MercenariesBattleState> {
+	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
 		return battleState.update({
 			playerClosedManually: true,
 		});

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import {
 	MercenariesHeroLevelFilterType,
@@ -187,7 +187,7 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 		this.heroStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.getGlobalStats(),
-				([main, nav]) => main.mercenaries.referenceData,
+				([main, nav]) => main.mercenaries.getReferenceData(),
 				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedHeroId,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
@@ -197,6 +197,19 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
 			)
 			.pipe(
+				filter(
+					([
+						globalStats,
+						referenceData,
+						gameStats,
+						selectedHeroId,
+						modeFilter,
+						difficultyFilter,
+						mmrFilter,
+						starterFilter,
+						levelFilter,
+					]) => !!referenceData,
+				),
 				map(
 					([
 						globalStats,

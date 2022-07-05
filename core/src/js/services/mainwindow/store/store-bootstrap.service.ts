@@ -122,7 +122,7 @@ export class StoreBootstrapService {
 				adventuresInfo,
 			],
 			[arenaRewards],
-			[mercenariesReferenceData, mercenariesCollection],
+			[mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -152,7 +152,7 @@ export class StoreBootstrapService {
 			Promise.all([this.arena.loadRewards()]),
 			Promise.all([
 				// this.mercenariesService.loadGlobalStats(),
-				this.mercenariesService.loadReferenceData(),
+				// this.mercenariesService.loadReferenceData(),
 				this.mercenariesMemory.getMercenariesMergedCollectionInfo(),
 			]),
 		]);
@@ -238,12 +238,13 @@ export class StoreBootstrapService {
 		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
 
 		const mercenariesState: MercenariesState = await this.mercenariesService.initState(
+			windowStateForFtue.mercenaries,
 			// mercenariesGlobalStats,
-			mercenariesReferenceData,
+			// mercenariesReferenceData,
 			mercenariesCollection,
 		);
 
-		const initialWindowState = Object.assign(new MainWindowState(), {
+		const initialWindowState = windowStateForFtue.update({
 			currentScene: currentScene,
 			currentUser: currentUser,
 			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
