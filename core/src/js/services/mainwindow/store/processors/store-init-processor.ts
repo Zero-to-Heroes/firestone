@@ -24,7 +24,18 @@ export class StoreInitProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[store-init] populating store');
 		const prefs = await this.prefs.getPreferences();
-		const newState = currentState.update(event.initialState);
+		// Whenever we move some data init to be async, we need to update this
+		// Ultimately we won't need that anymore once all the data is moved to an async init
+		const stateToUpdate = event.initialState.update({
+			mercenaries: event.initialState.mercenaries.update({
+				referenceData: currentState.mercenaries.referenceData,
+				globalStats: currentState.mercenaries.globalStats,
+			}),
+			decktracker: event.initialState.decktracker.update({
+				metaDecks: currentState.decktracker.metaDecks,
+			}),
+		});
+		const newState = currentState.update(stateToUpdate);
 		if (event.storeReady) {
 			console.log('[store-init] emitting STORE_READY event');
 			this.events.broadcast(Events.STORE_READY);
