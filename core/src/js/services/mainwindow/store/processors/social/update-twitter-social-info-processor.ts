@@ -16,7 +16,7 @@ export class UpdateTwitterSocialInfoProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const socialShareUserInfo = await this.initializeSocialShareUserInfo(currentState.socialShareUserInfo);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				socialShareUserInfo: socialShareUserInfo,
 			} as MainWindowState),
 			null,

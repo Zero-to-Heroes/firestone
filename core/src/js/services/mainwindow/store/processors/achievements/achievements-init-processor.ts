@@ -12,7 +12,7 @@ export class AchievementsInitProcessor implements Processor {
 		const newAchievements = currentState.achievements.update({
 			categories: event.categories,
 		} as AchievementsState);
-		const result = Object.assign(new MainWindowState(), currentState, {
+		const result = currentState.update({
 			achievements: newAchievements,
 		} as MainWindowState);
 

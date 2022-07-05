@@ -156,14 +156,11 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			)
 			.pipe(
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-				map(([referenceData, collectionInfo]) =>
+				this.mapData(([referenceData, collectionInfo]) =>
 					collectionInfo.Mercenaries.map((memMerc) =>
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
 					).filter((stat) => stat),
 				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
-				takeUntil(this.destroyed$),
 			);
 		this.stats$ = combineLatest(
 			this.unsortedStats$,
@@ -178,20 +175,10 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
 					!!stats?.length && !!referenceData,
 			),
-			// tap((info) => cdLog('combining stats in ', this.constructor.name, info)),
 			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-			map(([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
+			this.mapData(([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, sortCriteria, referenceData),
 			),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

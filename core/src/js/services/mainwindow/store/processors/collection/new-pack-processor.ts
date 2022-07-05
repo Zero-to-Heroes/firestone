@@ -64,7 +64,7 @@ export class NewPackProcessor implements Processor {
 			  } as NavigationCollection)
 			: navigationState.navigationCollection;
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				binder: newBinder,
 			} as MainWindowState),
 			navigationState.update({

@@ -47,7 +47,7 @@ export class NextFtueProcessor implements Processor {
 			showFtue = false;
 		}
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				showFtue: showFtue,
 			} as MainWindowState),
 			navigationState.update({

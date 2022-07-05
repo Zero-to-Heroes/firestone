@@ -53,29 +53,18 @@ export class MercenariesStarterFilterDropdownComponent
 		);
 		this.filter$ = this.store
 			.listen$(
-				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([globalStats, filter, selectedCategoryId]) => ({
+				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+				this.mapData(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
 						selectedCategoryId === 'mercenaries-hero-stats' ||
 						selectedCategoryId === 'mercenaries-meta-hero-details',
 				})),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

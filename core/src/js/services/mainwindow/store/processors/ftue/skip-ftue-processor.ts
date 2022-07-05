@@ -15,7 +15,7 @@ export class SkipFtueProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.setGlobalFtueDone();
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				showFtue: false,
 			} as MainWindowState),
 			navigationState.update({

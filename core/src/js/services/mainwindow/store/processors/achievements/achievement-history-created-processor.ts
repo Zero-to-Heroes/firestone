@@ -25,7 +25,7 @@ export class AchievementHistoryCreatedProcessor implements Processor {
 			] as readonly AchievementHistory[],
 		} as AchievementsState);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				achievements: newState,
 			} as MainWindowState),
 			null,

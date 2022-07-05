@@ -15,7 +15,6 @@ export class MercenariesReferenceDataLoadedProcessor implements Processor {
 				referenceData: event.data,
 			}),
 		});
-		console.debug('merc ref data loaded', newState, currentState, event.data);
 		return [newState, null];
 	}
 }

@@ -81,13 +81,13 @@ export class StoreBootstrapService {
 		}
 	}
 
-	public async initStore() {
+	public async initStore(initialState: MainWindowState) {
 		await this.ready();
 		// First load for the FTUE
 		const prefs = await this.prefs.getPreferences();
 		const showFtue = !prefs.ftue.hasSeenGlobalFtue;
 		// Early init to avoid having the navigation jump when restoring the app to the previous tab
-		const windowStateForFtue = Object.assign(new MainWindowState(), {
+		const windowStateForFtue = initialState.update({
 			showFtue: showFtue,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue, false));
@@ -260,7 +260,7 @@ export class StoreBootstrapService {
 			stats: newStatsState,
 			globalStats: globalStats,
 		} as MainWindowState);
-		console.debug('[debug]', 'initialWindowState', initialWindowState);
+		console.debug('initialWindowState', initialWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}
 

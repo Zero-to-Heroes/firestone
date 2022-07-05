@@ -60,7 +60,7 @@ export class MercenariesPveDifficultyFilterDropdownComponent
 			)
 			.pipe(
 				filter(([globalStats, filter, modeFilter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([globalStats, filter, modeFilter, selectedCategoryId]) => ({
+				this.mapData(([globalStats, filter, modeFilter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
@@ -72,16 +72,6 @@ export class MercenariesPveDifficultyFilterDropdownComponent
 							selectedCategoryId === 'mercenaries-compositions-stats' ||
 							selectedCategoryId === 'mercenaries-composition-details'),
 				})),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

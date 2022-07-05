@@ -35,7 +35,7 @@ export class ChangeDeckFormatFilterProcessor implements Processor {
 			),
 		} as DecktrackerState);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				decktracker: newState,
 			} as MainWindowState),
 			null,

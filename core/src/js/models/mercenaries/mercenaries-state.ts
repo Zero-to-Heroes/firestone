@@ -21,36 +21,18 @@ export class MercenariesState {
 	readonly referenceData: MercenariesReferenceData = undefined;
 	readonly globalStats: MercenariesGlobalStats = undefined;
 
-	constructor() {
-		this['uuid'] = uuid();
-	}
-
 	public static create(base: MercenariesState): MercenariesState {
-		const result = Object.assign(new MercenariesState(), base);
-		result['uuid'] = this['uuid'] ?? result['uuid'];
-		console.debug('building merc state 2', result['uuid'], this['uuid'], new Error().stack);
-		return result;
+		return Object.assign(new MercenariesState(), base);
 	}
 
 	public update(base: Partial<NonFunctionProperties<MercenariesState>>): MercenariesState {
-		const result = Object.assign(new MercenariesState(), this, base, { uuid: this['uuid'] });
-		result['uuid'] = this['uuid'] ?? result['uuid'];
-		console.debug('building merc state 3', result['uuid'], this['uuid'],new Error().stack);
-		return result;
+		return Object.assign(new MercenariesState(), this, base, { uuid: this['uuid'] });
 	}
 
 	public getGlobalStats(): MercenariesGlobalStats {
 		if (this.globalStats === undefined) {
-			console.log(
-				'mercs global stats not initialized yet',
-				this.globalStats === undefined,
-				this.globalStats === null,
-				new Error().stack,
-				this,
-				window,
-			);
+			console.log('mercs global stats not initialized yet');
 			(this.globalStats as MercenariesGlobalStats) = null;
-			console.log('set local stats to null', this.globalStats === undefined);
 			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('mercenaries-global-stats');
 		}
 		return this.globalStats;
@@ -58,7 +40,7 @@ export class MercenariesState {
 
 	public getReferenceData(): MercenariesReferenceData {
 		if (this.referenceData === undefined) {
-			console.log('mercs referenceData not initialized yet');
+			console.log('[merc-ref] mercs referenceData not initialized yet');
 			(this.referenceData as MercenariesReferenceData) = null;
 			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('mercenaries-reference-data');
 		}

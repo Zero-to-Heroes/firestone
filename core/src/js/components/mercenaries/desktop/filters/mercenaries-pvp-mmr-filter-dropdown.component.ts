@@ -49,7 +49,7 @@ export class MercenariesPvpMmrFilterDropdownComponent
 			.listen$(([main, nav, prefs]) => main.mercenaries.getGlobalStats()?.pvp?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
-				map(([mmrPercentiles]) =>
+				this.mapData(([mmrPercentiles]) =>
 					mmrPercentiles.map(
 						(percentile) =>
 							({
@@ -58,29 +58,20 @@ export class MercenariesPvpMmrFilterDropdownComponent
 							} as FilterOption),
 					),
 				),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(
-				([main, nav, prefs]) => main.mercenaries.getGlobalStats(),
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			),
 		).pipe(
-			tap((info) => console.debug(' info', info)),
 			filter(
-				([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
+				([options, [filter, modeFilter, selectedCategoryId]]) =>
 					!!options?.length && !!filter && !!selectedCategoryId,
 			),
-			tap(([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
-				console.debug('isVisible?', selectedCategoryId),
-			),
-			map(([options, [globalStats, filter, modeFilter, selectedCategoryId]]) => ({
+			this.mapData(([options, [filter, modeFilter, selectedCategoryId]]) => ({
 				filter: '' + filter,
 				placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 				visible:
@@ -92,16 +83,6 @@ export class MercenariesPvpMmrFilterDropdownComponent
 							selectedCategoryId === 'mercenaries-meta-hero-details' ||
 							selectedCategoryId === 'mercenaries-composition-details')),
 			})),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

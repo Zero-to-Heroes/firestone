@@ -456,6 +456,7 @@ export class MainWindowStoreService {
 			// console.debug(
 			// 	'emitting new merged state',
 			// 	event.eventName(),
+			// 	this.state.mercenaries.referenceData,
 			// 	event,
 			// 	this.state,
 			// 	stateWithNavigation,
@@ -989,7 +990,7 @@ export class MainWindowStoreService {
 	public populateStore(onlyGameData = false) {
 		if (!onlyGameData) {
 			console.log('sending populate store event');
-			this.storeBootstrap.initStore();
+			this.storeBootstrap.initStore(this.state);
 		} else {
 			this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
 		}

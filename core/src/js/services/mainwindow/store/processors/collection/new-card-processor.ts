@@ -45,7 +45,7 @@ export class NewCardProcessor implements Processor {
 			cardHistory: cardHistory,
 		} as BinderState);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				binder: newBinder,
 			} as MainWindowState),
 			null,

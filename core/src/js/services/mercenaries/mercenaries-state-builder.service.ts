@@ -31,13 +31,11 @@ export class MercenariesStateBuilderService {
 
 	private async init() {
 		await this.store.initComplete();
-		console.debug('init meta service');
 		combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.locale),
 			this.requestedInitialRefDataLoad.asObservable(),
 		)
 			.pipe(
-				tap((info) => console.debug('updating merc ref data info', info)),
 				filter(([[locale], load]) => load),
 				map(([[locale], load]) => ({ locale })),
 			)
@@ -63,8 +61,8 @@ export class MercenariesStateBuilderService {
 
 	public async loadReferenceData(locale?: string) {
 		const localInfo = this.localStorage.getItem<MercenariesReferenceData>('mercenaries-reference-data');
-		if (!!localInfo) {
-			console.debug('loaded local mercenaries ref data', localInfo);
+		if (!!localInfo?.mercenaries?.length) {
+			console.log('loaded local mercenaries ref data');
 			this.store.send(new MercenariesReferenceDataLoadedEvent(localInfo));
 		}
 
@@ -73,7 +71,7 @@ export class MercenariesStateBuilderService {
 			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
 		this.localStorage.setItem('mercenaries-reference-data', referenceData);
-		console.debug('loaded remove mercenaries ref data', localInfo);
+		console.log('loaded remote mercenaries ref data');
 		this.store.send(new MercenariesReferenceDataLoadedEvent(referenceData));
 		return referenceData;
 	}

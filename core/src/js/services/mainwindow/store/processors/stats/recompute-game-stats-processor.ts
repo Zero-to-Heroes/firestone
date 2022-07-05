@@ -57,7 +57,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 			: currentState.duels;
 
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				stats: newStatsState,
 				decktracker: decktracker,
 				replays: replayState,

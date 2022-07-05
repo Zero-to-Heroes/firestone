@@ -25,7 +25,7 @@ export class ArenaRewardsUpdatedProcessor implements Processor {
 			...this.buildRewards(event.rewards),
 		];
 		const result = [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				arena: currentState.arena.update({
 					rewards: newRewards,
 				} as ArenaState),

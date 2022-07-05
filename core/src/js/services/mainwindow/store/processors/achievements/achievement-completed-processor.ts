@@ -34,7 +34,7 @@ export class AchievementCompletedProcessor implements Processor {
 		} as AchievementsState);
 		// We store an history item every time, but we display only the first time an achievement is unlocked
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				achievements: newState,
 			}),
 			null,

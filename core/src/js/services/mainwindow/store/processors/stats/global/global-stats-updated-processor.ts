@@ -16,7 +16,7 @@ export class GlobalStatsUpdatedProcessor implements Processor {
 		this.events.broadcast(Events.GLOBAL_STATS_UPDATED, event.stats);
 
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				globalStats: event.stats,
 			} as MainWindowState),
 			null,

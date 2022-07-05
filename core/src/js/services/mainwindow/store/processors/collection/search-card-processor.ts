@@ -45,7 +45,7 @@ export class SearchCardProcessor implements Processor {
 			searchResults: undefined,
 		} as NavigationCollection);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				binder: newBinder,
 			} as MainWindowState),
 			navigationState.update({

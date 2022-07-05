@@ -45,7 +45,7 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 			newState.decks.find((deck) => deck.deckstring === event.deckstring),
 		);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				decktracker: newState,
 			} as MainWindowState),
 			navigationState.update({

@@ -13,7 +13,7 @@ export class CollectionInitProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const newCollection = Object.assign(new BinderState(), currentState.binder, event.newState);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				binder: newCollection,
 			} as MainWindowState),
 			null,

@@ -57,7 +57,7 @@ export class MercenariesModeFilterDropdownComponent extends AbstractSubscription
 			)
 			.pipe(
 				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([globalStats, filter, selectedCategoryId]) => ({
+				this.mapData(([globalStats, filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
@@ -68,16 +68,6 @@ export class MercenariesModeFilterDropdownComponent extends AbstractSubscription
 							selectedCategoryId === 'mercenaries-compositions-stats' ||
 							selectedCategoryId === 'mercenaries-composition-details'),
 				})),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

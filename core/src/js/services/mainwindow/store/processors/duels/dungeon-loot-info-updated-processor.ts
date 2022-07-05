@@ -27,7 +27,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 			duelsRewardsInfo: rewards,
 		} as DuelsState);
 		return [
-			Object.assign(new MainWindowState(), currentState, {
+			currentState.update({
 				duels: newDuels,
 			} as MainWindowState),
 			null,
