@@ -51,6 +51,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<replay-info
 						[replay]="step"
 						[displayCoin]="false"
+						[displayTime]="false"
 						[displayLoot]="_displayLoot"
 						[displayShortLoot]="_displayShortLoot"
 					></replay-info>

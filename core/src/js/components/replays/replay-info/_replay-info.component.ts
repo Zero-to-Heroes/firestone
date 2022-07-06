@@ -20,18 +20,21 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
 			[displayCoin]="displayCoin"
+			[displayTime]="displayTime"
 			[replay]="replayInfo"
 		></replay-info-ranked>
 		<replay-info-battlegrounds
 			*ngIf="gameMode === 'battlegrounds' || gameMode === 'battlegrounds-friendly'"
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
+			[displayTime]="displayTime"
 			[replay]="replayInfo"
 		></replay-info-battlegrounds>
 		<replay-info-mercenaries
 			*ngIf="isMercenaries"
 			[showStatsLabel]="showStatsLabel"
 			[showReplayLabel]="showReplayLabel"
+			[displayTime]="displayTime"
 			[replay]="replayInfo"
 		></replay-info-mercenaries>
 		<replay-info-duels
@@ -42,6 +45,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[displayLoot]="displayLoot"
 			[displayShortLoot]="displayShortLoot"
 			[displayCoin]="displayCoin"
+			[displayTime]="displayTime"
 		></replay-info-duels>
 		<replay-info-generic
 			*ngIf="
@@ -55,6 +59,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[showReplayLabel]="showReplayLabel"
 			[replay]="replayInfo"
 			[displayCoin]="displayCoin"
+			[displayTime]="displayTime"
 		></replay-info-generic>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,6 +68,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
+	@Input() displayTime = true;
 	@Input() displayLoot: boolean;
 	@Input() displayShortLoot: boolean;
 

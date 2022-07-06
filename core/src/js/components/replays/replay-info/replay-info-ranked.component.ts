@@ -55,6 +55,10 @@ declare let amplitude;
 						[helpTooltip]="playCoinTooltip"
 					></div>
 				</div>
+
+				<div class="group time" *ngIf="gameTime && displayTime">
+					<div class="value">{{ gameTime }}</div>
+				</div>
 			</div>
 
 			<div class="right-info">
@@ -82,6 +86,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
+	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -101,6 +106,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	opponentName: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
+	gameTime: string;
 	reviewId: string;
 
 	private bgsPerfectGame: boolean;
@@ -163,6 +169,9 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
+		this.gameTime = this.i18n.translateString('global.duration', {
+			...extractTime(this.replayInfo.gameDurationSeconds),
+		});
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {
@@ -215,3 +224,12 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		return name.split('#')[0];
 	}
 }
+
+export const extractTime = (durationInSeconds: number): { minutes: string; seconds: string } => {
+	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
+	const minutes = `${Math.floor((durationInSeconds - (durationInSeconds % 60)) / 60)}`;
+	return {
+		minutes,
+		seconds,
+	};
+};

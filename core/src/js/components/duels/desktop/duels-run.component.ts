@@ -91,6 +91,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<replay-info-duels
 						[replay]="step"
 						[displayCoin]="false"
+						[displayTime]="false"
 						[displayLoot]="displayLoot"
 						[displayShortLoot]="displayShortLoot"
 					></replay-info-duels>

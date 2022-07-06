@@ -20,6 +20,7 @@ import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/e
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { extractTime } from './replay-info-ranked.component';
 
 @Component({
 	selector: 'replay-info-duels',
@@ -91,6 +92,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						[helpTooltip]="playCoinTooltip"
 					></div>
 				</div>
+
+				<div class="group time" *ngIf="gameTime && displayTime">
+					<div class="value">{{ gameTime }}</div>
+				</div>
 			</div>
 
 			<div class="right-info">
@@ -118,6 +123,7 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
+	@Input() displayTime = true;
 	@Input() displayLoot: boolean;
 	@Input() displayShortLoot: boolean;
 
@@ -140,6 +146,7 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
+	gameTime: string;
 
 	treasure: InternalLoot;
 	loots: InternalLoot[];
@@ -222,6 +229,9 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 				}));
 			}
 		}
+		this.gameTime = this.i18n.translateString('global.duration', {
+			...extractTime(this.replayInfo.gameDurationSeconds),
+		});
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {

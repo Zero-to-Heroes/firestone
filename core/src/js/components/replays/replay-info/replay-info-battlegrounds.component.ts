@@ -14,6 +14,7 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
+import { extractTime } from './replay-info-ranked.component';
 
 declare let amplitude;
 @Component({
@@ -72,6 +73,10 @@ declare let amplitude;
 					<div class="value">{{ deltaMmr }}</div>
 					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
 				</div>
+
+				<div class="group time" *ngIf="gameTime && displayTime">
+					<div class="value">{{ gameTime }}</div>
+				</div> 
 			</div>
 
 			<div class="right-info">
@@ -112,6 +117,7 @@ declare let amplitude;
 export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
+	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -131,6 +137,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	reviewId: string;
 	hasMatchStats: boolean;
 	deltaMmr: number;
+	gameTime: string;
 
 	hasPrizes: boolean;
 	availableTribes: readonly InternalTribe[];
@@ -202,6 +209,9 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
 		this.finalWarband = this.buildFinalWarband();
 		this.hasPrizes = this.replayInfo.bgsHasPrizes;
+		this.gameTime = this.i18n.translateString('global.duration', {
+			...extractTime(this.replayInfo.gameDurationSeconds),
+		});
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {

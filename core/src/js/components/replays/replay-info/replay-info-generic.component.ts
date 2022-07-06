@@ -19,6 +19,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { extractTime } from './replay-info-ranked.component';
 
 @Component({
 	selector: 'replay-info-generic',
@@ -54,6 +55,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						[helpTooltip]="playCoinTooltip"
 					></div>
 				</div>
+
+				<div class="group time" *ngIf="gameTime && displayTime">
+					<div class="value">{{ gameTime }}</div>
+				</div>
 			</div>
 
 			<div class="right-info">
@@ -81,6 +86,7 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
+	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -102,6 +108,7 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
+	gameTime: string;
 
 	private sub$$: Subscription;
 
@@ -159,6 +166,9 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
+		this.gameTime = this.i18n.translateString('global.duration', {
+			...extractTime(this.replayInfo.gameDurationSeconds),
+		});
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, replaysShowClassIcon: boolean): [string, string] {

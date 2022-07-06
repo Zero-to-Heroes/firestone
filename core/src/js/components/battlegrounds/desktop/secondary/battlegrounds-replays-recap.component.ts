@@ -26,7 +26,12 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			></div>
 			<ul class="list">
 				<li *ngFor="let replay of replays; trackBy: trackByFn">
-					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>
+					<replay-info
+						[replay]="replay"
+						[showStatsLabel]="null"
+						[showReplayLabel]="null"
+						[displayTime]="false"
+					></replay-info>
 				</li>
 			</ul>
 		</div>

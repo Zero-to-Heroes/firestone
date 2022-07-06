@@ -11,6 +11,7 @@ import { getHeroRole, normalizeMercenariesCardId } from '../../../services/merce
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { extractTime } from './replay-info-ranked.component';
 
 @Component({
 	selector: 'replay-info-mercenaries',
@@ -66,6 +67,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div class="value">{{ deltaMmr }}</div>
 					<div class="text" [owTranslate]="'app.replays.replay-info.mmr'"></div>
 				</div>
+
+				<div class="group time" *ngIf="gameTime && displayTime">
+					<div class="value">{{ gameTime }}</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -76,6 +81,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponen
 
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
+	@Input() displayTime = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -95,6 +101,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponen
 	opponentName: string;
 	reviewId: string;
 	deltaMmr: number;
+	gameTime: string;
 
 	constructor(
 		private readonly sanitizer: DomSanitizer,
@@ -138,6 +145,9 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponen
 				? this.i18n.translateString('app.replays.replay-info.mercenaries-bot-opponent-name')
 				: this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
+		this.gameTime = this.i18n.translateString('global.duration', {
+			...extractTime(this.replayInfo.gameDurationSeconds),
+		});
 	}
 
 	private buildPlayerTeam(info: GameStat, isPlayer: boolean, isStarter: boolean): readonly MercenaryHero[] {

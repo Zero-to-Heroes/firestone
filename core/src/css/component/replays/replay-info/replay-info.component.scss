@@ -105,6 +105,13 @@
 		padding-left: 0px;
 		padding-right: 10px;
 	}
+
+	&.time {
+		font-size: 13px; 
+		width: 70px;
+		padding: 0;
+		justify-content: flex-end; 
+	}
 }
 
 .left-info,
