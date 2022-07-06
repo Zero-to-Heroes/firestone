@@ -36,6 +36,7 @@ import {
 	MercenariesFullyUpgradedFilterType,
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,
+	MercenariesOwnedFilterType,
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
@@ -460,6 +461,7 @@ export class Preferences {
 	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
 	readonly mercenariesActiveFullyUpgradedFilter: MercenariesFullyUpgradedFilterType = 'all';
+	readonly mercenariesActiveOwnedFilter: MercenariesOwnedFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter2: MercenariesHeroLevelFilterType = 30;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;

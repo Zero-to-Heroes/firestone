@@ -279,6 +279,7 @@ import { MenuSelectionComponent } from '../../components/menu-selection.componen
 import { MercenariesFullyUpgradedFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-fully-upgraded-filter-dropdown.component';
 import { MercenariesHeroLevelFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
 import { MercenariesModeFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-mode-filter-dropdown.component';
+import { MercenariesOwnedFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-owned-filter-dropdown.component';
 import { MercenariesPveDifficultyFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-pve-difficulty-filter-dropdown.component';
 import { MercenariesPvpMmrFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-pvp-mmr-filter-dropdown.component';
 import { MercenariesRoleFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-role-filter-dropdown.component';
@@ -901,6 +902,7 @@ const components = [
 		MercenariesStarterFilterDropdownComponent,
 		MercenariesHeroLevelFilterDropdownComponent,
 		MercenariesFullyUpgradedFilterDropdownComponent,
+		MercenariesOwnedFilterDropdownComponent,
 
 		StatsDesktopComponent,
 		StatsXpGraphComponent,

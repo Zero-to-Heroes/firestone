@@ -5,7 +5,10 @@ import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
-import { MercenariesFullyUpgradedFilterType } from '../../../models/mercenaries/mercenaries-filter-types';
+import {
+	MercenariesFullyUpgradedFilterType,
+	MercenariesOwnedFilterType,
+} from '../../../models/mercenaries/mercenaries-filter-types';
 import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
@@ -168,16 +171,17 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria,
 				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
+				([main, nav, prefs]) => prefs.mercenariesActiveOwnedFilter,
 				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
 			),
 		).pipe(
 			filter(
-				([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
+				([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
 					!!stats?.length && !!referenceData,
 			),
 			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
-			this.mapData(([stats, [referenceData, sortCriteria, fullyUpgraded, heroSearchString]]) =>
-				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, sortCriteria, referenceData),
+			this.mapData(([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
+				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),
 			),
 		);
 	}
@@ -427,6 +431,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		stats: readonly PersonalHeroStat[],
 		heroSearchString: string,
 		fullyUpgraded: MercenariesFullyUpgradedFilterType,
+		owned: MercenariesOwnedFilterType,
 		sortCriteria: readonly MercenariesPersonalHeroesSortCriteria[],
 		referenceData: MercenariesReferenceData,
 	): readonly PersonalHeroStat[] {
@@ -439,6 +444,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 					? stat.isFullyUpgraded
 					: !stat.isFullyUpgraded,
 			)
+			.filter((stat) => (owned === 'all' ? true : owned === 'owned' ? stat.owned : !stat.owned))
 			// So that minions that you own are always displayed above the ones you don't have in case of ties
 			.sort((a, b) => {
 				if (a.owned && !b.owned) {
