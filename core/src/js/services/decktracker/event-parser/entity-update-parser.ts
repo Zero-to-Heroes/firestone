@@ -34,7 +34,10 @@ export class EntityUpdateParser implements EventParser {
 			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
 
 		const newCardInHand = shouldShowCardIdInHand
-			? cardInHand.update({ cardId: cardId, cardName: this.i18n.getCardName(cardId) } as DeckCard)
+			? cardInHand.update({
+					cardId: cardId,
+					cardName: this.i18n.getCardName(cardId),
+			  } as DeckCard)
 			: null;
 
 		const newCardInDeck =
@@ -57,6 +60,10 @@ export class EntityUpdateParser implements EventParser {
 			hand: newHand,
 			deck: newDeck,
 			otherZone: newOther,
+			abyssalCurseHighestValue:
+				newCardInHand?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
+					? Math.max(deck.abyssalCurseHighestValue ?? 0, gameEvent.additionalData.dataNum1 ?? 0)
+					: deck.abyssalCurseHighestValue,
 		});
 
 		return Object.assign(new GameState(), currentState, {

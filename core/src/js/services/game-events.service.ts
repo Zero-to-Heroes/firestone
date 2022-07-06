@@ -533,6 +533,8 @@ export class GameEvents {
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
 						additionalPlayInfo: gameEvent.Value.AdditionalProps.AdditionalPlayInfo,
+						dataNum1: gameEvent.Value.AdditionalProps?.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps?.DataNum2,
 					}),
 				);
 				break;
@@ -1174,6 +1176,8 @@ export class GameEvents {
 						abilitySpeed: gameEvent.Value.AdditionalProps?.AbilitySpeed,
 						zonePosition: gameEvent.Value.AdditionalProps?.ZonePosition,
 						zone: gameEvent.Value.AdditionalProps?.Zone,
+						dataNum1: gameEvent.Value.AdditionalProps?.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps?.DataNum2,
 					}),
 				);
 				break;

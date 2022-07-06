@@ -393,7 +393,6 @@ export class GameStateService {
 		}
 
 		// We have processed the event for which the secret would trigger
-		// TODO: how to handle reconnects, where dev mode is active?
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
 			gameEvent.type !== GameEvent.COUNTER_WILL_TRIGGER &&
