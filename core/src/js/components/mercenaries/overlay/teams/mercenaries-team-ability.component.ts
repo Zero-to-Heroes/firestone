@@ -40,7 +40,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 				*ngIf="speed != null"
 				[helpTooltip]="speedModifierTooltip"
 			>
-				<div class="value">{{ speed }}</div>
+				<div class="value">{{ speedForDisplay }}</div>
 				<img
 					class="speed-icon"
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_speed_icon.png"
@@ -105,6 +105,7 @@ export class MercenariesTeamAbilityComponent {
 				: // It can happen that the ability hasn't been modified by a COST tag change, but that
 				  // we know some modifiers apply to the hero. In this case, we show it
 				  value.speed + (this.speedModifier?.value ?? 0);
+		this.speedForDisplay = this.speed == null ? null : Math.max(0, this.speed);
 		const influences = (this.speedModifier?.influences ?? [])
 			.map((influence) => `${this.allCards.getCard(influence.cardId).name}: ${influence.value}`)
 			.join('<br/> ');
@@ -130,6 +131,7 @@ export class MercenariesTeamAbilityComponent {
 	name: string;
 	baseSpeed: number;
 	speed: number;
+	speedForDisplay: number;
 	cooldown: number;
 	cooldownLeft: number;
 	isTreasure: boolean;
