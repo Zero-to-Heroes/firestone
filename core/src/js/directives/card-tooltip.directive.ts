@@ -172,6 +172,24 @@ export class CardTooltipDirective implements OnDestroy {
 					overlayY: 'bottom',
 				},
 			];
+		} else if (this._position === 'top') {
+			positions = [
+				{
+					originX: 'center',
+					originY: 'top',
+					overlayX: 'center',
+					overlayY: 'bottom',
+				},
+			];
+		} else if (this._position === 'bottom') {
+			positions = [
+				{
+					originX: 'center',
+					originY: 'bottom',
+					overlayX: 'center',
+					overlayY: 'top',
+				},
+			];
 		}
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef

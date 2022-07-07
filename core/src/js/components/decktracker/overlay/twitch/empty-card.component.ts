@@ -11,6 +11,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 			class="card"
 			[cardTooltip]="_cardId"
 			[cardTooltipBgs]="_cardTooltipBgs"
+			[cardTooltipPosition]="_cardTooltipPosition"
 			[style.transform]="_transform"
 			[style.left.%]="_leftOFfset"
 			[style.top.%]="_topOffset"
@@ -47,6 +48,13 @@ export class EmptyCardComponent {
 		}
 	}
 
+	@Input() set cardTooltipPosition(value: string) {
+		this._cardTooltipPosition = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() set cardId(value: string) {
 		this._cardId = value;
 		// const imageUrl = `https://static.firestoneapp.com/cards/enUS/512/${value}.png`;
@@ -63,6 +71,7 @@ export class EmptyCardComponent {
 	_leftOFfset: number;
 	_topOffset: number;
 	_transform: string;
+	_cardTooltipPosition: string;
 	_cardTooltipBgs: boolean;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

@@ -81,6 +81,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 					[topOffset]="handPositionTop(i)"
 					[cardId]="cardId"
 					[cardTooltipBgs]="isBgs"
+					[cardTooltipPosition]="'top'"
 				>
 				</empty-card>
 			</ul>
