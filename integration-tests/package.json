@@ -39,7 +39,7 @@
 		"deckstrings": "2.1.0",
 		"elementtree": "^0.1.7",
 		"immutable": "3.8.2",
-		"jszip": "^3.2.2",
+		"jszip": "^3.7.0",
 		"lodash-es": "^4.17.15",
 		"ng-inline-svg": "8.4.1",
 		"ng-lz-string": "1.5.3",
