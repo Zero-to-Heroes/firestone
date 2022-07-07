@@ -32,7 +32,8 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					allowedCards: allowedCards$ | async,
 					activeCards: activeCards$ | async,
 					buckets: possibleBuckets$ | async,
-					showRelatedCards: showRelatedCards$ | async
+					showRelatedCards: showRelatedCards$ | async,
+					showBuckets: showBuckets$ | async
 				} as value"
 			>
 				<div class="decklist-container">
@@ -116,10 +117,22 @@ export const DEFAULT_CARD_HEIGHT = 221;
 										class="real-card"
 										(click)="addCard(card)"
 									/>
+									<div
+										class="buckets-info"
+										*ngIf="value.showBuckets && card.numberOfBuckets > 1"
+										[helpTooltip]="
+											'app.duels.deckbuilder.part-of-multiple-buckets-tooltip'
+												| owTranslate: { value: card.numberOfBuckets }
+										"
+									>
+										<div>
+											{{ card.numberOfBuckets }}
+										</div>
+									</div>
 								</div>
 							</div>
 						</virtual-scroller>
-						<div class="buckets-container" *ngIf="showBuckets$ | async">
+						<div class="buckets-container" *ngIf="value.showBuckets">
 							<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
 								<div class="bucket-name">{{ bucket.bucketName }}</div>
 								<div class="class-images">
@@ -165,7 +178,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
 	ongoingText$: Observable<string>;
-	allowedCards$: Observable<ReferenceCard[]>;
+	allowedCards$: Observable<ReferenceCardWithBucket[]>;
 	collection$: Observable<readonly SetCard[]>;
 	missingDust$: Observable<number>;
 
@@ -204,74 +217,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					this.cdr.detectChanges();
 				}
 			});
-		this.allowedCards$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.duels.config,
-				([main, nav]) => main.duels.deckbuilder.currentClasses,
-			),
-			from([this.allCards.getCards()]),
-		).pipe(
-			this.mapData(([[config, currentClasses], cards]) => {
-				const cardsWithDuplicates: readonly ReferenceCard[] = cards
-					.filter((card) => card.collectible)
-					.filter((card) => config.includedSets?.includes(card.set?.toLowerCase()))
-					.filter(
-						(card) =>
-							!config.bannedCardsFromDeckbuilding?.length ||
-							!config.bannedCardsFromDeckbuilding.includes(card.id),
-					)
-					.filter((card) => {
-						const searchCardClasses: readonly CardClass[] = !!currentClasses?.length
-							? [...currentClasses, CardClass.NEUTRAL]
-							: [CardClass.NEUTRAL];
-						const cardCardClasses: readonly CardClass[] = card.classes
-							? card.classes.map((c) => CardClass[c])
-							: !!card.cardClass
-							? [CardClass[card.cardClass]]
-							: [];
-						return searchCardClasses.some((c) => cardCardClasses.includes(c));
-					})
-					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
-				const groupedByName = groupByFunction((card: ReferenceCard) => card.name)(cardsWithDuplicates);
-				const result = Object.values(groupedByName).map((cards) => {
-					if (cards.length === 1) {
-						return cards[0];
-					}
-					const allowed = cards.filter((c) => config.includedSets?.includes(c.set?.toLowerCase()));
-					if (allowed.length === 1) {
-						return allowed[0];
-					}
-					const original = allowed.filter((c) => !!c.deckDuplicateDbfId);
-					if (original.length === 1) {
-						return original[0];
-					}
-					// Core will probably always be allowed in deckbuilding
-					const core = allowed.filter((c) => c.set?.toLowerCase() === 'core');
-					if (core.length === 1) {
-						return core[0];
-					}
-
-					return cards[0];
-				});
-				return result;
-			}),
-		);
-		this.collection$ = this.store
-			.listen$(([main, nav]) => main.binder.allSets)
-			.pipe(
-				this.mapData(
-					([allSets]) =>
-						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
-				),
-			);
-
-		const searchString$ = this.searchForm.valueChanges.pipe(
-			startWith(null),
-			this.mapData((data: string) => data?.toLowerCase(), null, 50),
-		);
-		this.showBuckets$ = this.listenForBasicPref$((prefs) => prefs.duelsDeckbuilderShowBuckets);
-		this.currentDeckCards$ = this.currentDeckCards.asObservable();
-		this.toggledBucketFilters$ = this.toggledBucketFilters.asObservable();
 		const allBuckets$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.bucketsData,
@@ -325,6 +270,80 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 					});
 				}),
 			);
+		this.allowedCards$ = combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.duels.config,
+				([main, nav]) => main.duels.deckbuilder.currentClasses,
+			),
+			allBuckets$,
+			from([this.allCards.getCards()]),
+		).pipe(
+			this.mapData(([[config, currentClasses], allBuckets, cards]) => {
+				const cardsWithDuplicates: readonly ReferenceCard[] = cards
+					.filter((card) => card.collectible)
+					.filter((card) => config.includedSets?.includes(card.set?.toLowerCase()))
+					.filter(
+						(card) =>
+							!config.bannedCardsFromDeckbuilding?.length ||
+							!config.bannedCardsFromDeckbuilding.includes(card.id),
+					)
+					.filter((card) => {
+						const searchCardClasses: readonly CardClass[] = !!currentClasses?.length
+							? [...currentClasses, CardClass.NEUTRAL]
+							: [CardClass.NEUTRAL];
+						const cardCardClasses: readonly CardClass[] = card.classes
+							? card.classes.map((c) => CardClass[c])
+							: !!card.cardClass
+							? [CardClass[card.cardClass]]
+							: [];
+						return searchCardClasses.some((c) => cardCardClasses.includes(c));
+					})
+					.filter((card) => card.type?.toLowerCase() !== CardType[CardType.ENCHANTMENT].toLowerCase());
+				const groupedByName = groupByFunction((card: ReferenceCard) => card.name)(cardsWithDuplicates);
+				const result = Object.values(groupedByName)
+					.map((cards) => {
+						if (cards.length === 1) {
+							return cards[0];
+						}
+						const allowed = cards.filter((c) => config.includedSets?.includes(c.set?.toLowerCase()));
+						if (allowed.length === 1) {
+							return allowed[0];
+						}
+						const original = allowed.filter((c) => !!c.deckDuplicateDbfId);
+						if (original.length === 1) {
+							return original[0];
+						}
+						// Core will probably always be allowed in deckbuilding
+						const core = allowed.filter((c) => c.set?.toLowerCase() === 'core');
+						if (core.length === 1) {
+							return core[0];
+						}
+
+						return cards[0];
+					})
+					.map((card) => ({
+						...card,
+						numberOfBuckets: allBuckets.filter((b) => b.bucketCardIds.includes(card.id)).length,
+					}));
+				return result;
+			}),
+		);
+		this.collection$ = this.store
+			.listen$(([main, nav]) => main.binder.allSets)
+			.pipe(
+				this.mapData(
+					([allSets]) =>
+						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
+				),
+			);
+
+		const searchString$ = this.searchForm.valueChanges.pipe(
+			startWith(null),
+			this.mapData((data: string) => data?.toLowerCase(), null, 50),
+		);
+		this.showBuckets$ = this.listenForBasicPref$((prefs) => prefs.duelsDeckbuilderShowBuckets);
+		this.currentDeckCards$ = this.currentDeckCards.asObservable();
+		this.toggledBucketFilters$ = this.toggledBucketFilters.asObservable();
 		const cardIdsForMatchingBucketToggles$: Observable<readonly string[]> = combineLatest(
 			this.toggledBucketFilters$,
 			allBuckets$,
@@ -365,21 +384,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 		);
 		this.activeCards$ = combineLatest(
-			this.allowedCards$,
-			this.collection$,
-			searchString$,
-			this.currentDeckCards$,
-			cardIdsForMatchingBucketToggles$,
-			allCardIdsInBucketsWithDuplicates$,
+			combineLatest(this.allowedCards$, this.collection$, searchString$, this.currentDeckCards$),
+			combineLatest(cardIdsForMatchingBucketToggles$, allCardIdsInBucketsWithDuplicates$, allBuckets$),
 		).pipe(
 			this.mapData(
 				([
-					allCards,
-					collection,
-					searchString,
-					deckCards,
-					cardIdsForMatchingBucketToggles,
-					allCardIdsInBucketsWithDuplicates,
+					[allCards, collection, searchString, deckCards],
+					[cardIdsForMatchingBucketToggles, allCardIdsInBucketsWithDuplicates, allBuckets],
 				]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
 					const searchResult = allCards
@@ -406,6 +417,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								imagePath: this.i18n.getCardImage(card.id, {
 									isHighRes: false,
 								}),
+								numberOfBuckets: card.numberOfBuckets,
 							};
 							return result;
 						});
@@ -413,6 +425,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				},
 				null,
 				50,
+			),
+			tap((info) =>
+				console.debug(
+					'info',
+					info.filter((c) => c.numberOfBuckets > 1),
+					info,
+				),
 			),
 		);
 		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
@@ -723,6 +742,7 @@ interface DeckBuilderCard {
 	readonly cardId: string;
 	readonly name: string;
 	readonly imagePath: string;
+	readonly numberOfBuckets: number;
 }
 
 interface SearchFilters {
@@ -743,4 +763,8 @@ export interface BucketClass {
 	readonly class: CardClass;
 	readonly name: string;
 	readonly image: string;
+}
+
+interface ReferenceCardWithBucket extends ReferenceCard {
+	readonly numberOfBuckets: number;
 }
