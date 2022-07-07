@@ -1,20 +1,21 @@
 import {
 	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	Output,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
-import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { from } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
+import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'bgs-simulation-overlay-standalone',
@@ -40,8 +41,8 @@ import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulationOverlayStandaloneComponent
-	extends AbstractSubscriptionTwitchComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionTwitchResizableComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy {
 	nextBattle: BgsFaceOffWithSimulation;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
@@ -59,21 +60,11 @@ export class BgsSimulationOverlayStandaloneComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly prefs: TwitchPreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
 	) {
-		super(cdr);
-	}
-
-	ngAfterContentInit() {
-		from(this.prefs.prefs.asObservable())
-			.pipe(this.mapData((prefs) => prefs?.battleSimScale))
-			.subscribe((scale) => {
-				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			});
+		super(cdr, prefs, el, renderer);
 	}
 
 	startDragging() {

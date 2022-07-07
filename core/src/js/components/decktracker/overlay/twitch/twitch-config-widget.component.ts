@@ -14,6 +14,22 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 	template: `
 		<div class="twitch-config-widget">
 			<div class="settings" *ngIf="prefs$ | async as prefs">
+				<checkbox
+					class="item"
+					[label]="'twitch.adaptative-scaling' | owTranslate"
+					[labelTooltip]="'twitch.adaptative-scaling-tooltip' | owTranslate"
+					[value]="prefs.adaptativeScaling"
+					(valueChanged)="onAdaptativeScalingChanged(prefs, $event)"
+				></checkbox>
+				<numeric-input
+					class="item input scale"
+					[label]="'twitch.scale' | owTranslate"
+					[labelTooltip]="'twitch.scale-tooltip' | owTranslate"
+					[value]="prefs.heroBoardScale"
+					[minValue]="40"
+					[incrementStep]="5"
+					(valueChange)="onScaleChanged(prefs, $event)"
+				></numeric-input>
 				<section class="constructed">
 					<div class="section-title" [owTranslate]="'twitch.constructed-section-title'"></div>
 					<div class="group">
@@ -79,15 +95,6 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 							[value]="prefs.showBattleSimulator"
 							(valueChanged)="onShowBattleSimulatorChanged(prefs, $event)"
 						></checkbox>
-						<numeric-input
-							class="item input sim-size indented"
-							[label]="'twitch.battle-simulator-size' | owTranslate"
-							[value]="prefs.battleSimScale"
-							[disabled]="!prefs.showBattleSimulator"
-							[minValue]="10"
-							[incrementStep]="5"
-							(valueChange)="onBattleSimScaleChanged(prefs, $event)"
-						></numeric-input>
 					</div>
 				</section>
 			</div>
@@ -100,7 +107,6 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 })
 export class TwitchConfigWidgetComponent implements AfterContentInit {
 	prefs$: Observable<TwitchPreferences>;
-	battleSimScale: number;
 
 	constructor(private readonly prefs: TwitchPreferencesService, private readonly cdr: ChangeDetectorRef) {}
 
@@ -114,6 +120,18 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+
+	onAdaptativeScalingChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, adaptativeScaling: value };
+		console.log('changing adaptativeScaling pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onScaleChanged(prefs: TwitchPreferences, value: number) {
+		const newPrefs: TwitchPreferences = { ...prefs, scale: value };
+		console.log('changing scale pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
 	}
 
 	onShowHeroCardsChanged(prefs: TwitchPreferences, value: boolean) {
@@ -143,12 +161,6 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	onShowBattleSimulatorChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showBattleSimulator: value };
 		console.log('changing showBattleSimulator pref', newPrefs);
-		this.prefs.savePrefs(newPrefs);
-	}
-
-	onBattleSimScaleChanged(prefs: TwitchPreferences, value: number) {
-		const newPrefs: TwitchPreferences = { ...prefs, battleSimScale: value };
-		console.log('changing battleSimScale pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 
