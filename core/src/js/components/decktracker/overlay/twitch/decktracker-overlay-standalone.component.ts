@@ -11,12 +11,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
-import { ResizedEvent } from 'angular-resize-event';
 import { from, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../../models/decktracker/game-state';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'decktracker-overlay-standalone',
@@ -60,7 +59,7 @@ import { GameState } from '../../../../models/decktracker/game-state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayStandaloneComponent
-	extends AbstractSubscriptionTwitchComponent
+	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit, AfterViewInit {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
@@ -73,12 +72,12 @@ export class DeckTrackerOverlayStandaloneComponent
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	constructor(
-		protected cdr: ChangeDetectorRef,
-		private el: ElementRef,
-		private renderer: Renderer2,
-		private prefs: TwitchPreferencesService,
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
 	) {
-		super(cdr);
+		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit() {
@@ -89,26 +88,31 @@ export class DeckTrackerOverlayStandaloneComponent
 
 	ngAfterViewInit() {
 		this.displayMode = 'DISPLAY_MODE_GROUPED';
+		super.listenForResize();
 	}
 
-	onResized(event: ResizedEvent) {
-		try {
-			// Resize the tracker
-			const scale = event.newHeight / 950;
+	// onResized(event: ResizedEvent) {
+	// 	try {
+	// 		// Resize the tracker
+	// 		const scale = event.newHeight / 950;
 
-			// Now shrink the scale is the tracker is taller than a portion of the container's height
-			const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
-			const maxTrackerHeight = containerHeight;
-			const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
-			const element = this.el.nativeElement.querySelector('.scalable');
-			this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			this.keepOverlayInBounds();
-		} catch (e) {
-			console.warn('Caught exception while trying to resize overlay', e);
-		}
+	// 		// Now shrink the scale is the tracker is taller than a portion of the container's height
+	// 		const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
+	// 		const maxTrackerHeight = containerHeight;
+	// 		const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
+	// 		const element = this.el.nativeElement.querySelector('.scalable');
+	// 		this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
+	// 		if (!(this.cdr as ViewRef)?.destroyed) {
+	// 			this.cdr.detectChanges();
+	// 		}
+	// 		this.keepOverlayInBounds();
+	// 	} catch (e) {
+	// 		console.warn('Caught exception while trying to resize overlay', e);
+	// 	}
+	// }
+
+	protected postResize() {
+		this.keepOverlayInBounds();
 	}
 
 	private keepOverlayInBounds() {

@@ -43,6 +43,10 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 		this.sub?.unsubscribe();
 	}
 
+	protected postResize() {
+		// Do nothing
+	}
+
 	private resize(prefs: TwitchPreferences) {
 		try {
 			const newHeight = window.innerHeight;
@@ -50,6 +54,7 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 			const scale = (prefs.scale / 100) * adaptativeScale;
 			const element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+			this.postResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
