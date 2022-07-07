@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -36,23 +37,34 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	decks$: Observable<readonly DeckSummary[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.decks$ = this.store
-			.listen$(
+		this.decks$ = combineLatest(
+			this.store.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,
 				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
-			)
-			.pipe(
-				this.mapData(([decks, sort]) =>
-					(decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []).sort(
-						this.getSortFunction(sort),
-					),
-				),
-			);
+			),
+			this.store.listenPrefs$((prefs) => prefs.constructedDecksSearchString),
+		).pipe(
+			this.mapData(([[decks, sort], [search]]) =>
+				(decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
+					.filter(
+						(deck) =>
+							!search?.length ||
+							deck.deckName?.toLowerCase()?.includes(search) ||
+							deck.class?.toLowerCase()?.includes(search) ||
+							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
+					)
+					.sort(this.getSortFunction(sort)),
+			),
+		);
 	}
 
 	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {

@@ -139,6 +139,7 @@ export class Preferences {
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 	readonly constructedPersonalAdditionalDecks: readonly DeckSummary[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
+	readonly constructedDecksSearchString: string;
 	readonly constructedMetaDecksFormatFilter: FormatForDeckData = 'standard';
 	readonly constructedMetaDecksTimeFilter: TimeForDeckData = 'last-patch';
 	readonly constructedMetaDecksRankFilter: RankForDeckData = 'all';

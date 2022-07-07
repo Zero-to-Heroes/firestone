@@ -26,8 +26,7 @@
 		height: 20px;
 		position: relative;
 		top: 5px;
-		right: -15px;
-		margin-left: -20px;
+		right: -20px;
 		--icon-color: var(--secondary-text-color);
 	}
 
@@ -51,6 +50,25 @@
 
 		&:hover {
 			opacity: 1;
+		}
+	}
+
+	::ng-deep ng-select {
+		margin-right: 13px;
+	}
+
+	.search {
+		width: 155px;
+		position: relative;
+		top: 1px;
+
+		::ng-deep label {
+			height: 100%;
+
+			.icon {
+				width: 25px;
+				flex-shrink: 0;
+			}
 		}
 	}
 }

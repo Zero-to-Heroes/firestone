@@ -38,6 +38,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
 			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
 
+			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
+
 			<div class="filter-info" [helpTooltip]="helpTooltip" *ngIf="showInfo$ | async">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#info" />
