@@ -52,6 +52,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 							[value]="prefs.showHeroCards"
 							(valueChanged)="onShowHeroCardsChanged(prefs, $event)"
 						></checkbox>
+						<checkbox
+							class="item"
+							[label]="'twitch.move-magnifier-icon-on-top' | owTranslate"
+							[labelTooltip]="'twitch.move-magnifier-icon-on-top-tooltip' | owTranslate"
+							[value]="prefs.magnifierIconOnTop"
+							(valueChanged)="onMagnifierIconOnTopChanged(prefs, $event)"
+						></checkbox>
 					</div>
 					<div class="group">
 						<checkbox
@@ -121,6 +128,12 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	onShowRelatedCardsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showRelatedCards: value };
 		console.log('changing showRelatedCards pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onMagnifierIconOnTopChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, magnifierIconOnTop: value };
+		console.log('changing magnifierIconOnTop pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

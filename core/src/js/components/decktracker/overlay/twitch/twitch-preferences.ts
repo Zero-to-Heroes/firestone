@@ -6,4 +6,5 @@ export class TwitchPreferences {
 	readonly showMinionsListGoldenCards: boolean = true;
 	readonly showBattleSimulator: boolean = true;
 	readonly showRelatedCards: boolean = true;
+	readonly magnifierIconOnTop: boolean = false;
 }

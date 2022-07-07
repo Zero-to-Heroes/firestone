@@ -37,6 +37,10 @@ empty-card {
 		background-color: var(--color-5);
 		clip-path: circle(20px at 50% 50%);
 	}
+
+	&.inversed {
+		order: -1;
+	}
 }
 
 .board {

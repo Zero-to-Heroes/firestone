@@ -10,9 +10,10 @@ import {
 } from '@angular/core';
 import { Map } from 'immutable';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
+import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'state-mouse-over',
@@ -33,7 +34,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 					[showLiveInfo]="showLiveInfo$ | async"
 				>
 				</leaderboard-empty-card>
-				<div class="players-recap-icon">
+				<div class="players-recap-icon" [ngClass]="{ 'inversed': magnifierIconOnTop$ | async }">
 					<svg
 						class="svg-icon-fill icon"
 						(mouseenter)="toggleLiveInfo(true)"
@@ -91,6 +92,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 })
 export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	showLiveInfo$: Observable<boolean>;
+	magnifierIconOnTop$: Observable<boolean>;
 
 	@Input() set overlayLeftOffset(value: number) {
 		this.horizontalOffset = value ?? 0;
@@ -153,10 +155,14 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 
 	private destroyed$ = new Subject<void>();
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly prefs: TwitchPreferencesService) {}
 
 	ngAfterContentInit(): void {
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(takeUntil(this.destroyed$));
+		this.magnifierIconOnTop$ = this.prefs.prefs.asObservable().pipe(
+			map((prefs) => prefs.magnifierIconOnTop),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	@HostListener('window:beforeunload')
