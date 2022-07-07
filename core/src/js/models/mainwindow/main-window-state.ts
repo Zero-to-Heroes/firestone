@@ -31,8 +31,6 @@ export class MainWindowState {
 	readonly globalStats: GlobalStats = new GlobalStats();
 	readonly showAds: boolean = true;
 
-	constructor() {}
-
 	public static create(base: Partial<NonFunctionProperties<MainWindowState>>): MainWindowState {
 		return Object.assign(new MainWindowState(), base);
 	}

@@ -26,9 +26,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<bgs-opponent-overview-big
 				*ngIf="scale"
 				[opponent]="_opponent"
-				[enableSimulation]="false" 
+				[enableSimulation]="false"
 				[maxBoardHeight]="-1"
-				[currentTurn]="currentTurn" k
+				[currentTurn]="currentTurn"
 				tavernTitle="Latest upgrade"
 				[showTavernsIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"

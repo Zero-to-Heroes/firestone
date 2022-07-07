@@ -25,9 +25,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<mercenaries-fully-upgraded-filter-dropdown
 				class="fully-upgraded"
 			></mercenaries-fully-upgraded-filter-dropdown>
-			<mercenaries-owned-filter-dropdown
-				class="owned"
-			></mercenaries-owned-filter-dropdown>
+			<mercenaries-owned-filter-dropdown class="owned"></mercenaries-owned-filter-dropdown>
 
 			<preference-toggle
 				class="show-hidden-teams-link"

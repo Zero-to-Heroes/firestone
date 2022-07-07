@@ -76,7 +76,7 @@ declare let amplitude;
 
 				<div class="group time" *ngIf="gameTime && displayTime">
 					<div class="value">{{ gameTime }}</div>
-				</div> 
+				</div>
 			</div>
 
 			<div class="right-info">

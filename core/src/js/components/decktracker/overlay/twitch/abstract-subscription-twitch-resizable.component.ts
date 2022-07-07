@@ -44,7 +44,7 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 	}
 
 	protected postResize() {
-		// Do nothing
+		// Do nothing, only for sub component specific behaviors
 	}
 
 	private resize(prefs: TwitchPreferences) {
