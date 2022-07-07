@@ -24,10 +24,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="battlegrounds-theme bgs-hero-overview-tooltip scalable">
 			<bgs-opponent-overview-big
+				*ngIf="scale"
 				[opponent]="_opponent"
-				[enableSimulation]="false"
+				[enableSimulation]="false" 
 				[maxBoardHeight]="-1"
-				[currentTurn]="currentTurn"
+				[currentTurn]="currentTurn" k
 				tavernTitle="Latest upgrade"
 				[showTavernsIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"
@@ -60,6 +61,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	isLastOpponent: boolean;
+	scale: number;
 
 	constructor(
 		private readonly el: ElementRef,
@@ -70,13 +72,13 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		super(store, cdr);
 		this.store
 			.listenPrefs$((prefs) => prefs.bgsOpponentBoardScale)
-			.pipe(this.mapData(([pref]) => pref))
+			.pipe(this.mapData(([pref]) => pref, null, 0))
 			.subscribe((scale) => {
 				try {
-					// this.el.nativeElement.style.setProperty('--bgs-opponent-board-scale', scale / 100);
-					const newScale = scale / 100;
+					// Use this trick to avoid having the component flicker when appearing
+					this.scale = scale / 100;
 					const element = this.el.nativeElement.querySelector('.scalable');
-					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+					this.renderer.setStyle(element, 'transform', `scale(${this.scale})`);
 				} catch (e) {
 					// Do nothing
 					console.debug('error', e);
