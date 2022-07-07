@@ -32,43 +32,25 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.10',
+		version: '9.8.11',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					IMPORTANT: In the future, decks you play with might be shared (anonymously) with the community if they perform well at a high rank. If you don't want others to find out about your secret decklists (I think that can especially be true for high-level Legend players), please turn off the new "Allow game sharing" option under Settings > General.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		IMPORTANT: In the future, decks you play with might be shared (anonymously) with the community if they perform well at a high rank. If you don't want others to find out about your secret decklists (I think that can especially be true for high-level Legend players), please turn off the new "Allow game sharing" option under Settings > General.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to not let the app shre your decks with the community (see announcement above).`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Now shows the cards you are missing when building a deck, as well as the dust you need to craft the missing cards (also applies to the Duels deckbuilder).`,
-							},
-						],
-					},
-					{
 						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the deckbuilder wouldn't work anymore.`,
+								type: 'feature',
+								text: `In the deckbuilder, show the number of different buckets a card is in.`,
 							},
 						],
 					},
@@ -83,32 +65,59 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add global effect for Prince Renathal.`,
+								text: `Fix Card Oracle for Mailbox Dancer.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Grave Defiler.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag the exact secrets put in play by Horde Operative.`,
-							},
-							{
-								type: 'feature',
-								text: `Update the number of cards that make a valid Renathal deck to 40.`,
+								text: `Add card highlight for Insight and Switcheroo.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where a constructed deck could be used by the tracker instead of your Arena deck.`,
+								text: `Fix an issue where the Abyssal Curse counter would show incorrect info if a Curse could not be sent to the player's hand because it was full.`,
+							},
+							{
+								type: 'bug',
+								text: `Add a search function for personal decks.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'ui',
-								text: `Keep the mana color of missing cards, instead of showing them with a white background mana cost.`,
+								type: 'bug',
+								text: `Remove the flickering that could happen when showing the opponent's latest info.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix cards from an incorrect class being offered when building a deck after clicking on the "build a deck" widget.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a filter for owned / not owned.`,
+							},
+							{
+								type: 'bug',
+								text: `Don't show negative speeds in combat.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Add the match duration in the replays list.`,
 							},
 						],
 					},
