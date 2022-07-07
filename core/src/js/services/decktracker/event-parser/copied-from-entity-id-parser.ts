@@ -44,6 +44,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// the battlecry is repeated with the Macaw, the player isn't even given the view of the cards. So technically, they shouldn't
 		// be able to know anything new about the opponent's cards in hand, but if we show the info in the tracker they do
 		// So we just hide everything
+		// We also can't simply decide to hide it in the hand tracker and show it in the "In Hand" section, because otherwise
+		// we would get some info when then card leaves the hand (e.g. being traded). Working around all of this is probably
+		// way too much work for just that single card
 		const obfuscatedCardId =
 			forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
 			forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)
