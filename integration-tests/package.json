@@ -35,7 +35,7 @@
 		"angular2-notifications": "2.0.0",
 		"aws-sdk": "2.458.0",
 		"big-integer": "^1.6.48",
-		"cross-fetch": "^3.0.4",
+		"cross-fetch": "^3.1.5",
 		"deckstrings": "2.1.0",
 		"elementtree": "^0.1.7",
 		"immutable": "3.8.2",
