@@ -21,7 +21,12 @@ export class DuelsBuildDeckParser implements Processor {
 						currentHeroCardId: event.heroCardId,
 						currentHeroPowerCardId: event.heroPowerCardId,
 						currentSignatureTreasureCardId: event.signatureTreasureCardId,
-						currentClasses: extractDuelsClasses(event.signatureTreasureCardId, this.allCards),
+						currentClasses: extractDuelsClasses(
+							event.heroCardId,
+							event.heroPowerCardId,
+							event.signatureTreasureCardId,
+							this.allCards,
+						),
 					}),
 				}),
 			}),

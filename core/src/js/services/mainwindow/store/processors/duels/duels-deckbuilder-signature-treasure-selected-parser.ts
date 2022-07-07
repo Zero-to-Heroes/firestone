@@ -24,7 +24,12 @@ export class DuelsDeckbuilderSignatureTreasureSelectedProcessor implements Proce
 				normalizeDuelsHeroCardId(currentState.duels.deckbuilder.currentHeroCardId) as CardIds,
 			)
 		) {
-			classes = extractDuelsClasses(event.signatureTreasureCardId, this.allCards);
+			classes = extractDuelsClasses(
+				currentState.duels.deckbuilder.currentHeroCardId,
+				currentState.duels.deckbuilder.currentHeroPowerCardId,
+				event.signatureTreasureCardId,
+				this.allCards,
+			);
 		}
 		return [
 			currentState.update({
@@ -40,7 +45,22 @@ export class DuelsDeckbuilderSignatureTreasureSelectedProcessor implements Proce
 	}
 }
 
-export const extractDuelsClasses = (signatureTreasureCardId: string, allCards: CardsFacadeService): CardClass[] => {
+export const extractDuelsClasses = (
+	heroCardId: string,
+	heroPowerCardId: string,
+	signatureTreasureCardId: string,
+	allCards: CardsFacadeService,
+): CardClass[] => {
+	const heroCard = allCards.getCard(heroCardId);
+	if (heroCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
+		return [CardClass[heroCard.cardClass]];
+	}
+
+	const heroPowerCard = allCards.getCard(heroPowerCardId);
+	if (heroPowerCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
+		return [CardClass[heroPowerCard.cardClass]];
+	}
+
 	const sigTreasureCard = allCards.getCard(signatureTreasureCardId);
 	if (sigTreasureCard?.cardClass !== CardClass[CardClass.NEUTRAL]) {
 		return [CardClass[sigTreasureCard.cardClass]];
