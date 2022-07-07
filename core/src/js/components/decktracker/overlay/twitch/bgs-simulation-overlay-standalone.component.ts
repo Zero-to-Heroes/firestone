@@ -1,13 +1,11 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
 	EventEmitter,
 	Input,
-	OnDestroy,
 	Output,
 	Renderer2,
 	ViewRef,
@@ -42,7 +40,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 })
 export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit {
 	nextBattle: BgsFaceOffWithSimulation;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
@@ -65,6 +63,10 @@ export class BgsSimulationOverlayStandaloneComponent
 		protected readonly renderer: Renderer2,
 	) {
 		super(cdr, prefs, el, renderer);
+	}
+
+	ngAfterContentInit(): void {
+		super.listenForResize();
 	}
 
 	startDragging() {

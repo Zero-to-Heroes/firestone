@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch-preferences';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { from, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	selector: 'twitch-config-widget',
@@ -25,7 +25,7 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 					class="item input scale"
 					[label]="'twitch.scale' | owTranslate"
 					[labelTooltip]="'twitch.scale-tooltip' | owTranslate"
-					[value]="prefs.heroBoardScale"
+					[value]="prefs.scale"
 					[minValue]="40"
 					[incrementStep]="5"
 					(valueChange)="onScaleChanged(prefs, $event)"
@@ -52,15 +52,6 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 							[value]="prefs.showHeroCards"
 							(valueChanged)="onShowHeroCardsChanged(prefs, $event)"
 						></checkbox>
-						<numeric-input
-							class="item input board-size"
-							[label]="'twitch.last-board-size' | owTranslate"
-							[labelTooltip]="'twitch.last-board-size-tooltip' | owTranslate"
-							[value]="prefs.heroBoardScale"
-							[minValue]="10"
-							[incrementStep]="5"
-							(valueChange)="onHeroBoardScaleChanged(prefs, $event)"
-						></numeric-input>
 					</div>
 					<div class="group">
 						<checkbox
@@ -78,15 +69,6 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 							[value]="prefs.showMinionsListGoldenCards"
 							(valueChanged)="onShowMinionsListGoldenCardsChanged(prefs, $event)"
 						></checkbox>
-						<numeric-input
-							class="item input minions-list-size indented"
-							[label]="'twitch.minions-list-size' | owTranslate"
-							[value]="prefs.minionsListScale"
-							[disabled]="!prefs.showMinionsList"
-							[minValue]="10"
-							[incrementStep]="5"
-							(valueChange)="onMinionsListScaleChanged(prefs, $event)"
-						></numeric-input>
 					</div>
 					<div class="group">
 						<checkbox
@@ -111,11 +93,7 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	constructor(private readonly prefs: TwitchPreferencesService, private readonly cdr: ChangeDetectorRef) {}
 
 	async ngAfterContentInit() {
-		this.prefs$ = from(this.prefs.prefs.asObservable()).pipe(
-			debounceTime(200),
-			tap((info) => console.debug('updated info', info)),
-			distinctUntilChanged(),
-		);
+		this.prefs$ = from(this.prefs.prefs.asObservable()).pipe(debounceTime(200), distinctUntilChanged());
 	}
 
 	preventDrag(event: MouseEvent) {
@@ -161,18 +139,6 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	onShowBattleSimulatorChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showBattleSimulator: value };
 		console.log('changing showBattleSimulator pref', newPrefs);
-		this.prefs.savePrefs(newPrefs);
-	}
-
-	onMinionsListScaleChanged(prefs: TwitchPreferences, value: number) {
-		const newPrefs: TwitchPreferences = { ...prefs, minionsListScale: value };
-		console.log('changing minionsListScale pref', newPrefs);
-		this.prefs.savePrefs(newPrefs);
-	}
-
-	onHeroBoardScaleChanged(prefs: TwitchPreferences, value: number) {
-		const newPrefs: TwitchPreferences = { ...prefs, heroBoardScale: value };
-		console.log('changing heroBoardScale pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

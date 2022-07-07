@@ -1,27 +1,13 @@
-/* eslint-disable @angular-eslint/contextual-lifecycle */
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectorRef,
-	ElementRef,
-	HostListener,
-	Injectable,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectorRef, ElementRef, HostListener, Injectable, Renderer2, ViewRef } from '@angular/core';
 import { sleep } from '@services/utils';
-import { BehaviorSubject, combineLatest, fromEvent, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { AbstractSubscriptionTwitchComponent } from './abstract-subscription-twitch.component';
 import { TwitchPreferences } from './twitch-preferences';
 import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Injectable()
-export abstract class AbstractSubscriptionTwitchResizableComponent
-	extends AbstractSubscriptionTwitchComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
-	private resizeObservable$: Observable<Event>;
+export abstract class AbstractSubscriptionTwitchResizableComponent extends AbstractSubscriptionTwitchComponent {
 	private resizeSubject = new BehaviorSubject<boolean>(false);
 	private sub: Subscription;
 
@@ -34,25 +20,15 @@ export abstract class AbstractSubscriptionTwitchResizableComponent
 		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.resizeObservable$ = fromEvent(window, 'resize');
-		this.sub = combineLatest(
-			this.resizeObservable$,
-			this.prefs.prefs.asObservable(),
-			this.resizeSubject.asObservable(),
-		)
+	async listenForResize() {
+		this.sub = combineLatest(this.prefs.prefs.asObservable(), this.resizeSubject.asObservable())
 			.pipe(
-				map(([windowResize, prefs, resize]) => {
-					return prefs;
-				}),
+				map(([prefs, resize]) => prefs),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe((prefs) => {
 				this.resize(prefs);
 			});
-	}
-
-	async ngAfterViewInit() {
 		await sleep(100);
 		this.onResized(null);
 	}
@@ -62,7 +38,8 @@ export abstract class AbstractSubscriptionTwitchResizableComponent
 		this.resizeSubject.next(!this.resizeSubject.value);
 	}
 
-	ngOnDestroy(): void {
+	@HostListener('window:beforeunload')
+	onDestroy(): void {
 		this.sub?.unsubscribe();
 	}
 

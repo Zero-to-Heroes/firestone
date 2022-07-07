@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -7,13 +8,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { getHeroPower } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { from, Observable } from 'rxjs';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'twitch-bgs-hero-overview',
@@ -45,7 +46,9 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchComponent {
+export class TwitchBgsHeroOverviewComponent
+	extends AbstractSubscriptionTwitchResizableComponent
+	implements AfterViewInit {
 	showHeroCards$: Observable<boolean>;
 
 	_opponent: BgsPlayer;
@@ -77,6 +80,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 		this.heroPowerImage = this.i18n.getCardImage(heroPowerCardId, {
 			isHighRes: true,
 		});
+		super.listenForResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -84,19 +88,17 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchCo
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly prefs: TwitchPreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 	) {
-		super(cdr);
+		super(cdr, prefs, el, renderer);
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
-		from(this.prefs.prefs.asObservable())
-			.pipe(this.mapData((prefs) => prefs?.heroBoardScale))
-			.subscribe((scale) => {
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			});
+	}
+
+	ngAfterViewInit(): void {
+		// super.listenForResize();
 	}
 }

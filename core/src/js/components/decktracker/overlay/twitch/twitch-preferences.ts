@@ -5,7 +5,5 @@ export class TwitchPreferences {
 	readonly showMinionsList: boolean = true;
 	readonly showMinionsListGoldenCards: boolean = true;
 	readonly showBattleSimulator: boolean = true;
-	readonly minionsListScale: number = 100;
-	readonly heroBoardScale: number = 100;
 	readonly showRelatedCards: boolean = true;
 }

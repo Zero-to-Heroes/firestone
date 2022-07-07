@@ -1,5 +1,6 @@
 import {
 	AfterContentInit,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -9,13 +10,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getAllCardsInGame } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, from, Observable } from 'rxjs';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-twitch',
@@ -42,8 +43,8 @@ import { BehaviorSubject, from, Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionsTiersTwitchOverlayComponent
-	extends AbstractSubscriptionTwitchComponent
-	implements AfterContentInit, OnDestroy {
+	extends AbstractSubscriptionTwitchResizableComponent
+	implements AfterContentInit, OnDestroy, AfterViewInit {
 	tiers$: Observable<readonly Tier[]>;
 	currentTurn$: Observable<number>;
 	showGoldenCards$: Observable<boolean>;
@@ -60,12 +61,12 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
 		private readonly allCards: CardsFacadeService,
-		private readonly prefs: TwitchPreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 	) {
-		super(cdr);
+		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit() {
@@ -80,15 +81,10 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		this.showGoldenCards$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showMinionsListGoldenCards),
 		);
-		from(this.prefs.prefs.asObservable())
-			.pipe(this.mapData((prefs) => prefs?.minionsListScale))
-			.subscribe((scale) => {
-				// A scale of 100 looks too big on Twitch
-				scale = scale * 0.8;
-				// this.el.nativeElement.style.setProperty('--bgs-simulator-scale', scale / 100);
-				const element = this.el.nativeElement.querySelector('.scalable');
-				this.renderer.setStyle(element, 'transform', `scale(${scale / 100})`);
-			});
+	}
+
+	ngAfterViewInit(): void {
+		super.listenForResize();
 	}
 
 	startDragging() {
