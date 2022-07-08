@@ -84,6 +84,14 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 							[value]="prefs.showBattleSimulator"
 							(valueChanged)="onShowBattleSimulatorChanged(prefs, $event)"
 						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="'twitch.hide-battle-odds-in-combat' | owTranslate"
+							[labelTooltip]="'twitch.hide-battle-odds-in-combat-tooltip' | owTranslate"
+							[disabled]="!prefs.showBattleSimulator"
+							[value]="prefs.hideBattleOddsInCombat"
+							(valueChanged)="onHideBattleOddsInCombatChanged(prefs, $event)"
+						></checkbox>
 					</div>
 				</section>
 			</div>
@@ -152,6 +160,12 @@ export class TwitchConfigWidgetComponent implements AfterContentInit {
 	onShowBattleSimulatorChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, showBattleSimulator: value };
 		console.log('changing showBattleSimulator pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInCombat: value };
+		console.log('changing hideBattleOddsInCombat pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

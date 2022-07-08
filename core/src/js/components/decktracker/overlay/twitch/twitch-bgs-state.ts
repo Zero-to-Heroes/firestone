@@ -12,6 +12,7 @@ export interface TwitchBgsState {
 	readonly inGame: boolean;
 	readonly currentBattle?: TwitchBgsCurrentBattle;
 	readonly availableRaces: readonly Race[];
+	readonly phase: 'recruit' | 'combat';
 }
 
 export interface TwitchBgsCurrentBattle {

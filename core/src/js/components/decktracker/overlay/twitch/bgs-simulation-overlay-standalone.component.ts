@@ -10,6 +10,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
@@ -32,7 +33,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			(cdkDragReleased)="stopDragging()"
 		>
 			<div class="simulation-overlay scalable">
-				<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="false"></bgs-battle-status>
+				<bgs-battle-status [nextBattle]="nextBattle$ | async" [showReplayLink]="false"></bgs-battle-status>
 			</div>
 		</div>
 	`,
@@ -41,7 +42,8 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit {
-	nextBattle: BgsFaceOffWithSimulation;
+	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
 
@@ -49,12 +51,15 @@ export class BgsSimulationOverlayStandaloneComponent
 	@Output() dragEnd = new EventEmitter<void>();
 
 	@Input() set bgsState(value: TwitchBgsCurrentBattle) {
-		this.nextBattle = BgsFaceOffWithSimulation.create({
-			battleResult: value?.battleInfo,
-			battleInfoStatus: value?.status,
-			battleInfoMesage: null,
-		} as BgsFaceOffWithSimulation);
+		this.battleState$$.next(value);
 	}
+
+	@Input() set phase(value: 'combat' | 'recruit') {
+		this.phase$$.next(value);
+	}
+
+	battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
+	phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -67,6 +72,22 @@ export class BgsSimulationOverlayStandaloneComponent
 
 	ngAfterContentInit(): void {
 		super.listenForResize();
+		this.nextBattle$ = combineLatest(
+			this.prefs.prefs.asObservable(),
+			this.battleState$$.asObservable(),
+			this.phase$$.asObservable(),
+		).pipe(
+			this.mapData(([prefs, battleState, phase]) => {
+				if (prefs.hideBattleOddsInCombat && phase === 'combat') {
+					return null;
+				}
+				return BgsFaceOffWithSimulation.create({
+					battleResult: battleState?.battleInfo,
+					battleInfoStatus: battleState?.status,
+					battleInfoMesage: null,
+				} as BgsFaceOffWithSimulation);
+			}),
+		);
 	}
 
 	startDragging() {

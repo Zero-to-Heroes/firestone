@@ -130,7 +130,9 @@ export class TwitchAuthService {
 			cardsPlayedThisMatch: undefined,
 		});
 
-		const latestBattle = bgsState?.currentGame?.lastFaceOff();
+		// We need to show the last non-empty face off to let the extension decide whether to show the result
+		// or not (e.g. based on the "show only on tavern" pref)
+		const latestBattle = bgsState?.currentGame?.lastNonEmptyFaceOff();
 		const newBgsState: TwitchBgsState = !!bgsState
 			? {
 					leaderboard: this.buildLeaderboard(bgsState),
@@ -144,6 +146,7 @@ export class TwitchAuthService {
 					inGame: bgsState.inGame,
 					gameEnded: bgsState.currentGame?.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
+					phase: bgsState.currentGame?.phase,
 			  }
 			: null;
 
@@ -151,7 +154,7 @@ export class TwitchAuthService {
 			deck: newDeckState,
 			bgs: newBgsState,
 		};
-		// console.debug('[twitch-auth] built event', result);
+		// console.debug('[twitch-auth] built event', result, bgsState);
 		return result;
 	}
 

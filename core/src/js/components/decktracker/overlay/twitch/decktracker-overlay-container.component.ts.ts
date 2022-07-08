@@ -52,6 +52,7 @@ declare let amplitude;
 			<bgs-simulation-overlay-standalone
 				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
 				[bgsState]="bgsBattleState"
+				[phase]="bgsState?.phase"
 			>
 			</bgs-simulation-overlay-standalone>
 			<battlegrounds-minions-tiers-twitch
