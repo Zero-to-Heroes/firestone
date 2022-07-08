@@ -344,6 +344,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, inGraveyard, frenzy);
 			case CardIds.PetCollector:
 				return and(inDeck, minion, beast, effectiveCostLess(6));
+			case CardIds.PrimordialProtector_BAR_042:
+				return and(inDeck, spell);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
 			case CardIds.Rally:
