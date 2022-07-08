@@ -40,6 +40,9 @@ empty-card {
 
 	&.inversed {
 		order: -1;
+		margin-top: -6vh;
+		position: relative;
+		top: -2vh;
 	}
 }
 
