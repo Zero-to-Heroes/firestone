@@ -426,13 +426,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				null,
 				50,
 			),
-			tap((info) =>
-				console.debug(
-					'info',
-					info.filter((c) => c.numberOfBuckets > 1),
-					info,
-				),
-			),
 		);
 		this.possibleBuckets$ = combineLatest(allBuckets$, this.currentDeckCards$).pipe(
 			this.mapData(([validBuckets, deckCardIds]) => {
