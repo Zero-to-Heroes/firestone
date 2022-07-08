@@ -6,7 +6,6 @@ const DefinePlugin = require('webpack').DefinePlugin;
 const BannerPlugin = require('webpack').BannerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-// const AngularCompilerPlugin = require('@artonge/webpack').AngularCompilerPlugin;
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 var path = require('path');
@@ -166,26 +165,29 @@ module.exports = function (env, argv) {
 					},
 			  }
 			: {
-					runtimeChunk: 'single',
-					splitChunks: {
-						chunks: 'all',
-						maxInitialRequests: Infinity,
-						minSize: 1 * 1000, // Don't split the really small chunks
-						cacheGroups: {
-							vendor: {
-								test: /node_modules/,
-								chunks: 'initial',
-								name: 'vendor',
-								priority: 10,
-								enforce: true,
-							},
-						},
-					},
+					runtimeChunk: true,
+					removeAvailableModules: false,
+					removeEmptyChunks: false,
+					splitChunks: false,
+					// splitChunks: {
+					// 	chunks: 'all',
+					// 	maxInitialRequests: Infinity,
+					// 	minSize: 1 * 1000, // Don't split the really small chunks
+					// 	cacheGroups: {
+					// 		vendor: {
+					// 			test: /node_modules/,
+					// 			chunks: 'initial',
+					// 			name: 'vendor',
+					// 			priority: 10,
+					// 			enforce: true,
+					// 		},
+					// 	},
+					// },
 			  },
 
 		target: 'web',
 
-		devtool: env.production ? false : 'inline-source-map',
+		devtool: false, // env.production ? false : 'eval-source-map',
 
 		// Doesn't work, for some reason the code loaded after refresh is still the old one
 		watch: false,
@@ -198,6 +200,7 @@ module.exports = function (env, argv) {
 			path: getRoot('dist/Files'),
 			publicPath: './',
 			filename: '[name].js',
+			pathinfo: false,
 		},
 
 		resolve: {
@@ -206,6 +209,7 @@ module.exports = function (env, argv) {
 			// you need to remove the .ts files from its node_modules folder
 			// See https://github.com/gilf/angular2-indexeddb/issues/67
 			extensions: ['.ts', '.js', '.html'],
+			symlinks: false,
 		},
 
 		module: {
@@ -213,17 +217,35 @@ module.exports = function (env, argv) {
 				{
 					test: /\.ts$/,
 					exclude: [/node_modules/, /test/, /\.worker.ts$/],
-					use: ['@ngtools/webpack', 'ts-loader'],
-				},
-				{
-					test: /\.worker.ts$/,
-					exclude: [/node_modules/, /test/],
-					use: ['ts-loader'],
+					include: path.resolve(__dirname, 'src', 'js'),
+					use: [
+						'@ngtools/webpack',
+						{
+							loader: 'ts-loader',
+							options: {
+								transpileOnly: true,
+							},
+						},
+					],
 				},
 				{
 					test: /\.scss$/,
 					exclude: /node_modules/,
+					include: path.resolve(__dirname, 'src', 'css'),
 					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
+				},
+				{
+					test: /\.worker.ts$/,
+					exclude: [/node_modules/, /test/],
+					include: path.resolve(__dirname, 'src', 'js', 'workers'),
+					use: [
+						{
+							loader: 'ts-loader',
+							options: {
+								transpileOnly: true,
+							},
+						},
+					],
 				},
 				{
 					test: /\.worker\.js$/,
