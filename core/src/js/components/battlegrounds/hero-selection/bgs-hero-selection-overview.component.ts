@@ -60,15 +60,16 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 			this.store.bgHeroStats$(),
 			this.store.listen$(([main, nav]) => main.achievements),
 			this.store.listenBattlegrounds$(
-				([main, prefs]) => main.panels,
+				([main, prefs]) =>
+					// Filter here to avoid recomputing achievements info every time something changes in
+					// another panel (finding the right panel is inexpensive)
+					main.panels?.find(
+						(panel) => panel.id === 'bgs-hero-selection-overview',
+					) as BgsHeroSelectionOverviewPanel,
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
-			this.mapData(([stats, [achievements], [panels, showAchievements]]) => {
-				// console.debug('selection info', stats, achievements, panels, showAchievements);
-				const panel = panels.find(
-					(panel) => panel.id === 'bgs-hero-selection-overview',
-				) as BgsHeroSelectionOverviewPanel;
+			this.mapData(([stats, [achievements], [panel, showAchievements]]) => {
 				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
 				// console.debug('panel & category', panel, heroesAchievementCategory);
 				if (!panel || !heroesAchievementCategory) {
@@ -83,7 +84,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				}
 
 				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory.retrieveAllAchievements();
-				// console.debug('heroAchievements', heroAchievements);
 				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const existingStat = stats?.find((overview) => overview.id === normalized);
