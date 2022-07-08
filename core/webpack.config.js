@@ -187,7 +187,7 @@ module.exports = function (env, argv) {
 
 		target: 'web',
 
-		devtool: false, // env.production ? false : 'eval-source-map',
+		devtool: env.production ? false : 'eval-source-map',
 
 		// Doesn't work, for some reason the code loaded after refresh is still the old one
 		watch: false,
