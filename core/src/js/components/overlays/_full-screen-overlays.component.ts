@@ -11,9 +11,10 @@ import {
 	ViewChild,
 	ViewEncapsulation,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { combineLatest, Observable } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -130,11 +131,24 @@ export class FullScreenOverlaysComponent
 	}
 
 	ngAfterContentInit(): void {
+		const lastNonGamePlayScene$: Observable<SceneMode> = this.store
+			.listen$(([main, prefs]) => main.currentScene)
+			.pipe(
+				filter(([scene]) => !!scene && scene !== SceneMode.GAMEPLAY),
+				this.mapData(([scene]) => scene),
+			);
 		this.activeTheme$ = combineLatest(
+			lastNonGamePlayScene$,
 			this.store.listenDeckState$((deckState) => deckState.metadata?.gameType),
 			this.store.listen$(([main]) => main.currentScene),
 		).pipe(
-			this.mapData(([[gameType], [currentScene]]) => {
+			tap((info) => console.debug('infoo', info)),
+			this.mapData(([nonGameplayScene, [gameType], [currentScene]]) => {
+				if (!gameType) {
+					if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
+						return 'battlegrounds';
+					}
+				}
 				switch (gameType) {
 					case GameType.GT_BATTLEGROUNDS:
 					case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
@@ -142,9 +156,6 @@ export class FullScreenOverlaysComponent
 					case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
 						return 'battlegrounds';
 					default:
-						if (isBattlegroundsScene(currentScene)) {
-							return 'battlegrounds';
-						}
 						return 'decktracker';
 				}
 			}),

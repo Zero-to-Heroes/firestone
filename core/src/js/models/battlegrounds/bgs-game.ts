@@ -218,7 +218,7 @@ export class BgsGame {
 		return this.faceOffs[this.faceOffs.length - 1];
 	}
 
-	private lastNonEmptyFaceOff(): BgsFaceOffWithSimulation {
+	public lastNonEmptyFaceOff(): BgsFaceOffWithSimulation {
 		if (!this.faceOffs?.length) {
 			return null;
 		}

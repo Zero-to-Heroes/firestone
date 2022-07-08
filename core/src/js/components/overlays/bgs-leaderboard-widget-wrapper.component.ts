@@ -84,17 +84,15 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.store.listenPrefs$((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
 			this.store.listenBattlegrounds$(
 				([state]) => state?.inGame,
-				([state]) => state?.currentGame?.gameEnded,
 				([state]) => state?.currentGame?.players?.length,
 			),
 		).pipe(
 			this.mapData(
-				([[currentScene], [metadata], [bgsEnableOpponentBoardMouseOver], [inGame, gameEnded, playerCount]]) =>
+				([[currentScene], [metadata], [bgsEnableOpponentBoardMouseOver], [inGame, playerCount]]) =>
 					isBattlegrounds(metadata.gameType) &&
 					bgsEnableOpponentBoardMouseOver &&
 					currentScene === SceneMode.GAMEPLAY &&
 					inGame &&
-					!gameEnded &&
 					(GameType.GT_BATTLEGROUNDS_FRIENDLY === metadata.gameType ||
 						(GameType.GT_BATTLEGROUNDS === metadata.gameType && playerCount === 8)),
 			),

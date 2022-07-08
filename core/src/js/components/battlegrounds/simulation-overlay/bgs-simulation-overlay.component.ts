@@ -5,13 +5,11 @@ import {
 	Component,
 	ElementRef,
 	Renderer2,
-	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -53,35 +51,16 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 			),
 		).pipe(
 			filter(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) => !!currentGame),
-			map(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) =>
-				currentGame.getRelevantFaceOff(bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit),
-			),
-			distinctUntilChanged(),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting nextBattle in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
+			this.mapData(([[currentGame], [bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit]]) => {
+				const result = currentGame.getRelevantFaceOff(
+					bgsShowSimResultsOnlyOnRecruit,
+					bgsHideSimResultsOnRecruit,
+				);
+				console.debug('sending result', result, currentGame);
+				return result;
+			}),
 		);
-		this.showSimulationSample$ = this.store
-			.listen$(([state, nav, prefs]) => prefs?.bgsEnableSimulationSampleInOverlay)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting showSimulationSample in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+		this.showSimulationSample$ = this.listenForBasicPref$((prefs) => prefs?.bgsEnableSimulationSampleInOverlay);
 		this.store
 			.listen$(([main, nav, prefs]) => prefs.bgsSimulatorScale)
 			.pipe(this.mapData(([pref]) => pref))

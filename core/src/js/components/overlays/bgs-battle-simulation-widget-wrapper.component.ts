@@ -62,11 +62,10 @@ export class BgsBattleSimulationWidgetWrapperComponent
 			this.store.listenBattlegrounds$(
 				([state, prefs]) => state?.inGame,
 				([state, prefs]) => !!state?.currentGame,
-				([state, prefs]) => state?.currentGame?.gameEnded,
 			),
 		).pipe(
-			this.mapData(([[currentScene, displayFromPrefs], [inGame, isCurrentGame, gameEnded]]) => {
-				return inGame && isCurrentGame && !gameEnded && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
+			this.mapData(([[currentScene, displayFromPrefs], [inGame, isCurrentGame]]) => {
+				return inGame && isCurrentGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
 			this.handleReposition(),
 		);

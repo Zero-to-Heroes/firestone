@@ -75,6 +75,7 @@ export class BgsGameEndParser implements EventParser {
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
+				phase: 'recruit',
 			} as BgsGame),
 		} as BattlegroundsState);
 	}
