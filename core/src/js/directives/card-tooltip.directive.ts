@@ -13,6 +13,7 @@ import {
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
+import { sleep } from '../services/utils';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Directive({
@@ -84,120 +85,22 @@ export class CardTooltipDirective implements OnDestroy {
 		if (this._position === 'none') {
 			return;
 		}
-		let positions: ConnectedPosition[] = [
-			{
-				originX: 'end',
-				originY: 'center',
-				overlayX: 'start',
-				overlayY: 'center',
-			},
-			{
-				originX: 'start',
-				originY: 'center',
-				overlayX: 'end',
-				overlayY: 'center',
-			},
-			{
-				originX: 'start',
-				originY: 'top',
-				overlayX: 'end',
-				overlayY: 'top',
-			},
-			{
-				originX: 'end',
-				originY: 'top',
-				overlayX: 'start',
-				overlayY: 'top',
-			},
-		];
-		if (this._position === 'auto') {
-			//console.debug('position auto, updating');
-			const windowWidth = window.innerWidth;
-			const elementRect = this.elementRef.nativeElement.getBoundingClientRect();
-			this._position = elementRect.x < windowWidth / 2 ? 'right' : 'left';
-			//console.debug('new position', this._position, windowWidth, elementRect);
-		}
 
-		if (this._position === 'left') {
-			positions = [
-				{
-					originX: 'start',
-					originY: 'center',
-					overlayX: 'end',
-					overlayY: 'center',
-				},
-			];
-		} else if (this._position === 'right') {
-			positions = [
-				{
-					originX: 'end',
-					originY: 'center',
-					overlayX: 'start',
-					overlayY: 'center',
-				},
-			];
-		} else if (this._position === 'bottom') {
-			positions = [
-				{
-					originX: 'center',
-					originY: 'bottom',
-					overlayX: 'center',
-					overlayY: 'top',
-				},
-			];
-		} else if (this._position === 'bottom-right') {
-			positions = [
-				{
-					originX: 'end',
-					originY: 'bottom',
-					overlayX: 'start',
-					overlayY: 'top',
-				},
-			];
-		} else if (this._position === 'top-right') {
-			positions = [
-				{
-					originX: 'end',
-					originY: 'top',
-					overlayX: 'start',
-					overlayY: 'bottom',
-				},
-			];
-		} else if (this._position === 'top-left') {
-			positions = [
-				{
-					originX: 'start',
-					originY: 'top',
-					overlayX: 'end',
-					overlayY: 'bottom',
-				},
-			];
-		} else if (this._position === 'top') {
-			positions = [
-				{
-					originX: 'center',
-					originY: 'top',
-					overlayX: 'center',
-					overlayY: 'bottom',
-				},
-			];
-		} else if (this._position === 'bottom') {
-			positions = [
-				{
-					originX: 'center',
-					originY: 'bottom',
-					overlayX: 'center',
-					overlayY: 'top',
-				},
-			];
-		}
+		// if (this._position === 'auto') {
+		// 	//console.debug('position auto, updating');
+		// 	const elementRect = this.elementRef.nativeElement.getBoundingClientRect();
+		// 	const leftRight = elementRect.x < window.innerWidth / 2 ? 'right' : 'left';
+		// 	const topBottom = elementRect.y < window.innerHeight / 2 ? 'bottom-' : 'top-';
+		// 	this._position = `${topBottom}${leftRight}` as CardTooltipPositionType;
+		// 	console.debug('new position', this._position, elementRect, window.innerHeight, window.innerWidth);
+		// }
+
+		const positions: ConnectedPosition[] = this.buildPositions(this._position);
+
 		this.positionStrategy = this.overlayPositionBuilder
-			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.elementRef)
-			// Describe how to connect overlay to the elementRef
 			.withPositions(positions);
 
-		// Connect position strategy
 		this.overlayRef = this.overlay.create({
 			positionStrategy: this.positionStrategy,
 		});
@@ -212,15 +115,14 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		//console.debug('mouseenter', this.positionStrategy, this._position);
+		console.debug('mouseenter', this.cardId, this.cardTooltipCard);
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
-
-		if (this._position === 'none') {
+		if (!this.cardId && !this.cardTooltipCard) {
 			return;
 		}
-		if (!this.cardId && !this.cardTooltipCard) {
+		if (this._position === 'none') {
 			return;
 		}
 
@@ -260,16 +162,12 @@ export class CardTooltipDirective implements OnDestroy {
 		}
 
 		this.positionStrategy.apply();
-		setTimeout(() => {
-			const tooltipRect = tooltipRef.location.nativeElement.getBoundingClientRect();
-			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
-			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
-			tooltipRef.instance.relativePosition = relativePosition;
-		});
+		this.reposition(tooltipRef);
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
 		this.hideTimeout = setTimeout(() => {
+			console.debug('hidetimeout', this.cardId);
 			this.onMouseLeave();
 		}, 15_000);
 	}
@@ -292,5 +190,147 @@ export class CardTooltipDirective implements OnDestroy {
 				}
 			}
 		}
+	}
+
+	private async reposition(tooltipRef) {
+		let positionUpdated = true;
+		let previousTooltipLeft = 0;
+		let previousTooltipTop = 0;
+		while (positionUpdated) {
+			const tooltipRect = tooltipRef.location.nativeElement.getBoundingClientRect();
+			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
+			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
+			tooltipRef.instance.relativePosition = relativePosition;
+			console.debug(
+				'relative position',
+				relativePosition,
+				tooltipRect,
+				targetRect,
+				tooltipRef.location.nativeElement,
+				this.elementRef.nativeElement,
+			);
+			this.overlayRef.updatePosition();
+			positionUpdated = previousTooltipLeft !== tooltipRect.left || previousTooltipTop !== tooltipRect.top;
+			previousTooltipLeft = tooltipRect.left;
+			previousTooltipTop = tooltipRect.top;
+			await sleep(10);
+		}
+	}
+
+	private buildPositions(position: CardTooltipPositionType) {
+		let positions = [];
+		if (position === 'left') {
+			positions = [
+				{
+					originX: 'start',
+					originY: 'center',
+					overlayX: 'end',
+					overlayY: 'center',
+				},
+			];
+		} else if (position === 'right') {
+			positions = [
+				{
+					originX: 'end',
+					originY: 'center',
+					overlayX: 'start',
+					overlayY: 'center',
+				},
+			];
+		} else if (position === 'bottom') {
+			positions = [
+				{
+					originX: 'center',
+					originY: 'bottom',
+					overlayX: 'center',
+					overlayY: 'top',
+				},
+			];
+		} else if (position === 'bottom-right') {
+			positions = [
+				{
+					originX: 'end',
+					originY: 'bottom',
+					overlayX: 'start',
+					overlayY: 'top',
+				},
+			];
+		} else if (position === 'bottom-left') {
+			positions = [
+				{
+					originX: 'start',
+					originY: 'bottom',
+					overlayX: 'end',
+					overlayY: 'top',
+				},
+			];
+		} else if (position === 'top-right') {
+			positions = [
+				{
+					originX: 'end',
+					originY: 'top',
+					overlayX: 'start',
+					overlayY: 'bottom',
+				},
+			];
+		} else if (position === 'top-left') {
+			positions = [
+				{
+					originX: 'start',
+					originY: 'top',
+					overlayX: 'end',
+					overlayY: 'bottom',
+				},
+			];
+		} else if (position === 'top') {
+			positions = [
+				{
+					originX: 'center',
+					originY: 'top',
+					overlayX: 'center',
+					overlayY: 'bottom',
+				},
+			];
+		} else {
+			positions = [
+				{
+					originX: 'start',
+					originY: 'center',
+					overlayX: 'end',
+					overlayY: 'center',
+				},
+				{
+					originX: 'end',
+					originY: 'center',
+					overlayX: 'start',
+					overlayY: 'center',
+				},
+				{
+					originX: 'start',
+					originY: 'bottom',
+					overlayX: 'end',
+					overlayY: 'top',
+				},
+				{
+					originX: 'end',
+					originY: 'bottom',
+					overlayX: 'start',
+					overlayY: 'top',
+				},
+				{
+					originX: 'start',
+					originY: 'top',
+					overlayX: 'end',
+					overlayY: 'bottom',
+				},
+				{
+					originX: 'end',
+					originY: 'top',
+					overlayX: 'start',
+					overlayY: 'bottom',
+				},
+			];
+		}
+		return positions;
 	}
 }

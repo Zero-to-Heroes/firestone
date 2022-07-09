@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import {
 	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionTwitchComponent } from '@components/decktracker/overlay/twitch/abstract-subscription-twitch.component';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -15,14 +15,9 @@ import { inflate } from 'pako';
 import { from, Observable } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
-
-const EBS_URL = 'https://ebs.firestoneapp.com/deck';
-// const EBS_URL = 'https://localhost:8081/deck';
-
-declare let overwolf;
-declare let amplitude;
 
 @Component({
 	selector: 'decktracker-overlay-container',
@@ -31,7 +26,6 @@ declare let amplitude;
 		`../../../../../css/themes/decktracker-theme.scss`,
 		`../../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
-		// '../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
 		<div
@@ -66,7 +60,7 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayContainerComponent
-	extends AbstractSubscriptionTwitchComponent
+	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterViewInit, AfterContentInit {
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
@@ -84,13 +78,14 @@ export class DeckTrackerOverlayContainerComponent
 	private localeInit: boolean;
 
 	constructor(
-		private readonly http: HttpClient,
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly translate: TranslateService,
-		private readonly prefs: TwitchPreferencesService,
-		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(cdr);
+		super(cdr, prefs, el, renderer);
 	}
 
 	ngAfterContentInit(): void {
@@ -103,6 +98,7 @@ export class DeckTrackerOverlayContainerComponent
 	}
 
 	async ngAfterViewInit() {
+		super.listenForResize();
 		if (!(window as any).Twitch) {
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
@@ -164,6 +160,11 @@ export class DeckTrackerOverlayContainerComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	protected doResize(newScale: number): void {
+		const newSidth = newScale * 250;
+		this.el.nativeElement.style.setProperty('--card-tooltip-min-width', `${newSidth}px`);
 	}
 
 	private async processEvent(event: TwitchEvent) {

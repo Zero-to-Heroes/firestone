@@ -2,6 +2,7 @@
 	height: 100%;
 	width: 100%;
 	position: relative;
+	--card-tooltip-min-width: 250px;
 }
 
 .container {
@@ -39,6 +40,36 @@
 				}
 				input {
 					width: 45px;
+				}
+			}
+		}
+	}
+
+	::ng-deep .cdk-overlay-container {
+		card-tooltip {
+			min-width: var(--card-tooltip-min-width);
+			min-height: calc(400 / 256 * var(--card-tooltip-min-width));
+
+			.tooltip-image {
+				width: 100%;
+			}
+
+			.card-tooltip {
+				min-width: var(--card-tooltip-min-width);
+				width: var(--card-tooltip-min-width);
+				min-height: calc(400 / 256 * var(--card-tooltip-min-width));
+			}
+
+			.related-cards-container .related-cards {
+				max-width: calc(435 / 256 * var(--card-tooltip-min-width));
+				max-height: calc(800 / 256 * var(--card-tooltip-min-width));
+				padding-right: calc(25 / 256 * var(--card-tooltip-min-width));
+				padding-bottom: calc(25 / 256 * var(--card-tooltip-min-width));
+
+				.related-card .tooltip-image {
+					width: calc(150 / 256 * var(--card-tooltip-min-width));
+					margin-right: calc(-15 / 256 * var(--card-tooltip-min-width));
+					margin-bottom: calc(-15 / 256 * var(--card-tooltip-min-width));
 				}
 			}
 		}

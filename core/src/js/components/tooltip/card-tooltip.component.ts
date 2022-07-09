@@ -36,17 +36,18 @@ import { groupByFunction } from '../../services/utils';
 			</div>
 		</div>
 		<div
-			class="related-cards-container"
+			class="related-cards-wrapper"
+			*ngIf="relatedCards.length"
 			[ngClass]="{
-				'wide': relatedCards.length > 6,
 				'left': _relativePosition === 'left',
 				'hidden': !_relativePosition
 			}"
-			*ngIf="relatedCards.length"
 		>
-			<div class="related-cards">
-				<div class="related-card" *ngFor="let card of relatedCards">
-					<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+			<div class="related-cards-container" [ngClass]="{ 'wide': relatedCards.length > 6 }">
+				<div class="related-cards">
+					<div class="related-card" *ngFor="let card of relatedCards">
+						<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+					</div>
 				</div>
 			</div>
 		</div>

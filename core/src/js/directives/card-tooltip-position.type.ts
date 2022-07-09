@@ -8,4 +8,5 @@ export type CardTooltipPositionType =
 	| 'top-right'
 	| 'top-left'
 	| 'bottom-right'
+	| 'bottom-left'
 	| undefined;

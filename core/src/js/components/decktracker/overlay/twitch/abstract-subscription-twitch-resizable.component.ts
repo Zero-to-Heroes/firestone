@@ -54,8 +54,7 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 			const newHeight = window.innerHeight;
 			const adaptativeScale = prefs.adaptativeScaling ? Math.max(0.5, Math.min(1, newHeight / 950)) : 1;
 			const scale = Math.min(2.5, Math.max(this.minScale, (prefs.scale / 100) * adaptativeScale));
-			const element = this.el.nativeElement.querySelector('.scalable') ?? this.el.nativeElement;
-			this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+			this.doResize(scale);
 			this.postResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -63,5 +62,11 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 		} catch (e) {
 			console.warn('Caught exception while trying to resize overlay', e);
 		}
+	}
+
+	// Allow override simply to benefit from the pref listening mechanism
+	protected doResize(newScale: number) {
+		const element = this.el.nativeElement.querySelector('.scalable') ?? this.el.nativeElement;
+		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 	}
 }

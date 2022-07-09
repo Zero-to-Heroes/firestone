@@ -1,6 +1,24 @@
 :host() {
 	display: flex;
 	min-width: 250px;
+	min-height: 400px;
+	pointer-events: none;
+}
+
+// Because automatic tooltip positioning doesn't always work very well and sometimes
+// results in the tooltip container being squeeze very thin
+.related-cards-wrapper {
+	min-width: 450px;
+	display: flex;
+
+	&.left {
+		order: -1;
+		justify-content: flex-end;
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
 }
 
 .related-cards-container {
@@ -12,6 +30,7 @@
 	margin-right: -10px;
 	display: flex;
 	height: fit-content;
+	pointer-events: none;
 
 	.related-cards {
 		display: flex;
@@ -37,14 +56,6 @@
 	&.wide .related-cards {
 		max-width: 570px;
 	}
-
-	&.left {
-		order: -1;
-	}
-
-	&.hidden {
-		opacity: 0;
-	}
 }
 
 .card-tooltip {
@@ -54,6 +65,7 @@
 	height: 388px;
 	height: auto; // forcing height will wreak havoc if the card is not exactly at the right dimensions
 	min-height: 400px;
+	pointer-events: none;
 
 	&:not(:first-child) {
 		margin-left: -35px;
