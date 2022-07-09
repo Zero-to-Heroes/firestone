@@ -103,26 +103,15 @@ module.exports = function (env, argv) {
 					},
 			  }
 			: {
-					runtimeChunk: 'single',
-					splitChunks: {
-						chunks: 'all',
-						maxInitialRequests: Infinity,
-						minSize: 1 * 1000, // Don't split the really small chunks
-						cacheGroups: {
-							vendor: {
-								test: /node_modules/,
-								chunks: 'initial',
-								name: 'vendor',
-								priority: 10,
-								enforce: true,
-							},
-						},
-					},
+					runtimeChunk: true,
+					removeAvailableModules: false,
+					removeEmptyChunks: false,
+					splitChunks: false,
 			  },
 
 		target: 'web',
 
-		devtool: env.production ? false : 'inline-source-map',
+		devtool: env.production ? false : 'eval-source-map',
 
 		// Doesn't work, for some reason the code loaded after refresh is still the old one
 		watch: false,
