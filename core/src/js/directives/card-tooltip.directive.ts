@@ -86,15 +86,6 @@ export class CardTooltipDirective implements OnDestroy {
 			return;
 		}
 
-		// if (this._position === 'auto') {
-		// 	//console.debug('position auto, updating');
-		// 	const elementRect = this.elementRef.nativeElement.getBoundingClientRect();
-		// 	const leftRight = elementRect.x < window.innerWidth / 2 ? 'right' : 'left';
-		// 	const topBottom = elementRect.y < window.innerHeight / 2 ? 'bottom-' : 'top-';
-		// 	this._position = `${topBottom}${leftRight}` as CardTooltipPositionType;
-		// 	console.debug('new position', this._position, elementRect, window.innerHeight, window.innerWidth);
-		// }
-
 		const positions: ConnectedPosition[] = this.buildPositions(this._position);
 
 		this.positionStrategy = this.overlayPositionBuilder
@@ -115,7 +106,6 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		console.debug('mouseenter', this.cardId, this.cardTooltipCard);
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
@@ -167,7 +157,6 @@ export class CardTooltipDirective implements OnDestroy {
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
 		this.hideTimeout = setTimeout(() => {
-			console.debug('hidetimeout', this.cardId);
 			this.onMouseLeave();
 		}, 15_000);
 	}
@@ -201,15 +190,8 @@ export class CardTooltipDirective implements OnDestroy {
 			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
 			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
 			tooltipRef.instance.relativePosition = relativePosition;
-			console.debug(
-				'relative position',
-				relativePosition,
-				tooltipRect,
-				targetRect,
-				tooltipRef.location.nativeElement,
-				this.elementRef.nativeElement,
-			);
 			this.overlayRef.updatePosition();
+
 			positionUpdated = previousTooltipLeft !== tooltipRect.left || previousTooltipTop !== tooltipRect.top;
 			previousTooltipLeft = tooltipRect.left;
 			previousTooltipTop = tooltipRect.top;
@@ -305,30 +287,30 @@ export class CardTooltipDirective implements OnDestroy {
 					overlayX: 'start',
 					overlayY: 'center',
 				},
-				{
-					originX: 'start',
-					originY: 'bottom',
-					overlayX: 'end',
-					overlayY: 'top',
-				},
-				{
-					originX: 'end',
-					originY: 'bottom',
-					overlayX: 'start',
-					overlayY: 'top',
-				},
-				{
-					originX: 'start',
-					originY: 'top',
-					overlayX: 'end',
-					overlayY: 'bottom',
-				},
-				{
-					originX: 'end',
-					originY: 'top',
-					overlayX: 'start',
-					overlayY: 'bottom',
-				},
+				// {
+				// 	originX: 'start',
+				// 	originY: 'bottom',
+				// 	overlayX: 'end',
+				// 	overlayY: 'top',
+				// },
+				// {
+				// 	originX: 'end',
+				// 	originY: 'bottom',
+				// 	overlayX: 'start',
+				// 	overlayY: 'top',
+				// },
+				// {
+				// 	originX: 'start',
+				// 	originY: 'top',
+				// 	overlayX: 'end',
+				// 	overlayY: 'bottom',
+				// },
+				// {
+				// 	originX: 'end',
+				// 	originY: 'top',
+				// 	overlayX: 'start',
+				// 	overlayY: 'bottom',
+				// },
 			];
 		}
 		return positions;
