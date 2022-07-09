@@ -8,6 +8,7 @@
 	align-items: center;
 	justify-content: center;
 	pointer-events: none;
+	transform-origin: center left;
 }
 
 .twitch-config-widget {
@@ -35,6 +36,7 @@
 		flex-direction: column;
 		padding: 10px 10px;
 		font-size: 14px;
+		overflow: scroll;
 
 		section {
 			display: flex;

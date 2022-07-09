@@ -1,8 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Renderer2,
+} from '@angular/core';
 import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch-preferences';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { from, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
 	selector: 'twitch-config-widget',
@@ -12,6 +20,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-config-widget.component.scss',
 	],
 	template: `
+		<!-- Don't add scalable class so that the root element itself is scaled -->
 		<div class="twitch-config-widget">
 			<div class="settings" *ngIf="prefs$ | async as prefs">
 				<checkbox
@@ -102,12 +111,23 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchConfigWidgetComponent implements AfterContentInit {
+export class TwitchConfigWidgetComponent
+	extends AbstractSubscriptionTwitchResizableComponent
+	implements AfterContentInit {
 	prefs$: Observable<TwitchPreferences>;
 
-	constructor(private readonly prefs: TwitchPreferencesService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly prefs: TwitchPreferencesService,
+		protected readonly el: ElementRef,
+		protected readonly renderer: Renderer2,
+	) {
+		super(cdr, prefs, el, renderer);
+		super.minScale = 0.7;
+	}
 
-	async ngAfterContentInit() {
+	ngAfterContentInit(): void {
+		super.listenForResize();
 		this.prefs$ = from(this.prefs.prefs.asObservable()).pipe(debounceTime(200), distinctUntilChanged());
 	}
 

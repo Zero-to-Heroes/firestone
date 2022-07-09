@@ -11,6 +11,8 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 	private resizeSubject = new BehaviorSubject<boolean>(false);
 	private sub: Subscription;
 
+	protected minScale = 0.1;
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		protected readonly prefs: TwitchPreferencesService,
@@ -51,8 +53,8 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 		try {
 			const newHeight = window.innerHeight;
 			const adaptativeScale = prefs.adaptativeScaling ? Math.max(0.5, Math.min(1, newHeight / 950)) : 1;
-			const scale = (prefs.scale / 100) * adaptativeScale;
-			const element = this.el.nativeElement.querySelector('.scalable');
+			const scale = Math.min(2.5, Math.max(this.minScale, (prefs.scale / 100) * adaptativeScale));
+			const element = this.el.nativeElement.querySelector('.scalable') ?? this.el.nativeElement;
 			this.renderer.setStyle(element, 'transform', `scale(${scale})`);
 			this.postResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
