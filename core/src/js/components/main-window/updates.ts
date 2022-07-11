@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.11',
+		version: '9.8.12',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -65,11 +65,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Fix Card Oracle for Mailbox Dancer.`,
+								text: `Fix Card Oracle for Mailbox Dancer, Secure the Deck, Violet Spellwing, Cap'n Rokara, Libram of Wisdom and Dragon Breeder.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Insight and Switcheroo.`,
+								text: `Add card highlight for Insight, Switcheroo, Cowardly Grunt, Primordial Protector and Raise Dead.`,
+							},
+							{
+								type: 'feature',
+								text: `Add global effects for Prince Renathal and Snapdragon.`,
+							},
+							{
+								type: 'feature',
+								text: `Implement "Top of Deck" for Spy-O-Matic, Draconic Herald and Timeway Wanderer.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a search function for personal decks.`,
 							},
 							{
 								type: 'bug',
@@ -77,13 +89,21 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Add a search function for personal decks.`,
+								text: `Fix an issue where Bottomfeeder would not properly appear at the bottom of deck with the +X bonus for the opponent.`,
 							},
 						],
 					},
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `Add a specific icon for private lobbies in the replays / session recap widget.`,
+							},
+							{
+								type: 'feature',
+								text: `Keep widgets open on the end lobby screen. This should notably let you see the odds of the last match if you have the "hide odds in combat" option turned on.`,
+							},
 							{
 								type: 'bug',
 								text: `Remove the flickering that could happen when showing the opponent's latest info.`,
