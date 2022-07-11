@@ -404,6 +404,7 @@ export const publicCardCreators = [
 	CardIds.VarianWrynn_AT_072,
 	CardIds.VengefulSpirit_BAR_328,
 	CardIds.VenomousScorpid,
+	CardIds.VioletSpellwing,
 	CardIds.VitalitySurge,
 	CardIds.WarsongWrangler,
 	CardIds.WitchwoodPiper,
