@@ -349,6 +349,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
+			case CardIds.RaiseDead_SCH_514:
+				return and(inGraveyard, minion);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RazormaneBattleguard:
