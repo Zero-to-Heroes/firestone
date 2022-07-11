@@ -355,6 +355,7 @@ export const publicCardCreators = [
 	CardIds.SeafloorGateway_TSC_055,
 	CardIds.SeafloorGateway_Story_11_SeafloorGatewayPuzzle,
 	CardIds.SecretPassage_SecretEntranceEnchantment,
+	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance,
 	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
