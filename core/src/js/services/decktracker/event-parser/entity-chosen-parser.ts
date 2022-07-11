@@ -5,7 +5,13 @@ import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const CARDS_THAT_PUT_ON_TOP = [CardIds.SightlessWatcherCore, CardIds.SightlessWatcherLegacy];
+const CARDS_THAT_PUT_ON_TOP = [
+	CardIds.SightlessWatcherCore,
+	CardIds.SightlessWatcherLegacy,
+	CardIds.FindTheImposter_SpyOMaticToken,
+	CardIds.DraconicHerald,
+	CardIds.TimewayWanderer,
+];
 
 export class EntityChosenParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
