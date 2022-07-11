@@ -254,9 +254,10 @@ export const publicCardCreators = [
 	CardIds.DeadRinger,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DeepwaterEvoker,
+	CardIds.DivingGryphon,
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
-	CardIds.DivingGryphon,
+	CardIds.DragonBreeder,
 	CardIds.DunBaldarBunker,
 	CardIds.Duplicate,
 	CardIds.ElementalAllies,
