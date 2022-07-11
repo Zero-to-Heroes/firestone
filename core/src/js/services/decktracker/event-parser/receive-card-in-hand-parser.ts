@@ -137,7 +137,9 @@ export class ReceiveCardInHandParser implements EventParser {
 							deck.abyssalCurseHighestValue ?? 0,
 							// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
 							// while it is in the ENTITY_UPDATE event for the opponent
-							gameEvent.additionalData.dataNum1 ?? cardWithAdditionalAttributes.mainAttributeChange + 1,
+							!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+								? gameEvent.additionalData.dataNum1
+								: cardWithAdditionalAttributes.mainAttributeChange + 1,
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
@@ -156,7 +158,10 @@ export class ReceiveCardInHandParser implements EventParser {
 					? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
 					: -1;
 				return card.update({
-					mainAttributeChange: gameEvent.additionalData.dataNum1 ?? highestAttribute + 1,
+					mainAttributeChange:
+						!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+							? gameEvent.additionalData.dataNum1
+							: highestAttribute + 1,
 				});
 			case CardIds.SchoolTeacher_NagalingToken:
 				return card.update({
