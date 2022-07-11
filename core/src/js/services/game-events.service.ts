@@ -571,11 +571,11 @@ export class GameEvents {
 			case 'CREATE_CARD_IN_DECK':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
-						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
-						creatorEntityId:
-							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorEntityId,
-						createdByJoust:
-							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatedByJoust,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						createdByJoust: gameEvent.Value.AdditionalProps?.CreatedByJoust,
+						influencedByCardId: gameEvent.Value.AdditionalProps?.InfluencedByCardId,
+						influencedByEntityId: gameEvent.Value.AdditionalProps?.InfluencedByEntityId,
 					}),
 				);
 				break;

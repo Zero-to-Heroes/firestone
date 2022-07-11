@@ -33,17 +33,28 @@ export class CreateCardInDeckParser implements EventParser {
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
-		const positionFromBottom = buildPositionFromBottom(deck, gameEvent.additionalData.creatorCardId);
-		//console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
+		const positionFromBottom = buildPositionFromBottom(
+			deck,
+			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
+		);
+		// console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
-		const creatorEntityId = gameEvent.additionalData.creatorEntityId
-			? +gameEvent.additionalData.creatorEntityId
-			: null;
+		const creatorEntityId =
+			gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
+				? +(gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId)
+				: null;
 		const creatorEntity = creatorEntityId
 			? // Because sometimes the entityId is reversed in the Other zone
 			  deck.findCard(creatorEntityId) ?? deck.findCard(-creatorEntityId)
 			: null;
-		//console.debug('[debug]', 'creatorEntity', creatorEntity, gameEvent.additionalData.creatorEntityId, deck);
+		// console.debug(
+		// 	'[debug]',
+		// 	'creatorEntity',
+		// 	creatorEntity,
+		// 	gameEvent.additionalData.creatorEntityId,
+		// 	gameEvent.additionalData.influencedByEntityId,
+		// 	deck,
+		// );
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -55,14 +66,14 @@ export class CreateCardInDeckParser implements EventParser {
 			positionFromBottom: positionFromBottom,
 			createdByJoust: createdByJoust,
 		} as DeckCard);
-		//console.debug('[debug]', 'adding card', card);
+		// console.debug('[debug]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
-		//console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
+		// console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
 
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
@@ -112,7 +123,7 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 };
 
 const buildAttributeChange = (card: DeckCard): number => {
-	//console.debug('building attribute change', card);
+	// console.debug('building attribute change', card);
 	if (card?.cardId === CardIds.Ignite) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
