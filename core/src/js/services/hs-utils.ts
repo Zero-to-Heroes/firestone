@@ -86,6 +86,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
 	CardIds.SkulkingGeist,
+	CardIds.Snapdragon,
 	CardIds.SorcerersGambit_ArcanistDawngraspToken,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.WildheartGuff,
