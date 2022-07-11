@@ -238,6 +238,9 @@ export class GameEvents {
 			case 'HERO_POWER_USED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.HERO_POWER_USED, gameEvent));
 				break;
+			case 'START_OF_GAME':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.START_OF_GAME, gameEvent));
+				break;
 			case 'MULLIGAN_INPUT':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {

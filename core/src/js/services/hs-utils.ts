@@ -82,7 +82,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.LothraxionTheRedeemed,
 	CardIds.NeeruFireblade_BAR_919,
 	CardIds.PrinceKeleseth,
-	CardIds.PrinceRenathal,
 	CardIds.RadiantLightspawn,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
@@ -108,6 +107,7 @@ export const globalEffectCards = [
 	CardIds.InvigoratingSermon,
 	CardIds.LunasPocketGalaxy,
 	CardIds.MenAtArmsTavernBrawlToken,
+	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
 	CardIds.RenounceDarkness,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara

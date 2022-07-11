@@ -14,6 +14,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly GAME_RUNNING = 'GAME_RUNNING';
 	public static readonly INITIAL_CARD_IN_DECK = 'INITIAL_CARD_IN_DECK';
 	public static readonly HERO_POWER_USED = 'HERO_POWER_USED';
+	public static readonly START_OF_GAME = 'START_OF_GAME';
 	public static readonly MULLIGAN_INPUT = 'MULLIGAN_INPUT';
 	public static readonly MULLIGAN_INITIAL_OPTION = 'MULLIGAN_INITIAL_OPTION';
 	public static readonly MULLIGAN_DEALING = 'MULLIGAN_DEALING';
