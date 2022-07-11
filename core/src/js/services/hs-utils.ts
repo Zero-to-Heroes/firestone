@@ -333,6 +333,7 @@ export const publicCardCreators = [
 	CardIds.RaidingParty,
 	CardIds.RaidNegotiator,
 	CardIds.RaidTheDocks,
+	CardIds.RaidTheDocks_SecureTheSuppliesToken,
 	CardIds.RamCommander,
 	CardIds.RavenFamiliar_LOOT_170,
 	CardIds.Reconnaissance,
