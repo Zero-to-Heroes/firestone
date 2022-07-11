@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { decode as decodeDeckstring } from 'deckstrings';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
+import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ApiRunner } from '../../api-runner';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
+import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
@@ -24,6 +28,7 @@ export class GameStatsLoaderService {
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 		private readonly handler: DeckHandlerService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	public async retrieveArchetypesConfig(): Promise<readonly ArchetypeConfig[]> {
@@ -46,7 +51,7 @@ export class GameStatsLoaderService {
 			userName: user.username,
 		};
 		// const input = {
-		// 	userId: 'OW_8b6af718-0e60-4ea9-8a88-71a0bf5df8a9',
+		// 	userId: 'zerg',
 		// };
 		console.log('[game-stats-loader] retrieving stats', user);
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
@@ -61,6 +66,7 @@ export class GameStatsLoaderService {
 						: ({
 								boardHistory: [decoded],
 						  } as any);
+				let playerInfoFromDeckstring = null;
 				return {
 					...stat,
 					playerDecklist: isMercenaries(stat.gameMode)
@@ -69,6 +75,18 @@ export class GameStatsLoaderService {
 					// Because old stats are corrupted
 					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
 					postMatchStats: postMatchStats,
+					playerClass:
+						stat.playerClass ??
+						(playerInfoFromDeckstring =
+							playerInfoFromDeckstring ??
+							extractPlayerInfoFromDeckstring(stat.playerDecklist, this.allCards, stat.gameMode, stat))
+							?.playerClass,
+					playerCardId:
+						stat.playerCardId ??
+						(playerInfoFromDeckstring =
+							playerInfoFromDeckstring ??
+							extractPlayerInfoFromDeckstring(stat.playerDecklist, this.allCards, stat.gameMode, stat))
+							?.playerCardId,
 				};
 			})
 			.map((stat) => Object.assign(new GameStat(), stat))
@@ -89,3 +107,28 @@ export class GameStatsLoaderService {
 		return this.gameStats;
 	}
 }
+
+export const extractPlayerInfoFromDeckstring = (
+	deckstring: string,
+	allCards: CardsFacadeService,
+	gameMode: StatGameModeType,
+	info = null,
+): { playerClass: string; playerCardId: string } => {
+	if (gameMode !== 'ranked') {
+		return null;
+	}
+
+	try {
+		const deckDefinition = !!deckstring ? decodeDeckstring(deckstring) : null;
+		const playerClassFromDeckstring = allCards
+			.getCardFromDbfId(deckDefinition?.heroes[0])
+			?.playerClass?.toLowerCase();
+		const mainPlayerClass =
+			!!playerClassFromDeckstring && playerClassFromDeckstring !== 'neutral' ? playerClassFromDeckstring : null;
+		const playerCardId = allCards.getCardFromDbfId(getDefaultHeroDbfIdForClass(mainPlayerClass)).id;
+		return { playerClass: mainPlayerClass, playerCardId: playerCardId };
+	} catch (e) {
+		console.error('could not extract info from deckstring', deckstring, info, e);
+		return null;
+	}
+};

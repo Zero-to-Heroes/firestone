@@ -8,7 +8,6 @@ import {
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
-import { decode } from 'deckstrings';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -16,7 +15,6 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { Events } from '../../events.service';
-import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
 import { GameForUpload } from '../../manastorm-bridge/game-for-upload';
@@ -24,6 +22,7 @@ import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { MercenariesReferenceData } from '../../mercenaries/mercenaries-state-builder.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../overwolf.service';
+import { extractPlayerInfoFromDeckstring } from './game-stats-loader.service';
 
 @Injectable()
 export class GameStatsUpdaterService {
@@ -59,17 +58,19 @@ export class GameStatsUpdaterService {
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 
-		const deckDefinition = !!game.deckstring ? decode(game.deckstring) : null;
-		const playerClassFromDeckstring = this.allCards
-			.getCardFromDbfId(deckDefinition?.heroes[0])
-			?.playerClass?.toLowerCase();
-		const mainPlayerClass =
-			!!playerClassFromDeckstring && playerClassFromDeckstring !== 'neutral'
-				? playerClassFromDeckstring
-				: this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase();
-		let playerCardId = replay.mainPlayerCardId;
-		if (mainPlayerClass !== this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase()) {
-			playerCardId = this.allCards.getCardFromDbfId(getDefaultHeroDbfIdForClass(mainPlayerClass)).id;
+		const { playerClassFromReplay, playerCardIdFromReplay } = {
+			playerClassFromReplay: this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase(),
+			playerCardIdFromReplay: replay.mainPlayerCardId,
+		};
+		const playerInfoFromDeckstring = extractPlayerInfoFromDeckstring(game.deckstring, this.allCards, game.gameMode);
+
+		const mainPlayerClass = playerInfoFromDeckstring?.playerClass ?? playerClassFromReplay;
+		let playerCardId = playerCardIdFromReplay;
+		if (
+			mainPlayerClass !== this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase() &&
+			!!playerInfoFromDeckstring?.playerCardId
+		) {
+			playerCardId = playerInfoFromDeckstring?.playerCardId;
 		}
 
 		const firstGame = GameStat.create({
