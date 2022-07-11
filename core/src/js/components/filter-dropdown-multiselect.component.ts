@@ -129,7 +129,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 				if (!selected?.length || selected.length === options.length) {
 					return this.placeholder;
 				}
-				console.debug('multiselect icons', selected, options);
 				const result = this.buildIcons(
 					selected
 						.map((sel) => options.find((option) => option.value === sel))
@@ -156,7 +155,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 					...option,
 					selected: tempSelected?.includes(option.value),
 				}));
-				console.debug('multiselect options', result, options, tempSelected);
 				return result;
 			}),
 		);
@@ -235,7 +233,6 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	}
 
 	private buildIcons(options: MultiselectOption[]): string {
-		console.debug('multiselect buildIcons', options);
 		const icons = options.map((option) => `<img src="${option.image}" class="icon" />`).join('');
 		return `<div class="selection-icons">${icons}</div>`;
 	}

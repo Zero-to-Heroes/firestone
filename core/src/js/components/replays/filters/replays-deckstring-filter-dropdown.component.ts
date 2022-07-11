@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { formatClass } from '../../../services/hs-utils';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -55,11 +54,14 @@ export class ReplaysDeckstringFilterDropdownComponent
 				([main, nav]) => nav.navigationDecktracker.currentView,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
+				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
 			)
 			.pipe(
-				filter(([decks, currentApp, currentView, gameModeFilter, deckstringFilter]) => !!decks),
-				this.mapData(([decks, currentApp, currentView, gameModeFilter, deckstringFilter]) => {
-					const options: readonly MultiselectOption[] = [...decks]
+				this.mapData(([decks, currentApp, currentView, gameModeFilter, deckstringFilter, archivedDecks]) => {
+					const options: readonly MultiselectOption[] = (
+						decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []
+					)
+						.filter((deck) => !archivedDecks.includes(deck.deckstring))
 						.sort(sortByProperties((deck: DeckSummary) => [-deck.lastUsedTimestamp]))
 						.map(
 							(deck) =>
