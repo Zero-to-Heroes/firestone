@@ -8,6 +8,7 @@ import {
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { extractStats } from '@firestone-hs/trigger-process-mercenaries-review';
 import { ReviewMessage } from '@firestone-hs/trigger-process-mercenaries-review/dist/review-message';
+import { decode } from 'deckstrings';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -15,6 +16,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { Events } from '../../events.service';
+import { getDefaultHeroDbfIdForClass } from '../../hs-utils';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
 import { GameForUpload } from '../../manastorm-bridge/game-for-upload';
@@ -57,6 +59,19 @@ export class GameStatsUpdaterService {
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 
+		const deckDefinition = !!game.deckstring ? decode(game.deckstring) : null;
+		const playerClassFromDeckstring = this.allCards
+			.getCardFromDbfId(deckDefinition?.heroes[0])
+			?.playerClass?.toLowerCase();
+		const mainPlayerClass =
+			!!playerClassFromDeckstring && playerClassFromDeckstring !== 'neutral'
+				? playerClassFromDeckstring
+				: this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase();
+		let playerCardId = replay.mainPlayerCardId;
+		if (mainPlayerClass !== this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase()) {
+			playerCardId = this.allCards.getCardFromDbfId(getDefaultHeroDbfIdForClass(mainPlayerClass)).id;
+		}
+
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,
@@ -69,8 +84,8 @@ export class GameStatsUpdaterService {
 			opponentClass: this.allCards.getCard(replay.opponentPlayerCardId)?.playerClass?.toLowerCase(),
 			opponentName: game.forceOpponentName ?? replay.opponentPlayerName ?? game.opponent?.name,
 			opponentRank: game.opponentRank,
-			playerCardId: replay.mainPlayerCardId,
-			playerClass: this.allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase(),
+			playerCardId: playerCardId,
+			playerClass: mainPlayerClass,
 			playerDeckName: game.deckName,
 			playerDecklist: game.deckstring,
 			playerName: replay.mainPlayerName ?? game.player?.name,

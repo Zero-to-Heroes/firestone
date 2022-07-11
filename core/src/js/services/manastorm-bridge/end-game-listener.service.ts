@@ -154,10 +154,9 @@ export class EndGameListenerService {
 
 	private listening: boolean;
 
-	private async listenToDeckUpdate() {
-		console.log('[manastorm-bridge] listening to deck updates');
-		// Wait for a while to make sure the deck has been parsed
-		await sleep(15_000);
+	private async listenToDeckUpdate(shouldLoop = true) {
+		console.log('[manastorm-bridge] listening to deck updates', shouldLoop);
+		await sleep(2000);
 		// This in fact doesn't work, because if the deckService still has a deck in memory from
 		// last game, it will be used instead of the current one.
 		this.listening = true;
@@ -173,6 +172,12 @@ export class EndGameListenerService {
 		console.log('[manastorm-bridge] got local player info, adding deckstring', this.currentDeckstring, currentDeck);
 		// Don't normalize the deck name - it will be encoded during upload
 		this.currentDeckname = currentDeck?.name;
+
+		if (shouldLoop) {
+			// Wait for a while to make sure the deck has been parsed
+			await sleep(15_000);
+			this.listenToDeckUpdate(false);
+		}
 	}
 
 	private stopListenToDeckUpdates() {
