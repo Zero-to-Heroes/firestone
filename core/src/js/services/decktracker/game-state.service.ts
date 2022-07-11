@@ -109,6 +109,7 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
+import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
@@ -546,6 +547,7 @@ export class GameStateService {
 			new ShuffleDeckParser(),
 			new EntityChosenParser(this.helper),
 			new TurnDurationUpdatedParser(),
+			new StartOfGameEffectParser(this.helper, this.allCards, this.i18n),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),
