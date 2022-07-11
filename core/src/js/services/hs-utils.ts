@@ -198,7 +198,10 @@ export const forceHideInfoWhenDrawnInfluencers = [
 	CardIds.ShadowVisions,
 ];
 
+export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
+
 export const publicCardCreators = [
+	...cardsConsideredPublic,
 	CardIds.AbyssalWave,
 	CardIds.AkaliTheRhino,
 	CardIds.AllianceBannerman,
@@ -261,6 +264,7 @@ export const publicCardCreators = [
 	CardIds.EncumberedPackMule,
 	CardIds.ExcavationSpecialist_TSC_911,
 	CardIds.ExcavationSpecialist_Story_11_ExcavationPuzzle,
+	CardIds.ExplorersHat,
 	CardIds.FarSightLegacy,
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger,

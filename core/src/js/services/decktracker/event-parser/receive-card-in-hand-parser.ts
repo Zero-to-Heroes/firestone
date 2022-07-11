@@ -4,7 +4,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { cardsRevealedWhenDrawn, forcedHiddenCardCreators, publicCardCreators } from '../../hs-utils';
+import {
+	cardsConsideredPublic,
+	cardsRevealedWhenDrawn,
+	forcedHiddenCardCreators,
+	publicCardCreators,
+} from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -28,7 +33,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+		console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -40,18 +45,21 @@ export class ReceiveCardInHandParser implements EventParser {
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isCardInfoPublic =
 			isPlayer ||
+			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged
+			// with the dead entity as creator, and are never revealed
+			cardsConsideredPublic.includes(cardId as CardIds) ||
 			(!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
 				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 					publicCardCreators.includes(lastInfluencedByCardId)));
-		// console.debug(
-		// 	'[receive-card-in-hand] isCardInfoPublic',
-		// 	isCardInfoPublic,
-		// 	isPlayer,
-		// 	cardsRevealedWhenDrawn.includes(cardId as CardIds),
-		// 	cardId,
-		// 	publicCardCreators.includes(lastInfluencedByCardId),
-		// 	lastInfluencedByCardId,
-		// );
+		console.debug(
+			'[receive-card-in-hand] isCardInfoPublic',
+			isCardInfoPublic,
+			isPlayer,
+			cardsRevealedWhenDrawn.includes(cardId as CardIds),
+			cardId,
+			publicCardCreators.includes(lastInfluencedByCardId),
+			lastInfluencedByCardId,
+		);
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
@@ -76,7 +84,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newOther = otherCardWithObfuscation
 			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)[0]
 			: deck.otherZone;
-		// console.debug('[receive-card-in-hand] new board', newBoard, newOther);
+		console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
@@ -90,13 +98,13 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
-		// console.debug(
-		// 	'[receive-card-in-hand] cardWithDefault',
-		// 	cardWithDefault,
-		// 	creatorCardId,
-		// 	otherCard,
-		// 	otherCardWithObfuscation,
-		// );
+		console.debug(
+			'[receive-card-in-hand] cardWithDefault',
+			cardWithDefault,
+			creatorCardId,
+			otherCard,
+			otherCardWithObfuscation,
+		);
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
@@ -117,7 +125,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// here
 			true,
 		);
-		// console.debug('[receive-card-in-hand] new hand', newHand);
+		console.debug('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
