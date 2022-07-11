@@ -233,7 +233,6 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.BarakKodobane_BAR_551:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
-
 			case CardIds.BladeOfQuickeningTavernBrawlToken:
 				return and(inDeck, outcast);
 			case CardIds.BloodreaverGuldan:
@@ -248,6 +247,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
 				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
+			case CardIds.CowardlyGrunt:
+				return and(inDeck, minion);
 			case CardIds.CrushclawEnforcer:
 				return and(inDeck, naga);
 			case CardIds.CutlassCourier:
