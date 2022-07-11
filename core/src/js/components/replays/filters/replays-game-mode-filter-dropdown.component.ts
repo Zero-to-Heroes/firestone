@@ -39,6 +39,7 @@ export class ReplaysGameModeFilterDropdownComponent extends AbstractSubscription
 		this.options = [
 			'all',
 			'battlegrounds',
+			'battlegrounds-friendly',
 			'mercenaries-all',
 			'mercenaries-pve',
 			'mercenaries-pvp',

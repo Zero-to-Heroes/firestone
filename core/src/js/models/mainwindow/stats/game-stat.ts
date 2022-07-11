@@ -114,7 +114,7 @@ export class GameStat {
 			}
 		} else if (this.gameMode === 'battlegrounds' || this.gameMode === 'battlegrounds-friendly') {
 			rankIcon = 'battlegrounds';
-			rankIconTooltip = i18n.translateString('global.game-mode.battlegrounds');
+			rankIconTooltip = i18n.translateString(`global.game-mode.${this.gameMode}`);
 		} else if (this.gameMode?.startsWith('mercenaries')) {
 			rankIcon = 'mercenaries';
 			rankIconTooltip = i18n.translateString('global.game-mode.mercenaries');
