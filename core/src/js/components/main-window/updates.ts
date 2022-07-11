@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.12',
+		version: '9.8.13',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -90,6 +90,18 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where Bottomfeeder would not properly appear at the bottom of deck with the +X bonus for the opponent.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some matches were not properly counted when using the global Stats view.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where an incorrect hero/class was being registered when playing as Maestra and ending the game before revealing our true class.`,
+							},
+							{
+								type: 'bug',
+								text: `Don't show deleted / archived decks in the decks dropdown filter.`,
 							},
 						],
 					},
