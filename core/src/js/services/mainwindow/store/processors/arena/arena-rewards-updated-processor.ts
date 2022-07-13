@@ -13,10 +13,10 @@ export class ArenaRewardsUpdatedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('processing arena rewards event', event);
+		console.debug('[arena-rewards] processing arena rewards event', event);
 		const runId = event.rewards.runId;
 		if (currentState.arena.rewards?.some((reward) => reward.runId === runId)) {
-			console.log('rewards have already been added', runId);
+			console.log('[arena-rewards] rewards have already been added', runId);
 			return [null, null];
 		}
 
@@ -24,6 +24,7 @@ export class ArenaRewardsUpdatedProcessor implements Processor {
 			...(currentState.arena.rewards ?? []),
 			...this.buildRewards(event.rewards),
 		];
+		console.debug('[arena-rewards] new rewards', newRewards);
 		const result = [
 			currentState.update({
 				arena: currentState.arena.update({
