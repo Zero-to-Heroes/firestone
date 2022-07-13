@@ -71,7 +71,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 	ngAfterContentInit(): void {
 		this.showFuse$ = this.store
 			.listenDeckState$((state) => state?.metadata?.gameType)
-			.pipe(this.mapData(([gameType]) => true || ![GameType.GT_VS_AI].includes(gameType)));
+			.pipe(this.mapData(([gameType]) => ![GameType.GT_VS_AI].includes(gameType)));
 		this.currentTurn$ = this.store
 			.listenDeckState$((state) => state?.currentTurn)
 			.pipe(
