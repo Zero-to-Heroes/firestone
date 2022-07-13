@@ -290,12 +290,16 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.GuffRunetotem_BAR_720:
 				return and(spell, spellSchool(SpellSchool.NATURE));
-			case CardIds.HeraldOfLokholar:
-				return and(inDeck, spell, frost);
 			case CardIds.Hadronox:
 				return and(inGraveyard, minion, taunt);
 			case CardIds.HarborScamp:
 				return and(inDeck, pirate);
+			case CardIds.HeraldOfLokholar:
+				return and(inDeck, spell, frost);
+			case CardIds.HeraldOfShadows:
+				return and(inDeck, spell, shadow);
+			case CardIds.Hullbreaker:
+				return and(inDeck, spell);
 			case CardIds.IcebloodTower:
 				return and(inDeck, spell);
 			case CardIds.Insight:
