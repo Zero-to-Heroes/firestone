@@ -124,7 +124,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 							  })
 							: '-',
 					games: deck.totalGames,
-					bestAgainsts: [...deck.matchupStats]
+					bestAgainsts: [...(deck.matchupStats ?? [])]
 						.filter((matchup) => matchup.totalWins > 0)
 						.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)
 						.slice(0, 3)

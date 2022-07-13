@@ -165,8 +165,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		if (!this._deck) {
 			return;
 		}
-		const totalRow: MatchupStat = this.buildTotalRow(this._deck.matchupStats);
-		this.matchups = [...this._deck.matchupStats, totalRow];
+		const totalRow: MatchupStat = this.buildTotalRow(this._deck.matchupStats ?? []);
+		this.matchups = [...(this._deck.matchupStats ?? []), totalRow];
 		this.pieChartData = this.buildPieChartData();
 		this.pieChartOptions = this.buildPieChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
