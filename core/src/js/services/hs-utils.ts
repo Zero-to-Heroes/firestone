@@ -75,6 +75,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.FrizzKindleroost,
 	CardIds.GraniteForgeborn,
 	CardIds.HemetJungleHunter,
+	CardIds.InfiniteMurloc,
 	CardIds.LadyInWhite,
 	CardIds.LadyPrestor_SW_078,
 	CardIds.LordaeronAttendantToken,
