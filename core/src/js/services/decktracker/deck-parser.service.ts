@@ -100,7 +100,7 @@ export class DeckParserService {
 		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
 		// need to regenerate the deck
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
-		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 2);
+		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 4);
 		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory, this.duelsDeck);
 		const activeDeck =
 			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
