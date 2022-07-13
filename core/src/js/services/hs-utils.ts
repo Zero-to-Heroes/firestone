@@ -276,6 +276,7 @@ export const publicCardCreators = [
 	CardIds.FinalShowdown_CloseThePortalToken, // Demonslayer Kurtrus
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
+	CardIds.FirstFlame,
 	CardIds.ForgeOfSouls,
 	CardIds.FreeAdmission,
 	CardIds.FrostweaveDungeoneer,
