@@ -14,12 +14,15 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.log('[duels-rewards] handling rewards', event.dungeonLootInfo);
 		const dungeonLootInfo = event.dungeonLootInfo;
 		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, currentState.duels.duelsRunInfos);
+		console.log('[duels-rewards] existing rewards length', currentState.duels.duelsRewardsInfo?.length);
 		const rewards: readonly DuelsRewardsInfo[] = [
 			...(currentState.duels.duelsRewardsInfo ?? []),
 			...this.buildRewards(dungeonLootInfo.rewards),
 		];
+		console.log('[duels-rewards] new rewards length', rewards);
 
 		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
 		const newDuels = currentState.duels.update({
