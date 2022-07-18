@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.13',
+		version: '9.8.15',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -54,6 +54,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a separate icon in your opponent's hand for cards created by other cards vs. cards tutored from your deck.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -65,15 +74,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Fix Card Oracle for Mailbox Dancer, Secure the Deck, Violet Spellwing, Cap'n Rokara, Libram of Wisdom and Dragon Breeder.`,
+								text: `Fix Card Oracle for Mailbox Dancer, Secure the Deck, Violet Spellwing, Cap'n Rokara, Libram of Wisdom, First Flame and Dragon Breeder.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Insight, Switcheroo, Cowardly Grunt, Primordial Protector and Raise Dead.`,
+								text: `Add card highlight for Insight, Switcheroo, Cowardly Grunt, Primordial Protector, Herald of Shadows, Hullbreaker, Click-Clocker, Ice Revenant, Gather Your Party and Raise Dead.`,
 							},
 							{
 								type: 'feature',
-								text: `Add global effects for Prince Renathal and Snapdragon.`,
+								text: `Add global effects for Prince Renathal, Infinite Murloc and Snapdragon.`,
 							},
 							{
 								type: 'feature',
@@ -98,6 +107,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where an incorrect hero/class was being registered when playing as Maestra and ending the game before revealing our true class.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the turn timer would not show up in Arena.`,
 							},
 							{
 								type: 'bug',
