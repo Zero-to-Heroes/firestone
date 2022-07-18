@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<ul class="achievements-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'notifications' }" (mousedown)="selectMenu('notifications')">
-				<span [owTranslate]="'settings.achievements.menu.notifications'"></span>
+				<span [owTranslate]="'settings.achievements.menu.general'"></span>
 			</li>
 			<!-- <li [ngClass]="{ 'selected': selectedMenu === 'live' }" (mousedown)="selectMenu('live')">
 				<span>Live tracking</span>

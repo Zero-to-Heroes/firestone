@@ -1,22 +1,20 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
-import { AchievementProgress, AchievementsProgress } from '../../models/achievement/achievement-progress';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
-import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { AchievementsUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-updated-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
+import { HsAchievementInfo } from './achievements-info';
 import { AchievementsManager } from './achievements-manager.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
@@ -35,14 +33,13 @@ export class AchievementsMonitor {
 	private previousAchievements: readonly HsAchievementInfo[];
 	private spectating: boolean;
 
-	private achievementsProgressInterval;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly achievementLoader: AchievementsLoaderService,
 		private readonly events: Events,
-		private readonly store: MainWindowStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly remoteAchievements: RemoteAchievementsService,
 		private readonly achievementsStorage: AchievementsStorageService,
 		private readonly achievementsManager: AchievementsManager,
@@ -50,17 +47,25 @@ export class AchievementsMonitor {
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 	) {
+		this.init();
+	}
+
+	private async init() {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.achievementsFullEnabled) {
+			console.log('achievements are fully disabled, returning');
+			return;
+		}
+
+		await this.store.initComplete();
+		console.debug('init achievements service');
+		await this.initQuotas();
+
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.handleEvent(gameEvent);
-
 			if (gameEvent.type === GameEvent.GAME_START) {
 				this.assignPreviousAchievements();
-				if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
-					this.startAchievementsProgressDetection();
-				}
-			} else if (gameEvent.type === GameEvent.GAME_END) {
-				this.stopAchievementsProgressDetection();
 			} else if (gameEvent.type === GameEvent.SPECTATING) {
 				this.spectating = gameEvent.additionalData.spectating;
 			}
@@ -78,10 +83,16 @@ export class AchievementsMonitor {
 		// If we start the detection too early, the first pass will be done against
 		// an uninitialized achievements state, and thus discarded
 		this.events.on(Events.STORE_READY).subscribe((event) => this.startGlobalAchievementsProgressDetection());
-		this.init();
 	}
 
-	private async init() {
+	// TODO: there might be even better ways to reduce the amount of overhead taken by achievements,
+	// but I think it's already decent like this
+	private async initQuotas() {
+		if (this.achievementQuotas && !!Object.keys(this.achievementQuotas).length) {
+			console.log('achievements already initialized, returning');
+			return;
+		}
+
 		const rawAchievements: readonly HsRawAchievement[] = await this.remoteAchievements.loadHsRawAchievements();
 		this.achievementQuotas = {};
 		for (const ach of rawAchievements) {
@@ -114,19 +125,6 @@ export class AchievementsMonitor {
 			this.achievementsManager.getAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
 		]);
-		if (process.env.NODE_ENV !== 'production') {
-			console.debug('[achievement-monitor] retrieved achievements from memory', {
-				existingAchievements: existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
-				achievementsProgress: achievementsProgress, // This has the correct progress, unbless you're not in a game?
-				achievementQuotas: this.achievementQuotas,
-				previousAchievements: this.previousAchievements,
-				prorgressWithQuota: (achievementsProgress?.achievements || [])?.filter(
-					(progress) => progress.progress >= this.achievementQuotas[progress.id],
-				),
-			});
-		} else {
-			console.debug('[achievement-monitor] retrieved achievements from memory');
-		}
 		const computedProgress: readonly HsAchievementInfo[] = achievementsProgress?.achievements?.length
 			? achievementsProgress.achievements
 			: this.achievementsDiff(this.previousAchievements, existingAchievements);
@@ -170,9 +168,6 @@ export class AchievementsMonitor {
 					'[achievement-monitor] nothing from memory',
 					existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
 					achievementsProgress, // This has the correct progress
-					(achievementsProgress?.achievements || [])?.filter(
-						(progress) => progress.progress >= this.achievementQuotas[progress.id],
-					),
 					unlockedAchievements,
 				);
 			}
@@ -324,22 +319,11 @@ export class AchievementsMonitor {
 	}
 
 	private async prepareAchievementCompletedEvent(achievement: Achievement) {
-		this.store.stateUpdater.next(new AchievementCompletedEvent(achievement));
-	}
-
-	private async startAchievementsProgressDetection() {
-		this.achievementsProgressInterval = setInterval(() => this.detectAchievementProgress(), 5000);
-	}
-
-	private async stopAchievementsProgressDetection() {
-		if (this.achievementsProgressInterval) {
-			clearInterval(this.achievementsProgressInterval);
-		}
+		this.store.send(new AchievementCompletedEvent(achievement));
 	}
 
 	private async assignPreviousAchievements() {
 		const existingAchievements = await this.achievementsManager.getAchievements(true);
-
 		if (!existingAchievements) {
 			return;
 		}
@@ -350,33 +334,33 @@ export class AchievementsMonitor {
 		}
 	}
 
-	private async detectAchievementProgress() {
-		const achievementsProgress: HsAchievementsInfo = await this.memory.getInGameAchievementsProgressInfo();
-		const allAchievements = await this.achievementLoader.getAchievements();
-		if (!achievementsProgress?.achievements?.length) {
-			return;
-		}
+	// private async detectAchievementProgress() {
+	// 	const achievementsProgress: HsAchievementsInfo = await this.memory.getInGameAchievementsProgressInfo();
+	// 	const allAchievements = await this.achievementLoader.getAchievements();
+	// 	if (!achievementsProgress?.achievements?.length) {
+	// 		return;
+	// 	}
 
-		const achievementInfos: readonly AchievementProgress[] = achievementsProgress.achievements.map((ach) => {
-			const ref = allAchievements.find((a) => a.id === `hearthstone_game_${ach.id}`);
-			const quota = this.achievementQuotas[ach.id];
-			return {
-				id: ref.id,
-				progress: ach.progress,
-				quota: quota,
-				completed: ach.completed || ref.numberOfCompletions > 0 || ach.progress >= quota,
-				text: ref.text,
-				name: ref.name,
-				step: ref.priority,
-				type: ref.type,
-				ref: ref,
-			};
-		});
-		const achievementsInfo: AchievementsProgress = {
-			achievements: achievementInfos,
-		};
-		this.events.broadcast(Events.ACHIEVEMENT_PROGRESSION, achievementsInfo);
-	}
+	// 	const achievementInfos: readonly AchievementProgress[] = achievementsProgress.achievements.map((ach) => {
+	// 		const ref = allAchievements.find((a) => a.id === `hearthstone_game_${ach.id}`);
+	// 		const quota = this.achievementQuotas[ach.id];
+	// 		return {
+	// 			id: ref.id,
+	// 			progress: ach.progress,
+	// 			quota: quota,
+	// 			completed: ach.completed || ref.numberOfCompletions > 0 || ach.progress >= quota,
+	// 			text: ref.text,
+	// 			name: ref.name,
+	// 			step: ref.priority,
+	// 			type: ref.type,
+	// 			ref: ref,
+	// 		};
+	// 	});
+	// 	const achievementsInfo: AchievementsProgress = {
+	// 		achievements: achievementInfos,
+	// 	};
+	// 	this.events.broadcast(Events.ACHIEVEMENT_PROGRESSION, achievementsInfo);
+	// }
 
 	// There is some duplication here with the in-game live detection.
 	// However, the purpose is different, so for now I won't explore merging them together (unless it proves

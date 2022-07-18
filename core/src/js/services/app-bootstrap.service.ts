@@ -391,7 +391,7 @@ export class AppBootstrapService {
 			'desktopDeckDeletes',
 			'duelsDeckDeletes',
 		];
-		const toRemoveSuffix = ['.top', '.bottom'];
+		const toRemoveSuffix = ['.top', '.bottom', '.left', '.right'];
 		const prefs = await this.prefs.getPreferences();
 		// Log an event for each of the prefs
 		console.log('no-format', 'pref status', prefs);
