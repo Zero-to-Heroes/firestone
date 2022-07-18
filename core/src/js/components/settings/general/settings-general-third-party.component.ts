@@ -118,7 +118,7 @@ export class SettingsGeneralThirdPartyComponent
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 
 	vs = {
-		title: this.i18n.translateString('settings.general.third-party.vs.title'),
+		title: 'Vicious Syndicate',
 		icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/vs.png`,
 		pitch: this.i18n.translateString('settings.general.third-party.vs.pitch', {
 			websiteLink: `<a href="https://www.vicioussyndicate.com" target="_blank">${this.i18n.translateString(
@@ -129,7 +129,7 @@ export class SettingsGeneralThirdPartyComponent
 		toggleLabel: this.i18n.translateString('settings.general.third-party.vs.toggle-label'),
 	};
 	ooc = {
-		title: this.i18n.translateString('settings.general.third-party.ooc.title'),
+		title: 'Out of Cards',
 		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/out-of-cards.png',
 		pitch: this.i18n.translateString('settings.general.third-party.ooc.pitch', {
 			websiteLink: `<a href="https://outof.cards/hearthstone/" target="_blank">${this.i18n.translateString(
@@ -140,7 +140,7 @@ export class SettingsGeneralThirdPartyComponent
 		toggleLabel: this.i18n.translateString('settings.general.third-party.ooc.toggle-label'),
 	};
 	d0nkey = {
-		title: this.i18n.translateString('settings.general.third-party.d0nkey.title'),
+		title: 'd0nkey.top',
 		icon: 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png',
 		pitch: this.i18n.translateString('settings.general.third-party.d0nkey.pitch', {
 			websiteLink: `<a href="https://www.d0nkey.top" target="_blank">${this.i18n.translateString(
@@ -155,7 +155,7 @@ export class SettingsGeneralThirdPartyComponent
 		toggleLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-label'),
 	};
 	hsdecks = {
-		title: this.i18n.translateString('settings.general.third-party.hsdecks.title'),
+		title: 'Hearthstone-decks',
 		icon: 'https://hearthstone-decks.net/wp-content/uploads/2021/12/Logo.png',
 		pitch: this.i18n.translateString('settings.general.third-party.hsdecks.pitch', {
 			websiteLink: `<a href="https://hearthstone-decks.net" target="_blank">${this.i18n.translateString(
