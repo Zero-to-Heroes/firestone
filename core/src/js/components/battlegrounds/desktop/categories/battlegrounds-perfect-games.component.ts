@@ -13,8 +13,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-perfect-games.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-perfect-games">
-			<replays-list-view [replays]="replays$ | async"></replays-list-view>
+		<div class="battlegrounds-perfect-games" *ngIf="replays$ | async as replays">
+			<with-loading [isLoading]="!replays?.length">
+				<replays-list-view [replays]="replays"></replays-list-view>
+			</with-loading>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +33,7 @@ export class BattlegroundsPerfectGamesComponent
 	ngAfterContentInit() {
 		this.replays$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.perfectGames,
+				([main, nav]) => main.battlegrounds.getPerfectGames(),
 				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,

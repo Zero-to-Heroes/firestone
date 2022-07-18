@@ -75,6 +75,7 @@ import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
+import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs-perfect-games-loaded-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
@@ -209,6 +210,7 @@ import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battl
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
+import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegrounds/bgs-perfect-games-loaded-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
@@ -788,6 +790,9 @@ export class MainWindowStoreService {
 
 			BattlegroundsMainWindowSelectBattleEvent.eventName(),
 			new BattlegroundsMainWindowSelectBattleProcessor(this.i18n),
+
+			BattlegroundsPerfectGamesLoadedEvent.eventName(),
+			new BattlegroundsPerfectGamesLoadedProcessor(),
 
 			// Mercenaries
 			MercenariesGlobalStatsLoadedEvent.eventName(),

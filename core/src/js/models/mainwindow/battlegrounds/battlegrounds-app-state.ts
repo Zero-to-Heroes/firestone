@@ -1,3 +1,5 @@
+import { AppInjector } from '../../../services/app-injector';
+import { LazyDataInitService } from '../../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../../services/utils';
 import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
 import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
@@ -10,12 +12,14 @@ export class BattlegroundsAppState {
 	readonly loading: boolean = true;
 	readonly categories: readonly BattlegroundsCategory[] = [];
 	readonly globalStats: BgsStats = new BgsStats();
-	readonly perfectGames: readonly GameStat[];
 	readonly currentBattlegroundsMetaPatch: PatchInfo;
 	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
 
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 	readonly lastHeroPostMatchStatsHeroId: string;
+
+	// See decktracker-state.ts for more info
+	readonly perfectGames: readonly GameStat[] = undefined;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
@@ -23,6 +27,15 @@ export class BattlegroundsAppState {
 
 	public update(base: Partial<NonFunctionProperties<BattlegroundsAppState>>): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
+	}
+
+	public getPerfectGames(): readonly GameStat[] {
+		if (this.perfectGames === undefined) {
+			console.log('perfectGames not initialized yet');
+			(this.perfectGames as readonly GameStat[]) = [];
+			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('battlegrounds-perfect-games');
+		}
+		return this.perfectGames;
 	}
 
 	public findCategory(categoryId: string) {

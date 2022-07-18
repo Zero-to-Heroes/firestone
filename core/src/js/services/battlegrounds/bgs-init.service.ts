@@ -16,7 +16,10 @@ import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
+import { LocalStorageService } from '../local-storage';
+import { BattlegroundsPerfectGamesLoadedEvent } from '../mainwindow/store/events/battlegrounds/bgs-perfect-games-loaded-event';
 import { OverwolfService } from '../overwolf.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -32,6 +35,8 @@ export class BgsInitService {
 		private readonly cards: CardsFacadeService,
 		private readonly api: ApiRunner,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly localStorage: LocalStorageService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
@@ -43,10 +48,16 @@ export class BgsInitService {
 		});
 	}
 
-	public async loadPerfectGames(): Promise<readonly GameStat[]> {
+	public async loadInitialPerfectGames() {
+		const localPercectGames = this.localStorage.getItem<readonly GameStat[]>('battlegrounds-perfect-games');
+		if (!!localPercectGames?.length) {
+			console.debug('loaded local perfect games', localPercectGames);
+			this.store.send(new BattlegroundsPerfectGamesLoadedEvent(localPercectGames));
+		}
+
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
 		console.debug('[bgs-init] perfect games', result);
-		return (result ?? [])
+		const remotePerfectGames: readonly GameStat[] = (result ?? [])
 			.map((res) =>
 				GameStat.create({
 					...res,
@@ -57,11 +68,14 @@ export class BgsInitService {
 				} as GameStat),
 			)
 			.filter((stat) => stat.playerRank);
+		console.debug('loaded remote perfect games', remotePerfectGames);
+		this.localStorage.setItem('battlegrounds-perfect-games', remotePerfectGames);
+		this.store.send(new BattlegroundsPerfectGamesLoadedEvent(remotePerfectGames));
 	}
 
 	public async initBattlegoundsAppState(
 		bgsGlobalStats: BgsStats,
-		perfectGames: readonly GameStat[],
+		// perfectGames: readonly GameStat[],
 		patch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
 		const categories: readonly BattlegroundsCategory[] = [
@@ -74,7 +88,7 @@ export class BgsInitService {
 		return BattlegroundsAppState.create({
 			categories: categories,
 			globalStats: bgsGlobalStats,
-			perfectGames: perfectGames,
+			// perfectGames: perfectGames,
 			loading: false,
 			currentBattlegroundsMetaPatch: patch,
 		} as BattlegroundsAppState);
