@@ -476,6 +476,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(frost, dealsDamage);
 			case CardIds.CapturedFlag:
 				return and(or(inDeck, inHand), minion);
+			case CardIds.ClickClocker:
+				return and(inDeck, minion, mech);
 			case CardIds.CoilCastingTavernBrawl:
 				return and(or(inDeck, inHand), naga);
 			case CardIds.CookiesLadleTavernBrawl:
@@ -528,6 +530,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, holy);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
+			case CardIds.IceRevenant:
+				return and(inDeck, spell, frost);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.InspiringPresenceTavernBrawl:
