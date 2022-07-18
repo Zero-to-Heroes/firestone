@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { publicCardEye } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -21,7 +22,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[ngClass]="{ 'buffed': hasBuffs }"
 		>
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" />
-			<div *ngIf="createdBy" class="created-by">
+			<div *ngIf="createdBy" class="created-by" inlineSVG="assets/svg/gift_inside_circle.svg"></div>
+			<div *ngIf="drawnBy" class="drawn">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#created_by" />
 				</svg>
@@ -38,6 +40,7 @@ export class OpponentCardInfoIdComponent {
 	cardId: string;
 	cardUrl: string;
 	createdBy: boolean;
+	drawnBy: boolean;
 	hasBuffs: boolean;
 	_card: DeckCard;
 
@@ -45,7 +48,8 @@ export class OpponentCardInfoIdComponent {
 	@Input() displayBuff: boolean;
 
 	@Input() set card(value: DeckCard) {
-		this.cardId = this.normalizeEnchantment(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
+		const lastAffectedByCardId = value.creatorCardId ?? value.lastAffectedByCardId;
+		this.cardId = this.normalizeEnchantment(value.cardId ?? lastAffectedByCardId);
 		this._card = value.update({
 			cardId: this.cardId,
 			// We probably don't need to update the other fields, as they are not displayed
@@ -54,7 +58,9 @@ export class OpponentCardInfoIdComponent {
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
-		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
+		const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
+		this.createdBy = hasCreatorInfo && !publicCardEye.includes(lastAffectedByCardId as CardIds);
+		this.drawnBy = hasCreatorInfo && !this.createdBy;
 		this.hasBuffs = value.buffCardIds?.length > 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
