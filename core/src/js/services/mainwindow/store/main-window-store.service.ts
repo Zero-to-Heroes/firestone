@@ -742,7 +742,7 @@ export class MainWindowStoreService {
 			new SelectBattlegroundsCategoryProcessor(),
 
 			BgsTimeFilterSelectedEvent.eventName(),
-			new BgsTimeFilterSelectedProcessor(this.prefs),
+			new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater),
 
 			BgsRankFilterSelectedEvent.eventName(),
 			new BgsRankFilterSelectedProcessor(this.prefs),

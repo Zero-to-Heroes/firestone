@@ -158,7 +158,10 @@ export class StoreBootstrapService {
 		]);
 		console.log('loaded info');
 
-		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(mergedPrefs.bgsActiveTribesFilter);
+		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
+			mergedPrefs.bgsActiveTribesFilter,
+			mergedPrefs.bgsActiveTimeFilter,
+		);
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches

@@ -21,7 +21,10 @@ export class BgsTribesFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsTribesFilter([...event.tribes].sort());
-		this.stateUpdater.next(new BgsRequestNewGlobalStatsLoadEvent(event.tribes));
+		const prefs = await this.prefs.getPreferences();
+		this.stateUpdater.next(
+			new BgsRequestNewGlobalStatsLoadEvent(prefs.bgsActiveTribesFilter, prefs.bgsActiveTimeFilter),
+		);
 		return [
 			currentState.update({
 				battlegrounds: currentState.battlegrounds.update({

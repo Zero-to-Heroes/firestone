@@ -14,7 +14,7 @@ export class BgsRequestNewGlobalStatsLoadProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const newStats = await this.globalStatsService.loadGlobalStats(event.tribes);
+		const newStats = await this.globalStatsService.loadGlobalStats(event.tribes, event.timePeriod);
 		return [
 			currentState.update({
 				battlegrounds: currentState.battlegrounds.update({
