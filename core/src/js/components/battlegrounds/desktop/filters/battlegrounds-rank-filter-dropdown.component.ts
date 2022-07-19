@@ -5,19 +5,17 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
@@ -63,8 +61,7 @@ export class BattlegroundsRankFilterDropdownComponent
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
-				distinctUntilChanged(),
-				map(([mmrPercentiles]) =>
+				this.mapData(([mmrPercentiles]) =>
 					mmrPercentiles
 						// Not enough data for the top 1% yet
 						.filter((percentile) => percentile.percentile > 1)
@@ -76,10 +73,6 @@ export class BattlegroundsRankFilterDropdownComponent
 								} as RankFilterOption),
 						),
 				),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -91,7 +84,7 @@ export class BattlegroundsRankFilterDropdownComponent
 		).pipe(
 			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([options, [filter, categoryId, currentView]]) => ({
+			this.mapData(([options, [filter, categoryId, currentView]]) => ({
 				filter: '' + filter,
 				placeholder: options.find((option) => +option.value === filter)?.label ?? options[0].label,
 				visible:
@@ -100,16 +93,6 @@ export class BattlegroundsRankFilterDropdownComponent
 						categoryId,
 					),
 			})),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 
