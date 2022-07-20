@@ -73,6 +73,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.DemonslayerKurtrusToken,
 	CardIds.FrizzKindleroost,
+	CardIds.FrostLichJaina,
 	CardIds.GraniteForgeborn,
 	CardIds.HemetJungleHunter,
 	CardIds.InfiniteMurloc,
