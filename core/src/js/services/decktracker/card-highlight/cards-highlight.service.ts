@@ -592,6 +592,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, not(rush));
 			case CardIds.ScepterOfSummoning:
 				return and(or(inDeck, inHand), minion, effectiveCostMore(5));
+			case CardIds.ShroudOfConcealment:
+				return and(inDeck, minion);
 			case CardIds.SpecialDeliveryTavernBrawl:
 				return and(or(inDeck, inHand), minion, rush);
 			case CardIds.Shadowcasting101TavernBrawl:
