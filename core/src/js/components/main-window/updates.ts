@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.15',
+		version: '9.8.16',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'achievements',
 						details: [
 							{
 								type: 'feature',
-								text: `In the deckbuilder, show the number of different buckets a card is in.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a separate icon in your opponent's hand for cards created by other cards vs. cards tutored from your deck.`,
+								text: `Add an option to completely turn off all achievements system. WARNING: this option is ON by default, so if you want to use achievements please make sure to turn it off first.`,
 							},
 						],
 					},
@@ -70,99 +61,41 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Fish of N'Zoth would remember the deathrattles in reverse order.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Baron Rivendare's effect would not be applied if it died to a cleave effect.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Bru'kan's hero power would always trigger after Illidan.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulation issue where Yrel would only buff +1 health.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Fix Card Oracle for Mailbox Dancer, Secure the Deck, Violet Spellwing, Cap'n Rokara, Libram of Wisdom, First Flame and Dragon Breeder.`,
-							},
-							{
-								type: 'feature',
-								text: `Add card highlight for Insight, Switcheroo, Cowardly Grunt, Primordial Protector, Herald of Shadows, Hullbreaker, Click-Clocker, Ice Revenant, Gather Your Party and Raise Dead.`,
-							},
-							{
-								type: 'feature',
-								text: `Add global effects for Prince Renathal, Infinite Murloc and Snapdragon.`,
-							},
-							{
-								type: 'feature',
-								text: `Implement "Top of Deck" for Spy-O-Matic, Draconic Herald and Timeway Wanderer.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a search function for personal decks.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Abyssal Curse counter would show incorrect info if a Curse could not be sent to the player's hand because it was full.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Bottomfeeder would not properly appear at the bottom of deck with the +X bonus for the opponent.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some matches were not properly counted when using the global Stats view.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where an incorrect hero/class was being registered when playing as Maestra and ending the game before revealing our true class.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the turn timer would not show up in Arena.`,
-							},
-							{
-								type: 'bug',
-								text: `Don't show deleted / archived decks in the decks dropdown filter.`,
+								text: `Add Card Oracle for Ice Trap.`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a specific icon for private lobbies in the replays / session recap widget.`,
-							},
-							{
-								type: 'feature',
-								text: `Keep widgets open on the end lobby screen. This should notably let you see the odds of the last match if you have the "hide odds in combat" option turned on.`,
-							},
-							{
-								type: 'bug',
-								text: `Remove the flickering that could happen when showing the opponent's latest info.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix cards from an incorrect class being offered when building a deck after clicking on the "build a deck" widget.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a filter for owned / not owned.`,
-							},
-							{
-								type: 'bug',
-								text: `Don't show negative speeds in combat.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `Add the match duration in the replays list.`,
+								type: 'misc',
+								text: `I've started working on some optimization on when remote data is loaded into the app. It should make the initial app load a bit quicker, and will reduce the memory footprint of the app if you only play a few modes. This is a work in progress and will likely be spread over multiple releases, so don't expect drastic big-bang improvements :)`,
 							},
 						],
 					},
