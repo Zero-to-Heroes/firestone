@@ -20,9 +20,10 @@ export class DeckManipulationHelper {
 		entityId: number,
 		removeFillerCard = false,
 		normalizeUpgradedCards = true,
-		debug = false,
+		cardInfos: { cost?: number } = null,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
+		const debug = false;
 		if (debug) {
 			console.debug(
 				'removing',
@@ -146,16 +147,19 @@ export class DeckManipulationHelper {
 			if (drawnCard) {
 				const candidates = zone
 					.filter((card) => card.cardMatchCondition)
-					.filter((card) => card.cardMatchCondition(drawnCard));
+					.filter((card) => card.cardMatchCondition(drawnCard, cardInfos));
 				if (debug) {
-					console.debug('found candidates to remove', candidates);
+					console.debug('found candidates to remove', candidates, zone);
 				}
 
 				if (candidates?.length) {
 					let hasRemovedOnce = false;
 					const result = zone.filter(
-						(card) => !card.cardMatchCondition || !card.cardMatchCondition(drawnCard),
+						(card) => !card.cardMatchCondition || !card.cardMatchCondition(drawnCard, cardInfos),
 					);
+					if (debug) {
+						console.debug('result after filter', result);
+					}
 					let removedCard = undefined;
 					for (const card of candidates) {
 						// We don't want to remove a card if it has a different entityId
@@ -403,7 +407,6 @@ export class DeckManipulationHelper {
 			newCard.entityId,
 			removeFillerCard,
 			false,
-			debug,
 		);
 		debug && console.debug('removed card', newZone, removedCard);
 		const updatedZone = this.addSingleCardToZone(newZone, newCard);

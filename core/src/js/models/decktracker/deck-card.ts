@@ -50,7 +50,7 @@ export class DeckCard {
 	readonly createdByJoust?: boolean;
 	readonly linkedEntityIds?: readonly number[] = [];
 	readonly relatedCardIds?: readonly string[] = [];
-	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
+	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {
 		// if (base.cardId && !base.cardName) {

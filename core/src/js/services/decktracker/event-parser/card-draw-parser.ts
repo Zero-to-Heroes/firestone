@@ -115,6 +115,9 @@ export class CardDrawParser implements EventParser {
 					entityId,
 					deck.deckList.length === 0,
 					true,
+					{
+						cost: gameEvent.additionalData.cost,
+					},
 			  )[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);

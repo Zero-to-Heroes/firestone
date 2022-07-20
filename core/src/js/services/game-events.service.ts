@@ -684,6 +684,7 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						dataTag1: gameEvent.Value.AdditionalProps?.DataTag1,
+						cost: gameEvent.Value.AdditionalProps?.Cost,
 					}),
 				);
 				break;

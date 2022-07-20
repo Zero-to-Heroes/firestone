@@ -288,7 +288,23 @@ const handleLadyPrestor = (
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
 				cardType: 'Minion',
-				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost(),
+				cardMatchCondition: (other: ReferenceCard, cardInfos) => {
+					const result =
+						cardInfos?.cost != null
+							? cardInfos.cost === card.getEffectiveManaCost()
+							: other.cost === card.getEffectiveManaCost();
+					console.debug(
+						'does match?',
+						result,
+						card.getEffectiveManaCost(),
+						cardInfos?.cost,
+						other.cost,
+						card,
+						other,
+						cardInfos,
+					);
+					return result;
+				},
 			} as DeckCard),
 		deckState,
 		allCards,
