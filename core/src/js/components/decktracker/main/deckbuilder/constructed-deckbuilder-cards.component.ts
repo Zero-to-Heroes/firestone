@@ -182,6 +182,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			from([this.allCards.getCards()]),
 		).pipe(
 			this.mapData(([[config, currentFormat, currentClass], cards]) => {
+				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
 				const validSets =
 					currentFormat === 'classic'
 						? config.vanillaSets
