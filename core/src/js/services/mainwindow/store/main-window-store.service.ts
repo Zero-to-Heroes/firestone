@@ -195,6 +195,7 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loaded-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
@@ -334,6 +335,7 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
@@ -540,6 +542,9 @@ export class MainWindowStoreService {
 		return Map.of(
 			StoreInitEvent.eventName(),
 			new StoreInitProcessor(this.events, this.prefs, this.i18n),
+			
+			GlobalStatsLoadedEvent.eventName(),
+			new GlobalStatsLoadedProcessor(),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),

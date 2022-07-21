@@ -105,7 +105,6 @@ export class StoreBootstrapService {
 				currentUser,
 				achievementTopCategories,
 				achievementHistory,
-				globalStats,
 				collectionState,
 				currentScene,
 			],
@@ -129,7 +128,6 @@ export class StoreBootstrapService {
 				this.userService.getCurrentUser(),
 				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
-				this.globalStats.getGlobalStats(),
 				this.collectionBootstrap.initCollectionState(),
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
@@ -260,7 +258,6 @@ export class StoreBootstrapService {
 			mercenaries: mercenariesState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
-			globalStats: globalStats,
 		} as MainWindowState);
 		console.debug('initialWindowState', initialWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));

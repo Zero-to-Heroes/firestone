@@ -1,5 +1,7 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { AppInjector } from '../../services/app-injector';
+import { LazyDataInitService } from '../../services/lazy-data-init.service';
 import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
@@ -28,8 +30,10 @@ export class MainWindowState {
 	readonly mercenaries: MercenariesState = new MercenariesState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
-	readonly globalStats: GlobalStats = new GlobalStats();
 	readonly showAds: boolean = true;
+
+	// See decktracker-state.ts for more info
+	readonly globalStats: GlobalStats = undefined;
 
 	public static create(base: Partial<NonFunctionProperties<MainWindowState>>): MainWindowState {
 		return Object.assign(new MainWindowState(), base);
@@ -46,5 +50,14 @@ export class MainWindowState {
 		}
 
 		return this.battlegrounds.findReplay(reviewId);
+	}
+	
+	public getGlobalStats(): GlobalStats {
+		if (this.globalStats === undefined) {
+			console.log('globalStats not initialized yet');
+			(this.globalStats as GlobalStats) = null;
+			AppInjector.get<LazyDataInitService>(LazyDataInitService).requestLoad('user-global-stats');
+		}
+		return this.globalStats;
 	}
 }

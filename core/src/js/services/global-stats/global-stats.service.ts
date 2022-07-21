@@ -1,91 +1,60 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { CurrentUser } from '../../models/overwolf/profile/current-user';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { ApiRunner } from '../api-runner';
+import { LocalStorageService } from '../local-storage';
+import { GlobalStatsLoadedEvent } from '../mainwindow/store/events/stats/global/global-stats-loaded-event';
 import { OverwolfService } from '../overwolf.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const GLOBAL_STATS_ENDPOINT = 'https://dozgz6y7pf.execute-api.us-west-2.amazonaws.com/Prod/globalStats';
 
 @Injectable()
 export class GlobalStatsService {
-	private cachedStats: GlobalStats;
+	private requestedInitialGlobalStatsLoad = new BehaviorSubject<boolean>(false);
 
-	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {}
-
-	public async getGlobalStats(): Promise<GlobalStats> {
-		return new Promise<GlobalStats>(async (resolve) => {
-			const user = await this.ow.getCurrentUser();
-			if (!user.userId || !user.username) {
-				console.log('[global-stats] user not logged in', user);
-			}
-			this.getGlobalStatsInternal(user, (stats) => resolve(stats), 5);
-		});
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreFacadeService,
+		private readonly localStorage: LocalStorageService,
+	) {
+		this.init();
 	}
 
-	private getGlobalStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 5, shouldLogError = false) {
-		const postEvent = {
+	private async init() {
+		await this.store.initComplete();
+		combineLatest(this.requestedInitialGlobalStatsLoad.asObservable())
+			.pipe(filter(([load]) => load))
+			.subscribe(() => this.loadGlobalStats());
+	}
+
+	public loadInitialGlobalStats() {
+		this.requestedInitialGlobalStatsLoad.next(true);
+	}
+
+	public updateGlobalStats(stats: GlobalStats) {
+		this.localStorage.setItem('user-global-stats', stats);
+	}
+
+	public async loadGlobalStats() {
+		const localInfo = this.localStorage.getItem<GlobalStats>('user-global-stats');
+		if (!!localInfo?.stats?.length) {
+			console.log('loaded local global stats');
+			this.store.send(new GlobalStatsLoadedEvent(localInfo));
+		}
+
+		const currentUser = await this.ow.getCurrentUser();
+		const remoteData = await this.api.callPostApi<{ result: GlobalStats }>(GLOBAL_STATS_ENDPOINT, {
 			userName: currentUser.username,
 			userId: currentUser.userId,
 			machineId: currentUser.machineId,
-		};
-		if (retriesLeft <= 0) {
-			if (shouldLogError) {
-				console.error('[global-stats] could not retrieve stats', postEvent);
-			} else {
-				console.log('[global-stats] could not retrieve stats', postEvent);
-			}
-			callback(null);
-			return;
-		}
-		this.http.post(`${GLOBAL_STATS_ENDPOINT}`, postEvent).subscribe(
-			(data: any) => {
-				// Stats are guaranteed to change between two games betwen they record
-				// the time spend in games
-				const areEqual = this.areEqual(data.result, this.cachedStats);
-				if (!data || !data.result || areEqual) {
-					setTimeout(
-						() =>
-							this.getGlobalStatsInternal(
-								currentUser,
-								callback,
-								retriesLeft - 1,
-								!areEqual && !data.expectedEmpty,
-							),
-						2000,
-					);
-					return;
-				}
-				console.log('[global-stats] received stats');
-				const stats: GlobalStats = data.result;
-				this.cachedStats = stats;
-				callback(stats);
-			},
-			(error) => {
-				setTimeout(() => this.getGlobalStatsInternal(currentUser, callback, retriesLeft - 1), 1000);
-			},
-		);
-	}
-
-	private areEqual(stats1: GlobalStats, stats2: GlobalStats): boolean {
-		if (!stats1 || !stats2) {
-			return false;
-		}
-		if ((stats1.stats || []).length !== (stats2.stats || []).length) {
-			return false;
-		}
-		const sorted1 = [...stats1.stats].sort((a, b) => a.id - b.id);
-		const sorted2 = [...stats2.stats].sort((a, b) => a.id - b.id);
-		if (
-			JSON.stringify(sorted1.map((stat) => stat.statKey)) !== JSON.stringify(sorted2.map((stat) => stat.statKey))
-		) {
-			return false;
-		}
-		// Compare the values
-		for (let i = 0; i < sorted1.length; i++) {
-			if (JSON.stringify(sorted1[i]) !== JSON.stringify(sorted2[i])) {
-				return false;
-			}
-		}
-		return true;
+		});
+		this.localStorage.setItem('user-global-stats', remoteData?.result);
+		console.log('loaded remote globalStats');
+		console.debug('global stats', remoteData)
+		this.store.send(new GlobalStatsLoadedEvent(remoteData?.result));
+		return remoteData;
 	}
 }

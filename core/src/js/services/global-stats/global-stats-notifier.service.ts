@@ -56,5 +56,6 @@ export class GlobalStatsNotifierService {
 		}
 		const mergedStats: GlobalStats = mergeStats(currentGlobalStats, statsFromGame);
 		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(mergedStats));
+		this.globalStats.updateGlobalStats(mergedStats);
 	}
 }

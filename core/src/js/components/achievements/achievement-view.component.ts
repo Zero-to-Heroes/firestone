@@ -60,7 +60,7 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 		);
 		this.achievementText$ = combineLatest(
 			this.achievement$,
-			this.store.listen$(([main, nav, prefs]) => main.globalStats),
+			this.store.listen$(([main, nav, prefs]) => main.getGlobalStats()),
 		).pipe(
 			this.mapData(([achievement, [globalStats]]) =>
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
