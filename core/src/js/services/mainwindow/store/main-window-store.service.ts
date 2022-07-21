@@ -45,6 +45,7 @@ import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { CollectionStorageService } from '../../collection/collection-storage.service';
+import { PackStatsService } from '../../collection/pack-stats.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
@@ -91,6 +92,8 @@ import { BgsSimulatorMinionTierFilterSelectedEvent } from './events/battleground
 import { BgsSimulatorMinionTribeFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
+import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
+import { CollectionRefreshPacksEvent } from './events/collection/colection-refresh-packs-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
@@ -227,6 +230,8 @@ import { BgsSimulatorMinionTribeFilterSelectedProcessor } from './processors/bat
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
+import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
+import { CollectionRefreshPacksProcessor } from './processors/collection/collection-refresh-packs-processor';
 import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
@@ -379,6 +384,7 @@ export class MainWindowStoreService {
 		private readonly duelsMemoryCache: DuelsMemoryCacheService,
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
+		private readonly packsService: PackStatsService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -564,6 +570,12 @@ export class MainWindowStoreService {
 			// Collection
 			CollectionInitEvent.eventName(),
 			new CollectionInitProcessor(),
+
+			CollectionRefreshPacksEvent.eventName(),
+			new CollectionRefreshPacksProcessor(this.packsService),
+
+			CollectionPacksUpdatedEvent.eventName(),
+			new CollectionPacksUpdatedProcessor(),
 
 			CollectionSelectCurrentTabEvent.eventName(),
 			new CollectionSelectCurrentTabProcessor(),

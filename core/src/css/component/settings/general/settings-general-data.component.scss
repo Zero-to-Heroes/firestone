@@ -1,0 +1,53 @@
+:host() {
+	padding: 0 15px;
+}
+
+.general-data {
+	font-size: 13px;
+
+	h2 {
+		margin-bottom: 10px;
+	}
+
+	.resync {
+		display: flex;
+		align-items: center;
+		margin-top: 10px;
+
+		.label {
+			margin-right: 20px;
+		}
+	}
+}
+
+button {
+	border: 1px solid #d9c3ab;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: auto;
+	height: 30px;
+	display: flex;
+	align-self: flex-start;
+	align-items: center;
+
+	span {
+		color: #d9c3ab;
+	}
+
+	div {
+		display: flex;
+	}
+
+	&:hover {
+		background: #ffb948;
+		border: none;
+
+		span {
+			color: #2f0d0d;
+		}
+	}
+
+	&.busy {
+		pointer-events: none;
+	}
+}
