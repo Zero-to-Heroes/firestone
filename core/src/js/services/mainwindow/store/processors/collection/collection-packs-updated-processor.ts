@@ -4,8 +4,6 @@ import { CollectionPacksUpdatedEvent } from '../../events/collection/colection-p
 import { Processor } from '../processor';
 
 export class CollectionPacksUpdatedProcessor implements Processor {
-	constructor() {}
-
 	public async process(
 		event: CollectionPacksUpdatedEvent,
 		currentState: MainWindowState,

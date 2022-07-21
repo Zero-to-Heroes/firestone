@@ -51,7 +51,7 @@ export class MainWindowState {
 
 		return this.battlegrounds.findReplay(reviewId);
 	}
-	
+
 	public getGlobalStats(): GlobalStats {
 		if (this.globalStats === undefined) {
 			console.log('globalStats not initialized yet');

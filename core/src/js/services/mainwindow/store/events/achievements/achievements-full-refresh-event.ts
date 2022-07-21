@@ -5,8 +5,6 @@ export class AchievementsFullRefreshEvent implements MainWindowStoreEvent {
 		return 'AchievementsFullRefreshEvent';
 	}
 
-	constructor() {}
-
 	public eventName(): string {
 		return 'AchievementsFullRefreshEvent';
 	}

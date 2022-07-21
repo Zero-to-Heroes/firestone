@@ -5,8 +5,6 @@ export class CollectionRefreshPacksEvent implements MainWindowStoreEvent {
 		return 'CollectionRefreshPacksEvent';
 	}
 
-	constructor() {}
-
 	public eventName(): string {
 		return 'CollectionRefreshPacksEvent';
 	}

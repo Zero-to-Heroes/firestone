@@ -10,7 +10,7 @@ import {
 	Injectable,
 	Injector,
 	NgModule,
-	Type
+	Type,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -60,7 +60,7 @@ import { ReplayInfoDuelsComponent } from '@components/replays/replay-info/replay
 import { ReplayInfoGenericComponent } from '@components/replays/replay-info/replay-info-generic.component';
 import {
 	ReplayInfoMercenariesComponent,
-	ReplayInfoMercPlayerComponent
+	ReplayInfoMercPlayerComponent,
 } from '@components/replays/replay-info/replay-info-mercenaries.component';
 import { ReplayInfoRankedComponent } from '@components/replays/replay-info/replay-info-ranked.component';
 import { ReplaysListViewComponent } from '@components/replays/replays-list-view.component';
@@ -127,7 +127,7 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent
+	BgsHeroDetailedStatsComponent,
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -231,7 +231,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent
+	DuelsHeroStatVignetteComponent,
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsLeaderboardComponent } from '../../components/duels/desktop/duels-leaderboard.component';
@@ -259,7 +259,7 @@ import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/_d
 import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent
+	DuelsStatCellComponent,
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';
@@ -295,7 +295,7 @@ import { MercenariesMyTeamsComponent } from '../../components/mercenaries/deskto
 import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
 import {
 	MercenariesPersonalHeroStatsComponent,
-	SortableLabelComponent
+	SortableLabelComponent,
 } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesPersonalTeamSummaryComponent } from '../../components/mercenaries/desktop/mercenaries-personal-team-summary.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
@@ -370,7 +370,7 @@ import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/s
 import { TurnTimerWidgetWrapperComponent } from '../../components/overlays/turn-timer-widget-wrapper.component';
 import {
 	TurnTimerPlayerComponent,
-	TurnTimerWidgetComponent
+	TurnTimerWidgetComponent,
 } from '../../components/overlays/turntimer/turn-timer-widget.component';
 import { FullScreenOverlaysClickthroughComponent } from '../../components/overlays/_full-screen-overlays-clickthrough.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';

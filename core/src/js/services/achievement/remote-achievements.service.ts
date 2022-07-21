@@ -157,7 +157,7 @@ export class RemoteAchievementsService {
 			console.error('Empty local achievements');
 			return;
 		}
-		
+
 		const newAchievement: CompletedAchievement = CompletedAchievement.create({
 			id: achievement.id,
 			numberOfCompletions: 1,

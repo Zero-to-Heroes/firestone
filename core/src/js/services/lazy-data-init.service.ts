@@ -10,7 +10,7 @@ export class LazyDataInitService {
 		private readonly constructedMetaDecksStateBuilder: ConstructedMetaDecksStateBuilderService,
 		private readonly mercenariesStateBuilder: MercenariesStateBuilderService,
 		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
-		private readonly globalStatsService: GlobalStatsService
+		private readonly globalStatsService: GlobalStatsService,
 	) {}
 
 	public requestLoad(dataType: StateDataType) {

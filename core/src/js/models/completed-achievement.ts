@@ -1,4 +1,4 @@
-import { NonFunctionProperties } from "../services/utils";
+import { NonFunctionProperties } from '../services/utils';
 
 export class CompletedAchievement {
 	readonly id: string;

@@ -542,7 +542,7 @@ export class MainWindowStoreService {
 		return Map.of(
 			StoreInitEvent.eventName(),
 			new StoreInitProcessor(this.events, this.prefs, this.i18n),
-			
+
 			GlobalStatsLoadedEvent.eventName(),
 			new GlobalStatsLoadedProcessor(),
 
