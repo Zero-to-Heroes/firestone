@@ -1,3 +1,5 @@
+import { NonFunctionProperties } from "../services/utils";
+
 export class CompletedAchievement {
 	readonly id: string;
 	readonly numberOfCompletions: number;
@@ -7,7 +9,7 @@ export class CompletedAchievement {
 		this.numberOfCompletions = numberOfCompletions;
 	}
 
-	public static create(base: CompletedAchievement): CompletedAchievement {
+	public static create(base: Partial<NonFunctionProperties<CompletedAchievement>>): CompletedAchievement {
 		return Object.assign(new CompletedAchievement(null, null), base);
 	}
 

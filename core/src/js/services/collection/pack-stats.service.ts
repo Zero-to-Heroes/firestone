@@ -106,6 +106,11 @@ export class PackStatsService {
 
 	private updateLocalPackStats(boosterId: BoosterType, setId: string, cards: readonly InternalCardInfo[]) {
 		const localPackResult = this.localStorage.getItem<LocalPackStats>('collection-pack-stats');
+		if (!localPackResult) {
+			console.error('Empty local packs');
+			return;
+		}
+
 		const newPack: PackResult = {
 			id: 0,
 			boosterId: boosterId as any,

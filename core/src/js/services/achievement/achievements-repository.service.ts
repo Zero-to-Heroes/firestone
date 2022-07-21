@@ -45,6 +45,16 @@ export class AchievementsRepository {
 		});
 	}
 
+	public async reloadAllAchievements() {
+		const [[allAchievements], completedAchievements] = await Promise.all([
+			this.achievementsLoader.initializeAchievements(),
+			this.remoteAchievements.loadAchievements(),
+		]);
+		const mergedAchievements = this.mergeAchievements(allAchievements, completedAchievements);
+		this.categories = await this.buildCategories(mergedAchievements);
+		this.storeUpdater.next(new AchievementsInitEvent(this.categories));
+	}
+
 	public async getTopLevelCategories(): Promise<readonly VisualAchievementCategory[]> {
 		await this.waitForInit();
 		return this.categories;

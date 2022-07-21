@@ -4,8 +4,10 @@ import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { ApiRunner } from '../api-runner';
 import { GameStateService } from '../decktracker/game-state.service';
-import { OverwolfService } from '../overwolf.service';
+import { LocalStorageService } from '../local-storage';
+import { AchievementsFullUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-full-updated-event';
 import { PreferencesService } from '../preferences.service';
+import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { UserService } from '../user.service';
 import { AchievementsManager } from './achievements-manager.service';
 import { AchievementsStorageService } from './achievements-storage.service';
@@ -21,11 +23,12 @@ export class RemoteAchievementsService {
 	constructor(
 		private api: ApiRunner,
 		private storage: AchievementsStorageService,
-		private ow: OverwolfService,
 		private manager: AchievementsManager,
 		private userService: UserService,
 		private gameService: GameStateService,
 		private prefs: PreferencesService,
+		private readonly localStorage: LocalStorageService,
+		private readonly store: AppUiStoreFacadeService,
 	) {}
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
@@ -35,16 +38,9 @@ export class RemoteAchievementsService {
 			this.storage.setAll([]);
 			return [];
 		}
-		const currentUser = await this.userService.getCurrentUser();
-		// Load from remote
-		const postEvent = {
-			userName: currentUser.username,
-			userId: currentUser.userId,
-			machineId: currentUser.machineId,
-		};
 		console.log('[remote-achievements] loading from server');
 		const [achievementsFromRemote, achievementsFromMemory] = await Promise.all([
-			this.loadRemoteAchievements(postEvent),
+			this.loadRemoteAchievements(),
 			this.manager.getAchievements(),
 		]);
 		console.log('[remote-achievements] loaded', achievementsFromRemote.length, achievementsFromMemory.length);
@@ -145,6 +141,7 @@ export class RemoteAchievementsService {
 			'numberOfCompletions': achievement.numberOfCompletions,
 		};
 		this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
+		this.updateLocalAchievements(achievement);
 	}
 
 	// TODO: this is only used to get the quotas, so maybe expose a specific endpoint
@@ -154,7 +151,57 @@ export class RemoteAchievementsService {
 		return raw?.achievements || [];
 	}
 
-	private async loadRemoteAchievements(userInfo): Promise<readonly CompletedAchievement[]> {
-		return ((await this.api.callPostApi(ACHIEVEMENTS_RETRIEVE_URL, userInfo)) as any)?.results || [];
+	private updateLocalAchievements(achievement: Achievement) {
+		const localResult = this.localStorage.getItem<LocalRemoteAchievements>('achievements-user-completed');
+		if (!localResult) {
+			console.error('Empty local achievements');
+			return;
+		}
+		
+		const newAchievement: CompletedAchievement = CompletedAchievement.create({
+			id: achievement.id,
+			numberOfCompletions: 1,
+		});
+		const newResult: LocalRemoteAchievements = {
+			lastUpdateDate: new Date(localResult.lastUpdateDate),
+			achievements: [newAchievement, ...localResult.achievements],
+		};
+		this.localStorage.setItem('achievements-user-completed', newResult);
 	}
+
+	public async loadRemoteAchievements(
+		loadFromLocal = true,
+		sendEvent = false,
+	): Promise<readonly CompletedAchievement[]> {
+		console.debug('loading remote achievements, loadFromLocal=', loadFromLocal);
+		if (loadFromLocal) {
+			const localResult = this.localStorage.getItem<LocalRemoteAchievements>('achievements-user-completed');
+			// Cache the local results for 7 days
+			if (localResult && Date.now() - new Date(localResult.lastUpdateDate).getTime() <= 7 * 24 * 60 * 60 * 1000) {
+				return localResult.achievements;
+			}
+		}
+
+		const currentUser = await this.userService.getCurrentUser();
+		const userInfo = {
+			userName: currentUser.username,
+			userId: currentUser.userId,
+			machineId: currentUser.machineId,
+		};
+		const remoteResult = ((await this.api.callPostApi(ACHIEVEMENTS_RETRIEVE_URL, userInfo)) as any)?.results || [];
+		const newResult: LocalRemoteAchievements = {
+			lastUpdateDate: new Date(),
+			achievements: remoteResult,
+		};
+		this.localStorage.setItem('achievements-user-completed', newResult);
+		if (sendEvent) {
+			this.store.send(new AchievementsFullUpdatedEvent());
+		}
+		return newResult.achievements;
+	}
+}
+
+interface LocalRemoteAchievements {
+	readonly lastUpdateDate: Date;
+	readonly achievements: readonly CompletedAchievement[];
 }
