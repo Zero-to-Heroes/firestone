@@ -5,6 +5,8 @@ import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
+declare let amplitude;
+
 @Component({
 	selector: 'achievements-categories',
 	styleUrls: [
@@ -48,6 +50,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionCompone
 	}
 
 	selectCategory(category: VisualAchievementCategory) {
+		amplitude.getInstance().logEvent('achievement-category', { 'categoryId': category.id });
 		this.store.send(new SelectAchievementCategoryEvent(category.id));
 	}
 

@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 	Input,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -245,6 +245,7 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	}
 
 	selectModule(module: CurrentAppType) {
+		amplitude.getInstance().logEvent('app-navigation', { 'section': module });
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 
