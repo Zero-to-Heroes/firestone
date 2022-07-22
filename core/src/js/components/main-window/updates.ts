@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.16',
+		version: '9.8.18',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -79,6 +79,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a simulation issue where Yrel would only buff +1 health.`,
 							},
+							{
+								type: 'ui',
+								text: `Increase the size of replay entries in the Perfect Games tab.`,
+							},
 						],
 					},
 					{
@@ -88,6 +92,18 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `Add Card Oracle for Ice Trap.`,
 							},
+							{
+								type: 'feature',
+								text: `Add card highlight for Shroud of Concealment.`,
+							},
+							{
+								type: 'feature',
+								text: `Add Frost Lich Jaina to global effects.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a couple of issues when playing Lady Prestor with interactions like Dredge and Sir Finley. There are still some issues lingering (from what I've seen, playing Finley with discounted dragons in hand messes things up), and I'll look into them in the next release.`,
+							},
 						],
 					},
 					{
@@ -96,6 +112,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'misc',
 								text: `I've started working on some optimization on when remote data is loaded into the app. It should make the initial app load a bit quicker, and will reduce the memory footprint of the app if you only play a few modes. This is a work in progress and will likely be spread over multiple releases, so don't expect drastic big-bang improvements :)`,
+							},
+							{
+								type: 'misc',
+								text: `On a related topic, there are now buttons in the settings to force the refresh of some pieces of data that are cached for several days. You will typically never need these, but might want to force a refresh after switching computers if you run Firestone on multiple machines.`,
 							},
 						],
 					},
