@@ -209,6 +209,9 @@ export class TwitchAuthService {
 	private hasLoggedInfoOnce = false;
 	private async sendEvent(newEvent: TwitchEvent) {
 		const prefs = await this.prefs.getPreferences();
+		if (!newEvent) {
+			return;
+		}
 		if (!prefs.twitchAccessToken) {
 			return;
 		}
