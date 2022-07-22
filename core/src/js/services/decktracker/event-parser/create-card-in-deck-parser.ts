@@ -45,7 +45,7 @@ export class CreateCardInDeckParser implements EventParser {
 				: null;
 		const creatorEntity = creatorEntityId
 			? // Because sometimes the entityId is reversed in the Other zone
-			  deck.findCard(creatorEntityId) ?? deck.findCard(-creatorEntityId)
+			  deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card
 			: null;
 		// console.debug(
 		// 	'[debug]',

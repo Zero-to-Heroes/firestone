@@ -57,6 +57,7 @@ import { ConstructedAchievementsProgressionParser } from './event-parser/constru
 import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
 import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CopiedFromEntityIdParser } from './event-parser/copied-from-entity-id-parser';
+import { CostChangedParser } from './event-parser/cost-changed-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CthunParser } from './event-parser/cthun-parser';
@@ -548,6 +549,7 @@ export class GameStateService {
 			new EntityChosenParser(this.helper),
 			new TurnDurationUpdatedParser(),
 			new StartOfGameEffectParser(this.helper, this.allCards, this.i18n),
+			new CostChangedParser(this.helper),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

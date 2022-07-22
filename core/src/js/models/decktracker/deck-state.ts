@@ -109,12 +109,21 @@ export class DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 
-	public findCard(entityId: number): DeckCard {
-		const result = [...this.hand, ...this.deck, ...this.board, ...this.otherZone].find(
-			(card) => card.entityId === entityId,
-		);
+	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } {
+		const zones: { id: 'hand' | 'deck' | 'board' | 'other'; cards: readonly DeckCard[] }[] = [
+			{ id: 'hand', cards: this.hand },
+			{ id: 'deck', cards: this.deck },
+			{ id: 'board', cards: this.board },
+			{ id: 'other', cards: this.otherZone },
+		];
+		for (const zone of zones) {
+			const result = zone.cards.find((card) => card.entityId === entityId);
+			if (!!result) {
+				return { zone: zone.id, card: result };
+			}
+		}
 
-		return result;
+		return null;
 	}
 
 	public totalCardsInZones(): number {

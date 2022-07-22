@@ -30,8 +30,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const isCopiedPlayer = copiedCardControllerId === localPlayer.PlayerId;
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const newCopy: DeckCard = deck.findCard(entityId);
-		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId);
+		const newCopy: DeckCard = deck.findCard(entityId)?.card;
+		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
 
 		if (!copiedCard) {
 			return currentState;

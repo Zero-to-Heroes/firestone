@@ -24,14 +24,14 @@ export class LinkedEntityParser implements EventParser {
 		// console.debug('[linked-entity-parser] isPlayerForFind', isPlayerForFind, gameEvent);
 		let deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 
-		let newCard = deckInWhichToFindTheCard.findCard(entityId);
+		let newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
 		// let revert = false;
 		// console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
 		if (!newCard) {
 			// Can happen because of Disarming Elemetal where we dredge in the other player's deck
 			isPlayerForFind = !isPlayerForFind;
 			deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
-			newCard = deckInWhichToFindTheCard.findCard(entityId);
+			newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
 			// console.debug(
 			// 	'[linked-entity-parser] missing newCard, trying to find in other deck',
 			// 	newCard,
@@ -54,7 +54,7 @@ export class LinkedEntityParser implements EventParser {
 			}
 		}
 
-		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId);
+		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId)?.card;
 		// console.debug(
 		// 	'[linked-entity-parser] originalCard',
 		// 	originalCard,
@@ -93,6 +93,11 @@ export class LinkedEntityParser implements EventParser {
 				updatedCard.cardId,
 				updatedCard.entityId,
 				true,
+				true,
+				// For Lady Prestor + Dredge interaction
+				{
+					cost: updatedCard.getEffectiveManaCost(),
+				},
 			)[0];
 			const newDeck = this.helper.addSingleCardToZone(intermediaryDeck, updatedCard);
 			newPlayerDeck = deckInWhichToAddTheCard.update({
