@@ -43,9 +43,7 @@ import { groupByFunction } from '../../services/utils';
 export class ReplaysListViewComponent {
 	@Input() set replays(value: readonly GameStat[]) {
 		value = value ?? [];
-		console.debug('setting replays', value);
 		const groupedReplays = this.groupReplays(value);
-		console.debug('groupedReplays', groupedReplays);
 		this.flatReplays = groupedReplays
 			.filter((group) => group?.replays?.length)
 			.flatMap((group) => {
@@ -65,7 +63,6 @@ export class ReplaysListViewComponent {
 
 	onScrolling(scrolling: boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 0;
-		console.debug('handling scrolling in parent', scrolling, this.scrollDebounceTime);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
