@@ -75,6 +75,7 @@ import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter
 import { ArenaRewardsUpdatedEvent } from './events/arena/arena-rewards-updated-event';
 import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
+import { BgsBestStatsLoadedEvent } from './events/battlegrounds/bgs-best-stats-loaded-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
@@ -215,6 +216,7 @@ import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-clas
 import { ArenaRewardsUpdatedProcessor } from './processors/arena/arena-rewards-updated-processor';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
+import { BgsBestStatsLoadedProcessor } from './processors/battlegrounds/bgs-best-stats-loaded-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
@@ -769,6 +771,9 @@ export class MainWindowStoreService {
 			// Battlegrounds
 			SelectBattlegroundsCategoryEvent.eventName(),
 			new SelectBattlegroundsCategoryProcessor(),
+
+			BgsBestStatsLoadedEvent.eventName(),
+			new BgsBestStatsLoadedProcessor(),
 
 			BgsTimeFilterSelectedEvent.eventName(),
 			new BgsTimeFilterSelectedProcessor(this.prefs, this.stateUpdater),

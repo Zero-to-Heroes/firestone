@@ -16,14 +16,16 @@ declare let amplitude;
 		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div class="battlegrounds-heroes-records-broken">
-			<div class="title" [owTranslate]="'app.battlegrounds.personal-stats.records.title'"></div>
-			<ul class="list">
-				<battlegrounds-hero-records-broken
-					*ngFor="let stat of (stats$ | async) || []; trackBy: trackByFn"
-					[stat]="stat"
-				></battlegrounds-hero-records-broken>
-			</ul>
+		<div class="battlegrounds-heroes-records-broken" *ngIf="stats$ | async as stats">
+			<with-loading [isLoading]="!stats?.length">
+				<div class="title" [owTranslate]="'app.battlegrounds.personal-stats.records.title'"></div>
+				<ul class="list">
+					<battlegrounds-hero-records-broken
+						*ngFor="let stat of stats; trackBy: trackByFn"
+						[stat]="stat"
+					></battlegrounds-hero-records-broken>
+				</ul>
+			</with-loading>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +41,7 @@ export class BattlegroundsHeroesRecordsBrokenComponent
 
 	ngAfterContentInit() {
 		this.stats$ = this.store
-			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
+			.listen$(([main, nav]) => main.stats.getBestBgsUserStats())
 			.pipe(
 				filter(([bestBgsUserStats]) => !!bestBgsUserStats?.length),
 				this.mapData(([bestBgsUserStats]) => {

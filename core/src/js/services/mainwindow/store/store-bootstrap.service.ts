@@ -109,7 +109,6 @@ export class StoreBootstrapService {
 				currentScene,
 			],
 			[constructedConfig],
-			[bgsBestUserStats],
 			[matchStats, archetypesConfig, archetypesStats],
 			[
 				[duelsRunInfo, duelsRewardsInfo],
@@ -132,7 +131,6 @@ export class StoreBootstrapService {
 				this.memory.getCurrentSceneFromMindVision(),
 			]),
 			Promise.all([this.decktrackerStateLoader.loadConfig()]),
-			Promise.all([this.bestBgsStats.getBgsBestUserStats()]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
 				this.gameStatsLoader.retrieveArchetypesConfig(),
@@ -170,13 +168,7 @@ export class StoreBootstrapService {
 			currentBattlegroundsMetaPatch,
 		);
 
-		const newStatsState = this.stats.initState(
-			prefs,
-			matchStats,
-			archetypesConfig,
-			archetypesStats,
-			bgsBestUserStats,
-		);
+		const newStatsState = this.stats.initState(prefs, matchStats, archetypesConfig, archetypesStats);
 		const currentRankedMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
 			: null;

@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
@@ -14,135 +13,141 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component.scss`,
 	],
 	template: `
-		<div class="header">
-			<div class="label">
-				<div class="record-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#new_record" />
-					</svg>
+		<with-loading [isLoading]="!value.stat" *ngIf="{ stat: value$ | async } as value">
+			<ng-container *ngIf="value.stat">
+				<div class="header">
+					<div class="label">
+						<div class="record-icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#new_record" />
+							</svg>
+						</div>
+						{{ 'app.battlegrounds.personal-stats.records.columns.record' | owTranslate }}
+					</div>
+					<div class="filler"></div>
+					<div class="hero" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.hero'"></div>
+					<div class="replay" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.replay'"></div>
+					<div class="value" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.score'"></div>
 				</div>
-				{{ 'app.battlegrounds.personal-stats.records.columns.record' | owTranslate }}
-			</div>
-			<div class="filler"></div>
-			<div class="hero" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.hero'"></div>
-			<div class="replay" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.replay'"></div>
-			<div class="value" [owTranslate]="'app.battlegrounds.personal-stats.records.columns.score'"></div>
-		</div>
-		<div class="stats-recap" scrollable *ngIf="value$ | async as stat">
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions' | owTranslate"
-				[value]="stat.totalMinionsDamageDealt.value"
-				[heroIcon]="stat.totalMinionsDamageDealt.hero"
-				[reviewId]="stat.totalMinionsDamageDealt.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-taken-minions' | owTranslate"
-				[value]="stat.totalMinionsDamageTaken.value"
-				[heroIcon]="stat.totalMinionsDamageTaken.hero"
-				[reviewId]="stat.totalMinionsDamageTaken.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero' | owTranslate"
-				[tooltipText]="
-					'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero-tooltip' | owTranslate
-				"
-				[value]="stat.totalHeroDamageDealt.value"
-				[heroIcon]="stat.totalHeroDamageDealt.hero"
-				[reviewId]="stat.totalHeroDamageDealt.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
-				[tooltipText]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate"
-				[value]="stat.maxSingleTurnHeroDamageDealt.value"
-				[heroIcon]="stat.maxSingleTurnHeroDamageDealt.hero"
-				[reviewId]="stat.maxSingleTurnHeroDamageDealt.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.win-streak' | owTranslate"
-				[value]="stat.winStreak.value"
-				[heroIcon]="stat.winStreak.hero"
-				[reviewId]="stat.winStreak.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.triples' | owTranslate"
-				[value]="stat.triples.value"
-				[heroIcon]="stat.triples.hero"
-				[reviewId]="stat.triples.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.board-stats' | owTranslate"
-				[value]="stat.maxBoardStats.value"
-				[heroIcon]="stat.maxBoardStats.hero"
-				[reviewId]="stat.maxBoardStats.reviewId"
-				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
-				[value]="stat.coinsWasted.value"
-				[heroIcon]="stat.coinsWasted.hero"
-				[reviewId]="stat.coinsWasted.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.rerolls' | owTranslate"
-				[value]="stat.rerolls.value"
-				[heroIcon]="stat.rerolls.hero"
-				[reviewId]="stat.rerolls.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.freezes' | owTranslate"
-				[value]="stat.freezes.value"
-				[heroIcon]="stat.freezes.hero"
-				[reviewId]="stat.freezes.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.hero-power' | owTranslate"
-				[value]="stat.heroPowers.value"
-				[heroIcon]="stat.heroPowers.hero"
-				[reviewId]="stat.heroPowers.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.minions-bought' | owTranslate"
-				[value]="stat.minionsBought.value"
-				[heroIcon]="stat.minionsBought.hero"
-				[reviewId]="stat.minionsBought.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.minions-sold' | owTranslate"
-				[value]="stat.minionsSold.value"
-				[heroIcon]="stat.minionsSold.hero"
-				[reviewId]="stat.minionsSold.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-minions-killed' | owTranslate"
-				[value]="stat.minionsKilled.value"
-				[heroIcon]="stat.minionsKilled.hero"
-				[reviewId]="stat.minionsKilled.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.enemy-heroes-killed' | owTranslate"
-				[value]="stat.heroesKilled.value"
-				[heroIcon]="stat.heroesKilled.hero"
-				[reviewId]="stat.heroesKilled.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.battles-going-first' | owTranslate"
-				[value]="stat.percentageOfBattlesGoingFirst.value?.toFixed(1) + '%'"
-				[heroIcon]="stat.percentageOfBattlesGoingFirst.hero"
-				[reviewId]="stat.percentageOfBattlesGoingFirst.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.battle-luck' | owTranslate"
-				[value]="stat.battleLuck.value?.toFixed(1) + '%'"
-				[heroIcon]="stat.battleLuck.hero"
-				[reviewId]="stat.battleLuck.reviewId"
-			></stat-cell>
-			<stat-cell
-				[label]="'app.battlegrounds.personal-stats.records.rows.negative-battle-luck' | owTranslate"
-				[value]="stat.negativeBattleLuck.value?.toFixed(1) + '%'"
-				[heroIcon]="stat.negativeBattleLuck.hero"
-				[reviewId]="stat.negativeBattleLuck.reviewId"
-			></stat-cell>
-		</div>
+				<div class="stats-recap" scrollable>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-minions' | owTranslate"
+						[value]="value.stat.totalMinionsDamageDealt.value"
+						[heroIcon]="value.stat.totalMinionsDamageDealt.hero"
+						[reviewId]="value.stat.totalMinionsDamageDealt.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-taken-minions' | owTranslate"
+						[value]="value.stat.totalMinionsDamageTaken.value"
+						[heroIcon]="value.stat.totalMinionsDamageTaken.hero"
+						[reviewId]="value.stat.totalMinionsDamageTaken.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero' | owTranslate"
+						[tooltipText]="
+							'app.battlegrounds.personal-stats.records.rows.total-dmg-dealt-hero-tooltip' | owTranslate
+						"
+						[value]="value.stat.totalHeroDamageDealt.value"
+						[heroIcon]="value.stat.totalHeroDamageDealt.hero"
+						[reviewId]="value.stat.totalHeroDamageDealt.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero' | owTranslate"
+						[tooltipText]="
+							'app.battlegrounds.personal-stats.records.rows.max-dmg-dealt-hero-tooltip' | owTranslate
+						"
+						[value]="value.stat.maxSingleTurnHeroDamageDealt.value"
+						[heroIcon]="value.stat.maxSingleTurnHeroDamageDealt.hero"
+						[reviewId]="value.stat.maxSingleTurnHeroDamageDealt.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.win-streak' | owTranslate"
+						[value]="value.stat.winStreak.value"
+						[heroIcon]="value.stat.winStreak.hero"
+						[reviewId]="value.stat.winStreak.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.triples' | owTranslate"
+						[value]="value.stat.triples.value"
+						[heroIcon]="value.stat.triples.hero"
+						[reviewId]="value.stat.triples.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.board-stats' | owTranslate"
+						[value]="value.stat.maxBoardStats.value"
+						[heroIcon]="value.stat.maxBoardStats.hero"
+						[reviewId]="value.stat.maxBoardStats.reviewId"
+						tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
+						[value]="value.stat.coinsWasted.value"
+						[heroIcon]="value.stat.coinsWasted.hero"
+						[reviewId]="value.stat.coinsWasted.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.rerolls' | owTranslate"
+						[value]="value.stat.rerolls.value"
+						[heroIcon]="value.stat.rerolls.hero"
+						[reviewId]="value.stat.rerolls.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.freezes' | owTranslate"
+						[value]="value.stat.freezes.value"
+						[heroIcon]="value.stat.freezes.hero"
+						[reviewId]="value.stat.freezes.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.hero-power' | owTranslate"
+						[value]="value.stat.heroPowers.value"
+						[heroIcon]="value.stat.heroPowers.hero"
+						[reviewId]="value.stat.heroPowers.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.minions-bought' | owTranslate"
+						[value]="value.stat.minionsBought.value"
+						[heroIcon]="value.stat.minionsBought.hero"
+						[reviewId]="value.stat.minionsBought.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.minions-sold' | owTranslate"
+						[value]="value.stat.minionsSold.value"
+						[heroIcon]="value.stat.minionsSold.hero"
+						[reviewId]="value.stat.minionsSold.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.enemy-minions-killed' | owTranslate"
+						[value]="value.stat.minionsKilled.value"
+						[heroIcon]="value.stat.minionsKilled.hero"
+						[reviewId]="value.stat.minionsKilled.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.enemy-heroes-killed' | owTranslate"
+						[value]="value.stat.heroesKilled.value"
+						[heroIcon]="value.stat.heroesKilled.hero"
+						[reviewId]="value.stat.heroesKilled.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.battles-going-first' | owTranslate"
+						[value]="value.stat.percentageOfBattlesGoingFirst.value?.toFixed(1) + '%'"
+						[heroIcon]="value.stat.percentageOfBattlesGoingFirst.hero"
+						[reviewId]="value.stat.percentageOfBattlesGoingFirst.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.battle-luck' | owTranslate"
+						[value]="value.stat.battleLuck.value?.toFixed(1) + '%'"
+						[heroIcon]="value.stat.battleLuck.hero"
+						[reviewId]="value.stat.battleLuck.reviewId"
+					></stat-cell>
+					<stat-cell
+						[label]="'app.battlegrounds.personal-stats.records.rows.negative-battle-luck' | owTranslate"
+						[value]="value.stat.negativeBattleLuck.value?.toFixed(1) + '%'"
+						[heroIcon]="value.stat.negativeBattleLuck.hero"
+						[reviewId]="value.stat.negativeBattleLuck.reviewId"
+					></stat-cell>
+				</div>
+			</ng-container>
+		</with-loading>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -157,13 +162,11 @@ export class BattlegroundsPersonalStatsStatsComponent
 
 	ngAfterContentInit(): void {
 		this.value$ = this.store
-			.listen$(([main, nav]) => main.stats.bestBgsUserStats)
+			.listen$(([main, nav]) => main.stats.getBestBgsUserStats())
 			.pipe(
 				filter(([stats]) => !!stats?.length),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([stats]) => this.buildValue(stats)),
-				tap((stat) => cdLog('emitting stat in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
+				this.mapData(([stats]) => this.buildValue(stats)),
 			);
 	}
 

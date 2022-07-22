@@ -27,6 +27,7 @@ import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { sleep } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
+import { BgsBestUserStatsService } from '../bgs-best-user-stats.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { isBattlegrounds } from '../bgs-utils';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -138,6 +139,7 @@ export class BattlegroundsStoreService {
 		private readonly logsUploader: LogsUploaderService,
 		private readonly owUtils: OwUtilsService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly bgsUserStatsService: BgsBestUserStatsService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -345,11 +347,12 @@ export class BattlegroundsStoreService {
 			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
+				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
 				this.events.broadcast(
 					Events.START_BGS_RUN_STATS,
 					info.reviewId,
 					this.state.currentGame,
-					this.mainWindowState?.stats?.bestBgsUserStats,
+					bestBgsUserStats,
 					info.game,
 				);
 			}

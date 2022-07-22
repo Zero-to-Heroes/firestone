@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
-import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { StatsCategory } from '../../models/mainwindow/stats/stats-category';
@@ -18,7 +17,6 @@ export class StatsStateBuilderService {
 		matchStats: GameStats,
 		archetypesConfig: readonly ArchetypeConfig[],
 		archetypesStats: ArchetypeStats,
-		bgsBestUserStats: readonly BgsBestStat[],
 	) {
 		return StatsState.create({
 			categories: [
@@ -34,7 +32,6 @@ export class StatsStateBuilderService {
 			gameStats: matchStats,
 			archetypesConfig: archetypesConfig,
 			archetypesStats: archetypesStats,
-			bestBgsUserStats: bgsBestUserStats,
 			filters: {
 				xpGraphSeasonFilter: prefs.statsXpGraphSeasonFilter,
 			},
