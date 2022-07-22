@@ -9,4 +9,13 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+
+	::ng-deep replays-list-view {
+		replay-info .replay-info {
+			height: 60px;
+			.warband.warband bgs-board {
+				top: -3px;
+			}
+		}
+	}
 }
