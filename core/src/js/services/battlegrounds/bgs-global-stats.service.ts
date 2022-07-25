@@ -6,8 +6,10 @@ import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/b
 import { ApiRunner } from '../api-runner';
 
 // The light version doesn't have tribe filtering
-const BGS_STATS_RETRIEVE_URL =
-	'https://static.zerotoheroes.com/api/bgs/heroes/bgs-global-stats-%tribeSuffix%-%timeSuffix%.gz.json';
+// const BGS_STATS_RETRIEVE_URL =
+// 	'https://static.zerotoheroes.com/api/bgs/heroes/bgs-global-stats-%tribeSuffix%-%timeSuffix%.gz.json';
+// Current new process doesn't scale properly, so reverting to the old one for now (without time)
+const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/bgs-global-stats-%tribeSuffix%.gz.json';
 
 @Injectable()
 export class BgsGlobalStatsService {
