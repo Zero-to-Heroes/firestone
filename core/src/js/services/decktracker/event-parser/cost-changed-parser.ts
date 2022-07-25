@@ -17,7 +17,11 @@ export class CostChangedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const { zone, card } = deck.findCard(entityId);
+		const { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
+		if (!card) {
+			return currentState;
+		}
+
 		const updatedCard = card.update({
 			manaCost: newCost,
 			actualManaCost: newCost,
