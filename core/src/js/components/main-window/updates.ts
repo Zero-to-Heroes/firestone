@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.18',
+		version: '9.8.19',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -51,6 +51,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add an option to completely turn off all achievements system. WARNING: this option is ON by default, so if you want to use achievements please make sure to turn it off first.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'ui',
+								text: `The card images that are displayed in the deck tracker should now more accurately mirror what you see in the in-game deck builder, which should make cards more recognizable.`,
 							},
 						],
 					},
