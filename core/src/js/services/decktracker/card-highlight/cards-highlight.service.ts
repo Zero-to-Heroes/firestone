@@ -542,6 +542,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(spell, holy);
 			case CardIds.IronRootsTavernBrawl:
 				return and(or(inDeck, inHand), spell, nature);
+			case CardIds.MalygosTheSpellweaverCore:
+				return and(inDeck, spell);
 			case CardIds.KhadgarsScryingOrb:
 				return and(or(inDeck, inHand), spell);
 			case CardIds.KindlingFlameTavernBrawl:
