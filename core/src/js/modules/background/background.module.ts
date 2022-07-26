@@ -201,7 +201,10 @@ import { ConstructedDeckbuilderComponent } from '../../components/decktracker/ma
 import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/main/decktracker-deck-details.component';
 import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main/decktracker-deck-recap.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
-import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
+import {
+	DecktrackerDeckDragTemplateComponent,
+	DecktrackerDecksComponent,
+} from '../../components/decktracker/main/decktracker-decks.component';
 import { DecktrackerLadderStatsMatchupsComponent } from '../../components/decktracker/main/decktracker-ladder-stats-matchups.component';
 import { DecktrackerLadderStatsOverviewComponent } from '../../components/decktracker/main/decktracker-ladder-stats-overview.component';
 import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
@@ -724,6 +727,7 @@ const components = [
 
 		DecktrackerComponent,
 		DecktrackerDecksComponent,
+		DecktrackerDeckDragTemplateComponent,
 		DecktrackerDeckSummaryComponent,
 		DecktrackerDeckDetailsComponent,
 		ConstructedMetaDecksComponent,

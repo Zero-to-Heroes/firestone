@@ -6,6 +6,10 @@
 	display: flex;
 }
 
+// .drag-template {
+// 	position: absolute;
+// }
+
 .decktracker-decks {
 	display: flex;
 	flex-direction: column;
@@ -26,6 +30,42 @@
 			height: 200px;
 			margin-right: 13px;
 			margin-bottom: 13px;
+
+			&.valid-merging-target {
+				border: 2px solid var(--color-1);
+				opacity: 0.8;
+			}
+			&.invalid-merging-target {
+				opacity: 0.5;
+				// pointer-events: none;
+				::ng-deep decktracker-deck-summary {
+					.decktracker-deck-summary {
+						background: rgba(255, 255, 255, 0.08);
+					}
+					button {
+						display: none;
+					}
+				}
+			}
+			&.current-merging-target:not(.invalid-merging-target) {
+				opacity: 1;
+				::ng-deep decktracker-deck-summary {
+					button {
+						display: none;
+					}
+				}
+			}
+			&.merging-source {
+				opacity: 1;
+				::ng-deep decktracker-deck-summary {
+					.decktracker-deck-summary {
+						background: rgba(255, 255, 255, 0.08);
+					}
+					button {
+						display: none;
+					}
+				}
+			}
 		}
 	}
 }

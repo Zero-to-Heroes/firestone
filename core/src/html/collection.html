@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html style="background: transparent;">
+<html style="background: transparent">
 	<head>
 		<script type="text/javascript">
-			(function(e, t) {
+			(function (e, t) {
 				var n = e.amplitude || { _q: [], _iq: {} };
 				var r = t.createElement('script');
 				r.type = 'text/javascript';
@@ -10,7 +10,7 @@
 				r.crossOrigin = 'anonymous';
 				r.async = true;
 				r.src = 'https://cdn.amplitude.com/libs/amplitude-5.2.2-min.gz.js';
-				r.onload = function() {
+				r.onload = function () {
 					if (!e.amplitude.runQueuedFunctions) {
 						console.log('[Amplitude] Error: could not load SDK');
 					}
@@ -18,12 +18,12 @@
 				var i = t.getElementsByTagName('script')[0];
 				i.parentNode.insertBefore(r, i);
 				function s(e, t) {
-					e.prototype[t] = function() {
+					e.prototype[t] = function () {
 						this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
 						return this;
 					};
 				}
-				var o = function() {
+				var o = function () {
 					this._q = [];
 					return this;
 				};
@@ -32,7 +32,7 @@
 					s(o, a[u]);
 				}
 				n.Identify = o;
-				var c = function() {
+				var c = function () {
 					this._q = [];
 					return this;
 				};
@@ -66,7 +66,7 @@
 				];
 				function v(e) {
 					function t(t) {
-						e[t] = function() {
+						e[t] = function () {
 							e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
 						};
 					}
@@ -75,7 +75,7 @@
 					}
 				}
 				v(n);
-				n.getInstance = function(e) {
+				n.getInstance = function (e) {
 					e = (!e || e.length === 0 ? '$default_instance' : e).toLowerCase();
 					if (!n._iq.hasOwnProperty(e)) {
 						n._iq[e] = { _q: [] };
@@ -105,6 +105,24 @@
 		<style>
 			.card-tooltip .text {
 				margin-top: -10px !important;
+			}
+
+			.deck-drag-template {
+				background: #dfb3d3;
+				color: #1e0116;
+				width: 250px;
+				display: flex;
+				flex-direction: column;
+				height: fit-content;
+				padding: 10px;
+			}
+			.deck-drag-template .deck-name {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #39122e;
+				font-weight: bold;
+				margin-bottom: 10px;
 			}
 		</style>
 	</head>
