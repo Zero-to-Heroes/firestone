@@ -241,6 +241,7 @@ export class CollectionManager {
 	}
 
 	public buildPityTimers(packStats: readonly PackResult[]): readonly PityTimer[] {
+		console.debug('[collection-manager] buildPityTimers', packStats, new Error().stack);
 		if (!packStats?.length) {
 			return [];
 		}

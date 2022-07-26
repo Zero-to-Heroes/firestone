@@ -40,14 +40,16 @@ export class NewPackProcessor implements Processor {
 		console.log('[pack-history] handling new pack', newPack);
 		// Save the new pack info
 		const newPackStats: readonly PackResult[] = [newPack, ...(currentState.binder.packStats ?? [])];
+		console.debug('[pack-history] newPackStats', newPackStats);
 
 		const setToUpdate = currentState.binder.allSets.find((set) => set.id === event.setId);
 		if (!setToUpdate) {
-			console.log('could not find set, probably a bundle', event.setId, event.boosterId);
+			console.warn('[pack-history] could not find set, probably a bundle', event.setId, event.boosterId);
 		}
 		const pityTimer: PityTimer = this.collectionManager
 			.buildPityTimers(newPackStats.filter((stat) => stat.setId === event.setId))
 			.find((pityTimer) => pityTimer.setId === event.setId);
+		console.debug('[pack-history] pityTimer', pityTimer);
 		const updatedSet: Set = setToUpdate?.update({
 			pityTimer: pityTimer,
 		} as Set);
