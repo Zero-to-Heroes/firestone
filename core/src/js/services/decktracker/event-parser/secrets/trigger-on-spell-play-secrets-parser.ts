@@ -24,6 +24,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.NeverSurrender,
 		CardIds.OhMyYogg,
 		CardIds.DirtyTricks,
+		CardIds.StickySituation,
 	];
 
 	private secretWillTrigger: {
@@ -114,6 +115,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.CatTrick);
 			secretsWeCantRuleOut.push(CardIds.NetherwindPortal);
+			secretsWeCantRuleOut.push(CardIds.StickySituation);
 		}
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;

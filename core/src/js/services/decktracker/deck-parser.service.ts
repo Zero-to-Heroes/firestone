@@ -306,7 +306,7 @@ export class DeckParserService {
 							// normalize for Duels
 							// Still doesn't work for neutral heroes though
 							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))
-								?.dbfId,
+								?.dbfId ?? 7,
 							this.allCards,
 						),
 				  ]
@@ -361,6 +361,7 @@ export class DeckParserService {
 			ScenarioId.WIZARD_DUELS,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,
+			ScenarioId.WIZARD_DUELS___REVENDRETH,
 			ScenarioId.TAVERN_BRAWL_BRAWLISEUM,
 		];
 		return loggingSCenarios.includes(scenarioId);

@@ -77,7 +77,7 @@ export class DeckHandlerService {
 	public normalizeDeckstring(deckstring: string): string {
 		try {
 			const deck = decode(deckstring);
-			deck.heroes = deck.heroes?.map((heroDbfId) => normalizeDeckHeroDbfId(heroDbfId, this.allCards));
+			deck.heroes = deck.heroes?.map((heroDbfId) => normalizeDeckHeroDbfId(heroDbfId, this.allCards) ?? 7);
 			const newDeckstring = encode(deck);
 			return newDeckstring;
 		} catch (e) {
@@ -155,6 +155,8 @@ export class DeckHandlerService {
 				return 'SCH_199t29';
 			case Board.VOYAGE_TO_SUNKEN_CITY:
 				return 'SCH_199t30';
+			case Board.REVENDRETH:
+				return 'SCH_199t31';
 			default:
 				return cardId;
 		}

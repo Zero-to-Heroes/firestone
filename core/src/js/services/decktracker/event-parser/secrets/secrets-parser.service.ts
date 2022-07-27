@@ -11,6 +11,7 @@ import { TriggerOnHeroPowerSecretsParser } from './trigger-on-hero-power-secrets
 import { TriggerOnMinionPlaySecretsParser } from './trigger-on-minion-play-secrets-parser';
 import { TriggerOnNumCardDrawSecretsParser } from './trigger-on-num-card-draw-secrets-parser';
 import { TriggerOnNumCardPlaySecretsParser } from './trigger-on-num-card-play-secrets-parser';
+import { TriggerOnResourcesUsedSecretsParser } from './trigger-on-resources-used-secrets-parser';
 import { TriggerOnSpellPlaySecretsParser } from './trigger-on-spell-play-secrets-parser';
 import { TriggerOnTurnEndSecretsParser } from './trigger-on-turn-end-secrets-parser';
 import { TriggerOnTurnStartSecretsParser } from './trigger-on-turn-start-secrets-parser';
@@ -74,6 +75,7 @@ export class SecretsParserService {
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnTurnStartSecretsParser(this.helper),
 			new TriggerOnTurnEndSecretsParser(this.helper),
+			new TriggerOnResourcesUsedSecretsParser(this.helper),
 		];
 	}
 }

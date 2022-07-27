@@ -830,6 +830,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.RESOURCES_USED_THIS_TURN, gameEvent, {
 						resources: gameEvent.Value.AdditionalProps.Resources,
+						resourcesLeft: gameEvent.Value.AdditionalProps.ResourcesLeft,
 					}),
 				);
 				break;

@@ -13,6 +13,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
+import { HeroCard } from '../../models/decktracker/hero-card';
 import { GameEvent } from '../../models/game-event';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Events } from '../events.service';
@@ -433,8 +434,14 @@ export class GameStateService {
 				dormant: hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
+		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES);
+		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED);
+		const newHero: HeroCard = playerDeckWithZonesOrdered.hero.update({
+			manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
+		});
 		return playerDeckWithZonesOrdered.update({
 			board: newBoard,
+			hero: newHero,
 			cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
 			totalAttackOnBoard: this.attackOnBoardService.computeAttackOnBoard(deck, playerFromTracker),
 		} as DeckState);

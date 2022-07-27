@@ -492,7 +492,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				const deckDefinition: DeckDefinition = {
 					format: GameFormat.FT_WILD,
 					cards: cardDbfIds,
-					heroes: [heroDbfId],
+					heroes: [heroDbfId ?? 7],
 				};
 				const deckstring = encode(deckDefinition);
 				return deckstring;

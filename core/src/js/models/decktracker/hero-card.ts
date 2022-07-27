@@ -7,6 +7,7 @@ export class HeroCard {
 	readonly playerName: string;
 	readonly playerClass: string;
 	readonly maxHealth: number;
+	readonly manaLeft: number;
 
 	public static create(base: Partial<NonFunctionProperties<HeroCard>>): HeroCard {
 		return Object.assign(new HeroCard(), base);

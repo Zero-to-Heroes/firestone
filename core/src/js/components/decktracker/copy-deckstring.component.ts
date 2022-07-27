@@ -107,7 +107,7 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 	// console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
-		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass);
+		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass) ?? 7;
 		return result;
 	});
 	deckDefinition.cards = newCards;

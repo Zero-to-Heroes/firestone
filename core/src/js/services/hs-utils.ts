@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 // Don't specify anything by default, so that the "cache refresh" properly refreshes the data
 // (it is query-specific).
 // Only use a string in dev mode, otherwise rely on cache purge
-export const CARDS_VERSION = '';
+export const CARDS_VERSION = '20220727';
 
 export const classes = [
 	'demonhunter',
@@ -90,7 +90,9 @@ export const battlecryGlobalEffectCards = [
 	CardIds.SkulkingGeist,
 	CardIds.Snapdragon,
 	CardIds.SorcerersGambit_ArcanistDawngraspToken,
+	CardIds.TopiorTheShrubbagazzor,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
+	CardIds.TheStonewright,
 	CardIds.WildheartGuff,
 	CardIds.WyrmrestPurifier,
 ];
@@ -100,6 +102,7 @@ export const globalEffectCards = [
 	CardIds.CelestialAlignment,
 	CardIds.DeckOfChaos,
 	CardIds.DeckOfLunacy,
+	CardIds.DraconicMunitionTavernBrawl,
 	CardIds.TheFiresOfZinAzshari,
 	CardIds.Embiggen,
 	// CardIds.GrandTotemEysor, // We handle the effects triggered instead of the card played
@@ -228,6 +231,7 @@ export const publicCardGiftCreators = [
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.CorsairCache,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
+	CardIds.DispossessedSoul,
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
 	CardIds.DragonBreeder,
@@ -241,6 +245,7 @@ export const publicCardGiftCreators = [
 	CardIds.FirstFlame,
 	CardIds.FullBlownEvil,
 	CardIds.Guidance_YOP_024,
+	CardIds.IdentityTheft,
 	CardIds.JerryRigCarpenter,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
@@ -254,6 +259,7 @@ export const publicCardGiftCreators = [
 	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
 	CardIds.Peon_BAR_022,
+	CardIds.PlantedEvidence,
 	CardIds.QueenAzshara_TSC_641,
 	CardIds.HornOfAncients,
 	CardIds.RaidNegotiator,
@@ -272,6 +278,9 @@ export const publicCardGiftCreators = [
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
 	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
+	CardIds.SuspiciousAlchemist,
+	CardIds.SuspiciousPirate,
+	CardIds.SuspiciousUsher,
 	CardIds.TamsinRoame_BAR_918,
 	// For some reason the coin is flagged as created by the coin...
 	...COIN_IDS,
@@ -312,6 +321,8 @@ export const publicCardCreators = [
 	CardIds.CaptainsParrotLegacy,
 	CardIds.CaptainsParrotVanilla,
 	CardIds.CaptureColdtoothMine,
+	CardIds.CaptureColdtoothMine_MoreSupplies,
+	CardIds.CaptureColdtoothMine_MoreResources,
 	CardIds.CavernShinyfinder,
 	CardIds.CountessAshmore,
 	CardIds.Crystology,
@@ -319,6 +330,7 @@ export const publicCardCreators = [
 	CardIds.DeadRinger,
 	CardIds.DeepwaterEvoker,
 	CardIds.DivingGryphon,
+	CardIds.DoorOfShadows,
 	CardIds.DunBaldarBunker,
 	CardIds.ElementalAllies,
 	CardIds.ElementaryReaction, // falls in both cases
@@ -422,6 +434,7 @@ export const publicCardCreators = [
 	CardIds.VengefulSpirit_BAR_328,
 	CardIds.VitalitySurge,
 	CardIds.WarsongWrangler,
+	CardIds.WidowbloomSeedsman,
 	CardIds.WitchwoodPiper,
 	CardIds.WondrousWand,
 	CardIds.Wrathion_CFM_806,

@@ -10,6 +10,7 @@ import { EventParser } from '../event-parser';
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
 		CardIds.HiddenCache,
+		CardIds.Kidnap_REV_828,
 		CardIds.SnipeLegacy,
 		CardIds.SnipeVanilla,
 		CardIds.PotionOfPolymorph,
@@ -55,6 +56,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.MirrorEntity);
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityVanilla);
 			secretsWeCantRuleOut.push(CardIds.Ambush);
+			secretsWeCantRuleOut.push(CardIds.Kidnap_REV_828);
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;

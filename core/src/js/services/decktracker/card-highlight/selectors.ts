@@ -35,6 +35,10 @@ export const effectiveCostLess = (cost: number) => (handler: Handler): boolean =
 	return handler.deckCardProvider()?.getEffectiveManaCost() < cost;
 };
 
+export const effectiveCostLessThanRemainingMana = (handler: Handler, deckState: DeckState): boolean => {
+	return handler.deckCardProvider()?.getEffectiveManaCost() < deckState.hero.manaLeft;
+};
+
 export const effectiveCostMore = (cost: number) => (handler: Handler): boolean => {
 	return handler.deckCardProvider()?.getEffectiveManaCost() > cost;
 };

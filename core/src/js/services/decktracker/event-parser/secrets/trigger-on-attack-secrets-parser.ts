@@ -45,6 +45,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Bamboozle,
 		CardIds.ShadowClone,
 		CardIds.SuddenBetrayal,
+		CardIds.VengefulVisage,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -146,6 +147,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeCore);
 			secretsWeCantRuleOut.push(CardIds.NobleSacrificeVanilla);
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
+			secretsWeCantRuleOut.push(CardIds.VengefulVisage);
 		}
 		if (!isAttackerMinion) {
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken);
@@ -158,6 +160,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.JudgmentOfJustice);
 			secretsWeCantRuleOut.push(CardIds.SuddenBetrayal);
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
+			secretsWeCantRuleOut.push(CardIds.VengefulVisage);
 		}
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken);
@@ -192,6 +195,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.VaporizeVanilla);
 			secretsWeCantRuleOut.push(CardIds.ShadowClone);
 			secretsWeCantRuleOut.push(CardIds.SuddenBetrayal);
+			secretsWeCantRuleOut.push(CardIds.VengefulVisage);
 			if (isDefenderDivineShield) {
 				secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix_BOT_908);
 			}

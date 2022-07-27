@@ -292,6 +292,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.Ozumat_Tentacular;
 		case CardIds.LadyVashj_BG23_HERO_304:
 			return CardIds.LadyVashj_RelicsOfTheDeep;
+		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
+			return CardIds.HeistbaronTogwaggle_ThePerfectCrime;
 
 		case '':
 			return null; // new heroes
@@ -652,6 +654,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 407;
 		case CardIds.LadyVashj_BG23_HERO_304:
 			return 410;
+		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
+			return 425;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);
