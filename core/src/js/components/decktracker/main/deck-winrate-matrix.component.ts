@@ -25,7 +25,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	],
 	template: `
 		<div class="opponents-popularity">
-			<div class="title">Opponent class breakdown</div>
+			<div class="title"> [owTranslate]="'app.decktracker.matchup-info.opponents-popularity-header'" </div>
 			<pie-chart class="opponents-popularity-chart" [data]="pieChartData" [options]="pieChartOptions"></pie-chart>
 		</div>
 		<div class="deck-winrate-matrix">
@@ -75,7 +75,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 						(mousedown)="reset()"
 						[helpTooltip]="'app.decktracker.matchup-info.reset-button-tooltip' | owTranslate"
 					>
-						<span>{{ resetText }}</span>
+						<span>{{ [owTranslate]="'app.decktracker.matchup-info.reset-button-label'" }}</span>
 					</button>
 					<div
 						class="confirmation"
@@ -92,7 +92,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 						(onConfirm)="deleteDeck()"
 						[helpTooltip]="'app.decktracker.matchup-info.delete-tooltip' | owTranslate"
 					>
-						<span>{{ deleteText }}</span>
+						<span>{{ [owTranslate]="'app.decktracker.matchup-info.delete-button-label'" }}</span>
 					</button>
 				</div>
 			</div>
@@ -117,8 +117,6 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	pieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
 
-	resetText = 'Reset stats';
-	deleteText = 'Delete deck';
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
