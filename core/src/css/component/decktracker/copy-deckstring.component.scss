@@ -20,9 +20,10 @@
 	&:hover {
 		--icon-color: var(--color-1);
 	}
+	.message {
+		font-size: 13px;
+		margin-left: 10px;
+	}
 }
 
-.message {
-	font-size: 13px;
-	margin-left: 10px;
-}
+

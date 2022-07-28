@@ -101,7 +101,7 @@ import { Knob } from '../preference-slider.component';
 			<div class="reset-container">
 				<button
 					(mousedown)="reset()"
-					helpTooltip="'settings.decktracker.global.reset-button-tooltip' | owTranslate"
+					[helpTooltip]="'settings.decktracker.global.reset-button-tooltip' | owTranslate"
 				>
 					<span>{{ resetText }}</span>
 				</button>
