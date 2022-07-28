@@ -119,7 +119,7 @@ export class FullCardComponent {
 			card.playerClass !== 'Neutral'
 				? formatClass(card.playerClass, this.i18n)
 				: card.classes?.length
-				? card.classes.map((playerClass) => formatClass(card.playerClass, this.i18n)).join(', ')
+				? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
 				: formatClass('all', this.i18n);
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
@@ -377,7 +377,7 @@ export class FullCardComponent {
 			category: 'event',
 		},
 		{
-			regex: /.*HAPPY_NEW_YEAR_20.*/g,
+			regex: /.*HAPPY_NEW_YEAR.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.happy-new-year-20'),
 			category: 'event',
 		},
@@ -469,7 +469,7 @@ export class FullCardComponent {
 	}
 
 	private transformFlavor(flavor: string): string {
-		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '').replace(/<br>/g, ' ');
+		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '').replace(/<br>/g, ' ').replace(/[x]/g, '');
 		return result;
 	}
 }
