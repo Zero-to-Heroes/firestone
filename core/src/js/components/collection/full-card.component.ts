@@ -50,7 +50,7 @@ declare let amplitude;
 						<p class="value" [innerHTML]="flavor"></p>
 					</div>
 					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
-						<span class="sub-title" [owTranslate]="'app.collection.card-details.sounds-title'"></span>
+						<div class="sub-title" [owTranslate]="'app.collection.card-details.sounds-title'"></div>
 						<div class="audio-category" *ngFor="let category of audioCategories">
 							<span class="audio-category-title">{{ category.name }}</span>
 							<li class="sound" *ngFor="let sound of category.clips" (mousedown)="playSound(sound)">
