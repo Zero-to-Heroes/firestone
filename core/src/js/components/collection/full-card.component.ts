@@ -257,6 +257,11 @@ export class FullCardComponent {
 			category: 'emote',
 		},
 		{
+			regex: /.*WOW.*/g,
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.wow'),
+			category: 'emote',
+		},
+		{
 			regex: /.*CONCEDE.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.concede'),
 			category: 'emote',
@@ -267,32 +272,32 @@ export class FullCardComponent {
 			category: 'emote',
 		},
 		{
-			regex: /.*TIMER.*/g,
+			regex: /.*TIMER?.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.timer'),
 			category: 'emote',
 		},
 		{
-			regex: /.*THINK1.*/g,
+			regex: /.*THINK(?:ING_0)?1.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-1'),
 			category: 'emote',
 		},
 		{
-			regex: /.*THINK2.*/g,
+			regex: /.*THINK(?:ING_0)?2.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-2'),
 			category: 'emote',
 		},
 		{
-			regex: /.*THINK3.*/g,
+			regex: /.*THINK(?:ING_0)?3.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.think-3'),
 			category: 'emote',
 		},
 		{
-			regex: /.*LOW_CARDS.*/g,
+			regex: /.*LOW_?CARDS.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.low-cards'),
 			category: 'emote',
 		},
 		{
-			regex: /.*NO_CARDS.*/g,
+			regex: /.*NO_?CARDS.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.no-cards'),
 			category: 'emote',
 		},
@@ -327,7 +332,7 @@ export class FullCardComponent {
 			category: 'error',
 		},
 		{
-			regex: /.*ERROR_JUST_PLAYED.*/g,
+			regex: /.*ERROR_JUST_PLAYED.*|.*SUMMON_SICKNESS.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.error-just-played'),
 			category: 'error',
 		},
@@ -367,18 +372,23 @@ export class FullCardComponent {
 			category: 'error',
 		},
 		{
-			regex: /.*EVENT_LUNAR_NEW_YEAR.*/g,
-			value: this.i18n.translateString('app.collection.card-details.sounds.effect.lunar-new-year'),
-			category: 'event',
-		},
-		{
 			regex: /.*WINTERVEIL_GREETINGS.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.winterveil-greetings'),
 			category: 'event',
 		},
 		{
+			regex: /.*HAPPY_HOLIDAYS.*/g,
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.happy-holidays'),
+			category: 'event',
+		},
+		{
+			regex: /.*EVENT_LUNAR_NEW_YEAR.*|.*HAPPY_NEW_YEAR_LUNAR.*/g,
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.lunar-new-year'),
+			category: 'event',
+		},
+		{
 			regex: /.*HAPPY_NEW_YEAR.*/g,
-			value: this.i18n.translateString('app.collection.card-details.sounds.effect.happy-new-year-20'),
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.happy-new-year'),
 			category: 'event',
 		},
 		{
@@ -392,7 +402,7 @@ export class FullCardComponent {
 			category: 'event',
 		},
 		{
-			regex: /.*HALLOWS_END.*/g,
+			regex: /.*HALLOWS_END.*|.*HAPPY_HALLOWEEN.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.hallows-end'),
 			category: 'event',
 		},
@@ -400,6 +410,11 @@ export class FullCardComponent {
 			regex: /.*NOBLEGARDEN.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.noblegarden'),
 			category: 'event',
+		},
+		{
+			regex: /.*PICKED.*/g,
+			value: this.i18n.translateString('app.collection.card-details.sounds.effect.picked'),
+			category: 'other',
 		},
 	];
 
