@@ -432,7 +432,7 @@ const getTopDeck = (
 		buildNumberAtStart: deckStat.buildNumber,
 	};
 	const deckSummary: DuelsDeckSummary = {
-		deckName: 'tmp',
+		deckName: this.i18n.translateString('app.duels.deck-stat.default-deck-name-blank'),
 		runs: [run],
 		initialDeckList: deckStat.decklist ?? run.initialDeckList,
 		heroCardId: deckStat.heroCardId,
