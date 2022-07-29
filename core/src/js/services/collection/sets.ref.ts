@@ -88,6 +88,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'demon_hunter_initiate',
 		name: 'Demon Hunter Initiate',
 		launchDate: new Date('2020-04-02'),
+		isMiniSet: true,
 	},
 	{
 		id: 'yod',
@@ -154,6 +155,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'kara',
 		name: 'One Night in Karazhan',
 		launchDate: new Date('2018-08-11'),
+		isMiniSet: true,
 	},
 	{
 		id: 'og',
@@ -164,6 +166,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'loe',
 		name: 'League of Explorers',
 		launchDate: new Date('2015-11-12'),
+		isMiniSet: true,
 	},
 	{
 		id: 'tgt',
@@ -174,6 +177,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'brm',
 		name: 'Blackrock Mountain',
 		launchDate: new Date('2015-04-02'),
+		isMiniSet: true,
 	},
 	{
 		id: 'gvg',
@@ -184,6 +188,7 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'naxx',
 		name: 'Naxxramas',
 		launchDate: new Date('2014-07-22'),
+		isMiniSet: true,
 	},
 	{
 		id: 'core',
