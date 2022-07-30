@@ -29,10 +29,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
 					</div>
-					<span class="cards-collected" *ngIf="released" helpTooltip="Total non-golden cards collected">
+					<span class="cards-collected" *ngIf="released" helpTooltip=[owTranslate]="'app.collection.sets.total-non-golden-cards'">
 						{{ _cardSet.ownedLimitCollectibleCards }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
-					<span class="cards-collected premium" *ngIf="released" helpTooltip="Total golden cards collected">
+					<span class="cards-collected premium" *ngIf="released" helpTooltip=[owTranslate]="'app.collection.sets.total-golden-cards'">
 						{{ getOwnedLimitCollectibleCards() }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
