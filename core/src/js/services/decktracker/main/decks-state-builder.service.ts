@@ -9,6 +9,7 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
+import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
@@ -40,8 +41,10 @@ export class DecksStateBuilderService {
 		const decks: readonly DeckSummary[] = deckstrings.map((deckstring) =>
 			this.buildDeckSummary(
 				deckstring,
-				this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch),
+				statsByDeck[deckstring],
 				prefs,
+				filters,
+				patch,
 				statsByDeck[deckstring][0],
 			),
 		);
@@ -72,37 +75,50 @@ export class DecksStateBuilderService {
 		return [...decks, ...finalPersonalDecks];
 	}
 
-	private buildValidReplays(
+	public static buildValidReplays(
+		deckstring: string,
 		stats: readonly GameStat[],
-		filters: DeckFilters,
+		gameFormatFilter: StatGameFormatType,
+		gameModeFilter: StatGameModeType,
+		timeFilter: DeckTimeFilterType,
+		rankFilter: DeckRankFilterType,
 		prefs: Preferences,
 		patch: PatchInfo,
 	): readonly GameStat[] {
-		const replaysForDate = stats
+		const resetForDeck = (prefs?.desktopDeckStatsReset ?? {})[deckstring] ?? [];
+		const lastResetDate = resetForDeck[0] ?? 0;
+		const deleteForDeck = (prefs?.desktopDeckDeletes ?? {})[deckstring] ?? [];
+		const lastDeleteDate = deleteForDeck[0] ?? 0;
+
+		const statsWithReset = stats
+			.filter((stat) => stat.playerDecklist === deckstring)
+			.filter((stat) => !!stat.opponentClass)
+			.filter((stat) => stat.gameMode === gameModeFilter)
+			.filter((stat) => gameFormatFilter === 'all' || stat.gameFormat === gameFormatFilter)
+			.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
 			// We have to also filter the info here, as otherwise we need to do a full state reset
 			// after the user presses the delete button
-			.filter(
-				(stat) =>
-					!prefs?.desktopDeckDeletes ||
-					!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
-					prefs.desktopDeckDeletes[stat.playerDecklist][0] < stat.creationTimestamp,
-			)
-			.filter((stat) => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
-			.filter((stat) => stat.gameMode === filters.gameMode)
-			.filter((stat) => DecksStateBuilderService.isValidDate(stat, filters.time, patch));
+			.filter((stat) => stat.creationTimestamp > lastResetDate)
+			.filter((stat) => stat.creationTimestamp > lastDeleteDate);
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
 		// I think this doesn't work when you're mixing several formats together
 		const replaysForSeasons =
-			filters.time === 'season-start'
+			timeFilter === 'season-start'
 				? [
-						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'standard')),
-						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'wild')),
-						...this.replaysForSeason(replaysForDate.filter((stat) => stat.gameFormat === 'classic')),
+						...DecksStateBuilderService.replaysForSeason(
+							statsWithReset.filter((stat) => stat.gameFormat === 'standard'),
+						),
+						...DecksStateBuilderService.replaysForSeason(
+							statsWithReset.filter((stat) => stat.gameFormat === 'wild'),
+						),
+						...DecksStateBuilderService.replaysForSeason(
+							statsWithReset.filter((stat) => stat.gameFormat === 'classic'),
+						),
 				  ]
-				: replaysForDate;
+				: statsWithReset;
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const result = replaysForSeasons
-			.filter((stat) => this.isValidRank(stat, filters.rank))
+			.filter((stat) => DecksStateBuilderService.isValidRank(stat, rankFilter))
 			.filter((stat) => stat.playerDecklist && stat.playerDecklist !== 'undefined')
 			.filter(
 				(stat) => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
@@ -110,7 +126,7 @@ export class DecksStateBuilderService {
 		return result;
 	}
 
-	replaysForSeason(replaysForDate: GameStat[]): readonly GameStat[] {
+	private static replaysForSeason(replaysForDate: GameStat[]): readonly GameStat[] {
 		let indexOfFirstGame = replaysForDate.length;
 		for (let i = replaysForDate.length - 1; i >= 0; i--) {
 			if (replaysForDate[i]?.playerRank?.includes('5-')) {
@@ -151,7 +167,7 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private isValidRank(stat: GameStat, rankFilter: DeckRankFilterType): boolean {
+	private static isValidRank(stat: GameStat, rankFilter: DeckRankFilterType): boolean {
 		const legendRank =
 			stat.playerRank && stat.playerRank.indexOf('legend-') > -1
 				? parseInt(stat.playerRank.split('legend-')[1])
@@ -183,13 +199,19 @@ export class DecksStateBuilderService {
 		deckstring: string,
 		stats: readonly GameStat[],
 		prefs: Preferences,
+		filters: DeckFilters,
+		patch: PatchInfo,
 		sampleGame?: GameStat,
 	): DeckSummary {
-		const statsWithReset = stats.filter(
-			(stat) =>
-				!prefs?.desktopDeckStatsReset ||
-				!prefs.desktopDeckStatsReset[stat.playerDecklist]?.length ||
-				prefs.desktopDeckStatsReset[stat.playerDecklist][0] < stat.creationTimestamp,
+		const validStats: readonly GameStat[] = DecksStateBuilderService.buildValidReplays(
+			deckstring,
+			stats,
+			filters.gameFormat,
+			filters.gameMode,
+			filters.time,
+			filters.rank,
+			prefs,
+			patch,
 		);
 
 		const deckName =
@@ -208,14 +230,14 @@ export class DecksStateBuilderService {
 			stats.filter((stat) => stat.playerClass).length > 0
 				? stats.filter((stat) => stat.playerClass)[0].playerClass
 				: sampleGame?.playerClass;
-		const totalGames = statsWithReset.length;
-		const totalWins = statsWithReset.filter((stat) => stat.result === 'won').length;
-		const lastUsed = statsWithReset.filter((stat) => stat.creationTimestamp)?.length
-			? statsWithReset.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
+		const totalGames = validStats.length;
+		const totalWins = validStats.filter((stat) => stat.result === 'won').length;
+		const lastUsed = validStats.filter((stat) => stat.creationTimestamp)?.length
+			? validStats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 			: stats.filter((stat) => stat.creationTimestamp)?.length
 			? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 			: undefined;
-		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(statsWithReset);
+		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(validStats);
 		let decodedDeckName: string = null;
 		try {
 			decodedDeckName = decodeURIComponent(deckName);
@@ -234,7 +256,7 @@ export class DecksStateBuilderService {
 			hidden: prefs.desktopDeckHiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
 			format: this.buildFormat(deckstring),
-			replays: statsWithReset,
+			replays: validStats,
 		} as DeckSummary;
 	}
 

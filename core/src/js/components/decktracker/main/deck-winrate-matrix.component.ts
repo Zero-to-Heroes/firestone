@@ -165,7 +165,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		if (!this._deck) {
 			return;
 		}
-		const totalRow: MatchupStat = this.buildTotalRow(this._deck.matchupStats ?? []);
+		console.debug('[winrate-matrix] deck ', this._deck);
+		const totalRow: MatchupStat = buildTotalMatchupStats(this._deck.matchupStats ?? []);
 		this.matchups = [...(this._deck.matchupStats ?? []), totalRow];
 		this.pieChartData = this.buildPieChartData();
 		this.pieChartOptions = this.buildPieChartOptions();
@@ -197,16 +198,16 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 			};
 		});
 	}
-
-	private buildTotalRow(matchupStats: readonly MatchupStat[]): MatchupStat {
-		return {
-			opponentClass: 'Total',
-			totalGames: matchupStats.map((stat) => stat.totalGames).reduce((a, b) => a + b, 0),
-			totalGamesCoin: matchupStats.map((stat) => stat.totalGamesCoin).reduce((a, b) => a + b, 0),
-			totalGamesFirst: matchupStats.map((stat) => stat.totalGamesFirst).reduce((a, b) => a + b, 0),
-			totalWins: matchupStats.map((stat) => stat.totalWins).reduce((a, b) => a + b, 0),
-			totalWinsCoin: matchupStats.map((stat) => stat.totalWinsCoin).reduce((a, b) => a + b, 0),
-			totalWinsFirst: matchupStats.map((stat) => stat.totalWinsFirst).reduce((a, b) => a + b, 0),
-		};
-	}
 }
+
+export const buildTotalMatchupStats = (matchupStats: readonly MatchupStat[]): MatchupStat => {
+	return {
+		opponentClass: 'Total',
+		totalGames: matchupStats.map((stat) => stat.totalGames).reduce((a, b) => a + b, 0),
+		totalGamesCoin: matchupStats.map((stat) => stat.totalGamesCoin).reduce((a, b) => a + b, 0),
+		totalGamesFirst: matchupStats.map((stat) => stat.totalGamesFirst).reduce((a, b) => a + b, 0),
+		totalWins: matchupStats.map((stat) => stat.totalWins).reduce((a, b) => a + b, 0),
+		totalWinsCoin: matchupStats.map((stat) => stat.totalWinsCoin).reduce((a, b) => a + b, 0),
+		totalWinsFirst: matchupStats.map((stat) => stat.totalWinsFirst).reduce((a, b) => a + b, 0),
+	};
+};
