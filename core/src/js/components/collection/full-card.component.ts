@@ -93,6 +93,7 @@ export class FullCardComponent {
 			return;
 		}
 
+		console.debug('set card', selectedCard);
 		this.previousClips = this.audioClips || [];
 		this.audioCategories = this.buildAudio(selectedCard);
 		this.audioClips = this.audioCategories
