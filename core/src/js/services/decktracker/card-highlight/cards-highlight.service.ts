@@ -246,7 +246,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.BalindaStonehearth:
 				return and(inDeck, spell);
 			case CardIds.BandOfBeesTavernBrawl:
-				return and(or(inDeck, inHand), effectiveCostLess(3));
+				return and(or(inDeck, inHand), minion, effectiveCostLess(3));
 			case CardIds.BarakKodobane_BAR_551:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
 			case CardIds.BattleTotem_LOOTA_846:
