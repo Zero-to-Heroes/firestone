@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { capitalizeEachWord } from '../../services/utils';
+import { capitalizeEachWord, pickRandom } from '../../services/utils';
 
 declare let amplitude;
 
@@ -138,14 +138,29 @@ export class FullCardComponent {
 		private readonly sanitizer: DomSanitizer,
 	) {}
 
-	playSound(audioClip) {
+	playSound(audioClip: AudioClip) {
 		amplitude.getInstance().logEvent('sound', {
 			'card-id': this.card.id,
 		});
 		this.cancelPlayingSounds();
-		audioClip.audios.forEach((audio) => {
-			audio.play();
-		});
+
+		const audioGroup = audioClip.audioGroup;
+
+		const mainFiles = Object.values(audioGroup)
+			.flatMap((effect) => effect.mainSounds)
+			.filter((sound) => !!sound);
+		const randomSounds =
+			Object.values(audioGroup)
+				.filter((effect) => !!effect.randomSounds?.length)
+				.map((effect) => pickRandom(effect.randomSounds).sound)
+				.filter((sound) => sound) ?? [];
+		const allSoundsToPlay = [...mainFiles, ...randomSounds];
+		console.debug('will play', allSoundsToPlay, audioGroup);
+		audioClip.audios
+			.filter((audio) => allSoundsToPlay.includes((audio as any).key))
+			.forEach((audio) => {
+				audio.play();
+			});
 	}
 
 	closeWindow() {
@@ -154,37 +169,37 @@ export class FullCardComponent {
 
 	private buildAudio(inputCard: ReferenceCard | SetCard): readonly AudioClipCategory[] {
 		const card = this.allCards.getCard(inputCard.id);
-		if (!(card as ReferenceCard).audio) {
+		if (!(card as ReferenceCard).audio2) {
 			return [];
 		}
 
 		const result = [
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.basic'),
-				clips: this.buildAudioClips(card.audio, 'basic'),
+				clips: this.buildAudioClips(card.audio2, 'basic'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.spell'),
-				clips: this.buildAudioClips(card.audio, 'spell'),
+				clips: this.buildAudioClips(card.audio2, 'spell'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.emote'),
-				clips: this.buildAudioClips(card.audio, 'emote', 'emote'),
+				clips: this.buildAudioClips(card.audio2, 'emote', 'emote'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.event'),
-				clips: this.buildAudioClips(card.audio, 'emote', 'event'),
+				clips: this.buildAudioClips(card.audio2, 'emote', 'event'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.error'),
-				clips: this.buildAudioClips(card.audio, 'emote', 'error'),
+				clips: this.buildAudioClips(card.audio2, 'emote', 'error'),
 			},
 		];
 		const allMappedClips = result
 			.map((cat) => cat.clips)
 			.reduce((a, b) => a.concat(b), [])
 			.map((clip) => clip.originalKey);
-		const otherAudio = { ...card.audio };
+		const otherAudio = { ...card.audio2 };
 		allMappedClips.forEach((key) => delete otherAudio[key]);
 		const otherCategory = {
 			name: this.i18n.translateString('app.collection.card-details.sounds.category.other'),
@@ -194,7 +209,11 @@ export class FullCardComponent {
 		return [...result, otherCategory].filter((cat) => cat.clips.length > 0);
 	}
 
-	private buildAudioClips(audio, type: 'basic' | 'spell' | 'emote' | null, category?: string): readonly AudioClip[] {
+	private buildAudioClips(
+		audio: ReferenceCardAudio,
+		type: 'basic' | 'spell' | 'emote' | null,
+		category?: string,
+	): readonly AudioClip[] {
 		return Object.keys(audio)
 			.filter((key) =>
 				type !== null
@@ -205,13 +224,20 @@ export class FullCardComponent {
 			)
 			.filter((key) => !category || this.REGEXES.find((regex) => regex.regex.test(key))?.category === category)
 			.map((key) => {
-				const files = [...audio[key]];
+				const audioGroup = audio[key];
+				const mainFiles = Object.values(audioGroup).flatMap((effect) => effect.mainSounds);
+				const allRandomFiles =
+					Object.values(audioGroup)
+						.filter((effect) => !!effect.randomSounds?.length)
+						.flatMap((effect) => effect.randomSounds)
+						.map((sound) => sound.sound) ?? [];
+				const files = [...mainFiles, ...allRandomFiles];
 				const audioClip: AudioClip = {
 					name: this.getSoundName(key),
 					originalKey: key,
-					files: files,
+					audioGroup: audioGroup,
 					audios: files.map((file) =>
-						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}`),
+						this.createAudio(file, `https://static.zerotoheroes.com/hearthstone/audio/${file}`),
 					),
 				};
 				audioClip.audios.forEach((audio) => audio.load());
@@ -463,9 +489,10 @@ export class FullCardComponent {
 		});
 	}
 
-	private createAudio(src: string): any {
+	private createAudio(key: string, src: string): any {
 		const audio = new Audio();
 		audio.src = src;
+		(audio as any).key = key;
 		return audio;
 	}
 
@@ -483,7 +510,7 @@ interface AudioClipCategory {
 interface AudioClip {
 	name: string;
 	originalKey: string;
-	files: string[];
+	audioGroup: ReferenceCardAudio[0];
 	audios: HTMLAudioElement[];
 }
 
