@@ -277,6 +277,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.ClickClocker:
 				return and(inDeck, minion, mech);
+			case CardIds.ClockworkAssistant_GILA_907:
+			case CardIds.ClockworkAssistant_ONY_005ta11:
+			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
+			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5:
+				return and(inDeck, spell);
 			case CardIds.CoilCastingTavernBrawl:
 				return and(or(inDeck, inHand), naga);
 			case CardIds.ConchsCall:
