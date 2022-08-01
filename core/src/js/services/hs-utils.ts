@@ -10,7 +10,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 // Actually, it looks relying on the CF cache doesn't work too well for the cards (while it
 // works well in the browser, you sometimes get old data when getting it in the app). So the
 // string will be used in Firestone only
-export const CARDS_VERSION = '20220729';
+export const CARDS_VERSION = '20220801';
 
 export const classes = [
 	'demonhunter',
@@ -234,6 +234,7 @@ export const publicCardGiftCreators = [
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.CorsairCache,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
+	CardIds.DevouringSwarm,
 	CardIds.DispossessedSoul,
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
@@ -249,6 +250,7 @@ export const publicCardGiftCreators = [
 	CardIds.FullBlownEvil,
 	CardIds.Guidance_YOP_024,
 	CardIds.IdentityTheft,
+	CardIds.Jackpot,
 	CardIds.JerryRigCarpenter,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
@@ -275,6 +277,7 @@ export const publicCardGiftCreators = [
 	CardIds.Scrapsmith,
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
+	CardIds.SelectiveBreederCore,
 	CardIds.SirakessCultist,
 	CardIds.Sleetbreaker,
 	CardIds.SorcerersGambit,
