@@ -261,6 +261,10 @@ export class DeckState {
 		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
 	}
 
+	public hasLadyDarkvein() {
+		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
+	}
+
 	public hasGreySageParrot() {
 		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
 	}

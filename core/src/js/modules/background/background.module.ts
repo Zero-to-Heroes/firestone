@@ -349,6 +349,7 @@ import { PlayerFatigueWidgetWrapperComponent } from '../../components/overlays/c
 import { PlayerGalakrondWidgetWrapperComponent } from '../../components/overlays/counters/player-galakrond-widget-wrapper.component';
 import { PlayerHeroPowerDamageWidgetWrapperComponent } from '../../components/overlays/counters/player-hero-power-damage-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from '../../components/overlays/counters/player-jade-widget-wrapper.component';
+import { PlayerLadyDarkveinWidgetWrapperComponent } from '../../components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/counters/player-libram-widget-wrapper.component';
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
@@ -974,6 +975,7 @@ const components = [
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
+		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
 		PlayerCoralKeeperWidgetWrapperComponent,

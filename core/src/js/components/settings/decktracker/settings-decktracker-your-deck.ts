@@ -163,6 +163,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerLadyDarkveinCounter"
+					[label]="'settings.decktracker.your-deck.counters.lady-darkvein-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.lady-darkvein-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerGreySageParrotCounter"
 					[label]="'settings.decktracker.your-deck.counters.grey-sage-parrot-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip' | owTranslate"

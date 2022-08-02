@@ -24,6 +24,7 @@ import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damage-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
+import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -131,6 +132,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'ladyDarkvein':
+				return LadyDarkveinCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'greySageParrot':
 				return GreySageParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'multicaster':

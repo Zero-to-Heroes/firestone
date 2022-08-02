@@ -332,6 +332,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerLadyDarkveinCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerLadyDarkveinCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerGreySageParrotCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGreySageParrotCounterWidgetPosition: { left: number; top: number };
