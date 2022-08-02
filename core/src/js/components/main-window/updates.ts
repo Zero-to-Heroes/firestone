@@ -32,30 +32,34 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.20',
+		version: '9.8.24',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		IMPORTANT: In the future, decks you play with might be shared (anonymously) with the community if they perform well at a high rank. If you don't want others to find out about your secret decklists (I think that can especially be true for high-level Legend players), please turn off the new "Allow game sharing" option under Settings > General.
-			// 	`,
-			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'achievements',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Add an option to completely turn off all achievements system. WARNING: this option is ON by default, so if you want to use achievements please make sure to turn it off first.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					I hope you're all having fun with the new expansion! This release is a first update after the patch that fixes a few critical info leaks, and starts adding support for the new cards.
+				`,
+			},
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an info leak that would let you know what card your opponent picked after playing a "Suspicious" card.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an info leak when playing Theotar, the Mad Duke.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -65,11 +69,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
+								text: `Add a widget for Lady Darkvein that tells you what was the last Shadow spell you played.`,
+							},
+							{
+								type: 'feature',
 								text: `Add card highlight for Clockwork Assistant.`,
 							},
 							{
 								type: 'feature',
+								text: `Add Card Oracle for Suspicious Alchemist / Pirate / Usher.`,
+							},
+							{
+								type: 'feature',
 								text: `Cards created by Devouring Swarm, Selective Breeder and Jackpot now show a gift icon in hand.`,
+							},
+							{
+								type: 'feature',
+								text: `Cards added to your deck by Tome Tampering now have their cost set to 1.`,
 							},
 							{
 								type: 'bug',
