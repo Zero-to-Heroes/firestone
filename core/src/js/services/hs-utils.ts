@@ -10,7 +10,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 // Actually, it looks relying on the CF cache doesn't work too well for the cards (while it
 // works well in the browser, you sometimes get old data when getting it in the app). So the
 // string will be used in Firestone only
-export const CARDS_VERSION = '20220801-2';
+export const CARDS_VERSION = '';
 
 export const classes = [
 	'demonhunter',
