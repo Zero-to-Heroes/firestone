@@ -56,7 +56,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// 	deck,
 		// );
 		// Because of Tome Tampering
-		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
+		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
 		card =
 			card ??
 			DeckCard.create({
