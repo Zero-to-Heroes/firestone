@@ -98,8 +98,21 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
+		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
+		// moved to hand (e.g. Suspicious Pirate)
+		const newCardId = (isCardInfoPublic ? cardId : null) ?? cardWithDefault.cardId;
+		const cardWithKnownInfo =
+			newCardId === cardWithDefault.cardId
+				? cardWithDefault
+				: cardWithDefault.update({
+						cardId: newCardId,
+						cardName: this.allCards.getCard(newCardId).name,
+						manaCost: this.allCards.getCard(newCardId).cost,
+						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
+				  });
 		console.debug(
 			'[receive-card-in-hand] cardWithDefault',
+			cardWithKnownInfo,
 			cardWithDefault,
 			creatorCardId,
 			otherCard,
@@ -108,14 +121,14 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
-				? cardWithDefault.update({
+				? cardWithKnownInfo.update({
 						buffingEntityCardIds: [
 							...(cardWithDefault.buffingEntityCardIds || []),
 							buffingEntityCardId,
 						] as readonly string[],
-						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
+						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
-				: cardWithDefault;
+				: cardWithKnownInfo;
 		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
