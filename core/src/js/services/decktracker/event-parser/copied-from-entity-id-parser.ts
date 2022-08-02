@@ -48,10 +48,22 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// we would get some info when then card leaves the hand (e.g. being traded). Working around all of this is probably
 		// way too much work for just that single card
 		const obfuscatedCardId =
+			// Some manual patches
+			// Adding the info directly to the forcedHiddenCardCreators would prevent the card to be flagged when WE play the Suspicious
+			// cards
+			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
 			forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
 			forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)
 				? copiedCard.cardId
 				: updatedCardId;
+		console.debug(
+			'[copied-from-entity] obfuscatedCardId',
+			obfuscatedCardId,
+			isPlayer,
+			newCopy?.creatorCardId,
+			newCopy,
+			copiedCard,
+		);
 		const updatedCopiedCard = copiedCard.update({
 			cardId: obfuscatedCardId,
 			cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardId),
