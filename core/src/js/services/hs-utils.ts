@@ -332,6 +332,7 @@ export const publicCardCreators = [
 	CardIds.CaptureColdtoothMine_MoreSupplies,
 	CardIds.CaptureColdtoothMine_MoreResources,
 	CardIds.CavernShinyfinder,
+	CardIds.ConquerorsBanner,
 	CardIds.CountessAshmore,
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
