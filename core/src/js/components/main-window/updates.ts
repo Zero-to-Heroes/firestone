@@ -32,13 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.24',
+		version: '9.8.25',
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `
-					I hope you're all having fun with the new expansion! This release is a first update after the patch that fixes a few critical info leaks, and starts adding support for the new cards.
+					I hope you're all having fun with the new expansion! All the new cards should now be properly supported - and if not, don't hesitate to open a bug report with the icon at the top right of the app's main window :)
 				`,
 			},
 			{
@@ -55,6 +55,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an info leak when playing Theotar, the Mad Duke.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an info leak when playing Identity Theft.`,
 							},
 						],
 					},
@@ -73,11 +77,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Add a counter to keep track of dead Volatile Skeletons.`,
+							},
+							{
+								type: 'feature',
 								text: `Add card highlight for Clockwork Assistant.`,
 							},
 							{
 								type: 'feature',
-								text: `Add Card Oracle for Suspicious Alchemist / Pirate / Usher.`,
+								text: `Add Card Oracle for Suspicious Alchemist / Pirate / Usher, Conqueror's Banner and The Harvester of Envy.`,
 							},
 							{
 								type: 'feature',
@@ -86,6 +94,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Cards added to your deck by Tome Tampering now have their cost set to 1.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Location cards would not be properly handled on the board.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Double Cross would not be properly grayed out after the Coin had been played on the same turn.`,
 							},
 							{
 								type: 'bug',
