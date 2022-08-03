@@ -29,6 +29,7 @@ export type CounterType =
 	| 'multicaster'
 	| 'si7Counter'
 	| 'elwynnBoar'
+	| 'volatileSkeleton'
 	| 'coralKeeper'
 	| 'bgsPogo'
 	| 'bgsSouthsea'

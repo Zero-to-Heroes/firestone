@@ -41,6 +41,8 @@ export class MinionDiedParser implements EventParser {
 				board: newBoard,
 				otherZone: newOther,
 				elwynnBoarsDeadThisMatch: deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.ElwynnBoar ? 1 : 0),
+				volatileSkeletonsDeadThisMatch:
+					deck.volatileSkeletonsDeadThisMatch + (cardId === CardIds.VolatileSkeleton ? 1 : 0),
 			} as DeckState);
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

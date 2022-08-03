@@ -30,6 +30,7 @@ import { MulticasterCounterDefinition } from './definitions/multicaster-counter'
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
@@ -128,6 +129,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return LibramCounterDefinition.create(gameState, side, this.i18n);
 			case 'elwynnBoar':
 				return ElwynnBoarCounterDefinition.create(gameState, side, this.i18n);
+			case 'volatileSkeleton':
+				return VolatileSkeletonCounterDefinition.create(gameState, side, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':

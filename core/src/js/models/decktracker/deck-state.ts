@@ -79,6 +79,7 @@ export class DeckState {
 	readonly elementalsPlayedThisTurn: number = 0;
 	readonly elementalsPlayedLastTurn: number = 0;
 	readonly elwynnBoarsDeadThisMatch: number = 0;
+	readonly volatileSkeletonsDeadThisMatch: number = 0;
 	readonly heroPowerDamageThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
@@ -251,6 +252,25 @@ export class DeckState {
 		return this.getAllCardsInDeck()
 			.filter((card) => card.cardId)
 			.some((card) => card.cardId === CardIds.ElwynnBoar);
+	}
+
+	public containsVolatileSkeletonCards(): boolean {
+		if (this.volatileSkeletonsDeadThisMatch > 0) {
+			return true;
+		}
+
+		return this.getAllCardsInDeck()
+			.filter((card) => card.cardId)
+			.some((card) =>
+				[
+					CardIds.VolatileSkeleton,
+					CardIds.KelthuzadTheInevitable,
+					CardIds.ColdCase,
+					CardIds.Deathborne,
+					CardIds.NightcloakSanctum,
+					CardIds.BrittleBonesTavernBrawl,
+				].includes(card.cardId as CardIds),
+			);
 	}
 
 	public hasBolner() {

@@ -148,6 +148,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.elwynn-boar-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerVolatileSkeletonCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.volatile-skeleton-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.volatile-skeleton-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerHeroPowerDamageCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.hero-power-damage-tooltip' | owTranslate"
