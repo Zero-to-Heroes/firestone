@@ -53,7 +53,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
-		const isOnBoard = refCard && refCard.type === 'Minion';
+		const isOnBoard = refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
