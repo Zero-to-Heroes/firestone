@@ -1,8 +1,7 @@
 import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { DuelsTopDecksDustFilterType, DuelsUnlocksFilterType } from '@models/duels/duels-types';
-import { AdventuresInfo } from '@models/memory/memory-duels';
+import { DuelsTopDecksDustFilterType } from '@models/duels/duels-types';
 import { DuelsGameModeFilterType } from '../../models/duels/duels-game-mode-filter.type';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import { DuelsHeroFilterType } from '../../models/duels/duels-hero-filter.type';
@@ -465,9 +464,6 @@ export const topDeckApplyFilters = (
 	timeFilter: DuelsTimeFilterType,
 	dustFilter: DuelsTopDecksDustFilterType,
 	patch: PatchInfo,
-	adventuresInfo: AdventuresInfo,
-	lockFilter: DuelsUnlocksFilterType,
-	allCards: CardsFacadeService,
 ): DuelsGroupedDecks => {
 	return {
 		...grouped,
@@ -477,33 +473,8 @@ export const topDeckApplyFilters = (
 			.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
 			.filter((deck) => topDeckSigTreasureFilter(deck, sigTreasureFilter))
 			.filter((deck) => topDeckTimeFilter(deck, timeFilter, patch))
-			.filter((deck) => topDeckDustFilter(deck, dustFilter))
-			.filter((deck) => topDeckLockFilter(deck, adventuresInfo, lockFilter, allCards)),
+			.filter((deck) => topDeckDustFilter(deck, dustFilter)),
 	};
-};
-
-const topDeckLockFilter = (
-	deck: DuelsDeckStat,
-	adventuresInfo: AdventuresInfo,
-	filter: DuelsUnlocksFilterType,
-	allCards: CardsFacadeService,
-): boolean => {
-	if (!filter || filter === 'all') {
-		return true;
-	}
-	if (!adventuresInfo?.HeroPowersInfo?.length || !adventuresInfo?.LoadoutTreasuresInfo?.length) {
-		return true;
-	}
-	const isInHeroPower =
-		filter === 'reveal-locked-hero-powers' ||
-		adventuresInfo.HeroPowersInfo.filter((info) => info.Unlocked)
-			.map((info) => allCards.getCardFromDbfId(info.CardDbfId).id)
-			.includes(deck.heroPowerCardId);
-	const isInSigTreasure = adventuresInfo.LoadoutTreasuresInfo.filter((info) => info.Unlocked)
-		.map((info) => allCards.getCardFromDbfId(info.CardDbfId).id)
-		.includes(deck.signatureTreasureCardId);
-	const isIn = isInHeroPower && isInSigTreasure;
-	return isIn;
 };
 
 const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {

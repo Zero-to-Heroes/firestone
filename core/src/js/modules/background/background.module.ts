@@ -27,7 +27,6 @@ import { DuelsDeckbuilderHeroPowerComponent } from '@components/duels/desktop/de
 import { DuelsDeckbuilderHeroComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero.component';
 import { DuelsDeckbuilderSignatureTreasureComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-signature-treasure.component';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder.component';
-import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { HeroPowerOverlayComponent } from '@components/overlays/board/hero-power-overlay.component';
 import { OpponentAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
 import { PlayerAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
@@ -863,7 +862,6 @@ const components = [
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
 		DuelsDustFilterDropdownComponent,
-		DuelsLockedRequirementsFilterDropdownComponent,
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,
 		DuelsHeroPowerFilterDropdownComponent,
