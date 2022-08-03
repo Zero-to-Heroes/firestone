@@ -129,9 +129,6 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 						'last-patch',
 						'all',
 						patch,
-						null,
-						'all',
-						this.allCards,
 					),
 				);
 				const selectedTopDecks: readonly DuelsDeckWidgetDeck[] = this.buildTopDecks(
