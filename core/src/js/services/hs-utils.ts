@@ -195,6 +195,7 @@ export const forcedHiddenCardCreators = [
 	CardIds.CoilfangConstrictor,
 	CardIds.TheotarTheMadDuke,
 	CardIds.IdentityTheft,
+	CardIds.GhastlyGravedigger,
 ];
 
 export const forceHideInfoWhenDrawnInfluencers = [
