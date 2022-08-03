@@ -118,6 +118,9 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
+	CardIds.RelicOfDimensions,
+	CardIds.RelicOfExtinction,
+	CardIds.RelicOfPhantasms,
 	CardIds.RenounceDarkness,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest_SCH_609,
@@ -693,7 +696,7 @@ export const boosterIdToBoosterName = (boosterId: BoosterType, i18n: Localizatio
 		case BoosterType.FIRST_PURCHASE_OLD:
 			normalizedBoosterId = BoosterType.OLD_GODS;
 	}
-	return i18n.translateString(`global.pack.${BoosterType[normalizedBoosterId].toLowerCase().replace(/_/g, '-')}`);
+	return i18n.translateString(`global.pack.${BoosterType[normalizedBoosterId]?.toLowerCase()?.replace(/_/g, '-')}`);
 };
 
 export const getPackDustValue = (pack: PackResult): number => {
