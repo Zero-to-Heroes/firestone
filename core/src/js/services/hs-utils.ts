@@ -194,6 +194,7 @@ export const forcedHiddenCardCreators = [
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
 	CardIds.CoilfangConstrictor,
 	CardIds.TheotarTheMadDuke,
+	CardIds.IdentityTheft,
 ];
 
 export const forceHideInfoWhenDrawnInfluencers = [
