@@ -6,6 +6,7 @@ import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
+import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
@@ -15,7 +16,7 @@ import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { classes } from '../../hs-utils';
-import { groupByFunction } from '../../utils';
+import { groupByFunction, sumOnArray } from '../../utils';
 
 @Injectable()
 export class DecksStateBuilderService {
@@ -69,10 +70,80 @@ export class DecksStateBuilderService {
 					),
 					replays: [],
 					totalGames: 0,
+					totalWins: 0,
 					hidden: prefs.desktopDeckHiddenDeckCodes.includes(deck.deckstring),
 				} as DeckSummary;
 			});
-		return [...decks, ...finalPersonalDecks];
+
+		const versionedDecks = this.consolidateDeckVersions(
+			decks,
+			prefs.constructedDeckVersions,
+			prefs.desktopDeckHiddenDeckCodes,
+		);
+		console.debug('[deck] versionedDeck', versionedDecks, decks);
+		return [...versionedDecks, ...finalPersonalDecks];
+	}
+
+	private consolidateDeckVersions(
+		decks: readonly DeckSummary[],
+		constructedDeckVersions: readonly ConstructedDeckVersions[],
+		desktopDeckHiddenDeckCodes: readonly string[],
+	): readonly DeckSummary[] {
+		const groupedByVersion = groupByFunction(
+			(deck: DeckSummary) =>
+				constructedDeckVersions.find((links) =>
+					links.versions.map((v) => v.deckstring).includes(deck.deckstring),
+				)?.versions[0].deckstring ?? deck.deckstring,
+		)(decks);
+		console.debug('[deck], groupedByVersion', groupedByVersion, constructedDeckVersions);
+		return Object.values(groupedByVersion).map((versions) =>
+			this.groupDeckVersions(versions, desktopDeckHiddenDeckCodes),
+		);
+	}
+
+	private groupDeckVersions(
+		versions: readonly DeckSummary[],
+		desktopDeckHiddenDeckCodes: readonly string[],
+	): DeckSummary {
+		// TODO: find a way to order versions, and take the one the user decides is the latest one
+		const replays = versions
+			.flatMap((v) => v.replays)
+			.filter((r) => !!r)
+			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
+		console.debug('[deck] replays', replays, versions);
+		if (!replays?.length) {
+			return versions[0];
+		}
+
+		const lastReplay = replays[replays.length - 1];
+		const totalGames = sumOnArray(versions, (deck) => deck.totalGames);
+		const totalWins = sumOnArray(versions, (deck) => deck.totalWins);
+		const matchupStats = this.buildMatchupStats(replays);
+		let decodedDeckName: string = null;
+		try {
+			decodedDeckName = decodeURIComponent(lastReplay.playerDeckName);
+		} catch (e) {
+			console.error('Could not decode deck name', lastReplay.playerDeckName, e);
+		}
+		return {
+			class: lastReplay.playerClass,
+			deckArchetype: lastReplay.playerArchetypeId,
+			deckName: decodedDeckName,
+			deckstring: lastReplay.playerDecklist,
+			lastUsedTimestamp: lastReplay.creationTimestamp,
+			skin: lastReplay.playerCardId,
+			totalGames: totalGames,
+			totalWins: totalWins,
+			winRatePercentage: totalGames > 0 ? (100.0 * totalWins) / totalGames : null,
+			hidden: versions.some((v) => desktopDeckHiddenDeckCodes.includes(v.deckstring)),
+			matchupStats: matchupStats,
+			format: versions.some((v) => v.format === 'classic')
+				? 'classic'
+				: versions.some((v) => v.format === 'wild')
+				? 'wild'
+				: 'standard',
+			replays: replays,
+		} as DeckSummary;
 	}
 
 	public static buildValidReplays(
@@ -252,6 +323,7 @@ export class DecksStateBuilderService {
 			lastUsedTimestamp: lastUsed,
 			skin: deckSkin,
 			totalGames: totalGames,
+			totalWins: totalWins,
 			winRatePercentage: totalGames > 0 ? (100.0 * totalWins) / totalGames : null,
 			hidden: prefs.desktopDeckHiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,

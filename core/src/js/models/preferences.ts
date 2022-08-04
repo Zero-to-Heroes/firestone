@@ -28,6 +28,7 @@ import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { DeckSummary } from './mainwindow/decktracker/deck-summary';
+import { ConstructedDeckVersions } from './mainwindow/decktracker/decktracker-state';
 import { ConstructedStatsTab } from './mainwindow/decktracker/decktracker-view.type';
 import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
@@ -139,6 +140,7 @@ export class Preferences {
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 	readonly constructedPersonalAdditionalDecks: readonly DeckSummary[] = [];
+	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
 	readonly constructedDecksSearchString: string;
 	readonly constructedMetaDecksFormatFilter: FormatForDeckData = 'standard';

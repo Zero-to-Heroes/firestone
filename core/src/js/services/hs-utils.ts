@@ -253,6 +253,7 @@ export const publicCardGiftCreators = [
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.FirstFlame,
+	CardIds.FrozenTouch,
 	CardIds.FullBlownEvil,
 	CardIds.Guidance_YOP_024,
 	CardIds.TheHarvesterOfEnvy,

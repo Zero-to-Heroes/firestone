@@ -9,6 +9,7 @@ export interface DeckSummary {
 	readonly class: string;
 	readonly skin: string;
 	readonly totalGames: number;
+	readonly totalWins: number;
 	readonly winRatePercentage: number;
 	readonly lastUsedTimestamp: number;
 	readonly matchupStats: readonly MatchupStat[];

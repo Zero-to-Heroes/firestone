@@ -121,6 +121,7 @@ import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/construc
 import { ConstructedDeckbuilderImportDeckEvent } from './events/decktracker/constructed-deckbuilder-import-deck-event';
 import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
 import { ConstructedMetaDecksLoadedEvent } from './events/decktracker/constructed-meta-decks-loaded-event';
+import { ConstructedNewDeckVersionEvent } from './events/decktracker/constructed-new-deck-version-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
@@ -262,6 +263,7 @@ import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/
 import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
 import { ConstructedMetaDecksLoadedProcessor } from './processors/decktracker/constructed-meta-decks-loaded-processor';
+import { ConstructedNewDeckVersionProcessor } from './processors/decktracker/constructed-new-deck-version-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
 import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
@@ -767,6 +769,9 @@ export class MainWindowStoreService {
 
 			ConstructedMetaDecksLoadedEvent.eventName(),
 			new ConstructedMetaDecksLoadedProcessor(),
+
+			ConstructedNewDeckVersionEvent.eventName(),
+			new ConstructedNewDeckVersionProcessor(this.prefs, this.decksStateBuilder),
 
 			// Battlegrounds
 			SelectBattlegroundsCategoryEvent.eventName(),
