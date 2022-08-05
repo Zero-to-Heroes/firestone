@@ -168,10 +168,6 @@ body {
 		.text {
 			display: flex;
 			flex-direction: column;
-
-			.dust-amount:before {
-				content: '+';
-			}
 		}
 	}
 
