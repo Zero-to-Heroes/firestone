@@ -219,9 +219,7 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.STANDARD_WARLOCK,
-	BoosterType.STANDARD_BUNDLE,
-	BoosterType.GOLDEN_STANDARD_BUNDLE,
-	BoosterType.WILD_PACK,
+	BoosterType.GOLDEN_STANDARD_BUNDLE
 ];
 
 interface InternalPackGroup {
