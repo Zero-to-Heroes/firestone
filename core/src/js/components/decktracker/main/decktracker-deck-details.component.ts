@@ -54,7 +54,11 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 			)
 			.pipe(
 				this.mapData(([decks, selectedDeckstring]) =>
-					decks.find((deck) => deck.deckstring === selectedDeckstring),
+					decks.find(
+						(deck) =>
+							deck.deckstring === selectedDeckstring ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
+					),
 				),
 			);
 		this.replays$ = this.deck$.pipe(this.mapData((deck) => deck?.replays ?? []));

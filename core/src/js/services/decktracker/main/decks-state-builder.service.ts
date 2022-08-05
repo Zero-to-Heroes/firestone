@@ -49,6 +49,7 @@ export class DecksStateBuilderService {
 				statsByDeck[deckstring][0],
 			),
 		);
+		console.debug('[deck] decks after deckstring maps', decks);
 
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
 		const finalPersonalDecks = personalDecks
@@ -61,13 +62,7 @@ export class DecksStateBuilderService {
 				return {
 					...deck,
 					skin: this.allCards.getCardFromDbfId(deckDefinition.heroes[0]).id,
-					matchupStats: classes.map(
-						(oppClass) =>
-							({
-								opponentClass: oppClass,
-								totalGames: 0,
-							} as MatchupStat),
-					),
+					matchupStats: buildDefaultMatchupStats(),
 					replays: [],
 					totalGames: 0,
 					totalWins: 0,
@@ -112,7 +107,10 @@ export class DecksStateBuilderService {
 			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 		console.debug('[deck] replays', replays, versions);
 		if (!replays?.length) {
-			return versions[0];
+			return {
+				...versions[0],
+				allVersions: versions,
+			};
 		}
 
 		const lastReplay = replays[replays.length - 1];
@@ -143,6 +141,7 @@ export class DecksStateBuilderService {
 				? 'wild'
 				: 'standard',
 			replays: replays,
+			allVersions: versions,
 		} as DeckSummary;
 	}
 
@@ -284,6 +283,13 @@ export class DecksStateBuilderService {
 			prefs,
 			patch,
 		);
+		console.debug(
+			'[deck] built valid replays',
+			validStats.length && validStats[0].playerDeckName,
+			prefs,
+			filters,
+			validStats,
+		);
 
 		const deckName =
 			stats.filter((stat) => stat.playerDeckName).length > 0
@@ -362,3 +368,13 @@ export class DecksStateBuilderService {
 		});
 	}
 }
+
+export const buildDefaultMatchupStats = () => {
+	return classes.map(
+		(oppClass) =>
+			({
+				opponentClass: oppClass,
+				totalGames: 0,
+			} as MatchupStat),
+	);
+};

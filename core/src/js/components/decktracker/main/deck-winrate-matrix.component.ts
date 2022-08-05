@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-state-builder.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
@@ -162,12 +163,9 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._deck) {
-			return;
-		}
 		console.debug('[winrate-matrix] deck ', this._deck);
-		const totalRow: MatchupStat = buildTotalMatchupStats(this._deck.matchupStats ?? []);
-		this.matchups = [...(this._deck.matchupStats ?? []), totalRow];
+		const totalRow: MatchupStat = buildTotalMatchupStats(this._deck?.matchupStats ?? []);
+		this.matchups = [...(this._deck?.matchupStats ?? buildDefaultMatchupStats()), totalRow];
 		this.pieChartData = this.buildPieChartData();
 		this.pieChartOptions = this.buildPieChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {

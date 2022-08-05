@@ -18,4 +18,5 @@ export interface DeckSummary {
 	readonly format: StatGameFormatType;
 	readonly replays: readonly GameStat[];
 	readonly isPersonalDeck?: boolean;
+	readonly allVersions: readonly DeckSummary[];
 }
