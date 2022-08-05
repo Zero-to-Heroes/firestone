@@ -13,7 +13,9 @@
 		z-index: 1;
 	}
 
-	current-session-widget-wrapper {
+	current-session-widget-wrapper,
+	mercs-player-team-widget-wrapper,
+	mercs-opponent-team-widget-wrapper {
 		z-index: 2;
 	}
 }

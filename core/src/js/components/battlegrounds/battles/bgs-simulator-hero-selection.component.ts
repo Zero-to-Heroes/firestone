@@ -240,6 +240,7 @@ export class BgsSimulatorHeroSelectionComponent
 					.replace(/<i>/g, '')
 					.replace(/<\/i>/g, '')
 					.replace(/<br>/g, '')
+					.replace(/\$/g, '')
 					.replace(/Passive\. /g, '')
 					.replace(/Passive /g, '')
 					.replace(/Passive/g, '')
