@@ -22,7 +22,7 @@ import { InputPieChartData, InputPieChartOptions } from './input-pie-chart-data'
 	template: `
 		<div class="container-1">
 			<div
-				style="display: flex; align-items: center; justify-content: center; position: relative; height: 100%; width: 100%;"
+				style="display: flex; align-items: center; justify-content: flex-start; position: relative; height: 100%; width: 100%;"
 			>
 				<canvas
 					*ngIf="chartData?.length && chartOptions"
@@ -36,6 +36,12 @@ import { InputPieChartData, InputPieChartOptions } from './input-pie-chart-data'
 					[legend]="false"
 					[chartType]="'pie'"
 				></canvas>
+				<div class="legend-container" *ngIf="legends?.length">
+					<div class="legend-entry" *ngFor="let entry of legends">
+						<div class="color" [style.backgroundColor]="entry.color"></div>
+						<div class="name">{{ entry.label }}</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -59,6 +65,7 @@ export class PieChartComponent {
 	chartOptions: ChartOptions;
 	chartColors: Color[];
 	chartPlugins = [ChartDataLabels];
+	legends: readonly ChartLegend[];
 
 	private _options: InputPieChartOptions;
 	private _inputData: readonly InputPieChartData[];
@@ -79,6 +86,22 @@ export class PieChartComponent {
 			},
 		];
 		await this.updateChartOptions();
+
+		if (this._options) {
+			if (this._options.showLegendBelow) {
+				this.legends = this._inputData
+					.filter((data) => !!data.data)
+					.map((data) => {
+						return {
+							label: data.label,
+							color: data.color,
+						};
+					});
+				console.debug('build legends', this.legends, this._inputData);
+			} else {
+				this.legends = [];
+			}
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -121,7 +144,12 @@ export class PieChartComponent {
 			plugins: {
 				datalabels: {
 					// Don't show the "missing" labels
-					display: (ctx) => (this._options?.showAllLabels ? true : ctx.dataIndex % 2 === 0),
+					display: (ctx) =>
+						this._options?.showLegendBelow
+							? false
+							: this._options?.showAllLabels
+							? true
+							: ctx.dataIndex % 2 === 0,
 					formatter: (value, ctx) => (value ? this._inputData[ctx.dataIndex].label : null),
 					color: (ctx) => this._inputData[ctx.dataIndex].color as any,
 					anchor: 'end',
@@ -147,4 +175,9 @@ export class PieChartComponent {
 		}
 		return tooltipBackgroundColor;
 	}
+}
+
+interface ChartLegend {
+	readonly label: string;
+	readonly color: string;
 }

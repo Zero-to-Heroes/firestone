@@ -176,14 +176,15 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	private buildPieChartOptions(): InputPieChartOptions {
 		return {
 			padding: {
-				top: 50,
-				bottom: 50,
-				left: 50,
-				right: 100,
+				top: 10,
+				bottom: 10,
+				left: 10,
+				right: 20,
 			},
 			showAllLabels: true,
 			aspectRatio: 1,
 			tooltipFontSize: 16,
+			showLegendBelow: true,
 		};
 	}
 
