@@ -76,6 +76,7 @@ export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
 	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
+export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);

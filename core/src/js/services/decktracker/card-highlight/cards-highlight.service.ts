@@ -19,6 +19,7 @@ import {
 	beast,
 	cardsPlayedThisMatch,
 	cardType,
+	chooseOne,
 	corrupt,
 	corrupted,
 	damage as dealsDamage,
@@ -426,6 +427,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, murloc);
 			case CardIds.JaceDarkweaver:
 				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
+			case CardIds.JerryRigCarpenter:
+				return and(inDeck, chooseOne);
 			case CardIds.JewelOfNzoth:
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.K90tron:
