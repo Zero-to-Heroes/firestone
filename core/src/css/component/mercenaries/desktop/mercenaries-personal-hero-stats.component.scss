@@ -58,6 +58,10 @@
 			&.to-farm {
 				display: none;
 			}
+
+			::ng-deep .sortable-label .label .caret {
+				right: -5px;
+			}
 		}
 
 		.tasks {
