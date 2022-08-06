@@ -18,6 +18,26 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[replays]="replays$ | async"
 			></decktracker-stats-for-replays>
 			<div class="container">
+				<div
+					class="deck-versions"
+					*ngIf="value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1"
+				>
+					<div class="header">Deck versions</div>
+					<div
+						class="version"
+						*ngFor="let version of value.deck.allVersions"
+						[ngClass]="{ 'inactive': !version.totalGames }"
+					>
+						<div class="background-image" [style.background-image]="version.backgroundImage"></div>
+						<div class="deck-name">{{ version.deckName }}</div>
+						<div class="matches-played">{{ version.totalGames }}</div>
+						<div
+							class="eject-version-button"
+							inlineSVG="assets/svg/close.svg"
+							(click)="ejectVersion(version)"
+						></div>
+					</div>
+				</div>
 				<div class="deck-list-container">
 					<copy-deckstring
 						class="copy-deckcode"
@@ -63,5 +83,9 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 			);
 		this.replays$ = this.deck$.pipe(this.mapData((deck) => deck?.replays ?? []));
 		this.showMatchupAsPercentages$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages);
+	}
+
+	ejectVersion(version: DeckSummary) {
+		console.debug('ejecting version', version);
 	}
 }

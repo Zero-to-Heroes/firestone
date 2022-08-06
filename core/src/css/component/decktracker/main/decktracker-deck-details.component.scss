@@ -26,6 +26,36 @@
 		width: 100%;
 	}
 
+	.deck-versions {
+		display: flex;
+		flex-direction: column;
+		width: 200px;
+		flex-shrink: 0;
+		margin-right: 30px;
+		height: fit-content;
+		background: rgba(255, 255, 255, 0.08);
+
+		.version {
+			display: flex;
+			background: var(--color-7);
+			height: 40px;
+			color: var(--color-2);
+
+			.deck-name {
+				width: 150px;
+				padding-right: 10px;
+				display: flex;
+				align-items: center;
+			}
+
+			.matches-played {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+	}
+
 	.deck-list-container {
 		order: 2;
 		margin-left: 20px;

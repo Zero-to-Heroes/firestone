@@ -4,7 +4,7 @@ import { GameFormat } from '@firestone-hs/reference-data';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
-import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { DeckSummary, DeckSummaryVersion } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -109,7 +109,7 @@ export class DecksStateBuilderService {
 		if (!replays?.length) {
 			return {
 				...versions[0],
-				allVersions: versions,
+				allVersions: this.buildVersions(versions),
 			};
 		}
 
@@ -141,7 +141,7 @@ export class DecksStateBuilderService {
 				? 'wild'
 				: 'standard',
 			replays: replays,
-			allVersions: versions,
+			allVersions: this.buildVersions(versions),
 		} as DeckSummary;
 	}
 
@@ -366,6 +366,11 @@ export class DecksStateBuilderService {
 					.length,
 			} as MatchupStat;
 		});
+	}
+
+	private buildVersions(versions: readonly DeckSummary[]): readonly DeckSummaryVersion[] {
+		// Find the cards that are in all the versions
+		return [];
 	}
 }
 
