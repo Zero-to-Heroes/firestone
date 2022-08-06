@@ -612,6 +612,9 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.THE_SUNKEN_CITY:
 		case BoosterType.GOLDEN_THE_SUNKEN_CITY:
 			return 'the_sunken_city';
+		case BoosterType.REVENDRETH:
+		case BoosterType.GOLDEN_REVENDRETH:
+			return 'revendreth';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
