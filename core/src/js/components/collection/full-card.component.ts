@@ -41,7 +41,7 @@ declare let amplitude;
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.set'"></span>
 						<span class="value">{{ set }}</span>
 					</div>
-					<div class="card-info rarity" *ngIf="rarityd">
+					<div class="card-info rarity" *ngIf="rarity">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.rarity'"></span>
 						<span class="value">{{ rarity }}</span>
 					</div>
