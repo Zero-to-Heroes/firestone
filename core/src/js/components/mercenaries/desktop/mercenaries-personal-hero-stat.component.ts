@@ -28,7 +28,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				</div>
 			</div>
 
-			<div class="portrait" [cardTooltip]="cardId" cardTooltipPosition="top-right">
+			<div class="portrait" [cardTooltip]="cardId">
 				<img class="icon" [src]="portraitUrl" />
 				<img class="frame" [src]="frameUrl" />
 			</div>
@@ -96,7 +96,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 			<div class="abilities">
 				<div class="item" *ngFor="let ability of abilities" [ngClass]="{ 'missing': !ability.owned }">
-					<div class="item-icon" [cardTooltip]="ability.cardId" cardTooltipPosition="top-right">
+					<div class="item-icon" [cardTooltip]="ability.cardId">
 						<img class="icon" [src]="ability.artUrl" />
 						<img
 							class="frame"
@@ -125,7 +125,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					*ngFor="let equipment of equipments"
 					[ngClass]="{ 'equipped': equipment.equipped, 'missing': !equipment.owned }"
 				>
-					<div class="item-icon" [cardTooltip]="equipment.cardId" cardTooltipPosition="top-right">
+					<div class="item-icon" [cardTooltip]="equipment.cardId">
 						<img class="icon" [src]="equipment.artUrl" />
 						<img
 							class="frame"
