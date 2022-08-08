@@ -1,4 +1,4 @@
-import { CardClass, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler, SelectorOptions } from './cards-highlight.service';
 
@@ -57,6 +57,10 @@ export const notInInitialDeck = (handler: Handler): boolean => {
 
 export const healthBiggerThanAttack = (handler: Handler): boolean => {
 	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
+};
+
+export const cardIs = (...cardIds: readonly CardIds[]) => (handler: Handler): boolean => {
+	return cardIds.includes(handler.referenceCardProvider().id as CardIds);
 };
 
 export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {

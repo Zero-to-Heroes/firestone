@@ -17,6 +17,7 @@ import {
 	baseCostEqual,
 	battlecry,
 	beast,
+	cardIs,
 	cardsPlayedThisMatch,
 	cardType,
 	chooseOne,
@@ -128,9 +129,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			return;
 		}
 
-		if (!side) {
-			console.warn('no side provided', cardId, side);
-		}
+		// if (!side) {
+		// 	console.warn('no side provided', cardId, side);
+		// }
 
 		const selector: (
 			handler: Handler,
@@ -439,6 +440,18 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
 			case CardIds.KhadgarsScryingOrb:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.KelthuzadTheInevitable:
+				return and(
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.VolatileSkeleton,
+						CardIds.KelthuzadTheInevitable,
+						CardIds.ColdCase,
+						CardIds.Deathborne,
+						CardIds.NightcloakSanctum,
+						CardIds.BrittleBonesTavernBrawl,
+					),
+				);
 			case CardIds.Kindle_DALA_911:
 			case CardIds.Kindle_ULDA_911:
 				return and(inDeck, spell);
