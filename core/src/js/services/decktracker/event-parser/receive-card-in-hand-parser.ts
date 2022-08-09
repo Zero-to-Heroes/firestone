@@ -129,7 +129,12 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
 				: cardWithKnownInfo;
-		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent);
+		const cardWithAdditionalAttributes = addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent, this.allCards);
+		console.debug(
+			'[receive-card-in-hand] cardWithAdditionalAttributes',
+			cardWithAdditionalAttributes,
+			otherCardWithBuffs,
+		);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
@@ -156,38 +161,47 @@ export class ReceiveCardInHandParser implements EventParser {
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
+		console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
-	}
-
-	private addAdditionalAttribues(card: DeckCard, deck: DeckState, gameEvent: GameEvent) {
-		switch (card?.cardId) {
-			case CardIds.SirakessCultist_AbyssalCurseToken:
-				const knownCurses = deck
-					.getAllCardsInDeck()
-					.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
-				const highestAttribute = !!knownCurses.length
-					? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
-					: -1;
-				return card.update({
-					mainAttributeChange:
-						!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
-							? gameEvent.additionalData.dataNum1
-							: highestAttribute + 1,
-				});
-			case CardIds.SchoolTeacher_NagalingToken:
-				return card.update({
-					relatedCardIds: [
-						...card.relatedCardIds,
-						this.allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
-					].filter((id) => !!id),
-				});
-		}
-		return card;
 	}
 
 	event(): string {
 		return GameEvent.RECEIVE_CARD_IN_HAND;
 	}
 }
+
+export const addAdditionalAttribues = (
+	card: DeckCard,
+	deck: DeckState,
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): DeckCard => {
+	switch (card?.cardId) {
+		case CardIds.SirakessCultist_AbyssalCurseToken:
+			const knownCurses = deck
+				.getAllCardsInDeck()
+				.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
+			console.debug('[receive-card-in-hand] knownCurses', knownCurses);
+			const highestAttribute = !!knownCurses.length
+				? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
+				: -1;
+			console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
+			return card.update({
+				mainAttributeChange:
+					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+						? // dataNum1 is the base value, while we start our count at 0
+						  gameEvent.additionalData.dataNum1 - 1
+						: highestAttribute + 1,
+			});
+		case CardIds.SchoolTeacher_NagalingToken:
+			return card.update({
+				relatedCardIds: [
+					...card.relatedCardIds,
+					allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
+				].filter((id) => !!id),
+			});
+	}
+	return card;
+};

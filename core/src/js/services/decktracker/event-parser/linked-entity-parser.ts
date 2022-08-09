@@ -84,6 +84,9 @@ export class LinkedEntityParser implements EventParser {
 			// We don't add the initial cards in the deck, so if no card is found, we create it
 			const updatedCard = DeckCard.create({
 				...newCard,
+				// Avoid info leak where we add a card in the opponent's deck and link it to the entity id
+				// (if we have that link, we will update the decklist in real time, and possibly even
+				// flag the card in)
 				entityId: isPlayerForAdd ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
 			} as DeckCard);

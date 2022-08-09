@@ -544,7 +544,7 @@ export class GameStateService {
 			new CustomEffectsParser(this.helper),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
-			new EntityUpdateParser(this.helper, this.i18n),
+			new EntityUpdateParser(this.helper, this.i18n, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards, this.i18n),
 			new DamageTakenParser(),
 			new HeroPowerDamageParser(this.allCards),
