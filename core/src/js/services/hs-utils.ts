@@ -222,6 +222,7 @@ export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.Lib
 
 export const publicCardGiftCreators = [
 	CardIds.AbyssalWave,
+	CardIds.AmalgamOfTheDeep,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.ArcaneBrilliance,
 	CardIds.ArchmageArugal,
@@ -276,6 +277,8 @@ export const publicCardGiftCreators = [
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.MailboxDancer,
 	CardIds.Mankrik,
+	CardIds.MarkedShot,
+	CardIds.MarkedShotCore,
 	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
 	CardIds.Peon_BAR_022,
