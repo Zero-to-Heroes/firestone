@@ -32,15 +32,15 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.25',
+		version: '9.8.27',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					I hope you're all having fun with the new expansion! All the new cards should now be properly supported - and if not, don't hesitate to open a bug report with the icon at the top right of the app's main window :)
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		I hope you're all having fun with the new expansion! All the new cards should now be properly supported - and if not, don't hesitate to open a bug report with the icon at the top right of the app's main window :)
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -50,15 +50,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an info leak that would let you know what card your opponent picked after playing a "Suspicious" card.`,
+								text: `Fix some info leaks that would flag known cards in deck when drawn by the opponent (like with Identity Thief).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an info leak when playing Theotar, the Mad Duke.`,
+								text: `Fix info leaks with Chameleos and Madame Lazul.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an info leak when playing Identity Theft.`,
+								text: `Fix an issue where the tracker would break after a Colossal minion is copied from hand (e.g. by Kobold Illusionist).`,
 							},
 						],
 					},
@@ -73,61 +73,27 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a widget for Lady Darkvein that tells you what was the last Shadow spell you played.`,
+								text: `Add highlight for Kel'Thuzad the Inevitable, Jerry Rig Carpenter.`,
 							},
 							{
 								type: 'feature',
-								text: `Add a counter to keep track of dead Volatile Skeletons.`,
+								text: `Add related cards for each of Lady Naz'jar transformations.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Clockwork Assistant.`,
-							},
-							{
-								type: 'feature',
-								text: `Add Card Oracle for Suspicious Alchemist / Pirate / Usher, Conqueror's Banner and The Harvester of Envy.`,
-							},
-							{
-								type: 'feature',
-								text: `Cards created by Devouring Swarm, Selective Breeder and Jackpot now show a gift icon in hand.`,
-							},
-							{
-								type: 'feature',
-								text: `Cards added to your deck by Tome Tampering now have their cost set to 1.`,
+								text: `Add a time filter when viewing a deck's detailed stats.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Location cards would not be properly handled on the board.`,
+								text: `Fix an issue where the Abyssal Curse counter would give incorrect information when receiving curses.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Double Cross would not be properly grayed out after the Coin had been played on the same turn.`,
+								text: `Fix an issue where cards drawn by Dreadlich Tamsin's battlecry would be incorrectly flagged as Rifts.`,
 							},
 							{
-								type: 'bug',
-								text: `Fix an issue where the winrate stats would sometimes be slightly off.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Prince Renathal would not appear in the Global Effects section.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix card highlight for Band of Bees.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Add missing treasures synergies highlights for before 24.0 (it will take a few days to gather enough data for the new treasures).`,
+								type: 'ui',
+								text: `Improve the display of the Opponents breakdown chart when viewing a deck details.`,
 							},
 						],
 					},
@@ -135,8 +101,17 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'feature',
-								text: `All the missing sounds are now available in the app. When playing sounds, the app now properly cycles between the different variations (if there are multiple flavors).`,
+								type: 'bug',
+								text: `FIx an issue with the new card packs not being properly detected.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'bug',
+								text: `FIx an issue where the Progression screen would not display any information.`,
 							},
 						],
 					},
