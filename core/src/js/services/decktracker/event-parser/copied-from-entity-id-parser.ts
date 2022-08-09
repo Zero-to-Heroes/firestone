@@ -68,7 +68,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			cardId: obfuscatedCardId,
 			cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardId),
 		} as DeckCard);
-		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard);
+		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(

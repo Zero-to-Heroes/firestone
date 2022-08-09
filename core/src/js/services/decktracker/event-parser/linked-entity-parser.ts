@@ -74,7 +74,7 @@ export class LinkedEntityParser implements EventParser {
 				positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
 			} as DeckCard);
 			// console.debug('[linked-entity-parser] updating card', updatedCard, newCard, originalCard);
-			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard);
+			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard, isPlayerForAdd);
 			// console.debug('[linked-entity-parser] newPlayerDeck', newPlayerDeck);
 		} else {
 			// Can happen for BG heroes
@@ -84,7 +84,7 @@ export class LinkedEntityParser implements EventParser {
 			// We don't add the initial cards in the deck, so if no card is found, we create it
 			const updatedCard = DeckCard.create({
 				...newCard,
-				entityId: gameEvent.additionalData.linkedEntityId,
+				entityId: isPlayerForAdd ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
 			} as DeckCard);
 			// console.debug('[linked-entity-parser] adding card', updatedCard);
