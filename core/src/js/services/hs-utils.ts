@@ -189,17 +189,21 @@ export const cardsRevealedWhenDrawn = [
 ];
 
 export const forcedHiddenCardCreators = [
+	CardIds.Chameleos,
+	CardIds.CoilfangConstrictor,
+	CardIds.IdentityTheft,
+	CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
+	CardIds.MindVisionLegacy,
+	CardIds.MindVisionVanilla,
 	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
 	CardIds.PirateAdmiralHooktusk_TakeTheirGoldToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirShipToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
-	CardIds.CoilfangConstrictor,
+	CardIds.PsychicConjurerCore,
+	CardIds.PsychicConjurerLegacy,
 	CardIds.TheotarTheMadDuke,
-	CardIds.IdentityTheft,
-	CardIds.Chameleos,
-	CardIds.MadameLazul,
 ];
 
 export const forceHideInfoWhenDrawnInfluencers = [
