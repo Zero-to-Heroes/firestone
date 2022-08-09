@@ -42,6 +42,7 @@ import {
 	hasSpellSchool,
 	healthBiggerThanAttack,
 	holy,
+	imp,
 	inDeck,
 	inGraveyard,
 	inHand,
@@ -530,6 +531,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.RaiseDead_SCH_514:
 				return and(inGraveyard, minion);
+			case CardIds.ImpKingRafaam:
+			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
+				return and(inGraveyard, minion, imp);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RallyTheTroopsTavernBrawl:
