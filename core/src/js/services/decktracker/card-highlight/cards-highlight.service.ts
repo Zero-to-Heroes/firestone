@@ -71,6 +71,7 @@ import {
 	spellSchool,
 	taunt,
 	weapon,
+	whelp,
 } from './selectors';
 
 @Injectable()
@@ -534,6 +535,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ImpKingRafaam:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
 				return and(inGraveyard, minion, imp);
+			case CardIds.RaidBossOnyxia_ONY_004:
+				return and(or(inDeck, inHand), minion, whelp);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RallyTheTroopsTavernBrawl:
