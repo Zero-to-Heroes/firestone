@@ -56,6 +56,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div
 									class="task-list {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showTaskList$ | async }"
+									*ngIf="_tasks.length!==0"
 									[style.bottom.px]="taskListBottomPx"
 								>
 									<div class="task" *ngFor="let task of _tasks; trackBy: trackByTaskFn">
