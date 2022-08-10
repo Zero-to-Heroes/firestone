@@ -246,6 +246,7 @@ export const publicCardGiftCreators = [
 	CardIds.CommanderSivara_Story_11_Sivara,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
+	CardIds.ConfectionCyclone,
 	CardIds.CorsairCache,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DevouringSwarm,
