@@ -15,13 +15,14 @@
 		display: flex;
 		flex-direction: column;
 		width: 155px;
-		height: 75px;
+	    height: 90px;
 		align-items: center;
 		justify-content: center;
 		margin-right: 15px;
 		margin-bottom: 20px;
 
 		.label {
+		    text-align: center;
 			color: var(--default-text-color);
 			margin-bottom: 5px;
 		}
