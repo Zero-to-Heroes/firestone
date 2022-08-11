@@ -198,6 +198,7 @@ const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_THE_BARRENS,
 	BoosterType.GOLDEN_DARKMOON_FAIRE,
 	BoosterType.GOLDEN_ALTERAC_VALLEY,
+	BoosterType.GOLDEN_REVENDRETH,
 ];
 
 const NON_BUYABLE_BOOSTER_IDS = [
@@ -219,9 +220,7 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.STANDARD_WARLOCK,
-	BoosterType.STANDARD_BUNDLE,
 	BoosterType.GOLDEN_STANDARD_BUNDLE,
-	BoosterType.WILD_PACK,
 ];
 
 interface InternalPackGroup {

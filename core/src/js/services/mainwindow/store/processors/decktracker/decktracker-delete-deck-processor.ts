@@ -24,7 +24,11 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		const currentPrefs = await this.prefs.getPreferences();
 		console.log(
 			'[deck-delete] deck before deletion',
-			currentState.decktracker.decks.find((deck) => deck.deckstring === event.deckstring),
+			currentState.decktracker.decks.find(
+				(deck) =>
+					deck.deckstring === event.deckstring ||
+					(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(event.deckstring),
+			),
 		);
 		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
 		console.log('[deck-delete] deletedDeckDates', event.deckstring, deletedDeckDates);
@@ -42,7 +46,11 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		} as DecktrackerState);
 		console.log(
 			'[deck-delete] deck after deletion',
-			newState.decks.find((deck) => deck.deckstring === event.deckstring),
+			newState.decks.find(
+				(deck) =>
+					deck.deckstring === event.deckstring ||
+					(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(event.deckstring),
+			),
 		);
 		return [
 			currentState.update({

@@ -55,17 +55,21 @@ export class CreateCardInDeckParser implements EventParser {
 		// 	gameEvent.additionalData.influencedByEntityId,
 		// 	deck,
 		// );
-		const card = DeckCard.create({
-			cardId: cardId,
-			entityId: entityId,
-			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
-			manaCost: cardData ? cardData.cost : undefined,
-			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
-			creatorCardId: gameEvent.additionalData.creatorCardId,
-			mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
-			positionFromBottom: positionFromBottom,
-			createdByJoust: createdByJoust,
-		} as DeckCard);
+		// Because of Tome Tampering
+		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
+		card =
+			card ??
+			DeckCard.create({
+				cardId: cardId,
+				entityId: entityId,
+				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
+				manaCost: cardData ? cardData.cost : undefined,
+				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+				creatorCardId: gameEvent.additionalData.creatorCardId,
+				mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
+				positionFromBottom: positionFromBottom,
+				createdByJoust: createdByJoust,
+			} as DeckCard);
 		// console.debug('[debug]', 'adding card', card);
 
 		const previousDeck = deck.deck;

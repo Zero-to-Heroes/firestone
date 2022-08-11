@@ -7,7 +7,10 @@ import { LocalizationFacadeService } from './localization-facade.service';
 // Don't specify anything by default, so that the "cache refresh" properly refreshes the data
 // (it is query-specific).
 // Only use a string in dev mode, otherwise rely on cache purge
-export const CARDS_VERSION = '20220727';
+// Actually, it looks relying on the CF cache doesn't work too well for the cards (while it
+// works well in the browser, you sometimes get old data when getting it in the app). So the
+// string will be used in Firestone only
+export const CARDS_VERSION = '';
 
 export const classes = [
 	'demonhunter',
@@ -115,6 +118,9 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
+	CardIds.RelicOfDimensions,
+	CardIds.RelicOfExtinction,
+	CardIds.RelicOfPhantasms,
 	CardIds.RenounceDarkness,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest_SCH_609,
@@ -183,13 +189,21 @@ export const cardsRevealedWhenDrawn = [
 ];
 
 export const forcedHiddenCardCreators = [
+	CardIds.Chameleos,
+	CardIds.CoilfangConstrictor,
+	CardIds.IdentityTheft,
+	CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
+	CardIds.MindVisionLegacy,
+	CardIds.MindVisionVanilla,
 	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
 	CardIds.PirateAdmiralHooktusk_TakeTheirGoldToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirShipToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
-	CardIds.CoilfangConstrictor,
+	CardIds.PsychicConjurerCore,
+	CardIds.PsychicConjurerLegacy,
+	CardIds.TheotarTheMadDuke,
 ];
 
 export const forceHideInfoWhenDrawnInfluencers = [
@@ -208,9 +222,11 @@ export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.Lib
 
 export const publicCardGiftCreators = [
 	CardIds.AbyssalWave,
+	CardIds.AmalgamOfTheDeep,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.ArcaneBrilliance,
 	CardIds.ArchmageArugal,
+	CardIds.AzsharanSweeper_TSC_776,
 	CardIds.BagOfCoins_LOOTA_836,
 	CardIds.BagOfCoins_Story_11_BagofCoinsPuzzle,
 	CardIds.BagOfCoinsTavernBrawl,
@@ -225,12 +241,14 @@ export const publicCardGiftCreators = [
 	CardIds.BuildASnowman_BuildASnowgreToken,
 	CardIds.ClawMachine,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
+	CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment,
 	CardIds.CommanderSivara_TSC_087,
 	CardIds.CommanderSivara_Story_11_Sivara,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.CorsairCache,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
+	CardIds.DevouringSwarm,
 	CardIds.DispossessedSoul,
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
@@ -243,10 +261,16 @@ export const publicCardGiftCreators = [
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.FirstFlame,
+	CardIds.FrozenTouch,
 	CardIds.FullBlownEvil,
+	CardIds.GorillabotA3,
+	CardIds.GorillabotA3Core,
 	CardIds.Guidance_YOP_024,
+	CardIds.TheHarvesterOfEnvy,
 	CardIds.IdentityTheft,
+	CardIds.Jackpot,
 	CardIds.JerryRigCarpenter,
+	CardIds.JourneyBelow_OG_072,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
 	CardIds.KoboldTaskmaster,
@@ -256,10 +280,14 @@ export const publicCardGiftCreators = [
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.MailboxDancer,
 	CardIds.Mankrik,
+	CardIds.MarkedShot,
+	CardIds.MarkedShotCore,
 	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
 	CardIds.Peon_BAR_022,
 	CardIds.PlantedEvidence,
+	CardIds.PsychicConjurerCore,
+	CardIds.PsychicConjurerLegacy,
 	CardIds.QueenAzshara_TSC_641,
 	CardIds.HornOfAncients,
 	CardIds.RaidNegotiator,
@@ -272,15 +300,20 @@ export const publicCardGiftCreators = [
 	CardIds.Scrapsmith,
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
+	CardIds.SelectiveBreederCore,
 	CardIds.SirakessCultist,
 	CardIds.Sleetbreaker,
+	CardIds.SoothsayersCaravan,
 	CardIds.SorcerersGambit,
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
 	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
+	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPirate,
 	CardIds.SuspiciousUsher,
+	CardIds.Swashburglar,
+	CardIds.SwashburglarCore,
 	CardIds.TamsinRoame_BAR_918,
 	// For some reason the coin is flagged as created by the coin...
 	...COIN_IDS,
@@ -290,6 +323,7 @@ export const publicCardGiftCreators = [
 	CardIds.VanessaVancleefCore,
 	CardIds.VenomousScorpid,
 	CardIds.VioletSpellwing,
+	CardIds.WandThief_SCH_350,
 	CardIds.YseraTheDreamerCore,
 	CardIds.Zaqul_TSC_959,
 	CardIds.Zaqul_Story_11_Zaqul,
@@ -324,6 +358,7 @@ export const publicCardCreators = [
 	CardIds.CaptureColdtoothMine_MoreSupplies,
 	CardIds.CaptureColdtoothMine_MoreResources,
 	CardIds.CavernShinyfinder,
+	CardIds.ConquerorsBanner,
 	CardIds.CountessAshmore,
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
@@ -593,6 +628,9 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.THE_SUNKEN_CITY:
 		case BoosterType.GOLDEN_THE_SUNKEN_CITY:
 			return 'the_sunken_city';
+		case BoosterType.REVENDRETH:
+		case BoosterType.GOLDEN_REVENDRETH:
+			return 'revendreth';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
@@ -678,7 +716,7 @@ export const boosterIdToBoosterName = (boosterId: BoosterType, i18n: Localizatio
 		case BoosterType.FIRST_PURCHASE_OLD:
 			normalizedBoosterId = BoosterType.OLD_GODS;
 	}
-	return i18n.translateString(`global.pack.${BoosterType[normalizedBoosterId].toLowerCase().replace(/_/g, '-')}`);
+	return i18n.translateString(`global.pack.${BoosterType[normalizedBoosterId]?.toLowerCase()?.replace(/_/g, '-')}`);
 };
 
 export const getPackDustValue = (pack: PackResult): number => {

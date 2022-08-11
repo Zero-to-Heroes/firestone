@@ -52,8 +52,20 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 		).pipe(
 			this.mapData(([[decks, selectedDeckstring], [deckstringsFilter]]) =>
 				decks
-					.filter((deck) => (selectedDeckstring ? deck.deckstring === selectedDeckstring : true))
-					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
+					.filter((deck) =>
+						selectedDeckstring
+							? deck.deckstring === selectedDeckstring ||
+							  (deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring)
+							: true,
+					)
+					.filter(
+						(deck) =>
+							!deckstringsFilter?.length ||
+							deckstringsFilter.includes(deck.deckstring) ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).some((d) =>
+								deckstringsFilter.includes(d),
+							),
+					)
 					.flatMap((deck) => deck.replays)
 					.sort((a: GameStat, b: GameStat) => (a.creationTimestamp <= b.creationTimestamp ? 1 : -1))
 					.slice(0, 20),

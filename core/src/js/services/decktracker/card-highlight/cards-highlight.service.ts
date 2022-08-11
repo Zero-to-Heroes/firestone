@@ -17,8 +17,10 @@ import {
 	baseCostEqual,
 	battlecry,
 	beast,
+	cardIs,
 	cardsPlayedThisMatch,
 	cardType,
+	chooseOne,
 	corrupt,
 	corrupted,
 	damage as dealsDamage,
@@ -40,6 +42,7 @@ import {
 	hasSpellSchool,
 	healthBiggerThanAttack,
 	holy,
+	imp,
 	inDeck,
 	inGraveyard,
 	inHand,
@@ -127,9 +130,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			return;
 		}
 
-		if (!side) {
-			console.warn('no side provided', cardId, side);
-		}
+		// if (!side) {
+		// 	console.warn('no side provided', cardId, side);
+		// }
 
 		const selector: (
 			handler: Handler,
@@ -246,7 +249,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.BalindaStonehearth:
 				return and(inDeck, spell);
 			case CardIds.BandOfBeesTavernBrawl:
-				return and(or(inDeck, inHand), effectiveCostLess(3));
+				return and(or(inDeck, inHand), minion, effectiveCostLess(3));
 			case CardIds.BarakKodobane_BAR_551:
 				return and(inDeck, spell, or(effectiveCostEqual(1), effectiveCostEqual(2), effectiveCostEqual(3)));
 			case CardIds.BattleTotem_LOOTA_846:
@@ -277,6 +280,11 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.ClickClocker:
 				return and(inDeck, minion, mech);
+			case CardIds.ClockworkAssistant_GILA_907:
+			case CardIds.ClockworkAssistant_ONY_005ta11:
+			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
+			case CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5:
+				return and(inDeck, spell);
 			case CardIds.CoilCastingTavernBrawl:
 				return and(or(inDeck, inHand), naga);
 			case CardIds.ConchsCall:
@@ -421,6 +429,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, murloc);
 			case CardIds.JaceDarkweaver:
 				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
+			case CardIds.JerryRigCarpenter:
+				return and(inDeck, chooseOne);
 			case CardIds.JewelOfNzoth:
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.K90tron:
@@ -431,6 +441,18 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
 			case CardIds.KhadgarsScryingOrb:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.KelthuzadTheInevitable:
+				return and(
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.VolatileSkeleton,
+						CardIds.KelthuzadTheInevitable,
+						CardIds.ColdCase,
+						CardIds.Deathborne,
+						CardIds.NightcloakSanctum,
+						CardIds.BrittleBonesTavernBrawl,
+					),
+				);
 			case CardIds.Kindle_DALA_911:
 			case CardIds.Kindle_ULDA_911:
 				return and(inDeck, spell);
@@ -509,6 +531,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.RaiseDead_SCH_514:
 				return and(inGraveyard, minion);
+			case CardIds.ImpKingRafaam:
+			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
+				return and(inGraveyard, minion, imp);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RallyTheTroopsTavernBrawl:

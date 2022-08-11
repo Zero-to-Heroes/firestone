@@ -30,6 +30,7 @@ export class PackStatsService {
 		// Ideally this would be fully reactive, but there are too many processes that depend on it,
 		// so for now I will just use a local cache
 		const localPackResult = this.localStorage.getItem<LocalPackStats>('collection-pack-stats');
+		console.debug('[pack] localPackResult', localPackResult);
 		// Cache the local results for 7 days
 		if (
 			localPackResult &&
@@ -44,16 +45,19 @@ export class PackStatsService {
 			userName: user.username,
 		};
 		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
+		console.debug('[pack] data', data);
 		const packs: readonly PackResult[] =
 			data.results
 				// Because of how pack logging used to work, when you received the 5 galakrond cards,
 				// the app flagged that as a new pack
 				?.filter((pack) => !this.isPackAllGalakronds(pack)) ?? [];
+		console.debug('[pack] packs', packs);
 		const newPackResults: LocalPackStats = {
 			lastUpdateDate: new Date(),
 			packs: packs,
 		};
 		this.localStorage.setItem('collection-pack-stats', newPackResults);
+		console.debug('[pack] newPackResults', newPackResults);
 		return newPackResults.packs;
 	}
 
@@ -106,6 +110,7 @@ export class PackStatsService {
 
 	private updateLocalPackStats(boosterId: BoosterType, setId: string, cards: readonly InternalCardInfo[]) {
 		const localPackResult = this.localStorage.getItem<LocalPackStats>('collection-pack-stats');
+		console.debug('[pack] localPackResult', localPackResult);
 		if (!localPackResult) {
 			console.error('Empty local packs');
 			return;
@@ -137,6 +142,7 @@ export class PackStatsService {
 			lastUpdateDate: new Date(localPackResult.lastUpdateDate),
 			packs: [...localPackResult.packs, newPack],
 		};
+		console.debug('[pack] will update local packs', newPack, newPackResults);
 		this.localStorage.setItem('collection-pack-stats', newPackResults);
 	}
 

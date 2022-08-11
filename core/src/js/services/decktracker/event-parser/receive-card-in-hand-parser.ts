@@ -98,8 +98,21 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
+		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
+		// moved to hand (e.g. Suspicious Pirate)
+		const newCardId = (isCardInfoPublic ? cardId : null) ?? cardWithDefault.cardId;
+		const cardWithKnownInfo =
+			newCardId === cardWithDefault.cardId
+				? cardWithDefault
+				: cardWithDefault.update({
+						cardId: newCardId,
+						cardName: this.allCards.getCard(newCardId).name,
+						manaCost: this.allCards.getCard(newCardId).cost,
+						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
+				  });
 		console.debug(
 			'[receive-card-in-hand] cardWithDefault',
+			cardWithKnownInfo,
 			cardWithDefault,
 			creatorCardId,
 			otherCard,
@@ -108,15 +121,20 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
-				? cardWithDefault.update({
+				? cardWithKnownInfo.update({
 						buffingEntityCardIds: [
 							...(cardWithDefault.buffingEntityCardIds || []),
 							buffingEntityCardId,
 						] as readonly string[],
-						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
+						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
-				: cardWithDefault;
-		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent);
+				: cardWithKnownInfo;
+		const cardWithAdditionalAttributes = addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent, this.allCards);
+		console.debug(
+			'[receive-card-in-hand] cardWithAdditionalAttributes',
+			cardWithAdditionalAttributes,
+			otherCardWithBuffs,
+		);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
@@ -143,38 +161,47 @@ export class ReceiveCardInHandParser implements EventParser {
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
+		console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
-	}
-
-	private addAdditionalAttribues(card: DeckCard, deck: DeckState, gameEvent: GameEvent) {
-		switch (card?.cardId) {
-			case CardIds.SirakessCultist_AbyssalCurseToken:
-				const knownCurses = deck
-					.getAllCardsInDeck()
-					.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
-				const highestAttribute = !!knownCurses.length
-					? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
-					: -1;
-				return card.update({
-					mainAttributeChange:
-						!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
-							? gameEvent.additionalData.dataNum1
-							: highestAttribute + 1,
-				});
-			case CardIds.SchoolTeacher_NagalingToken:
-				return card.update({
-					relatedCardIds: [
-						...card.relatedCardIds,
-						this.allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
-					].filter((id) => !!id),
-				});
-		}
-		return card;
 	}
 
 	event(): string {
 		return GameEvent.RECEIVE_CARD_IN_HAND;
 	}
 }
+
+export const addAdditionalAttribues = (
+	card: DeckCard,
+	deck: DeckState,
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): DeckCard => {
+	switch (card?.cardId) {
+		case CardIds.SirakessCultist_AbyssalCurseToken:
+			const knownCurses = deck
+				.getAllCardsInDeck()
+				.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
+			console.debug('[receive-card-in-hand] knownCurses', knownCurses);
+			const highestAttribute = !!knownCurses.length
+				? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
+				: -1;
+			console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
+			return card.update({
+				mainAttributeChange:
+					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+						? // dataNum1 is the base value, while we start our count at 0
+						  gameEvent.additionalData.dataNum1 - 1
+						: highestAttribute + 1,
+			});
+		case CardIds.SchoolTeacher_NagalingToken:
+			return card.update({
+				relatedCardIds: [
+					...card.relatedCardIds,
+					allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
+				].filter((id) => !!id),
+			});
+	}
+	return card;
+};

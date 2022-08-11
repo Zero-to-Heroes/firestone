@@ -23,6 +23,7 @@ import { GameEvents } from './game-events.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
+import { PreferencesService } from './preferences.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 
@@ -45,6 +46,7 @@ export class DevService {
 		private memoryService: MemoryInspectionService,
 		private handler: DeckHandlerService,
 		private allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -53,25 +55,10 @@ export class DevService {
 	}
 
 	private addTestCommands() {
-		// window['addGame'] = () => {
-		// 	const reviewId = 'gagaga' + uuid();
-		// 	const game: GameForUpload = new GameForUpload();
-		// 	game.gameMode = 'battlegrounds';
-		// 	const player: Player = new Player();
-		// 	player.hero = 'BG20_HERO_101';
-		// 	game.player = player;
-		// 	game.additionalResult = '2';
-		// 	game.uncompressedXmlReplay = replayXml;
-		// 	const info: ManastormInfo = {
-		// 		type: 'new-review',
-		// 		reviewId: reviewId,
-		// 		replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
-		// 		game: game,
-		// 	};
-		// 	console.debug('sending', info);
-		// 	this.events.broadcast(Events.REVIEW_FINALIZED, info);
-		// };
-		// this.addCollectionCommands();
+		window['clearDeckVersions'] = async () => {
+			const prefs = await this.prefs.getPreferences();
+			await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: [] });
+		};
 		this.addAchievementCommands();
 		// this.addCustomLogLoaderCommand();
 		// window['arena'] = async () => {

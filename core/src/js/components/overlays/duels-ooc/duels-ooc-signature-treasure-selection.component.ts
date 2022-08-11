@@ -83,10 +83,8 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
-				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
@@ -95,17 +93,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([
 					allSignatureTreasureCards,
 					selectedHeroPower,
-					[
-						duelStats,
-						duelsTopDecks,
-						mmrPercentiles,
-						runs,
-						adventuresInfo,
-						dustFilter,
-						mmrFilter,
-						lockFilter,
-						patch,
-					],
+					[duelStats, duelsTopDecks, mmrPercentiles, runs, dustFilter, mmrFilter, patch],
 				]) => {
 					return allSignatureTreasureCards
 						.map((card) => card.id)
@@ -155,10 +143,6 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 										'last-patch',
 										dustFilter,
 										patch,
-										adventuresInfo,
-										// Here we show the decks even for locked treasures, since they are a separate info
-										'all',
-										this.allCards,
 									),
 								)
 								.filter((group) => group.decks.length > 0)

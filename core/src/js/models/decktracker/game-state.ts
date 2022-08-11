@@ -1,4 +1,4 @@
-import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
 import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { NonFunctionProperties } from '../../services/utils';
@@ -66,6 +66,16 @@ export class GameState {
 				.filter((card) => card.cardId !== CardIds.BrilliantMacaw)
 				.pop()?.cardId
 		);
+	}
+
+	public lastShadowSpellPlayed(allCards: CardsFacadeService, side: 'player' | 'opponent'): string {
+		return this.cardsPlayedThisMatch
+			.filter((card) => card.side === side)
+			.filter((card) => {
+				const ref = allCards.getCard(card.cardId);
+				return ref.spellSchool === SpellSchool[SpellSchool.SHADOW];
+			})
+			.pop()?.cardId;
 	}
 
 	public getSpellsPlayedForPlayer(allCards: CardsFacadeService, side: 'player' | 'opponent'): readonly string[] {

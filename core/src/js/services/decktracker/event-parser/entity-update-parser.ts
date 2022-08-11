@@ -4,12 +4,18 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { addAdditionalAttribues } from './receive-card-in-hand-parser';
 
 export class EntityUpdateParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.ENTITY_UPDATE;
@@ -34,10 +40,15 @@ export class EntityUpdateParser implements EventParser {
 			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
 
 		const newCardInHand = shouldShowCardIdInHand
-			? cardInHand.update({
-					cardId: cardId,
-					cardName: this.i18n.getCardName(cardId),
-			  } as DeckCard)
+			? addAdditionalAttribues(
+					cardInHand.update({
+						cardId: cardId,
+						cardName: this.i18n.getCardName(cardId),
+					} as DeckCard),
+					deck,
+					gameEvent,
+					this.allCards,
+			  )
 			: null;
 
 		const newCardInDeck =

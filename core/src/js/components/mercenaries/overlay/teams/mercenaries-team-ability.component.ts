@@ -27,7 +27,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
 				/>
 			</div>
-			<div class="equipment-item-icon" [cardTooltip]="cardId" *ngIf="type === 'equipment'">
+			<div class="equipment-item-icon" *ngIf="type === 'equipment'">
 				<img class="icon" [src]="buildAbilityArtUrl(cardId)" />
 				<img
 					class="frame"

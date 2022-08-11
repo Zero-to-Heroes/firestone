@@ -32,13 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.19',
+		version: '9.8.28',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `
-			// 		IMPORTANT: In the future, decks you play with might be shared (anonymously) with the community if they perform well at a high rank. If you don't want others to find out about your secret decklists (I think that can especially be true for high-level Legend players), please turn off the new "Allow game sharing" option under Settings > General.
+			// 		I hope you're all having fun with the new expansion! All the new cards should now be properly supported - and if not, don't hesitate to open a bug report with the icon at the top right of the app's main window :)
 			// 	`,
 			// },
 			{
@@ -46,20 +46,19 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to completely turn off all achievements system. WARNING: this option is ON by default, so if you want to use achievements please make sure to turn it off first.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
-								type: 'ui',
-								text: `The card images that are displayed in the deck tracker should now more accurately mirror what you see in the in-game deck builder, which should make cards more recognizable.`,
+								type: 'bug',
+								text: `Fix some info leaks that would flag known cards in deck when drawn by the opponent (like with Identity Thief).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix info leaks with Chameleos and Madame Lazul.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the tracker would break after a Colossal minion is copied from hand (e.g. by Kobold Illusionist).`,
 							},
 						],
 					},
@@ -70,61 +69,49 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Fish of N'Zoth would remember the deathrattles in reverse order.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Baron Rivendare's effect would not be applied if it died to a cleave effect.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Bru'kan's hero power would always trigger after Illidan.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulation issue where Yrel would only buff +1 health.`,
-							},
-							{
-								type: 'ui',
-								text: `Increase the size of replay entries in the Perfect Games tab.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add Card Oracle for Ice Trap.`,
+								text: `Add highlight for Kel'Thuzad the Inevitable, Jerry Rig Carpenter.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Shroud of Concealment.`,
+								text: `Add related cards for each of Lady Naz'jar transformations.`,
 							},
 							{
 								type: 'feature',
-								text: `Add Frost Lich Jaina to global effects.`,
+								text: `Add a time filter when viewing a deck's detailed stats.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a couple of issues when playing Lady Prestor with interactions like Dredge and Sir Finley. There are still some issues lingering (from what I've seen, playing Finley with discounted dragons in hand messes things up), and I'll look into them in the next release.`,
+								text: `Fix an issue where the Abyssal Curse counter would give incorrect information when receiving curses.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards drawn by Dreadlich Tamsin's battlecry would be incorrectly flagged as Rifts.`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the display of the Opponents breakdown chart when viewing a deck details.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'collection',
 						details: [
 							{
-								type: 'misc',
-								text: `I've started working on some optimization on when remote data is loaded into the app. It should make the initial app load a bit quicker, and will reduce the memory footprint of the app if you only play a few modes. This is a work in progress and will likely be spread over multiple releases, so don't expect drastic big-bang improvements :)`,
+								type: 'bug',
+								text: `FIx an issue with the new card packs not being properly detected.`,
 							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
 							{
-								type: 'misc',
-								text: `On a related topic, there are now buttons in the settings to force the refresh of some pieces of data that are cached for several days. You will typically never need these, but might want to force a refresh after switching computers if you run Firestone on multiple machines.`,
+								type: 'bug',
+								text: `FIx an issue where the Progression screen would not display any information.`,
 							},
 						],
 					},

@@ -114,7 +114,14 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 		).pipe(
 			this.mapData(([[decks], [deckstringsFilter]]) => {
 				const result = decks
-					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
+					.filter(
+						(deck) =>
+							!deckstringsFilter?.length ||
+							deckstringsFilter.includes(deck.deckstring) ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).some((d) =>
+								deckstringsFilter.includes(d),
+							),
+					)
 					.flatMap((deck) => deck.replays)
 					.filter((replay) => !!replay.playerClass && !!replay.opponentClass);
 				return result;

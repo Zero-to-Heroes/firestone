@@ -36,7 +36,12 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const dbCard = this.allCards.getCard(cardId);
-		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {
+		if (
+			!dbCard ||
+			!dbCard.type ||
+			(dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase() &&
+				dbCard.type.toLowerCase() !== CardType[CardType.LOCATION].toLowerCase())
+		) {
 			return currentState;
 		}
 		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;

@@ -238,16 +238,18 @@ export class DeckManipulationHelper {
 		return [...zone, newCard];
 	}
 
-	public updateCardInDeck(deck: DeckState, card: DeckCard): DeckState {
+	public updateCardInDeck(deck: DeckState, card: DeckCard, isPlayer: boolean): DeckState {
 		if (!card?.entityId) {
 			console.warn('missing entityId for card update', card);
 			return deck;
 		}
 
 		return deck.update({
-			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card),
+			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card, !isPlayer),
 			board: this.updateCardInZone(deck.board, card.entityId, card.cardId, card),
-			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId, card),
+			// When we update a card in the deck, we shouldn't know exactly what their entityId is
+			// as this could lead to info leaks
+			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId, card, true),
 			otherZone: this.updateCardInZone(deck.otherZone, card.entityId, card.cardId, card),
 		} as DeckState);
 	}
@@ -257,6 +259,7 @@ export class DeckManipulationHelper {
 		entityId: number,
 		cardId: string,
 		newCard: DeckCard,
+		hideEntityId = false,
 	): readonly DeckCard[] {
 		if (!cardId) {
 			return zone;
@@ -265,7 +268,7 @@ export class DeckManipulationHelper {
 			card.entityId !== entityId
 				? card
 				: card.update(newCard).update({
-						entityId: entityId,
+						entityId: hideEntityId ? null : entityId,
 						cardId: cardId,
 						cardName: this.i18n.getCardName(cardId),
 				  } as DeckCard),

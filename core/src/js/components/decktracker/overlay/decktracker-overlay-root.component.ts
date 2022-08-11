@@ -11,13 +11,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { formatFormat } from '@firestone-hs/reference-data';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
+import { gameFormatToStatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { Preferences } from '../../../models/preferences';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { Events } from '../../../services/events.service';
@@ -193,37 +193,30 @@ export class DeckTrackerOverlayRootComponent
 			this.store.listen$(
 				([main, nav, prefs]) => main.stats.gameStats,
 				([main, nav, prefs]) => main.decktracker.filters.time,
+				([main, nav, prefs]) => main.decktracker.filters.rank,
 				([main, nav, prefs]) => main.decktracker.patch,
-				([main, nav, prefs]) => prefs.desktopDeckStatsReset,
-				([main, nav, prefs]) => prefs.desktopDeckDeletes,
+				([main, nav, prefs]) => prefs,
 			),
 		).pipe(
 			filter(
-				([
-					[deckstring, formatType],
-					[gameStats, timeFilter, patch, desktopDeckStatsReset, desktopDeckDeletes],
-				]) => !!gameStats?.stats?.length,
+				([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, prefs]]) =>
+					!!gameStats?.stats?.length,
 			),
-			this.mapData(
-				([
-					[deckstring, formatType],
-					[gameStats, timeFilter, patch, desktopDeckStatsReset, desktopDeckDeletes],
-				]) => {
-					const resetForDeck = (desktopDeckStatsReset ?? {})[deckstring] ?? [];
-					const lastResetDate = resetForDeck[0] ?? 0;
-
-					const deleteForDeck = (desktopDeckDeletes ?? {})[deckstring] ?? [];
-					const lastDeleteDate = deleteForDeck[0] ?? 0;
-					const result = gameStats.stats
-						.filter((stat) => stat.gameMode === 'ranked')
-						.filter((stat) => stat.gameFormat === formatFormat(formatType))
-						.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
-						.filter((stat) => stat.playerDecklist === deckstring)
-						.filter((stat) => stat.creationTimestamp > lastResetDate)
-						.filter((stat) => stat.creationTimestamp > lastDeleteDate);
-					return result;
-				},
-			),
+			this.mapData(([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, prefs]]) => {
+				const result = DecksStateBuilderService.buildValidReplays(
+					deckstring,
+					gameStats.stats,
+					// 'standard',
+					gameFormatToStatGameFormatType(formatType),
+					'ranked',
+					timeFilter,
+					rankFilter,
+					prefs,
+					patch,
+				);
+				console.debug('returning gamesForDeck', result);
+				return result;
+			}),
 		);
 
 		this.matchupStatsRecap$ = combineLatest(

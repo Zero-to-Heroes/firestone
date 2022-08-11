@@ -245,14 +245,12 @@ export class AppUiStoreService {
 		this.listen$(
 			([main, nav]) => main.duels.topDecks,
 			([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-			([main, nav]) => main.duels.adventuresInfo,
 			([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 			([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-			([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 		)
 			.pipe(
@@ -261,14 +259,12 @@ export class AppUiStoreService {
 					([
 						topDecks,
 						mmrPercentiles,
-						adventuresInfo,
 						mmrFilter,
 						classFilter,
 						heroPowerFilter,
 						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
-						lockFilter,
 						patch,
 					]) => {
 						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
@@ -283,9 +279,6 @@ export class AppUiStoreService {
 									timeFilter,
 									dustFilter,
 									patch,
-									adventuresInfo,
-									lockFilter,
-									this.allCards,
 								),
 							)
 							.filter((group) => group.decks.length > 0);

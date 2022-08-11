@@ -1,4 +1,4 @@
-import { CardClass, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, Race, RarityTYpe, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler, SelectorOptions } from './cards-highlight.service';
 
@@ -59,6 +59,10 @@ export const healthBiggerThanAttack = (handler: Handler): boolean => {
 	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
 };
 
+export const cardIs = (...cardIds: readonly CardIds[]) => (handler: Handler): boolean => {
+	return cardIds.includes(handler.referenceCardProvider().id as CardIds);
+};
+
 export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
 	return deckState?.spellsPlayedThisMatch
 		.map((spell) => spell.entityId)
@@ -76,6 +80,7 @@ export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 const hasMechanic = (mechanic: GameTag) => (handler: Handler): boolean =>
 	(handler.referenceCardProvider()?.mechanics ?? []).includes(GameTag[mechanic]);
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
+export const chooseOne = hasMechanic(GameTag.CHOOSE_ONE);
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
@@ -127,6 +132,7 @@ export const mech = race(Race.MECH);
 export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
+export const imp = hasMechanic(GameTag.IMP);
 
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];

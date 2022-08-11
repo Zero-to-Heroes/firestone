@@ -72,24 +72,13 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
 			this.mapData(
 				([
 					allHeroPowerCards,
-					[
-						duelStats,
-						duelsTopDecks,
-						runs,
-						mmrPercentiles,
-						adventuresInfo,
-						mmrFilter,
-						dustFilter,
-						lockFilter,
-						patch,
-					],
+					[duelStats, duelsTopDecks, runs, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
 				]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)
@@ -137,10 +126,6 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 										'last-patch',
 										dustFilter,
 										patch,
-										adventuresInfo,
-										// Since each hero power is shown separately, we can ignore the filter based on them
-										'reveal-locked-hero-powers',
-										this.allCards,
 									),
 								)
 								.filter((group) => group.decks.length > 0)

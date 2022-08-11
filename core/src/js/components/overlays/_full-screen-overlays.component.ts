@@ -84,10 +84,12 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
 			<player-bolner-widget-wrapper></player-bolner-widget-wrapper>
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
+			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
 			<player-multicaster-widget-wrapper></player-multicaster-widget-wrapper>
 			<player-coral-keeper-widget-wrapper></player-coral-keeper-widget-wrapper>
+			<player-volatile-skeleton-widget-wrapper></player-volatile-skeleton-widget-wrapper>
 
 			<!-- Opponent counters -->
 			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
@@ -100,6 +102,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<opponent-elwynn-boar-widget-wrapper></opponent-elwynn-boar-widget-wrapper>
 			<opponent-cthun-widget-wrapper></opponent-cthun-widget-wrapper>
 			<opponent-hero-power-damage-widget-wrapper></opponent-hero-power-damage-widget-wrapper>
+			<opponent-volatile-skeleton-widget-wrapper></opponent-volatile-skeleton-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

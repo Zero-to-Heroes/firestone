@@ -60,7 +60,14 @@ export class DecktrackerLadderStatsOverviewComponent
 		).pipe(
 			this.mapData(([[decks], [deckstringsFilter]]) =>
 				decks
-					.filter((deck) => !deckstringsFilter?.length || deckstringsFilter.includes(deck.deckstring))
+					.filter(
+						(deck) =>
+							!deckstringsFilter?.length ||
+							deckstringsFilter.includes(deck.deckstring) ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).some((d) =>
+								deckstringsFilter.includes(d),
+							),
+					)
 					.map((deck) => deck.replays)
 					.reduce((a, b) => a.concat(b), []),
 			),
