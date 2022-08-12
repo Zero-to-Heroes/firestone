@@ -534,7 +534,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion);
 			case CardIds.ImpKingRafaam:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
-				return and(inGraveyard, minion, imp);
+				return and(or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(or(inDeck, inHand), minion, whelp);
 			case CardIds.Rally:
