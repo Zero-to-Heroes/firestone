@@ -169,7 +169,8 @@ export class MercenariesPersonalTeamSummaryComponent {
 			month: 'short',
 			day: '2-digit',
 			year: 'numeric',
-		});
+		})
+		.replace(/\s+г\./, ""); //truncate date in russian
 	}
 
 	private getMostFrequentStarterTeam(gamesForTeam: readonly GameStat[]): readonly string[] {
