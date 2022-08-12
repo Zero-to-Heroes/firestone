@@ -162,7 +162,7 @@ export class CardTooltipComponent {
 			.reverse()
 			.map((cardId) => {
 				const card = this.allCards.getCard(cardId);
-				const isPremium = cardId?.endsWith('_golden') || !!card.battlegroundsNormalDbfId;
+				const isPremium = cardId?.endsWith('_golden') || this._cardType ==='GOLDEN' || !!card.battlegroundsNormalDbfId;
 				const realCardId = cardId?.split('_golden')[0];
 				const image = !!realCardId
 					? this.localized
