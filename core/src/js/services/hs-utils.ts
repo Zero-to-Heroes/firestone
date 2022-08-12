@@ -299,6 +299,7 @@ export const publicCardGiftCreators = [
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
 	CardIds.MysticalMirage_ULDA_035,
+	CardIds.MurlocHolmes,
 	CardIds.OpenTheWaygate,
 	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
@@ -311,6 +312,7 @@ export const publicCardGiftCreators = [
 	CardIds.HornOfAncients,
 	CardIds.RaidNegotiator,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken,
+	CardIds.RaiseDead_SCH_514,
 	CardIds.RamCommander,
 	CardIds.RapidFire_DAL_373,
 	CardIds.RayOfFrost_DAL_577,
@@ -354,6 +356,7 @@ export const publicCardGiftCreators = [
 	CardIds.YseraTheDreamerCore,
 	CardIds.Zaqul_TSC_959,
 	CardIds.Zaqul_Story_11_Zaqul,
+	CardIds.ZephrysTheGreat,
 	CardIds.ZolaTheGorgon,
 	CardIds.ZolaTheGorgonCore,
 ];
