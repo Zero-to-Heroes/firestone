@@ -59,7 +59,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 				*ngIf="!hidden"
 			>
 				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#bin"></use>
+					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
 				</svg>
 			</button>
 			<button

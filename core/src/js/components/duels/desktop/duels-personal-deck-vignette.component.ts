@@ -67,7 +67,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[helpTooltip]="archiveDeckTooltip"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!renaming && !hidden"
-				inlineSVG="assets/svg/bin.svg"
+				inlineSVG="assets/svg/hide.svg"
 			></button>
 			<button
 				class="restore-button"
