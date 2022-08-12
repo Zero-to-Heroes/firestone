@@ -431,7 +431,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.JaceDarkweaver:
 				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
 			case CardIds.JerryRigCarpenter:
-				return and(inDeck, chooseOne);
+				return and(inDeck, spell, chooseOne);
 			case CardIds.JewelOfNzoth:
 				return and(minion, inGraveyard, deathrattle);
 			case CardIds.K90tron:
