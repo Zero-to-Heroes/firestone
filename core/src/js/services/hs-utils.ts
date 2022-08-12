@@ -272,6 +272,7 @@ export const publicCardGiftCreators = [
 	CardIds.FishyFlyer,
 	CardIds.FreshScent_YOD_005,
 	CardIds.FrozenTouch,
+	CardIds.FrozenTouch_FrozenTouchToken,
 	CardIds.FullBlownEvil,
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
