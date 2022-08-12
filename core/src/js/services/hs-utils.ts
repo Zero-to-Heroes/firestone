@@ -221,7 +221,10 @@ export const forceHideInfoWhenDrawnInfluencers = [
 export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
 
 export const publicCardGiftCreators = [
+	// For some reason the coin is flagged as created by the coin...
+	...COIN_IDS,
 	CardIds.AbyssalWave,
+	CardIds.AirRaid_YOD_012,
 	CardIds.AmalgamOfTheDeep,
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.ArcaneBrilliance,
@@ -231,6 +234,7 @@ export const publicCardGiftCreators = [
 	CardIds.BagOfCoins_Story_11_BagofCoinsPuzzle,
 	CardIds.BagOfCoinsTavernBrawl,
 	CardIds.BattleVicar,
+	CardIds.BaubleOfBeetles_ULDA_307,
 	CardIds.Questionquestionquestion_BlackSoulstoneTavernBrawl,
 	CardIds.BlessingOfTheAncients_DAL_351,
 	CardIds.BloodsailFlybooter,
@@ -247,8 +251,11 @@ export const publicCardGiftCreators = [
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.CommandTheElements_TameTheFlamesToken, // Stormcaller Brukan
 	CardIds.ConfectionCyclone,
+	CardIds.ConjureManaBiscuit,
+	CardIds.ConjurersCalling_DAL_177,
 	CardIds.CorsairCache,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
+	CardIds.DesperateMeasures_DAL_141,
 	CardIds.DevouringSwarm,
 	CardIds.DispossessedSoul,
 	CardIds.DraggedBelow,
@@ -263,6 +270,7 @@ export const publicCardGiftCreators = [
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.FirstFlame,
 	CardIds.FishyFlyer,
+	CardIds.FreshScent_YOD_005,
 	CardIds.FrozenTouch,
 	CardIds.FullBlownEvil,
 	CardIds.GorillabotA3,
@@ -276,7 +284,12 @@ export const publicCardGiftCreators = [
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
 	CardIds.KoboldTaskmaster,
+	CardIds.LicensedAdventurer,
+	CardIds.LightforgedBlessing_DAL_568,
 	CardIds.LoanShark,
+	CardIds.Locuuuusts_ULDA_036,
+	CardIds.LocuuuustsTavernBrawl,
+	CardIds.Locuuuusts_ONY_005tb3,
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
@@ -284,10 +297,13 @@ export const publicCardGiftCreators = [
 	CardIds.Mankrik,
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
+	CardIds.MysticalMirage_ULDA_035,
+	CardIds.OpenTheWaygate,
 	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
 	CardIds.Peon_BAR_022,
 	CardIds.PlantedEvidence,
+	CardIds.PotionOfIllusion,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
 	CardIds.QueenAzshara_TSC_641,
@@ -295,9 +311,12 @@ export const publicCardGiftCreators = [
 	CardIds.RaidNegotiator,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken,
 	CardIds.RamCommander,
+	CardIds.RapidFire_DAL_373,
+	CardIds.RayOfFrost_DAL_577,
 	CardIds.Reconnaissance,
 	CardIds.RiseToTheOccasion_AvengeTheFallenToken, // Lightborn Cariel
 	CardIds.RunicHelmTavernBrawl,
+	CardIds.Schooling,
 	CardIds.SchoolTeacher,
 	CardIds.Scrapsmith,
 	CardIds.SecureTheDeck,
@@ -311,6 +330,7 @@ export const publicCardGiftCreators = [
 	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
 	CardIds.SketchyStranger,
+	CardIds.StaffOfAmmunae_ULDA_041,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPirate,
@@ -318,11 +338,11 @@ export const publicCardGiftCreators = [
 	CardIds.Swashburglar,
 	CardIds.SwashburglarCore,
 	CardIds.TamsinRoame_BAR_918,
-	// For some reason the coin is flagged as created by the coin...
-	...COIN_IDS,
+	CardIds.TheForestsAid_DAL_256,
 	CardIds.TheLobotomizer,
 	CardIds.ThistleTea,
 	CardIds.ToothOfNefarian,
+	CardIds.UnleashTheBeast_DAL_378,
 	CardIds.VanessaVancleefCore,
 	CardIds.VenomousScorpid,
 	CardIds.VioletSpellwing,
