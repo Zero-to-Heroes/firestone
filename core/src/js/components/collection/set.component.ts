@@ -253,7 +253,7 @@ export class SetComponent implements AfterViewInit {
 		}
 
 		// No pity timer for mini sets
-		if (sets.find((set) => set.id === this._cardSet.id)?.isMiniSet) {
+		if (sets.find((set) => set.id === this._cardSet.id)?.hidePityTimers) {
 			return;
 		}
 
