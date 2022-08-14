@@ -301,7 +301,7 @@ export class MercenariesPersonalHeroStatComponent {
 		);
 		return `
 			<div class="container">
-				<div class="header">Where to farm coins</div>
+				<div class="header"> ${this.i18n.translateString('mercenaries.hero-stats.bounties-to-farm')} </div>
 				${bounties.join('')}
 			</div>
 		`;
