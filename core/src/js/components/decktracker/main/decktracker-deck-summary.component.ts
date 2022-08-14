@@ -81,7 +81,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				aria-hidden="true"
 			>
 				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
+					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#show"></use>
 				</svg>
 			</button>
 			<button
