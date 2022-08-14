@@ -14,6 +14,7 @@ import { Set } from '../../models/set';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { sets } from '../../services/collection/sets.ref';
 import { Events } from '../../services/events.service';
+import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -29,10 +30,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
 					</div>
-					<span class="cards-collected" *ngIf="released" helpTooltip="Total non-golden cards collected">
+					<span class="cards-collected" *ngIf="released" [helpTooltip]="'app.collection.sets.total-non-golden-cards' | owTranslate"
+					>
 						{{ _cardSet.ownedLimitCollectibleCards }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
-					<span class="cards-collected premium" *ngIf="released" helpTooltip="Total golden cards collected">
+					<span class="cards-collected premium" *ngIf="released" [helpTooltip]="'app.collection.sets.total-golden-cards' | owTranslate"
+					>
 						{{ getOwnedLimitCollectibleCards() }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
@@ -211,6 +214,7 @@ export class SetComponent implements AfterViewInit {
 		private elRef: ElementRef,
 		private ow: OverwolfService,
 		private events: Events,
+		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	ngAfterViewInit() {
