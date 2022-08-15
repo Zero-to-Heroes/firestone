@@ -123,9 +123,9 @@ export class FullCardComponent {
 			        ? formatClass('all', this.i18n)
 			        : formatClass(card.playerClass, this.i18n);
 				
-		this.type = card.type;
+		this.type =  this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
 		this.set = this.cards.setName(card.set);
-		this.rarity = card.rarity;
+		this.rarity = this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`);
 		const flavorSource = card.flavor ?? card.text;
 		this.flavor = flavorSource?.length
 			? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
