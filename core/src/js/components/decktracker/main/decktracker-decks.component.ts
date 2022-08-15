@@ -96,8 +96,8 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			this.store.listenPrefs$((prefs) => prefs.constructedDecksSearchString),
 		).pipe(
 			this.mapData(([[decks, sort], [search]]) => {
-				console.debug('[deck] updating decks', decks);
-				return (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
+				// console.debug('[deck] updating decks', decks);
+				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
 						(deck) =>
 							!search?.length ||
@@ -106,6 +106,8 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
 					)
 					.sort(this.getSortFunction(sort));
+				// console.debug('[deck] after update', result);
+				return result;
 			}),
 		);
 
@@ -192,6 +194,10 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 	}
 
 	drop(event: CdkDragDrop<DeckSummary[]>) {
+		if (!this.currentlyMousedOverDeck.value) {
+			return;
+		}
+
 		const droppedOn: DeckSummary = event.container.data.find(
 			(deck) => deck.deckstring === this.currentlyMousedOverDeck.value,
 		);
@@ -219,9 +225,13 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		this.currentlyDraggedDeck.next(null);
 	}
 
-	mouseEnterDeck(deck: DeckSummary) {
+	mouseEnterDeck(deck: InternalDeckSummary) {
 		// console.debug('mousing over', deck.deckName, deck);
-		this.currentlyMousedOverDeck.next(deck.deckstring);
+		if (deck.isValidMergingTarget) {
+			this.currentlyMousedOverDeck.next(deck.deckstring);
+		} else {
+			this.currentlyMousedOverDeck.next(null);
+		}
 	}
 
 	mouseLeaveDeck(deck: DeckSummary) {

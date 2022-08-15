@@ -120,8 +120,10 @@ import { ConstructedDeckbuilderFormatSelectedEvent } from './events/decktracker/
 import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/constructed-deckbuilder-go-back-event';
 import { ConstructedDeckbuilderImportDeckEvent } from './events/decktracker/constructed-deckbuilder-import-deck-event';
 import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
+import { ConstructedEjectDeckVersionEvent } from './events/decktracker/constructed-eject-deck-version-event';
 import { ConstructedMetaDecksLoadedEvent } from './events/decktracker/constructed-meta-decks-loaded-event';
 import { ConstructedNewDeckVersionEvent } from './events/decktracker/constructed-new-deck-version-event';
+import { ConstructedToggleDeckVersionStatsEvent } from './events/decktracker/constructed-toggle-deck-version-stats-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
@@ -262,8 +264,10 @@ import { ConstructedDeckbuilderFormatSelectedProcessor } from './processors/deck
 import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/constructed-deckbuilder-go-back-processor';
 import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
 import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
+import { ConstructedEjectDeckVersionProcessor } from './processors/decktracker/constructed-eject-deck-version-processor';
 import { ConstructedMetaDecksLoadedProcessor } from './processors/decktracker/constructed-meta-decks-loaded-processor';
 import { ConstructedNewDeckVersionProcessor } from './processors/decktracker/constructed-new-deck-version-processor';
+import { ConstructedToggleDeckVersionStatsProcessor } from './processors/decktracker/constructed-toggle-deck-version-stats-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
 import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
@@ -772,6 +776,12 @@ export class MainWindowStoreService {
 
 			ConstructedNewDeckVersionEvent.eventName(),
 			new ConstructedNewDeckVersionProcessor(this.prefs, this.decksStateBuilder),
+
+			ConstructedEjectDeckVersionEvent.eventName(),
+			new ConstructedEjectDeckVersionProcessor(this.prefs, this.decksStateBuilder),
+
+			ConstructedToggleDeckVersionStatsEvent.eventName(),
+			new ConstructedToggleDeckVersionStatsProcessor(),
 
 			// Battlegrounds
 			SelectBattlegroundsCategoryEvent.eventName(),
