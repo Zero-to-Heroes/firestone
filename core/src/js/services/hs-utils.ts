@@ -282,6 +282,7 @@ export const publicCardGiftCreators = [
 	CardIds.HalazziTheLynx,
 	CardIds.TheHarvesterOfEnvy,
 	CardIds.IdentityTheft,
+	CardIds.InfestedGoblin,
 	CardIds.Jackpot,
 	CardIds.JerryRigCarpenter,
 	CardIds.JourneyBelow_OG_072,

@@ -570,6 +570,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.RunningWild:
 			case CardIds.RunningWild_RunningWild:
 				return and(inDeck, minion);
+			case CardIds.SalhetsPride:
+				return and(inDeck, minion, effectiveCostLess(2));
 			case CardIds.ScavengersIngenuity:
 				return and(inDeck, beast);
 			case CardIds.ScepterOfSummoning:
@@ -594,6 +596,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.Shudderwock:
 				return and(cardsPlayedThisMatch, minion, battlecry);
+			case CardIds.SketchyInformation:
+				return and(inDeck, deathrattle, effectiveCostLess(5));
 			case CardIds.SkulkingGeist:
 				return and(or(inDeck, inHand), spell, baseCostEqual(1));
 			case CardIds.Smokescreen:
