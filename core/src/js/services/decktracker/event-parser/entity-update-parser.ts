@@ -35,7 +35,9 @@ export class EntityUpdateParser implements EventParser {
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
 			cardInHand &&
-			cardInHand.cardId !== cardId &&
+			// I Don't know why this was introduced. Keeping this prevents some cards to be updated when we do get some
+			// additional information about the card, like for Abyssal Curses
+			// cardInHand.cardId !== cardId &&
 			// Introduced for Lorewalker Cho
 			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
 
@@ -50,6 +52,7 @@ export class EntityUpdateParser implements EventParser {
 					this.allCards,
 			  )
 			: null;
+		console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
 
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId
