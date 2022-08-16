@@ -192,6 +192,7 @@ export const forcedHiddenCardCreators = [
 	CardIds.Chameleos,
 	CardIds.CoilfangConstrictor,
 	CardIds.IdentityTheft,
+	CardIds.KoboldIllusionist,
 	CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
