@@ -24,9 +24,9 @@ export class ZoneOrderingService {
 	private orderZone(zone: readonly DeckCard[], stateFromTracker: any[]): readonly DeckCard[] {
 		// const trackerEntityIds = stateFromTracker.map((entity) => entity.entityId);
 		// console.debug('trackerEntityIds', trackerEntityIds);
-		if (zone.some((card) => !card.entityId)) {
-			console.warn('Trying to order zone without entityId', zone);
-		}
+		// if (zone.some((card) => !card.entityId)) {
+		// 	console.warn('Trying to order zone without entityId', zone);
+		// }
 		if (zone.length !== stateFromTracker.length) {
 			// console.warn('invalid zone length', zone.length, stateFromTracker.length, zone, stateFromTracker);
 			return zone;
