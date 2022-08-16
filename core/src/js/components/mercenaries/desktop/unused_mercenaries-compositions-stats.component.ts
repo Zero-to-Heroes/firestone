@@ -30,10 +30,10 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 		>
 			<ng-container *ngIf="stats$ | async as stats; else emptyState">
 				<div class="header">
-					<div class="starter">Team</div>
+					<div class="starter" [owTranslate]="'mercenaries.teams.team'" ></div>
 					<!-- <div class="bench" helpTooltip="An example of a possible bench for this composition">Bench</div> -->
-					<div class="stat winrate">Global winrate</div>
-					<div class="stat matches">Total matches</div>
+					<div class="stat winrate" [owTranslate]="'mercenaries.teams.global-winrate'"></div>
+					<div class="stat matches" [owTranslate]="'mercenaries.teams.total-matches'"></div>
 				</div>
 				<mercenaries-composition-stat
 					*ngFor="let stat of stats; trackBy: trackByFn"
