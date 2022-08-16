@@ -86,7 +86,7 @@ export class DuelsDeckWidgetComponent {
 			value.type === 'duels'
 				? 'assets/images/deck/ranks/casual_duels.png'
 				: 'assets/images/deck/ranks/heroic_duels.png';
-		this.rankText = value.mmr == null ? '0' :`${value.mmr}`;
+		this.rankText = value.mmr == null ? '0' : `${value.mmr}`;
 		this.treasureCardIds = value.treasureCardIds ?? [];
 		this.wins = value.wins;
 		this.losses = value.losses;

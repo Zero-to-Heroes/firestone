@@ -59,7 +59,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	creationDate: string;
 	dustValue: number;
 	cardId: string;
-	cardType: 'GOLDEN' | 'NORMAL' = 'NORMAL'; 
+	cardType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

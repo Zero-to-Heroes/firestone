@@ -116,14 +116,13 @@ export class FullCardComponent {
 			this.showCount = false;
 		}
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
-		this.class =
-			card.classes?.length
-			    ? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-			    : card.playerClass == 'Neutral'
-			        ? formatClass('all', this.i18n)
-			        : formatClass(card.playerClass, this.i18n);
-				
-		this.type =  this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
+		this.class = card.classes?.length
+			? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
+			: card.playerClass == 'Neutral'
+			? formatClass('all', this.i18n)
+			: formatClass(card.playerClass, this.i18n);
+
+		this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
 		this.set = this.cards.setName(card.set);
 		this.rarity = this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`);
 		const flavorSource = card.flavor ?? card.text;

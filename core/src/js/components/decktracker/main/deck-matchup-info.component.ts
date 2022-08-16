@@ -127,14 +127,14 @@ export class DeckMatchupInfoComponent {
 				? (100 * this._matchup.totalWinsFirst) / this._matchup.totalGamesFirst
 				: null;
 		this.winrateFirstTooltip = this.i18n.translateString('app.decktracker.matchup-info.matches-going-first', {
-						totalMatches: this._matchup.totalGamesFirst,
-					});
+			totalMatches: this._matchup.totalGamesFirst,
+		});
 		this.winrateCoin =
 			this._matchup.totalWinsCoin != null && this._matchup.totalGamesCoin
 				? (100 * this._matchup.totalWinsCoin) / this._matchup.totalGamesCoin
 				: null;
 		this.winrateCoinTooltip = this.i18n.translateString('app.decktracker.matchup-info.matches-going-second', {
-						totalMatches: this._matchup.totalGamesCoin,
-					});
+			totalMatches: this._matchup.totalGamesCoin,
+		});
 	}
 }

@@ -223,27 +223,49 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 				const storyIndex = match ? match[1] : '';
 				switch (+storyIndex) {
 					case 1:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.rokara')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.rokara',
+						)}`;
 					case 2:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.xyrella')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.xyrella',
+						)}`;
 					case 3:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.guff')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.guff',
+						)}`;
 					case 4:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.kurtrus')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.kurtrus',
+						)}`;
 					case 5:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.tamsin')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.tamsin',
+						)}`;
 					case 6:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.cariel')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.cariel',
+						)}`;
 					case 7:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.scabbs')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.scabbs',
+						)}`;
 					case 8:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.tavish')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.tavish',
+						)}`;
 					case 9:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.brukan')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.brukan',
+						)}`;
 					case 10:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.dawngrasp')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.dawngrasp',
+						)}`;
 					default:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs-chapters.other')}`;
+						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
+							'app.collection.filters.hero-portrait.book-of-mercs-chapters.other',
+						)}`;
 				}
 		}
 	}

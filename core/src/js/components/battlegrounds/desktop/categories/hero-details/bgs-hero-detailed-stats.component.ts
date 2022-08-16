@@ -170,7 +170,9 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,
 	],
 	template: `
-		<div class="global-value" [helpTooltip]="'app.battlegrounds.personal-stats.hero-details.stats.community-value-tooltip' | owTranslate"
+		<div
+			class="global-value"
+			[helpTooltip]="'app.battlegrounds.personal-stats.hero-details.stats.community-value-tooltip' | owTranslate"
 		>
 			<div class="global-icon">
 				<svg class="svg-icon-fill">

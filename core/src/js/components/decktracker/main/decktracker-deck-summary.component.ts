@@ -69,7 +69,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				*ngIf="!hidden"
 				aria-hidden="true"
 			>
-			    <svg class="svg-icon-fill">
+				<svg class="svg-icon-fill">
 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
 				</svg>
 			</button>

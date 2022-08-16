@@ -49,7 +49,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 				class="show-hidden-decks-link"
 				*ngIf="showHiddenDecksLink$ | async"
 				field="desktopDeckShowHiddenDecks"
-				[label]="'app.decktracker.filters.show-hidden-decks'| owTranslate"
+				[label]="'app.decktracker.filters.show-hidden-decks' | owTranslate"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
 		</div>

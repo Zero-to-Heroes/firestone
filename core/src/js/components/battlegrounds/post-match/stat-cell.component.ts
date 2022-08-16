@@ -29,16 +29,19 @@ declare let amplitude: any;
 			<div class="hero">
 				<img
 					*ngIf="_heroCardId"
-					[helpTooltip]="'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
-							| owTranslate: { heroName: getCardName(_heroCardId) }"
+					[helpTooltip]="
+						'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
+							| owTranslate: { heroName: getCardName(_heroCardId) }
+					"
 					[src]="heroImage"
 					class="portrait"
 				/>
 				<img
 					*ngIf="heroIcon"
-					[helpTooltip]="'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
-							| owTranslate: { heroName: getCardName(heroIcon) }"
-				
+					[helpTooltip]="
+						'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
+							| owTranslate: { heroName: getCardName(heroIcon) }
+					"
 					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg'"
 					class="portrait"
 				/>
