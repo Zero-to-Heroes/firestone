@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, Zone } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -23,6 +23,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		const copiedCardEntityId = gameEvent.additionalData.copiedCardEntityId;
 		const copiedCardControllerId = gameEvent.additionalData.copiedCardControllerId;
+		const copiedCardZone = gameEvent.additionalData.copiedCardZone;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -32,12 +33,20 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		const newCopy: DeckCard = deck.findCard(entityId)?.card;
 		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
+		console.debug('copiedCard', copiedCard, copiedDeck, copiedCardEntityId, newCopy, gameEvent, deck);
 
-		if (!copiedCard) {
-			return currentState;
-		}
+		// Cards like Masked Reveler summon a copy of a card from the deck. Because we don't store the entityId of
+		// unknown cards in deck (to avoid info leaks), we can't find the right card from the event info, and so
+		// we can't decide to update the card in the deck.
+		// However, we can still use that zone information to create an empty card in the zone, so that we know that
+		// the card might be inside their deck (though we don't want to store the entityId, because that would leak to
+		// info leaks)
 
-		const updatedCardId = newCopy?.cardId ?? copiedCard.cardId;
+		// if (!copiedCard) {
+		// 	return currentState;
+		// }
+
+		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
@@ -54,7 +63,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
 			forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
 			forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)
-				? copiedCard.cardId
+				? copiedCard?.cardId
 				: updatedCardId;
 		console.debug(
 			'[copied-from-entity] obfuscatedCardId',
@@ -64,18 +73,36 @@ export class CopiedFromEntityIdParser implements EventParser {
 			newCopy,
 			copiedCard,
 		);
-		const updatedCopiedCard = copiedCard.update({
-			cardId: obfuscatedCardId,
-			cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardId),
-		} as DeckCard);
-		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
+		// We don't add the initial cards in the deck, so if no card is found, we create it
+		const updatedCopiedCard =
+			copiedCard?.update({
+				cardId: obfuscatedCardId,
+				cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardName),
+			} as DeckCard) ??
+			DeckCard.create({
+				cardId: obfuscatedCardId,
+				cardName: this.i18n.getCardName(obfuscatedCardId),
+				entityId: isPlayer ? copiedCardEntityId : null,
+				zone: undefined,
+			} as DeckCard);
+		console.debug('[copied-from-entity] updatedCopiedCard', updatedCopiedCard);
+		const newCopiedDeck =
+			copiedCardZone === Zone.DECK
+				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCard, true)
+				: copiedDeck.deck;
+		const newCopiedPlayer =
+			copiedCardZone === Zone.DECK
+				? copiedDeck.update({ deck: newCopiedDeck })
+				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
+		console.debug('[copied-from-entity] newCopiedDeck', newCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(
-			newCopiedDeck,
+			newCopiedPlayer,
 			updatedCopiedCard.cardId,
 			copiedCardEntityId,
 		);
+		console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);
 
 		return Object.assign(new GameState(), currentState, {
 			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithSecrets,

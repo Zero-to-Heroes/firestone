@@ -894,6 +894,7 @@ export class GameEvents {
 					CopiedFromEntityIdGameEvent.build(GameEvent.COPIED_FROM_ENTITY_ID, gameEvent, {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
+						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
 					}),
 				);
 				break;
