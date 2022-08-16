@@ -330,6 +330,7 @@ export const publicCardGiftCreators = [
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
 	CardIds.SelectiveBreederCore,
+	CardIds.SerpentWig_TSC_215,
 	CardIds.SinfulSousChef,
 	CardIds.SirakessCultist,
 	CardIds.Sleetbreaker,
