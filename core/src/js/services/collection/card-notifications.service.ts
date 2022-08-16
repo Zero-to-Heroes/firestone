@@ -49,9 +49,8 @@ export class CardNotificationsService {
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
 		const clickText = this.i18n.translateString('app.collection.card-history.click-to-view', {
-			link: `<span class="link">${this.i18n.translateString(
-				'app.collection.card-history.click-to-view-link',
-			)}</span>`,
+			link: `${this.i18n.translateString(
+				'app.collection.card-history.click-to-view-link')}`,
 		});
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
@@ -71,8 +70,10 @@ export class CardNotificationsService {
 								</svg>
 							</i>
 						</div>
-						<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
-						<span class="cta">${clickText}</span>
+						<div class="text-container link">
+							<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
+							<span class="cta"> ${clickText}</span>
+						</div>
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">
