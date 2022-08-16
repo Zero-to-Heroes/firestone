@@ -664,6 +664,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.TotemOfTheDead_LOOTA_845:
 				return and(deathrattle);
+			case CardIds.TownCrier_GIL_580:
+				return and(inDeck, minion, rush);
 			case CardIds.Tuskpiercer:
 				return and(inDeck, deathrattle);
 			case CardIds.TwilightsCall:
