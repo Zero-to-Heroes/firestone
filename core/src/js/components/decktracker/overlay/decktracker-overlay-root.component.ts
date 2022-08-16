@@ -64,6 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[showTitleBar]="showTitleBar$ | async"
 								[showDeckWinrate]="showDeckWinrate$ | async"
 								[showMatchupWinrate]="showMatchupWinrate$ | async"
+								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
 								[deckWinrate]="deckStatsRecap$ | async"
 								[matchupWinrate]="matchupStatsRecap$ | async"
 							></decktracker-title-bar>
@@ -83,6 +84,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone$ | async"
 								[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 								[showTopCardsSeparately]="showTopCardsSeparately$ | async"
+								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
 								[side]="player"
 							>
 							</decktracker-deck-list>
@@ -110,12 +112,9 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showTopCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
-	// @Input() trackerPositionUpdater: (left: number, top: number) => void;
-	// @Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
-	// @Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
-	// @Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
+	@Input() showTotalCardsInZoneExtractor: (computedValue: boolean) => boolean = (computedValue) => computedValue;
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
 
@@ -142,6 +141,8 @@ export class DeckTrackerOverlayRootComponent
 	sortCardsByManaCostInOtherZone$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
 	showTopCardsSeparately$: Observable<boolean>;
+	showTotalCardsInZone$: Observable<boolean>;
+
 	active = true;
 	windowId: string;
 	activeTooltip: string;
@@ -185,6 +186,9 @@ export class DeckTrackerOverlayRootComponent
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(this.mapData(([gameState]) => (!gameState ? null : this.deckExtractor(gameState))));
+		this.showTotalCardsInZone$ = this.store
+			.listenDeckState$((gameState) => gameState.currentTurn)
+			.pipe(this.mapData(([currentTurn]) => this.showTotalCardsInZoneExtractor(currentTurn !== 'mulligan')));
 		const gamesForDeck$ = combineLatest(
 			this.store.listenDeckState$(
 				(gameState) => gameState?.playerDeck?.deckstring,

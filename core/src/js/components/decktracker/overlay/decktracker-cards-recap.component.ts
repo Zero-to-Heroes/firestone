@@ -31,7 +31,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 						<use xlink:href="assets/svg/sprite.svg#cards_in_deck" />
 					</svg>
 				</div>
-				<div class="count">{{ cardsInDeck }}</div>
+				<div class="count">{{ showCardsInDeck ? cardsInDeck : '-' }}</div>
 			</div>
 		</div>
 	`,
@@ -40,6 +40,8 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 export class DeckTrackerCardsRecapComponent {
 	cardsInHand: number;
 	cardsInDeck: number;
+
+	@Input() showCardsInDeck = true;
 
 	@Input() set deck(value: DeckState) {
 		this.cardsInHand = value && value.hand ? value.hand.length : 0;

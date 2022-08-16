@@ -48,6 +48,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
 					[tooltipPosition]="_tooltipPosition"
 					[darkenUsedCards]="darkenUsedCards"
+					[showTotalCardsInZone]="showTotalCardsInZone"
 					[side]="side"
 				>
 				</deck-list-by-zone>
@@ -65,8 +66,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltipPosition]="_tooltipPosition"
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
-					[collection]="collection"
 					[side]="side"
+					[showTotalCardsInZone]="showTotalCardsInZone"
+					[collection]="collection"
 					(cardClicked)="onCardClicked($event)"
 				>
 				</grouped-deck-list>
@@ -92,6 +94,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() showBottomCardsSeparately: boolean;
 	@Input() showTopCardsSeparately: boolean;
+	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {

@@ -28,6 +28,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showTopCardsSeparately]="_showTopCardsSeparately"
 					[showBottomCardsSeparately]="_showBottomCardsSeparately"
 					[darkenUsedCards]="_darkenUsedCards"
+					[showTotalCardsInZone]="showTotalCardsInZone"
 					[side]="side"
 				></deck-zone>
 			</li>
@@ -42,6 +43,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 	@Input() showUnknownCards: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() showStatsChange: boolean;
+	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {
