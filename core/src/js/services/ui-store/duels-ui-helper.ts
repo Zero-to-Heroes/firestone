@@ -463,6 +463,7 @@ export const topDeckApplyFilters = (
 	sigTreasureFilter: 'all' | string,
 	timeFilter: DuelsTimeFilterType,
 	dustFilter: DuelsTopDecksDustFilterType,
+	passivesFilter: readonly string[],
 	patch: PatchInfo,
 ): DuelsGroupedDecks => {
 	return {
@@ -473,8 +474,13 @@ export const topDeckApplyFilters = (
 			.filter((deck) => topDeckHeroPowerFilter(deck, heroPowerFilter))
 			.filter((deck) => topDeckSigTreasureFilter(deck, sigTreasureFilter))
 			.filter((deck) => topDeckTimeFilter(deck, timeFilter, patch))
-			.filter((deck) => topDeckDustFilter(deck, dustFilter)),
+			.filter((deck) => topDeckDustFilter(deck, dustFilter))
+			.filter((deck) => topDeckPassivesFilter(deck, passivesFilter)),
 	};
+};
+
+const topDeckPassivesFilter = (deck: DuelsDeckStat, filter: readonly string[]): boolean => {
+	return !filter?.length || deck.treasuresCardIds?.some((cardId) => filter.includes(cardId));
 };
 
 const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {

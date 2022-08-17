@@ -251,6 +251,7 @@ export class AppUiStoreService {
 			([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 			([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+			([main, nav, prefs]) => prefs.duelsActivePassiveTreasuresFilter,
 			([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 		)
 			.pipe(
@@ -265,6 +266,7 @@ export class AppUiStoreService {
 						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
+						passivesFilter,
 						patch,
 					]) => {
 						const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
@@ -278,6 +280,7 @@ export class AppUiStoreService {
 									sigTreasureFilter,
 									timeFilter,
 									dustFilter,
+									passivesFilter,
 									patch,
 								),
 							)

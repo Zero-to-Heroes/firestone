@@ -128,6 +128,7 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 						signatureTreasureCardId,
 						'last-patch',
 						'all',
+						null,
 						patch,
 					),
 				);

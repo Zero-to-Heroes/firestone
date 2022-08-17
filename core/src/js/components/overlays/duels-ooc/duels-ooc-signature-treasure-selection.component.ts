@@ -142,6 +142,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 										currentSignatureTreasureCardId,
 										'last-patch',
 										dustFilter,
+										null,
 										patch,
 									),
 								)

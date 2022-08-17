@@ -125,6 +125,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 										'all',
 										'last-patch',
 										dustFilter,
+										null,
 										patch,
 									),
 								)
