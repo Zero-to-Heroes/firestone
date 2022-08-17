@@ -380,21 +380,23 @@ export class DecksStateBuilderService {
 		}
 		// allCardsLimitedByMaxCopies
 		// Find the cards that are in all the versions
-		return versions.map((version) => {
-			const deckCards = decode(version.deckstring)?.cards;
-			const uniqueVersionCards = this.getUniqueVersionCards(deckCards, commonCardIdsWithMaxOccurrences);
-			const fullyUniqueCards = this.getFullyUniqueVersionCards(
-				uniqueVersionCards,
-				commonCardIdsWithMaxOccurrences,
-			);
-			return {
-				...version,
-				differentCards: uniqueVersionCards,
-				backgroundImage: `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.pickRandomCard(
-					fullyUniqueCards,
-				)}.jpg)`,
-			};
-		});
+		return versions
+			.map((version) => {
+				const deckCards = decode(version.deckstring)?.cards;
+				const uniqueVersionCards = this.getUniqueVersionCards(deckCards, commonCardIdsWithMaxOccurrences);
+				const fullyUniqueCards = this.getFullyUniqueVersionCards(
+					uniqueVersionCards,
+					commonCardIdsWithMaxOccurrences,
+				);
+				return {
+					...version,
+					differentCards: uniqueVersionCards,
+					backgroundImage: `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.pickRandomCard(
+						fullyUniqueCards,
+					)}.jpg)`,
+				};
+			})
+			.sort((a, b) => b.lastUsedTimestamp - a.lastUsedTimestamp);
 	}
 
 	private pickRandomCard(fullyUniqueCards: readonly string[]): string {
