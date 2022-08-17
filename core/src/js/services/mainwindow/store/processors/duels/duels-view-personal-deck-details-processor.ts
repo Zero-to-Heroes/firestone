@@ -1,10 +1,14 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { LocalizationService } from '../../../../localization.service';
+import { PreferencesService } from '../../../../preferences.service';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../events/duels/duels-view-personal-deck-details-event';
 import { Processor } from '../processor';
 
 export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
+	constructor(private readonly prefs: PreferencesService, private readonly i18n: LocalizationService) {}
+
 	public async process(
 		event: DuelsViewPersonalDeckDetailsEvent,
 		currentState: MainWindowState,
@@ -15,6 +19,11 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		console.debug('deck', deck, currentState, event);
 		const firstRun = deck.runs?.length ? deck.runs[0] : null;
 		const expandedRunIds: readonly string[] = !!firstRun ? [firstRun.id] : [];
+		const prefs = await this.prefs.getPreferences();
+		const deckName =
+			prefs.duelsPersonalDeckNames[deck.initialDeckList] ??
+			deck.deckName ??
+			this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 		return [
 			null,
 			navigationState.update({
@@ -27,7 +36,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					treasureSearchString: null,
 					heroSearchString: null,
 				} as NavigationDuels),
-				text: deck.deckName ?? 'Unnamed deck',
+				text: deckName,
 			} as NavigationState),
 		];
 	}

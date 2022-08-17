@@ -955,7 +955,7 @@ export class MainWindowStoreService {
 			new DuelsViewDeckDetailsProcessor(this.events, this.i18n),
 
 			DuelsViewPersonalDeckDetailsEvent.eventName(),
-			new DuelsViewPersonalDeckDetailsProcessor(),
+			new DuelsViewPersonalDeckDetailsProcessor(this.prefs, this.i18n),
 
 			DuelsTopDeckRunDetailsLoadedEvent.eventName(),
 			new DuelsTopDeckRunDetailsLoadedProcessor(),
