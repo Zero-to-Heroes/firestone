@@ -247,6 +247,7 @@ export const publicCardGiftCreators = [
 	CardIds.BookOfWonders,
 	CardIds.Bottomfeeder,
 	CardIds.BringOnRecruitsTavernBrawl,
+	CardIds.BronzeExplorer,
 	CardIds.BronzeHerald,
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
