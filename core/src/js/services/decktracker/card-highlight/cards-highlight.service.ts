@@ -388,6 +388,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, fel);
 			case CardIds.GreedyGainsTavernBrawl:
 				return and(or(inDeck, inHand), minion);
+			case CardIds.GreySageParrot:
+				return and(or(inDeck, inHand), spell, effectiveCostMore(4));
 			case CardIds.GrommashsArmguardsTavernBrawl:
 				return and(weapon);
 			case CardIds.GuardianAnimals:
