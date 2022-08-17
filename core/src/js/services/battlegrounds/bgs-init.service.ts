@@ -4,12 +4,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsPerfectGamesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-perfect-games-category';
 import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
-import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
-import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { BattlegroundsSimulatorCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-simulator-category';
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
@@ -79,11 +75,27 @@ export class BgsInitService {
 		patch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
 		const categories: readonly BattlegroundsCategory[] = [
+			// BattlegroundsCategory.create({
+			// 	id: 'bgs-category-overview',
+			// 	name: this.i18n.translateString('app.battlegrounds.menu.overview'),
+			// }),
 			this.buildPersonalHeroesCategory(bgsGlobalStats),
-			this.buildPersonalRatingCategory(),
-			this.buildPersonalStatsCategory(),
-			this.buildPerfectGamesCategory(),
-			this.buildSimulatorCategory(),
+			BattlegroundsCategory.create({
+				id: 'bgs-category-personal-rating',
+				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
+			}),
+			BattlegroundsCategory.create({
+				id: 'bgs-category-perfect-games',
+				name: this.i18n.translateString('app.battlegrounds.menu.records'),
+			}),
+			BattlegroundsCategory.create({
+				id: 'bgs-category-perfect-games',
+				name: this.i18n.translateString('app.battlegrounds.menu.perfect-games'),
+			}),
+			BattlegroundsCategory.create({
+				id: 'bgs-category-simulator',
+				name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
+			}),
 		].filter((cat) => cat);
 		return BattlegroundsAppState.create({
 			categories: categories,
@@ -112,36 +124,7 @@ export class BgsInitService {
 		);
 		return BattlegroundsPersonalHeroesCategory.create({
 			name: this.i18n.translateString('app.battlegrounds.menu.heroes'),
-			enabled: true,
 			categories: heroDetailCategories,
 		} as BattlegroundsPersonalHeroesCategory);
-	}
-
-	private buildPersonalRatingCategory(): BattlegroundsCategory {
-		return BattlegroundsPersonalRatingCategory.create({
-			name: this.i18n.translateString('app.battlegrounds.menu.rating'),
-			enabled: true,
-		} as BattlegroundsPersonalRatingCategory);
-	}
-
-	private buildPerfectGamesCategory(): BattlegroundsCategory {
-		return BattlegroundsPerfectGamesCategory.create({
-			name: this.i18n.translateString('app.battlegrounds.menu.perfect-games'),
-			enabled: true,
-		} as BattlegroundsPerfectGamesCategory);
-	}
-
-	private buildPersonalStatsCategory(): BattlegroundsCategory {
-		return BattlegroundsPersonalStatsCategory.create({
-			name: this.i18n.translateString('app.battlegrounds.menu.records'),
-			enabled: true,
-		} as BattlegroundsPersonalStatsCategory);
-	}
-
-	private buildSimulatorCategory(): BattlegroundsCategory {
-		return BattlegroundsSimulatorCategory.create({
-			name: this.i18n.translateString('app.battlegrounds.menu.simulator'),
-			enabled: true,
-		} as BattlegroundsSimulatorCategory);
 	}
 }
