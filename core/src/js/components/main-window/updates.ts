@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.30',
+		version: '9.9.0',
 		sections: [
 			{
 				type: 'intro',
@@ -55,6 +55,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix some an info leak where Kobold Illusionist would reveal the location in the opponent's hand of the copied card.`,
+							},
+							{
+								type: 'bug',
+								text: `Hide the number of cards in the opponent's deck until the muligan is over, as this would let you know whether the opponent was running Prince Renathal.`,
 							},
 						],
 					},
@@ -108,6 +112,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `The 'fuse" in the turn timer now go up instead of down, to reflect that the time counter itself is counting up.`,
+							},
+							{
+								type: 'feature',
+								text: `Add the card copied by Masked Reveler in the list of known cards in the opponent's deck.`,
 							},
 							{
 								type: 'ui',
