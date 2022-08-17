@@ -77,6 +77,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.DemonslayerKurtrusToken,
 	CardIds.FrizzKindleroost,
 	CardIds.FrostLichJaina,
+	CardIds.GoruTheMightree,
 	CardIds.GraniteForgeborn,
 	CardIds.HemetJungleHunter,
 	CardIds.InfiniteMurloc,
