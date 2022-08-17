@@ -324,6 +324,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, legendary);
 			case CardIds.DivineIlluminationTavernBrawl:
 				return and(holy);
+			case CardIds.DoorOfShadows:
+			case CardIds.DoorOfShadows_DoorOfShadowsToken:
+				return and(inDeck, spell);
 			case CardIds.DoubleJump:
 				return and(inDeck, outcast);
 			case CardIds.DoubleTime:
