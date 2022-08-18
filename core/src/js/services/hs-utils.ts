@@ -368,6 +368,7 @@ export const publicCardGiftCreators = [
 	CardIds.SpringpawCore,
 	CardIds.SketchyStranger,
 	CardIds.StaffOfAmmunae_ULDA_041,
+	CardIds.StewardOfScrolls_SCH_245,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPirate,
