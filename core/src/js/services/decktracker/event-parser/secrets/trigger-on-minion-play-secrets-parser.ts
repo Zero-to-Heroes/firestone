@@ -50,6 +50,17 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.HiddenCache);
 		}
 
+		if (gameEvent.additionalData.immune) {
+			// Trigger, but the minion takes no damage
+			// secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
+			// secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
+			// Is Kidnap a bug?
+			secretsWeCantRuleOut.push(CardIds.Kidnap_REV_828);
+			// secretsWeCantRuleOut.push(CardIds.PotionOfPolymorph);
+			// secretsWeCantRuleOut.push(CardIds.SnipeLegacy);
+			// secretsWeCantRuleOut.push(CardIds.SnipeVanilla);
+		}
+
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.MirrorEntityLegacy);
