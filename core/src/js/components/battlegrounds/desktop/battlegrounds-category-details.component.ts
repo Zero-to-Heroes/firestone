@@ -17,6 +17,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			scrollable
 			*ngIf="selectedCategoryId$ | async as selectedCategoryId"
 		>
+			<battlegrounds-desktop-overview *ngIf="selectedCategoryId === 'bgs-category-overview'" role="region">
+			</battlegrounds-desktop-overview>
 			<battlegrounds-personal-stats-heroes
 				*ngIf="selectedCategoryId === 'bgs-category-personal-heroes'"
 				role="region"

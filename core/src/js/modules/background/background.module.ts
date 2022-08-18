@@ -117,6 +117,7 @@ import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-ban
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
+import { BattlegroundsDesktopOverviewComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component';
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
@@ -790,6 +791,7 @@ const components = [
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
+		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsStatsHeroVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
