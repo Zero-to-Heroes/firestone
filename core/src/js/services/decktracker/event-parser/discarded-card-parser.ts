@@ -22,7 +22,22 @@ export class DiscardedCardParser implements EventParser {
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
 
 		// See card-played-from-hand
-		const newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
+		let newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
+
+		// See card-played-from-hand
+		if (!removedCard?.cardId && cardId && !gameEvent.additionalData?.transientCard) {
+			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
+				newDeck,
+				cardId,
+				entityId,
+				deck.deckList.length === 0,
+			);
+			console.debug('[card-discard] newDeckAfterReveal', newDeckAfterReveal, removedCardFromDeck);
+
+			if (removedCardFromDeck) {
+				newDeck = newDeckAfterReveal;
+			}
+		}
 
 		const cardWithZone = card.update({
 			zone: 'DISCARD',

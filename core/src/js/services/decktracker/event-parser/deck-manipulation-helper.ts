@@ -244,8 +244,12 @@ export class DeckManipulationHelper {
 			return deck;
 		}
 
+		// We don't always want to hide the entityId in hand. Typically, when the entityId + cardId is known beflorehand,
+		// we can keep it because this won't lead to an info leak (since we already know everything there is to
+		// know about the card)
+		const shouldKeepEntityIdInHand = isPlayer || (!!card.entityId && !!card.cardId);
 		return deck.update({
-			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card, !isPlayer),
+			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card, !shouldKeepEntityIdInHand),
 			board: this.updateCardInZone(deck.board, card.entityId, card.cardId, card),
 			// When we update a card in the deck, we shouldn't know exactly what their entityId is
 			// as this could lead to info leaks
