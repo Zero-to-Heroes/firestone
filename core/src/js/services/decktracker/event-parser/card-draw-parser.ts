@@ -8,6 +8,7 @@ import {
 	cardsRevealedWhenDrawn,
 	forceHideInfoWhenDrawnInfluencers,
 	publicCardCreators,
+	publicCardInfos,
 	supportedAdditionalData,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -89,18 +90,22 @@ export class CardDrawParser implements EventParser {
 			// 3. As a result, the card info is considered public, and we show it
 			isPlayer ||
 			useTopOfDeckToIdentifyCard ||
-			(!isCardDrawnBySecretPassage &&
-				(cardsRevealedWhenDrawn.includes(updatedCardId as CardIds) ||
-					// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
-					(!isTradable && publicCardCreators.includes(lastInfluencedByCardId))));
+			(!isCardDrawnBySecretPassage && cardsRevealedWhenDrawn.includes(updatedCardId as CardIds)) ||
+			publicCardInfos.includes(lastInfluencedByCardId);
 		const isCreatorPublic =
-			isCardInfoPublic || (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
+			isCardInfoPublic ||
+			// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor
+			// ISSUE: there are some cards that are revealed in the deck, like Start of Game effects. In that
+			// case, if we draw them via a tutor, they will also be flagged
+			// FIX: we remove the "standard tutors" from this check, and they will be only kept for the
+			// creator field
+			(!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 		console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 		const cardWithCreator = card.update({
 			entityId: entityId,
-			creatorCardId: isCardInfoPublic ? creatorCardId : undefined,
+			creatorCardId: isCreatorPublic ? creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
