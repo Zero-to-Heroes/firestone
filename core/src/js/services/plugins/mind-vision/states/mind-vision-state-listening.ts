@@ -28,7 +28,11 @@ export class MindVisionStateListening implements MindVisionState {
 		}
 		this.log('onEnter, plugin init starting');
 		this.log('running sanity checks');
-		await this.loadCollection(this.abortController.signal);
+		try {
+			await this.loadCollection(this.abortController.signal);
+		} catch (e) {
+			this.dispatcher(Action.FORCE_RESET);
+		}
 		this.log('sanity check ok, waitint a bit before starting listening');
 		// Trying to see if this could reduce the number of times the listening fails in a loop
 		await sleep(2000);
