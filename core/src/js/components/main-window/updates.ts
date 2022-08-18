@@ -32,13 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.0',
+		version: '9.9.1',
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `
-					As you might know, Firestone is an open-source project, and this release is the first including quite a few contributions from the community. So I'd like to take the opportunity to specifically thank Boris (piedpiper on GitHub) for his recent contributions :)
+					I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
 				`,
 			},
 			{
@@ -50,28 +50,24 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Deck versioning is there! You can now drag and drop a deck onto another one to create a new version of it. See <a href="https://youtu.be/_2tSzgge5No" target="_blank">this video</a> for a quick overview.`,
+								text: `Fix an info leak (yeah, there have been a lot of these recently) when Prince Renathal is drawn by a tutor.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix some an info leak where Kobold Illusionist would reveal the location in the opponent's hand of the copied card.`,
-							},
-							{
-								type: 'bug',
-								text: `Hide the number of cards in the opponent's deck until the muligan is over, as this would let you know whether the opponent was running Prince Renathal.`,
+								text: `Fix an issue where The Coin was not always properly removed from the opponent's hand (e.g. when stealed by Theotar).`,
 							},
 						],
 					},
 					{
-						category: 'replays',
+						category: 'duels',
 						details: [
 							{
 								type: 'feature',
-								text: `Fix an issue where the replay viewer would never finish loading while used in the app.`,
+								text: `The High-Wins Decks should now have a better representation of the various decks that go to 10+ wins. They will now only show at most 3 samples for a given hero power / signature treasure / passives combination.`,
 							},
 							{
 								type: 'feature',
-								text: `Locations should now be properly supported in replays.`,
+								text: `A Passives Treasures filter has been added to the High-Wins Decks tab.`,
 							},
 						],
 					},
@@ -82,60 +78,19 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `The heroes stats are not limited anymore to the last million games, so data for higher ranks should be more accurate.`,
-							},
-							{
-								type: 'feature',
-								text: `Add the "last updated date" information on the heroes tier list.`,
-							},
-							{
-								type: 'bug',
-								text: `Minion tooltips in the simulator now show tavern tier instead of mana crystals (community contribution!).`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add/fix card highlight for Im-Ending Catastrophe, Jerry Rig Carpenter, Imp King Rafaam, Raid Boss Onyxia.`,
+								text: `Add Gory the Mightree to the Global Effects section.`,
 							},
 							{
 								type: 'feature',
-								text: `Fix/add Card Oracles for quite a few new cards.`,
-							},
-							{
-								type: 'feature',
-								text: `The 'fuse" in the turn timer now go up instead of down, to reflect that the time counter itself is counting up.`,
-							},
-							{
-								type: 'feature',
-								text: `Add the card copied by Masked Reveler in the list of known cards in the opponent's deck.`,
-							},
-							{
-								type: 'ui',
-								text: `Replace the icon for archive / unarchive decks (community contribution!).`,
+								text: `Add card highlight for Grey Sage Parrot, and gift icons for Plagiarize and Steward of Scrolls.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Secrets Helper would sometimes gray out Double Cross when 1 mana was left.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Abyssal Curse counter would sometimes skip a curse when your opponent's hand is full.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Secrets Helper would gray out secrets that trigger on minion play (like Explosive Runes) when a location is played.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the "copy deck" button could sometimes become too small (community contribution!).`,
+								text: `Today, Kidnap (the Rogue secret) doesn't trigger on Immune minions. The Secrets Helper has been updated to reflect this. I'm not yet 100% convinced that this behavior is intended, so I might revert this change in the future.`,
 							},
 						],
 					},
@@ -144,51 +99,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Show 0 as MMR instead of "null" in the quick-select deck widgets when no MMR is available (community contribution!).`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'ui',
-								text: `Add several small improvements in the layout / tooltips of the Progression page (community contribution!).`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'ui',
-								text: `Increase the size of the Tavern Brawl icon (community contribution!).`,
-							},
-						],
-					},
-					{
-						category: 'arena',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the opponent's name would not appear when looking at matches of an Arena run (community contribution!).`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `Don't show the pity timers on mini-sets and adventures (community contribution!).`,
-							},
-							{
-								type: 'feature',
-								text: `Move Standard and Wild packs to the "Main packs" section of the Packs stats (community contribution!).`,
-							},
-							{
-								type: 'bug',
-								text: `Mousing over a golden card in the card history now properly shows a golden tooltip (community contribution!).`,
+								text: `Fix the new deck name not always showing up after renaming a Duels deck.`,
 							},
 						],
 					},
