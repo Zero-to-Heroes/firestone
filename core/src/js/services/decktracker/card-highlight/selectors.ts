@@ -60,7 +60,7 @@ export const healthBiggerThanAttack = (handler: Handler): boolean => {
 };
 
 export const cardIs = (...cardIds: readonly CardIds[]) => (handler: Handler): boolean => {
-	return cardIds.includes(handler.referenceCardProvider().id as CardIds);
+	return cardIds.includes(handler.referenceCardProvider()?.id as CardIds);
 };
 
 export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
