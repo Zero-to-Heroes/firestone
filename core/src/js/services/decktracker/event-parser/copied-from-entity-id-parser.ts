@@ -90,11 +90,12 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copiedCardZone === Zone.DECK
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCard, true)
 				: copiedDeck.deck;
+		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck);
 		const newCopiedPlayer =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
 				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
-		console.debug('[copied-from-entity] newCopiedDeck', newCopiedPlayer);
+		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(
