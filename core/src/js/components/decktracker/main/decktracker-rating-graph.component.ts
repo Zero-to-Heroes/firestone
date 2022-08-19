@@ -147,22 +147,23 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 		if (rakingGroup === 'per-day') {
 			const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
 				new Date(match.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit',
-			}),
+					day: '2-digit',
+					month: '2-digit',
+					year: '2-digit',
+				}),
 			)(finalData);
 			const daysSinceStart = daysBetweenDates(
 				formatDate(new Date(finalData[0].creationTimestamp)),
 				formatDate(new Date(finalData[finalData.length - 1].creationTimestamp)),
 			);
-			labels = Array.from(Array(daysSinceStart), (_, i) =>
-				addDaysToDate(finalData[0].creationTimestamp, i),
-			).map((date) => date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-				day: '2-digit',
-				month: '2-digit',
-				year: '2-digit',
-			}));
+			labels = Array.from(Array(daysSinceStart), (_, i) => addDaysToDate(finalData[0].creationTimestamp, i)).map(
+				(date) =>
+					date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+						day: '2-digit',
+						month: '2-digit',
+						year: '2-digit',
+					}),
+			);
 			for (const date of labels) {
 				const valuesForDay = groupedByDay[date] ?? [];
 				let rankForDay = ladderRankToInt(valuesForDay.filter((game) => game.playerRank)[0]?.playerRank);
