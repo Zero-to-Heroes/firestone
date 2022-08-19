@@ -53,6 +53,9 @@ export class CardDrawParser implements EventParser {
 			console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
 		}
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
+		// If we don't have info on the entityId, we try to remove the one at the top
+		// Not sure this fix is needed, keeping it in case
+		// const useTopOfDeckToIdentifyCard = !shouldUseEntityId && deck.deck.some((c) => c.positionFromTop != null);
 		console.debug(
 			'useTopOfDeckToIdentifyCard',
 			useTopOfDeckToIdentifyCard,

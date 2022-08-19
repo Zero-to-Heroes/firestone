@@ -238,7 +238,12 @@ export class DeckManipulationHelper {
 		return [...zone, newCard];
 	}
 
-	public updateCardInDeck(deck: DeckState, card: DeckCard, isPlayer: boolean): DeckState {
+	public updateCardInDeck(
+		deck: DeckState,
+		card: DeckCard,
+		isPlayer: boolean,
+		forceUseEntityIdInDeck = false,
+	): DeckState {
 		if (!card?.entityId) {
 			console.warn('missing entityId for card update', card);
 			return deck;
@@ -248,12 +253,15 @@ export class DeckManipulationHelper {
 		// we can keep it because this won't lead to an info leak (since we already know everything there is to
 		// know about the card)
 		const shouldKeepEntityIdInHand = isPlayer || (!!card.entityId && !!card.cardId);
+		const shouldKeepEntityIdInDeck = forceUseEntityIdInDeck;
 		return deck.update({
 			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId, card, !shouldKeepEntityIdInHand),
 			board: this.updateCardInZone(deck.board, card.entityId, card.cardId, card),
 			// When we update a card in the deck, we shouldn't know exactly what their entityId is
 			// as this could lead to info leaks
-			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId, card, true),
+			// However, there are cases where you want to keep the entityId because you know exactly what card was updated,
+			// like when linking an entity after a dredge
+			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId, card, !shouldKeepEntityIdInDeck),
 			otherZone: this.updateCardInZone(deck.otherZone, card.entityId, card.cardId, card),
 		} as DeckState);
 	}
