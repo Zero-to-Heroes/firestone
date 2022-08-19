@@ -242,7 +242,7 @@ export class TwitchAuthService {
 						newEvent,
 					);
 				} else {
-					console.error('[twitch-auth] Could not send deck event to EBS', error);
+					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
 				}
 			},
 		);
