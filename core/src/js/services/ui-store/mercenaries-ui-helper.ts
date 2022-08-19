@@ -180,6 +180,8 @@ export const buildMercenariesTasksList = (
 						  }),
 					description: task.description,
 					progress: visitor.TaskProgress,
+					quota: task.quota,
+					progressPercentage: !!task.quota ? (100 * (visitor.TaskProgress ?? 0)) / task.quota : 0,
 					taskChainProgress: visitor.TaskChainProgress,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
 					frameUrl: role

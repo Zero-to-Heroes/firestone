@@ -244,12 +244,9 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						<div class="header">{{ task.header }}</div>
 						<div class="description">{{ task.description }}</div>
 						<div class="progress">
-							<div
-								class="label"
-								[owTranslate]="'mercenaries.team-widget.task-progress-label'"
-								[helpTooltip]="'mercenaries.team-widget.task-progress-tooltip' | owTranslate"
-							></div>
-							<div class="value">{{ task.progress }}</div>
+							<div class="background"></div>
+							<div class="current-progress" [style.width.%]="task.progressPercentage"></div>
+							<div class="text">{{ task.progress }} / {{ task.quota }}</div>
 						</div>
 					</div>
 				</div>
