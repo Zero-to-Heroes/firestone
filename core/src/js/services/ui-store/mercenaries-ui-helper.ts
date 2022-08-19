@@ -150,9 +150,9 @@ export const buildMercenariesTasksList = (
 					return null;
 				}
 
-				if (taskChain.mercenaryVisitorId === 1938) {
-					console.debug('story task chain', taskChain, referenceData, visitor);
-				}
+				// if (taskChain.mercenaryVisitorId === 1938) {
+				// 	console.debug('story task chain', taskChain, referenceData, visitor);
+				// }
 
 				const task = taskChain.tasks[visitor.TaskChainProgress];
 				if (!task) {
