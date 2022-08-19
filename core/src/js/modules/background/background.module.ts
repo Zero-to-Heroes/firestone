@@ -317,7 +317,10 @@ import { MercenariesTeamAbilityComponent } from '../../components/mercenaries/ov
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
-import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
+import {
+	MercenariesTeamRootComponent,
+	MercsTasksListComponent,
+} from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
@@ -885,6 +888,7 @@ const components = [
 		MercenariesTeamControlBarComponent,
 		MercenariesTeamListComponent,
 		MercenariesTeamMercenaryComponent,
+		MercsTasksListComponent,
 
 		MercenariesDesktopComponent,
 		MercenariesPersonalHeroStatsComponent,

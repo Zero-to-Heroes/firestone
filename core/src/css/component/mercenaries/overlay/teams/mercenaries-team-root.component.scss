@@ -211,7 +211,9 @@
 		opacity: 1;
 		pointer-events: all;
 	}
+}
 
+.tasks-container {
 	.task {
 		display: flex;
 		position: relative;
@@ -272,6 +274,13 @@
 				}
 			}
 		}
+	}
+
+	.empty-state {
+		padding-left: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }
 

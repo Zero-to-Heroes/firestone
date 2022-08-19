@@ -53,36 +53,12 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.tasks-button' | owTranslate }}
 								</div>
-								<div
+								<mercs-tasks-list
 									class="task-list {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showTaskList$ | async }"
 									[style.bottom.px]="taskListBottomPx"
-								>
-									<div class="task" *ngFor="let task of _tasks; trackBy: trackByTaskFn">
-										<div
-											class="portrait"
-											*ngIf="task.mercenaryCardId"
-											[cardTooltip]="task.mercenaryCardId"
-										>
-											<img class="art" [src]="task.portraitUrl" />
-											<img class="frame" *ngIf="task.frameUrl" [src]="task.frameUrl" />
-										</div>
-										<div class="task-content">
-											<div class="header">{{ task.header }}</div>
-											<div class="description">{{ task.description }}</div>
-											<div class="progress">
-												<div
-													class="label"
-													[owTranslate]="'mercenaries.team-widget.task-progress-label'"
-													[helpTooltip]="
-														'mercenaries.team-widget.task-progress-tooltip' | owTranslate
-													"
-												></div>
-												<div class="value">{{ task.progress }}</div>
-											</div>
-										</div>
-									</div>
-								</div>
+									[tasks]="_tasks"
+								></mercs-tasks-list>
 							</div>
 
 							<div
@@ -114,7 +90,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 
 	@Input() set team(value: MercenariesBattleTeam) {
-		// console.debug('set team in root', value);
 		this._team = value;
 		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -126,21 +101,11 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		if (!value) {
 			return;
 		}
-		// this._tasks = [];
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-
-		// // Avoids the "Cannot read property 'destroyed' of null" error
-		// // This might be caused by the "detectChanges" calls done in mapData. However if I remove them then
-		// // some data is sometimes not updated, so I'm not sure what the correct approach should be
-		// setTimeout(() => {
 		this._tasks = value;
 		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
@@ -258,6 +223,46 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	hideTasks() {
 		this.showTaskList$$.next(false);
 	}
+}
+
+@Component({
+	selector: 'mercs-tasks-list',
+	styleUrls: [
+		'../../../../../css/global/components-global.scss',
+		`../../../../../css/themes/decktracker-theme.scss`,
+		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-root.component.scss',
+	],
+	template: `
+		<div class="tasks-container">
+			<ng-container *ngIf="tasks?.length; else emptyState">
+				<div class="task" *ngFor="let task of tasks; trackBy: trackByTaskFn">
+					<div class="portrait" *ngIf="task.mercenaryCardId" [cardTooltip]="task.mercenaryCardId">
+						<img class="art" [src]="task.portraitUrl" />
+						<img class="frame" *ngIf="task.frameUrl" [src]="task.frameUrl" />
+					</div>
+					<div class="task-content">
+						<div class="header">{{ task.header }}</div>
+						<div class="description">{{ task.description }}</div>
+						<div class="progress">
+							<div
+								class="label"
+								[owTranslate]="'mercenaries.team-widget.task-progress-label'"
+								[helpTooltip]="'mercenaries.team-widget.task-progress-tooltip' | owTranslate"
+							></div>
+							<div class="value">{{ task.progress }}</div>
+						</div>
+					</div>
+				</div>
+			</ng-container>
+			<ng-template #emptyState
+				><div class="empty-state" [owTranslate]="'mercenaries.team-widget.tasks-completed'"></div>
+			</ng-template>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MercsTasksListComponent {
+	@Input() tasks: readonly Task[];
 }
 
 export interface Task {
