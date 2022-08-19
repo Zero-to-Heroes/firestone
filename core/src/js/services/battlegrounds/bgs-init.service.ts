@@ -85,7 +85,7 @@ export class BgsInitService {
 				name: this.i18n.translateString('app.battlegrounds.menu.rating'),
 			}),
 			BattlegroundsCategory.create({
-				id: 'bgs-category-perfect-games',
+				id: 'bgs-category-personal-stats',
 				name: this.i18n.translateString('app.battlegrounds.menu.records'),
 			}),
 			BattlegroundsCategory.create({
