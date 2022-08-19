@@ -32,20 +32,23 @@ export class CardNotificationsService {
 		}
 
 		const cardName: string = dbCard.name;
-		const goldenClass = type === 'GOLDEN' ||  type === 'DIAMOND' ? 'premium' : '';
+		const goldenClass = type === 'GOLDEN' || type === 'DIAMOND' ? 'premium' : '';
 		const newLabel = isSecondCopy
-			? this.i18n.translateString('app.collection.card-history.second-copy-long', {  version: 
-					goldenClass ? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' ' : '',
-				})
-			: this.i18n.translateString('app.collection.card-history.new-copy-long', { version:
-					goldenClass ? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' ' : '',
-				});
+			? this.i18n.translateString('app.collection.card-history.second-copy-long', {
+					version: goldenClass
+						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
+						: '',
+			  })
+			: this.i18n.translateString('app.collection.card-history.new-copy-long', {
+					version: goldenClass
+						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
+						: '',
+			  });
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
 		const clickText = this.i18n.translateString('app.collection.card-history.click-to-view', {
-			link: `${this.i18n.translateString(
-				'app.collection.card-history.click-to-view-link')}`,
+			link: `${this.i18n.translateString('app.collection.card-history.click-to-view-link')}`,
 		});
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
