@@ -495,6 +495,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, neutral);
 			case CardIds.MummyMagic:
 				return and(or(inDeck, inHand), minion, deathrattle);
+			case CardIds.NagaGiant:
+				return and(or(inDeck, inHand), spell);
 			case CardIds.NaturalForceTavernBrawl:
 				return and(spell, nature, dealsDamage);
 			case CardIds.NzothGodOfTheDeep:
