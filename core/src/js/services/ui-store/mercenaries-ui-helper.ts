@@ -143,6 +143,9 @@ export const buildMercenariesTasksList = (
 				const taskChain = referenceData.taskChains.find(
 					(chain) =>
 						chain.mercenaryVisitorId === visitor.VisitorId &&
+						// If we don't ignore the EVENTs, we might pick that quest chain instead of the
+						// "normal" one. So we need another information to properly pick the event quest
+						// when it is available
 						chain.taskChainType !== VillageVisitorType.EVENT,
 				);
 				// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
