@@ -17,6 +17,12 @@ export class MercenariesCooldownUpdatedParser implements MercenariesParser {
 		mainWindowState: MainWindowState,
 	): Promise<MercenariesBattleState> {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
+		if (!localPlayer) {
+			return battleState;
+		}
+		if (!cardId) {
+			return battleState;
+		}
 
 		const ownerEntityId = event.additionalData.abilityOwnerEntityId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
