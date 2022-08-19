@@ -17,7 +17,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 		<div class="duels-hero-stat-vignette" [ngClass]="{ 'unused': playerGamesPlayed === 0 }">
 			<div class="box-side">
 				<div class="name-container">
-					<div class="name" [helpTooltip]="playerClassLoc + ' - ' + name">{{ name }}</div>
+					<div class="name" [helpTooltip]="name + ' (' + playerClassLoc + ')'"> {{isNeutralHero ? playerClassLoc + ' ' + name : name }} </div>
 					<div class="info" [helpTooltip]="numberOfGamesTooltip">
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#info" />
@@ -73,11 +73,11 @@ export class DuelsHeroStatVignetteComponent {
 		this._stat = value;
 		this.cardId = value.cardId;
 		this.playerClassLoc = formatClass(card?.playerClass, this.i18n);
-		const isNeutralHero =
+		this.isNeutralHero =
 			value.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) ||
 			value.cardId.startsWith(CardIds.DrektharTavernBrawl);
-		this.name = isNeutralHero ? `${this.playerClassLoc} ${card?.name}` : card?.name;
-		this.secondaryClassIcon = isNeutralHero
+		this.name = card?.name;
+		this.secondaryClassIcon = this.isNeutralHero
 			? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${card?.playerClass?.toLowerCase()}.png`
 			: null;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
@@ -105,6 +105,7 @@ export class DuelsHeroStatVignetteComponent {
 	cardId: string;
 	name: string;
 	playerClassLoc: string;
+	isNeutralHero: boolean;
 	icon: string;
 	playerWinrate: number;
 	globalWinrate: number;
