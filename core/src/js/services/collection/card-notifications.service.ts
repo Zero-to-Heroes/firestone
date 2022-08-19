@@ -31,20 +31,15 @@ export class CardNotificationsService {
 			return;
 		}
 
-		const cardName: string =
-			type === 'GOLDEN'
-				? this.i18n.translateString('app.collection.card-history.golden-card', {
-						cardName: dbCard.name,
-				  })
-				: type === 'DIAMOND'
-				? this.i18n.translateString('app.collection.card-history.diamond-card', {
-						cardName: dbCard.name,
-				  })
-				: dbCard.name;
-		const goldenClass = type === 'GOLDEN' ? 'premium' : '';
+		const cardName: string = dbCard.name;
+		const goldenClass = type === 'GOLDEN' ||  type === 'DIAMOND' ? 'premium' : '';
 		const newLabel = isSecondCopy
-			? this.i18n.translateString('app.collection.card-history.second-copy-long')
-			: this.i18n.translateString('app.collection.card-history.new-copy-long');
+			? this.i18n.translateString('app.collection.card-history.second-copy-long', {  version: 
+					goldenClass ? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' ' : '',
+				})
+			: this.i18n.translateString('app.collection.card-history.new-copy-long', { version:
+					goldenClass ? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' ' : '',
+				});
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
