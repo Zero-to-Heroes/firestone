@@ -40,13 +40,13 @@
 
 		.skin {
 			width: 100%;
-			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 0%, 85% 20%, 100% 56%, 100% 100%);
 		}
 		.frame {
 			position: absolute;
-			top: -8%;
-			left: -16%;
-			width: 120%;
+			top: -16%;
+			left: -17%;
+			width: 134%;
 		}
 		.decoration {
 			position: absolute;
