@@ -24,7 +24,7 @@ declare let amplitude;
 			*ngIf="card"
 		>
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="true">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [premium]="card.ownedPremium" [highRes]="true">/</card-view>
 			</div>
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
