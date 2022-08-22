@@ -105,13 +105,19 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				>
 				</sortable-label>
 			</div>
-			<div class="list" scrollable>
+			<div class="list" *ngIf="stats.length; else searchEmptyState" scrollable>
 				<mercenaries-personal-hero-stat
 					*ngFor="let stat of stats; trackBy: trackByFn"
 					[stat]="stat"
 				></mercenaries-personal-hero-stat>
 			</div>
 		</div>
+		<ng-template #searchEmptyState>
+			<mercenaries-empty-state
+				[title]="'mercenaries.search-empty-state.title' | owTranslate"
+				[subtitle]="'mercenaries.search-empty-state.subtitle' | owTranslate"
+			></mercenaries-empty-state
+		></ng-template>
 		<ng-template #emptyState>
 			<mercenaries-empty-state
 				[subtitle]="'mercenaries.hero-stats.empty-state-subtitle' | owTranslate"
