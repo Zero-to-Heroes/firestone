@@ -180,8 +180,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					</div>
 				</div>
 				<div class="hero-selection">
-					<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 					<div class="search">
+						<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 						<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
 						<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
 						<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
