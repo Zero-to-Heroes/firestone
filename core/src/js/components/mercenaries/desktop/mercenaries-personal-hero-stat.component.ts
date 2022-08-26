@@ -294,8 +294,8 @@ export class MercenariesPersonalHeroStatComponent {
 		const bounties: readonly string[] = value.bountiesWithRewards.map(
 			(bounty) => `
 				<div class="bounty">
-					<div class="bounty-zone">${bounty.bountySetName}</div>
-					<div class="bounty-name">${bounty.bountyName}</div>
+					<div class="bounty-zone" style="white-space: nowrap;">${bounty.bountySetName}</div>
+					<div class="bounty-name" style="white-space: nowrap; overflow: hidden;">${bounty.bountyName}</div>
 				</div>
 			`,
 		);
