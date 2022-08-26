@@ -22,7 +22,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	template: `
 		<div class="bgs-last-warbands">
 			<with-loading [isLoading]="false" [mainTitle]="null" [subtitle]="null" svgName="loading-spiral">
-				<ng-container *ngIf="boards$ | async as boards; else emptyState">
+				<ng-container *ngIf="(boards$ | async)?.length && (boards$ | async) as boards; else emptyState">
 					<div
 						class="title"
 						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.last-warbands.title'"
