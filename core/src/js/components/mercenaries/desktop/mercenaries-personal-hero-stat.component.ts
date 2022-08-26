@@ -97,7 +97,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 			<div class="abilities">
 				<div class="item" *ngFor="let ability of abilities" [ngClass]="{ 'missing': !ability.owned }">
 					<div class="item-icon" [cardTooltip]="ability.cardId">
-						<img class="icon" [src]="ability.artUrl" />
+						<img class="ability-icon" [src]="ability.artUrl" />
 						<img
 							class="frame"
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
@@ -126,7 +126,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					[ngClass]="{ 'equipped': equipment.equipped, 'missing': !equipment.owned }"
 				>
 					<div class="item-icon" [cardTooltip]="equipment.cardId">
-						<img class="icon" [src]="equipment.artUrl" />
+						<img class="equipment-icon" [src]="equipment.artUrl" />
 						<img
 							class="frame"
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"

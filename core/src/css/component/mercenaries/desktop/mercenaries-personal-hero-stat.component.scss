@@ -210,7 +210,15 @@
 				left: 0;
 				z-index: 9;
 
-				.icon {
+				.ability-icon {
+					position: absolute;
+					top: 11%;
+					left: 13%;
+					width: 76%;
+					clip-path: ellipse(40% 44% at 50% 50%);
+				}
+
+				.equipment-icon {
 					position: absolute;
 					top: 11%;
 					left: 13%;
