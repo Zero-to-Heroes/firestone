@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[enableSimulation]="false"
 				[maxBoardHeight]="-1"
 				[currentTurn]="currentTurn"
-				tavernTitle="Latest upgrade"
+				[tavernTitle]="'battlegrounds.in-game.opponents.tavern-latest-upgrade-title' | owTranslate"
 				[showTavernsIfEmpty]="false"
 				[showLastOpponentIcon]="isLastOpponent"
 			></bgs-opponent-overview-big>
