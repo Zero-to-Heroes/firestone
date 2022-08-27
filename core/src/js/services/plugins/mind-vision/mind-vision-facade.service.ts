@@ -52,17 +52,23 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getCollection(): Promise<any[]> {
+	public async getCollection(throwException = false): Promise<any[]> {
 		return new Promise<any[]>(async (resolve, reject) => {
 			const plugin = await this.get();
-			try {
-				plugin.getCollection((collection) => {
+			plugin.getCollection(throwException, (collection) => {
+				console.debug('[mind-vision] got collection', collection);
+				if (collection === 'exception') {
+					reject();
+					return;
+				}
+
+				try {
 					resolve(collection ? JSON.parse(collection) : null);
-				});
-			} catch (e) {
-				console.log('[mind-vision] could not parse collection', e);
-				resolve(null);
-			}
+				} catch (e) {
+					console.log('[mind-vision] could not parse collection', e);
+					resolve(null);
+				}
+			});
 		});
 	}
 

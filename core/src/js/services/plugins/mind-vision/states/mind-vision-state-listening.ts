@@ -31,7 +31,9 @@ export class MindVisionStateListening implements MindVisionState {
 		try {
 			await this.loadCollection(this.abortController.signal);
 		} catch (e) {
+			this.warn('Exception while loading collection, triggering force reset', e);
 			this.dispatcher(Action.FORCE_RESET);
+			return;
 		}
 		this.log('sanity check ok, waitint a bit before starting listening');
 		// Trying to see if this could reduce the number of times the listening fails in a loop
@@ -65,12 +67,18 @@ export class MindVisionStateListening implements MindVisionState {
 				resolve();
 			});
 
-			let collection = await this.mindVision.getCollection();
+			let collection = null;
 			// TODO: there is an issue if we're leaving the state while this is ongoing
 			while (!collection?.length && !abortProcess) {
-				await sleep(500);
+				this.debug('current collection', collection, abortProcess);
+				await sleep(1000);
 				this.log('waiting for collection to be populated');
-				collection = await this.mindVision.getCollection();
+				try {
+					collection = await this.mindVision.getCollection(true);
+				} catch (e) {
+					this.log('caught exception', e);
+					reject();
+				}
 			}
 			resolve();
 		});
@@ -86,5 +94,9 @@ export class MindVisionStateListening implements MindVisionState {
 
 	private log(...args: any[]) {
 		console.log('[mind-vision]', `[${CurrentState[this.stateId()].toLowerCase()}-state]`, ...args);
+	}
+
+	private debug(...args: any[]) {
+		console.debug('[mind-vision]', `[${CurrentState[this.stateId()].toLowerCase()}-state]`, ...args);
 	}
 }
