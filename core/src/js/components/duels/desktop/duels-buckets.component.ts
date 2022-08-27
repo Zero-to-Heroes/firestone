@@ -52,6 +52,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 				<virtual-scroller
 					class="buckets-container"
 					#scroll
+					*ngIf="(buckets$ | async)?.length; else emptyState"
 					[items]="buckets$ | async"
 					bufferAmount="5"
 					scrollable
@@ -71,6 +72,12 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						</div>
 					</div>
 				</virtual-scroller>
+				<ng-template #emptyState>
+					<collection-empty-state
+						[searchString]="searchString$ | async"
+					>
+					</collection-empty-state>
+				</ng-template>
 			</div>
 		</div>
 	`,
@@ -78,7 +85,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 })
 export class DuelsBucketsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	buckets$: Observable<readonly BucketData[]>;
-
+	searchString$: Observable<string>;
 	classOptions: readonly ClassOption[];
 
 	searchForm = new FormControl();
@@ -147,11 +154,11 @@ export class DuelsBucketsComponent extends AbstractSubscriptionComponent impleme
 					});
 				}),
 			);
-		const searchString$ = this.searchForm.valueChanges.pipe(
+		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.trim()?.toLowerCase(), null, 50),
 		);
-		this.buckets$ = combineLatest(allBuckets$, this.activeClassFilters.asObservable(), searchString$).pipe(
+		this.buckets$ = combineLatest(allBuckets$, this.activeClassFilters.asObservable(), this.searchString$).pipe(
 			this.mapData(([buckets, activeClassFilters, searchString]) =>
 				buckets
 					.filter(
