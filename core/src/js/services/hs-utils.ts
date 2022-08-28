@@ -288,6 +288,8 @@ export const publicCardGiftCreators = [
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
 	CardIds.FirstFlame,
+	CardIds.FirstWishTavernBrawl,
+	CardIds.SecondWishTavernBrawl,
 	CardIds.FishyFlyer,
 	CardIds.FreshScent_YOD_005,
 	CardIds.FrostShardsTavernBrawl,
