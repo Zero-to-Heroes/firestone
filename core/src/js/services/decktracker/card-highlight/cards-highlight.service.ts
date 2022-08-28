@@ -294,6 +294,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(or(inDeck, inHand), murloc);
+			case CardIds.Commencement:
+				return and(inDeck, minion);
 			case CardIds.CorruptedFelstoneTavernBrawl:
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.CowardlyGrunt:
@@ -408,6 +410,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, deathrattle);
 			case CardIds.HeraldOfLokholar:
 				return and(inDeck, spell, frost);
+			case CardIds.HeraldOfNature:
+				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
 				return and(inDeck, spell, shadow);
 			case CardIds.HoldTheLineTavernBrawl:
