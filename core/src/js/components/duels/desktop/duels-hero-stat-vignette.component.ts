@@ -17,7 +17,9 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 		<div class="duels-hero-stat-vignette" [ngClass]="{ 'unused': playerGamesPlayed === 0 }">
 			<div class="box-side">
 				<div class="name-container">
-					<div class="name" [helpTooltip]="name + ' (' + playerClassLoc + ')'"> {{isNeutralHero ? playerClassLoc + ' ' + name : name }} </div>
+					<div class="name" [helpTooltip]="name + ' (' + playerClassLoc + ')'">
+						{{ isNeutralHero ? playerClassLoc + ' ' + name : name }}
+					</div>
 					<div class="info" [helpTooltip]="numberOfGamesTooltip">
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#info" />
