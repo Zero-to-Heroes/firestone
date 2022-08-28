@@ -298,6 +298,8 @@ export const publicCardGiftCreators = [
 	CardIds.GorillabotA3Core,
 	CardIds.Guidance_YOP_024,
 	CardIds.HalazziTheLynx,
+	CardIds.HeadcrackLegacy,
+	CardIds.HeadcrackVanilla,
 	CardIds.Hydrologist,
 	CardIds.TheHarvesterOfEnvy,
 	CardIds.IdentityTheft,
