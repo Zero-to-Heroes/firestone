@@ -14,7 +14,7 @@ import { MercenaryInfo } from './mercenary-info';
 	template: `
 		<div class="mercenaries-hero-stat" (click)="select()">
 			<div class="name-container">
-				<div class="name" [helpTooltip]="role + ' - ' + name">{{ name }}</div>
+				<div class="name" [helpTooltip]="name +' (' + role + ')'">{{ name }}</div>
 				<div class="info" [helpTooltip]="numberOfGamesTooltip">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#info" />
