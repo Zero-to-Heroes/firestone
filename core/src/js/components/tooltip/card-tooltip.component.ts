@@ -1,9 +1,11 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ComponentRef,
 	Input,
+	OnDestroy,
 	Optional,
 	ViewRef,
 } from '@angular/core';
@@ -62,7 +64,7 @@ import { groupByFunction } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardTooltipComponent {
+export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 	cards: readonly InternalCard[];
 	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
@@ -147,13 +149,23 @@ export class CardTooltipComponent {
 		// }
 	}
 
+	private timeout;
+
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		@Optional() private prefs: PreferencesService,
-	) {
-		setTimeout(() => this.viewRef?.destroy(), 15_000);
+	) {}
+
+	ngAfterViewInit(): void {
+		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
+	}
+
+	ngOnDestroy(): void {
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
 	}
 
 	refresh() {
