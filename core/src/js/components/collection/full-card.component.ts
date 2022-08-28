@@ -259,7 +259,7 @@ export class FullCardComponent {
 			category: 'emote',
 		},
 		{
-			regex: /.*WELL_PLAYED.*/g,
+			regex: /.*WELL_?PLAYED.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.well-played'),
 			category: 'emote',
 		},
