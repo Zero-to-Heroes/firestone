@@ -253,6 +253,7 @@ export const publicCardGiftCreators = [
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
 	CardIds.BuildASnowman_BuildASnowgreToken,
+	CardIds.BumperCar,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
 	CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment,
 	CardIds.CommanderSivara_TSC_087,
