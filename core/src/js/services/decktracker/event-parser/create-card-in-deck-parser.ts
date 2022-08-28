@@ -37,7 +37,7 @@ export class CreateCardInDeckParser implements EventParser {
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
 		);
-		// console.debug('[debug]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
+		// console.debug('[create-card-in-deck]', 'positionFromBottom', positionFromBottom, deck, gameEvent, currentState);
 		const createdByJoust = gameEvent.additionalData.createdByJoust;
 		const creatorEntityId =
 			gameEvent.additionalData.creatorEntityId ?? gameEvent.additionalData.influencedByEntityId
@@ -47,37 +47,37 @@ export class CreateCardInDeckParser implements EventParser {
 			? // Because sometimes the entityId is reversed in the Other zone
 			  deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card
 			: null;
-		// console.debug(
-		// 	'[debug]',
-		// 	'creatorEntity',
-		// 	creatorEntity,
-		// 	gameEvent.additionalData.creatorEntityId,
-		// 	gameEvent.additionalData.influencedByEntityId,
-		// 	deck,
-		// );
+		console.debug(
+			'[create-card-in-deck]',
+			'creatorEntity',
+			creatorEntity,
+			gameEvent.additionalData.creatorEntityId,
+			gameEvent.additionalData.influencedByEntityId,
+			deck,
+		);
 		// Because of Tome Tampering
 		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		card =
-			card ??
-			DeckCard.create({
-				cardId: cardId,
-				entityId: entityId,
-				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
-				manaCost: cardData ? cardData.cost : undefined,
-				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
-				creatorCardId: gameEvent.additionalData.creatorCardId,
-				mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
-				positionFromBottom: positionFromBottom,
-				createdByJoust: createdByJoust,
-			} as DeckCard);
-		// console.debug('[debug]', 'adding card', card);
+		console.debug('[create-card-in-deck]', 'card added', card);
+		// Sometimes a CARD_REVEALED event occurs first, so we need to
+		card = (card ?? DeckCard.create()).update({
+			cardId: cardId ?? card?.cardId,
+			entityId: entityId,
+			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
+			manaCost: cardData ? cardData.cost : undefined,
+			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+			creatorCardId: gameEvent.additionalData.creatorCardId,
+			mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
+			positionFromBottom: positionFromBottom,
+			createdByJoust: createdByJoust,
+		} as DeckCard);
+		console.debug('[create-card-in-deck]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
-		// console.debug('[debug]', 'newPlayerDeck', newPlayerDeck);
+		console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
 
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
