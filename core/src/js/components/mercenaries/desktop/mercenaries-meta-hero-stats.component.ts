@@ -31,7 +31,7 @@ const THRESHOLD = 50;
 		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stats.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-stats" *ngIf="(stats$ | async).length; else searchEmptyState" scrollable>
+		<div class="mercenaries-stats" *ngIf="(stats$ | async)?.length; else searchEmptyState" scrollable>
 			<mercenaries-meta-hero-stat
 				*ngFor="let stat of stats$ | async; trackBy: trackByFn"
 				[stat]="stat"

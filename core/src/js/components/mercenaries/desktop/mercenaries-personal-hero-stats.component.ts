@@ -105,7 +105,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				>
 				</sortable-label>
 			</div>
-			<div class="list" *ngIf="stats.length; else searchEmptyState" scrollable>
+			<div class="list" *ngIf="stats?.length; else searchEmptyState" scrollable>
 				<mercenaries-personal-hero-stat
 					*ngFor="let stat of stats; trackBy: trackByFn"
 					[stat]="stat"
