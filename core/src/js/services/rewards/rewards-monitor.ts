@@ -59,7 +59,7 @@ export class RewardMonitorService {
 							xpGainedWithoutBonus: rawXpGained,
 							levelsGained: levelsGained,
 							bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-							xpNeeded: this.currentSeason.getXpForLevel(rewardTrackInfo.Level),
+							xpNeeded: this.currentSeason.getXpForLevel(rewardTrackInfo.Level + 1),
 						};
 						console.log('[rewards-monitor] sent degraded info', this.xpForGameInfo);
 						this.lastRewardTrackInfo = rewardTrackInfo;
@@ -120,7 +120,7 @@ export class RewardMonitorService {
 					realXpGained: xpGained,
 					levelsGained: levelsGained,
 					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-					xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel),
+					xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel + 1),
 				};
 				console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
 				// }
