@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -48,6 +48,9 @@ export class ReceiveCardInHandParser implements EventParser {
 			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged
 			// with the dead entity as creator, and are never revealed
 			cardsConsideredPublic.includes(cardId as CardIds) ||
+			// There might be some edge cases where we don't want that, but for now it's a good approximation
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
 			(!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
 				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 					publicCardCreators.includes(lastInfluencedByCardId)));
