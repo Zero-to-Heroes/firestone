@@ -730,6 +730,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				);
 				this.processingReposition = false;
 				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+				this.repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
 				break;
 			}
 			this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-${ProcessingStatus[
