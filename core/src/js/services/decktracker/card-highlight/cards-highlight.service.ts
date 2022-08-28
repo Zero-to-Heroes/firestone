@@ -709,6 +709,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
+			case CardIds.YshaarjTheDefiler:
+				return and(cardsPlayedThisMatch, corrupted);
 		}
 	}
 }
