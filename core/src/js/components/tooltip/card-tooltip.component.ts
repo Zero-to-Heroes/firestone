@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ComponentRef,
+	Input,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -59,6 +67,8 @@ export class CardTooltipComponent {
 	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
 	_relativePosition: 'left' | 'right';
+
+	public viewRef: ComponentRef<CardTooltipComponent>;
 
 	// private image: string;
 	// private _text: string;
@@ -142,7 +152,9 @@ export class CardTooltipComponent {
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		@Optional() private prefs: PreferencesService,
-	) {}
+	) {
+		setTimeout(() => this.viewRef?.destroy(), 15_000);
+	}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {

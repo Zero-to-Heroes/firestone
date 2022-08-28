@@ -97,7 +97,7 @@ export class CardTooltipDirective implements OnDestroy {
 		});
 	}
 
-	private hideTimeout;
+	// private hideTimeout;
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
@@ -106,9 +106,9 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		if (this.hideTimeout) {
-			clearTimeout(this.hideTimeout);
-		}
+		// if (this.hideTimeout) {
+		// 	clearTimeout(this.hideTimeout);
+		// }
 		if (!this.cardId && !this.cardTooltipCard) {
 			return;
 		}
@@ -136,6 +136,7 @@ export class CardTooltipDirective implements OnDestroy {
 			: this.cardTooltipRelatedCardIds?.length
 			? this.cardTooltipRelatedCardIds
 			: this.relatedCardIds;
+		tooltipRef.instance.viewRef = tooltipRef;
 
 		if (this.cardTooltipCard) {
 			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
@@ -156,18 +157,20 @@ export class CardTooltipDirective implements OnDestroy {
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
-		this.hideTimeout = setTimeout(() => {
-			this.onMouseLeave();
-		}, 15_000);
+		// TODO: add that in the tooltip component itself, so that it destroys itself (which might solve some issues with
+		// the host component being destroyed)
+		// this.hideTimeout = setTimeout(() => {
+		// 	this.onMouseLeave();
+		// }, 15_000);
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
 		this.positionStrategyDirty = true;
 
-		if (this.hideTimeout) {
-			clearTimeout(this.hideTimeout);
-		}
+		// if (this.hideTimeout) {
+		// 	clearTimeout(this.hideTimeout);
+		// }
 
 		if (this.overlayRef) {
 			this.overlayRef.detach();
