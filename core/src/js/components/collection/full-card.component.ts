@@ -29,7 +29,7 @@ declare let amplitude;
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
-					<div class="card-info class" *ngIf="class && class !== 'global.class.undefined'">
+					<div class="card-info class" *ngIf="class">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.class'"></span>
 						<span class="value">{{ class }}</span>
 					</div>
@@ -125,7 +125,7 @@ export class FullCardComponent {
 
 		this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
 		this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);
-		this.rarity = this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`);
+		this.rarity = card.rarity != null ? this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`) : null;
 		const flavorSource = card.flavor ?? card.text;
 		this.flavor = flavorSource?.length
 			? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
