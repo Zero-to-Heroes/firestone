@@ -22,7 +22,7 @@ export class DiscardedCardParser implements EventParser {
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
 
 		// See card-played-from-hand
-		let newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
+		let newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		// See card-played-from-hand
 		if (!removedCard?.cardId && cardId && !gameEvent.additionalData?.transientCard) {

@@ -110,6 +110,7 @@ import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
+import { SecretWillTriggerParser } from './event-parser/secret-will-trigger-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
@@ -399,6 +400,8 @@ export class GameStateService {
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
 			gameEvent.type !== GameEvent.COUNTER_WILL_TRIGGER &&
+			// Sometimes these events are sent even if the cost doesn't actually change
+			gameEvent.type !== GameEvent.COST_CHANGED &&
 			((this.secretWillTrigger?.reactingToCardId &&
 				this.secretWillTrigger.reactingToCardId === gameEvent.cardId) ||
 				(this.secretWillTrigger?.reactingToEntityId &&
@@ -530,6 +533,7 @@ export class GameStateService {
 			new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckHandler),
+			new SecretWillTriggerParser(this.helper),
 			new SecretTriggeredParser(this.helper),
 			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
 			new QuestDestroyedParser(),

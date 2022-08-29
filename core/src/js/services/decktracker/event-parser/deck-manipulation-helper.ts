@@ -21,9 +21,10 @@ export class DeckManipulationHelper {
 		removeFillerCard = false,
 		normalizeUpgradedCards = true,
 		cardInfos: { cost?: number } = null,
+		debug = false,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
-		const debug = false;
+		// const debug = false;
 		if (debug) {
 			console.debug(
 				'removing',

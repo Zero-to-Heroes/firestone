@@ -50,8 +50,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		);
 		console.debug('[card-played] newHand', newHand, removedCard);
 
-		let newDeck =
-			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
+		let newDeck = deck.deck;
+		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
 
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
@@ -63,7 +63,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				entityId,
 				deck.deckList.length === 0,
 			);
-			console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, removedCardFromDeck);
+			console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
