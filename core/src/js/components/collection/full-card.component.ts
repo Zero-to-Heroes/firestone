@@ -126,9 +126,9 @@ export class FullCardComponent {
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class = card.classes?.length
 			? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-			: card.playerClass == 'Neutral'
-			? formatClass('all', this.i18n)
-			: formatClass(card.playerClass, this.i18n);
+			: card.playerClass != null
+			? formatClass(card.playerClass, this.i18n)
+			: null;
 
 		this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
 		this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);
