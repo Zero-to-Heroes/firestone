@@ -134,5 +134,8 @@ const buildAttributeChange = (card: DeckCard): number => {
 	if (card?.cardId === CardIds.Bottomfeeder) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
+	if (card?.cardId === CardIds.SunscaleRaptor) {
+		return 1 + (card.mainAttributeChange ?? 0);
+	}
 	return null;
 };
