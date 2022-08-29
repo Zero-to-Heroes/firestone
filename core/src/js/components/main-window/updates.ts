@@ -32,15 +32,15 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.1',
+		version: '9.9.4',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -49,25 +49,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Fix an info leak (yeah, there have been a lot of these recently) when Prince Renathal is drawn by a tutor.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix an issue where The Coin was not always properly removed from the opponent's hand (e.g. when stealed by Theotar).`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `The High-Wins Decks should now have a better representation of the various decks that go to 10+ wins. They will now only show at most 3 samples for a given hero power / signature treasure / passives combination.`,
-							},
-							{
-								type: 'feature',
-								text: `A Passives Treasures filter has been added to the High-Wins Decks tab.`,
+								text: `Fix an issue where importing a decklist for the opponent while in game would not work properly.`,
 							},
 						],
 					},
@@ -82,24 +65,58 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add Gory the Mightree to the Global Effects section.`,
+								text: `Add a widget for Vanessa VanCleef which tells you which card you'll get from the combo.`,
 							},
 							{
 								type: 'feature',
-								text: `Add card highlight for Grey Sage Parrot, and gift icons for Plagiarize and Steward of Scrolls.`,
+								text: `Add some missing card oracles (like Identity Theft).`,
+							},
+							{
+								type: 'feature',
+								text: `Add cards highlight for Commencement, Herald of Nature, Y'Shaarj the Defiler.`,
+							},
+							{
+								type: 'feature',
+								text: `Add +1 modifier for Sunscale Raptors created in deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Today, Kidnap (the Rogue secret) doesn't trigger on Immune minions. The Secrets Helper has been updated to reflect this. I'm not yet 100% convinced that this behavior is intended, so I might revert this change in the future.`,
+								text: `Fix an issue where the curse counter would not properly increment when receiving curses.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the settings for "show related cards" and "show card rarity" where reversed.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'replays',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix the new deck name not always showing up after renaming a Duels deck.`,
+								text: `Fix an issue where dragging the replay time bar would drag the whole app window.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Display the number of owned diamond copies of a card when looking at the card details (Community Contribution).`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'ui',
+								text: `Add several visual enhancements, mostly when using the app in non-English (Community Contribution).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the XP notification would use the target XP of the previous level.`,
 							},
 						],
 					},
