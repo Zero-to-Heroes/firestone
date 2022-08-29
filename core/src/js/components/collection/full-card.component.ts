@@ -110,8 +110,9 @@ export class FullCardComponent {
 			(selectedCard as SetCard).ownedDiamond
 		) {
 			this.showCount = true;
-			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium + (selectedCard as SetCard).ownedDiamond;
+			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
 			this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
+			this.card.ownedDiamond = (selectedCard as SetCard).ownedDiamond
 		} else {
 			this.showCount = false;
 		}
@@ -537,5 +538,6 @@ interface AudioClip {
 interface InternalReferenceCard extends ReferenceCard {
 	ownedPremium: number;
 	ownedNonPremium: number;
+	ownedDiamond: number;
 	owned: number;
 }
