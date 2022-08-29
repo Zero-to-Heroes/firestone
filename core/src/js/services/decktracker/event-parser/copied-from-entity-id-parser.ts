@@ -6,7 +6,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
-import { forcedHiddenCardCreators } from '../../hs-utils';
+import { forcedHiddenCardCreators, hideInfoWhenPlayerPlaysIt } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -47,6 +47,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// }
 
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
+		// See receive-card-in-hand-parser
+		const shouldObfuscate =
+			(isPlayer ||
+				forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
+				forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)) &&
+			(!isPlayer ||
+				hideInfoWhenPlayerPlaysIt.includes(newCopy?.lastAffectedByCardId as CardIds) ||
+				hideInfoWhenPlayerPlaysIt.includes(newCopy?.creatorCardId as CardIds));
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
@@ -61,8 +69,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			// Adding the info directly to the forcedHiddenCardCreators would prevent the card to be flagged when WE play the Suspicious
 			// cards
 			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
-			forcedHiddenCardCreators.includes(newCopy?.lastAffectedByCardId as CardIds) ||
-			forcedHiddenCardCreators.includes(newCopy?.creatorCardId as CardIds)
+			shouldObfuscate
 				? copiedCard?.cardId
 				: updatedCardId;
 		console.debug(

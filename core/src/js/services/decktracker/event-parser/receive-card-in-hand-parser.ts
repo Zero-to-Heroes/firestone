@@ -8,6 +8,7 @@ import {
 	cardsConsideredPublic,
 	cardsRevealedWhenDrawn,
 	forcedHiddenCardCreators,
+	hideInfoWhenPlayerPlaysIt,
 	publicCardCreators,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -43,6 +44,18 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
+		const isSpecialCasePublic =
+			// This is starting to become one of the worst tangle of special cases in the app
+			//The idea is this:
+			// - Some cards let you discover cards from the opponent's hand
+			// - Because of how logs work, this means we could theoretically be able to fully identify these
+			// cards in hand
+			// - To prevent that, we add some exception for these cards to hide the info
+			// - However, when the opponent plays the cards, we still want to be able to flag them as "created by"
+			// in their hand
+			((!isPlayer && !forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds)) ||
+				(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))) &&
+			(cardsRevealedWhenDrawn.includes(cardId as CardIds) || publicCardCreators.includes(lastInfluencedByCardId));
 		const isCardInfoPublic =
 			isPlayer ||
 			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged
@@ -51,9 +64,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// There might be some edge cases where we don't want that, but for now it's a good approximation
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
-			(!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
-				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-					publicCardCreators.includes(lastInfluencedByCardId)));
+			isSpecialCasePublic;
 		console.debug(
 			'[receive-card-in-hand] isCardInfoPublic',
 			isCardInfoPublic,

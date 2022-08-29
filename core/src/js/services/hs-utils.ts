@@ -192,20 +192,41 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.YseraUnleashed_DreamPortalToken,
 ];
 
+// These are used to prevent info leaks in hand because we might know too much information
+// Mostly useful when the opponent plays it
 export const forcedHiddenCardCreators = [
-	CardIds.Chameleos,
-	CardIds.CoilfangConstrictor,
-	CardIds.IdentityTheft,
-	CardIds.KoboldIllusionist,
-	CardIds.MadameLazul,
+	// CardIds.Chameleos,
+	// CardIds.CoilfangConstrictor,
+	// // Prevent the player from knowing too much about the opponent's hand when we play IT
+	// // However, it has the side-effect of hiding the cards drawn by the opponent
+	// CardIds.IdentityTheft,
+	// CardIds.KoboldIllusionist,
+	// CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
-	CardIds.MindVisionLegacy,
-	CardIds.MindVisionVanilla,
+	// CardIds.MindVisionLegacy,
+	// CardIds.MindVisionVanilla,
 	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
 	CardIds.PirateAdmiralHooktusk_TakeTheirGoldToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirShipToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
+	// CardIds.PsychicConjurerCore,
+	// CardIds.PsychicConjurerLegacy,
+	// CardIds.TheotarTheMadDuke,
+];
+
+// These are used to prevent info leaks in hand because we might know too much information
+// But only when the player plays it
+export const hideInfoWhenPlayerPlaysIt = [
+	CardIds.Chameleos,
+	CardIds.CoilfangConstrictor,
+	// Prevent the player from knowing too much about the opponent's hand when we play IT
+	// However, it has the side-effect of hiding the cards drawn by the opponent
+	CardIds.IdentityTheft,
+	CardIds.KoboldIllusionist,
+	CardIds.MadameLazul,
+	CardIds.MindVisionLegacy,
+	CardIds.MindVisionVanilla,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
 	CardIds.TheotarTheMadDuke,
