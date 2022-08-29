@@ -20,7 +20,9 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 			*ngIf="values$ | async as values"
 			[communityValues]="values.community"
 			[yourValues]="values.your"
-			[communityLabel]="'app.battlegrounds.personal-stats.hero-details.warband-stats.community-label' | owTranslate"
+			[communityLabel]="
+				'app.battlegrounds.personal-stats.hero-details.warband-stats.community-label' | owTranslate
+			"
 			[yourLabel]="'app.battlegrounds.personal-stats.hero-details.warband-stats.your-label' | owTranslate"
 			[communityTooltip]="
 				'app.battlegrounds.personal-stats.hero-details.warband-stats.community-tooltip' | owTranslate

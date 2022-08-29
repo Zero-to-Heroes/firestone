@@ -120,10 +120,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							</div>
 						</virtual-scroller>
 						<ng-template #emptyState>
-							<collection-empty-state
-								[searchString]="searchString$ | async"
-							>
-							</collection-empty-state>
+							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
 						</ng-template>
 					</div>
 				</div>

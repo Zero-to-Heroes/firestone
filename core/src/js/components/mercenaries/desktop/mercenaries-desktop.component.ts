@@ -70,7 +70,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<section class="secondary">
 				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
 					<mercenaries-hero-search
-						*ngIf="selectedCategoryId === 'mercenaries-personal-hero-stats' || selectedCategoryId === 'mercenaries-hero-stats'"
+						*ngIf="
+							selectedCategoryId === 'mercenaries-personal-hero-stats' ||
+							selectedCategoryId === 'mercenaries-hero-stats'
+						"
 					></mercenaries-hero-search>
 					<secondary-default></secondary-default>
 				</ng-container>

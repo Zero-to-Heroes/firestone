@@ -100,11 +100,11 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						[tooltip]="'app.duels.deckbuilder.show-buckets-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<div class="results">
-						<virtual-scroller 
-							class="cards-container" 
-							#scroll 
+						<virtual-scroller
+							class="cards-container"
+							#scroll
 							*ngIf="value.activeCards?.length; else emptyState"
-							[items]="value.activeCards" 
+							[items]="value.activeCards"
 							scrollable
 						>
 							<div
@@ -139,10 +139,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							</div>
 						</virtual-scroller>
 						<ng-template #emptyState>
-							<collection-empty-state
-								[searchString]="searchString$ | async"
-							>
-							</collection-empty-state>
+							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
 						</ng-template>
 						<div class="buckets-container" *ngIf="value.showBuckets">
 							<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
