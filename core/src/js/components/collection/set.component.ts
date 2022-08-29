@@ -27,7 +27,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="box-side set-view">
 					<div class="logo-container">
 						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
-						<span class="text set-name" *ngIf="_displayName" [owTranslate]=setName></span>
+						<span class="text set-name" *ngIf="_displayName" [owTranslate]="setName"></span>
 					</div>
 					<span
 						class="cards-collected"
