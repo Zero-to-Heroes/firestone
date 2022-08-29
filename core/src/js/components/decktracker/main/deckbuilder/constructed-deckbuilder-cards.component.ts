@@ -95,7 +95,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						<virtual-scroller
 							class="cards-container"
 							#scroll
-							*ngIf="value.activeCards.length; else emptyState"
+							*ngIf="value.activeCards?.length; else emptyState"
 							[items]="value.activeCards"
 							bufferAmount="5"
 							scrollable
