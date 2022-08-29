@@ -794,8 +794,19 @@ export class GameEvents {
 				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
-						armorChange: gameEvent.Value.AdditionalProps.ArmorChange,
+						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
+					}),
+				);
+				break;
+			case 'DATA_SCRIPT_CHANGED':
+				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
+						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
+						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
+						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
 					}),
 				);
 				break;
