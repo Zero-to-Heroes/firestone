@@ -18,6 +18,8 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	template: `
 		<graph-with-comparison-new
 			*ngIf="values$ | async as values"
+			[turnLabel]="'app.battlegrounds.personal-stats.hero-details.warband-stats.turn-label' | owTranslate"
+			[statLabel]="'app.battlegrounds.personal-stats.hero-details.warband-stats.stat-label' | owTranslate"
 			[communityValues]="values.community"
 			[yourValues]="values.your"
 			[communityLabel]="'app.battlegrounds.personal-stats.hero-details.warband-stats.community-label' | owTranslate"

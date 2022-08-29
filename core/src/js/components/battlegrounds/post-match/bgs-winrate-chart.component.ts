@@ -13,6 +13,8 @@ import { areDeepEqual } from '../../../services/utils';
 	template: `
 		<graph-with-comparison-new
 			[id]="id"
+			[turnLabel]="'battlegrounds.post-match-stats.winrate-stats.turn-label' | owTranslate"
+			[statLabel]="'battlegrounds.post-match-stats.winrate-stats.winrate-label' | owTranslate"
 			[communityLabel]="'battlegrounds.post-match-stats.warband-stats.community-label' | owTranslate"
 			[yourLabel]="'battlegrounds.post-match-stats.warband-stats.your-label' | owTranslate"
 			[yourValues]="yourValues"

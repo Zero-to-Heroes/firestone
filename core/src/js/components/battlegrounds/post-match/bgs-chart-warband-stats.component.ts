@@ -12,6 +12,9 @@ import { areDeepEqual } from '../../../services/utils';
 	],
 	template: `
 		<graph-with-comparison-new
+			[turnLabel]="'battlegrounds.post-match-stats.warband-stats.turn-label' | owTranslate"
+			[statLabel]="'battlegrounds.post-match-stats.warband-stats.stat-label' | owTranslate"
+			[deltaLabel]="'battlegrounds.post-match-stats.warband-stats.delta-label' | owTranslate"
 			[communityLabel]="'battlegrounds.post-match-stats.warband-stats.community-label' | owTranslate"
 			[yourLabel]="'battlegrounds.post-match-stats.warband-stats.your-label' | owTranslate"
 			[yourValues]="yourValues"

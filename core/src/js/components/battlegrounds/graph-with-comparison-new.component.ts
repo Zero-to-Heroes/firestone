@@ -57,6 +57,9 @@ export class GraphWithComparisonNewComponent {
 	@Input() yourLabel = 'You';
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
+	@Input() turnLabel = 'Turn';
+	@Input() statLabel = 'Stat';
+	@Input() deltaLabel: string;
 	@Input() id: string;
 	@Input() showDeltaWithPrevious: boolean;
 
@@ -377,6 +380,9 @@ export class GraphWithComparisonNewComponent {
 						? this.buildSection(
 								'player',
 								yourLabel,
+								this.turnLabel,
+								this.statLabel,
+								this.deltaLabel,
 								yourDelta != null ? parseInt(yourDelta) : null,
 								yourDatapoint,
 						  )
@@ -385,6 +391,9 @@ export class GraphWithComparisonNewComponent {
 						? this.buildSection(
 								'average',
 								communityLabel,
+								this.turnLabel,
+								this.statLabel,
+								this.deltaLabel,
 								communityDelta != null ? parseInt(communityDelta) : null,
 								communityDatapoint,
 						  )
@@ -437,17 +446,20 @@ export class GraphWithComparisonNewComponent {
 	private buildSection(
 		theClass: 'player' | 'average',
 		label: string,
+		turnLabel: string,
+		statLabel: string,
+		deltaLabel: string,
 		delta: number,
 		datapoint: ChartTooltipItem,
 	): string {
 		return `
 			<div class="section ${theClass}">
 				<div class="subtitle">${label}</div>
-				<div class="value">Turn ${datapoint?.label}</div>
-				<div class="value">${datapoint?.value ? 'Stat ' + parseInt(datapoint.value).toFixed(0) : 'No data'}</div>
+				<div class="value">${turnLabel} ${datapoint?.label}</div>
+				<div class="value">${datapoint?.value ? statLabel +' '+ parseInt(datapoint.value).toFixed(0) : 'No data'}</div>
 				<div class="delta">${
 					this.showDeltaWithPrevious && delta != null
-						? (delta >= 0 ? '+' + delta.toFixed(0) : delta.toFixed(0)) + ' this turn'
+						? deltaLabel.replace('{{delta}}', '' + delta.toFixed(0))
 						: ''
 				}</div>
 			</div>
