@@ -41,13 +41,13 @@
 		height: auto;
 
 		.related-card{
-			background: rgba(25, 5, 5, 0.15);
 
 			margin-top: -5px;
 			margin-left: -10px;
 			margin-right: -10px;
 			margin-bottom: -5px;
 			img {
+				background: rgba(25, 5, 5, 0.1);
 				width: 150px;
 				height: auto;
 				filter: drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5)) drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5));
