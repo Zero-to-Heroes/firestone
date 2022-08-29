@@ -359,6 +359,7 @@ import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/co
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
+import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
@@ -984,6 +985,7 @@ const components = [
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
+		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,

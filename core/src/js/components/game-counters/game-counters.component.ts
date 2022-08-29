@@ -30,6 +30,7 @@ import { MulticasterCounterDefinition } from './definitions/multicaster-counter'
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
@@ -135,6 +136,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'vanessaVanCleef':
+				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'ladyDarkvein':
 				return LadyDarkveinCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'greySageParrot':

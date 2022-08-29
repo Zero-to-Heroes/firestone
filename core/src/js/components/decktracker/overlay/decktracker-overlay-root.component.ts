@@ -218,7 +218,7 @@ export class DeckTrackerOverlayRootComponent
 					prefs,
 					patch,
 				);
-				console.debug('returning gamesForDeck', result);
+				// console.debug('returning gamesForDeck', result);
 				return result;
 			}),
 		);

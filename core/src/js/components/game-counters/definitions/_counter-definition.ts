@@ -23,6 +23,7 @@ export type CounterType =
 	| 'libram'
 	| 'bolner'
 	| 'brilliantMacaw'
+	| 'vanessaVanCleef'
 	| 'ladyDarkvein'
 	| 'greySageParrot'
 	| 'heroPowerDamage'
