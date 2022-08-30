@@ -196,7 +196,7 @@ export class MercenariesPersonalHeroStatComponent {
 				return {
 					cardId: info.cardId,
 					owned: info.owned,
-					speed: info.speed,
+					speed: info.speed ?? 0,
 					cooldown: info.cooldown,
 					tier: info.tier,
 					artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
