@@ -199,14 +199,15 @@ export class DeckTrackerOverlayRootComponent
 				([main, nav, prefs]) => main.decktracker.filters.time,
 				([main, nav, prefs]) => main.decktracker.filters.rank,
 				([main, nav, prefs]) => main.decktracker.patch,
+				([main, nav, prefs]) => main.decktracker.decks,
 				([main, nav, prefs]) => prefs,
 			),
 		).pipe(
 			filter(
-				([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, prefs]]) =>
-					!!gameStats?.stats?.length,
+				([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, decks, prefs]]) =>
+					!!gameStats?.stats?.length && !!decks?.length,
 			),
-			this.mapData(([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, prefs]]) => {
+			this.mapData(([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, decks, prefs]]) => {
 				const result = DecksStateBuilderService.buildValidReplays(
 					deckstring,
 					gameStats.stats,
@@ -217,6 +218,7 @@ export class DeckTrackerOverlayRootComponent
 					rankFilter,
 					prefs,
 					patch,
+					decks,
 				);
 				// console.debug('returning gamesForDeck', result);
 				return result;
