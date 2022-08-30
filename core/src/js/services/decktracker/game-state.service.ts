@@ -209,6 +209,13 @@ export class GameStateService {
 			});
 			this.i18n.init();
 		});
+
+		if (process.env.NODE_ENV !== 'production') {
+			window['gameState'] = () => {
+				console.debug(this.state);
+				return this.state;
+			};
+		}
 	}
 
 	// TODO: this should move elsewhere
@@ -495,7 +502,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 			new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n),
 			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
-			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
+			new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
