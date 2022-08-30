@@ -68,7 +68,7 @@ export class MercenariesStateBuilderService {
 
 		locale = locale ?? (await this.prefs.getPreferences()).locale;
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(
-			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json?v=3`,
+			`${MERCENARIES_REFERENCE_DATA}/mercenaries-data_${locale}.json`,
 		);
 		this.localStorage.setItem('mercenaries-reference-data', referenceData);
 		console.log('loaded remote mercenaries ref data');
