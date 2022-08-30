@@ -95,6 +95,7 @@ export class DeckState {
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
@@ -283,6 +284,15 @@ export class DeckState {
 
 	public hasVanessaVanCleef() {
 		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.VanessaVancleefCore);
+	}
+
+	public hasMurozondTheInfinite() {
+		return this.hand
+			.filter((card) => card.cardId)
+			.some(
+				(card) =>
+					card.cardId === CardIds.MurozondTheInfinite || card.cardId === CardIds.MurozondTheInfiniteCore,
+			);
 	}
 
 	public hasLadyDarkvein() {

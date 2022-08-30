@@ -112,8 +112,10 @@ export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 
 	@Input() set cardTooltipCard(value: DeckCard) {
 		if (!value) {
+			this.updateInfos();
 			return;
 		}
+
 		this.buffs =
 			!value.buffCardIds || value.buffCardIds.length === 0
 				? undefined
@@ -175,12 +177,13 @@ export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async updateInfos() {
-		if (!this._cardIds?.length) {
+		if (!this._cardIds?.length && !this._relatedCardIds?.length) {
 			return;
 		}
+
 		const highRes = (await this.prefs?.getPreferences())?.collectionUseHighResImages;
 		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
-		this.cards = this._cardIds
+		this.cards = (this._cardIds ?? [])
 			// Empty card IDs are necessary when showing buff only
 			// .filter((cardId) => cardId)
 			.reverse()

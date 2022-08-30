@@ -173,6 +173,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.vanessa-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerMurozondTheInfiniteCounter"
+					[label]="'settings.decktracker.your-deck.counters.murozond-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.murozond-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerLadyDarkveinCounter"
 					[label]="'settings.decktracker.your-deck.counters.lady-darkvein-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.lady-darkvein-tooltip' | owTranslate"

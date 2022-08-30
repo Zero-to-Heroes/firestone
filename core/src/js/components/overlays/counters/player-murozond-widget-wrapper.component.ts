@@ -13,12 +13,12 @@ import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store
 import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-counter-widget-wrapper.component';
 
 @Component({
-	selector: 'player-vanessa-widget-wrapper',
+	selector: 'player-murozond-widget-wrapper',
 	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: templateBase,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlayerVanessaVanCleefWidgetWrapperComponent
+export class PlayerMurozondTheInfiniteWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
 	implements AfterContentInit {
 	constructor(
@@ -32,13 +32,12 @@ export class PlayerVanessaVanCleefWidgetWrapperComponent
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 		this.side = 'player';
-		this.activeCounter = 'vanessaVanCleef';
+		this.activeCounter = 'murozondTheInfinite';
 	}
 
 	ngAfterContentInit(): void {
-		this.prefExtractor = (prefs) => prefs.playerVanessaVanCleefCounter;
-		this.deckStateExtractor = (state) =>
-			!!state.opponentDeck.cardsPlayedThisMatch?.length && state.playerDeck.hasVanessaVanCleef();
+		this.prefExtractor = (prefs) => prefs.playerMurozondTheInfiniteCounter;
+		this.deckStateExtractor = (state) => state.playerDeck.hasMurozondTheInfinite();
 		super.ngAfterContentInit();
 	}
 }

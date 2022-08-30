@@ -5,6 +5,7 @@ export interface CounterDefinition {
 	readonly image: string;
 	readonly cssClass: string;
 	readonly tooltip: string;
+	readonly cardTooltips?: readonly string[];
 	readonly standardCounter: boolean;
 }
 
@@ -24,6 +25,7 @@ export type CounterType =
 	| 'bolner'
 	| 'brilliantMacaw'
 	| 'vanessaVanCleef'
+	| 'murozondTheInfinite'
 	| 'ladyDarkvein'
 	| 'greySageParrot'
 	| 'heroPowerDamage'
