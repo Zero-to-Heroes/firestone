@@ -24,7 +24,7 @@ export class DataScriptChangedParser implements EventParser {
 
 		const cardInHand = deck.hand.find((c) => c.entityId === entityId);
 		if (!cardInHand) {
-			console.warn('[data-script-changed] no card', gameEvent, deck.hand);
+			// console.warn('[data-script-changed] no card', gameEvent, deck.hand);
 			return currentState;
 		}
 
