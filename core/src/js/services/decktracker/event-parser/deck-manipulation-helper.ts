@@ -288,6 +288,7 @@ export class DeckManipulationHelper {
 		);
 	}
 
+	// Warning: this also update the card, so is not suitable for a pure "find" request
 	public findCardInZone(
 		zone: readonly DeckCard[],
 		cardId: string,

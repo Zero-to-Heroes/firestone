@@ -18,11 +18,16 @@ export class DataScriptChangedParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		console.debug('[data-script-changed] handling event', cardId, entityId, gameEvent);
+		console.debug('[data-script-changed] handling event', cardId, entityId, gameEvent, currentState);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const cardInHand = this.helper.findCardInZone(deck.hand, cardId, entityId);
+		const cardInHand = deck.hand.find((c) => c.entityId === entityId);
+		if (!cardInHand) {
+			console.warn('[data-script-changed] no card', gameEvent, deck.hand);
+			return currentState;
+		}
+
 		const cardWithAdditionalAttributes = addAdditionalAttribues(cardInHand, deck, gameEvent, this.allCards);
 		console.debug('[data-script-changed] cardWithAdditionalAttributes', cardWithAdditionalAttributes, cardInHand);
 		const previousHand = deck.hand;
