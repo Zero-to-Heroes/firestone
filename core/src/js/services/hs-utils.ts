@@ -376,7 +376,8 @@ export const publicCardGiftCreators = [
 	CardIds.MindVisionLegacy,
 	CardIds.MindVisionVanilla,
 	CardIds.MuckbornServant,
-	CardIds.MurlocHolmes,
+	CardIds.MurlocHolmes_REV_022,
+	CardIds.MurlocHolmes_REV_770,
 	CardIds.MysticalMirage_ULDA_035,
 	CardIds.NatureStudies_SCH_333,
 	CardIds.OpenTheDoorwaysTavernBrawl,
@@ -685,7 +686,7 @@ export const defaultStartingHp = (gameType: GameType, heroCardId: string): numbe
 	if (isBattlegrounds(gameType)) {
 		switch (heroCardId) {
 			case CardIds.PatchwerkBattlegrounds:
-				return 55;
+				return 60;
 			default:
 				return 40;
 		}

@@ -531,7 +531,9 @@ export class BgsSimulatorMinionSelectionComponent
 			windfury: this.windfury,
 			megaWindfury: this.megaWindfury,
 			enchantments: [
-				this.summonMechs ? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment } : null,
+				this.summonMechs
+					? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e }
+					: null,
 				this.summonPlants ? { cardId: CardIds.LivingSpores_LivingSporesEnchantment } : null,
 				...(this.sneeds > 0
 					? [...Array(this.sneeds).keys()].map((i) => ({
@@ -567,7 +569,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.megaWindfury = this._entity.megaWindfury;
 		this.summonMechs = this._entity.enchantments
 			.map((e) => e.cardId)
-			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment);
+			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e);
 		this.summonPlants = this._entity.enchantments
 			.map((e) => e.cardId)
 			.includes(CardIds.LivingSpores_LivingSporesEnchantment);
