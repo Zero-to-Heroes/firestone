@@ -24,12 +24,19 @@ declare let amplitude;
 			*ngIf="card"
 		>
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="true">/</card-view>
+				<card-view
+					[card]="card"
+					[tooltips]="false"
+					[showCounts]="showCount"
+					[premium]="card.ownedPremium"
+					[highRes]="true"
+					>/</card-view
+				>
 			</div>
 			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
-					<div class="card-info class" *ngIf="class && class !== 'global.class.undefined'">
+					<div class="card-info class" *ngIf="class">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.class'"></span>
 						<span class="value">{{ class }}</span>
 					</div>
@@ -110,22 +117,25 @@ export class FullCardComponent {
 			(selectedCard as SetCard).ownedDiamond
 		) {
 			this.showCount = true;
-			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium + (selectedCard as SetCard).ownedDiamond;
+			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
 			this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
+			this.card.ownedDiamond = (selectedCard as SetCard).ownedDiamond;
 		} else {
 			this.showCount = false;
 		}
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
-		this.class =
-			card.classes?.length
-			    ? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-			    : card.playerClass == 'Neutral'
-			        ? formatClass('all', this.i18n)
-			        : formatClass(card.playerClass, this.i18n);
-				
-		this.type = card.type;
-		this.set = this.cards.setName(card.set);
-		this.rarity = card.rarity;
+		this.class = card.classes?.length
+			? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
+			: card.playerClass == 'Neutral'
+			? formatClass('all', this.i18n)
+			: formatClass(card.playerClass, this.i18n);
+
+		this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
+		this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);
+		this.rarity =
+			card.rarity != null
+				? this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`)
+				: null;
 		const flavorSource = card.flavor ?? card.text;
 		this.flavor = flavorSource?.length
 			? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
@@ -260,7 +270,7 @@ export class FullCardComponent {
 			category: 'emote',
 		},
 		{
-			regex: /.*WELL_PLAYED.*/g,
+			regex: /.*WELL_?PLAYED.*/g,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.well-played'),
 			category: 'emote',
 		},
@@ -538,5 +548,6 @@ interface AudioClip {
 interface InternalReferenceCard extends ReferenceCard {
 	ownedPremium: number;
 	ownedNonPremium: number;
+	ownedDiamond: number;
 	owned: number;
 }

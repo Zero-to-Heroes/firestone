@@ -65,6 +65,7 @@ import { CthunParser } from './event-parser/cthun-parser';
 import { CthunRevealedParser } from './event-parser/cthun-revealed-parser';
 import { CustomEffectsParser } from './event-parser/custom-effects-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
+import { DataScriptChangedParser } from './event-parser/data-script-changed-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
@@ -110,6 +111,7 @@ import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
+import { SecretWillTriggerParser } from './event-parser/secret-will-trigger-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
@@ -207,6 +209,13 @@ export class GameStateService {
 			});
 			this.i18n.init();
 		});
+
+		if (process.env.NODE_ENV !== 'production') {
+			window['gameState'] = () => {
+				console.debug(this.state);
+				return this.state;
+			};
+		}
 	}
 
 	// TODO: this should move elsewhere
@@ -399,6 +408,8 @@ export class GameStateService {
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
 			gameEvent.type !== GameEvent.COUNTER_WILL_TRIGGER &&
+			// Sometimes these events are sent even if the cost doesn't actually change
+			gameEvent.type !== GameEvent.COST_CHANGED &&
 			((this.secretWillTrigger?.reactingToCardId &&
 				this.secretWillTrigger.reactingToCardId === gameEvent.cardId) ||
 				(this.secretWillTrigger?.reactingToEntityId &&
@@ -491,7 +502,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 			new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n),
 			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
-			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
+			new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
@@ -530,6 +541,7 @@ export class GameStateService {
 			new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckHandler),
+			new SecretWillTriggerParser(this.helper),
 			new SecretTriggeredParser(this.helper),
 			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
 			new QuestDestroyedParser(),
@@ -557,6 +569,7 @@ export class GameStateService {
 			new TurnDurationUpdatedParser(),
 			new StartOfGameEffectParser(this.helper, this.allCards, this.i18n),
 			new CostChangedParser(this.helper),
+			new DataScriptChangedParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

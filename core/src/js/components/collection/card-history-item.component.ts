@@ -25,6 +25,7 @@ declare let amplitude;
 			class="card-history-item"
 			[ngClass]="{ 'active': active }"
 			[cardTooltip]="cardId"
+			[cardTooltipType]="cardType"
 			cardTooltipPosition="left"
 		>
 			<img class="rarity" src="{{ rarityImg }}" />
@@ -58,6 +59,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	creationDate: string;
 	dustValue: number;
 	cardId: string;
+	cardType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -104,6 +106,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			month: '2-digit',
 			year: '2-digit',
 		});
+		this.cardType = history.isPremium ? 'GOLDEN' : 'NORMAL';
 		// FIXME: Why do I need this?
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

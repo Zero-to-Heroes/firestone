@@ -29,29 +29,89 @@
 	.deck-versions {
 		display: flex;
 		flex-direction: column;
-		width: 200px;
+		width: 180px;
 		flex-shrink: 0;
-		margin-right: 30px;
+		margin-right: 15px;
 		height: fit-content;
-		background: rgba(255, 255, 255, 0.08);
+
+		.header {
+			color: var(--default-title-color);
+			font-size: 20px;
+			text-align: center;
+			position: relative;
+			margin-top: 32px;
+			margin-bottom: 20px;
+		}
 
 		.version {
 			display: flex;
 			background: var(--color-7);
 			height: 40px;
 			color: var(--color-2);
+			position: relative;
+			margin-bottom: 5px;
+			opacity: 0.8;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			&.inactive {
+				opacity: 0.3;
+			}
+
+			.background-image {
+				position: absolute;
+				top: 1px; // Otherwise there is a little band of color showing when art is blank
+				left: 0;
+				right: 0;
+				bottom: 1px;
+				background-size: cover;
+				// Because some tiles still have a white border on the right
+				background-position-x: 15px;
+			}
+
+			.gradiant {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+			}
 
 			.deck-name {
 				width: 150px;
 				padding-right: 10px;
 				display: flex;
 				align-items: center;
+				z-index: 1;
+				padding-left: 10px;
+				color: var(--default-text-color);
+				text-shadow: -2px -2px 0 #090a0d, 0px -2px 0 #090a0d, 2px -2px 0 #090a0d, -2px 2px 0 #090a0d,
+					0px 2px 0 #090a0d, 2px 2px 0 #090a0d;
+				max-width: 100%;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 
-			.matches-played {
-				display: flex;
-				align-items: center;
-				justify-content: center;
+			// .matches-played {
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: center;
+			// }
+
+			.eject-version-button {
+				background: #131010;
+				z-index: 1;
+				margin-left: 15px;
+				flex-shrink: 0;
+
+				&:hover {
+					background: var(--color-1);
+					color: #131010;
+				}
 			}
 		}
 	}
@@ -83,5 +143,21 @@
 		margin-top: -10px;
 		margin-right: auto;
 		max-width: calc(100% - var(--decklist-width) - 50px);
+
+		&.with-versions {
+			max-width: calc(100% - var(--decklist-width) - 50px - 180px);
+		}
+	}
+}
+
+@media (max-width: 1500px) {
+	::ng-deep deck-winrate-matrix:not(.with-versions) .opponents-popularity {
+		display: none;
+	}
+}
+
+@media (max-width: 1650px) {
+	::ng-deep deck-winrate-matrix.with-versions .opponents-popularity {
+		display: none;
 	}
 }

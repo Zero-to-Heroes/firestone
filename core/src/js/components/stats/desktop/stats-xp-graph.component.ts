@@ -13,6 +13,9 @@ import {
 	xpSeason1,
 	xpSeason2,
 	xpSeason3,
+	xpSeason4,
+	xpSeason5,
+	xpSeason6,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -71,8 +74,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 		}
 
 		const values: number[] = [];
-		// let labels: readonly string[];
-		// if (rakingGroup === 'per-day') {
 		const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
 			formatDate(new Date(match.creationTimestamp)),
 		)(dataWithTime);
@@ -93,10 +94,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 			const previousDayXp = !!values?.length ? values[values.length - 1] : 0;
 			values.push(previousDayXp + xpForDay);
 		}
-		// } else {
-		// 	values = finalData.map((match) => ladderRankToInt(match.playerRank)).filter((rank) => rank != null);
-		// 	labels = Array.from(Array(values.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex);
-		// }
 		return {
 			data: [
 				{
@@ -116,6 +113,12 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 				return getSeason(stat.creationTimestamp) === xpSeason2;
 			case 'season-3':
 				return getSeason(stat.creationTimestamp) === xpSeason3;
+			case 'season-4':
+				return getSeason(stat.creationTimestamp) === xpSeason4;
+			case 'season-5':
+				return getSeason(stat.creationTimestamp) === xpSeason5;
+			case 'season-6':
+				return getSeason(stat.creationTimestamp) === xpSeason6;
 			case 'all-seasons':
 			default:
 				return true;

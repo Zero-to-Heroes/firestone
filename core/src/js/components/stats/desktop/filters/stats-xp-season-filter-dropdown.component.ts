@@ -81,6 +81,16 @@ export class StatsXpSeasonFilterDropdownComponent
 							label: 'Season 4',
 							tooltip: 'From 2021-12-02',
 						},
+						{
+							value: 'season-5',
+							label: 'Season 5',
+							tooltip: 'From 2022-04-05',
+						},
+						{
+							value: 'season-6',
+							label: 'Season 6',
+							tooltip: 'From 2022-08-02',
+						},
 					] as readonly FilterOption[];
 					return {
 						filter: filter,

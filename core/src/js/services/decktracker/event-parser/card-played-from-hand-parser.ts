@@ -48,20 +48,22 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
+		console.debug('[card-played] newHand', newHand, removedCard);
 
-		let newDeck =
-			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
+		let newDeck = deck.deck;
+		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
 
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
-		if (removedCard == null && cardId && !gameEvent.additionalData.transientCard) {
+		if (!removedCard?.cardId && cardId && !gameEvent.additionalData.transientCard) {
 			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 				newDeck,
 				cardId,
 				entityId,
 				deck.deckList.length === 0,
 			);
+			console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
@@ -127,11 +129,15 @@ export class CardPlayedFromHandParser implements EventParser {
 			);
 		}
 
+		const handAfterCardsRemembered = isCardCountered
+			? newHand
+			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+
 		const isElemental =
 			refCard?.type === 'Minion' && refCard?.race?.toLowerCase() === Race[Race.ELEMENTAL].toLowerCase();
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: newHand,
+		const newPlayerDeck = deck.update({
+			hand: handAfterCardsRemembered,
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
@@ -185,3 +191,28 @@ export class CardPlayedFromHandParser implements EventParser {
 		return GameEvent.CARD_PLAYED;
 	}
 }
+
+export const rememberCardsInHand = (
+	cardId: string,
+	hand: readonly DeckCard[],
+	helper: DeckManipulationHelper,
+	allCards: CardsFacadeService,
+): readonly DeckCard[] => {
+	const commanderSivaraCards = hand.filter((c) => c.cardId === CardIds.CommanderSivara_TSC_087);
+	console.debug('sivaraCards', commanderSivaraCards);
+	const refCard = allCards.getCard(cardId);
+	let handAfterCardsRemembered = hand;
+	if (refCard?.type === 'Spell' && !!commanderSivaraCards.length) {
+		const newSivaraCards = commanderSivaraCards.map((c) =>
+			c.update({
+				relatedCardIds: [...c.relatedCardIds, cardId],
+			}),
+		);
+		console.debug('newSivaraCards', newSivaraCards);
+		for (const newCard of newSivaraCards) {
+			handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
+			console.debug('updated', handAfterCardsRemembered);
+		}
+	}
+	return handAfterCardsRemembered;
+};

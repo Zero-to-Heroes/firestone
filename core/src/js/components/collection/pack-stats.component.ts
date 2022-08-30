@@ -119,7 +119,13 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						...pack,
 						set: sets.find((set) => set.id === pack.setId),
 					}))
-					.filter((pack) => !!pack.set || pack.packType === BoosterType.CLASSIC)
+					.filter(
+						(pack) =>
+							!!pack.set ||
+							pack.packType === BoosterType.CLASSIC ||
+							pack.packType === BoosterType.WILD_PACK ||
+							pack.packType === BoosterType.STANDARD_BUNDLE,
+					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
 					.sort(sortByProperties((pack) => [-pack.set?.launchDate?.getTime() ?? 0]));
 				const mainSetsGroup: InternalPackGroup = {

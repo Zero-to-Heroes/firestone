@@ -117,6 +117,7 @@ import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-ban
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
+import { BattlegroundsDesktopOverviewComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component';
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
@@ -252,6 +253,7 @@ import { DuelsHeroPowerFilterDropdownComponent } from '../../components/duels/de
 import { DuelsHeroSortDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-sort-dropdown.component';
 import { DuelsLeaderboardGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
 import { DuelsMmrFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-mmr-filter-dropdown.component';
+import { DuelsPassiveFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-passive-filter-dropdown.component';
 import { DuelsSignatureTreasureFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-signature-treasure-filter-dropdown.component';
 import { DuelsStatTypeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-stat-type-filter-dropdown.component';
 import { DuelsTimeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-time-filter-dropdown.component';
@@ -315,7 +317,10 @@ import { MercenariesTeamAbilityComponent } from '../../components/mercenaries/ov
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
-import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
+import {
+	MercenariesTeamRootComponent,
+	MercsTasksListComponent,
+} from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
@@ -352,8 +357,10 @@ import { PlayerJadeWidgetWrapperComponent } from '../../components/overlays/coun
 import { PlayerLadyDarkveinWidgetWrapperComponent } from '../../components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/counters/player-libram-widget-wrapper.component';
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
+import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
+import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
@@ -789,6 +796,7 @@ const components = [
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
+		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsStatsHeroVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
@@ -861,6 +869,7 @@ const components = [
 		DuelsHeroSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
+		DuelsPassiveFilterDropdownComponent,
 		DuelsDustFilterDropdownComponent,
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,
@@ -881,6 +890,7 @@ const components = [
 		MercenariesTeamControlBarComponent,
 		MercenariesTeamListComponent,
 		MercenariesTeamMercenaryComponent,
+		MercsTasksListComponent,
 
 		MercenariesDesktopComponent,
 		MercenariesPersonalHeroStatsComponent,
@@ -976,6 +986,8 @@ const components = [
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
+		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,

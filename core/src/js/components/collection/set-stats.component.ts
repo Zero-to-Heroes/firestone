@@ -290,7 +290,7 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 				text: this.i18n.translateString('app.collection.set-stats.golden-duplicate-dust'),
 				current: duplicateDust,
 				total: undefined,
-				tooltip: this.i18n.translateString('app.collection.set-stats.duplicate-duplicate-dust-tooltip', {
+				tooltip: this.i18n.translateString('app.collection.set-stats.golden-duplicate-dust-tooltip', {
 					value: duplicateDust.toLocaleString(),
 				}),
 			},

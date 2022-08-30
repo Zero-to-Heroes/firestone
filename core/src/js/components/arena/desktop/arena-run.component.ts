@@ -48,13 +48,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps; trackBy: trackByStepFn">
-					<replay-info
+					<replay-info-generic
 						[replay]="step"
 						[displayCoin]="false"
 						[displayTime]="false"
-						[displayLoot]="_displayLoot"
-						[displayShortLoot]="_displayShortLoot"
-					></replay-info>
+					></replay-info-generic>
 				</li>
 			</ul>
 		</div>

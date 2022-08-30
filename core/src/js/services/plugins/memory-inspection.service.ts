@@ -219,6 +219,7 @@ export class MemoryInspectionService {
 	}
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
+		console.debug('getting duels info', new Error().stack);
 		return this.mindVision.callMindVision(() => this.getDuelsInfoOperation.call(numberOfRetries, forceReset));
 	}
 

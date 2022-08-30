@@ -95,6 +95,7 @@ export class DeckState {
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
@@ -274,19 +275,32 @@ export class DeckState {
 	}
 
 	public hasBolner() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BolnerHammerbeak);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BolnerHammerbeak);
 	}
 
 	public hasBrilliantMacaw() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+	}
+
+	public hasVanessaVanCleef() {
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.VanessaVancleefCore);
+	}
+
+	public hasMurozondTheInfinite() {
+		return this.hand
+			.filter((card) => card.cardId)
+			.some(
+				(card) =>
+					card.cardId === CardIds.MurozondTheInfinite || card.cardId === CardIds.MurozondTheInfiniteCore,
+			);
 	}
 
 	public hasLadyDarkvein() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
 	}
 
 	public hasGreySageParrot() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

@@ -32,13 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.8.28',
+		version: '9.9.4',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `
-			// 		I hope you're all having fun with the new expansion! All the new cards should now be properly supported - and if not, don't hesitate to open a bug report with the icon at the top right of the app's main window :)
+			// 		I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
 			// 	`,
 			// },
 			{
@@ -50,15 +50,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix some info leaks that would flag known cards in deck when drawn by the opponent (like with Identity Thief).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix info leaks with Chameleos and Madame Lazul.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the tracker would break after a Colossal minion is copied from hand (e.g. by Kobold Illusionist).`,
+								text: `Fix an issue where importing a decklist for the opponent while in game would not work properly.`,
 							},
 						],
 					},
@@ -73,27 +65,36 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add highlight for Kel'Thuzad the Inevitable, Jerry Rig Carpenter.`,
+								text: `Add a widget for Vanessa VanCleef which tells you which card you'll get from the combo.`,
 							},
 							{
 								type: 'feature',
-								text: `Add related cards for each of Lady Naz'jar transformations.`,
+								text: `Add some missing card oracles (like Identity Theft).`,
 							},
 							{
 								type: 'feature',
-								text: `Add a time filter when viewing a deck's detailed stats.`,
+								text: `Add cards highlight for Commencement, Herald of Nature, Y'Shaarj the Defiler.`,
+							},
+							{
+								type: 'feature',
+								text: `Add +1 modifier for Sunscale Raptors created in deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the Abyssal Curse counter would give incorrect information when receiving curses.`,
+								text: `Fix an issue where the curse counter would not properly increment when receiving curses.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where cards drawn by Dreadlich Tamsin's battlecry would be incorrectly flagged as Rifts.`,
+								text: `Fix an issue where the settings for "show related cards" and "show card rarity" where reversed.`,
 							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
 							{
-								type: 'ui',
-								text: `Improve the display of the Opponents breakdown chart when viewing a deck details.`,
+								type: 'bug',
+								text: `Fix an issue where dragging the replay time bar would drag the whole app window.`,
 							},
 						],
 					},
@@ -101,17 +102,21 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'bug',
-								text: `FIx an issue with the new card packs not being properly detected.`,
+								type: 'feature',
+								text: `Display the number of owned diamond copies of a card when looking at the card details (Community Contribution).`,
 							},
 						],
 					},
 					{
-						category: 'mercenaries',
+						category: 'general',
 						details: [
 							{
+								type: 'ui',
+								text: `Add several visual enhancements, mostly when using the app in non-English (Community Contribution).`,
+							},
+							{
 								type: 'bug',
-								text: `FIx an issue where the Progression screen would not display any information.`,
+								text: `Fix an issue where the XP notification would use the target XP of the previous level.`,
 							},
 						],
 					},

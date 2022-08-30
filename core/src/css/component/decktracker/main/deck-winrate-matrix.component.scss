@@ -50,6 +50,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		text-align: center;
 
 		&.class {
 			flex-grow: 1;
@@ -168,11 +169,5 @@ deck-matchup-info {
 				}
 			}
 		}
-	}
-}
-
-@media (max-width: 1500px) {
-	.opponents-popularity {
-		display: none;
 	}
 }

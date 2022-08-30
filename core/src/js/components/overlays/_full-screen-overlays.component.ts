@@ -14,7 +14,7 @@ import {
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, startWith, tap } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -84,6 +84,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-cthun-widget-wrapper></player-cthun-widget-wrapper>
 			<player-bolner-widget-wrapper></player-bolner-widget-wrapper>
 			<player-brilliant-macaw-widget-wrapper></player-brilliant-macaw-widget-wrapper>
+			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
+			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
 			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>
@@ -138,17 +140,14 @@ export class FullScreenOverlaysComponent
 			.listen$(([main, prefs]) => main.currentScene)
 			.pipe(
 				startWith([null]),
-				tap((info) => console.debug('prep lastNonGamePlayScene', info)),
 				filter(([scene]) => scene !== SceneMode.GAMEPLAY),
 				this.mapData(([scene]) => scene),
-				tap((info) => console.debug('lastNonGamePlayScene', info)),
 			);
 		this.activeTheme$ = combineLatest(
 			lastNonGamePlayScene$,
 			this.store.listenDeckState$((deckState) => deckState.metadata?.gameType),
 			this.store.listen$(([main]) => main.currentScene),
 		).pipe(
-			tap((info) => console.debug('prep activeTheme', info)),
 			this.mapData(([nonGameplayScene, [gameType], [currentScene]]) => {
 				if (!gameType) {
 					if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {

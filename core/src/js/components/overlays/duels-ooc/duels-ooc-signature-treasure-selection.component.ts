@@ -28,7 +28,7 @@ import { filter } from 'rxjs/operators';
 				<div
 					class="empty-card"
 					(mouseenter)="onMouseEnter(signatureTreasure.id)"
-					(mouseleave)="onMouseLeave(signatureTreasure.id)"
+					(mouseleave)="onMouseLeave(signatureTreasure.id, $event)"
 				></div>
 			</div>
 		</div>
@@ -142,6 +142,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 										currentSignatureTreasureCardId,
 										'last-patch',
 										dustFilter,
+										null,
 										patch,
 									),
 								)
@@ -246,9 +247,11 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		this.selectedSignatureTreasureCardId.next(cardId);
 	}
 
-	onMouseLeave(cardId: string) {
-		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedSignatureTreasureCardId.next(null);
+	onMouseLeave(cardId: string, event: MouseEvent) {
+		if (!event.shiftKey) {
+			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+			this.selectedSignatureTreasureCardId.next(null);
+		}
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

@@ -139,20 +139,27 @@ export const buildMercenariesTasksList = (
 					visitor.Status === TaskStatus.ACTIVE ||
 					visitor.Status === TaskStatus.COMPLETE,
 			)
-			.map((visitor) => {
-				const taskChain = referenceData.taskChains.find(
-					(chain) =>
-						chain.mercenaryVisitorId === visitor.VisitorId &&
-						chain.taskChainType !== VillageVisitorType.EVENT,
-				);
+			.flatMap((visitor) => {
+				const taskChains = referenceData.taskChains
+					.filter((chain) => chain.mercenaryVisitorId === visitor.VisitorId)
+					// So that we don't return events for which there is no visitor
+					.filter((chain) => chain.tasks.some((t) => t.id === visitor.TaskId));
 				// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
-				if (!taskChain) {
+				if (!taskChains?.length) {
+					console.debug(
+						'[tasks] no chain',
+						visitor,
+						referenceData.taskChains.find((chain) => chain.mercenaryVisitorId === visitor.VisitorId),
+					);
 					return null;
 				}
 
-				if (taskChain.mercenaryVisitorId === 1938) {
-					console.debug('story task chain', taskChain, referenceData, visitor);
-				}
+				return taskChains.map((chain) => ({ chain: chain, visitor: visitor }));
+			})
+			.filter((info) => !!info)
+			.map((info) => {
+				const taskChain = info.chain;
+				const visitor = info.visitor;
 
 				const task = taskChain.tasks[visitor.TaskChainProgress];
 				if (!task) {
@@ -180,6 +187,8 @@ export const buildMercenariesTasksList = (
 						  }),
 					description: task.description,
 					progress: visitor.TaskProgress,
+					quota: task.quota,
+					progressPercentage: !!task.quota ? (100 * (visitor.TaskProgress ?? 0)) / task.quota : 0,
 					taskChainProgress: visitor.TaskChainProgress,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
 					frameUrl: role

@@ -36,12 +36,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const dbCard = this.allCards.getCard(cardId);
-		if (
-			!dbCard ||
-			!dbCard.type ||
-			(dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase() &&
-				dbCard.type.toLowerCase() !== CardType[CardType.LOCATION].toLowerCase())
-		) {
+		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {
 			return currentState;
 		}
 		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
@@ -53,6 +48,17 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		// minion in hand (which is even more likely if they actually played HiddenCache)
 		if (deckWithSecretToCheck.hand.length === 0) {
 			secretsWeCantRuleOut.push(CardIds.HiddenCache);
+		}
+
+		if (gameEvent.additionalData.immune) {
+			// Trigger, but the minion takes no damage
+			// secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
+			// secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
+			// Is Kidnap a bug?
+			secretsWeCantRuleOut.push(CardIds.Kidnap_REV_828);
+			// secretsWeCantRuleOut.push(CardIds.PotionOfPolymorph);
+			// secretsWeCantRuleOut.push(CardIds.SnipeLegacy);
+			// secretsWeCantRuleOut.push(CardIds.SnipeVanilla);
 		}
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;

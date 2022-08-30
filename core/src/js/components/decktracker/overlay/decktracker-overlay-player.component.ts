@@ -23,6 +23,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[deckExtractor]="deckExtractor"
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
+			[showTotalCardsInZoneExtractor]="showTotalCardsInZoneExtractor"
 			closeEvent="CLOSE_TRACKER"
 			player="player"
 		>
@@ -44,12 +45,10 @@ export class DeckTrackerOverlayPlayerComponent {
 	showBottomCardsSeparatelyExtractor = (prefs: Preferences) => prefs.overlayShowBottomCardsSeparately;
 	showTopCardsSeparatelyExtractor = (prefs: Preferences) => prefs.overlayShowTopCardsSeparately;
 	deckExtractor = (state: GameState) => state.playerDeck;
-	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
-	// trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => prefs.overlayShowDeckWinrate;
 	showMatchupWinrateExtractor = (prefs: Preferences) => prefs.overlayShowMatchupWinrate;
-	// defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
-	// defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
+	// We know our deck, so don't hide the info
+	showTotalCardsInZoneExtractor = (computedValue) => true;
 
 	constructor(private prefs: PreferencesService) {}
 }

@@ -29,13 +29,19 @@ declare let amplitude: any;
 			<div class="hero">
 				<img
 					*ngIf="_heroCardId"
-					[helpTooltip]="'Best stat unlocked with ' + getCardName(_heroCardId)"
+					[helpTooltip]="
+						'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
+							| owTranslate: { heroName: getCardName(_heroCardId) }
+					"
 					[src]="heroImage"
 					class="portrait"
 				/>
 				<img
 					*ngIf="heroIcon"
-					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroIcon)"
+					[helpTooltip]="
+						'app.battlegrounds.personal-stats.records.rows.best-stat-hero'
+							| owTranslate: { heroName: getCardName(heroIcon) }
+					"
 					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg'"
 					class="portrait"
 				/>
@@ -44,7 +50,7 @@ declare let amplitude: any;
 				class="replay"
 				*ngIf="reviewId"
 				(click)="showReplay()"
-				helpTooltip="Watch the replay where this value was obtained"
+				[helpTooltip]="'app.battlegrounds.personal-stats.records.rows.watch-replay-tooltip' | owTranslate"
 			>
 				<div class="watch-icon">
 					<svg class="svg-icon-fill">

@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ComponentRef,
+	Input,
+	OnDestroy,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -54,11 +64,13 @@ import { groupByFunction } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardTooltipComponent {
+export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 	cards: readonly InternalCard[];
 	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
 	_relativePosition: 'left' | 'right';
+
+	public viewRef: ComponentRef<CardTooltipComponent>;
 
 	// private image: string;
 	// private _text: string;
@@ -100,8 +112,10 @@ export class CardTooltipComponent {
 
 	@Input() set cardTooltipCard(value: DeckCard) {
 		if (!value) {
+			this.updateInfos();
 			return;
 		}
+
 		this.buffs =
 			!value.buffCardIds || value.buffCardIds.length === 0
 				? undefined
@@ -137,12 +151,24 @@ export class CardTooltipComponent {
 		// }
 	}
 
+	private timeout;
+
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		@Optional() private prefs: PreferencesService,
 	) {}
+
+	ngAfterViewInit(): void {
+		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
+	}
+
+	ngOnDestroy(): void {
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
+	}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -151,18 +177,20 @@ export class CardTooltipComponent {
 	}
 
 	private async updateInfos() {
-		if (!this._cardIds?.length) {
+		if (!this._cardIds?.length && !this._relatedCardIds?.length) {
 			return;
 		}
+
 		const highRes = (await this.prefs?.getPreferences())?.collectionUseHighResImages;
 		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
-		this.cards = this._cardIds
+		this.cards = (this._cardIds ?? [])
 			// Empty card IDs are necessary when showing buff only
 			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
 				const card = this.allCards.getCard(cardId);
-				const isPremium = cardId?.endsWith('_golden') || !!card.battlegroundsNormalDbfId;
+				const isPremium =
+					cardId?.endsWith('_golden') || this._cardType === 'GOLDEN' || !!card.battlegroundsNormalDbfId;
 				const realCardId = cardId?.split('_golden')[0];
 				const image = !!realCardId
 					? this.localized

@@ -4,13 +4,13 @@ import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { Season4 } from '../stats/xp/xp-tables/season-4';
+import { Season6 } from '../stats/xp/xp-tables/season-6';
 import { Season } from '../stats/xp/xp-tables/_season';
 import { sleep } from '../utils';
 
 @Injectable()
 export class RewardMonitorService {
-	private currentSeason: Season = new Season4();
+	private currentSeason: Season = new Season6();
 
 	// This is a workaround until the XP memory updates are fixed
 	private lastRewardTrackInfo: RewardsTrackInfo;
@@ -59,7 +59,7 @@ export class RewardMonitorService {
 							xpGainedWithoutBonus: rawXpGained,
 							levelsGained: levelsGained,
 							bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-							xpNeeded: this.currentSeason.getXpForLevel(rewardTrackInfo.Level),
+							xpNeeded: this.currentSeason.getXpForLevel(rewardTrackInfo.Level + 1),
 						};
 						console.log('[rewards-monitor] sent degraded info', this.xpForGameInfo);
 						this.lastRewardTrackInfo = rewardTrackInfo;
@@ -120,7 +120,7 @@ export class RewardMonitorService {
 					realXpGained: xpGained,
 					levelsGained: levelsGained,
 					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-					xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel),
+					xpNeeded: this.currentSeason.getXpForLevel(xpChange.CurrentLevel + 1),
 				};
 				console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
 				// }

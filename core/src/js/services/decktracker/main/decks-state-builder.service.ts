@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { GameFormat } from '@firestone-hs/reference-data';
-import { DeckDefinition, decode } from 'deckstrings';
+import { DeckDefinition, DeckList, decode } from 'deckstrings';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSummary, DeckSummaryVersion } from '../../../models/mainwindow/decktracker/deck-summary';
@@ -16,7 +16,7 @@ import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { classes } from '../../hs-utils';
-import { groupByFunction, sumOnArray } from '../../utils';
+import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 @Injectable()
 export class DecksStateBuilderService {
@@ -49,7 +49,6 @@ export class DecksStateBuilderService {
 				statsByDeck[deckstring][0],
 			),
 		);
-		console.debug('[deck] decks after deckstring maps', decks);
 
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
 		const finalPersonalDecks = personalDecks
@@ -75,7 +74,6 @@ export class DecksStateBuilderService {
 			prefs.constructedDeckVersions,
 			prefs.desktopDeckHiddenDeckCodes,
 		);
-		console.debug('[deck] versionedDeck', versionedDecks, decks);
 		return [...versionedDecks, ...finalPersonalDecks];
 	}
 
@@ -105,7 +103,6 @@ export class DecksStateBuilderService {
 			.flatMap((v) => v.replays)
 			.filter((r) => !!r)
 			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
-		console.debug('[deck] replays', replays, versions);
 		if (!replays?.length) {
 			return {
 				...versions[0],
@@ -113,7 +110,7 @@ export class DecksStateBuilderService {
 			};
 		}
 
-		const lastReplay = replays[replays.length - 1];
+		const lastReplay = replays[0];
 		const totalGames = sumOnArray(versions, (deck) => deck.totalGames);
 		const totalWins = sumOnArray(versions, (deck) => deck.totalWins);
 		const matchupStats = this.buildMatchupStats(replays);
@@ -154,14 +151,25 @@ export class DecksStateBuilderService {
 		rankFilter: DeckRankFilterType,
 		prefs: Preferences,
 		patch: PatchInfo,
+		decks: readonly DeckSummary[] = null,
 	): readonly GameStat[] {
 		const resetForDeck = (prefs?.desktopDeckStatsReset ?? {})[deckstring] ?? [];
 		const lastResetDate = resetForDeck[0] ?? 0;
 		const deleteForDeck = (prefs?.desktopDeckDeletes ?? {})[deckstring] ?? [];
 		const lastDeleteDate = deleteForDeck[0] ?? 0;
 
+		// Because the method is used also to build the initial decks, we can't rely on the decks
+		// to always be present
+		const deckForDeckstring = !decks?.length
+			? null
+			: decks.find((d) => d.allVersions.some((v) => v.deckstring === deckstring));
+		const validDeckstrings = !!deckForDeckstring
+			? deckForDeckstring.allVersions.map((v) => v.deckstring)
+			: [deckstring];
+		// console.debug('')
+
 		const statsWithReset = stats
-			.filter((stat) => stat.playerDecklist === deckstring)
+			.filter((stat) => validDeckstrings.includes(stat.playerDecklist))
 			.filter((stat) => !!stat.opponentClass)
 			.filter((stat) => stat.gameMode === gameModeFilter)
 			.filter((stat) => gameFormatFilter === 'all' || stat.gameFormat === gameFormatFilter)
@@ -369,8 +377,95 @@ export class DecksStateBuilderService {
 	}
 
 	private buildVersions(versions: readonly DeckSummary[]): readonly DeckSummaryVersion[] {
+		const deckLists = versions
+			.map((version) => version.deckstring)
+			.map((deckstring) => decode(deckstring))
+			.map((deckDefinition) => deckDefinition.cards);
+		const uniqueCardDbfIds = [...new Set(deckLists.flatMap((cardPair) => cardPair[0]))];
+		const commonCardIdsWithMaxOccurrences: string[] = [];
+		for (const cardDbfId of uniqueCardDbfIds) {
+			const smallestCopiesInAllVersions = this.getSmallestOccurences(cardDbfId, deckLists);
+			for (let i = 0; i < smallestCopiesInAllVersions; i++) {
+				commonCardIdsWithMaxOccurrences.push(this.allCards.getCardFromDbfId(cardDbfId).id);
+			}
+		}
+		// allCardsLimitedByMaxCopies
 		// Find the cards that are in all the versions
-		return [];
+		return versions
+			.map((version) => {
+				const deckCards = decode(version.deckstring)?.cards;
+				const uniqueVersionCards = this.getUniqueVersionCards(deckCards, commonCardIdsWithMaxOccurrences);
+				const fullyUniqueCards = this.getFullyUniqueVersionCards(
+					uniqueVersionCards,
+					commonCardIdsWithMaxOccurrences,
+				);
+				return {
+					...version,
+					differentCards: uniqueVersionCards,
+					backgroundImage: `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.pickRandomCard(
+						fullyUniqueCards,
+					)}.jpg)`,
+				};
+			})
+			.sort((a, b) => b.lastUsedTimestamp - a.lastUsedTimestamp);
+	}
+
+	private pickRandomCard(fullyUniqueCards: readonly string[]): string {
+		const legendaries = fullyUniqueCards
+			.map((cardId) => this.allCards.getCard(cardId))
+			.filter((card) => card.rarity?.toLowerCase() === 'legendary')
+			.sort((a, b) => b.cost - a.cost);
+		if (!!legendaries?.length) {
+			return legendaries[0].id;
+		}
+
+		const epics = fullyUniqueCards
+			.map((cardId) => this.allCards.getCard(cardId))
+			.filter((card) => card.rarity?.toLowerCase() === 'epic')
+			.sort((a, b) => b.cost - a.cost);
+		if (!!epics?.length) {
+			return epics[0].id;
+		}
+
+		return fullyUniqueCards[0];
+	}
+
+	private getFullyUniqueVersionCards(
+		uniqueVersionCards: readonly string[],
+		commonCardIdsWithMaxOccurrences: readonly string[],
+	): readonly string[] {
+		const uniqueVersionCardIds = [...new Set(uniqueVersionCards)];
+		const uniqueCommonCards = [...new Set(commonCardIdsWithMaxOccurrences)];
+		for (const cardId of uniqueCommonCards) {
+			removeFromArray(uniqueVersionCardIds, cardId);
+		}
+		return uniqueVersionCardIds;
+	}
+
+	private getUniqueVersionCards(deckCards: DeckList, commonCardIdsWithMaxOccurrences: string[]): readonly string[] {
+		const result = [];
+		const commonCardsCopy = [...commonCardIdsWithMaxOccurrences];
+		for (const cardPair of deckCards) {
+			const cardId = this.allCards.getCardFromDbfId(cardPair[0]).id;
+			const quantity = cardPair[1];
+			for (let i = 0; i < quantity; i++) {
+				if (commonCardsCopy.includes(cardId)) {
+					removeFromArray(commonCardsCopy, cardId);
+				} else {
+					result.push(cardId);
+				}
+			}
+		}
+		return result;
+	}
+
+	private getSmallestOccurences(cardDbfId: number, deckLists: DeckList[]): number {
+		return Math.min(
+			...deckLists.map((deckList) => {
+				const pair = deckList.find((cardPair) => cardPair[0] === cardDbfId);
+				return !!pair ? pair[1] : 0;
+			}),
+		);
 	}
 }
 

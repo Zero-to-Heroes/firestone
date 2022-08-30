@@ -203,6 +203,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[ngClass]="{ 'selected': minion.id === _currentMinion?.id }"
 							(click)="selectMinion(minion)"
 							[cardTooltip]="minion.id"
+							[cardTooltipBgs]="true"
 						>
 							<img class="icon" [src]="minion.icon" />
 						</div>

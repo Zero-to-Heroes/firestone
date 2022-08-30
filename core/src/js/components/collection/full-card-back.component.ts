@@ -24,7 +24,7 @@ import { InternalCardBack } from './internal-card-back';
 				<h1>{{ _cardBack.name }}</h1>
 				<div class="card-back-details">
 					<div class="card-back-info description">
-						<span class="value">{{ _cardBack.text }}</span>
+						<span class="value">{{ this.transformFlavor(_cardBack.text) }}</span>
 					</div>
 				</div>
 			</div>
@@ -57,5 +57,15 @@ export class FullCardBackComponent extends AbstractSubscriptionComponent impleme
 
 	ngAfterContentInit() {
 		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
+	}
+
+	private transformFlavor(flavor: string): string {
+		const result = flavor
+			.replace(/\n/g, '<br>')
+			.replace(/<i>/g, '')
+			.replace(/<\/i>/g, '')
+			.replace(/<br>/g, ' ')
+			.replace(/[x]/g, '');
+		return result;
 	}
 }

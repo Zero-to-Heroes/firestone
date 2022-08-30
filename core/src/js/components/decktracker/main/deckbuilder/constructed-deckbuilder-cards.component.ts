@@ -95,6 +95,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						<virtual-scroller
 							class="cards-container"
 							#scroll
+							*ngIf="value.activeCards?.length; else emptyState"
 							[items]="value.activeCards"
 							bufferAmount="5"
 							scrollable
@@ -118,6 +119,9 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								</div>
 							</div>
 						</virtual-scroller>
+						<ng-template #emptyState>
+							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
+						</ng-template>
 					</div>
 				</div>
 			</ng-container>
@@ -133,6 +137,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	maxCardsInDeck$: Observable<number>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
+	searchString$: Observable<string>;
 	ongoingText$: Observable<string>;
 	allowedCards$: Observable<ReferenceCard[]>;
 	collection$: Observable<readonly SetCard[]>;
@@ -238,7 +243,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				),
 			);
 
-		const searchString$ = this.searchForm.valueChanges.pipe(
+		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
@@ -246,7 +251,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 		this.activeCards$ = combineLatest(
 			this.allowedCards$,
 			this.collection$,
-			searchString$,
+			this.searchString$,
 			this.currentDeckCards$,
 		).pipe(
 			this.mapData(

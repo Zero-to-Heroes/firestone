@@ -16,7 +16,11 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 				[tooltipPosition]="_tooltipPosition"
 				*ngIf="showTitleBar"
 			></decktracker-deck-name>
-			<decktracker-cards-recap [deck]="deck" *ngIf="showTitleBar"></decktracker-cards-recap>
+			<decktracker-cards-recap
+				[deck]="deck"
+				[showCardsInDeck]="showTotalCardsInZone"
+				*ngIf="showTitleBar"
+			></decktracker-cards-recap>
 			<decktracker-winrate-recap
 				*ngIf="showDeckWinrate"
 				[stats]="deckWinrate"
@@ -36,6 +40,7 @@ export class DeckTrackerTitleBarComponent implements OnDestroy {
 	@Input() showTitleBar: boolean;
 	@Input() showDeckWinrate: boolean;
 	@Input() showMatchupWinrate: boolean;
+	@Input() showTotalCardsInZone: boolean;
 	@Input() deckWinrate: StatsRecap;
 	@Input() matchupWinrate: StatsRecap;
 

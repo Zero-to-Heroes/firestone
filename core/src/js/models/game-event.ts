@@ -87,6 +87,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
 	public static readonly ARMOR_CHANGED = 'ARMOR_CHANGED';
+	public static readonly DATA_SCRIPT_CHANGED = 'DATA_SCRIPT_CHANGED';
 	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
 	public static readonly NUM_CARDS_PLAYED_THIS_TURN = 'NUM_CARDS_PLAYED_THIS_TURN';
 	public static readonly NUM_CARDS_DRAW_THIS_TURN = 'NUM_CARDS_DRAW_THIS_TURN';

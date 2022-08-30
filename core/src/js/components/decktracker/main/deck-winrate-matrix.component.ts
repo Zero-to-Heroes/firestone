@@ -26,7 +26,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	],
 	template: `
 		<div class="opponents-popularity">
-			<div class="title">Opponent class breakdown</div>
+			<div class="title" [owTranslate]="'app.decktracker.matchup-info.opponents-popularity-header'"></div>
 			<pie-chart class="opponents-popularity-chart" [data]="pieChartData" [options]="pieChartOptions"></pie-chart>
 		</div>
 		<div class="deck-winrate-matrix">
@@ -118,8 +118,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	pieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
 
-	resetText = 'Reset stats';
-	deleteText = 'Delete deck';
+	resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-button-label');
+	deleteText = this.i18n.translateString('app.decktracker.matchup-info.delete-button-label');
 	confirmationShown = false;
 	showResetConfirmationText = false;
 

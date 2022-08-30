@@ -103,16 +103,20 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 			.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
+				([main, nav, prefs]) => nav.navigationDecktracker.selectedVersionDeckstring,
 			)
 			.pipe(
 				tap((info) => console.debug('[deck] info', info)),
-				this.mapData(([decks, selectedDeckstring]) =>
-					decks.find(
+				this.mapData(([decks, selectedDeckstring, selectedVersionDeckstring]) => {
+					const deck: DeckSummary = decks.find(
 						(deck) =>
 							deck?.deckstring === selectedDeckstring ||
 							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
-					),
-				),
+					);
+					return !!selectedVersionDeckstring
+						? deck.allVersions.find((v) => v.deckstring === selectedVersionDeckstring)
+						: deck;
+				}),
 			);
 		this.deck$.subscribe((deck) => (this.deckstring = deck?.deckstring));
 		this.info$ = this.deck$.pipe(

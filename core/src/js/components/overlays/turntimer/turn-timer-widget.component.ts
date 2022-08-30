@@ -202,7 +202,7 @@ export class TurnTimerPlayerComponent {
 		this.currentTurnDuration = formatDuration(value.currentTurnDurationInMillis);
 		this.totalPlayedDuration = formatDuration(value.totalPlayedDurationInMillis);
 		const turnMaxDuration = value.turnDuration ?? TURN_DURATION_MILLIS;
-		this.fusePercent = Math.max(2, (100 * (turnMaxDuration - value.currentTurnDurationInMillis)) / turnMaxDuration);
+		this.fusePercent = Math.min(100, (100 * value.currentTurnDurationInMillis) / turnMaxDuration);
 		this.active = !!this.currentTurnDuration;
 	}
 

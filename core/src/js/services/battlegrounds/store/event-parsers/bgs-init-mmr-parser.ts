@@ -33,7 +33,7 @@ export class BgsInitMmrParser implements EventParser {
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const reviewId = await this.gameState.getCurrentReviewId();
 		const mmr = bgsInfo?.Rating;
-		console.log('[bgs-mmr] mmrAtStart', reviewId, mmr);
+		console.log('[bgs-mmr] mmrAtStart', reviewId, mmr, event);
 
 		const prefs = await this.prefs.getPreferences();
 
@@ -55,7 +55,9 @@ export class BgsInitMmrParser implements EventParser {
 		stateUpdater.next(new BgsTribesFilterSelectedEvent(races));
 
 		const percentile = prefs.bgsUseMmrFilterInHeroSelection
-			? [...event.mmrPercentiles].sort((a, b) => b.mmr - a.mmr).find((percentile) => percentile.mmr <= (mmr ?? 0))
+			? [...(event.mmrPercentiles ?? [])]
+					.sort((a, b) => b.mmr - a.mmr)
+					.find((percentile) => percentile.mmr <= (mmr ?? 0))
 			: null;
 		stateUpdater.next(new BgsRankFilterSelectedEvent(percentile?.percentile ?? 100));
 

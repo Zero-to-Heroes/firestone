@@ -339,6 +339,7 @@ export class GameEvents {
 									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
+									immune: gameEvent.Value.AdditionalProps.Immune,
 							  }
 							: {},
 					),
@@ -793,8 +794,19 @@ export class GameEvents {
 				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
-						armorChange: gameEvent.Value.AdditionalProps.ArmorChange,
+						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
+					}),
+				);
+				break;
+			case 'DATA_SCRIPT_CHANGED':
+				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
+						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
+						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
+						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
 					}),
 				);
 				break;
@@ -894,6 +906,7 @@ export class GameEvents {
 					CopiedFromEntityIdGameEvent.build(GameEvent.COPIED_FROM_ENTITY_ID, gameEvent, {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
+						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
 					}),
 				);
 				break;

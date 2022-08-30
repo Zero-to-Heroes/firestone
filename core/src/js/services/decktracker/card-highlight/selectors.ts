@@ -60,7 +60,7 @@ export const healthBiggerThanAttack = (handler: Handler): boolean => {
 };
 
 export const cardIs = (...cardIds: readonly CardIds[]) => (handler: Handler): boolean => {
-	return cardIds.includes(handler.referenceCardProvider().id as CardIds);
+	return cardIds.includes(handler.referenceCardProvider()?.id as CardIds);
 };
 
 export const spellPlayedThisMatch = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
@@ -133,6 +133,7 @@ export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
 export const imp = hasMechanic(GameTag.IMP);
+export const whelp = hasMechanic(GameTag.WHELP);
 
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];

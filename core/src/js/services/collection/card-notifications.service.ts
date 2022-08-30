@@ -31,28 +31,23 @@ export class CardNotificationsService {
 			return;
 		}
 
-		const cardName: string =
-			type === 'GOLDEN'
-				? this.i18n.translateString('app.collection.card-history.golden-card', {
-						cardName: dbCard.name,
-				  })
-				: type === 'DIAMOND'
-				? this.i18n.translateString('app.collection.card-history.diamond-card', {
-						cardName: dbCard.name,
-				  })
-				: dbCard.name;
-		const goldenClass = type === 'GOLDEN' ? 'premium' : '';
+		const cardName: string = dbCard.name;
+		const goldenClass = type === 'GOLDEN' || type === 'DIAMOND' ? 'premium' : '';
 		const newLabel = isSecondCopy
-			? this.i18n.translateString('app.collection.card-history.second-copy-long')
-			: this.i18n.translateString('app.collection.card-history.new-copy-long');
+			? this.i18n.translateString('app.collection.card-history.second-copy-long', {
+					version: goldenClass
+						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
+						: '',
+			  })
+			: this.i18n.translateString('app.collection.card-history.new-copy-long', {
+					version: goldenClass
+						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
+						: '',
+			  });
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
-		const clickText = this.i18n.translateString('app.collection.card-history.click-to-view', {
-			link: `<span class="link">${this.i18n.translateString(
-				'app.collection.card-history.click-to-view-link',
-			)}</span>`,
-		});
+		const clickText = this.i18n.translateString('app.collection.card-history.click-to-expand');
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
@@ -71,8 +66,10 @@ export class CardNotificationsService {
 								</svg>
 							</i>
 						</div>
-						<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
-						<span class="cta">${clickText}</span>
+						<div class="text-container link">
+							<span class="new-card"><span class="new">${newLabel}</span> ${cardName}!</span>
+							<span class="cta"> ${clickText}</span>
+						</div>
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">

@@ -45,7 +45,7 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 				cooldown: event.additionalData.abilityCooldownConfig ?? refAbilityCard.mercenaryAbilityCooldown,
 				cooldownLeft: event.additionalData.abilityCurrentCooldown ?? refAbilityCard.mercenaryAbilityCooldown,
 				level: getMercCardLevel(cardId),
-				speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost,
+				speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0,
 				totalUsed: 0,
 				isTreasure: event.additionalData.isTreasure,
 			}),
