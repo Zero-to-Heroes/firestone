@@ -8,7 +8,7 @@ import { AdventuresInfo, DuelsDeck, MemoryDuelsHeroPowerOption } from '@models/m
 import { MemoryMercenariesCollectionInfo } from '@models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
-import { RewardsTrackInfo } from '@models/rewards-track-info';
+import { RewardsTrackInfos } from '@models/rewards-track-info';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
@@ -326,8 +326,8 @@ export class MindVisionFacadeService {
 		});
 	}
 
-	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
-		return new Promise<RewardsTrackInfo>(async (resolve) => {
+	public async getRewardsTrackInfo(): Promise<RewardsTrackInfos> {
+		return new Promise<RewardsTrackInfos>(async (resolve) => {
 			const plugin = await this.get();
 			try {
 				plugin.getRewardsTrackInfo((info) => {

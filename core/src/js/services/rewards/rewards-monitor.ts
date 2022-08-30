@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RewardTrackType } from '@firestone-hs/reference-data';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
@@ -33,8 +34,11 @@ export class RewardMonitorService {
 			}
 			if (!this.xpForGameInfo) {
 				console.warn('[rewards-monitor] could not get xpForGameInfo, getting rewardsTrackInfo');
-				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
-				if (rewardTrackInfo) {
+				const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
+				if (rewardTrackInfos) {
+					const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos.TrackEntries?.find(
+						(track) => track.TrackType === RewardTrackType.GLOBAL,
+					);
 					if (this.lastRewardTrackInfo) {
 						const levelsGained = rewardTrackInfo.Level - this.lastRewardTrackInfo.Level;
 						const xpGained =
@@ -107,7 +111,10 @@ export class RewardMonitorService {
 						  // Xp needed to finish the previous level
 						  (this.currentSeason.getXpForLevel(xpChange.PreviousLevel) - xpChange.PreviousXp) +
 						  this.getXpForIntermediaryLevels(xpChange.PreviousLevel, xpChange.CurrentLevel);
-				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
+				const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
+				const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
+					(track) => track.TrackType === RewardTrackType.GLOBAL,
+				);
 				const xpModifier = 1 + (rewardTrackInfo?.XpBonusPercent ?? 0) / 100;
 				const rawXpGained = xpGained / xpModifier;
 				// if (prefs.showXpRecapAtGameEnd) {
@@ -126,7 +133,10 @@ export class RewardMonitorService {
 				// }
 			}
 		});
-		const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
+		const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
+		const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
+			(track) => track.TrackType === RewardTrackType.GLOBAL,
+		);
 		console.log('[rewards-monitor] initialize values from rewardsTrackInfo', rewardTrackInfo);
 		this.lastRewardTrackInfo = rewardTrackInfo;
 	}

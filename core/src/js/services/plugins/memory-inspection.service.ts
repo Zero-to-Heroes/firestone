@@ -21,7 +21,7 @@ import { AdventuresInfo, DuelsDeck, DuelsInfo, MemoryDuelsHeroPowerOption } from
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
-import { RewardsTrackInfo } from '../../models/rewards-track-info';
+import { RewardsTrackInfos } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
 import { OverwolfService } from '../overwolf.service';
@@ -251,7 +251,7 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getDuelsRewardsInfoOperation.call(1, forceReset));
 	}
 
-	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
+	public async getRewardsTrackInfo(): Promise<RewardsTrackInfos> {
 		return this.mindVision.callMindVision(() => this.getRewardsTrackInfoOperation.call());
 	}
 
