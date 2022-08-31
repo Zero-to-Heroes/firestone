@@ -333,6 +333,13 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerRelicCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerRelicCounterWidgetPosition: { left: number; top: number };
+	readonly opponentRelicCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentRelicCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerBolnerCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };

@@ -153,6 +153,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.volatile-skeleton-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerRelicCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.relic-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.relic-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerHeroPowerDamageCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.hero-power-damage-tooltip' | owTranslate"

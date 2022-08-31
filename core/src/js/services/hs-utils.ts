@@ -123,9 +123,9 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
-	CardIds.RelicOfDimensions,
-	CardIds.RelicOfExtinction,
-	CardIds.RelicOfPhantasms,
+	// CardIds.RelicOfDimensions,
+	// CardIds.RelicOfExtinction,
+	// CardIds.RelicOfPhantasms,
 	CardIds.RenounceDarkness,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest_SCH_609,

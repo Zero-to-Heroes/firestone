@@ -33,6 +33,7 @@ export type CounterType =
 	| 'si7Counter'
 	| 'elwynnBoar'
 	| 'volatileSkeleton'
+	| 'relic'
 	| 'coralKeeper'
 	| 'bgsPogo'
 	| 'bgsSouthsea'

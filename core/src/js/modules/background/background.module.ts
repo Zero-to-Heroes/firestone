@@ -342,6 +342,7 @@ import { OpponentHeroPowerDamageWidgetWrapperComponent } from '../../components/
 import { OpponentJadeWidgetWrapperComponent } from '../../components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentLibramWidgetWrapperComponent } from '../../components/overlays/counters/opponent-libram-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from '../../components/overlays/counters/opponent-pogo-widget-wrapper.component';
+import { OpponentRelicWidgetWrapperComponent } from '../../components/overlays/counters/opponent-relic-widget-wrapper.component';
 import { OpponentVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/opponent-volatile-skeleton-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-watchpost-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-attack-widget-wrapper.component';
@@ -359,6 +360,7 @@ import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/co
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
+import { PlayerRelicWidgetWrapperComponent } from '../../components/overlays/counters/player-relic-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
@@ -982,6 +984,7 @@ const components = [
 		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
 		PlayerVolatileSkeletonWidgetWrapperComponent,
+		PlayerRelicWidgetWrapperComponent,
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
@@ -1005,6 +1008,7 @@ const components = [
 		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
 		OpponentVolatileSkeletonWidgetWrapperComponent,
+		OpponentRelicWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentLibramWidgetWrapperComponent,
 

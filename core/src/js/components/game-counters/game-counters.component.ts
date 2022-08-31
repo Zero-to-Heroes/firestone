@@ -29,6 +29,7 @@ import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { RelicCounterDefinition } from './definitions/relic-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
@@ -135,6 +136,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElwynnBoarCounterDefinition.create(gameState, side, this.i18n);
 			case 'volatileSkeleton':
 				return VolatileSkeletonCounterDefinition.create(gameState, side, this.i18n);
+			case 'relic':
+				return RelicCounterDefinition.create(gameState, side, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
