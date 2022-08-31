@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.4',
+		version: '9.9.7',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,11 +46,33 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `The app has been updated for 24.2. Some features are still missing (like a BG XP tracker or proper handling of the quest rewards in the simulator / twitch extension) and should come in the coming days.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Relic counter is here, for you and your opponent! Consequently, relics have been removed from the Global Effects section.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue where importing a decklist for the opponent while in game would not work properly.`,
+								text: `Fix a bug where the Curse counter would be stuck on 1/1 when receiving curses.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Event tasks (like C'Thun's) are now properly tracked.`,
 							},
 						],
 					},
@@ -65,58 +87,32 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a widget for Vanessa VanCleef which tells you which card you'll get from the combo.`,
+								text: `When mousing over your own Commander Sivara in the decktracker, you can now see the spells he will bounce back.`,
 							},
 							{
 								type: 'feature',
-								text: `Add some missing card oracles (like Identity Theft).`,
+								text: `Add a widget for Murozond that tells you all cards that will be replayed.`,
 							},
 							{
 								type: 'feature',
-								text: `Add cards highlight for Commencement, Herald of Nature, Y'Shaarj the Defiler.`,
-							},
-							{
-								type: 'feature',
-								text: `Add +1 modifier for Sunscale Raptors created in deck.`,
+								text: `Add various card oracles, global effects and card highlights.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the curse counter would not properly increment when receiving curses.`,
+								text: `Fix an issue where the deck stats shown in the tracker would not account for all versions of a multi-version deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the settings for "show related cards" and "show card rarity" where reversed.`,
+								text: `Fix an info leak where Prince Renathal would be flagged in hand if drawn during the mulligan.`,
 							},
 						],
 					},
 					{
-						category: 'replays',
+						category: 'mercenaries',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where dragging the replay time bar would drag the whole app window.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `Display the number of owned diamond copies of a card when looking at the card details (Community Contribution).`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'ui',
-								text: `Add several visual enhancements, mostly when using the app in non-English (Community Contribution).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the XP notification would use the target XP of the previous level.`,
+								text: `Fix an issue where abilities that have a speed of 0 would not show any speed at all.`,
 							},
 						],
 					},
