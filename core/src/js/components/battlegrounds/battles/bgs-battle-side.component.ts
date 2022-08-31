@@ -194,7 +194,9 @@ export class BgsBattleSideComponent {
 
 		this.heroCardId = this._player.player?.cardId;
 		this.heroPowerCardId = this._player.player?.heroPowerId;
-		this.questRewardCardId = this._player.player?.questReward;
+		this.questRewardCardId = !!this._player.player?.questRewards?.length
+			? this._player.player?.questRewards[0]
+			: null;
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;

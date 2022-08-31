@@ -218,7 +218,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
-							questReward: null,
+							questRewards: null,
 						},
 					},
 					opponentBoard: {
@@ -230,7 +230,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
-							questReward: null,
+							questRewards: null,
 						},
 					},
 					options: {
@@ -418,7 +418,9 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			}
 		};
 		modalRef.instance.currentReward =
-			side === 'player' ? this.player.player.questReward : this.opponent.player.questReward;
+			side === 'player'
+				? (this.player.player.questRewards ?? [])[0]
+				: (this.opponent.player.questRewards ?? [])[0];
 		modalRef.instance.applyHandler = (newQuestRewardId: string) => {
 			this.overlayRef.detach();
 			side === 'player'
@@ -426,7 +428,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						battleInfo: {
 							playerBoard: {
 								player: {
-									questReward: newQuestRewardId,
+									questRewards: [newQuestRewardId] as readonly string[],
 								},
 							},
 						},
@@ -435,7 +437,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						battleInfo: {
 							opponentBoard: {
 								player: {
-									questReward: newQuestRewardId,
+									questRewards: [newQuestRewardId] as readonly string[],
 								},
 							},
 						},
