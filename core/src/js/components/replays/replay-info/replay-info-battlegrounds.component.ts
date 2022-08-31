@@ -209,7 +209,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.bgsPerfectGame = this.replayInfo.bgsPerfectGame;
 		this.finalWarband = this.buildFinalWarband();
 		this.hasPrizes = this.replayInfo.bgsHasPrizes;
-		this.gameTime = this.i18n.translateString('global.duration', {
+		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
 	}

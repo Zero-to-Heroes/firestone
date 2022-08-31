@@ -145,7 +145,7 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponen
 				? this.i18n.translateString('app.replays.replay-info.mercenaries-bot-opponent-name')
 				: this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
-		this.gameTime = this.i18n.translateString('global.duration', {
+		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
 	}
