@@ -112,6 +112,7 @@ import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegroun
 import { BgsSimulatorMinionSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-selection.component';
 import { BattlegroundsSimulatorMinionTierFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tier-filter-dropdown.component';
 import { BattlegroundsSimulatorMinionTribeFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tribe-filter-dropdown.component';
+import { BgsSimulatorQuestRewardSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-quest-reward-selection.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
@@ -658,6 +659,7 @@ const components = [
 		BgsBattlesComponent,
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
+		BgsSimulatorQuestRewardSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,
 		BattlegroundsSimulatorMinionTribeFilterDropdownComponent,
 		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
@@ -1075,6 +1077,7 @@ const components = [
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
+		BgsSimulatorQuestRewardSelectionComponent,
 		CurrentSessionBgsBoardTooltipComponent,
 		...components,
 	],
