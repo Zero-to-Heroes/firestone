@@ -71,7 +71,7 @@ export class MercenariesTeamMercenaryComponent {
 					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png)`
 					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png)`,
 				name: abilityCard.name,
-				speed: ability.speed ?? abilityCard.cost ?? 0,
+				speed: ability.speed ?? abilityCard.cost ?? (ability.isTreasure ? null : 0),
 				cooldown: ability.cooldown ?? abilityCard.mercenaryAbilityCooldown,
 				cooldownLeft: ability.cooldownLeft,
 				isTreasure: ability.isTreasure,

@@ -36,15 +36,16 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 		}
 
 		const refAbilityCard = this.allCards.getCard(cardId);
+		const isTreasure = event.additionalData.isTreasure;
 		const newAbility = BattleAbility.create({
 			entityId: entityId,
 			cardId: cardId,
 			cooldown: event.additionalData.abilityCooldownConfig ?? refAbilityCard.mercenaryAbilityCooldown,
 			cooldownLeft: event.additionalData.abilityCurrentCooldown ?? refAbilityCard.mercenaryAbilityCooldown,
 			level: getMercCardLevel(cardId),
-			speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0,
+			speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? (isTreasure ? null : 0),
 			totalUsed: 0,
-			isTreasure: event.additionalData.isTreasure,
+			isTreasure: isTreasure,
 		});
 		// Because in PvE, abilities are revealed as you encounter them
 		// In PvP that's probably the case as well by the way, so let's see how it behaves in that case

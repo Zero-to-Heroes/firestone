@@ -34,7 +34,7 @@ export class MercenariesSpeedParser implements MercenariesParser {
 			entityId,
 			cardId,
 			BattleAbility.create({
-				speed: event.additionalData.cost ?? 0,
+				speed: event.additionalData.cost,
 			}),
 		);
 		console.debug('[merc-speed-parser] newMerc', newMerc);

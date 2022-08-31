@@ -36,6 +36,7 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 		}
 
 		const refAbilityCard = this.allCards.getCard(cardId);
+		const isTreasure = event.additionalData.isTreasure;
 		const newMerc = abilityOwner.updateAbility(
 			entityId,
 			cardId,
@@ -45,9 +46,9 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 				cooldown: event.additionalData.abilityCooldownConfig ?? refAbilityCard.mercenaryAbilityCooldown,
 				cooldownLeft: event.additionalData.abilityCurrentCooldown ?? refAbilityCard.mercenaryAbilityCooldown,
 				level: getMercCardLevel(cardId),
-				speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0,
+				speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? (isTreasure ? null : 0),
 				totalUsed: 0,
-				isTreasure: event.additionalData.isTreasure,
+				isTreasure: isTreasure,
 			}),
 		);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
