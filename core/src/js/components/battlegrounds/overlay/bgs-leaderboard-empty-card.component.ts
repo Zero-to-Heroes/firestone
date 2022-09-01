@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -50,6 +50,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 					[tribeImage]="tribeImage"
 					[tribeCount]="tribeCount"
 					[damage]="damage"
+					[questRewards]="questRewards"
 				></bgs-hero-short-recap>
 			</div>
 		</div>
@@ -113,6 +114,7 @@ export class BgsLeaderboardEmptyCardComponent
 	tribeImage: string;
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 	damage: number;
+	questRewards: readonly QuestReward[];
 
 	private callbackHandle;
 
@@ -172,6 +174,7 @@ export class BgsLeaderboardEmptyCardComponent
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
+				questRewards: this._previousPlayer?.questRewards,
 				// buddyTurns: this._previousPlayer?.buddyTurns ?? [],
 			}),
 			currentTurn: this._currentTurn,
@@ -186,6 +189,7 @@ export class BgsLeaderboardEmptyCardComponent
 		this.tribeCount = tribe === 'mixed' ? null : this._previousPlayer.getLastKnownComposition()?.count ?? 0;
 		this.tribeImage = getTribeIcon(tribe);
 		this.damage = this._previousPlayer.getLastKnownBattleHistory()?.damage ?? 0;
+		this.questRewards = this._bgsPlayer.player.questRewards;
 		if (this.winStreak === 0 && this.damage > 0) {
 			this.damage = -this.damage;
 		}

@@ -192,6 +192,13 @@
 		flex-shrink: 0;
 	}
 
+	bgs-quest-rewards {
+		display: none;
+		width: 170px;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
 	.last-opponent-icon {
 		width: 28px;
 		height: 28px;
@@ -218,6 +225,9 @@
 @media (min-width: 1550px) {
 	.opponent-overview {
 		bgs-buddies {
+			display: flex;
+		}
+		bgs-quest-rewards {
 			display: flex;
 		}
 	}

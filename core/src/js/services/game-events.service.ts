@@ -1144,6 +1144,29 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_REWARD_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_REWARD_REVEALED,
+						additionalData: {
+							cardId: gameEvent.Value.CardId,
+							questRewardDbfId: gameEvent.Value.QuestRewardDbfId,
+							isHeroPowerReward: gameEvent.Value.IsHeroPowerReward,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_REWARD_GAINED':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_REWARD_GAINED,
+						additionalData: {
+							cardId: gameEvent.Value.CardId,
+							isHeroPowerReward: gameEvent.Value.IsHeroPowerReward,
+						},
+					} as GameEvent),
+				);
+				break;
 			case 'WINNER':
 				console.log(gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
 				this.gameEventsEmitter.allEvents.next(

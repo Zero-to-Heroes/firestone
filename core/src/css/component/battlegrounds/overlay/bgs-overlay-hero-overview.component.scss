@@ -151,6 +151,17 @@
 						display: flex;
 					}
 				}
+
+				bgs-quest-rewards {
+					justify-content: space-between;
+					width: auto;
+					border-right: 1px solid var(--color-3);
+					padding-right: 10px;
+
+					.rewards-container .title {
+						display: flex;
+					}
+				}
 			}
 		}
 	}

@@ -72,14 +72,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 			shouldObfuscate
 				? copiedCard?.cardId
 				: updatedCardId;
-		console.debug(
-			'[copied-from-entity] obfuscatedCardId',
-			obfuscatedCardId,
-			isPlayer,
-			newCopy?.creatorCardId,
-			newCopy,
-			copiedCard,
-		);
+		// console.debug(
+		// 	'[copied-from-entity] obfuscatedCardId',
+		// 	obfuscatedCardId,
+		// 	isPlayer,
+		// 	newCopy?.creatorCardId,
+		// 	newCopy,
+		// 	copiedCard,
+		// );
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard =
 			copiedCard?.update({
@@ -92,17 +92,17 @@ export class CopiedFromEntityIdParser implements EventParser {
 				entityId: isPlayer ? copiedCardEntityId : null,
 				zone: undefined,
 			} as DeckCard);
-		console.debug('[copied-from-entity] updatedCopiedCard', updatedCopiedCard);
+		// console.debug('[copied-from-entity] updatedCopiedCard', updatedCopiedCard);
 		const newCopiedDeck =
 			copiedCardZone === Zone.DECK
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCard, true)
 				: copiedDeck.deck;
-		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck);
+		// console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck);
 		const newCopiedPlayer =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
 				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard, isCopiedPlayer);
-		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
+		// console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(
@@ -110,7 +110,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			updatedCopiedCard.cardId,
 			copiedCardEntityId,
 		);
-		console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);
+		// console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);
 
 		return Object.assign(new GameState(), currentState, {
 			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithSecrets,

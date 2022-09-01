@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 
 @Component({
 	selector: 'bgs-hero-short-recap',
@@ -25,6 +26,19 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<img class="icon" [src]="damageImage" />
 				<div class="value">{{ damage }}</div>
 			</div>
+			<div class="element quest-rewards" *ngIf="questRewards?.length">
+				<div
+					class="quest-reward"
+					*ngFor="let reward of questRewards"
+					[ngClass]="{ 'completed': reward.completed }"
+				>
+					<img [src]="getIcon(reward.cardId)" class="image" />
+					<img
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_quest_reward_frame.png"
+						class="frame"
+					/>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,8 +50,14 @@ export class BgsHeroShortRecapComponent {
 	@Input() tribeImage: string;
 	@Input() tribeCount: number;
 	@Input() damage: number;
+	@Input() questRewards: readonly QuestReward[];
 
 	triplesImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_triple.png';
 	winStreakImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_winstreak.png';
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
+
+	getIcon(cardId: string): string {
+		console.debug('getting icon for', cardId);
+		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
+	}
 }

@@ -56,6 +56,8 @@ import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-sta
 import { BgsReconnectStatusParser } from './event-parsers/bgs-reconnect-status-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
+import { BgsRewardGainedParser } from './event-parsers/bgs-reward-gained-parser';
+import { BgsRewardRevealedParser } from './event-parsers/bgs-reward-revealed-parser';
 import { BgsSelectBattleParser } from './event-parsers/bgs-select-battle-parser';
 import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
@@ -85,6 +87,8 @@ import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
 import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updated-event';
 import { BgsReconnectStatusEvent } from './events/bgs-reconnect-status-event';
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
+import { BgsRewardGainedEvent } from './events/bgs-reward-gained-event';
+import { BgsRewardRevealedEvent } from './events/bgs-reward-revealed-event';
 import { BgsSpectatingEvent } from './events/bgs-spectating-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
@@ -261,6 +265,22 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BUDDY_GAINED) {
 				this.battlegroundsUpdater.next(
 					new BgsBuddyGainedEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.totalBuddies),
+				);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_REVEALED) {
+				this.battlegroundsUpdater.next(
+					new BgsRewardRevealedEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.questRewardDbfId,
+						gameEvent.additionalData.isHeroPowerReward,
+					),
+				);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_GAINED) {
+				this.battlegroundsUpdater.next(
+					new BgsRewardGainedEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.questRewardDbfId,
+						gameEvent.additionalData.isHeroPowerReward,
+					),
 				);
 			} else if (
 				gameEvent.type === GameEvent.DAMAGE &&
@@ -524,6 +544,8 @@ export class BattlegroundsStoreService {
 			new BgsNextOpponentParser(this.i18n, this.allCards),
 			new BgsTavernUpgradeParser(this.gameEventsService, this.allCards),
 			new BgsBuddyGainedParser(this.gameEventsService, this.allCards),
+			new BgsRewardRevealedParser(this.allCards),
+			new BgsRewardGainedParser(this.allCards),
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService, this.allCards),
 			new BgsTripleCreatedParser(this.allCards),
 			new BgsOpponentRevealedParser(this.allCards),

@@ -17,6 +17,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly baseCardId?: string;
 	readonly displayedCardId: string;
 	readonly heroPowerCardId: string;
+	readonly questRewards: readonly QuestReward[] = [];
 	readonly name: string;
 	readonly isMainPlayer: boolean = false;
 	readonly tavernUpgradeHistory: readonly BgsTavernUpgrade[] = [];
@@ -132,4 +133,11 @@ export class BgsPlayer implements IBgsPlayer {
 			cardId: enchant.CardId,
 		}));
 	}
+}
+
+export interface QuestReward {
+	readonly cardId: string;
+	readonly completed: boolean;
+	readonly completedTurn: number;
+	readonly isHeroPower: boolean;
 }

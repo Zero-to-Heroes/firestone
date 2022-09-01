@@ -11,6 +11,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
+import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
@@ -57,6 +58,7 @@ import { normalizeCardId } from './card-utils';
 							[minionStats]="minionStats"
 							[customTitle]="boardTitle"
 						></bgs-board>
+						<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 					</div>
 				</bgs-player-capsule>
 				<div class="tabs-container multi-{{ selectedTabs.length }}">
@@ -156,6 +158,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		const numberOfTabsToShow = value.numberOfDisplayedTabs ?? 1;
 		this.selectedTabs = tabs.slice(0, numberOfTabsToShow);
 		this.addMinionStats();
+		this.questRewards = value.player.questRewards;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -174,6 +177,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tavernTier: number;
 	boardMinions: readonly Entity[] = [];
 	minionStats: readonly MinionStat[];
+	questRewards: readonly QuestReward[];
 	// mmr: number;
 	showAds = true;
 

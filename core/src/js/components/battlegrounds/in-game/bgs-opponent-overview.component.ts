@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 
@@ -54,6 +54,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 				></div>
 			</div>
 			<!-- <bgs-buddies [buddies]="buddies"></bgs-buddies> -->
+			<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
 				class="last-opponent-icon"
@@ -76,6 +77,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	boardTurn: number;
 	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
+	questRewards: readonly QuestReward[];
 	debug = false;
 	// buddies: readonly number[];
 
@@ -105,6 +107,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
+		this.questRewards = value.questRewards;
 		// this.buddies = value.buddyTurns;
 	}
 

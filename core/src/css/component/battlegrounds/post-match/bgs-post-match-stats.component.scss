@@ -58,6 +58,9 @@
 	.main-info {
 		border: none;
 		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: row;
 
 		::ng-deep bgs-board .board {
 			width: 100%;

@@ -13,6 +13,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 				/>
 				<div class="aspect-ratio"></div>
 			</div>
+			<div class="quest-reward" *ngIf="_questRewardCardId" [cardTooltip]="_questRewardCardId">
+				<img [src]="questRewardIcon" class="image" *ngIf="!!questRewardIcon" />
+				<img
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_quest_reward_frame.png"
+					class="frame"
+				/>
+			</div>
 			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth, 'new': !!heroIcon }" *ngIf="_health">
 				<!-- <img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" /> -->
 				<div class="value">{{ _health }}</div>
@@ -28,11 +35,21 @@ export class BgsHeroPortraitComponent {
 	_health: number;
 	_maxHealth: number;
 	heroIcon: string;
+	_questRewardCardId: string;
+	questRewardIcon: string;
 
 	@Input() rating: number;
 
 	@Input() set heroCardId(value: string) {
 		this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set questRewardCardId(value: string) {
+		this._questRewardCardId = value;
+		this.questRewardIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
