@@ -24,15 +24,18 @@
 	.container {
 		display: flex;
 		width: 100%;
+		justify-content: space-evenly;
 	}
 
 	.deck-versions {
 		display: flex;
+		min-width: 15%;
+		max-width: 20%;
 		flex-direction: column;
-		width: 180px;
+		justify-content: space-between;
 		flex-shrink: 0;
-		margin-right: 15px;
 		height: fit-content;
+		font-family: Open Sans;
 
 		.header {
 			color: var(--default-title-color);
@@ -45,6 +48,7 @@
 
 		.version {
 			display: flex;
+			justify-content: space-between;
 			background: var(--color-7);
 			height: 40px;
 			color: var(--color-2);
@@ -68,7 +72,7 @@
 				bottom: 1px;
 				background-size: cover;
 				// Because some tiles still have a white border on the right
-				background-position-x: 15px;
+				//background-position-x: 15px;
 			}
 
 			.gradiant {
@@ -81,7 +85,6 @@
 			}
 
 			.deck-name {
-				width: 150px;
 				padding-right: 10px;
 				display: flex;
 				align-items: center;
@@ -103,9 +106,9 @@
 			// }
 
 			.eject-version-button {
+				width: 30px;
 				background: #131010;
 				z-index: 1;
-				margin-left: 15px;
 				flex-shrink: 0;
 
 				&:hover {
@@ -140,8 +143,6 @@
 	}
 
 	deck-winrate-matrix {
-		margin-top: -10px;
-		margin-right: auto;
 		max-width: calc(100% - var(--decklist-width) - 50px);
 
 		&.with-versions {
