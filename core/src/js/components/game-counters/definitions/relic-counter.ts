@@ -23,7 +23,7 @@ export class RelicCounterDefinition implements CounterDefinition {
 			value: relicsPlayed,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.RelicOfDimensions}.jpg`,
 			cssClass: 'relic-counter',
-			tooltip: i18n.translateString(`counters.relic.${side}`, { value: relicsPlayed }),
+			tooltip: i18n.translateString(`counters.relic.${side}`, { value: relicsPlayed + 1 }),
 			standardCounter: true,
 		};
 	}
