@@ -975,6 +975,7 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 			[GameTag[GameTag.ATK]]: minion.attack,
 			[GameTag[GameTag.HEALTH]]: minion.health,
 			[GameTag[GameTag.TAUNT]]: minion.taunt ? 1 : 0,
+			[GameTag[GameTag.STEALTH]]: minion.stealth ? 1 : 0,
 			[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
 			[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
 			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,

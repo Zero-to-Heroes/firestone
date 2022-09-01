@@ -110,6 +110,7 @@ export class BgsPlayer implements IBgsPlayer {
 			reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
 			taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
 			cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
+			stealth: logEntity.Tags.find((tag) => tag.Name === GameTag.STEALTH)?.Value === 1,
 			windfury: logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1,
 			megaWindfury:
 				logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||

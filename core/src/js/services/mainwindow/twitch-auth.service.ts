@@ -317,6 +317,7 @@ export class TwitchAuthService {
 			GameTag.POISONOUS,
 			GameTag.PREMIUM,
 			GameTag.REBORN,
+			GameTag.STEALTH,
 			GameTag.TAG_SCRIPT_DATA_NUM_1,
 			GameTag.TAG_SCRIPT_DATA_NUM_2,
 			GameTag.TAUNT,
