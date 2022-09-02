@@ -23,15 +23,17 @@ import { normalizeCardId } from './post-match/card-utils';
 		</div>
 		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">Your final board</div>
 		<div
-			class="board-turn empty"
+			class="board-turn empty not-met"
 			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
-			[owTranslate]="'battlegrounds.board.opponent-not-met'"
-		></div>
+		> 
+			<span [owTranslate]="'battlegrounds.board.opponent-not-met'"></span>
+		</div>
 		<div
 			class="board-turn empty"
 			*ngIf="!customTitle && _entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)"
-			[owTranslate]="'battlegrounds.board.last-board-empty'"
-		></div>
+		>
+			<span [owTranslate]="'battlegrounds.board.last-board-empty'"></span>
+		</div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0">
 			<div class="minion-container" *ngFor="let entity of _entities; trackBy: trackByEntity">
 				<li>

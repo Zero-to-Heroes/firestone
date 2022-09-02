@@ -33,10 +33,9 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
 				></bgs-board>
-				<div class="filler"></div>
 			</div>
 			<div class="tavern-upgrades">
-				<div class="title" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
+				<div class="title" *ngIf="tavernUpgrades?.length" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
 				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>

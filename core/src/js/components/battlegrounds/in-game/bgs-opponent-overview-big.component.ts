@@ -40,8 +40,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="tavern-upgrades" *ngIf="showTavernsIfEmpty || tavernUpgrades?.length">
-				<div class="title">{{ tavernTitle }}</div>
-				<div class="upgrades">
+				<div class="title" *ngIf="tavernUpgrades?.length">{{ tavernTitle }}</div>
+				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 						<div
@@ -51,7 +51,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						></div>
 					</div>
 				</div>
+				<div class="tavern-upgrades empty"
+					*ngIf="!tavernUpgrades?.length"
+					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
+				></div>
 			</div>
+			
 		</bgs-player-capsule>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

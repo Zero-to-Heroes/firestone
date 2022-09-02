@@ -1,5 +1,6 @@
 .opponent-overview {
 	display: flex;
+	justify-content: flex-end;
 	flex-grow: 1;
 	flex-shrink: 1;
 	background: rgba(255, 255, 255, 0.08);
@@ -91,12 +92,6 @@
 				}
 			}
 		}
-
-		.filler {
-			display: flex;
-			flex-grow: 1;
-			height: 100%;
-		}
 	}
 
 	bgs-triples {
@@ -115,9 +110,6 @@
 			.title {
 				width: auto;
 				margin: 0;
-			}
-			.subtitle {
-				margin: auto;
 			}
 			.triple-tiers {
 				justify-content: space-around;
@@ -144,21 +136,27 @@
 		width: auto;
 		flex-grow: 1;
 		flex-direction: column;
+		justify-content: space-evenly;
 		border-right: 1px solid var(--color-3);
 		padding-right: 10px;
 		align-items: flex-start;
-		max-width: 465px;
+		max-width: 500px;
+		overflow: hidden;
 
 		.title {
 			margin-left: 20px;
-			margin-bottom: 10px;
 			text-align: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.subtitle {
+			margin-left: 20px;
 		}
 
 		.upgrades {
 			display: flex;
-			flex-wrap: wrap;
-			overflow: hidden;
+			flex-wrap: nowrap;
 			justify-content: flex-start;
 
 			.upgrades {
@@ -215,9 +213,6 @@
 		}
 		.tavern-upgrades {
 			display: flex;
-		}
-		.filler {
-			display: none;
 		}
 	}
 }
