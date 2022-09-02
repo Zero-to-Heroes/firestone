@@ -44,7 +44,7 @@
 		"@firestone-hs/replay-parser": "^1.1.44",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.201",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.202",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.9",
 		"@firestone-hs/user-bgs-post-match-stats": "^1.0.3",
 		"@firestone-hs/user-packs": "^1.0.1",
