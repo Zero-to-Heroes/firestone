@@ -35,6 +35,9 @@ import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
+import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
+import { BgsRewardEquippedParser } from './event-parser/bgs-reward-equipped-parser';
+import { BgsRewardRevealedParser } from './event-parser/bgs-reward-revealed-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
@@ -304,6 +307,7 @@ export class GameStateService {
 				console.error(
 					'[game-state] Exception while applying parser for non-match event',
 					parser.event(),
+					event,
 					e.message,
 					e.stack,
 					e,
@@ -526,6 +530,9 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.allCards, this.i18n),
 			new WeaponEquippedParser(this.allCards, this.i18n),
 			new WeaponDestroyedParser(this.helper),
+			new BgsRewardRevealedParser(this.allCards, this.helper, this.i18n),
+			new BgsRewardEquippedParser(this.allCards, this.i18n),
+			new BgsRewardDestroyedParser(this.allCards, this.i18n),
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(

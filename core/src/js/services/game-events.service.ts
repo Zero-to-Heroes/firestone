@@ -1145,26 +1145,37 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_REVEALED':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.BATTLEGROUNDS_REWARD_REVEALED,
-						additionalData: {
-							cardId: gameEvent.Value.CardId,
-							questRewardDbfId: gameEvent.Value.QuestRewardDbfId,
-							isHeroPowerReward: gameEvent.Value.IsHeroPowerReward,
-						},
-					} as GameEvent),
+					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
+						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
 				);
 				break;
 			case 'BATTLEGROUNDS_REWARD_GAINED':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.BATTLEGROUNDS_REWARD_GAINED,
-						additionalData: {
-							cardId: gameEvent.Value.CardId,
-							isHeroPowerReward: gameEvent.Value.IsHeroPowerReward,
-						},
-					} as GameEvent),
+					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
+						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
+				);
+				break;
+			case 'BATTLEGROUNDS_QUEST_REWARD_EQUIPPED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
+				);
+				break;
+			case 'BATTLEGROUNDS_QUEST_REWARD_DESTROYED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
 				);
 				break;
 			case 'WINNER':

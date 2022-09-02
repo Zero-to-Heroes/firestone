@@ -269,18 +269,14 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_REVEALED) {
 				this.battlegroundsUpdater.next(
 					new BgsRewardRevealedEvent(
-						gameEvent.additionalData.cardId,
+						gameEvent.cardId,
 						gameEvent.additionalData.questRewardDbfId,
 						gameEvent.additionalData.isHeroPowerReward,
 					),
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_REWARD_GAINED) {
 				this.battlegroundsUpdater.next(
-					new BgsRewardGainedEvent(
-						gameEvent.additionalData.cardId,
-						gameEvent.additionalData.questRewardDbfId,
-						gameEvent.additionalData.isHeroPowerReward,
-					),
+					new BgsRewardGainedEvent(gameEvent.cardId, gameEvent.additionalData.isHeroPowerReward),
 				);
 			} else if (
 				gameEvent.type === GameEvent.DAMAGE &&
@@ -488,7 +484,7 @@ export class BattlegroundsStoreService {
 					//console.debug('has applied parser', gameEvent, parser);
 				}
 			} catch (e) {
-				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
+				console.error('[bgs-store] Exception while applying parser', gameEvent.type, gameEvent, e.message, e);
 			}
 		}
 		if (newState !== this.state) {

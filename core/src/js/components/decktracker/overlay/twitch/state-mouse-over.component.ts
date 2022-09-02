@@ -46,10 +46,10 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			</ul>
 			<ul class="hero top-hero">
 				<div class="weapon">
-					<empty-card [cardId]="topWeaponCard"></empty-card>
+					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
 				<div class="hero-power">
-					<empty-card [cardId]="topHeroPowerCard"></empty-card>
+					<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
 			</ul>
 			<ul class="board top-board">
@@ -68,10 +68,10 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			</ul>
 			<ul class="hero bottom-hero">
 				<div class="weapon">
-					<empty-card [cardId]="bottomWeaponCard"></empty-card>
+					<empty-card [cardId]="bottomWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
 				<div class="hero-power">
-					<empty-card [cardId]="bottomHeroPowerCard"></empty-card>
+					<empty-card [cardId]="bottomHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
 			</ul>
 			<ul class="bottom-hand">
@@ -121,13 +121,12 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			return;
 		}
 		this._gameState = value;
-		this.topHeroPowerCard =
-			this._gameState.opponentDeck?.heroPower && this._gameState.opponentDeck.heroPower.cardId;
-		this.topWeaponCard = this._gameState.opponentDeck?.weapon && this._gameState.opponentDeck.weapon.cardId;
+		this.topHeroPowerCard = this._gameState.opponentDeck?.heroPower?.cardId;
+		this.topWeaponCard = this._gameState.opponentDeck?.weapon?.cardId;
 		this.topBoardCards = this._gameState.opponentDeck?.board.map((card) => card.cardId);
 		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
-		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower && this._gameState.playerDeck.heroPower.cardId;
-		this.bottomWeaponCard = this._gameState.playerDeck?.weapon && this._gameState.playerDeck.weapon.cardId;
+		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower?.cardId;
+		this.bottomWeaponCard = this._gameState.playerDeck?.weapon?.cardId;
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

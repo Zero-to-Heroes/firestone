@@ -164,6 +164,7 @@ export class TwitchAuthService {
 				hand: this.cleanZone(deckState.hand, isBattlegrounds),
 				board: this.cleanZone(deckState.board, isBattlegrounds),
 				heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
+				weapon: this.cleanCard(deckState.weapon, isBattlegrounds),
 			} as DeckState;
 		}
 		const result = {
