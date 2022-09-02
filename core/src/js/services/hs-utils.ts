@@ -223,6 +223,7 @@ export const hideInfoWhenPlayerPlaysIt = [
 	CardIds.CoilfangConstrictor,
 	// Prevent the player from knowing too much about the opponent's hand when we play IT
 	// However, it has the side-effect of hiding the cards drawn by the opponent
+	CardIds.GhastlyGravedigger,
 	CardIds.IdentityTheft,
 	CardIds.KoboldIllusionist,
 	CardIds.MadameLazul,
@@ -385,6 +386,7 @@ export const publicCardGiftCreators = [
 	CardIds.OptimizedPolarityTavernBrawl,
 	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
+	CardIds.PalmReading,
 	CardIds.PandarenImporter,
 	CardIds.Peon_BAR_022,
 	CardIds.PilferLegacy,
@@ -403,6 +405,7 @@ export const publicCardGiftCreators = [
 	CardIds.RapidFire_DAL_373,
 	CardIds.RayOfFrost_DAL_577,
 	CardIds.Reconnaissance,
+	CardIds.Renew_BT_252,
 	CardIds.ResizingPouch,
 	CardIds.RiseToTheOccasion_AvengeTheFallenToken, // Lightborn Cariel
 	CardIds.RunedOrb_BAR_541,

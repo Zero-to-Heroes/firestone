@@ -327,6 +327,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, legendary);
 			case CardIds.DivineIlluminationTavernBrawl:
 				return and(holy);
+			case CardIds.DivingGryphon:
+				return and(inDeck, minion, rush);
 			case CardIds.DoorOfShadows:
 			case CardIds.DoorOfShadows_DoorOfShadowsToken:
 				return and(inDeck, spell);
@@ -506,6 +508,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.NagaGiant:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.MastersCall:
+				return and(inDeck, minion);
 			case CardIds.NaturalForceTavernBrawl:
 				return and(spell, nature, dealsDamage);
 			case CardIds.NzothGodOfTheDeep:
