@@ -422,6 +422,7 @@ export const publicCardGiftCreators = [
 	CardIds.Sleetbreaker,
 	CardIds.SludgeSlurper,
 	CardIds.SmugSenior,
+	CardIds.SnackRun,
 	CardIds.SneakyDelinquent,
 	CardIds.SoothsayersCaravan,
 	CardIds.SorcerersGambit,
