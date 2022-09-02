@@ -31,6 +31,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
+			[ngClass]="{ 'hidden': hidden$ | async }"
 		>
 			<div class="simulation-overlay scalable">
 				<bgs-battle-status [nextBattle]="nextBattle$ | async" [showReplayLink]="false"></bgs-battle-status>
@@ -43,8 +44,8 @@ export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+	hidden$: Observable<boolean>;
 
-	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
 
 	@Output() dragStart = new EventEmitter<void>();
@@ -58,8 +59,13 @@ export class BgsSimulationOverlayStandaloneComponent
 		this.phase$$.next(value);
 	}
 
-	battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
-	phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
+	@Input() set hideWhenEmpty(value: boolean) {
+		this.hideWhenEmpty$$.next(value);
+	}
+
+	private battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
+	private phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
+	private hideWhenEmpty$$ = new BehaviorSubject<boolean>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -81,11 +87,22 @@ export class BgsSimulationOverlayStandaloneComponent
 				if (prefs.hideBattleOddsInCombat && phase === 'combat') {
 					return null;
 				}
+				if (prefs.hideBattleOddsInTavern && phase === 'recruit') {
+					return null;
+				}
 				return BgsFaceOffWithSimulation.create({
 					battleResult: battleState?.battleInfo,
 					battleInfoStatus: battleState?.status,
 					battleInfoMesage: null,
 				} as BgsFaceOffWithSimulation);
+			}),
+		);
+		this.hidden$ = combineLatest(this.hideWhenEmpty$$.asObservable(), this.nextBattle$).pipe(
+			this.mapData(([hideWhenEmpty, nextBattle]) => {
+				if (!hideWhenEmpty) {
+					return false;
+				}
+				return !nextBattle || nextBattle?.battleInfoStatus !== 'done';
 			}),
 		);
 	}

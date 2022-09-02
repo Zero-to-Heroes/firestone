@@ -101,6 +101,22 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 							[value]="prefs.hideBattleOddsInCombat"
 							(valueChanged)="onHideBattleOddsInCombatChanged(prefs, $event)"
 						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="'twitch.hide-battle-odds-in-tavern' | owTranslate"
+							[labelTooltip]="'twitch.hide-battle-odds-in-tavern-tooltip' | owTranslate"
+							[disabled]="!prefs.showBattleSimulator"
+							[value]="prefs.hideBattleOddsInTavern"
+							(valueChanged)="onHideBattleOddsInTavernChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="'twitch.hide-battle-odds-when-empty' | owTranslate"
+							[labelTooltip]="'twitch.hide-battle-odds-when-empty-tooltip' | owTranslate"
+							[disabled]="!prefs.showBattleSimulator"
+							[value]="prefs.hideBattleOddsWhenEmpty"
+							(valueChanged)="onHideBattleOddsWhenEmptyChanged(prefs, $event)"
+						></checkbox>
 					</div>
 				</section>
 			</div>
@@ -186,6 +202,18 @@ export class TwitchConfigWidgetComponent
 	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInCombat: value };
 		console.log('changing hideBattleOddsInCombat pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHideBattleOddsInTavernChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInTavern: value };
+		console.log('changing hideBattleOddsInTavern pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHideBattleOddsWhenEmptyChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsWhenEmpty: value };
+		console.log('changing hideBattleOddsWhenEmpty pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

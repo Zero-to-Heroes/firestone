@@ -40,6 +40,7 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 				[gameState]="gameState"
 				[bgsState]="bgsState"
 				[overlayLeftOffset]="horizontalOffset"
+				[magnifierIconOnTop]="magnifierIconOnTop"
 			></state-mouse-over>
 			<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
 			</decktracker-overlay-standalone>
@@ -47,6 +48,7 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
 				[bgsState]="bgsBattleState"
 				[phase]="bgsState?.phase"
+				[hideWhenEmpty]="hideSimulatorWhenEmpty$ | async"
 			>
 			</bgs-simulation-overlay-standalone>
 			<battlegrounds-minions-tiers-twitch
@@ -64,14 +66,18 @@ export class DeckTrackerOverlayContainerComponent
 	implements AfterViewInit, AfterContentInit {
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
+	hideSimulatorWhenEmpty$: Observable<boolean>;
 
 	gameState: GameState;
 	bgsState: TwitchBgsState;
 	bgsBattleState: TwitchBgsCurrentBattle;
 	activeTooltip: string;
 	showDecktracker: boolean;
-	horizontalOffset: number;
 	currentDisplayMode: 'decktracker' | 'battlegrounds' = 'battlegrounds';
+
+	// Streamer settings
+	horizontalOffset: number;
+	magnifierIconOnTop: null | '' | 'top' | 'bottom';
 
 	private twitch;
 	private token: string;
@@ -94,6 +100,9 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showBattleSimulator$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showBattleSimulator),
+		);
+		this.hideSimulatorWhenEmpty$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.hideBattleOddsWhenEmpty),
 		);
 	}
 
@@ -150,6 +159,7 @@ export class DeckTrackerOverlayContainerComponent
 				const config = JSON.parse(this.twitch.configuration.broadcaster.content);
 				console.log('config', config);
 				this.horizontalOffset = config?.horizontalOffset;
+				this.magnifierIconOnTop = config?.magnifierIconOnTop;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

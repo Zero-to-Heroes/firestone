@@ -30,19 +30,25 @@
 	}
 
 	::ng-deep bgs-hero-short-recap {
-		.short-recap .element {
-			height: 7vh;
-			width: 7vh;
-			margin-right: -1.8vh;
-			position: relative;
-			top: 0.3vh;
+		.short-recap {
+			.element {
+				height: 7vh;
+				width: 7vh;
+				margin-right: -1.8vh;
+				position: relative;
+				top: 0.3vh;
 
-			&.tavern {
-				top: 0.8vh;
-			}
+				&.tavern {
+					top: 0.8vh;
+				}
 
-			.value {
-				font-size: 3vh;
+				&:last-child {
+					margin-right: 20px;
+				}
+
+				.value {
+					font-size: 3vh;
+				}
 			}
 		}
 	}

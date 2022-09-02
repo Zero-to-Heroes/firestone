@@ -8,4 +8,6 @@ export class TwitchPreferences {
 	readonly showRelatedCards: boolean = true;
 	readonly magnifierIconOnTop: boolean = false;
 	readonly hideBattleOddsInCombat: boolean = false;
+	readonly hideBattleOddsInTavern: boolean = false;
+	readonly hideBattleOddsWhenEmpty: boolean = false;
 }
