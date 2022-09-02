@@ -141,7 +141,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.CenarionSurgeLettuceEnchantment,
 	CardIds.CasterHasteLettuceEnchantment,
 	CardIds.DreadbladesLettuceEnchantment,
-	CardIds.ElunesGraceLettuceEnchantment,
+	// CardIds.ElunesGraceLettuceEnchantment,
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e3,
 	CardIds.FanOfKnivesLettuceEnchantment, // Check that it's the correct card ID
