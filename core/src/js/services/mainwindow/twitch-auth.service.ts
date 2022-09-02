@@ -277,6 +277,7 @@ export class TwitchAuthService {
 			currentWinStreak: player.currentWinStreak,
 			lastKnownComposition: player.getLastKnownComposition(),
 			lastKnownBattleHistory: player.getLastKnownBattleHistory(),
+			questRewards: player.questRewards,
 			// buddyTurns: player.buddyTurns,
 		};
 	}

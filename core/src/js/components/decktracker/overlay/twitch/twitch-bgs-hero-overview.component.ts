@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -39,6 +38,11 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 			</div>
 			<div class="cards" *ngIf="showHeroCards$ | async">
 				<img class="card normal" [src]="heroPowerImage" />
+				<ng-container *ngIf="rewards?.length">
+					<div class="rewards" *ngFor="let reward of rewards" [ngClass]="{ 'unfinished': !reward.completed }">
+						<img class="card buddy normal" [src]="reward.image" />
+					</div>
+				</ng-container>
 				<!-- <img class="card buddy normal" [src]="buddyCardImage" />
 				<img class="card buddy golden" [src]="buddyCardGoldenImage" /> -->
 			</div>
@@ -46,24 +50,30 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitchBgsHeroOverviewComponent
-	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterViewInit {
+export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchResizableComponent {
 	showHeroCards$: Observable<boolean>;
 
 	_opponent: BgsPlayer;
 	currentTurn: number;
 	showLogo = true;
 	heroPowerImage: string;
+	leaderboardPositionClass: string;
+	rewards: readonly Reward[];
 	// buddyCardImage: string;
 	// buddyCardGoldenImage: string;
-	leaderboardPositionClass: string;
 
 	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
 		this.leaderboardPositionClass = `position-${value.player.leaderboardPlace}`;
+		this.rewards = value.player.questRewards?.map((reward) => ({
+			image: this.i18n.getCardImage(reward.cardId, {
+				isBgs: true,
+				isHighRes: true,
+			}),
+			completed: reward.completed,
+		}));
 		// const buddyCardId = getBuddy(value.player?.cardId as CardIds, this.cards);
 		// const buddyCard = this.cards.getCard(buddyCardId);
 		// const buddyCardGolden = this.cards.getCardFromDbfId(buddyCard.battlegroundsPremiumDbfId);
@@ -97,8 +107,9 @@ export class TwitchBgsHeroOverviewComponent
 		super(cdr, prefs, el, renderer);
 		this.showHeroCards$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.showHeroCards));
 	}
+}
 
-	ngAfterViewInit(): void {
-		// super.listenForResize();
-	}
+interface Reward {
+	readonly image: string;
+	readonly completed: boolean;
 }

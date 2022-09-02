@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getTribeIcon } from '@services/battlegrounds/bgs-utils';
 import { fromJS } from 'immutable';
-import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { BgsPlayer, QuestReward } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { TwitchBgsHeroOverviewComponent } from './twitch-bgs-hero-overview.component';
 import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
@@ -34,6 +34,7 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 				[tribeImage]="tribeImage"
 				[tribeCount]="tribeCount"
 				[damage]="damage"
+				[questRewards]="questRewards"
 			></bgs-hero-short-recap>
 		</div>
 	`,
@@ -79,6 +80,7 @@ export class LeaderboardEmptyCardComponent {
 	tribeImage: string;
 	tribeCount: number;
 	damage: number;
+	questRewards: readonly QuestReward[];
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -97,11 +99,13 @@ export class LeaderboardEmptyCardComponent {
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
 				boardHistory: boardHistory,
+				questRewards: this._previousPlayer.questRewards,
 				// buddyTurns: this._previousPlayer.buddyTurns,
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
 			showLogo: false,
 		};
+		this.questRewards = this._bgsPlayer.player.questRewards;
 		this.tavernTier = [...(this._previousPlayer.tavernUpgradeHistory ?? [])].pop()?.tavernTier ?? 1;
 		this.triples = (this._previousPlayer.tripleHistory ?? []).length;
 		this.winStreak = this._previousPlayer.currentWinStreak;

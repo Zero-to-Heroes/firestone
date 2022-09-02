@@ -57,7 +57,6 @@ export class BgsHeroShortRecapComponent {
 	damageImage = 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_leaderboard_damage.png';
 
 	getIcon(cardId: string): string {
-		console.debug('getting icon for', cardId);
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
 	}
 }
