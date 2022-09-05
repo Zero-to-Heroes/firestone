@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.7',
+		version: '9.9.8',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,33 +46,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `The app has been updated for 24.2. Some features are still missing (like a BG XP tracker or proper handling of the quest rewards in the simulator / twitch extension) and should come in the coming days.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Relic counter is here, for you and your opponent! Consequently, relics have been removed from the Global Effects section.`,
+								text: `Add quest rewards overview in the various widgets.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a bug where the Curse counter would be stuck on 1/1 when receiving curses.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Event tasks (like C'Thun's) are now properly tracked.`,
+								text: `Fix a sim issue where Baron Rivendare was ignored when simulating deathrattles.`,
 							},
 						],
 					},
@@ -83,27 +65,32 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue that ignore the Stealth attribute.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue that ignored quests after the first one (for Sire Denathrius).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Evil Twin on an empty board.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `When mousing over your own Commander Sivara in the decktracker, you can now see the spells he will bounce back.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a widget for Murozond that tells you all cards that will be replayed.`,
-							},
-							{
-								type: 'feature',
-								text: `Add various card oracles, global effects and card highlights.`,
+								text: `Change the wording of the Relic counter to show the power level of the next relic (instead of the number of relics already played).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the deck stats shown in the tracker would not account for all versions of a multi-version deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an info leak where Prince Renathal would be flagged in hand if drawn during the mulligan.`,
+								text: `Fix an issue where Vanessa VanCleef's counter would also consider the player's last played card.`,
 							},
 						],
 					},
@@ -111,8 +98,34 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
+								type: 'feature',
+								text: `Add highlight for Toxic Venom.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix an issue where abilities that have a speed of 0 would not show any speed at all.`,
+								text: `Fix Elune's Grace speed buff being incorrectly applied to all abilities.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where passive treasures could be displayed with a speed of 0.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the One Night in Karazhan set was not at its expected chronological place in the sets list.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where you couldn't drag the scrollbar in multiselect dropdowns.`,
 							},
 						],
 					},
