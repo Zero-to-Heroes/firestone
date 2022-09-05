@@ -141,7 +141,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						<ng-template #emptyState>
 							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
 						</ng-template>
-						<div class="buckets-container" *ngIf="value.showBuckets">
+						<div class="buckets-container" *ngIf="value.showBuckets" scrollable>
 							<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
 								<div class="bucket-name">{{ bucket.bucketName }}</div>
 								<div class="class-images">
