@@ -531,6 +531,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.TheBeastWithin4Lettuce:
 		case CardIds.TheBeastWithin5Lettuce:
 			return beast;
+		case CardIds.ToxicVenom1Lettuce:
+		case CardIds.ToxicVenom2Lettuce:
+		case CardIds.ToxicVenom3Lettuce:
+		case CardIds.ToxicVenom4Lettuce:
+			return nature;
 		case CardIds.TreasureChest1Lettuce:
 		case CardIds.TreasureChest2Lettuce:
 		case CardIds.TreasureChest3Lettuce:
