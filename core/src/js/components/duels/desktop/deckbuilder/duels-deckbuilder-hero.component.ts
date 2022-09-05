@@ -10,7 +10,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	selector: 'duels-deckbuilder-hero',
 	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder-hero.component.scss`],
 	template: `
-		<div class="duels-deckbuilder-hero" role="list">
+		<div class="duels-deckbuilder-hero" role="list" scrollable>
 			<button
 				class="hero"
 				role="listitem"
