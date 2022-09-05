@@ -208,9 +208,11 @@ interface MercenaryHero {
 		`../../../../css/component/replays/replay-info/replay-info.component.scss`,
 	],
 	template: `
-		<div class="merc-portrait player" [cardTooltip]="hero.cardId">
-			<img class="icon" [src]="hero.portraitUrl" />
-			<img class="frame" [src]="hero.frameUrl" />
+		<div class="merc-portrait player">
+			<div class="portrait" [cardTooltip]="hero.cardId">
+				<img class="icon" [src]="hero.portraitUrl" />
+				<img class="frame" [src]="hero.frameUrl" />
+			</div>	
 			<div class="equipment" [cardTooltip]="hero.equipmentCardId" *ngIf="hero.equipmentCardId">
 				<img class="icon" [src]="hero.equipmentUrl" />
 				<img
