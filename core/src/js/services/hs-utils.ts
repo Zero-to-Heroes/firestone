@@ -44,25 +44,25 @@ export const formatClass = (playerClass: string, i18n: { translateString: (strin
 export const colorForClass = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'demonhunter':
-			return '#8ECD64';
+			return '#123B17';
 		case 'druid':
-			return '#965F45';
+			return '#664122';
 		case 'hunter':
-			return '#0A5945';
+			return '#436612';
 		case 'mage':
-			return '#24A4C7';
+			return '#277BC2';
 		case 'paladin':
-			return '#E3A81F';
+			return '#D6951A';
 		case 'priest':
-			return '#8C98A7';
+			return '#AEB9D1';
 		case 'rogue':
-			return '#5E6069';
+			return '#393A3D';
 		case 'shaman':
-			return '#542A8A';
+			return '#1D2F75';
 		case 'warrior':
-			return '#CB3222';
+			return '#9E2111';
 		case 'warlock':
-			return '#8A2A6A';
+			return '#662A75';
 	}
 };
 
