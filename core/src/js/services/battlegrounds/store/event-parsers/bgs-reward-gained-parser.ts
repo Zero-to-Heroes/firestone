@@ -27,7 +27,7 @@ export class BgsRewardGainedParser implements EventParser {
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		const reward: QuestReward = playerToUpdate.questRewards.find((r) => r.isHeroPower === event.isHeroPowerReward);
 		if (!reward) {
-			console.error('[bgs-reward] missing reward', event, playerToUpdate.questRewards, playerToUpdate);
+			console.warn('[bgs-reward] missing reward', event, playerToUpdate.questRewards, playerToUpdate);
 			return currentState;
 		}
 
