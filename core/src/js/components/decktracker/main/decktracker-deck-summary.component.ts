@@ -173,7 +173,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 			month: 'short',
 			day: '2-digit',
 			year: 'numeric',
-		});
+		})
+		.replace(/\s+г\./, ""); //truncate date in russian
 	}
 
 	private buildDecoration(gameFormat: StatGameFormatType) {
