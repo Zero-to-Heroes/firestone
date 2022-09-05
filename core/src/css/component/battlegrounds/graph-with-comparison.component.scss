@@ -94,7 +94,11 @@
 					display: flex;
 
 					.section {
-						// width: 110px;
+						display: flex;
+						flex-direction: column;
+						justify-content: end;
+						min-width: 110px;
+						max-width: 150px;
 					}
 
 					.player {
@@ -104,7 +108,12 @@
 					}
 
 					.subtitle {
+						flex-grow: 2;
+						display: flex;
 						font-weight: bold;
+						text-align: center;
+						align-items: center;
+						justify-content: center;
 					}
 				}
 			}
