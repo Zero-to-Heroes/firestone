@@ -70,6 +70,33 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.VardenDawngraspLettuce_LETL_017H_01:
 		case CardIds.VardenDawngraspLettuce_LETL_017H_02:
 		case CardIds.VardenDawngraspLettuce_LETL_017H_03:
+		case CardIds.BrannBronzebeardLettuce_LT23_031H_01:
+		case CardIds.BrannBronzebeardLettuce_LT23_031H_02:
+		case CardIds.BrannBronzebeardLettuce_LT23_031H_03:
+		case CardIds.LokholarTheIceLordLettuce_LT22_005H_01:
+		case CardIds.LokholarTheIceLordLettuce_LT22_005H_02:
+		case CardIds.LokholarTheIceLordLettuce_LT22_005H_03:
+		case CardIds.ValeeraSanguinarLettuce_LETL_019H_01:
+		case CardIds.ValeeraSanguinarLettuce_LETL_019H_02:
+		case CardIds.ValeeraSanguinarLettuce_LETL_019H_03:
+		case CardIds.TrigoreTheLasherLettuce_BARL_015H_01:
+		case CardIds.TrigoreTheLasherLettuce_BARL_015H_02:
+		case CardIds.TrigoreTheLasherLettuce_BARL_015H_03:
+		case CardIds.BalindaStonehearthLettuce_LT22_002H_01:
+		case CardIds.BalindaStonehearthLettuce_LT22_002H_02:
+		case CardIds.BalindaStonehearthLettuce_LT22_002H_03:
+		case CardIds.RenoJacksonLettuce_LT23_030H_01:
+		case CardIds.RenoJacksonLettuce_LT23_030H_02:
+		case CardIds.RenoJacksonLettuce_LT23_030H_03:
+		case CardIds.SylvanasWindrunnerLettuce_LETL_001H_01:
+		case CardIds.SylvanasWindrunnerLettuce_LETL_001H_02:
+		case CardIds.SylvanasWindrunnerLettuce_LETL_001H_03:
+		case CardIds.BaineBloodhoofLettuce_LT23_034H_01:
+		case CardIds.BaineBloodhoofLettuce_LT23_034H_02:
+		case CardIds.BaineBloodhoofLettuce_LT23_034H_03:
+		case CardIds.EliseStarseekerLettuce_LT23_032H_01:
+		case CardIds.EliseStarseekerLettuce_LT23_032H_02:
+		case CardIds.EliseStarseekerLettuce_LT23_032H_03:
 			return fullName.split(' ').shift();
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_01:
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_02:
@@ -77,11 +104,23 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.WarMasterVooneLettuce_BARL_009H_01:
 		case CardIds.WarMasterVooneLettuce_BARL_009H_02:
 		case CardIds.WarMasterVooneLettuce_BARL_009H_03:
+		case CardIds.SkyAdmiralRogersLettuce_LT21_07H_01:
+		case CardIds.SkyAdmiralRogersLettuce_LT21_07H_02:
+		case CardIds.SkyAdmiralRogersLettuce_LT21_07H_03:
+		case CardIds.TidemistressAthissaLettuce_LT23_018H_01:
+		case CardIds.TidemistressAthissaLettuce_LT23_018H_02:
+		case CardIds.TidemistressAthissaLettuce_LT23_018H_03:
+		case CardIds.LorewalkerChoLettuce_LT23_036H_01:
+		case CardIds.LorewalkerChoLettuce_LT23_036H_02:
+		case CardIds.LorewalkerChoLettuce_LT23_036H_03:
+		case CardIds.QueenAzsharaLettuce_LT23_016H_01:
+		case CardIds.QueenAzsharaLettuce_LT23_016H_02:
+		case CardIds.QueenAzsharaLettuce_LT23_016H_03:
 			return fullName.split(' ').pop();
 		case CardIds.TheLichKingLettuce_LETL_041H_01:
 		case CardIds.TheLichKingLettuce_LETL_041H_02:
 		case CardIds.TheLichKingLettuce_LETL_041H_03:
-			return 'Lich King';
+			return fullName == 'The Lich King' ? 'Lich King' : fullName; 
 		default:
 			return fullName;
 	}
@@ -141,7 +180,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.CenarionSurgeLettuceEnchantment,
 	CardIds.CasterHasteLettuceEnchantment,
 	CardIds.DreadbladesLettuceEnchantment,
-	CardIds.ElunesGraceLettuceEnchantment,
+	// CardIds.ElunesGraceLettuceEnchantment,
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e3,
 	CardIds.FanOfKnivesLettuceEnchantment, // Check that it's the correct card ID

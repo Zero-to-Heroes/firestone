@@ -134,4 +134,10 @@
 			pointer-events: all;
 		}
 	}
+
+	::ng-deep dropdown {
+		filter-dropdown {
+			width: 100px;
+		}
+	}
 }

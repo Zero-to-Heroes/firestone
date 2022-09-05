@@ -206,8 +206,19 @@
 					}
 
 					.hero-power {
-						left: 0;
-						bottom: 0;
+						left: -15px;
+						bottom: 7px;
+						right: auto;
+						width: 53px;
+						height: 65px;
+					}
+
+					.quest-reward {
+						bottom: 72px;
+						right: auto;
+						left: -15px;
+						width: 53px;
+						height: 65px;
 					}
 				}
 
@@ -232,7 +243,19 @@
 					}
 
 					.hero-power {
+						left: -25px;
 						bottom: 0;
+						right: auto;
+						width: 48px;
+						height: 59px;
+					}
+
+					.quest-reward {
+						bottom: 55px;
+						right: auto;
+						left: -25px;
+						width: 48px;
+						height: 59px;
 					}
 				}
 			}

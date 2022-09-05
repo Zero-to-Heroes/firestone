@@ -1,8 +1,9 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { forcedHiddenCardCreators } from '../../hs-utils';
+import { forcedHiddenCardCreators, hideInfoWhenPlayerPlaysIt } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -23,7 +24,11 @@ export class CardCreatorChangedParser implements EventParser {
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 
-		const isCardInfoPublic = isPlayer || !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId);
+		// See receive-card-in-hand-parser
+		const isSpecialCasePublic =
+			(!isPlayer && !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId as CardIds)) ||
+			(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(gameEvent.additionalData.creatorCardId as CardIds));
+		const isCardInfoPublic = isPlayer || isSpecialCasePublic;
 		const newCardInHand = cardInHand
 			? cardInHand.update({
 					// To avoid info leaks from Mask of Mimicry

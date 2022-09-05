@@ -116,6 +116,7 @@ export class DeckTrackerOverlayStandaloneComponent
 	}
 
 	private keepOverlayInBounds() {
+		return;
 		setTimeout(() => {
 			try {
 				// Move the tracker so that it doesn't go over the edges

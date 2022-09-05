@@ -10,11 +10,7 @@ export class GetDuelsRewardsInfoOperation extends MindVisionOperationFacade<Duel
 			'getDuelsRewardsInfo',
 			() => mindVision.getDuelsRewardsInfo(true),
 			(rewardsTrackInfo) => false,
-			(rewardsTrackInfo) => {
-				return {
-					...rewardsTrackInfo,
-				};
-			},
+			(rewardsTrackInfo) => rewardsTrackInfo,
 			1, // No retry, because we need to reset the plugin anyway
 			1500,
 		);

@@ -21,9 +21,10 @@ export class DeckManipulationHelper {
 		removeFillerCard = false,
 		normalizeUpgradedCards = true,
 		cardInfos: { cost?: number } = null,
+		debug = false,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
-		const debug = false;
+		// const debug = false;
 		if (debug) {
 			console.debug(
 				'removing',
@@ -287,6 +288,7 @@ export class DeckManipulationHelper {
 		);
 	}
 
+	// Warning: this also update the card, so is not suitable for a pure "find" request
 	public findCardInZone(
 		zone: readonly DeckCard[],
 		cardId: string,

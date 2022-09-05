@@ -32,42 +32,29 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.1',
+		version: '9.9.8',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Fix an info leak (yeah, there have been a lot of these recently) when Prince Renathal is drawn by a tutor.`,
+								text: `Add quest rewards overview in the various widgets.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where The Coin was not always properly removed from the opponent's hand (e.g. when stealed by Theotar).`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `The High-Wins Decks should now have a better representation of the various decks that go to 10+ wins. They will now only show at most 3 samples for a given hero power / signature treasure / passives combination.`,
-							},
-							{
-								type: 'feature',
-								text: `A Passives Treasures filter has been added to the High-Wins Decks tab.`,
+								text: `Fix a sim issue where Baron Rivendare was ignored when simulating deathrattles.`,
 							},
 						],
 					},
@@ -78,28 +65,67 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add Gory the Mightree to the Global Effects section.`,
-							},
-							{
-								type: 'feature',
-								text: `Add card highlight for Grey Sage Parrot, and gift icons for Plagiarize and Steward of Scrolls.`,
+								type: 'bug',
+								text: `Fix a sim issue that ignore the Stealth attribute.`,
 							},
 							{
 								type: 'bug',
-								text: `Today, Kidnap (the Rogue secret) doesn't trigger on Immune minions. The Secrets Helper has been updated to reflect this. I'm not yet 100% convinced that this behavior is intended, so I might revert this change in the future.`,
+								text: `Fix a sim issue that ignored quests after the first one (for Sire Denathrius).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Evil Twin on an empty board.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Change the wording of the Relic counter to show the power level of the next relic (instead of the number of relics already played).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Vanessa VanCleef's counter would also consider the player's last played card.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Add highlight for Toxic Venom.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix Elune's Grace speed buff being incorrectly applied to all abilities.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where passive treasures could be displayed with a speed of 0.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix the new deck name not always showing up after renaming a Duels deck.`,
+								text: `Fix an issue where the One Night in Karazhan set was not at its expected chronological place in the sets list.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where you couldn't drag the scrollbar in multiselect dropdowns.`,
 							},
 						],
 					},

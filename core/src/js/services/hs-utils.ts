@@ -44,25 +44,25 @@ export const formatClass = (playerClass: string, i18n: { translateString: (strin
 export const colorForClass = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'demonhunter':
-			return '#8ECD64';
+			return '#123B17';
 		case 'druid':
-			return '#965F45';
+			return '#664122';
 		case 'hunter':
-			return '#0A5945';
+			return '#436612';
 		case 'mage':
-			return '#24A4C7';
+			return '#277BC2';
 		case 'paladin':
-			return '#E3A81F';
+			return '#D6951A';
 		case 'priest':
-			return '#8C98A7';
+			return '#AEB9D1';
 		case 'rogue':
-			return '#5E6069';
+			return '#393A3D';
 		case 'shaman':
-			return '#542A8A';
+			return '#1D2F75';
 		case 'warrior':
-			return '#CB3222';
+			return '#9E2111';
 		case 'warlock':
-			return '#8A2A6A';
+			return '#662A75';
 	}
 };
 
@@ -96,6 +96,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.SorcerersGambit_ArcanistDawngraspToken,
 	CardIds.SowTheSeeds,
 	CardIds.SowTheSeedsTavernBrawl,
+	CardIds.AzsharanScavenger_SunkenScavengerToken,
 	CardIds.TopiorTheShrubbagazzor,
 	CardIds.TheDemonSeed_BlightbornTamsinToken,
 	CardIds.TheStonewright,
@@ -122,9 +123,9 @@ export const globalEffectCards = [
 	CardIds.MenAtArmsTavernBrawlToken,
 	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
-	CardIds.RelicOfDimensions,
-	CardIds.RelicOfExtinction,
-	CardIds.RelicOfPhantasms,
+	// CardIds.RelicOfDimensions,
+	// CardIds.RelicOfExtinction,
+	// CardIds.RelicOfPhantasms,
 	CardIds.RenounceDarkness,
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest_SCH_609,
@@ -192,20 +193,42 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.YseraUnleashed_DreamPortalToken,
 ];
 
+// These are used to prevent info leaks in hand because we might know too much information
+// Mostly useful when the opponent plays it
 export const forcedHiddenCardCreators = [
-	CardIds.Chameleos,
-	CardIds.CoilfangConstrictor,
-	CardIds.IdentityTheft,
-	CardIds.KoboldIllusionist,
-	CardIds.MadameLazul,
+	// CardIds.Chameleos,
+	// CardIds.CoilfangConstrictor,
+	// // Prevent the player from knowing too much about the opponent's hand when we play IT
+	// // However, it has the side-effect of hiding the cards drawn by the opponent
+	// CardIds.IdentityTheft,
+	// CardIds.KoboldIllusionist,
+	// CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
-	CardIds.MindVisionLegacy,
-	CardIds.MindVisionVanilla,
+	// CardIds.MindVisionLegacy,
+	// CardIds.MindVisionVanilla,
 	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
 	CardIds.PirateAdmiralHooktusk_TakeTheirGoldToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirShipToken,
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
+	// CardIds.PsychicConjurerCore,
+	// CardIds.PsychicConjurerLegacy,
+	// CardIds.TheotarTheMadDuke,
+];
+
+// These are used to prevent info leaks in hand because we might know too much information
+// But only when the player plays it
+export const hideInfoWhenPlayerPlaysIt = [
+	CardIds.Chameleos,
+	CardIds.CoilfangConstrictor,
+	// Prevent the player from knowing too much about the opponent's hand when we play IT
+	// However, it has the side-effect of hiding the cards drawn by the opponent
+	CardIds.GhastlyGravedigger,
+	CardIds.IdentityTheft,
+	CardIds.KoboldIllusionist,
+	CardIds.MadameLazul,
+	CardIds.MindVisionLegacy,
+	CardIds.MindVisionVanilla,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
 	CardIds.TheotarTheMadDuke,
@@ -235,8 +258,12 @@ export const publicCardGiftCreators = [
 	CardIds.ApocalypseTavernBrawlToken,
 	CardIds.ArcaneBrilliance,
 	CardIds.ArchmageArugal,
+	CardIds.ArchmageStaff,
+	CardIds.ArchmageStaffTavernBrawl,
 	CardIds.AthleticStudies_SCH_237,
+	CardIds.AwakenTheMakers,
 	CardIds.AzsharanSweeper_TSC_776,
+	CardIds.AzsharanScroll,
 	CardIds.BagOfCoins_LOOTA_836,
 	CardIds.BagOfCoins_Story_11_BagofCoinsPuzzle,
 	CardIds.BagOfCoinsTavernBrawl,
@@ -253,6 +280,11 @@ export const publicCardGiftCreators = [
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
 	CardIds.BuildASnowman_BuildASnowgreToken,
+	CardIds.BumperCar,
+	CardIds.CallOfTheGrave,
+	CardIds.Castle,
+	CardIds.CastleTavernBrawl,
+	CardIds.CleverDisguise_ULD_328,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
 	CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment,
 	CardIds.CommanderSivara_TSC_087,
@@ -263,6 +295,7 @@ export const publicCardGiftCreators = [
 	CardIds.ConjureManaBiscuit,
 	CardIds.ConjurersCalling_DAL_177,
 	CardIds.CorsairCache,
+	CardIds.CrystallineOracle,
 	CardIds.DeathBlossomWhomper,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
@@ -273,9 +306,17 @@ export const publicCardGiftCreators = [
 	CardIds.DraggedBelow,
 	CardIds.DragonbaneShot,
 	CardIds.DragonBreeder,
+	CardIds.DrygulchJailor,
 	CardIds.Duplicate,
 	CardIds.EerieStoneTavernBrawl,
 	CardIds.EncumberedPackMule,
+	CardIds.EvilCableRat,
+	CardIds.EvilConscripter,
+	CardIds.EVILConscription,
+	CardIds.EvilGenius,
+	CardIds.EvilMiscreant,
+	CardIds.EvilQuartermaster,
+	CardIds.EvilTotem,
 	CardIds.ExpiredMerchant,
 	CardIds.ExplorersHat,
 	CardIds.Felosophy,
@@ -283,30 +324,44 @@ export const publicCardGiftCreators = [
 	CardIds.FinalShowdown_CloseThePortalToken, // Demonslayer Kurtrus
 	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.FindTheImposter_MarkedATraitorToken, // Spymaster Scabbs
+	CardIds.FireFly,
 	CardIds.FirstFlame,
+	CardIds.FirstWishTavernBrawl,
+	CardIds.SecondWishTavernBrawl,
 	CardIds.FishyFlyer,
 	CardIds.FreshScent_YOD_005,
 	CardIds.FrostShardsTavernBrawl,
 	CardIds.FrozenTouch,
 	CardIds.FrozenTouch_FrozenTouchToken,
 	CardIds.FullBlownEvil,
+	CardIds.GalakrondsGuile,
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
+	CardIds.GrandLackeyErkh,
 	CardIds.Guidance_YOP_024,
 	CardIds.HalazziTheLynx,
+	CardIds.HeadcrackLegacy,
+	CardIds.HeadcrackVanilla,
+	CardIds.HeistbaronTogwaggle_DAL_417,
 	CardIds.Hydrologist,
 	CardIds.TheHarvesterOfEnvy,
 	CardIds.IdentityTheft,
+	CardIds.ImproveMorale,
 	CardIds.InfernalStrikeTavernBrawl,
 	CardIds.InfestedGoblin,
+	CardIds.InFormation,
 	CardIds.Jackpot,
 	CardIds.JerryRigCarpenter,
 	CardIds.JourneyBelow_OG_072,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
+	CardIds.KingMukla_CORE_EX1_014,
+	CardIds.KingMuklaLegacy,
+	CardIds.KingMuklaVanilla,
 	CardIds.KoboldTaskmaster,
 	CardIds.LicensedAdventurer,
 	CardIds.LightforgedBlessing_DAL_568,
+	CardIds.LivewireLance,
 	CardIds.LoanShark,
 	CardIds.Locuuuusts_ULDA_036,
 	CardIds.LocuuuustsTavernBrawl,
@@ -321,15 +376,22 @@ export const publicCardGiftCreators = [
 	CardIds.MarvelousMyceliumTavernBrawlToken,
 	CardIds.MindVisionLegacy,
 	CardIds.MindVisionVanilla,
+	CardIds.MuckbornServant,
+	CardIds.MurlocHolmes_REV_022,
+	CardIds.MurlocHolmes_REV_770,
 	CardIds.MysticalMirage_ULDA_035,
-	CardIds.MurlocHolmes,
 	CardIds.NatureStudies_SCH_333,
 	CardIds.OpenTheDoorwaysTavernBrawl,
 	CardIds.OpenTheWaygate,
-	// CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
+	CardIds.OptimizedPolarityTavernBrawl,
+	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	CardIds.PackKodo,
+	CardIds.PalmReading,
+	CardIds.PandarenImporter,
 	CardIds.Peon_BAR_022,
+	CardIds.PilferLegacy,
 	CardIds.PlantedEvidence,
+	CardIds.PrimalfinLookout_UNG_937,
 	CardIds.PotionOfIllusion,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
@@ -343,7 +405,10 @@ export const publicCardGiftCreators = [
 	CardIds.RapidFire_DAL_373,
 	CardIds.RayOfFrost_DAL_577,
 	CardIds.Reconnaissance,
+	CardIds.Renew_BT_252,
+	CardIds.ResizingPouch,
 	CardIds.RiseToTheOccasion_AvengeTheFallenToken, // Lightborn Cariel
+	CardIds.RunedOrb_BAR_541,
 	CardIds.RunicHelmTavernBrawl,
 	CardIds.SandwaspQueen,
 	CardIds.Schooling,
@@ -355,9 +420,12 @@ export const publicCardGiftCreators = [
 	CardIds.SerpentWig_TSC_215,
 	CardIds.ShadowVisions,
 	CardIds.SinfulSousChef,
+	CardIds.SinisterDeal,
 	CardIds.SirakessCultist,
 	CardIds.Sleetbreaker,
+	CardIds.SludgeSlurper,
 	CardIds.SmugSenior,
+	CardIds.SnackRun,
 	CardIds.SneakyDelinquent,
 	CardIds.SoothsayersCaravan,
 	CardIds.SorcerersGambit,
@@ -382,13 +450,23 @@ export const publicCardGiftCreators = [
 	CardIds.TheForestsAid_DAL_256,
 	CardIds.TheLobotomizer,
 	CardIds.ThistleTea,
+	CardIds.ThoughtstealLegacy,
+	CardIds.ThoughtstealVanilla,
+	CardIds.TomeOfIntellectLegacy,
 	CardIds.ToothOfNefarian,
+	CardIds.TransferStudent_TransferStudentToken_SCH_199t19,
+	CardIds.TwinSlice_BT_175,
 	CardIds.UnleashTheBeast_DAL_378,
+	CardIds.UniteTheMurlocs,
+	CardIds.UnstablePortal_GVG_003,
 	CardIds.VanessaVancleefCore,
 	CardIds.VenomousScorpid,
 	CardIds.VioletSpellwing,
+	CardIds.Wandmaker,
 	CardIds.WandThief_SCH_350,
+	CardIds.WhispersOfEvil,
 	CardIds.WitchwoodApple,
+	CardIds.WorthyExpedition,
 	CardIds.YseraTheDreamerCore,
 	CardIds.Zaqul_TSC_959,
 	CardIds.Zaqul_Story_11_Zaqul,
@@ -399,6 +477,7 @@ export const publicCardGiftCreators = [
 
 // You draw something, but you don't know the exact card
 export const cardTutors = [
+	CardIds.AbyssalDepths,
 	CardIds.AkaliTheRhino,
 	CardIds.AllianceBannerman,
 	CardIds.AncientMysteries,
@@ -441,6 +520,7 @@ export const cardTutors = [
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger,
 	CardIds.ForgeOfSouls,
+	CardIds.FossilFanatic,
 	CardIds.FreeAdmission,
 	CardIds.FrostweaveDungeoneer,
 	CardIds.FungalFortunes,
@@ -482,6 +562,7 @@ export const cardTutors = [
 	CardIds.RadarDetector_Story_11_RadarDetector,
 	CardIds.RaidingParty,
 	CardIds.RaidTheDocks,
+	CardIds.RelicOfDimensions,
 	CardIds.RingmasterWhatley,
 	CardIds.RollTheBones,
 	CardIds.SalhetsPride,
@@ -495,6 +576,7 @@ export const cardTutors = [
 	CardIds.SenseDemonsLegacy,
 	CardIds.SenseDemonsVanilla_VAN_EX1_317,
 	CardIds.ShroudOfConcealment,
+	CardIds.SigilOfAlacrity,
 	CardIds.SketchyInformation,
 	CardIds.SmallTimeRecruits,
 	CardIds.SorcerersGambit_StallForTimeToken,
@@ -608,7 +690,7 @@ export const defaultStartingHp = (gameType: GameType, heroCardId: string): numbe
 	if (isBattlegrounds(gameType)) {
 		switch (heroCardId) {
 			case CardIds.PatchwerkBattlegrounds:
-				return 55;
+				return 60;
 			default:
 				return 40;
 		}

@@ -7,7 +7,7 @@
 	border-width: 1px;
 	border-style: solid;
 	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
-	padding-right: 1.8vh;
+	// padding-right: 1.8vh;
 
 	&.active {
 		display: flex;
@@ -22,7 +22,7 @@
 		justify-content: center;
 
 		&:last-child {
-			margin-right: 20px;
+			margin-right: 10px;
 		}
 
 		.icon {
@@ -63,6 +63,40 @@
 	.tribes {
 		.icon {
 			clip-path: ellipse(35% 35% at 50% 50%);
+		}
+	}
+
+	.quest-rewards {
+		position: relative;
+		width: auto;
+		margin-left: 10px;
+		bottom: 3px;
+
+		.quest-reward {
+			position: relative;
+			.image {
+				height: 5vh;
+				top: 0;
+				left: 0;
+				clip-path: ellipse(40% 30% at 50% 55%);
+			}
+
+			.frame {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+			}
+
+			&:not(:last-child) {
+				margin-right: 5px;
+			}
+
+			&:not(.completed) {
+				opacity: 0.5;
+				filter: grayscale(0.5);
+			}
 		}
 	}
 }

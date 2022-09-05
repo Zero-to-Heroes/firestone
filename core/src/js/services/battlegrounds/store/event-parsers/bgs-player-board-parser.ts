@@ -156,6 +156,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
+				questRewards: playerBoard.questRewards,
 			},
 			board: bgsBoard,
 			secrets: secrets,
@@ -198,7 +199,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		];
 		const newPlayer: BgsPlayer = playerToUpdate.update({
 			boardHistory: newHistory,
-		} as BgsPlayer);
+		});
 		console.log(
 			'update board for player',
 			newPlayer.cardId,

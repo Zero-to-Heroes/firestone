@@ -52,7 +52,7 @@ export class EntityUpdateParser implements EventParser {
 					this.allCards,
 			  )
 			: null;
-		console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
+		// console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
 
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId

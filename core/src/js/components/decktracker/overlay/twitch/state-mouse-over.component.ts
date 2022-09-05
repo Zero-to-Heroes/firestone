@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Map } from 'immutable';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
@@ -46,10 +46,10 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			</ul>
 			<ul class="hero top-hero">
 				<div class="weapon">
-					<empty-card [cardId]="topWeaponCard"></empty-card>
+					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
 				<div class="hero-power">
-					<empty-card [cardId]="topHeroPowerCard"></empty-card>
+					<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
 			</ul>
 			<ul class="board top-board">
@@ -68,10 +68,18 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			</ul>
 			<ul class="hero bottom-hero">
 				<div class="weapon">
-					<empty-card [cardId]="bottomWeaponCard"></empty-card>
+					<empty-card
+						[cardId]="bottomWeaponCard"
+						[cardTooltipPosition]="'left'"
+						[cardTooltipBgs]="isBgs"
+					></empty-card>
 				</div>
 				<div class="hero-power">
-					<empty-card [cardId]="bottomHeroPowerCard"></empty-card>
+					<empty-card
+						[cardId]="bottomHeroPowerCard"
+						[cardTooltipPosition]="'right'"
+						[cardTooltipBgs]="isBgs"
+					></empty-card>
 				</div>
 			</ul>
 			<ul class="bottom-hand">
@@ -121,17 +129,20 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			return;
 		}
 		this._gameState = value;
-		this.topHeroPowerCard =
-			this._gameState.opponentDeck?.heroPower && this._gameState.opponentDeck.heroPower.cardId;
-		this.topWeaponCard = this._gameState.opponentDeck?.weapon && this._gameState.opponentDeck.weapon.cardId;
+		this.topHeroPowerCard = this._gameState.opponentDeck?.heroPower?.cardId;
+		this.topWeaponCard = this._gameState.opponentDeck?.weapon?.cardId;
 		this.topBoardCards = this._gameState.opponentDeck?.board.map((card) => card.cardId);
 		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
-		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower && this._gameState.playerDeck.heroPower.cardId;
-		this.bottomWeaponCard = this._gameState.playerDeck?.weapon && this._gameState.playerDeck.weapon.cardId;
+		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower?.cardId;
+		this.bottomWeaponCard = this._gameState.playerDeck?.weapon?.cardId;
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	@Input() set magnifierIconOnTop(value: null | '' | 'top' | 'bottom') {
+		this.magnifierIconOnTopFromStreamer.next(value);
 	}
 
 	isBgs: boolean;
@@ -152,6 +163,7 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 	private showLiveInfo = new BehaviorSubject<boolean>(false);
+	private magnifierIconOnTopFromStreamer = new BehaviorSubject<null | '' | 'top' | 'bottom'>(null);
 
 	private destroyed$ = new Subject<void>();
 
@@ -159,8 +171,16 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 
 	ngAfterContentInit(): void {
 		this.showLiveInfo$ = this.showLiveInfo.asObservable().pipe(takeUntil(this.destroyed$));
-		this.magnifierIconOnTop$ = this.prefs.prefs.asObservable().pipe(
-			map((prefs) => prefs.magnifierIconOnTop),
+		this.magnifierIconOnTop$ = combineLatest(
+			this.prefs.prefs.asObservable(),
+			this.magnifierIconOnTopFromStreamer.asObservable(),
+		).pipe(
+			map(([prefs, magnifierIconOnTopFromStreamer]) => {
+				if (!magnifierIconOnTopFromStreamer) {
+					return prefs.magnifierIconOnTop;
+				}
+				return magnifierIconOnTopFromStreamer === 'top' ? true : false;
+			}),
 			takeUntil(this.destroyed$),
 		);
 	}
@@ -172,7 +192,6 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	}
 
 	toggleLiveInfo(value: boolean) {
-		// console.log('toggling live info', value);
 		this.showLiveInfo.next(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

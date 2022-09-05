@@ -154,7 +154,7 @@ export const sets: readonly ReferenceSet[] = [
 	{
 		id: 'kara',
 		name: 'One Night in Karazhan',
-		launchDate: new Date('2018-08-11'),
+		launchDate: new Date('2016-08-11'),
 		hidePityTimers: true,
 	},
 	{

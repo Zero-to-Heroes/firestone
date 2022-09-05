@@ -27,9 +27,12 @@ import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
+import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { RelicCounterDefinition } from './definitions/relic-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
@@ -55,6 +58,8 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 				[valueImg]="definition.valueImg"
 				[counterClass]="definition.cssClass"
 				[standardCounter]="definition.standardCounter"
+				[cardTooltip]=""
+				[cardTooltipRelatedCardIds]="definition.cardTooltips"
 			></generic-counter>
 		</div>
 	`,
@@ -131,10 +136,16 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return ElwynnBoarCounterDefinition.create(gameState, side, this.i18n);
 			case 'volatileSkeleton':
 				return VolatileSkeletonCounterDefinition.create(gameState, side, this.i18n);
+			case 'relic':
+				return RelicCounterDefinition.create(gameState, side, this.i18n);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'vanessaVanCleef':
+				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'murozondTheInfinite':
+				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'ladyDarkvein':
 				return LadyDarkveinCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'greySageParrot':

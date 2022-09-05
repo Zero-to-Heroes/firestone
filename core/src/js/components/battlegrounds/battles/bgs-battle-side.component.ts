@@ -33,12 +33,15 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					class="portrait"
 					[heroCardId]="heroCardId"
 					[heroPowerCardId]="heroPowerCardId"
+					[questRewardCardId]="questRewardCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[tavernTier]="showTavernTier && tavernTier"
 					[tooltipPosition]="tooltipPosition"
+					[fullScreenMode]="fullScreenMode"
 					(portraitChangeRequested)="onPortraitClick()"
 					(heroPowerChangeRequested)="onHeroPowerClick()"
+					(questRewardChangeRequested)="onQuestRewardClick()"
 				></bgs-hero-portrait-simulator>
 			</div>
 			<div class="board" cdkDropListGroup (cdkDropListDropped)="drop($event)">
@@ -102,6 +105,7 @@ export class BgsBattleSideComponent {
 	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
 	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
@@ -120,6 +124,7 @@ export class BgsBattleSideComponent {
 
 	heroCardId: string;
 	heroPowerCardId: string;
+	questRewardCardId: string;
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
@@ -162,6 +167,10 @@ export class BgsBattleSideComponent {
 		this.heroPowerChangeRequested.next();
 	}
 
+	onQuestRewardClick() {
+		this.questRewardChangeRequested.next();
+	}
+
 	addMinion() {
 		this.addMinionRequested.next(null);
 	}
@@ -185,6 +194,9 @@ export class BgsBattleSideComponent {
 
 		this.heroCardId = this._player.player?.cardId;
 		this.heroPowerCardId = this._player.player?.heroPowerId;
+		this.questRewardCardId = !!this._player.player?.questRewards?.length
+			? this._player.player?.questRewards[0]
+			: null;
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;

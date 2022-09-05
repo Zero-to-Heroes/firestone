@@ -94,17 +94,29 @@
 					display: flex;
 
 					.section {
-						// width: 110px;
+						display: flex;
+						flex-direction: column;
+						justify-content: end;
+						min-width: 110px;
+						max-width: 150px;
 					}
 
-					.player {
-						border-right: 1px solid rgba(#841063, 0.2);
-						padding-right: 7px;
-						margin-right: 7px;
+					.average {
+						border-left: 1px solid rgba(#841063, 0.2);
+						padding-left: 7px;
+						margin-left: 7px;
 					}
 
 					.subtitle {
+						flex-grow: 2;
+						display: flex;
 						font-weight: bold;
+						text-align: center;
+						align-items: center;
+						justify-content: center;
+					}
+					.value{
+						white-space: nowrap;
 					}
 				}
 			}

@@ -59,7 +59,6 @@ export class FullCardBackComponent extends AbstractSubscriptionComponent impleme
 		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
 	}
 
-
 	private transformFlavor(flavor: string): string {
 		const result = flavor
 			.replace(/\n/g, '<br>')

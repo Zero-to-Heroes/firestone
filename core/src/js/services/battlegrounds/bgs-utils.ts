@@ -62,11 +62,11 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	switch (tribe) {
 		case 'mech':
 		case Race.MECH:
-			referenceCardId = CardIds.MicroMummy;
+			referenceCardId = CardIds.MicroMummy_BG_ULD_217;
 			break;
 		case 'beast':
 		case Race.BEAST:
-			referenceCardId = CardIds.Alleycat;
+			referenceCardId = CardIds.Alleycat_BG_CFM_315;
 			break;
 		case 'demon':
 		case Race.DEMON:
@@ -78,7 +78,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'murloc':
 		case Race.MURLOC:
-			referenceCardId = CardIds.RockpoolHunter;
+			referenceCardId = CardIds.RockpoolHunter_BG_UNG_073;
 			break;
 		case 'pirate':
 		case Race.PIRATE:
@@ -294,6 +294,10 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.LadyVashj_RelicsOfTheDeep;
 		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
 			return CardIds.HeistbaronTogwaggle_ThePerfectCrime;
+		case CardIds.MurlocHolmes_BG23_HERO_303:
+			return CardIds.MurlocHolmes_DetectiveForHire;
+		case CardIds.SireDenathrius_BG24_HERO_100:
+			return CardIds.SireDenathrius_Whodunitquestion;
 
 		case '':
 			return null; // new heroes
@@ -656,6 +660,10 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 410;
 		case CardIds.HeistbaronTogwaggle_BG23_HERO_305:
 			return 425;
+		case CardIds.MurlocHolmes_BG23_HERO_303:
+			return 426;
+		case CardIds.SireDenathrius_BG24_HERO_100:
+			return 427;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);
@@ -967,6 +975,7 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 			[GameTag[GameTag.ATK]]: minion.attack,
 			[GameTag[GameTag.HEALTH]]: minion.health,
 			[GameTag[GameTag.TAUNT]]: minion.taunt ? 1 : 0,
+			[GameTag[GameTag.STEALTH]]: minion.stealth ? 1 : 0,
 			[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
 			[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
 			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,

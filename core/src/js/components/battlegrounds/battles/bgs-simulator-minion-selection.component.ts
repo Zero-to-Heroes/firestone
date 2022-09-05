@@ -127,6 +127,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								(valueChanged)="onTauntChanged($event)"
 							></checkbox>
 							<checkbox
+								[label]="'global.hs-terms.stealth' | owTranslate"
+								[value]="stealth"
+								(valueChanged)="onStealthChanged($event)"
+							></checkbox>
+							<checkbox
 								[label]="'global.hs-terms.windfury' | owTranslate"
 								[value]="windfury"
 								(valueChanged)="onWindfuryChanged($event)"
@@ -180,8 +185,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					</div>
 				</div>
 				<div class="hero-selection">
-					<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 					<div class="search">
+						<div class="header" [owTranslate]="'battlegrounds.sim.minions-selection-title'"></div>
 						<bgs-sim-minion-tribe-filter class="filter tribe-filter"></bgs-sim-minion-tribe-filter>
 						<bgs-sim-minion-tier-filter class="filter tier-filter"></bgs-sim-minion-tier-filter>
 						<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
@@ -248,6 +253,7 @@ export class BgsSimulatorMinionSelectionComponent
 	taunt: boolean;
 	attack: number;
 	health: number;
+	stealth: boolean;
 	windfury: boolean;
 	megaWindfury: boolean;
 	summonMechs: boolean;
@@ -402,6 +408,13 @@ export class BgsSimulatorMinionSelectionComponent
 		}
 	}
 
+	onStealthChanged(value: boolean) {
+		this.stealth = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	onMegaWindfuryChanged(value: boolean) {
 		this.megaWindfury = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -508,6 +521,7 @@ export class BgsSimulatorMinionSelectionComponent
 		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
 		this.reborn = this.ref.mechanics?.includes(GameTag[GameTag.REBORN]);
 		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
+		this.stealth = this.ref.mechanics?.includes(GameTag[GameTag.STEALTH]);
 		this.windfury = this.ref.mechanics?.includes(GameTag[GameTag.WINDFURY]);
 		this.megaWindfury = this.ref.mechanics?.includes(GameTag[GameTag.MEGA_WINDFURY]);
 		// The cards that summon 1/1s as part of their normal abilities are already handled in the sim
@@ -528,10 +542,13 @@ export class BgsSimulatorMinionSelectionComponent
 			poisonous: this.poisonous,
 			taunt: this.taunt,
 			reborn: this.reborn,
+			stealth: this.stealth,
 			windfury: this.windfury,
 			megaWindfury: this.megaWindfury,
 			enchantments: [
-				this.summonMechs ? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment } : null,
+				this.summonMechs
+					? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e }
+					: null,
 				this.summonPlants ? { cardId: CardIds.LivingSpores_LivingSporesEnchantment } : null,
 				...(this.sneeds > 0
 					? [...Array(this.sneeds).keys()].map((i) => ({
@@ -563,11 +580,12 @@ export class BgsSimulatorMinionSelectionComponent
 		this.poisonous = this._entity.poisonous;
 		this.reborn = this._entity.reborn;
 		this.taunt = this._entity.taunt;
+		this.stealth = this._entity.stealth;
 		this.windfury = this._entity.windfury;
 		this.megaWindfury = this._entity.megaWindfury;
 		this.summonMechs = this._entity.enchantments
 			.map((e) => e.cardId)
-			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment);
+			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment_BG_BOT_312e);
 		this.summonPlants = this._entity.enchantments
 			.map((e) => e.cardId)
 			.includes(CardIds.LivingSpores_LivingSporesEnchantment);

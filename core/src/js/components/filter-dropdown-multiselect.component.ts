@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 					} as value
 				"
 			>
-				<div class="choices">
+				<div class="choices" scrollable>
 					<div class="option" *ngFor="let option of value.workingOptions; trackBy: trackByFn">
 						<checkbox
 							[label]="option.label"

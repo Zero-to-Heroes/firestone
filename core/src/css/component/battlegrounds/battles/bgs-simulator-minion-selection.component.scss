@@ -209,27 +209,22 @@
 	.hero-selection {
 		display: flex;
 		flex-direction: column;
-		margin-top: 15px;
 		position: relative;
 		min-height: 0;
 
-		.header {
-			font-size: 16px;
-			margin-bottom: 15px;
-		}
-
 		.search {
-			position: absolute;
-			top: 0;
-			right: 0;
 			height: 30px;
 			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			margin-bottom: 15px;
+
+			.header {
+				font-size: 16px;
+				flex-grow: 1;
+			}
 
 			.filter {
-				width: 125px;
-				margin-right: 15px;
-				position: relative;
-				top: -1px;
 
 				::ng-deep filter-dropdown {
 					width: 100%;
@@ -291,7 +286,6 @@
 			overflow-y: scroll;
 			display: flex;
 			flex-wrap: wrap;
-			padding: 15px;
 
 			.hero-portrait-frame {
 				width: 119px;

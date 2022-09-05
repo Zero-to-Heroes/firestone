@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
 import { ShortCard } from '@models/decktracker/game-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
@@ -80,6 +80,7 @@ export class DeckState {
 	readonly elementalsPlayedLastTurn: number = 0;
 	readonly elwynnBoarsDeadThisMatch: number = 0;
 	readonly volatileSkeletonsDeadThisMatch: number = 0;
+	readonly relicsPlayedThisMatch: number = 0;
 	readonly heroPowerDamageThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
@@ -95,6 +96,7 @@ export class DeckState {
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
@@ -264,29 +266,61 @@ export class DeckState {
 			.some((card) =>
 				[
 					CardIds.VolatileSkeleton,
-					CardIds.KelthuzadTheInevitable,
+					CardIds.KelthuzadTheInevitable_REV_514,
+					CardIds.KelthuzadTheInevitable_REV_786,
 					CardIds.ColdCase,
 					CardIds.Deathborne,
-					CardIds.NightcloakSanctum,
+					CardIds.NightcloakSanctum_REV_602,
+					CardIds.NightcloakSanctum_REV_796,
 					CardIds.BrittleBonesTavernBrawl,
 				].includes(card.cardId as CardIds),
 			);
 	}
 
+	public containsRelicCards(): boolean {
+		if (this.relicsPlayedThisMatch > 0) {
+			return true;
+		}
+
+		return this.getAllCardsInDeck()
+			.filter((card) => card.cardId)
+			.some((card) =>
+				[
+					CardIds.ArtificerXymox_REV_787,
+					CardIds.ArtificerXymox_REV_937,
+					CardIds.ArtificerXymox_ArtificerXymoxToken,
+					...RELIC_IDS,
+				].includes(card.cardId as CardIds),
+			);
+	}
+
 	public hasBolner() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BolnerHammerbeak);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BolnerHammerbeak);
 	}
 
 	public hasBrilliantMacaw() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+	}
+
+	public hasVanessaVanCleef() {
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.VanessaVancleefCore);
+	}
+
+	public hasMurozondTheInfinite() {
+		return this.hand
+			.filter((card) => card.cardId)
+			.some(
+				(card) =>
+					card.cardId === CardIds.MurozondTheInfinite || card.cardId === CardIds.MurozondTheInfiniteCore,
+			);
 	}
 
 	public hasLadyDarkvein() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
 	}
 
 	public hasGreySageParrot() {
-		return [...this.hand].filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

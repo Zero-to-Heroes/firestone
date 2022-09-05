@@ -7,5 +7,7 @@ export class TwitchPreferences {
 	readonly showBattleSimulator: boolean = true;
 	readonly showRelatedCards: boolean = true;
 	readonly magnifierIconOnTop: boolean = false;
-	readonly hideBattleOddsInCombat: boolean = false;
+	readonly hideBattleOddsInCombat: 'auto' | 'true' | 'false' = 'auto';
+	readonly hideBattleOddsInTavern: 'auto' | 'true' | 'false' = 'auto';
+	readonly hideBattleOddsWhenEmpty: boolean = false;
 }

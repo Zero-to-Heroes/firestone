@@ -151,14 +151,25 @@ export class DecksStateBuilderService {
 		rankFilter: DeckRankFilterType,
 		prefs: Preferences,
 		patch: PatchInfo,
+		decks: readonly DeckSummary[] = null,
 	): readonly GameStat[] {
 		const resetForDeck = (prefs?.desktopDeckStatsReset ?? {})[deckstring] ?? [];
 		const lastResetDate = resetForDeck[0] ?? 0;
 		const deleteForDeck = (prefs?.desktopDeckDeletes ?? {})[deckstring] ?? [];
 		const lastDeleteDate = deleteForDeck[0] ?? 0;
 
+		// Because the method is used also to build the initial decks, we can't rely on the decks
+		// to always be present
+		const deckForDeckstring = !decks?.length
+			? null
+			: decks.find((d) => d.allVersions.some((v) => v.deckstring === deckstring));
+		const validDeckstrings = !!deckForDeckstring
+			? deckForDeckstring.allVersions.map((v) => v.deckstring)
+			: [deckstring];
+		// console.debug('')
+
 		const statsWithReset = stats
-			.filter((stat) => stat.playerDecklist === deckstring)
+			.filter((stat) => validDeckstrings.includes(stat.playerDecklist))
 			.filter((stat) => !!stat.opponentClass)
 			.filter((stat) => stat.gameMode === gameModeFilter)
 			.filter((stat) => gameFormatFilter === 'all' || stat.gameFormat === gameFormatFilter)

@@ -115,7 +115,7 @@ import { Knob } from '../preference-slider.component';
 				<preference-toggle
 					field="playerAbyssalCurseCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.abyssal-curse-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.abyssal-curse-tooltip-2' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.abyssal-curse-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="playerAttackCounter"
@@ -153,6 +153,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.volatile-skeleton-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerRelicCounter"
+					[label]="'settings.decktracker.opponent-deck.counters.relic-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.relic-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerHeroPowerDamageCounter"
 					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.hero-power-damage-tooltip' | owTranslate"
@@ -166,6 +171,16 @@ import { Knob } from '../preference-slider.component';
 					field="playerBrilliantMacawCounter"
 					[label]="'settings.decktracker.your-deck.counters.brilliant-macaw-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerVanessaVanCleefCounter"
+					[label]="'settings.decktracker.your-deck.counters.vanessa-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.vanessa-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="playerMurozondTheInfiniteCounter"
+					[label]="'settings.decktracker.your-deck.counters.murozond-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.murozond-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="playerLadyDarkveinCounter"

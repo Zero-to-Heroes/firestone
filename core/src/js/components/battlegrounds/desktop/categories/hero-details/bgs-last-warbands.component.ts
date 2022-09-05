@@ -20,16 +20,16 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 	],
 	template: `
-		<div class="bgs-last-warbands">
+		<div class="bgs-last-warbands" *ngIf="{ boards: boards$ | async } as value">
 			<with-loading [isLoading]="false" [mainTitle]="null" [subtitle]="null" svgName="loading-spiral">
-				<ng-container *ngIf="boards$ | async as boards; else emptyState">
+				<ng-container *ngIf="value.boards?.length; else emptyState">
 					<div
 						class="title"
 						[owTranslate]="'app.battlegrounds.personal-stats.hero-details.last-warbands.title'"
-						[translateParams]="{ value: boards?.length }"
+						[translateParams]="{ value: value.boards?.length }"
 					></div>
 					<div class="boards" scrollable>
-						<div class="board-container" *ngFor="let board of boards">
+						<div class="board-container" *ngFor="let board of value.boards">
 							<div class="meta-info">
 								<div class="finish-position">{{ board.title }}</div>
 								<div class="date">{{ board.date }}</div>

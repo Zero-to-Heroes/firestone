@@ -4,13 +4,19 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { SecretConfigService } from '../secret-config.service';
+import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class SecretPlayedFromHandParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly secretConfig: SecretConfigService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly secretConfig: SecretConfigService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && (gameEvent.type === GameEvent.SECRET_PLAYED || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY);
@@ -52,6 +58,10 @@ export class SecretPlayedFromHandParser implements EventParser {
 		} as DeckCard);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
+		const handAfterCardsRemembered = isCardCountered
+			? newHand
+			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousOtherZone,
@@ -62,8 +72,9 @@ export class SecretPlayedFromHandParser implements EventParser {
 				  } as DeckCard)
 				: cardWithZone,
 		);
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: newHand,
+			hand: handAfterCardsRemembered,
 			otherZone: newOtherZone,
 			secrets: isCardCountered
 				? deck.secrets

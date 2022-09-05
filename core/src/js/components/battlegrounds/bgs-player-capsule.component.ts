@@ -27,6 +27,7 @@ import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
 					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
 					[rating]="rating"
+					[questRewardCardId]="questRewardCardId"
 				></bgs-hero-portrait>
 				<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
 				<div
@@ -49,6 +50,7 @@ export class BgsPlayerCapsuleComponent {
 	health: number;
 	maxHealth: number;
 	heroPowerCardId: string;
+	questRewardCardId: string;
 	name: string;
 	tavernTier: number;
 	boardMinions: readonly Entity[];
@@ -74,6 +76,7 @@ export class BgsPlayerCapsuleComponent {
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
+		// this.questRewardCardId = value.questRewardCardId;
 		this.name = value.name;
 		this.tavernTier = this.displayTavernTier ? value.getCurrentTavernTier() : undefined;
 		this.boardMinions = value.getLastKnownBoardState();

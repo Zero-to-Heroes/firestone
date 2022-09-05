@@ -35,7 +35,7 @@ export class CardChangedInDeckParser implements EventParser {
 		);
 		//console.debug('[debug]', 'theCard', theCard);
 		if (!theCard) {
-			console.warn('could not find card in deck', cardId, entityId);
+			// console.warn('could not find card in deck', cardId, entityId);
 			return currentState;
 		}
 

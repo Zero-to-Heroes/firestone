@@ -67,8 +67,10 @@ export class DeckCard {
 		if (!newCard) {
 			return this;
 		}
+
+		// Don't log anything, as this can cause some huge lag on new releases, when the cards are not updated yet
 		if (newCard?.cardId && !newCard?.cardName) {
-			console.warn('updating deck card without name', newCard, newCard?.cardId, new Error().stack);
+			// console.warn('updating deck card without name', newCard, newCard?.cardId, new Error().stack);
 		}
 		return Object.assign(new DeckCard(), this, newCard);
 	}

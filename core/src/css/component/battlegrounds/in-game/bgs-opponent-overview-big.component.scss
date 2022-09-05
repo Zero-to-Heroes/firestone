@@ -60,6 +60,23 @@
 			}
 		}
 
+		bgs-quest-rewards {
+			margin-left: 15px;
+			margin-right: 15px;
+			border-left: 1px solid var(--color-3);
+			padding-left: 15px;
+
+			::ng-deep {
+				.rewards-container {
+					border-right: none;
+				}
+
+				.title {
+					display: none;
+				}
+			}
+		}
+
 		.triples-section {
 			display: flex;
 			align-items: center;
@@ -106,11 +123,11 @@
 		width: 170px;
 		display: flex;
 		flex-direction: column;
+		justify-content: space-evenly;
 		padding-left: 15px;
 		padding-right: 15px;
 
 		.title {
-			margin-bottom: 10px;
 			text-align: center;
 		}
 

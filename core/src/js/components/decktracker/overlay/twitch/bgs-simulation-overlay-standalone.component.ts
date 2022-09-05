@@ -11,7 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { Preferences } from '../../../../models/preferences';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 import { TwitchPreferencesService } from './twitch-preferences.service';
@@ -31,6 +33,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
+			[ngClass]="{ 'hidden': hidden$ | async }"
 		>
 			<div class="simulation-overlay scalable">
 				<bgs-battle-status [nextBattle]="nextBattle$ | async" [showReplayLink]="false"></bgs-battle-status>
@@ -43,8 +46,8 @@ export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
+	hidden$: Observable<boolean>;
 
-	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
 
 	@Output() dragStart = new EventEmitter<void>();
@@ -58,8 +61,18 @@ export class BgsSimulationOverlayStandaloneComponent
 		this.phase$$.next(value);
 	}
 
-	battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
-	phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
+	@Input() set hideWhenEmpty(value: boolean) {
+		this.hideWhenEmpty$$.next(value);
+	}
+
+	@Input() set streamerPrefs(value: Partial<Preferences>) {
+		this.streamerPrefs$$.next(value);
+	}
+
+	private battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
+	private streamerPrefs$$ = new BehaviorSubject<Partial<Preferences>>(null);
+	private phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
+	private hideWhenEmpty$$ = new BehaviorSubject<boolean>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -76,9 +89,28 @@ export class BgsSimulationOverlayStandaloneComponent
 			this.prefs.prefs.asObservable(),
 			this.battleState$$.asObservable(),
 			this.phase$$.asObservable(),
+			this.streamerPrefs$$.asObservable(),
 		).pipe(
-			this.mapData(([prefs, battleState, phase]) => {
-				if (prefs.hideBattleOddsInCombat && phase === 'combat') {
+			this.mapData(([prefs, battleState, phase, streamerPrefs]) => {
+				const hideBattleOddsInCombat: boolean =
+					prefs.hideBattleOddsInCombat == null
+						? streamerPrefs.bgsShowSimResultsOnlyOnRecruit
+						: prefs.hideBattleOddsInCombat === 'true';
+				const hideBattleOddsInTavern: boolean =
+					prefs.hideBattleOddsInTavern == null
+						? streamerPrefs.bgsHideSimResultsOnRecruit
+						: prefs.hideBattleOddsInTavern === 'true';
+				console.debug(
+					'hide info',
+					hideBattleOddsInCombat,
+					hideBattleOddsInTavern,
+					prefs.hideBattleOddsInCombat,
+					prefs.hideBattleOddsInTavern,
+				);
+				if (hideBattleOddsInCombat && phase === 'combat') {
+					return null;
+				}
+				if (hideBattleOddsInTavern && phase === 'recruit') {
 					return null;
 				}
 				return BgsFaceOffWithSimulation.create({
@@ -86,6 +118,14 @@ export class BgsSimulationOverlayStandaloneComponent
 					battleInfoStatus: battleState?.status,
 					battleInfoMesage: null,
 				} as BgsFaceOffWithSimulation);
+			}),
+		);
+		this.hidden$ = combineLatest(this.hideWhenEmpty$$.asObservable(), this.nextBattle$).pipe(
+			this.mapData(([hideWhenEmpty, nextBattle]) => {
+				if (!hideWhenEmpty) {
+					return false;
+				}
+				return !nextBattle || nextBattle?.battleInfoStatus !== 'done';
 			}),
 		);
 	}

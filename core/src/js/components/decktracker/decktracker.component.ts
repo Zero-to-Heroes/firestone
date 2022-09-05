@@ -86,6 +86,7 @@ export class DecktrackerComponent extends AbstractSubscriptionComponent implemen
 		return (
 			currentView === 'decks' ||
 			currentView === 'ladder-stats' ||
+			currentView === 'ladder-ranking' ||
 			(currentView === 'deck-details' && !this.showAds)
 		);
 	}

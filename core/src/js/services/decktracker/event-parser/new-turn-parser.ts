@@ -45,6 +45,7 @@ export class NewTurnParser implements EventParser {
 		);
 		const playerDeck = currentState.playerDeck.update({
 			isActivePlayer: isPlayerActive,
+			cardsPlayedLastTurn: currentState.playerDeck.cardsPlayedThisTurn,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
 			damageTakenThisTurn: 0,
 			elementalsPlayedLastTurn: isPlayerActive
@@ -55,6 +56,7 @@ export class NewTurnParser implements EventParser {
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
 			isActivePlayer: !isPlayerActive,
+			cardsPlayedLastTurn: currentState.opponentDeck.cardsPlayedThisTurn,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
 			damageTakenThisTurn: 0,
 			elementalsPlayedLastTurn: !isPlayerActive

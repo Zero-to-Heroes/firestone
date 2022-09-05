@@ -47,9 +47,7 @@ export class CardNotificationsService {
 		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 
-		const clickText = this.i18n.translateString('app.collection.card-history.click-to-view', {
-			link: `${this.i18n.translateString('app.collection.card-history.click-to-view-link')}`,
-		});
+		const clickText = this.i18n.translateString('app.collection.card-history.click-to-expand');
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
@@ -69,7 +67,7 @@ export class CardNotificationsService {
 							</i>
 						</div>
 						<div class="text-container link">
-							<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
+							<span class="new-card"><span class="new">${newLabel}</span> ${cardName}!</span>
 							<span class="cta"> ${clickText}</span>
 						</div>
 					</div>

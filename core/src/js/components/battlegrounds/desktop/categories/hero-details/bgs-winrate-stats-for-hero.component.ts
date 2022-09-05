@@ -19,8 +19,14 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	template: `
 		<graph-with-comparison-new
 			*ngIf="values$ | async as values"
+			[turnLabel]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.turn-label' | owTranslate"
+			[statLabel]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.winrate-label' | owTranslate"
 			[communityValues]="values.community"
 			[yourValues]="values.your"
+			[communityLabel]="
+				'app.battlegrounds.personal-stats.hero-details.winrate-stats.community-label' | owTranslate
+			"
+			[yourLabel]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.your-label' | owTranslate"
 			[communityTooltip]="
 				'app.battlegrounds.personal-stats.hero-details.winrate-stats.community-tooltip' | owTranslate
 			"

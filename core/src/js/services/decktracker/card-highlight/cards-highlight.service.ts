@@ -275,7 +275,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion);
 			case CardIds.CariaFelsoul:
 				return and(inDeck, demon);
-			case CardIds.CastleKennels:
+			case CardIds.CastleKennels_REV_362:
+			case CardIds.CastleKennels_REV_790:
 				return and(inDeck, minion, beast);
 			case CardIds.ChattyBartender:
 				return and(inDeck, secret);
@@ -294,6 +295,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(or(inDeck, inHand), murloc);
+			case CardIds.Commencement:
+				return and(inDeck, minion);
 			case CardIds.CorruptedFelstoneTavernBrawl:
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.CowardlyGrunt:
@@ -324,6 +327,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, legendary);
 			case CardIds.DivineIlluminationTavernBrawl:
 				return and(holy);
+			case CardIds.DivingGryphon:
+				return and(inDeck, minion, rush);
 			case CardIds.DoorOfShadows:
 			case CardIds.DoorOfShadows_DoorOfShadowsToken:
 				return and(inDeck, spell);
@@ -404,10 +409,13 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, pirate);
 			case CardIds.HarnessTheElementsTavernBrawl:
 				return and(inDeck, spell);
-			case CardIds.HedgeMaze:
+			case CardIds.HedgeMaze_REV_333:
+			case CardIds.HedgeMaze_REV_792:
 				return and(inDeck, minion, deathrattle);
 			case CardIds.HeraldOfLokholar:
 				return and(inDeck, spell, frost);
+			case CardIds.HeraldOfNature:
+				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
 				return and(inDeck, spell, shadow);
 			case CardIds.HoldTheLineTavernBrawl:
@@ -447,15 +455,18 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
 			case CardIds.KhadgarsScryingOrb:
 				return and(or(inDeck, inHand), spell);
-			case CardIds.KelthuzadTheInevitable:
+			case CardIds.KelthuzadTheInevitable_REV_514:
+			case CardIds.KelthuzadTheInevitable_REV_786:
 				return and(
 					or(inDeck, inHand),
 					cardIs(
 						CardIds.VolatileSkeleton,
-						CardIds.KelthuzadTheInevitable,
+						CardIds.KelthuzadTheInevitable_REV_514,
+						CardIds.KelthuzadTheInevitable_REV_786,
 						CardIds.ColdCase,
 						CardIds.Deathborne,
-						CardIds.NightcloakSanctum,
+						CardIds.NightcloakSanctum_REV_602,
+						CardIds.NightcloakSanctum_REV_796,
 						CardIds.BrittleBonesTavernBrawl,
 					),
 				);
@@ -497,6 +508,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.NagaGiant:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.MastersCall:
+				return and(inDeck, minion);
 			case CardIds.NaturalForceTavernBrawl:
 				return and(spell, nature, dealsDamage);
 			case CardIds.NzothGodOfTheDeep:
@@ -541,7 +554,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
 				return and(or(inDeck, inHand), minion, imp);
-			case CardIds.ImpKingRafaam:
+			case CardIds.ImpKingRafaam_REV_789:
+			case CardIds.ImpKingRafaam_REV_835:
 			case CardIds.ImpKingRafaam_ImpKingRafaamToken:
 				return and(or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaidBossOnyxia_ONY_004:
@@ -589,7 +603,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, beast);
 			case CardIds.ScrollSavvy:
 				return and(inDeck, spell);
-			case CardIds.SesselieOfTheFaeCourt:
+			case CardIds.SesselieOfTheFaeCourt_REV_319:
+			case CardIds.SesselieOfTheFaeCourt_REV_782:
 				return and(inDeck, minion, deathrattle);
 			case CardIds.SecretStudiesTavernBrawl:
 				return and(inDeck, secret);
@@ -705,6 +720,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, fel);
 			case CardIds.XyrellaTheDevout:
 				return and(inGraveyard, minion, deathrattle);
+			case CardIds.YshaarjTheDefiler:
+				return and(cardsPlayedThisMatch, corrupted);
 		}
 	}
 }
