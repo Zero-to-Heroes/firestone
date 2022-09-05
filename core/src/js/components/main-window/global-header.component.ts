@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				</svg>
 			</i>
 			<img class="image" *ngIf="image$ | async as image" [src]="image" />
-			<div class="text">{{ text }}</div>
+			<div class="text" [owTranslate]="text"></div>
 			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrow$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
