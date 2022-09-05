@@ -24,7 +24,7 @@
 	.container {
 		display: flex;
 		width: 100%;
-		justify-content: space-evenly;
+		justify-content: space-between;
 	}
 
 	.deck-versions {
@@ -71,8 +71,7 @@
 				right: 0;
 				bottom: 1px;
 				background-size: cover;
-				// Because some tiles still have a white border on the right
-				//background-position-x: 15px;
+				background-position-x: right;
 			}
 
 			.gradiant {
