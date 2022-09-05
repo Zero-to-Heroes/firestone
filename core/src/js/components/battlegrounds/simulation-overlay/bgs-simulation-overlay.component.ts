@@ -56,7 +56,6 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 					bgsShowSimResultsOnlyOnRecruit,
 					bgsHideSimResultsOnRecruit,
 				);
-				console.debug('sending result', result, currentGame);
 				return result;
 			}),
 		);
