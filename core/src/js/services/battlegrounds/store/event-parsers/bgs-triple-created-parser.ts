@@ -22,7 +22,7 @@ export class BgsTripleCreatedParser implements EventParser {
 				normalizeHeroCardId(event.heroCardId, this.allCards),
 		);
 		if (!playerToUpdate) {
-			console.error(
+			console.warn(
 				'Could not find player to update for triple history',
 				currentState.currentGame.reviewId,
 				event.heroCardId,

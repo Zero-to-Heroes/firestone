@@ -171,7 +171,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		);
 		if (!playerToUpdate) {
 			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
-				console.error(
+				console.warn(
 					'Could not idenfity player for whom to update board history',
 					currentState.currentGame.reviewId,
 					playerBoard.heroCardId,

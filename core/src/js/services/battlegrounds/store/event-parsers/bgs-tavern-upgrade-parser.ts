@@ -27,7 +27,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.KelthuzadBattlegrounds) {
 				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
-					console.error(
+					console.warn(
 						'No player found to update the history',
 						currentState.currentGame.reviewId,
 						event.heroCardId,

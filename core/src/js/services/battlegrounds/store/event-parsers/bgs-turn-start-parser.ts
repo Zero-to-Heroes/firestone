@@ -33,7 +33,11 @@ export class BgsTurnStartParser implements EventParser {
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
 		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
-		if (currentState.currentGame.players.length !== 8 && isBattlegrounds(gameState?.metadata?.gameType)) {
+		if (
+			currentState.currentGame.players.length !== 8 &&
+			isBattlegrounds(gameState?.metadata?.gameType) &&
+			Math.random() < 0.1
+		) {
 			setTimeout(async () => {
 				const gameLogsKey = await this.logsUploader.uploadGameLogs();
 				console.error(
