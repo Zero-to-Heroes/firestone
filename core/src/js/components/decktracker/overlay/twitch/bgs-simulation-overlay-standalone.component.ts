@@ -11,7 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { Preferences } from '../../../../models/preferences';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 import { TwitchPreferencesService } from './twitch-preferences.service';
@@ -63,7 +65,12 @@ export class BgsSimulationOverlayStandaloneComponent
 		this.hideWhenEmpty$$.next(value);
 	}
 
+	@Input() set streamerPrefs(value: Partial<Preferences>) {
+		this.streamerPrefs$$.next(value);
+	}
+
 	private battleState$$ = new BehaviorSubject<TwitchBgsCurrentBattle>(null);
+	private streamerPrefs$$ = new BehaviorSubject<Partial<Preferences>>(null);
 	private phase$$ = new BehaviorSubject<'combat' | 'recruit'>(null);
 	private hideWhenEmpty$$ = new BehaviorSubject<boolean>(null);
 
@@ -82,12 +89,28 @@ export class BgsSimulationOverlayStandaloneComponent
 			this.prefs.prefs.asObservable(),
 			this.battleState$$.asObservable(),
 			this.phase$$.asObservable(),
+			this.streamerPrefs$$.asObservable(),
 		).pipe(
-			this.mapData(([prefs, battleState, phase]) => {
-				if (prefs.hideBattleOddsInCombat && phase === 'combat') {
+			this.mapData(([prefs, battleState, phase, streamerPrefs]) => {
+				const hideBattleOddsInCombat: boolean =
+					prefs.hideBattleOddsInCombat == null
+						? streamerPrefs.bgsShowSimResultsOnlyOnRecruit
+						: prefs.hideBattleOddsInCombat === 'true';
+				const hideBattleOddsInTavern: boolean =
+					prefs.hideBattleOddsInTavern == null
+						? streamerPrefs.bgsHideSimResultsOnRecruit
+						: prefs.hideBattleOddsInTavern === 'true';
+				console.debug(
+					'hide info',
+					hideBattleOddsInCombat,
+					hideBattleOddsInTavern,
+					prefs.hideBattleOddsInCombat,
+					prefs.hideBattleOddsInTavern,
+				);
+				if (hideBattleOddsInCombat && phase === 'combat') {
 					return null;
 				}
-				if (prefs.hideBattleOddsInTavern && phase === 'recruit') {
+				if (hideBattleOddsInTavern && phase === 'recruit') {
 					return null;
 				}
 				return BgsFaceOffWithSimulation.create({

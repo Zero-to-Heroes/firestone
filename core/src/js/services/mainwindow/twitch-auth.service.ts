@@ -19,6 +19,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
+import { Preferences } from '../../models/preferences';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -42,6 +43,7 @@ export class TwitchAuthService {
 	private deckEvents = new BehaviorSubject<{ event: string; state: GameState }>(null);
 	private bgEvents = new BehaviorSubject<BattlegroundsState>(null);
 	private twitchAccessToken$: Observable<string>;
+	private streamerPrefs$: Observable<Partial<Preferences>>;
 
 	private twitchDelay = 0;
 
@@ -71,12 +73,24 @@ export class TwitchAuthService {
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 			);
-		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$)
+		this.streamerPrefs$ = this.store
+			.listenPrefs$(
+				(prefs) => prefs.bgsHideSimResultsOnRecruit,
+				(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+			)
+			.pipe(
+				distinctUntilChanged(),
+				map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
+					bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
+					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
+				})),
+			);
+		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$, this.streamerPrefs$)
 			.pipe(
 				debounceTime(500),
 				distinctUntilChanged(),
-				map(([deckEvent, bgsState, twitchAccessToken]) =>
-					this.buildEvent(deckEvent, bgsState, twitchAccessToken),
+				map(([deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
+					this.buildEvent(deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				delay(this.twitchDelay),
@@ -102,6 +116,7 @@ export class TwitchAuthService {
 		deckEvent: { event: string; state: GameState },
 		bgsState: BattlegroundsState,
 		twitchAccessToken: string,
+		streamerPrefs: Partial<Preferences>,
 	): TwitchEvent {
 		if (!twitchAccessToken) {
 			return null;
@@ -150,9 +165,10 @@ export class TwitchAuthService {
 			  }
 			: null;
 
-		const result = {
+		const result: TwitchEvent = {
 			deck: newDeckState,
 			bgs: newBgsState,
+			streamerPrefs: streamerPrefs,
 		};
 		// console.debug('[twitch-auth] built event', result, bgsState);
 		return result;
@@ -424,4 +440,5 @@ export class TwitchAuthService {
 export interface TwitchEvent {
 	readonly deck: GameState;
 	readonly bgs: TwitchBgsState;
+	readonly streamerPrefs: Partial<Preferences>;
 }

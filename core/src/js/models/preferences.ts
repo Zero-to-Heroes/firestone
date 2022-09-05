@@ -402,8 +402,8 @@ export class Preferences {
 	readonly bgsShowHeroSelectionAchievements = true;
 	readonly bgsShowHeroSelectionTooltip = true;
 	readonly bgsShowNextOpponentRecapSeparately = true;
-	readonly bgsHideSimResultsOnRecruit = true;
-	readonly bgsShowSimResultsOnlyOnRecruit = false;
+	readonly bgsHideSimResultsOnRecruit: boolean = true;
+	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 5000;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

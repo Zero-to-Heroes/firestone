@@ -95,6 +95,7 @@ import { LoadingStateComponent } from '../../components/loading-state.component'
 import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { ProgressBarComponent } from '../../components/progress-bar.component';
 import { CheckboxComponent } from '../../components/settings/checkbox.component';
+import { DropdownComponent } from '../../components/settings/dropdown.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { ClipboardShareButtonComponent } from '../../components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
@@ -217,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
+		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
 
@@ -357,6 +359,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
+		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
 

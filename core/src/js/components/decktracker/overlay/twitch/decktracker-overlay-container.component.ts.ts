@@ -14,6 +14,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { inflate } from 'pako';
 import { from, Observable } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
+import { Preferences } from '../../../../models/preferences';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fakeState from './gameState.json';
@@ -47,6 +48,7 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 			<bgs-simulation-overlay-standalone
 				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
 				[bgsState]="bgsBattleState"
+				[streamerPrefs]="streamerPrefs"
 				[phase]="bgsState?.phase"
 				[hideWhenEmpty]="hideSimulatorWhenEmpty$ | async"
 			>
@@ -70,6 +72,7 @@ export class DeckTrackerOverlayContainerComponent
 
 	gameState: GameState;
 	bgsState: TwitchBgsState;
+	streamerPrefs: Partial<Preferences>;
 	bgsBattleState: TwitchBgsCurrentBattle;
 	activeTooltip: string;
 	showDecktracker: boolean;
@@ -182,6 +185,7 @@ export class DeckTrackerOverlayContainerComponent
 		this.bgsState = event?.bgs;
 		// Don't overwrite the battle state if not present in the input state
 		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
+		this.streamerPrefs = event.streamerPrefs;
 		// console.log('bgsBattleState', this.bgsBattleState, this.bgsState);
 		this.gameState = event?.deck;
 		this.showDecktracker =
@@ -235,22 +239,22 @@ export class DeckTrackerOverlayContainerComponent
 
 const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
 	const mapping = {
-		// 'de': 'deDE',
+		'de': 'deDE',
 		'en': 'enUS',
 		'en-gb': 'enUS',
-		// 'es': 'esES',
-		// 'es-mx': 'esMX',
+		'es': 'esES',
+		'es-mx': 'esMX',
 		'fr': 'frFR',
-		// 'it': 'itIT',
-		// 'ja': 'jaJP',
-		// 'ko': 'koKR',
-		// 'pl': 'plPL',
-		// 'pt': 'ptBR',
-		// 'pt-br': 'ptBR',
-		// 'ru': 'ruRU',
-		// 'th': 'thTH',
-		// 'zh-cn': 'zhCN',
-		// 'zh-tw': 'zhTW',
+		'it': 'itIT',
+		'ja': 'jaJP',
+		'ko': 'koKR',
+		'pl': 'plPL',
+		'pt': 'ptBR',
+		'pt-br': 'ptBR',
+		'ru': 'ruRU',
+		'th': 'thTH',
+		'zh-cn': 'zhCN',
+		'zh-tw': 'zhTW',
 	};
 	const hsLocale = mapping[twitchLanguage] ?? 'enUS';
 	return hsLocale;
