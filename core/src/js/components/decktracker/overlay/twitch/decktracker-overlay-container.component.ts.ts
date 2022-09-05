@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
@@ -36,28 +37,30 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 				'decktracker-theme': currentDisplayMode === 'decktracker'
 			}"
 		>
-			<state-mouse-over
-				*ngIf="gameState || bgsState"
-				[gameState]="gameState"
-				[bgsState]="bgsState"
-				[overlayLeftOffset]="horizontalOffset"
-				[magnifierIconOnTop]="magnifierIconOnTop"
-			></state-mouse-over>
-			<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
-			</decktracker-overlay-standalone>
-			<bgs-simulation-overlay-standalone
-				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
-				[bgsState]="bgsBattleState"
-				[streamerPrefs]="streamerPrefs"
-				[phase]="bgsState?.phase"
-				[hideWhenEmpty]="hideSimulatorWhenEmpty$ | async"
-			>
-			</bgs-simulation-overlay-standalone>
-			<battlegrounds-minions-tiers-twitch
-				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showMinionsList$ | async)"
-				[availableRaces]="bgsState?.availableRaces"
-				[currentTurn]="bgsState?.currentTurn"
-			></battlegrounds-minions-tiers-twitch>
+			<ng-container *ngIf="inGameplay">
+				<state-mouse-over
+					*ngIf="gameState || bgsState"
+					[gameState]="gameState"
+					[bgsState]="bgsState"
+					[overlayLeftOffset]="horizontalOffset"
+					[magnifierIconOnTop]="magnifierIconOnTop"
+				></state-mouse-over>
+				<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
+				</decktracker-overlay-standalone>
+				<bgs-simulation-overlay-standalone
+					*ngIf="bgsState?.inGame && (showBattleSimulator$ | async)"
+					[bgsState]="bgsBattleState"
+					[streamerPrefs]="streamerPrefs"
+					[phase]="bgsState?.phase"
+					[hideWhenEmpty]="hideSimulatorWhenEmpty$ | async"
+				>
+				</bgs-simulation-overlay-standalone>
+				<battlegrounds-minions-tiers-twitch
+					*ngIf="bgsState?.inGame && (showMinionsList$ | async)"
+					[availableRaces]="bgsState?.availableRaces"
+					[currentTurn]="bgsState?.currentTurn"
+				></battlegrounds-minions-tiers-twitch>
+			</ng-container>
 			<twitch-config-widget></twitch-config-widget>
 		</div>
 	`,
@@ -70,6 +73,7 @@ export class DeckTrackerOverlayContainerComponent
 	showBattleSimulator$: Observable<boolean>;
 	hideSimulatorWhenEmpty$: Observable<boolean>;
 
+	inGameplay: boolean;
 	gameState: GameState;
 	bgsState: TwitchBgsState;
 	streamerPrefs: Partial<Preferences>;
@@ -182,6 +186,7 @@ export class DeckTrackerOverlayContainerComponent
 
 	private async processEvent(event: TwitchEvent) {
 		console.log('received event', event);
+		this.inGameplay = event.scene === SceneMode.GAMEPLAY;
 		this.bgsState = event?.bgs;
 		// Don't overwrite the battle state if not present in the input state
 		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag } from '@firestone-hs/reference-data';
+import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -85,12 +85,18 @@ export class TwitchAuthService {
 					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
 				})),
 			);
-		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$, this.streamerPrefs$)
+		combineLatest(
+			this.store.listen$(([main, nav]) => main.currentScene),
+			this.deckEvents,
+			this.bgEvents,
+			this.twitchAccessToken$,
+			this.streamerPrefs$,
+		)
 			.pipe(
 				debounceTime(500),
 				distinctUntilChanged(),
-				map(([deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
-					this.buildEvent(deckEvent, bgsState, twitchAccessToken, streamerPrefs),
+				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
+					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				delay(this.twitchDelay),
@@ -113,6 +119,7 @@ export class TwitchAuthService {
 	}
 
 	private buildEvent(
+		currentScene: SceneMode,
 		deckEvent: { event: string; state: GameState },
 		bgsState: BattlegroundsState,
 		twitchAccessToken: string,
@@ -166,6 +173,7 @@ export class TwitchAuthService {
 			: null;
 
 		const result: TwitchEvent = {
+			scene: currentScene,
 			deck: newDeckState,
 			bgs: newBgsState,
 			streamerPrefs: streamerPrefs,
@@ -438,6 +446,7 @@ export class TwitchAuthService {
 }
 
 export interface TwitchEvent {
+	readonly scene: SceneMode;
 	readonly deck: GameState;
 	readonly bgs: TwitchBgsState;
 	readonly streamerPrefs: Partial<Preferences>;
