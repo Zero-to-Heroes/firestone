@@ -414,7 +414,7 @@ export class GraphWithComparisonNewComponent {
 					const left = Math.max(
 						0,
 						Math.min(
-							tooltip.caretX - 110 + leftOffset,
+							tooltip.caretX - tooltipWidth/2 + leftOffset,
 							chartParent.getBoundingClientRect().right - tooltipWidth,
 						),
 					);
@@ -423,7 +423,7 @@ export class GraphWithComparisonNewComponent {
 					// 10 is because of padding
 					// const carretLeftOffset = yourDatapoint?.value != null ? 0 : -50;
 					const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
-					const carretLeft = tooltip.caretX - left - 10;
+					const carretLeft = tooltip.caretX - left - 8;
 					tooltipArrowEl.style.left = carretLeft + 'px';
 
 					// Display, position, and set styles for font
