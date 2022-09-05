@@ -114,7 +114,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
 					);
 					return !!selectedVersionDeckstring
-						? deck.allVersions.find((v) => v.deckstring === selectedVersionDeckstring)
+						? deck.allVersions?.find((v) => v.deckstring === selectedVersionDeckstring)
 						: deck;
 				}),
 			);

@@ -162,9 +162,9 @@ export class DecksStateBuilderService {
 		// to always be present
 		const deckForDeckstring = !decks?.length
 			? null
-			: decks.find((d) => d.allVersions.some((v) => v.deckstring === deckstring));
+			: decks.find((d) => d.allVersions?.some((v) => v.deckstring === deckstring));
 		const validDeckstrings = !!deckForDeckstring
-			? deckForDeckstring.allVersions.map((v) => v.deckstring)
+			? deckForDeckstring.allVersions?.map((v) => v.deckstring)
 			: [deckstring];
 		// console.debug('')
 

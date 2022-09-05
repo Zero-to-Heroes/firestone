@@ -117,7 +117,7 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 				if (!selectedVersion) {
 					return deck;
 				}
-				return deck.allVersions.find((v) => v.deckstring === selectedVersion);
+				return deck.allVersions?.find((v) => v.deckstring === selectedVersion);
 			}),
 		);
 		this.replays$ = this.deck$.pipe(this.mapData((deck) => deck?.replays ?? []));
