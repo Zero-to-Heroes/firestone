@@ -19,7 +19,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 	styleUrls: [`../../../css/component/collection/cards.component.scss`, `../../../css/global/scrollbar.scss`],
 	template: `
 		<div class="cards" *ngIf="{ cards: cards$ | async } as value">
-			<div class="show-filter" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
+			<div class="show-filter">
 				<card-rarity-filter></card-rarity-filter>
 				<card-class-filter></card-class-filter>
 				<card-owned-filter></card-owned-filter>
