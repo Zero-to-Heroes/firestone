@@ -7,6 +7,7 @@
 .decktracker-filters {
 	position: relative;
 	display: flex;
+	align-items: center;
 	min-height: 30px;
 	color: var(--secondary-text-color);
 	font-family: Open Sans;
@@ -23,10 +24,9 @@
 	.filter, .filter-info{
 		margin-bottom: 5px;
 	}
-	.filter-dropdown, .search{
+	.filter-dropdown{
 		margin-right: 15px;
 	}
-
 	.filter-info {
 		width: 20px;
 		height: 20px;
@@ -58,8 +58,11 @@
 
 	
 	.filter.search{
-		width: 155px;
-		height: 30px;
+		::ng-deep .decks-search{
+			width: 155px;
+			height: 30px;
+			margin-right: 15px;
+		}
 	}
 }
 
