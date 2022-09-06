@@ -59,7 +59,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 					[toggleFunction]="toggleUseMmrFilter"
 				></preference-toggle>
 			</div>
-			<div class="heroes">
+			<div class="heroes" scrollable>
 				<bgs-hero-tier
 					*ngFor="let tier of stats.tiers || []; trackBy: trackByTierFn"
 					[tier]="tier"

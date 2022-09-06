@@ -21,7 +21,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 		`../../../../../css/component/duels/desktop/secondary/duels-hero-tier-list.component.scss`,
 	],
 	template: `
-		<div class="duels-hero-tier-list" *ngIf="tiers$ | async as tiers">
+		<div class="duels-hero-tier-list" *ngIf="tiers$ | async as tiers" scrollable>
 			<div
 				class="title"
 				[owTranslate]="'app.duels.stats.tier-list-title'"
