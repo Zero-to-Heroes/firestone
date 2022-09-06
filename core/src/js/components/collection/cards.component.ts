@@ -18,18 +18,18 @@ export const DEFAULT_CARD_HEIGHT = 240;
 	selector: 'cards',
 	styleUrls: [`../../../css/component/collection/cards.component.scss`, `../../../css/global/scrollbar.scss`],
 	template: `
-		<div class="cards">
+		<div class="cards" *ngIf="{ cards: cards$ | async } as value">
 			<div class="show-filter">
 				<card-rarity-filter></card-rarity-filter>
 				<card-class-filter></card-class-filter>
 				<card-owned-filter></card-owned-filter>
 			</div>
 
-			<ng-container *ngIf="{ highRes: highRes$ | async } as value">
+			<ng-container *ngIf="{ highRes: highRes$ | async } as highRes">
 				<virtual-scroller
 					#scroll
-					*ngIf="cards$ | async as activeCards; else emptyState"
-					[items]="activeCards"
+					*ngIf="value.cards?.length; else emptyState"
+					[items]="value.cards"
 					bufferAmount="5"
 					class="cards-list"
 					scrollable
@@ -40,7 +40,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 						[style.width.px]="cardWidth"
 						[style.height.px]="cardHeight"
 					>
-						<card-view [card]="card" [highRes]="value.highRes" [showCounts]="true">/</card-view>
+						<card-view [card]="card" [highRes]="highRes.highRes" [showCounts]="true">/</card-view>
 					</li>
 				</virtual-scroller>
 			</ng-container>
