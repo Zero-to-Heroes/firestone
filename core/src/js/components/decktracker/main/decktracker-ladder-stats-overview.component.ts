@@ -86,13 +86,14 @@ export class DecktrackerLadderStatsOverviewComponent
 		return {
 			padding: {
 				top: 0,
-				bottom: 50,
-				left: 90,
-				right: 80,
+				bottom: 10,
+				left: 10,
+				right: 10,
 			},
 			showAllLabels: true,
 			aspectRatio: 1,
 			tooltipFontSize: 16,
+			showLegendBelow: true,
 		};
 	}
 
