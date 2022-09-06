@@ -18,6 +18,10 @@
 			margin-top: 50px;
 		}
 	}
+
+	::ng-deep bgs-opponent-overview-big .triples-section .title {
+		display: none;
+	}
 }
 
 .left {
@@ -58,10 +62,6 @@ bgs-hero-face-off {
 	flex-grow: 0;
 	flex-shrink: 0;
 	display: flex;
-}
-
-::ng-deep bgs-opponent-overview bgs-board .board {
-	top: -4px;
 }
 
 .content {
