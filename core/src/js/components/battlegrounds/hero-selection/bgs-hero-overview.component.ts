@@ -37,18 +37,18 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 					[cardTooltip]="_hero.heroPowerCardId"
 					[cardTooltipClass]="'bgs-hero-select'"
 				></bgs-hero-portrait>
-				<div class="achievements">
+			</div>
+			<div class="achievements">
+				<div
+					class="achievement"
+					*ngFor="let achievement of achievementsToDisplay; let i = index; trackBy: trackByFn"
+					[ngClass]="{ 'completed': achievement.completed }"
+				>
 					<div
-						class="achievement"
-						*ngFor="let achievement of achievementsToDisplay; let i = index; trackBy: trackByFn"
-						[ngClass]="{ 'completed': achievement.completed }"
-					>
-						<div
-							class="icon"
-							inlineSVG="assets/svg/achievements/categories/hearthstone_game.svg"
-							[helpTooltip]="achievement.text"
-						></div>
-					</div>
+						class="icon"
+						inlineSVG="assets/svg/achievements/categories/hearthstone_game.svg"
+						[helpTooltip]="achievement.text"
+					></div>
 				</div>
 			</div>
 			<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
