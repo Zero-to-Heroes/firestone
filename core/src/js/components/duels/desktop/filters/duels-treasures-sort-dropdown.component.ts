@@ -21,10 +21,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
+		`../../../../../css/component/sort-dropdown.component.scss`,
 	],
 	template: `
-		<filter-dropdown
+		<sort-dropdown
 			*ngIf="filter$ | async as value"
 			class="duels-treasures-sort-dropdown"
 			[options]="options"
@@ -32,7 +32,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
 			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		></sort-dropdown>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

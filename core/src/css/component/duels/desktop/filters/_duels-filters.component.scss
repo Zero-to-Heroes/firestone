@@ -18,7 +18,8 @@
 	duels-filter-dropdown,
 	.filter {
 		// So that the margin is not applied if the filter is not displayed (no ng-select element)
-		::ng-deep filter-dropdown ng-select {
+		::ng-deep filter-dropdown ng-select, 
+		::ng-deep sort-dropdown ng-select {
 			margin-bottom: 15px;
 		}
 	}
