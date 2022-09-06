@@ -22,17 +22,17 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/filter-dropdown.component.scss`,
+		`../../../../../css/component/sort-dropdown.component.scss`,
 	],
 	template: `
-		<filter-dropdown
+		<sort-dropdown
 			*ngIf="filter$ | async as value"
 			[options]="value.options"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
 			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		></sort-dropdown>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

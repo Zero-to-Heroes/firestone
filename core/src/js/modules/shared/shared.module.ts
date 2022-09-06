@@ -89,6 +89,7 @@ import { FilterDropdownMultiselectComponent } from '../../components/filter-drop
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
+import { SortDropdownComponent } from '../../components/sort-dropdown.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
@@ -304,6 +305,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		FilterDropdownComponent,
 		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
+		SortDropdownComponent,
 
 		StatCellComponent,
 		ProgressBarComponent,
@@ -444,6 +446,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		FilterDropdownComponent,
 		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
+		SortDropdownComponent,
 
 		StatCellComponent,
 		ProgressBarComponent,
