@@ -123,7 +123,7 @@ export class MatchMetadataParser implements EventParser {
 
 	private buildHero(currentDeck: any): HeroCard {
 		if (!currentDeck || !currentDeck.deck || !currentDeck.deck.heroes || currentDeck.deck.heroes.length === 0) {
-			return null;
+			return HeroCard.create({});
 		}
 		return currentDeck.deck.heroes
 			.map((hero) => this.allCards.getCardFromDbfId(+hero))

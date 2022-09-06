@@ -451,7 +451,7 @@ export class GameStateService {
 		});
 		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES);
 		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED);
-		const newHero: HeroCard = playerDeckWithZonesOrdered.hero.update({
+		const newHero: HeroCard = playerDeckWithZonesOrdered.hero?.update({
 			manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
 		});
 		return playerDeckWithZonesOrdered.update({
