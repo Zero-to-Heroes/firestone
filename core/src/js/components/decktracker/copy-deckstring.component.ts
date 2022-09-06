@@ -24,8 +24,9 @@ declare let amplitude;
 			<svg class="svg-icon-fill">
 				<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
 			</svg>
+
+			<div class="message" *ngIf="!showTooltip || title">{{ copyText || title }}</div>
 		</div>
-		<div class="message" *ngIf="!showTooltip || title">{{ copyText || title }}</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

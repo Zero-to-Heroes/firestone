@@ -27,6 +27,10 @@ export class RankImageComponent {
 			return;
 		}
 
+		if (!value.buildPlayerRankImage) {
+			value = GameStat.create(value);
+		}
+
 		this.playerRank = value.playerRank;
 		this.isLegend = value.playerRank != null ? `${value.playerRank}`?.startsWith('legend') : false;
 		const rankImage = value.buildPlayerRankImage(this.i18n);

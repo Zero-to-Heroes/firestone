@@ -149,7 +149,7 @@ export class SettingsGeneralThirdPartyComponent
 		}),
 		whatNext: this.i18n.translateString('settings.general.third-party.d0nkey.next', {
 			link: `<a href="https://www.d0nkey.top/streamer-instructions" target="_blank">${this.i18n.translateString(
-				'settings.general.third-party.d0nkey.next-link',
+				'settings.general.third-party.d0nkey.instructions-page-link',
 			)}</a>`,
 		}),
 		toggleLabel: this.i18n.translateString('settings.general.third-party.d0nkey.toggle-label'),

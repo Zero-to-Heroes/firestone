@@ -48,8 +48,8 @@
 
 bgs-opponent-overview-big {
 	max-height: 260px;
-	height: 260px;
 	flex-shrink: 0;
+	margin-left: 20px;
 }
 
 bgs-hero-face-off {
@@ -73,7 +73,7 @@ bgs-hero-face-off {
 	// min-height: 0;
 	// overflow: auto;
 	// So that the divine shields are the top are not truncated
-	padding-top: 20px;
+	padding-top: 10px;
 	position: relative;
 	top: 0px;
 }

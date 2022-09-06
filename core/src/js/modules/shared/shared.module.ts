@@ -45,7 +45,12 @@ import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selec
 import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
 import { BgsHeroTribesComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tribes.component';
 import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game/bgs-battle-status.component';
+import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
+import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-offs.component';
+import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
 import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
+import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
+import { BgsQuestRewardsComponent } from '../../components/battlegrounds/in-game/bgs-quest-rewards.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
 import { BgsLeaderboardEmptyCardComponent } from '../../components/battlegrounds/overlay/bgs-leaderboard-empty-card.component';
@@ -90,6 +95,7 @@ import { LoadingStateComponent } from '../../components/loading-state.component'
 import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { ProgressBarComponent } from '../../components/progress-bar.component';
 import { CheckboxComponent } from '../../components/settings/checkbox.component';
+import { DropdownComponent } from '../../components/settings/dropdown.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { ClipboardShareButtonComponent } from '../../components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
@@ -128,6 +134,7 @@ import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 import { ApiRunner } from '../../services/api-runner';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
+import { translationFileVersion } from './translation-file-version';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	suppressScrollX: true,
@@ -136,7 +143,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, 'https://static.firestoneapp.com/data/i18n/', '.json?v=111');
+	return new TranslateHttpLoader(
+		http,
+		'https://static.firestoneapp.com/data/i18n/',
+		!!translationFileVersion?.length ? `.json?v=${translationFileVersion}` : null,
+	);
 }
 
 // Include everything that is needed for both Twitch and the standard app here
@@ -207,6 +218,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
+		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
 
@@ -258,6 +270,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
+		BgsOpponentOverviewComponent,
+		BgsNextOpponentOverviewComponent,
+		BgsHeroFaceOffsComponent,
+		BgsHeroFaceOffComponent,
+		BgsQuestRewardsComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,
@@ -342,6 +359,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PreferenceToggleComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
+		DropdownComponent,
 		NumericInputComponent,
 		PreferenceDropdownComponent,
 
@@ -393,6 +411,11 @@ export function HttpLoaderFactory(http: HttpClient) {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 		BgsHeroOverviewComponent,
+		BgsOpponentOverviewComponent,
+		BgsNextOpponentOverviewComponent,
+		BgsHeroFaceOffsComponent,
+		BgsHeroFaceOffComponent,
+		BgsQuestRewardsComponent,
 
 		BattlegroundsMinionsTiersViewOverlayComponent,
 		BattlegroundsMinionsListComponent,

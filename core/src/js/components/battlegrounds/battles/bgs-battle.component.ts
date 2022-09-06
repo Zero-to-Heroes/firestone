@@ -37,6 +37,7 @@ import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
 import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
+import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest-reward-selection.component';
 
 declare let amplitude;
 @Component({
@@ -70,6 +71,7 @@ declare let amplitude;
 						(entitiesUpdated)="onEntitiesUpdated('opponent', $event)"
 						(portraitChangeRequested)="onPortraitChangeRequested('opponent')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('opponent')"
+						(questRewardChangeRequested)="onQuestRewardChangeRequested('opponent')"
 						(addMinionRequested)="onMinionAddRequested('opponent')"
 						(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
@@ -114,6 +116,7 @@ declare let amplitude;
 						(entitiesUpdated)="onEntitiesUpdated('player', $event)"
 						(portraitChangeRequested)="onPortraitChangeRequested('player')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('player')"
+						(questRewardChangeRequested)="onQuestRewardChangeRequested('player')"
 						(addMinionRequested)="onMinionAddRequested('player')"
 						(updateMinionRequested)="onMinionUpdateRequested('player', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
@@ -215,6 +218,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
+							questRewards: null,
 						},
 					},
 					opponentBoard: {
@@ -226,6 +230,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerId: null,
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
+							questRewards: null,
 						},
 					},
 					options: {
@@ -320,6 +325,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			.control(BgsSimulatorKeyboardControl.OpponentHero, () => this.onPortraitChangeRequested('opponent'))
 			.control(BgsSimulatorKeyboardControl.PlayerHeroPower, () => this.onHeroPowerChangeRequested('player'))
 			.control(BgsSimulatorKeyboardControl.OpponentHeroPower, () => this.onHeroPowerChangeRequested('opponent'))
+			.control(BgsSimulatorKeyboardControl.PlayerQuestReward, () => this.onQuestRewardChangeRequested('player'))
+			.control(BgsSimulatorKeyboardControl.OpponentQuestReward, () =>
+				this.onQuestRewardChangeRequested('opponent'),
+			)
 			.control(BgsSimulatorKeyboardControl.PlayerAddMinion, () => this.onMinionAddRequested('player'))
 			.control(BgsSimulatorKeyboardControl.OpponentAddMinion, () => this.onMinionAddRequested('opponent'));
 	}
@@ -399,6 +408,47 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	onQuestRewardChangeRequested(side: 'player' | 'opponent') {
+		const portal = new ComponentPortal(BgsSimulatorQuestRewardSelectionComponent);
+		const modalRef = this.overlayRef.attach(portal);
+		modalRef.instance.closeHandler = () => {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		};
+		modalRef.instance.currentReward =
+			side === 'player'
+				? (this.player.player.questRewards ?? [])[0]
+				: (this.opponent.player.questRewards ?? [])[0];
+		modalRef.instance.applyHandler = (newQuestRewardId: string) => {
+			this.overlayRef.detach();
+			side === 'player'
+				? this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							playerBoard: {
+								player: {
+									questRewards: [newQuestRewardId] as readonly string[],
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation)
+				: this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							opponentBoard: {
+								player: {
+									questRewards: [newQuestRewardId] as readonly string[],
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation);
+		};
+		this.positionStrategy.apply();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	onHeroPowerChangeRequested(side: 'player' | 'opponent') {
 		const portal = new ComponentPortal(BgsSimulatorHeroPowerSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
@@ -426,7 +476,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						},
 				  } as BgsFaceOffWithSimulation)
 				: this.simulationUpdater(this._faceOff, {
-						opponentCardId: newHeroPowerCardId,
 						battleInfo: {
 							opponentBoard: {
 								player: {
@@ -730,6 +779,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 				);
 				this.processingReposition = false;
 				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
+				this.repositionButtonTooltipKey = 'battlegrounds.sim.reposition-button-tooltip';
 				break;
 			}
 			this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-${ProcessingStatus[
@@ -772,6 +822,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			friendly: true,
 			megaWindfury: entity.getTag(GameTag.MEGA_WINDFURY) === 1,
 			windfury: entity.getTag(GameTag.WINDFURY) === 1,
+			stealth: entity.getTag(GameTag.STEALTH) === 1,
 			poisonous: entity.getTag(GameTag.POISONOUS) === 1,
 			reborn: entity.getTag(GameTag.REBORN) === 1,
 			taunt: entity.getTag(GameTag.TAUNT) === 1,

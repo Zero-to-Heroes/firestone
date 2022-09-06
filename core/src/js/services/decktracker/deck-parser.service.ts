@@ -320,6 +320,7 @@ export class DeckParserService {
 			deckFromMemory.HeroClass,
 			deckDefinition,
 			JSON.stringify(deckDefinition),
+			deckDefinition.cards.map((pair) => pair[0]),
 			deckDefinition.cards.some((pair) => pair[0] == null),
 		);
 		const deckString = deckDefinition.cards.some((pair) => pair[0] == null) ? null : encode(deckDefinition);
@@ -340,13 +341,13 @@ export class DeckParserService {
 			const isDbfId = !isNaN(+cardId);
 			const card = isDbfId ? this.allCards.getCardFromDbfId(+cardId) : this.allCards.getCard(cardId as string);
 			if (!card?.dbfId) {
-				console.warn(
-					'[deck-parser] could not find card for dbfId',
-					cardId,
-					isDbfId,
-					card,
-					this.allCards.getCards()?.length,
-				);
+				// console.warn(
+				// 	'[deck-parser] could not find card for dbfId',
+				// 	cardId,
+				// 	isDbfId,
+				// 	card,
+				// 	this.allCards.getCards()?.length,
+				// );
 			}
 			return card?.dbfId;
 		});

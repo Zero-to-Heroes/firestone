@@ -105,13 +105,19 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				>
 				</sortable-label>
 			</div>
-			<div class="list" scrollable>
+			<div class="list" *ngIf="stats?.length; else searchEmptyState" scrollable>
 				<mercenaries-personal-hero-stat
 					*ngFor="let stat of stats; trackBy: trackByFn"
 					[stat]="stat"
 				></mercenaries-personal-hero-stat>
 			</div>
 		</div>
+		<ng-template #searchEmptyState>
+			<mercenaries-empty-state
+				[title]="'mercenaries.search-empty-state.title' | owTranslate"
+				[subtitle]="'mercenaries.search-empty-state.subtitle' | owTranslate"
+			></mercenaries-empty-state
+		></ng-template>
 		<ng-template #emptyState>
 			<mercenaries-empty-state
 				[subtitle]="'mercenaries.hero-stats.empty-state-subtitle' | owTranslate"
@@ -202,16 +208,16 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.map((chain) => ({
 				...chain,
 				// The last 2 tasks are present in the ref data, but not activated in-game
-				tasks: chain.tasks.slice(0, 18),
+				tasks: chain?.tasks.slice(0, 18) ?? [],
 			}))[0];
-		// debug && console.debug('taskChain', taskChain);
+
 		// Can have only one task per mercenary at the same time
 		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
 		const currentStep = !visitorInfo
 			? null
 			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
-			? Math.min(taskChain.tasks.length, currentTaskStep + 1)
+			? Math.min(taskChain?.tasks?.length ?? 0, currentTaskStep + 1)
 			: Math.max(0, currentTaskStep);
 		// debug && console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
 
@@ -226,7 +232,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			sumOnArray(abilities, (a) => a.coinsToCraft) + sumOnArray(equipments, (e) => e.coinsToCraft);
 		const totalCoinsLeft = memMerc.CurrencyAmount;
 
-		const coinsMissingFromTasks = taskChain.tasks
+		const coinsMissingFromTasks = taskChain?.tasks
 			.filter((task, index) => index >= (currentStep ?? -1))
 			.flatMap((task) => task.rewards)
 			.filter((task) => task)

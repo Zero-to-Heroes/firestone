@@ -28,7 +28,7 @@ export class SelectCollectionSetProcessor implements Processor {
 				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
-				text: selectedSet.name,
+				text: `global.set.${event.setId}`,
 				image: `assets/images/sets/${selectedSet.id}.png`,
 			} as NavigationState),
 		];

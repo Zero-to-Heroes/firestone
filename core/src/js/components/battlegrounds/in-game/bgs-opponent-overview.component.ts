@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 
@@ -33,10 +33,9 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
 				></bgs-board>
-				<div class="filler"></div>
 			</div>
 			<div class="tavern-upgrades">
-				<div class="title" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
+				<div class="title" *ngIf="tavernUpgrades?.length" [owTranslate]="'battlegrounds.in-game.opponents.tavern-last-upgrade-title'"></div>
 				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
@@ -54,6 +53,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 				></div>
 			</div>
 			<!-- <bgs-buddies [buddies]="buddies"></bgs-buddies> -->
+			<bgs-quest-rewards [rewards]="questRewards"></bgs-quest-rewards>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
 				class="last-opponent-icon"
@@ -76,6 +76,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	boardTurn: number;
 	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
+	questRewards: readonly QuestReward[];
 	debug = false;
 	// buddies: readonly number[];
 
@@ -105,6 +106,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
+		this.questRewards = value.questRewards;
 		// this.buddies = value.buddyTurns;
 	}
 

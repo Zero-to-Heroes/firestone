@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-state-builder.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
@@ -25,7 +26,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	],
 	template: `
 		<div class="opponents-popularity">
-			<div class="title">Opponent class breakdown</div>
+			<div class="title" [owTranslate]="'app.decktracker.matchup-info.opponents-popularity-header'"></div>
 			<pie-chart class="opponents-popularity-chart" [data]="pieChartData" [options]="pieChartOptions"></pie-chart>
 		</div>
 		<div class="deck-winrate-matrix">
@@ -117,8 +118,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	pieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
 
-	resetText = 'Reset stats';
-	deleteText = 'Delete deck';
+	resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-button-label');
+	deleteText = this.i18n.translateString('app.decktracker.matchup-info.delete-button-label');
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
@@ -162,11 +163,9 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._deck) {
-			return;
-		}
-		const totalRow: MatchupStat = this.buildTotalRow(this._deck.matchupStats ?? []);
-		this.matchups = [...(this._deck.matchupStats ?? []), totalRow];
+		console.debug('[winrate-matrix] deck ', this._deck);
+		const totalRow: MatchupStat = buildTotalMatchupStats(this._deck?.matchupStats ?? []);
+		this.matchups = [...(this._deck?.matchupStats ?? buildDefaultMatchupStats()), totalRow];
 		this.pieChartData = this.buildPieChartData();
 		this.pieChartOptions = this.buildPieChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -177,14 +176,15 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	private buildPieChartOptions(): InputPieChartOptions {
 		return {
 			padding: {
-				top: 50,
-				bottom: 50,
-				left: 50,
-				right: 100,
+				top: 10,
+				bottom: 10,
+				left: 10,
+				right: 20,
 			},
 			showAllLabels: true,
 			aspectRatio: 1,
 			tooltipFontSize: 16,
+			showLegendBelow: true,
 		};
 	}
 
@@ -197,16 +197,16 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 			};
 		});
 	}
-
-	private buildTotalRow(matchupStats: readonly MatchupStat[]): MatchupStat {
-		return {
-			opponentClass: 'Total',
-			totalGames: matchupStats.map((stat) => stat.totalGames).reduce((a, b) => a + b, 0),
-			totalGamesCoin: matchupStats.map((stat) => stat.totalGamesCoin).reduce((a, b) => a + b, 0),
-			totalGamesFirst: matchupStats.map((stat) => stat.totalGamesFirst).reduce((a, b) => a + b, 0),
-			totalWins: matchupStats.map((stat) => stat.totalWins).reduce((a, b) => a + b, 0),
-			totalWinsCoin: matchupStats.map((stat) => stat.totalWinsCoin).reduce((a, b) => a + b, 0),
-			totalWinsFirst: matchupStats.map((stat) => stat.totalWinsFirst).reduce((a, b) => a + b, 0),
-		};
-	}
 }
+
+export const buildTotalMatchupStats = (matchupStats: readonly MatchupStat[]): MatchupStat => {
+	return {
+		opponentClass: 'Total',
+		totalGames: matchupStats.map((stat) => stat.totalGames).reduce((a, b) => a + b, 0),
+		totalGamesCoin: matchupStats.map((stat) => stat.totalGamesCoin).reduce((a, b) => a + b, 0),
+		totalGamesFirst: matchupStats.map((stat) => stat.totalGamesFirst).reduce((a, b) => a + b, 0),
+		totalWins: matchupStats.map((stat) => stat.totalWins).reduce((a, b) => a + b, 0),
+		totalWinsCoin: matchupStats.map((stat) => stat.totalWinsCoin).reduce((a, b) => a + b, 0),
+		totalWinsFirst: matchupStats.map((stat) => stat.totalWinsFirst).reduce((a, b) => a + b, 0),
+	};
+};

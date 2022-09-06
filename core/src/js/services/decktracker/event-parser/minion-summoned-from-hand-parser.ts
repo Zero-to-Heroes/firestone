@@ -32,13 +32,13 @@ export class MinionSummonedFromHandParser implements EventParser {
 			deck.deckList.length === 0,
 		);
 
-		let newDeck =
-			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
+		let newDeck = deck.deck;
+		// removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
 
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
-		if (removedCard == null && cardId) {
+		if (!removedCard?.cardId && cardId) {
 			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 				newDeck,
 				cardId,
@@ -53,7 +53,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
-		const isOnBoard = refCard && refCard.type === 'Minion';
+		const isOnBoard = refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,

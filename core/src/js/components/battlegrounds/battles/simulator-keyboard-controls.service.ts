@@ -5,6 +5,8 @@ export enum BgsSimulatorKeyboardControl {
 	OpponentHero,
 	PlayerHeroPower,
 	OpponentHeroPower,
+	PlayerQuestReward,
+	OpponentQuestReward,
 	PlayerAddMinion,
 	OpponentAddMinion,
 }
@@ -57,6 +59,10 @@ export class BgsSimulatorKeyboardControls {
 				return 'p';
 			case BgsSimulatorKeyboardControl.OpponentHeroPower:
 				return 'P';
+			case BgsSimulatorKeyboardControl.PlayerQuestReward:
+				return 'r';
+			case BgsSimulatorKeyboardControl.OpponentQuestReward:
+				return 'R';
 			case BgsSimulatorKeyboardControl.PlayerAddMinion:
 				return 'm';
 			case BgsSimulatorKeyboardControl.OpponentAddMinion:

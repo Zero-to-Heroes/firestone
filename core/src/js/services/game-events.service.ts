@@ -339,6 +339,7 @@ export class GameEvents {
 									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
+									immune: gameEvent.Value.AdditionalProps.Immune,
 							  }
 							: {},
 					),
@@ -793,8 +794,19 @@ export class GameEvents {
 				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
-						armorChange: gameEvent.Value.AdditionalProps.ArmorChange,
+						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
 						totalArmor: gameEvent.Value.AdditionalProps.TotalArmor,
+					}),
+				);
+				break;
+			case 'DATA_SCRIPT_CHANGED':
+				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
+						initialData1: gameEvent.Value.AdditionalProps.InitialData1,
+						initialData2: gameEvent.Value.AdditionalProps.InitialData2,
+						dataNum1: gameEvent.Value.AdditionalProps.DataNum1,
+						dataNum2: gameEvent.Value.AdditionalProps.DataNum2,
 					}),
 				);
 				break;
@@ -894,6 +906,7 @@ export class GameEvents {
 					CopiedFromEntityIdGameEvent.build(GameEvent.COPIED_FROM_ENTITY_ID, gameEvent, {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
+						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
 					}),
 				);
 				break;
@@ -1079,6 +1092,7 @@ export class GameEvents {
 								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
 								heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
+								questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
 							},
 							opponentBoard: {
 								cardId: gameEvent.Value.OpponentBoard.CardId,
@@ -1088,6 +1102,7 @@ export class GameEvents {
 								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
 								heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
+								questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
 							},
 						},
 					} as GameEvent),
@@ -1127,6 +1142,40 @@ export class GameEvents {
 							totalBuddies: gameEvent.Value.TotalBuddies,
 						},
 					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_REWARD_REVEALED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_REVEALED, gameEvent, {
+						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
+				);
+				break;
+			case 'BATTLEGROUNDS_REWARD_GAINED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_REWARD_GAINED, gameEvent, {
+						questRewardDbfId: gameEvent.Value.AdditionalProps.QuestRewardDbfId,
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
+				);
+				break;
+			case 'BATTLEGROUNDS_QUEST_REWARD_EQUIPPED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED, gameEvent, {
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
+				);
+				break;
+			case 'BATTLEGROUNDS_QUEST_REWARD_DESTROYED':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED, gameEvent, {
+						isHeroPowerReward: gameEvent.Value.AdditionalProps.IsHeroPowerReward,
+					}),
 				);
 				break;
 			case 'WINNER':

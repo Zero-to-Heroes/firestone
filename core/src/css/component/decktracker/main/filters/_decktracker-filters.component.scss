@@ -14,19 +14,22 @@
 	font-weight: normal;
 	font-size: 13px;
 	flex-grow: 1;
-	margin-right: 20px;
 	margin-bottom: 10px;
 	flex-shrink: 0;
 	z-index: 2;
 	flex-wrap: wrap;
 	max-width: 100%;
 
+	.filter, .filter-info{
+		margin-bottom: 5px;
+	}
+	.filter-dropdown, .search{
+		margin-right: 15px;
+	}
+
 	.filter-info {
 		width: 20px;
 		height: 20px;
-		position: relative;
-		top: 5px;
-		right: -20px;
 		--icon-color: var(--secondary-text-color);
 	}
 
@@ -53,23 +56,10 @@
 		}
 	}
 
-	::ng-deep ng-select {
-		margin-right: 13px;
-	}
-
-	.search {
+	
+	.filter.search{
 		width: 155px;
-		position: relative;
-		top: 1px;
-
-		::ng-deep label {
-			height: 100%;
-
-			.icon {
-				width: 25px;
-				flex-shrink: 0;
-			}
-		}
+		height: 30px;
 	}
 }
 

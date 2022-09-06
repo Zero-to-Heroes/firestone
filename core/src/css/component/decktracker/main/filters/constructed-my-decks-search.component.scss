@@ -2,10 +2,14 @@
 	position: relative;
 	width: 100%;
 
-	label {
-		width: 100%;
+	.search-label {
 		outline: 1px solid var(--color-3);
 		display: flex;
+
+		.icon, .icon svg{
+			width: 30px;
+			height: 30px;
+		}
 
 		&:focus-within,
 		&:hover {
@@ -28,7 +32,7 @@
 		}
 	}
 
-	label.search-active {
+	.search-label.search-active {
 		input {
 			outline: none;
 		}

@@ -41,7 +41,7 @@ export class CollectionCardClassFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		this.options = ['all', ...classes].map((playerClass) => ({
+		this.options = ['all', 'neutral', ...classes].map((playerClass) => ({
 			label: this.i18n.translateString(`global.class.${playerClass}`),
 			value: playerClass,
 		}));

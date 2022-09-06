@@ -426,7 +426,9 @@ export class DeckCardComponent implements OnDestroy {
 				});
 			}
 		} else if (this.creatorCardIds && this.creatorCardIds.length > 1) {
-			this.giftTooltip = this.i18n.translateString('decktracker.gift-created-by-multiple-cards');
+			this.giftTooltip = this.i18n.translateString('decktracker.gift-created-by-single-card', {
+				value: this.creatorCardIds.map((cardId) => this.cards.getCard(cardId).name).join(', '),
+			});
 		}
 	}
 }

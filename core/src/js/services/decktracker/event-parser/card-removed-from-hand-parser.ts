@@ -23,7 +23,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(previousHand, cardId, entityId);
 
 		// See card-played-from-hand
-		const newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
+		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',

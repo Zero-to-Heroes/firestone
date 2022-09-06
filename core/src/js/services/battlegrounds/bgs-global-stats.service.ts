@@ -6,10 +6,10 @@ import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/b
 import { ApiRunner } from '../api-runner';
 
 // The light version doesn't have tribe filtering
-// const BGS_STATS_RETRIEVE_URL =
-// 	'https://static.zerotoheroes.com/api/bgs/heroes/bgs-global-stats-%tribeSuffix%-%timeSuffix%.gz.json';
+const BGS_STATS_RETRIEVE_URL =
+	'https://static.zerotoheroes.com/api/bgs/heroes/bgs-global-stats-%tribeSuffix%-%timeSuffix%.gz.json';
 // Current new process doesn't scale properly, so reverting to the old one for now (without time)
-const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/bgs-global-stats-%tribeSuffix%.gz.json';
+// const BGS_STATS_RETRIEVE_URL = 'https://static.zerotoheroes.com/api/bgs/bgs-global-stats-%tribeSuffix%.gz.json';
 
 @Injectable()
 export class BgsGlobalStatsService {
@@ -20,7 +20,10 @@ export class BgsGlobalStatsService {
 		// we'll just get the full stats instead
 		const tribesSuffix = !tribes?.length || tribes?.length !== 5 ? 'all-tribes' : [...tribes].sort().join('-');
 		const timeSuffix = timePeriod;
-		const url = BGS_STATS_RETRIEVE_URL.replace('%tribeSuffix%', tribesSuffix).replace('%timeSuffix%', timeSuffix);
+		const url = BGS_STATS_RETRIEVE_URL.replace('%tribeSuffix%', tribesSuffix).replace(
+			'%timeSuffix%',
+			this.fixInvalidTimeSuffix(timeSuffix),
+		);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
 		const globalStats = BgsStats.create(result as BgsStats);
 		console.debug('retrieved global stats', globalStats);
@@ -28,5 +31,15 @@ export class BgsGlobalStatsService {
 			console.error('could not load bgs global stats', url, tribes, result);
 		}
 		return globalStats;
+	}
+
+	private fixInvalidTimeSuffix(timeSuffix: string): BgsActiveTimeFilterType {
+		switch (timeSuffix) {
+			case 'past-7':
+				return 'past-seven';
+			case 'past-3':
+				return 'past-three';
+		}
+		return timeSuffix as BgsActiveTimeFilterType;
 	}
 }

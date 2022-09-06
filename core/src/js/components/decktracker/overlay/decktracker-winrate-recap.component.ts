@@ -88,7 +88,7 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 		} else {
 			const readableClass = formatClass(this._stats.opponentClass, this.i18n);
 			this.text = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class', { value: readableClass });
-			this.text = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class-tooltip', {
+			this.tooltip = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class-tooltip', {
 				opponent: readableClass,
 				date: dateFrom,
 			});

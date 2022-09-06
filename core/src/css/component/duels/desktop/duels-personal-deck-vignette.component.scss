@@ -130,18 +130,17 @@
 		position: relative;
 		flex-grow: 0;
 		margin-bottom: 10px;
-		left: 7px;
 		flex-shrink: 0;
 
 		.skin {
 			width: 100%;
-			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 75% 20%, 85% 56%, 85% 100%);
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 		}
 		.frame {
 			position: absolute;
-			top: -8%;
-			left: -16%;
-			width: 120%;
+			top: -16%;
+			left: -17%;
+			width: 134%;
 		}
 	}
 

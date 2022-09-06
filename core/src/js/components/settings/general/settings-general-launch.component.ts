@@ -9,11 +9,12 @@ import { Knob } from '../preference-slider.component';
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/forms.scss`,
+		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/general/settings-general-launch.component.scss`,
 	],
 	template: `
-		<div class="settings-group general-launch">
+		<div class="settings-group general-launch" scrollable>
 			<section class="toggle-label">
 				<preference-toggle
 					field="launchAppOnGameStart"

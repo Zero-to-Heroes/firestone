@@ -102,11 +102,12 @@ body {
 			// padding-left: 30px;
 			padding-right: 14px;
 		}
-
-		.new-card {
-			margin-bottom: 5px;
+		.text-container{
+			display: flex;
+  			flex-direction: column;
+  			justify-content: space-around;
+  			align-items: stretch;
 		}
-
 		.premium-deco {
 			display: none;
 		}
@@ -168,10 +169,6 @@ body {
 		.text {
 			display: flex;
 			flex-direction: column;
-
-			.dust-amount:before {
-				content: '+';
-			}
 		}
 	}
 

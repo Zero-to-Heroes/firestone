@@ -19,7 +19,11 @@ export class SelectDeckDetailsProcessor implements Processor {
 					menuDisplayType: 'breadcrumbs',
 					selectedDeckstring: event.deckstring,
 				} as NavigationDecktracker),
-				text: currentState.decktracker.decks.find((deck) => deck.deckstring === event.deckstring)?.deckName,
+				text: currentState.decktracker.decks.find(
+					(deck) =>
+						deck.deckstring === event.deckstring ||
+						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(event.deckstring),
+				)?.deckName,
 			} as NavigationState),
 		];
 	}

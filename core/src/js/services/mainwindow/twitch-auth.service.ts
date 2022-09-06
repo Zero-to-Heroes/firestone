@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag } from '@firestone-hs/reference-data';
+import { GameTag, SceneMode } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -19,6 +19,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
+import { Preferences } from '../../models/preferences';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -42,6 +43,7 @@ export class TwitchAuthService {
 	private deckEvents = new BehaviorSubject<{ event: string; state: GameState }>(null);
 	private bgEvents = new BehaviorSubject<BattlegroundsState>(null);
 	private twitchAccessToken$: Observable<string>;
+	private streamerPrefs$: Observable<Partial<Preferences>>;
 
 	private twitchDelay = 0;
 
@@ -71,12 +73,30 @@ export class TwitchAuthService {
 				map(([pref]) => pref),
 				distinctUntilChanged(),
 			);
-		combineLatest(this.deckEvents, this.bgEvents, this.twitchAccessToken$)
+		this.streamerPrefs$ = this.store
+			.listenPrefs$(
+				(prefs) => prefs.bgsHideSimResultsOnRecruit,
+				(prefs) => prefs.bgsShowSimResultsOnlyOnRecruit,
+			)
+			.pipe(
+				distinctUntilChanged(),
+				map(([bgsHideSimResultsOnRecruit, bgsShowSimResultsOnlyOnRecruit]) => ({
+					bgsHideSimResultsOnRecruit: bgsHideSimResultsOnRecruit,
+					bgsShowSimResultsOnlyOnRecruit: bgsShowSimResultsOnlyOnRecruit,
+				})),
+			);
+		combineLatest(
+			this.store.listen$(([main, nav]) => main.currentScene),
+			this.deckEvents,
+			this.bgEvents,
+			this.twitchAccessToken$,
+			this.streamerPrefs$,
+		)
 			.pipe(
 				debounceTime(500),
 				distinctUntilChanged(),
-				map(([deckEvent, bgsState, twitchAccessToken]) =>
-					this.buildEvent(deckEvent, bgsState, twitchAccessToken),
+				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
+					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 				),
 				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				delay(this.twitchDelay),
@@ -99,9 +119,11 @@ export class TwitchAuthService {
 	}
 
 	private buildEvent(
+		currentScene: SceneMode,
 		deckEvent: { event: string; state: GameState },
 		bgsState: BattlegroundsState,
 		twitchAccessToken: string,
+		streamerPrefs: Partial<Preferences>,
 	): TwitchEvent {
 		if (!twitchAccessToken) {
 			return null;
@@ -150,9 +172,11 @@ export class TwitchAuthService {
 			  }
 			: null;
 
-		const result = {
+		const result: TwitchEvent = {
+			scene: currentScene,
 			deck: newDeckState,
 			bgs: newBgsState,
+			streamerPrefs: streamerPrefs,
 		};
 		// console.debug('[twitch-auth] built event', result, bgsState);
 		return result;
@@ -164,6 +188,7 @@ export class TwitchAuthService {
 				hand: this.cleanZone(deckState.hand, isBattlegrounds),
 				board: this.cleanZone(deckState.board, isBattlegrounds),
 				heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
+				weapon: this.cleanCard(deckState.weapon, isBattlegrounds),
 			} as DeckState;
 		}
 		const result = {
@@ -242,7 +267,7 @@ export class TwitchAuthService {
 						newEvent,
 					);
 				} else {
-					console.error('[twitch-auth] Could not send deck event to EBS', error);
+					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
 				}
 			},
 		);
@@ -276,6 +301,7 @@ export class TwitchAuthService {
 			currentWinStreak: player.currentWinStreak,
 			lastKnownComposition: player.getLastKnownComposition(),
 			lastKnownBattleHistory: player.getLastKnownBattleHistory(),
+			questRewards: player.questRewards,
 			// buddyTurns: player.buddyTurns,
 		};
 	}
@@ -317,6 +343,7 @@ export class TwitchAuthService {
 			GameTag.POISONOUS,
 			GameTag.PREMIUM,
 			GameTag.REBORN,
+			GameTag.STEALTH,
 			GameTag.TAG_SCRIPT_DATA_NUM_1,
 			GameTag.TAG_SCRIPT_DATA_NUM_2,
 			GameTag.TAUNT,
@@ -419,6 +446,8 @@ export class TwitchAuthService {
 }
 
 export interface TwitchEvent {
+	readonly scene: SceneMode;
 	readonly deck: GameState;
 	readonly bgs: TwitchBgsState;
+	readonly streamerPrefs: Partial<Preferences>;
 }

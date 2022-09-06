@@ -119,7 +119,13 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						...pack,
 						set: sets.find((set) => set.id === pack.setId),
 					}))
-					.filter((pack) => !!pack.set || pack.packType === BoosterType.CLASSIC)
+					.filter(
+						(pack) =>
+							!!pack.set ||
+							pack.packType === BoosterType.CLASSIC ||
+							pack.packType === BoosterType.WILD_PACK ||
+							pack.packType === BoosterType.STANDARD_BUNDLE,
+					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
 					.sort(sortByProperties((pack) => [-pack.set?.launchDate?.getTime() ?? 0]));
 				const mainSetsGroup: InternalPackGroup = {
@@ -198,6 +204,7 @@ const GOLDEN_SET_PACKS = [
 	BoosterType.GOLDEN_THE_BARRENS,
 	BoosterType.GOLDEN_DARKMOON_FAIRE,
 	BoosterType.GOLDEN_ALTERAC_VALLEY,
+	BoosterType.GOLDEN_REVENDRETH,
 ];
 
 const NON_BUYABLE_BOOSTER_IDS = [
@@ -219,9 +226,7 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.STANDARD_WARLOCK,
-	BoosterType.STANDARD_BUNDLE,
 	BoosterType.GOLDEN_STANDARD_BUNDLE,
-	BoosterType.WILD_PACK,
 ];
 
 interface InternalPackGroup {

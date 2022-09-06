@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
@@ -102,11 +103,20 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 			.listen$(
 				([main, nav, prefs]) => main.decktracker.decks,
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
+				([main, nav, prefs]) => nav.navigationDecktracker.selectedVersionDeckstring,
 			)
 			.pipe(
-				this.mapData(([decks, selectedDeckstring]) =>
-					decks.find((deck) => deck?.deckstring === selectedDeckstring),
-				),
+				tap((info) => console.debug('[deck] info', info)),
+				this.mapData(([decks, selectedDeckstring, selectedVersionDeckstring]) => {
+					const deck: DeckSummary = decks.find(
+						(deck) =>
+							deck?.deckstring === selectedDeckstring ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
+					);
+					return !!selectedVersionDeckstring
+						? deck.allVersions.find((v) => v.deckstring === selectedVersionDeckstring)
+						: deck;
+				}),
 			);
 		this.deck$.subscribe((deck) => (this.deckstring = deck?.deckstring));
 		this.info$ = this.deck$.pipe(

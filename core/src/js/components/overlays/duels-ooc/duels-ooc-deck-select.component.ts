@@ -128,10 +128,8 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 						signatureTreasureCardId,
 						'last-patch',
 						'all',
-						patch,
 						null,
-						'all',
-						this.allCards,
+						patch,
 					),
 				);
 				const selectedTopDecks: readonly DuelsDeckWidgetDeck[] = this.buildTopDecks(

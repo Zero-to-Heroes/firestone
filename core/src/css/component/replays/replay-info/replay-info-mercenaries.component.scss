@@ -6,8 +6,8 @@
 			display: flex;
 			align-items: center;
 			width: 325px;
+			height: calc(100% + 20px);
 		}
-		height: calc(100% + 20px);
 	}
 
 	&.show-merc-details {
@@ -32,18 +32,20 @@
 			margin-bottom: 0;
 			margin-right: -5px;
 
-			.icon {
-				position: absolute;
-				top: 11%;
-				left: 13%;
-				width: 76%;
-				height: auto;
-				clip-path: ellipse(35% 44% at 50% 50%);
-			}
+			.portrait {
+				.icon {
+					position: absolute;
+					top: 11%;
+					left: 13%;
+					width: 76%;
+					height: auto;
+					clip-path: ellipse(35% 44% at 50% 50%);
+					z-index: -1;
+				}
 
-			.frame {
-				width: 100%;
-				z-index: 1;
+				.frame {
+					width: 100%;
+				}
 			}
 
 			.equipment {
@@ -110,5 +112,7 @@
 	.player-name {
 		margin-left: 15px;
 		width: auto;
+		min-width: 50px;
+		text-align: center;
 	}
 }

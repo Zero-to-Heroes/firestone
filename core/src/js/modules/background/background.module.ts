@@ -27,7 +27,6 @@ import { DuelsDeckbuilderHeroPowerComponent } from '@components/duels/desktop/de
 import { DuelsDeckbuilderHeroComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-hero.component';
 import { DuelsDeckbuilderSignatureTreasureComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder-signature-treasure.component';
 import { DuelsDeckbuilderComponent } from '@components/duels/desktop/deckbuilder/duels-deckbuilder.component';
-import { DuelsLockedRequirementsFilterDropdownComponent } from '@components/duels/desktop/filters/duels-locked-requirements-filter-dropdown.component';
 import { HeroPowerOverlayComponent } from '@components/overlays/board/hero-power-overlay.component';
 import { OpponentAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/opponent-abyssal-curse-widget-wrapper.component';
 import { PlayerAbyssalCurseWidgetWrapperComponent } from '@components/overlays/counters/player-abyssal-curse-widget-wrapper.component';
@@ -113,11 +112,13 @@ import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegroun
 import { BgsSimulatorMinionSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-selection.component';
 import { BattlegroundsSimulatorMinionTierFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tier-filter-dropdown.component';
 import { BattlegroundsSimulatorMinionTribeFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tribe-filter-dropdown.component';
+import { BgsSimulatorQuestRewardSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-quest-reward-selection.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
+import { BattlegroundsDesktopOverviewComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component';
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
@@ -147,10 +148,6 @@ import { BattlegroundsTierListComponent } from '../../components/battlegrounds/d
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 // import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
-import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
-import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-offs.component';
-import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
-import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
@@ -253,6 +250,7 @@ import { DuelsHeroPowerFilterDropdownComponent } from '../../components/duels/de
 import { DuelsHeroSortDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-sort-dropdown.component';
 import { DuelsLeaderboardGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
 import { DuelsMmrFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-mmr-filter-dropdown.component';
+import { DuelsPassiveFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-passive-filter-dropdown.component';
 import { DuelsSignatureTreasureFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-signature-treasure-filter-dropdown.component';
 import { DuelsStatTypeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-stat-type-filter-dropdown.component';
 import { DuelsTimeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-time-filter-dropdown.component';
@@ -316,7 +314,10 @@ import { MercenariesTeamAbilityComponent } from '../../components/mercenaries/ov
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
-import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
+import {
+	MercenariesTeamRootComponent,
+	MercsTasksListComponent,
+} from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { BgsBannedTribesWidgetWrapperComponent } from '../../components/overlays/bgs-banned-tribes-widget-wrapper.component';
@@ -338,6 +339,8 @@ import { OpponentHeroPowerDamageWidgetWrapperComponent } from '../../components/
 import { OpponentJadeWidgetWrapperComponent } from '../../components/overlays/counters/opponent-jade-widget-wrapper.component';
 import { OpponentLibramWidgetWrapperComponent } from '../../components/overlays/counters/opponent-libram-widget-wrapper.component';
 import { OpponentPogoWidgetWrapperComponent } from '../../components/overlays/counters/opponent-pogo-widget-wrapper.component';
+import { OpponentRelicWidgetWrapperComponent } from '../../components/overlays/counters/opponent-relic-widget-wrapper.component';
+import { OpponentVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/opponent-volatile-skeleton-widget-wrapper.component';
 import { OpponentWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-watchpost-widget-wrapper.component';
 import { PlayerCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-attack-widget-wrapper.component';
 import { PlayerBolnerWidgetWrapperComponent } from '../../components/overlays/counters/player-bolner-widget-wrapper.component';
@@ -349,10 +352,15 @@ import { PlayerFatigueWidgetWrapperComponent } from '../../components/overlays/c
 import { PlayerGalakrondWidgetWrapperComponent } from '../../components/overlays/counters/player-galakrond-widget-wrapper.component';
 import { PlayerHeroPowerDamageWidgetWrapperComponent } from '../../components/overlays/counters/player-hero-power-damage-widget-wrapper.component';
 import { PlayerJadeWidgetWrapperComponent } from '../../components/overlays/counters/player-jade-widget-wrapper.component';
+import { PlayerLadyDarkveinWidgetWrapperComponent } from '../../components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/counters/player-libram-widget-wrapper.component';
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
+import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
+import { PlayerRelicWidgetWrapperComponent } from '../../components/overlays/counters/player-relic-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
+import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
+import { PlayerVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
 import { PlayerWatchpostCounterWidgetWrapperComponent } from '../../components/overlays/counters/player-watchpost-widget-wrapper.component';
 import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/overlays/decktracker-opponent-widget-wrapper.component';
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
@@ -636,17 +644,14 @@ const components = [
 		BattlegroundsContentComponent,
 		BgsHeroSelectionOverviewComponent,
 		// BgsHeroWarbandStatsComponent,
-		BgsNextOpponentOverviewComponent,
-		BgsHeroFaceOffComponent,
-		BgsOpponentOverviewComponent,
 		MenuSelectionBgsComponent,
-		BgsHeroFaceOffsComponent,
 		BgsTavernMinionComponent,
 		BgsBannedTribeComponent,
 		GraphWithSingleValueComponent,
 		BgsBattlesComponent,
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
+		BgsSimulatorQuestRewardSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,
 		BattlegroundsSimulatorMinionTribeFilterDropdownComponent,
 		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
@@ -787,6 +792,7 @@ const components = [
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
+		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsStatsHeroVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
@@ -859,8 +865,8 @@ const components = [
 		DuelsHeroSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
+		DuelsPassiveFilterDropdownComponent,
 		DuelsDustFilterDropdownComponent,
-		DuelsLockedRequirementsFilterDropdownComponent,
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,
 		DuelsHeroPowerFilterDropdownComponent,
@@ -880,6 +886,7 @@ const components = [
 		MercenariesTeamControlBarComponent,
 		MercenariesTeamListComponent,
 		MercenariesTeamMercenaryComponent,
+		MercsTasksListComponent,
 
 		MercenariesDesktopComponent,
 		MercenariesPersonalHeroStatsComponent,
@@ -970,10 +977,15 @@ const components = [
 		PlayerFatigueWidgetWrapperComponent,
 		PlayerAbyssalCurseWidgetWrapperComponent,
 		PlayerElwynnBoarWidgetWrapperComponent,
+		PlayerVolatileSkeletonWidgetWrapperComponent,
+		PlayerRelicWidgetWrapperComponent,
 		PlayerElementalWidgetWrapperComponent,
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
+		PlayerVanessaVanCleefWidgetWrapperComponent,
+		PlayerMurozondTheInfiniteWidgetWrapperComponent,
+		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
 		PlayerCoralKeeperWidgetWrapperComponent,
@@ -989,6 +1001,8 @@ const components = [
 		OpponentAbyssalCurseWidgetWrapperComponent,
 		OpponentHeroPowerDamageWidgetWrapperComponent,
 		OpponentElwynnBoarWidgetWrapperComponent,
+		OpponentVolatileSkeletonWidgetWrapperComponent,
+		OpponentRelicWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentLibramWidgetWrapperComponent,
 
@@ -1055,6 +1069,7 @@ const components = [
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorMinionSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
+		BgsSimulatorQuestRewardSelectionComponent,
 		CurrentSessionBgsBoardTooltipComponent,
 		...components,
 	],

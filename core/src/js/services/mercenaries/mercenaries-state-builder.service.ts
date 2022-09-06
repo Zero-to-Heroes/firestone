@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { MercenarySelector, VillageVisitorType } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
@@ -171,6 +171,7 @@ export interface MercenariesReferenceData {
 			readonly id: number;
 			readonly mercenaryOverrideId: number;
 			readonly title: string;
+			readonly quota: number;
 			readonly description: string;
 			readonly rewards: readonly {
 				readonly type: number;

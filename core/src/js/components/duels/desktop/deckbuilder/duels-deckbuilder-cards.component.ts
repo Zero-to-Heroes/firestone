@@ -100,7 +100,13 @@ export const DEFAULT_CARD_HEIGHT = 221;
 						[tooltip]="'app.duels.deckbuilder.show-buckets-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<div class="results">
-						<virtual-scroller class="cards-container" #scroll [items]="value.activeCards" scrollable>
+						<virtual-scroller
+							class="cards-container"
+							#scroll
+							*ngIf="value.activeCards?.length; else emptyState"
+							[items]="value.activeCards"
+							scrollable
+						>
 							<div
 								*ngFor="let card of scroll.viewPortItems; trackBy: trackByCardId"
 								class="card-container"
@@ -132,7 +138,10 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								</div>
 							</div>
 						</virtual-scroller>
-						<div class="buckets-container" *ngIf="value.showBuckets">
+						<ng-template #emptyState>
+							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
+						</ng-template>
+						<div class="buckets-container" *ngIf="value.showBuckets" scrollable>
 							<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
 								<div class="bucket-name">{{ bucket.bucketName }}</div>
 								<div class="class-images">
@@ -177,6 +186,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 	showRelatedCards$: Observable<boolean>;
 	deckValid$: Observable<boolean>;
 	deckstring$: Observable<string>;
+	searchString$: Observable<string>;
 	ongoingText$: Observable<string>;
 	allowedCards$: Observable<ReferenceCardWithBucket[]>;
 	collection$: Observable<readonly SetCard[]>;
@@ -337,7 +347,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				),
 			);
 
-		const searchString$ = this.searchForm.valueChanges.pipe(
+		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
 		);
@@ -384,7 +394,7 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			),
 		);
 		this.activeCards$ = combineLatest(
-			combineLatest(this.allowedCards$, this.collection$, searchString$, this.currentDeckCards$),
+			combineLatest(this.allowedCards$, this.collection$, this.searchString$, this.currentDeckCards$),
 			combineLatest(cardIdsForMatchingBucketToggles$, allCardIdsInBucketsWithDuplicates$, allBuckets$),
 		).pipe(
 			this.mapData(

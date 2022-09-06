@@ -35,6 +35,9 @@ import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BgsHeroSelectedCardParser } from './event-parser/bgs-hero-selected-card-parser';
+import { BgsRewardDestroyedParser } from './event-parser/bgs-reward-destroyed-parser';
+import { BgsRewardEquippedParser } from './event-parser/bgs-reward-equipped-parser';
+import { BgsRewardRevealedParser } from './event-parser/bgs-reward-revealed-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
@@ -65,6 +68,7 @@ import { CthunParser } from './event-parser/cthun-parser';
 import { CthunRevealedParser } from './event-parser/cthun-revealed-parser';
 import { CustomEffectsParser } from './event-parser/custom-effects-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
+import { DataScriptChangedParser } from './event-parser/data-script-changed-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
@@ -110,6 +114,7 @@ import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
+import { SecretWillTriggerParser } from './event-parser/secret-will-trigger-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { StartOfGameEffectParser } from './event-parser/start-of-game-effect-parser';
 import { TurnDurationUpdatedParser } from './event-parser/turn-duration-updated-parser';
@@ -207,6 +212,13 @@ export class GameStateService {
 			});
 			this.i18n.init();
 		});
+
+		if (process.env.NODE_ENV !== 'production') {
+			window['gameState'] = () => {
+				console.debug(this.state);
+				return this.state;
+			};
+		}
 	}
 
 	// TODO: this should move elsewhere
@@ -295,6 +307,7 @@ export class GameStateService {
 				console.error(
 					'[game-state] Exception while applying parser for non-match event',
 					parser.event(),
+					event,
 					e.message,
 					e.stack,
 					e,
@@ -341,7 +354,7 @@ export class GameStateService {
 					cardId: minion.CardId,
 				})),
 			];
-			console.debug('[game-state] minions will die', this.minionsWillDie);
+			// console.debug('[game-state] minions will die', this.minionsWillDie);
 		}
 
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, {
@@ -399,6 +412,8 @@ export class GameStateService {
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
 			gameEvent.type !== GameEvent.COUNTER_WILL_TRIGGER &&
+			// Sometimes these events are sent even if the cost doesn't actually change
+			gameEvent.type !== GameEvent.COST_CHANGED &&
 			((this.secretWillTrigger?.reactingToCardId &&
 				this.secretWillTrigger.reactingToCardId === gameEvent.cardId) ||
 				(this.secretWillTrigger?.reactingToEntityId &&
@@ -491,7 +506,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 			new CardPlayedByEffectParser(this.helper, this.allCards, this.i18n),
 			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
-			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
+			new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
@@ -515,6 +530,9 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.allCards, this.i18n),
 			new WeaponEquippedParser(this.allCards, this.i18n),
 			new WeaponDestroyedParser(this.helper),
+			new BgsRewardRevealedParser(this.allCards, this.helper, this.i18n),
+			new BgsRewardEquippedParser(this.allCards, this.i18n),
+			new BgsRewardDestroyedParser(this.allCards, this.i18n),
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(
@@ -530,6 +548,7 @@ export class GameStateService {
 			new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckHandler),
+			new SecretWillTriggerParser(this.helper),
 			new SecretTriggeredParser(this.helper),
 			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
 			new QuestDestroyedParser(),
@@ -544,7 +563,7 @@ export class GameStateService {
 			new CustomEffectsParser(this.helper),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
-			new EntityUpdateParser(this.helper, this.i18n),
+			new EntityUpdateParser(this.helper, this.i18n, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards, this.i18n),
 			new DamageTakenParser(),
 			new HeroPowerDamageParser(this.allCards),
@@ -557,6 +576,7 @@ export class GameStateService {
 			new TurnDurationUpdatedParser(),
 			new StartOfGameEffectParser(this.helper, this.allCards, this.i18n),
 			new CostChangedParser(this.helper),
+			new DataScriptChangedParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

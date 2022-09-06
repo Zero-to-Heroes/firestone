@@ -59,7 +59,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 					[toggleFunction]="toggleUseMmrFilter"
 				></preference-toggle>
 			</div>
-			<div class="heroes">
+			<div class="heroes" scrollable>
 				<bgs-hero-tier
 					*ngFor="let tier of stats.tiers || []; trackBy: trackByTierFn"
 					[tier]="tier"
@@ -104,16 +104,21 @@ export class BattlegroundsTierListComponent
 			this.store.listen$(
 				([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
+				([main, nav, prefs]) => main.battlegrounds.globalStats.lastUpdateDate,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		).pipe(
-			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats?.length),
-			map(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => ({
+			filter(
+				([stats, [mmrPercentiles, allTribes, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) =>
+					!!stats?.length,
+			),
+			map(([stats, [mmrPercentiles, allTribes, lastUpdateDate, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,
 				mmrPercentiles: mmrPercentiles,
 				allTribes: allTribes,
+				lastUpdateDate: lastUpdateDate,
 				timeFilter: timeFilter,
 				rankFilter: rankFilter,
 				tribesFilter: tribesFilter,
@@ -164,6 +169,12 @@ export class BattlegroundsTierListComponent
 				const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {
 					totalMatches: totalMatches.toLocaleString('en-US'),
 				});
+				const lastUpdateText = this.i18n.translateString(
+					'battlegrounds.hero-selection.tier-list-title-footer',
+					{
+						lastUpdateDate: new Date(info.lastUpdateDate).toLocaleString(this.i18n.formatCurrentLocale()),
+					},
+				);
 				return {
 					tiers: tiers,
 					totalMatches: totalMatches,
@@ -180,6 +191,7 @@ export class BattlegroundsTierListComponent
 								)}</li>
 								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
 							</ul>
+							<div class="footer">${lastUpdateText}</div>
 						</div>
 					`,
 				};

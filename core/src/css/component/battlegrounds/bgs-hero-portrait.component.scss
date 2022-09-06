@@ -17,18 +17,18 @@
 
 	.icon {
 		position: absolute;
-		top: 0;
+		top: 2%;
 		left: 0;
-		width: 105%;
-		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+		width: 100%;
+		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 	}
 
 	.frame {
 		z-index: 1;
 		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
+		top: -3%;
+		left: -1;
+		width: 103%;
 	}
 
 	.aspect-ratio {
@@ -56,6 +56,35 @@
 		text-align: center;
 		color: var(--color-1);
 		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	}
+}
+
+.quest-reward {
+	position: absolute;
+	bottom: 20px;
+	z-index: 1;
+	width: 10%;
+	height: 10%;
+
+	.image {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		clip-path: ellipse(40% 30% at 50% 55%);
+
+		&.empty-icon {
+			background: var(--color-5);
+		}
+	}
+
+	.frame {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
 	}
 }
 

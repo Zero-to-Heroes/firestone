@@ -7,10 +7,10 @@
 }
 
 .copy-deckstring {
+    display: flex;
+    flex-direction: row;
 	--icon-color: var(--color-6);
 	--icon-color-secondary: var(--color-1);
-	max-width: 20px;
-	max-height: 20px;
 
 	svg {
 		height: 16px;
@@ -20,9 +20,10 @@
 	&:hover {
 		--icon-color: var(--color-1);
 	}
+	.message {
+		font-size: 13px;
+		margin-left: 10px;
+	}
 }
 
-.message {
-	font-size: 13px;
-	margin-left: 10px;
-}
+

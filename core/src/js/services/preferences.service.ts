@@ -620,6 +620,7 @@ export class PreferencesService {
 			name: eventName,
 			preferences: finalPrefs,
 		});
+		return finalPrefs;
 	}
 
 	public async updateRemotePreferences() {

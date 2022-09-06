@@ -27,12 +27,20 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="box-side set-view">
 					<div class="logo-container">
 						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
-						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
+						<span class="text set-name" *ngIf="_displayName" [owTranslate]="setName"></span>
 					</div>
-					<span class="cards-collected" *ngIf="released" helpTooltip="Total non-golden cards collected">
+					<span
+						class="cards-collected"
+						*ngIf="released"
+						[helpTooltip]="'app.collection.sets.total-non-golden-cards' | owTranslate"
+					>
 						{{ _cardSet.ownedLimitCollectibleCards }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
-					<span class="cards-collected premium" *ngIf="released" helpTooltip="Total golden cards collected">
+					<span
+						class="cards-collected premium"
+						*ngIf="released"
+						[helpTooltip]="'app.collection.sets.total-golden-cards' | owTranslate"
+					>
 						{{ getOwnedLimitCollectibleCards() }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
@@ -182,6 +190,7 @@ export class SetComponent implements AfterViewInit {
 
 	@Input() set cardSet(set: Set) {
 		this._cardSet = set;
+		this.setName = `global.set.${set.id}`;
 		this.released = set.allCards && set.allCards.length > 0;
 		if (['classic', 'core', 'legacy', 'demon_hunter_initiate'].includes(set.id)) {
 			this._displayName = true;
@@ -190,6 +199,7 @@ export class SetComponent implements AfterViewInit {
 		this.epicFill = ((10 - this.epicTimer) / 10) * 100;
 		this.legendaryTimer = set.pityTimer?.packsUntilGuaranteedLegendary ?? CollectionManager.LEGENDARY_PITY_TIMER;
 		this.legendaryFill = ((40 - this.legendaryTimer) / 40) * 100;
+		
 	}
 
 	_cardSet: Set;
@@ -199,6 +209,7 @@ export class SetComponent implements AfterViewInit {
 	epicFill = 0;
 	legendaryTimer = 40;
 	legendaryFill = 0;
+	setName : string;
 
 	flip = 'inactive';
 
@@ -253,7 +264,7 @@ export class SetComponent implements AfterViewInit {
 		}
 
 		// No pity timer for mini sets
-		if (sets.find((set) => set.id === this._cardSet.id)?.isMiniSet) {
+		if (sets.find((set) => set.id === this._cardSet.id)?.hidePityTimers) {
 			return;
 		}
 

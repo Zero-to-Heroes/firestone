@@ -59,7 +59,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 				*ngIf="!hidden"
 			>
 				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#bin"></use>
+					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#hide"></use>
 				</svg>
 			</button>
 			<button
@@ -69,7 +69,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 				*ngIf="hidden"
 			>
 				<svg class="svg-icon-fill">
-					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
+					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#show"></use>
 				</svg>
 			</button>
 		</div>
@@ -169,7 +169,8 @@ export class MercenariesPersonalTeamSummaryComponent {
 			month: 'short',
 			day: '2-digit',
 			year: 'numeric',
-		});
+		})
+		.replace(/\s+г\./, ""); //truncate date in russian
 	}
 
 	private getMostFrequentStarterTeam(gamesForTeam: readonly GameStat[]): readonly string[] {

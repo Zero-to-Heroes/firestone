@@ -67,14 +67,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[helpTooltip]="archiveDeckTooltip"
 				(mousedown)="hideDeck($event)"
 				*ngIf="!renaming && !hidden"
-				inlineSVG="assets/svg/bin.svg"
+				inlineSVG="assets/svg/hide.svg"
 			></button>
 			<button
 				class="restore-button"
 				[helpTooltip]="'app.duels.deck-stat.restore-deck-tooltip' | owTranslate"
 				(mousedown)="restoreDeck($event)"
 				*ngIf="!renaming && hidden"
-				inlineSVG="assets/svg/restore.svg"
+				inlineSVG="assets/svg/show.svg"
 			></button>
 			<button
 				class="rename-button"

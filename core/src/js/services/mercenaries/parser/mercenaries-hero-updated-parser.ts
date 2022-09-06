@@ -71,7 +71,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 						level: refTier.tier,
 						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
 						cooldownLeft: Math.max(0, (refCard.mercenaryAbilityCooldown ?? 0) - turnsElapsed),
-						speed: refCard.cost,
+						speed: refCard.cost ?? 0,
 						totalUsed: null,
 						isTreasure: false,
 					});

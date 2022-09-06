@@ -28,7 +28,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				</div>
 			</div>
 
-			<div class="portrait" [cardTooltip]="cardId" cardTooltipPosition="top-right">
+			<div class="portrait" [cardTooltip]="cardId">
 				<img class="icon" [src]="portraitUrl" />
 				<img class="frame" [src]="frameUrl" />
 			</div>
@@ -96,8 +96,8 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 			<div class="abilities">
 				<div class="item" *ngFor="let ability of abilities" [ngClass]="{ 'missing': !ability.owned }">
-					<div class="item-icon" [cardTooltip]="ability.cardId" cardTooltipPosition="top-right">
-						<img class="icon" [src]="ability.artUrl" />
+					<div class="item-icon" [cardTooltip]="ability.cardId">
+						<img class="ability-icon" [src]="ability.artUrl" />
 						<img
 							class="frame"
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png"
@@ -125,8 +125,8 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					*ngFor="let equipment of equipments"
 					[ngClass]="{ 'equipped': equipment.equipped, 'missing': !equipment.owned }"
 				>
-					<div class="item-icon" [cardTooltip]="equipment.cardId" cardTooltipPosition="top-right">
-						<img class="icon" [src]="equipment.artUrl" />
+					<div class="item-icon" [cardTooltip]="equipment.cardId">
+						<img class="equipment-icon" [src]="equipment.artUrl" />
 						<img
 							class="frame"
 							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png"
@@ -196,7 +196,7 @@ export class MercenariesPersonalHeroStatComponent {
 				return {
 					cardId: info.cardId,
 					owned: info.owned,
-					speed: info.speed,
+					speed: info.speed ?? 0,
 					cooldown: info.cooldown,
 					tier: info.tier,
 					artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
@@ -294,14 +294,14 @@ export class MercenariesPersonalHeroStatComponent {
 		const bounties: readonly string[] = value.bountiesWithRewards.map(
 			(bounty) => `
 				<div class="bounty">
-					<div class="bounty-zone">${bounty.bountySetName}</div>
-					<div class="bounty-name">${bounty.bountyName}</div>
+					<div class="bounty-zone" style="white-space: nowrap;">${bounty.bountySetName}</div>
+					<div class="bounty-name" style="white-space: nowrap; overflow: hidden;">${bounty.bountyName}</div>
 				</div>
 			`,
 		);
 		return `
 			<div class="container">
-				<div class="header">Where to farm coins</div>
+				<div class="header"> ${this.i18n.translateString('mercenaries.hero-stats.bounties-to-farm')} </div>
 				${bounties.join('')}
 			</div>
 		`;

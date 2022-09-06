@@ -14,33 +14,38 @@ export class CardStolenParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.debug('[card-stolen] stealing card', gameEvent, currentState);
 		// Ideally ,this should just use the entity tags for the zone instead of
 		// relying on finding the card somewhere
 		const [cardId, , , entityId] = gameEvent.parse();
 
 		const isPlayerStolenFrom = gameEvent.additionalData.newControllerId === gameEvent.opponentPlayer.PlayerId;
-
 		const stolenFromDeck = isPlayerStolenFrom ? currentState.playerDeck : currentState.opponentDeck;
+		console.debug('[card-stolen] isPlayerStolenFrom', isPlayerStolenFrom, stolenFromDeck);
 
 		const cardInHand = this.helper.findCardInZone(stolenFromDeck.hand, null, entityId);
-
+		console.debug('[card-stolen] cardInHand', cardInHand);
 		const cardInBoard = this.helper.findCardInZone(stolenFromDeck.board, null, entityId);
-
+		console.debug('[card-stolen] cardInBoard', cardInBoard);
 		const cardInDeck = this.helper.findCardInZone(stolenFromDeck.deck, null, entityId);
+		console.debug('[card-stolen] cardInDeck', cardInDeck);
 
 		const secret = stolenFromDeck.secrets.find((entity) => entity.entityId === entityId);
 
 		const [stolenHand, removedCardFromHand] = cardInHand
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
 			: [stolenFromDeck.hand, undefined];
+		console.debug('[card-stolen] stolenHand', stolenHand, removedCardFromHand);
 
 		const [stolenBoard] = cardInBoard
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)
 			: [stolenFromDeck.board, undefined];
+		console.debug('[card-stolen] stolenBoard', stolenBoard);
 
 		const [stolenDeck] = cardInDeck
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
 			: [stolenFromDeck.deck, undefined];
+		console.debug('[card-stolen] stolenDeck', stolenDeck);
 
 		const stolenSecrets = stolenFromDeck.secrets.filter((entity) => entity.entityId !== entityId);
 
@@ -54,9 +59,10 @@ export class CardStolenParser implements EventParser {
 			!removedCardFromHand.cardId
 		) {
 			const result = this.helper.removeSingleCardFromZone(stolenDeck, cardId, entityId);
-
+			console.debug('[card-stolen] removedCard', result);
 			newDeck = result[0];
 		}
+
 		const newStolenDeck = Object.assign(new DeckState(), stolenFromDeck, {
 			hand: stolenHand,
 			board: stolenBoard,

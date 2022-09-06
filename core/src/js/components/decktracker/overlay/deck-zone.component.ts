@@ -52,7 +52,7 @@ import { groupByFunction } from '../../../services/utils';
 							[tooltipPosition]="_tooltipPosition"
 							[colorManaCost]="colorManaCost"
 							[showRelatedCards]="showRelatedCards"
-							[showUnknownCards]="showUnknownCards"
+							[showUnknownCards]="showUnknownCards && _showTotalCardsInZone"
 							[showUpdatedCost]="_showUpdatedCost"
 							[showStatsChange]="_showStatsChange"
 							[zone]="_zone"
@@ -102,6 +102,11 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	@Input() set showTotalCardsInZone(value: boolean) {
+		this._showTotalCardsInZone = value;
+		this.refreshZone();
+	}
+
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		this.refreshZone();
@@ -125,10 +130,11 @@ export class DeckZoneComponent implements AfterViewInit {
 	_collection: readonly SetCard[];
 	_showUpdatedCost = true;
 	_darkenUsedCards = true;
+	_showTotalCardsInZone = true;
 	className: string;
 	zoneName: string;
 	showWarning: boolean;
-	cardsInZone = 0;
+	cardsInZone = '0';
 	cardSections: readonly DeckZoneSection[] = [];
 	// cards: readonly VisualDeckCard[];
 	open = true;
@@ -179,7 +185,7 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.className = this._zone.id;
 		this.zoneName = this._zone.name;
 		this.showWarning = this._zone.showWarning;
-		this.cardsInZone = this._zone.numberOfCards;
+		this.cardsInZone = this._showTotalCardsInZone ? `${this._zone.numberOfCards}` : '-';
 
 		this.cardSections = this._zone.sections.map((section) => {
 			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards);

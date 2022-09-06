@@ -3,7 +3,7 @@ import { Season } from './_season';
 
 export class Season5 implements Season {
 	public readonly startDate: Date = new Date(2022, 4, 5);
-	public readonly endDate: Date = new Date(2022, 10, 8);
+	public readonly endDate: Date = new Date(2022, 7, 1);
 	public readonly bonusXp = 1500;
 	public readonly xpPerLevel: Map<number, number> = Map([
 		[1, 0],

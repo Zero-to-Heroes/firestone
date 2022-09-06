@@ -4,12 +4,18 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { CardsFacadeService } from '../../cards-facade.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { addAdditionalAttribues } from './receive-card-in-hand-parser';
 
 export class EntityUpdateParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.ENTITY_UPDATE;
@@ -29,16 +35,24 @@ export class EntityUpdateParser implements EventParser {
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
 			cardInHand &&
-			cardInHand.cardId !== cardId &&
+			// I Don't know why this was introduced. Keeping this prevents some cards to be updated when we do get some
+			// additional information about the card, like for Abyssal Curses
+			// cardInHand.cardId !== cardId &&
 			// Introduced for Lorewalker Cho
 			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
 
 		const newCardInHand = shouldShowCardIdInHand
-			? cardInHand.update({
-					cardId: cardId,
-					cardName: this.i18n.getCardName(cardId),
-			  } as DeckCard)
+			? addAdditionalAttribues(
+					cardInHand.update({
+						cardId: cardId,
+						cardName: this.i18n.getCardName(cardId),
+					} as DeckCard),
+					deck,
+					gameEvent,
+					this.allCards,
+			  )
 			: null;
+		// console.debug('[entity-update] newCardInHand', newCardInHand, shouldShowCardIdInHand, cardInHand, gameEvent);
 
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId

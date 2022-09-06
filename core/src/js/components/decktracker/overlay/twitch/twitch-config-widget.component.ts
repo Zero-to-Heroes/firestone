@@ -10,6 +10,7 @@ import { TwitchPreferences } from '@components/decktracker/overlay/twitch/twitch
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { from, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { DropdownOption } from '../../../settings/dropdown.component';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 
 @Component({
@@ -93,13 +94,32 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 							[value]="prefs.showBattleSimulator"
 							(valueChanged)="onShowBattleSimulatorChanged(prefs, $event)"
 						></checkbox>
-						<checkbox
+						<dropdown
 							class="item indented"
+							[options]="autoTrueFalseOptions"
 							[label]="'twitch.hide-battle-odds-in-combat' | owTranslate"
 							[labelTooltip]="'twitch.hide-battle-odds-in-combat-tooltip' | owTranslate"
 							[disabled]="!prefs.showBattleSimulator"
 							[value]="prefs.hideBattleOddsInCombat"
 							(valueChanged)="onHideBattleOddsInCombatChanged(prefs, $event)"
+						>
+						</dropdown>
+						<dropdown
+							class="item indented"
+							[options]="autoTrueFalseOptions"
+							[label]="'twitch.hide-battle-odds-in-tavern' | owTranslate"
+							[labelTooltip]="'twitch.hide-battle-odds-in-tavern-tooltip' | owTranslate"
+							[disabled]="!prefs.showBattleSimulator"
+							[value]="prefs.hideBattleOddsInTavern"
+							(valueChanged)="onHideBattleOddsInTavernChanged(prefs, $event)"
+						></dropdown>
+						<checkbox
+							class="item indented"
+							[label]="'twitch.hide-battle-odds-when-empty' | owTranslate"
+							[labelTooltip]="'twitch.hide-battle-odds-when-empty-tooltip' | owTranslate"
+							[disabled]="!prefs.showBattleSimulator"
+							[value]="prefs.hideBattleOddsWhenEmpty"
+							(valueChanged)="onHideBattleOddsWhenEmptyChanged(prefs, $event)"
 						></checkbox>
 					</div>
 				</section>
@@ -115,6 +135,22 @@ export class TwitchConfigWidgetComponent
 	extends AbstractSubscriptionTwitchResizableComponent
 	implements AfterContentInit {
 	prefs$: Observable<TwitchPreferences>;
+
+	autoTrueFalseOptions: readonly DropdownOption[] = [
+		{
+			value: null,
+			label: 'Auto',
+			tooltip: 'Use streamer defaults',
+		},
+		{
+			value: 'true',
+			label: 'Yes',
+		},
+		{
+			value: 'false',
+			label: 'No',
+		},
+	];
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -183,9 +219,21 @@ export class TwitchConfigWidgetComponent
 		this.prefs.savePrefs(newPrefs);
 	}
 
-	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: boolean) {
+	onHideBattleOddsInCombatChanged(prefs: TwitchPreferences, value: 'auto' | 'true' | 'false') {
 		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInCombat: value };
 		console.log('changing hideBattleOddsInCombat pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHideBattleOddsInTavernChanged(prefs: TwitchPreferences, value: 'auto' | 'true' | 'false') {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsInTavern: value };
+		console.log('changing hideBattleOddsInTavern pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onHideBattleOddsWhenEmptyChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsWhenEmpty: value };
+		console.log('changing hideBattleOddsWhenEmpty pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortByProperties } from '@services/utils';
 import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
+import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { DeckCard } from '../models/decktracker/deck-card';
 import { DeckState } from '../models/decktracker/deck-state';
 import { GameState } from '../models/decktracker/game-state';
@@ -13,6 +14,7 @@ import { AchievementsMonitor } from './achievement/achievements-monitor.service'
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
+import { CardNotificationsService } from './collection/card-notifications.service';
 import { SetsService } from './collection/sets-service.service';
 import { DeckHandlerService } from './decktracker/deck-handler.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
@@ -23,6 +25,7 @@ import { GameEvents } from './game-events.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
+import { PreferencesService } from './preferences.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 
@@ -45,6 +48,8 @@ export class DevService {
 		private memoryService: MemoryInspectionService,
 		private handler: DeckHandlerService,
 		private allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly cardNotification: CardNotificationsService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -53,25 +58,10 @@ export class DevService {
 	}
 
 	private addTestCommands() {
-		// window['addGame'] = () => {
-		// 	const reviewId = 'gagaga' + uuid();
-		// 	const game: GameForUpload = new GameForUpload();
-		// 	game.gameMode = 'battlegrounds';
-		// 	const player: Player = new Player();
-		// 	player.hero = 'BG20_HERO_101';
-		// 	game.player = player;
-		// 	game.additionalResult = '2';
-		// 	game.uncompressedXmlReplay = replayXml;
-		// 	const info: ManastormInfo = {
-		// 		type: 'new-review',
-		// 		reviewId: reviewId,
-		// 		replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
-		// 		game: game,
-		// 	};
-		// 	console.debug('sending', info);
-		// 	this.events.broadcast(Events.REVIEW_FINALIZED, info);
-		// };
-		// this.addCollectionCommands();
+		window['clearDeckVersions'] = async () => {
+			const prefs = await this.prefs.getPreferences();
+			await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: [] });
+		};
 		this.addAchievementCommands();
 		// this.addCustomLogLoaderCommand();
 		// window['arena'] = async () => {
@@ -116,6 +106,13 @@ export class DevService {
 			} as Challenge);
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
+		};
+		window['showCardNotification'] = (
+			cardId = 'GVG_118',
+			isSecondCopy = false,
+			type: CollectionCardType = 'GOLDEN',
+		) => {
+			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 		window['showMatchStatsNotification'] = () => {
 			this.events.broadcast(
@@ -230,27 +227,6 @@ export class DevService {
 			console.debug(deckstring);
 			console.debug(decode(deckstring));
 		};
-		window['grantAchievement'] = async (id) => {
-			const challenges = await this.achievementLoader.getChallengeModules();
-			const challenge = challenges.find((chal) => chal.achievementId === id);
-			this.achievementsMonitor['sendUnlockEvent'](challenge);
-		};
-		// window['addReplayInfos'] = async () => {
-		// 	const achievements = await this.storage.loadAchievements();
-		// 	const achievement = achievements.filter(ach => ach.replayInfo && ach.replayInfo.length > 0)[0];
-		// 	const newReplays = [
-		// 		...achievement.replayInfo,
-		// 		achievement.replayInfo[0],
-		// 		achievement.replayInfo[0],
-		// 		achievement.replayInfo[0],
-		// 		achievement.replayInfo[0],
-		// 		achievement.replayInfo[0],
-		// 		achievement.replayInfo[0],
-		// 	];
-		// 	const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, newReplays);
-		// 	const updated = await this.storage.saveAchievement(newAchievement);
-		// 	console.debug('added lots of replays to achievement', updated.id, updated);
-		// };
 	}
 
 	private async loadEvents(events: any, awaitEvents: boolean, deckstring?: string, timeBetweenEvents?: number) {

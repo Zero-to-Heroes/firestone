@@ -26,7 +26,7 @@ export class SelectAchievementCategoryProcessor implements Processor {
 				: [],
 			selectedAchievementId: undefined,
 		} as NavigationAchievements);
-		const text = hierarchy.map((cat) => cat.name).join(' ');
+		const text = hierarchy.map((cat) => cat.name).join(' › ');
 		return [
 			null,
 			navigationState.update({

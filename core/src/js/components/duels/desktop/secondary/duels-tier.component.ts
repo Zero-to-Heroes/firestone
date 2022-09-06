@@ -10,7 +10,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	],
 	template: `
 		<div class="duels-tier">
-			<div class="header {{ label?.toLowerCase() }}" [helpTooltip]="tooltip">
+			<div class="header {{ label?.toLowerCase() }}" [helpTooltip]="tooltip" [helpTooltipPosition]="'top'">
 				{{ label }}
 			</div>
 			<div class="items">

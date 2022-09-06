@@ -37,6 +37,7 @@ import { SetCard } from '../../../models/set';
 				[showTopCardsSeparately]="_showTopCardsSeparately"
 				[showBottomCardsSeparately]="_showBottomCardsSeparately"
 				[side]="side"
+				[showTotalCardsInZone]="showTotalCardsInZone"
 				[collection]="collection"
 				(cardClicked)="onCardClicked($event)"
 			></deck-zone>
@@ -53,6 +54,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() showStatsChange: boolean;
+	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent';
 	@Input() collection: readonly SetCard[];
 

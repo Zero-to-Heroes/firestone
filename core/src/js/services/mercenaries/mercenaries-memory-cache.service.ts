@@ -119,9 +119,11 @@ export class MercenariesMemoryCacheService {
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
 		if (
-			!newMercenariesInfo ||
-			(areDeepEqual(newMercenariesInfo, this.previousCollectionInfo) &&
-				areDeepEqual(savedVisitorsInfo, this.previousVisitorsInfo))
+			!newMercenariesInfo
+			// It's better to have a few more cycles recomputing the info than showing nothing when the memory
+			// reading glitches out
+			// || (areDeepEqual(newMercenariesInfo, this.previousCollectionInfo) &&
+			// 	areDeepEqual(savedVisitorsInfo, this.previousVisitorsInfo))
 		) {
 			console.debug(
 				'[merc-memory] no new info',

@@ -77,6 +77,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				this.mapData(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					const result = this.buildTiers(cardsInGame);
+					console.debug(
+						'minions list',
+						cardsInGame,
+						result,
+						cardsInGame.filter((c) => c.name?.toLowerCase()?.includes('menace')),
+					);
 					return result;
 				}),
 			);

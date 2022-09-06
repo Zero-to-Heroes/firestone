@@ -5,6 +5,7 @@ import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.t
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -22,8 +23,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					*ngFor="let deck of decks; trackBy: trackByDeckId"
 					cdkDropList
 					cdkDrop
-					(cdkDropListEntered)="dragEnter($event, deck)"
-					(cdkDropListDropped)="drop($event, deck)"
+					(cdkDropListDropped)="drop($event)"
 					[cdkDropListData]="decks"
 					[cdkDropListSortingDisabled]="true"
 					[ngClass]="{
@@ -96,7 +96,8 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			this.store.listenPrefs$((prefs) => prefs.constructedDecksSearchString),
 		).pipe(
 			this.mapData(([[decks, sort], [search]]) => {
-				return (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
+				// console.debug('[deck] updating decks', decks);
+				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
 						(deck) =>
 							!search?.length ||
@@ -105,6 +106,8 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
 					)
 					.sort(this.getSortFunction(sort));
+				// console.debug('[deck] after update', result);
+				return result;
 			}),
 		);
 
@@ -190,10 +193,27 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		event.stopPropagation();
 	}
 
-	drop(event: CdkDragDrop<DeckSummary[]>, droppedOn: DeckSummary) {
+	drop(event: CdkDragDrop<DeckSummary[]>) {
+		if (!this.currentlyMousedOverDeck.value) {
+			return;
+		}
+
+		const droppedOn: DeckSummary = event.container.data.find(
+			(deck) => deck.deckstring === this.currentlyMousedOverDeck.value,
+		);
 		const dragged: DeckSummary = event.item.data;
-		console.debug('dropping', event, droppedOn);
-		// this.store.send(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
+		// console.debug(
+		// 	'dropping',
+		// 	dragged.deckName,
+		// 	droppedOn.deckName,
+		// 	dragged.deckstring,
+		// 	droppedOn.deckstring,
+		// 	event,
+		// 	droppedOn,
+		// );
+		if (dragged.deckstring !== droppedOn.deckstring) {
+			this.store.send(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
+		}
 	}
 
 	deckDragStart(event, deck: DeckSummary) {
@@ -201,11 +221,17 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 	}
 
 	deckDragRelease(event, deck: DeckSummary) {
+		// console.debug('released drag', deck.deckName, deck);
 		this.currentlyDraggedDeck.next(null);
 	}
 
-	mouseEnterDeck(deck: DeckSummary) {
-		this.currentlyMousedOverDeck.next(deck.deckstring);
+	mouseEnterDeck(deck: InternalDeckSummary) {
+		// console.debug('mousing over', deck.deckName, deck);
+		if (deck.isValidMergingTarget) {
+			this.currentlyMousedOverDeck.next(deck.deckstring);
+		} else {
+			this.currentlyMousedOverDeck.next(null);
+		}
 	}
 
 	mouseLeaveDeck(deck: DeckSummary) {

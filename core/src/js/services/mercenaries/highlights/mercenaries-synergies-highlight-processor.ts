@@ -50,6 +50,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.AvatarOfStormpike3Lettuce:
 		case CardIds.AvatarOfStormpike4Lettuce:
 			return dwarf;
+		case CardIds.AzsharanInfluence1Lettuce:
+		case CardIds.AzsharanInfluence2Lettuce:
+		case CardIds.AzsharanInfluence3Lettuce:
+		case CardIds.AzsharanInfluence4Lettuce:
+		case CardIds.AzsharanInfluence5Lettuce:
+			return or(dealsDamage, naga);
 		case CardIds.BannerOfTheHorde1Lettuce:
 		case CardIds.BannerOfTheHorde2Lettuce:
 		case CardIds.BannerOfTheHorde3Lettuce:
@@ -98,6 +104,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.CenarionSurge4Lettuce:
 		case CardIds.CenarionSurge5Lettuce:
 			return nature;
+		case CardIds.ChilledToTheBone1Lettuce:
+		case CardIds.ChilledToTheBone2Lettuce:
+		case CardIds.ChilledToTheBone3Lettuce:
+		case CardIds.ChilledToTheBone4Lettuce:
+		case CardIds.ChilledToTheBone5Lettuce:
+			return freeze;
 		case CardIds.ChromaticDragonflight1Lettuce:
 		case CardIds.ChromaticDragonflight2Lettuce:
 		case CardIds.ChromaticDragonflight3Lettuce:
@@ -111,12 +123,24 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return dragon;
 		case CardIds.CondemnLettuce:
 			return holy;
+		case CardIds.CorruptedPower1Lettuce:
+		case CardIds.CorruptedPower2Lettuce:
+		case CardIds.CorruptedPower3Lettuce:
+		case CardIds.CorruptedPower4Lettuce:
+		case CardIds.CorruptedPower5Lettuce:
+			return oldgod;
 		case CardIds.DarkShamanCowl1Lettuce:
 		case CardIds.DarkShamanCowl2Lettuce:
 		case CardIds.DarkShamanCowl3Lettuce:
 		case CardIds.DarkShamanCowl4Lettuce:
 		case CardIds.DarkShamanCowl5Lettuce:
 			return horde;
+		case CardIds.DeceivingFire1Lettuce:
+		case CardIds.DeceivingFire2Lettuce:
+		case CardIds.DeceivingFire3Lettuce:
+		case CardIds.DeceivingFire4Lettuce:
+		case CardIds.DeceivingFire5Lettuce:
+			return pirate;
 		case CardIds.Demonfire1Lettuce:
 		case CardIds.Demonfire2Lettuce:
 		case CardIds.Demonfire3Lettuce:
@@ -246,6 +270,9 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FrostStaff4Lettuce:
 		case CardIds.FrostStaff5Lettuce:
 			return and(frost, dealsDamage);
+		case CardIds.GiveInToYourRage1Lettuce:
+		case CardIds.GiveInToYourRage2Lettuce:
+			return oldgod;
 		case CardIds.HeroicLeap1Lettuce:
 		case CardIds.HeroicLeap2Lettuce:
 		case CardIds.HeroicLeap3Lettuce:
@@ -296,6 +323,9 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return fire;
 		case CardIds.KittyRideLettuce:
 			return or(dragon, beast);
+		case CardIds.LeechingPoison1Lettuce:
+		case CardIds.LeechingPoison2Lettuce:
+			return bleed;
 		case CardIds.LifebindersLocket1Lettuce:
 		case CardIds.LifebindersLocket2Lettuce:
 		case CardIds.LifebindersLocket3Lettuce:
@@ -413,6 +443,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SearingStrike4Lettuce:
 		case CardIds.SearingStrike5Lettuce:
 			return fire;
+		case CardIds.SecretOfTheNaga1Lettuce:
+		case CardIds.SecretOfTheNaga2Lettuce:
+		case CardIds.SecretOfTheNaga3Lettuce:
+		case CardIds.SecretOfTheNaga4Lettuce:
+			return naga;
 		case CardIds.Shadowflame1Lettuce_LT22_011P3_01:
 		case CardIds.Shadowflame2Lettuce_LT22_011P3_02:
 		case CardIds.Shadowflame3Lettuce_LT22_011P3_03:
@@ -496,6 +531,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.TheBeastWithin4Lettuce:
 		case CardIds.TheBeastWithin5Lettuce:
 			return beast;
+		case CardIds.ToxicVenom1Lettuce:
+		case CardIds.ToxicVenom2Lettuce:
+		case CardIds.ToxicVenom3Lettuce:
+		case CardIds.ToxicVenom4Lettuce:
+			return nature;
 		case CardIds.TreasureChest1Lettuce:
 		case CardIds.TreasureChest2Lettuce:
 		case CardIds.TreasureChest3Lettuce:
@@ -513,6 +553,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.VelensBlessing3Lettuce:
 		case CardIds.VelensBlessing4Lettuce:
 		case CardIds.VelensBlessing5Lettuce:
+			return holy;
+		case CardIds.VolleyOfLight1Lettuce:
+		case CardIds.VolleyOfLight2Lettuce:
+		case CardIds.VolleyOfLight3Lettuce:
+		case CardIds.VolleyOfLight4Lettuce:
+		case CardIds.VolleyOfLight5Lettuce:
 			return holy;
 		case CardIds.WarchiefsBlessing1Lettuce:
 		case CardIds.WarchiefsBlessing2Lettuce:
@@ -534,24 +580,26 @@ const or = (...selectors: HighlightSelector[]): HighlightSelector => {
 };
 
 const race = (card: ReferenceCard, race: Race) => Race[race] === card.race?.toUpperCase();
-const orc = (card: ReferenceCard) => race(card, Race.ORC);
-const troll = (card: ReferenceCard) => race(card, Race.TROLL);
-const tauren = (card: ReferenceCard) => race(card, Race.TAUREN);
-const undead = (card: ReferenceCard) => race(card, Race.UNDEAD);
-const bloodelf = (card: ReferenceCard) => race(card, Race.BLOODELF);
-const horde = or(orc, troll, tauren, undead, bloodelf);
-const human = (card: ReferenceCard) => race(card, Race.HUMAN);
-const dwarf = (card: ReferenceCard) => race(card, Race.DWARF);
-const gnome = (card: ReferenceCard) => race(card, Race.GNOME);
-const nightelf = (card: ReferenceCard) => race(card, Race.NIGHTELF);
-const draenei = (card: ReferenceCard) => race(card, Race.DRAENEI);
-const alliance = or(human, dwarf, gnome, nightelf, draenei);
-const dragon = (card: ReferenceCard) => race(card, Race.DRAGON);
-const murloc = (card: ReferenceCard) => race(card, Race.MURLOC);
-const elemental = (card: ReferenceCard) => race(card, Race.ELEMENTAL);
 const beast = (card: ReferenceCard) => race(card, Race.BEAST);
+const bloodelf = (card: ReferenceCard) => race(card, Race.BLOODELF);
 const demon = (card: ReferenceCard) => race(card, Race.DEMON);
+const draenei = (card: ReferenceCard) => race(card, Race.DRAENEI);
+const dragon = (card: ReferenceCard) => race(card, Race.DRAGON);
+const dwarf = (card: ReferenceCard) => race(card, Race.DWARF);
+const elemental = (card: ReferenceCard) => race(card, Race.ELEMENTAL);
+const gnome = (card: ReferenceCard) => race(card, Race.GNOME);
+const human = (card: ReferenceCard) => race(card, Race.HUMAN);
+const murloc = (card: ReferenceCard) => race(card, Race.MURLOC);
+const naga = (card: ReferenceCard) => race(card, Race.NAGA);
+const nightelf = (card: ReferenceCard) => race(card, Race.NIGHTELF);
 const pirate = (card: ReferenceCard) => race(card, Race.PIRATE);
+const orc = (card: ReferenceCard) => race(card, Race.ORC);
+const oldgod = (card: ReferenceCard) => race(card, Race.OLDGOD);
+const tauren = (card: ReferenceCard) => race(card, Race.TAUREN);
+const troll = (card: ReferenceCard) => race(card, Race.TROLL);
+const undead = (card: ReferenceCard) => race(card, Race.UNDEAD);
+const alliance = or(human, dwarf, gnome, nightelf, draenei);
+const horde = or(orc, troll, tauren, undead, bloodelf);
 
 const spellSchool = (card: ReferenceCard, spellSchool: SpellSchool) =>
 	SpellSchool[spellSchool] === card.spellSchool?.toUpperCase();
@@ -564,12 +612,13 @@ const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
 const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 
 const hasMechanic = (card: ReferenceCard, mechanic: GameTag) => (card?.mechanics ?? []).includes(GameTag[mechanic]);
-const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
+const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.BLEED);
 const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_SHIELD);
+const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
 const stealth = (card: ReferenceCard) => hasMechanic(card, GameTag.STEALTH);
+const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
 
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
 const dealsDamage = (card: ReferenceCard) =>
 	true || hasText(card, /deal \$?\{?\#?\d+\}? damage/) || hasText(card, /restore \$?\{?\#?\d+\}? health/);
-const freeze = (card: ReferenceCard) => hasText(card, /freeze/);

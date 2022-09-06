@@ -12,7 +12,6 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 			</div>
 		</div>
 	`,
-	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementProgressBarComponent {

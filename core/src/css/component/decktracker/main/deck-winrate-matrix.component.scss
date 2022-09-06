@@ -7,7 +7,7 @@
 
 .opponents-popularity {
 	width: calc(100% - var(--winrate-matrix-min-width));
-	max-width: 500px;
+	max-width: 350px;
 	display: flex;
 	flex-direction: column;
 	font-family: Open Sans;
@@ -17,7 +17,7 @@
 		font-size: 20px;
 		text-align: center;
 		position: relative;
-		top: 50px;
+		margin-top: 40px;
 	}
 
 	.opponents-popularity-chart {
@@ -50,6 +50,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		text-align: center;
 
 		&.class {
 			flex-grow: 1;
@@ -168,11 +169,5 @@ deck-matchup-info {
 				}
 			}
 		}
-	}
-}
-
-@media (max-width: 1500px) {
-	.opponents-popularity {
-		display: none;
 	}
 }

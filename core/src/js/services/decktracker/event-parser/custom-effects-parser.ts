@@ -10,6 +10,11 @@ const SUPPORTED_EFFECTS = [
 		cardId: CardIds.RunedMithrilRod,
 		effect: 'ReuseFX_Generic_HandAE_FriendlySide_Purple_ScaleUp_Super',
 	},
+	// Relic improvement
+	{
+		cardId: null,
+		effect: 'REVFX_Relics_RestOfGameAE_Super',
+	},
 ];
 
 export class CustomEffectsParser implements EventParser {
@@ -24,7 +29,7 @@ export class CustomEffectsParser implements EventParser {
 		const effect = SUPPORTED_EFFECTS.find(
 			(e) =>
 				e.effect === gameEvent.additionalData?.prefabId &&
-				(e.cardId === cardId || e.cardId === gameEvent.additionalData.parentCardId),
+				(!e.cardId || e.cardId === cardId || e.cardId === gameEvent.additionalData.parentCardId),
 		);
 		if (!effect) {
 			return currentState;
@@ -34,6 +39,10 @@ export class CustomEffectsParser implements EventParser {
 			case CardIds.RunedMithrilRod:
 				return this.handleRunedMithrilRod(currentState, gameEvent);
 			default:
+				switch (effect.effect) {
+					case 'REVFX_Relics_RestOfGameAE_Super':
+						return this.handleRelicsImprovement(currentState, gameEvent);
+				}
 				return currentState;
 		}
 	}
@@ -57,6 +66,18 @@ export class CustomEffectsParser implements EventParser {
 			);
 		}
 		return newState;
+	}
+
+	private handleRelicsImprovement(currentState: GameState, gameEvent: GameEvent): GameState {
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const newDeck = deck.update({
+			relicsPlayedThisMatch: deck.relicsPlayedThisMatch + 1,
+		});
+		return currentState.update({
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
+		});
 	}
 
 	event(): string {

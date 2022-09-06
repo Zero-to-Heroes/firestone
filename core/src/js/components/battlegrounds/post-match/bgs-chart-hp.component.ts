@@ -487,7 +487,7 @@ export class BgsChartHpComponent {
 				.filter((info) => info.turnDeath === 99)
 				.filter((info) =>
 					info.playerCardId === CardIds.PatchwerkBattlegrounds
-						? info.lastKnownHp === 55
+						? info.lastKnownHp === 60
 						: info.lastKnownHp === 40,
 				)
 				.filter((info) => info.playerCardId !== this._mainPlayerCardId);

@@ -9,6 +9,7 @@ export interface DeckSummary {
 	readonly class: string;
 	readonly skin: string;
 	readonly totalGames: number;
+	readonly totalWins: number;
 	readonly winRatePercentage: number;
 	readonly lastUsedTimestamp: number;
 	readonly matchupStats: readonly MatchupStat[];
@@ -17,4 +18,10 @@ export interface DeckSummary {
 	readonly format: StatGameFormatType;
 	readonly replays: readonly GameStat[];
 	readonly isPersonalDeck?: boolean;
+	readonly allVersions: readonly DeckSummaryVersion[];
+}
+
+export interface DeckSummaryVersion extends DeckSummary {
+	readonly differentCards: readonly string[];
+	readonly backgroundImage: string;
 }

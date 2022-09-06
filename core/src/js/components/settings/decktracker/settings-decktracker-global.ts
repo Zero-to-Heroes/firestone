@@ -32,12 +32,12 @@ import { Knob } from '../preference-slider.component';
 						[label]="'settings.decktracker.global.show-tooltips-on-hover' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
-						field="overlayShowRarityColors"
+						field="overlayShowRelatedCards"
 						[label]="'settings.collection.general.show-related-cards-label' | owTranslate"
 						[tooltip]="'settings.collection.general.show-related-cards-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
-						field="overlayShowRelatedCards"
+						field="overlayShowRarityColors"
 						[label]="'settings.decktracker.global.show-rarity-color' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-rarity-color-tooltip' | owTranslate"
 					></preference-toggle>
@@ -101,7 +101,7 @@ import { Knob } from '../preference-slider.component';
 			<div class="reset-container">
 				<button
 					(mousedown)="reset()"
-					helpTooltip="'settings.decktracker.global.reset-button-tooltip' | owTranslate"
+					[helpTooltip]="'settings.decktracker.global.reset-button-tooltip' | owTranslate"
 				>
 					<span>{{ resetText }}</span>
 				</button>

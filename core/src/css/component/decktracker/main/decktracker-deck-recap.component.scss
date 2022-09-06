@@ -34,13 +34,13 @@
 
 		.skin {
 			width: 100%;
-			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 		}
 		.frame {
 			position: absolute;
-			top: -8%;
-			left: -16%;
-			width: 120%;
+			top: -17%;
+			left: -17%;
+			width: 135%;
 		}
 	}
 
@@ -113,6 +113,7 @@
 			color: var(--default-title-color);
 			font-size: 14px;
 			margin-bottom: 15px;
+			text-align: center;
 		}
 
 		.classes {
@@ -155,6 +156,7 @@
 
 			.text {
 				font-size: 13px;
+				text-align: center;
 			}
 		}
 	}

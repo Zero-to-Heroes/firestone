@@ -9,8 +9,7 @@
 	height: 100%;
 	background: rgba(255, 255, 255, 0.08);
 	position: relative;
-	padding: 10px;
-	padding-bottom: 12px;
+	padding: 10px 5px 12px;
 
 	.deck-name {
 		width: 100%;
@@ -40,13 +39,13 @@
 
 		.skin {
 			width: 100%;
-			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
 		}
 		.frame {
 			position: absolute;
-			top: -8%;
-			left: -16%;
-			width: 120%;
+			top: -16%;
+			left: -17%;
+			width: 134%;
 		}
 		.decoration {
 			position: absolute;

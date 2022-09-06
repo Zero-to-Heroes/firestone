@@ -24,7 +24,7 @@ export class RTStatsTotalDamageDealtByMinionsParser implements EventParser {
 		const sourceCardId = gameEvent.additionalData.sourceCardId;
 		const sourceCard = this.allCards.getCard(sourceCardId);
 		if (!sourceCard?.id) {
-			console.warn(this.name(), 'Could not find card', sourceCardId);
+			// console.warn(this.name(), 'Could not find card', sourceCardId);
 			return currentState;
 		}
 

@@ -100,6 +100,12 @@
 			margin-right: 10px;
 			margin-bottom: 15px;
 
+			.bucket-name{
+				padding-left: 30px;
+				white-space: nowrap;
+				overflow: hidden;
+				width: 100%;
+			}
 			.class-images {
 				position: absolute;
 				top: 5px;
@@ -140,5 +146,9 @@
 			display: flex;
 			flex-wrap: wrap;
 		}
+	}
+	collection-empty-state {
+		flex-grow: 1;
+		display: flex;
 	}
 }

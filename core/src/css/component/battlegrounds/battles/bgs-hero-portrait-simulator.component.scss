@@ -23,15 +23,15 @@
 		}
 	}
 
-	.hero-power {
+	.hero-power,
+	.quest-reward {
 		position: absolute;
-		bottom: -4px;
+		bottom: 20px;
 		z-index: 1;
-		left: -25px;
-		width: 53px;
-		height: 65px;
+		width: 63px;
+		height: 77px;
 
-		.hero-power-container {
+		.item-container {
 			width: 100%;
 			height: 100%;
 		}
@@ -61,5 +61,13 @@
 			top: 20px;
 			right: -5px;
 		}
+	}
+
+	.hero-power {
+		right: -80px;
+	}
+
+	.quest-reward {
+		left: -85px;
 	}
 }

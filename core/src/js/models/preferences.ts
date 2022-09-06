@@ -19,7 +19,7 @@ import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
-import { DuelsTopDecksDustFilterType, DuelsUnlocksFilterType } from './duels/duels-types';
+import { DuelsTopDecksDustFilterType } from './duels/duels-types';
 import { AchievementsCompletedFilterType } from './mainwindow/achievement/filter-types';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
@@ -28,6 +28,7 @@ import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { DeckSummary } from './mainwindow/decktracker/deck-summary';
+import { ConstructedDeckVersions } from './mainwindow/decktracker/decktracker-state';
 import { ConstructedStatsTab } from './mainwindow/decktracker/decktracker-view.type';
 import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
@@ -139,6 +140,7 @@ export class Preferences {
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
 	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 	readonly constructedPersonalAdditionalDecks: readonly DeckSummary[] = [];
+	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
 	readonly constructedDecksSearchString: string;
 	readonly constructedMetaDecksFormatFilter: FormatForDeckData = 'standard';
@@ -324,6 +326,20 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentElwynnBoarCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerVolatileSkeletonCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
+	readonly opponentVolatileSkeletonCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentVolatileSkeletonCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerRelicCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerRelicCounterWidgetPosition: { left: number; top: number };
+	readonly opponentRelicCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentRelicCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerBolnerCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };
@@ -331,6 +347,18 @@ export class Preferences {
 	readonly playerBrilliantMacawCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerVanessaVanCleefCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerMurozondTheInfiniteCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerLadyDarkveinCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerLadyDarkveinCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerGreySageParrotCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -374,8 +402,8 @@ export class Preferences {
 	readonly bgsShowHeroSelectionAchievements = true;
 	readonly bgsShowHeroSelectionTooltip = true;
 	readonly bgsShowNextOpponentRecapSeparately = true;
-	readonly bgsHideSimResultsOnRecruit = true;
-	readonly bgsShowSimResultsOnlyOnRecruit = false;
+	readonly bgsHideSimResultsOnRecruit: boolean = true;
+	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 5000;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -434,6 +462,7 @@ export class Preferences {
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
 	readonly duelsActiveHeroesFilter2: DuelsHeroFilterType = allDuelsHeroes;
+	readonly duelsActivePassiveTreasuresFilter: readonly string[] = [];
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveHeroPowerFilter: 'all' | string = 'all';
@@ -447,7 +476,6 @@ export class Preferences {
 	readonly duelsShowOocTracker: boolean = true;
 	readonly duelsShowOocDeckSelect: boolean = true;
 	readonly duelsHighlightTreasureSynergies: boolean = true;
-	readonly duelsFilterOutLockedRequirements: DuelsUnlocksFilterType = 'all';
 	readonly duelsShowInfoOnHeroSelection: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly duelsOocTrackerPosition: { left: number; top: number };

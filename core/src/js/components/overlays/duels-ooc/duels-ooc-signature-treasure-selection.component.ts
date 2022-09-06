@@ -28,7 +28,7 @@ import { filter } from 'rxjs/operators';
 				<div
 					class="empty-card"
 					(mouseenter)="onMouseEnter(signatureTreasure.id)"
-					(mouseleave)="onMouseLeave(signatureTreasure.id)"
+					(mouseleave)="onMouseLeave(signatureTreasure.id, $event)"
 				></div>
 			</div>
 		</div>
@@ -83,10 +83,8 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
-				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
-				([main, nav, prefs]) => prefs.duelsFilterOutLockedRequirements,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
@@ -95,17 +93,7 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				([
 					allSignatureTreasureCards,
 					selectedHeroPower,
-					[
-						duelStats,
-						duelsTopDecks,
-						mmrPercentiles,
-						runs,
-						adventuresInfo,
-						dustFilter,
-						mmrFilter,
-						lockFilter,
-						patch,
-					],
+					[duelStats, duelsTopDecks, mmrPercentiles, runs, dustFilter, mmrFilter, patch],
 				]) => {
 					return allSignatureTreasureCards
 						.map((card) => card.id)
@@ -154,11 +142,8 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 										currentSignatureTreasureCardId,
 										'last-patch',
 										dustFilter,
+										null,
 										patch,
-										adventuresInfo,
-										// Here we show the decks even for locked treasures, since they are a separate info
-										'all',
-										this.allCards,
 									),
 								)
 								.filter((group) => group.decks.length > 0)
@@ -262,9 +247,11 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 		this.selectedSignatureTreasureCardId.next(cardId);
 	}
 
-	onMouseLeave(cardId: string) {
-		console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
-		this.selectedSignatureTreasureCardId.next(null);
+	onMouseLeave(cardId: string, event: MouseEvent) {
+		if (!event.shiftKey) {
+			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+			this.selectedSignatureTreasureCardId.next(null);
+		}
 	}
 
 	trackByFn(index: number, item: ReferenceCard) {

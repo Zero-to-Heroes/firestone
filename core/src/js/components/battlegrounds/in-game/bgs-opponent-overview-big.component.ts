@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { BgsPlayer, QuestReward } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -28,6 +28,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						[title]="buddiesTitle"
 						*ngIf="showBuddiesIfEmpty || buddies?.length"
 					></bgs-buddies> -->
+					<bgs-quest-rewards
+						[rewards]="questRewards"
+						*ngIf="showQuestRewardsIfEmpty || questRewards?.length"
+					></bgs-quest-rewards>
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
@@ -36,8 +40,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 			</div>
 			<div class="tavern-upgrades" *ngIf="showTavernsIfEmpty || tavernUpgrades?.length">
-				<div class="title">{{ tavernTitle }}</div>
-				<div class="upgrades">
+				<div class="title" *ngIf="tavernUpgrades?.length">{{ tavernTitle }}</div>
+				<div class="upgrades" *ngIf="tavernUpgrades?.length">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 						<div
@@ -47,7 +51,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						></div>
 					</div>
 				</div>
+				<div class="tavern-upgrades empty"
+					*ngIf="!tavernUpgrades?.length"
+					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
+				></div>
 			</div>
+			
 		</bgs-player-capsule>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +67,7 @@ export class BgsOpponentOverviewBigComponent {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
+	questRewards: readonly QuestReward[];
 	// buddies: readonly number[];
 
 	@Input() rating: number;
@@ -70,6 +80,7 @@ export class BgsOpponentOverviewBigComponent {
 	// @Input() buddiesTitle: string;
 	@Input() showTavernsIfEmpty = true;
 	// @Input() showBuddiesIfEmpty = true;
+	@Input() showQuestRewardsIfEmpty = true;
 	@Input() showLastOpponentIcon: boolean;
 
 	@Input() set opponent(value: BgsPlayer) {
@@ -86,6 +97,7 @@ export class BgsOpponentOverviewBigComponent {
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
+		this.questRewards = value.questRewards;
 		// this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {

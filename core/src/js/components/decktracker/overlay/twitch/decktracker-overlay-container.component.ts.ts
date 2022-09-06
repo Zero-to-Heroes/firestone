@@ -9,11 +9,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { inflate } from 'pako';
 import { from, Observable } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
+import { Preferences } from '../../../../models/preferences';
 import { TwitchEvent } from '../../../../services/mainwindow/twitch-auth.service';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
 import fakeState from './gameState.json';
@@ -35,25 +37,30 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 				'decktracker-theme': currentDisplayMode === 'decktracker'
 			}"
 		>
-			<state-mouse-over
-				*ngIf="gameState || bgsState"
-				[gameState]="gameState"
-				[bgsState]="bgsState"
-				[overlayLeftOffset]="horizontalOffset"
-			></state-mouse-over>
-			<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
-			</decktracker-overlay-standalone>
-			<bgs-simulation-overlay-standalone
-				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showBattleSimulator$ | async)"
-				[bgsState]="bgsBattleState"
-				[phase]="bgsState?.phase"
-			>
-			</bgs-simulation-overlay-standalone>
-			<battlegrounds-minions-tiers-twitch
-				*ngIf="bgsState?.inGame && !bgsState?.gameEnded && (showMinionsList$ | async)"
-				[availableRaces]="bgsState?.availableRaces"
-				[currentTurn]="bgsState?.currentTurn"
-			></battlegrounds-minions-tiers-twitch>
+			<ng-container *ngIf="inGameplay">
+				<state-mouse-over
+					*ngIf="gameState || bgsState"
+					[gameState]="gameState"
+					[bgsState]="bgsState"
+					[overlayLeftOffset]="horizontalOffset"
+					[magnifierIconOnTop]="magnifierIconOnTop"
+				></state-mouse-over>
+				<decktracker-overlay-standalone *ngIf="showDecktracker" [gameState]="gameState">
+				</decktracker-overlay-standalone>
+				<bgs-simulation-overlay-standalone
+					*ngIf="bgsState?.inGame && (showBattleSimulator$ | async)"
+					[bgsState]="bgsBattleState"
+					[streamerPrefs]="streamerPrefs"
+					[phase]="bgsState?.phase"
+					[hideWhenEmpty]="hideSimulatorWhenEmpty$ | async"
+				>
+				</bgs-simulation-overlay-standalone>
+				<battlegrounds-minions-tiers-twitch
+					*ngIf="bgsState?.inGame && (showMinionsList$ | async)"
+					[availableRaces]="bgsState?.availableRaces"
+					[currentTurn]="bgsState?.currentTurn"
+				></battlegrounds-minions-tiers-twitch>
+			</ng-container>
 			<twitch-config-widget></twitch-config-widget>
 		</div>
 	`,
@@ -64,14 +71,20 @@ export class DeckTrackerOverlayContainerComponent
 	implements AfterViewInit, AfterContentInit {
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
+	hideSimulatorWhenEmpty$: Observable<boolean>;
 
+	inGameplay: boolean;
 	gameState: GameState;
 	bgsState: TwitchBgsState;
+	streamerPrefs: Partial<Preferences>;
 	bgsBattleState: TwitchBgsCurrentBattle;
 	activeTooltip: string;
 	showDecktracker: boolean;
-	horizontalOffset: number;
 	currentDisplayMode: 'decktracker' | 'battlegrounds' = 'battlegrounds';
+
+	// Streamer settings
+	horizontalOffset: number;
+	magnifierIconOnTop: null | '' | 'top' | 'bottom';
 
 	private twitch;
 	private token: string;
@@ -94,6 +107,9 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showBattleSimulator$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.showBattleSimulator),
+		);
+		this.hideSimulatorWhenEmpty$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.hideBattleOddsWhenEmpty),
 		);
 	}
 
@@ -150,6 +166,7 @@ export class DeckTrackerOverlayContainerComponent
 				const config = JSON.parse(this.twitch.configuration.broadcaster.content);
 				console.log('config', config);
 				this.horizontalOffset = config?.horizontalOffset;
+				this.magnifierIconOnTop = config?.magnifierIconOnTop;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -169,9 +186,11 @@ export class DeckTrackerOverlayContainerComponent
 
 	private async processEvent(event: TwitchEvent) {
 		console.log('received event', event);
+		this.inGameplay = event.scene === SceneMode.GAMEPLAY;
 		this.bgsState = event?.bgs;
 		// Don't overwrite the battle state if not present in the input state
 		this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
+		this.streamerPrefs = event.streamerPrefs;
 		// console.log('bgsBattleState', this.bgsBattleState, this.bgsState);
 		this.gameState = event?.deck;
 		this.showDecktracker =
@@ -225,22 +244,22 @@ export class DeckTrackerOverlayContainerComponent
 
 const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
 	const mapping = {
-		// 'de': 'deDE',
+		'de': 'deDE',
 		'en': 'enUS',
 		'en-gb': 'enUS',
-		// 'es': 'esES',
-		// 'es-mx': 'esMX',
+		'es': 'esES',
+		'es-mx': 'esMX',
 		'fr': 'frFR',
-		// 'it': 'itIT',
-		// 'ja': 'jaJP',
-		// 'ko': 'koKR',
-		// 'pl': 'plPL',
-		// 'pt': 'ptBR',
-		// 'pt-br': 'ptBR',
-		// 'ru': 'ruRU',
-		// 'th': 'thTH',
-		// 'zh-cn': 'zhCN',
-		// 'zh-tw': 'zhTW',
+		'it': 'itIT',
+		'ja': 'jaJP',
+		'ko': 'koKR',
+		'pl': 'plPL',
+		'pt': 'ptBR',
+		'pt-br': 'ptBR',
+		'ru': 'ruRU',
+		'th': 'thTH',
+		'zh-cn': 'zhCN',
+		'zh-tw': 'zhTW',
 	};
 	const hsLocale = mapping[twitchLanguage] ?? 'enUS';
 	return hsLocale;

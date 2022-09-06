@@ -47,6 +47,7 @@
 					padding-bottom: 9px;
 					font-size: 16px;
 					margin-right: 55px;
+					display: flex;
 				}
 
 				.audio-category {
@@ -87,7 +88,6 @@
 				}
 
 				.label {
-					text-transform: capitalize;
 				}
 			}
 
@@ -157,7 +157,7 @@
 						}
 					}
 
-					.premium.premium {
+					.premium.premium, .diamond{
 						width: 90px;
 
 						.left {

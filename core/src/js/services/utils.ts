@@ -7,7 +7,9 @@ export const groupByFunction = <T>(keyExtractor: (obj: T) => string | number) =>
 ): { [key: string]: readonly T[] } => {
 	return (array ?? []).reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
-		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+		objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
+		// Using push instead of concat is thousands of times faster on big arrays
+		objectsByKeyValue[value].push(obj);
 		return objectsByKeyValue;
 	}, {});
 };

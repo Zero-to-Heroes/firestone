@@ -5,7 +5,7 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
 declare let amplitude;
 
-const REPLAY_API = 'http://xml.firestoneapp.com/';
+const REPLAY_API = 'https://xml.firestoneapp.com/';
 
 @Component({
 	selector: 'game-replay',
@@ -27,11 +27,13 @@ export class GameReplayComponent implements OnInit {
 	}
 
 	private async setReplay(value: MatchDetail) {
-		await this.resetGame(value.replayInfo.reviewId);
-		if (value && value.replayInfo) {
-			console.log('[game-replay] setting game', value.replayInfo.reviewId);
-			this.loadReview(value.replayInfo.reviewId);
+		if (!value?.replayInfo) {
+			return;
 		}
+
+		await this.resetGame(value.replayInfo.reviewId);
+		console.log('[game-replay] setting game', value.replayInfo.reviewId);
+		this.loadReview(value.replayInfo.reviewId);
 	}
 
 	private async loadReview(reviewId: string) {

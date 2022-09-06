@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -8,6 +8,7 @@ import {
 	cardsConsideredPublic,
 	cardsRevealedWhenDrawn,
 	forcedHiddenCardCreators,
+	hideInfoWhenPlayerPlaysIt,
 	publicCardCreators,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -43,14 +44,27 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
+		const isSpecialCasePublic =
+			// This is starting to become one of the worst tangle of special cases in the app
+			//The idea is this:
+			// - Some cards let you discover cards from the opponent's hand
+			// - Because of how logs work, this means we could theoretically be able to fully identify these
+			// cards in hand
+			// - To prevent that, we add some exception for these cards to hide the info
+			// - However, when the opponent plays the cards, we still want to be able to flag them as "created by"
+			// in their hand
+			((!isPlayer && !forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds)) ||
+				(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))) &&
+			(cardsRevealedWhenDrawn.includes(cardId as CardIds) || publicCardCreators.includes(lastInfluencedByCardId));
 		const isCardInfoPublic =
 			isPlayer ||
 			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged
 			// with the dead entity as creator, and are never revealed
 			cardsConsideredPublic.includes(cardId as CardIds) ||
-			(!forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds) &&
-				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-					publicCardCreators.includes(lastInfluencedByCardId)));
+			// There might be some edge cases where we don't want that, but for now it's a good approximation
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
+			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
+			isSpecialCasePublic;
 		console.debug(
 			'[receive-card-in-hand] isCardInfoPublic',
 			isCardInfoPublic,
@@ -98,8 +112,21 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
+		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
+		// moved to hand (e.g. Suspicious Pirate)
+		const newCardId = (isCardInfoPublic ? cardId : null) ?? cardWithDefault.cardId;
+		const cardWithKnownInfo =
+			newCardId === cardWithDefault.cardId
+				? cardWithDefault
+				: cardWithDefault.update({
+						cardId: newCardId,
+						cardName: this.allCards.getCard(newCardId).name,
+						manaCost: this.allCards.getCard(newCardId).cost,
+						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
+				  });
 		console.debug(
 			'[receive-card-in-hand] cardWithDefault',
+			cardWithKnownInfo,
 			cardWithDefault,
 			creatorCardId,
 			otherCard,
@@ -108,15 +135,20 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
-				? cardWithDefault.update({
+				? cardWithKnownInfo.update({
 						buffingEntityCardIds: [
 							...(cardWithDefault.buffingEntityCardIds || []),
 							buffingEntityCardId,
 						] as readonly string[],
-						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
+						buffCardIds: [...(cardWithKnownInfo.buffCardIds || []), buffCardId] as readonly string[],
 				  } as DeckCard)
-				: cardWithDefault;
-		const cardWithAdditionalAttributes = this.addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent);
+				: cardWithKnownInfo;
+		const cardWithAdditionalAttributes = addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent, this.allCards);
+		console.debug(
+			'[receive-card-in-hand] cardWithAdditionalAttributes',
+			cardWithAdditionalAttributes,
+			otherCardWithBuffs,
+		);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
@@ -143,38 +175,47 @@ export class ReceiveCardInHandParser implements EventParser {
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
+		console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
-	}
-
-	private addAdditionalAttribues(card: DeckCard, deck: DeckState, gameEvent: GameEvent) {
-		switch (card?.cardId) {
-			case CardIds.SirakessCultist_AbyssalCurseToken:
-				const knownCurses = deck
-					.getAllCardsInDeck()
-					.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
-				const highestAttribute = !!knownCurses.length
-					? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
-					: -1;
-				return card.update({
-					mainAttributeChange:
-						!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
-							? gameEvent.additionalData.dataNum1
-							: highestAttribute + 1,
-				});
-			case CardIds.SchoolTeacher_NagalingToken:
-				return card.update({
-					relatedCardIds: [
-						...card.relatedCardIds,
-						this.allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
-					].filter((id) => !!id),
-				});
-		}
-		return card;
 	}
 
 	event(): string {
 		return GameEvent.RECEIVE_CARD_IN_HAND;
 	}
 }
+
+export const addAdditionalAttribues = (
+	card: DeckCard,
+	deck: DeckState,
+	gameEvent: GameEvent,
+	allCards: CardsFacadeService,
+): DeckCard => {
+	switch (card?.cardId) {
+		case CardIds.SirakessCultist_AbyssalCurseToken:
+			const knownCurses = deck
+				.getAllCardsInDeck()
+				.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
+			console.debug('[receive-card-in-hand] knownCurses', knownCurses);
+			const highestAttribute = !!knownCurses.length
+				? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
+				: -1;
+			console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
+			return card.update({
+				mainAttributeChange:
+					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+						? // dataNum1 is the base value, while we start our count at 0
+						  gameEvent.additionalData.dataNum1 - 1
+						: highestAttribute + 1,
+			});
+		case CardIds.SchoolTeacher_NagalingToken:
+			return card.update({
+				relatedCardIds: [
+					...card.relatedCardIds,
+					allCards.getCardFromDbfId(gameEvent.additionalData.additionalPlayInfo).id,
+				].filter((id) => !!id),
+			});
+	}
+	return card;
+};
