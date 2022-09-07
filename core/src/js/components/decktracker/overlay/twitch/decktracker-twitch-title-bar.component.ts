@@ -74,20 +74,37 @@ export class DeckTrackerTwitchTitleBarComponent {
 			});
 		console.log('copyPermission', copyPermission);
 		if (copyPermission?.state === 'denied') {
-			// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
-			this.copyText = 'Manual copy';
-			this.shouldShowDeckstring = true;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+			let worked = false;
+			// Twitch on Chrome doesn't implement the clipboard-write permission, so fallbacking to something else
+			const listener = (e: ClipboardEvent) => {
+				const clipboardData = e.clipboardData;
+				if (clipboardData) {
+					clipboardData.setData('text/plain', this.deckState.deckstring);
+					worked = true;
+					e.preventDefault();
+				}
+			};
+
+			document.addEventListener('copy', listener);
+			try {
+				document.execCommand('copy');
+			} finally {
+				document.removeEventListener('copy', listener);
+			}
+
+			if (worked) {
+				this.copyDone();
+			} else {
+				// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
+				this.copyText = 'Manual copy';
+				this.shouldShowDeckstring = true;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		} else {
 			(navigator as any).clipboard.writeText(this.deckState.deckstring);
-			this.copyText = 'Copied';
-			this.copied = true;
-			console.log('copied deckstring to clipboard', this.deckState.deckstring);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			this.copyDone();
 		}
 		setTimeout(() => {
 			this.copied = false;
@@ -124,5 +141,14 @@ export class DeckTrackerTwitchTitleBarComponent {
 
 	closeWindow() {
 		(window as any).Twitch.ext.actions.minimize();
+	}
+
+	private copyDone() {
+		this.copyText = 'Copied';
+		this.copied = true;
+		console.log('copied deckstring to clipboard', this.deckState.deckstring);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
