@@ -495,6 +495,7 @@ export class Preferences {
 	readonly mercenariesActiveHeroLevelFilter2: MercenariesHeroLevelFilterType = 30;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;
+	readonly mercenariesShowTurnCounterInBattle: boolean = true;
 	// For now only for PvE
 	readonly mercenariesShowTaskButton: boolean = true;
 	// Most important criteria is first in the list

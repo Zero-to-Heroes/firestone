@@ -59,6 +59,11 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.mercenaries.general.synergies-label' | owTranslate"
 					[tooltip]="'settings.mercenaries.general.synergies-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesShowTurnCounterInBattle'"
+					[label]="'settings.mercenaries.general.turn-counter-battle-label' | owTranslate"
+					[tooltip]="'settings.mercenaries.general.turn-counter-battle-tooltip' | owTranslate"
+				></preference-toggle>
 			</div>
 
 			<div class="title" [owTranslate]="'settings.global.widget-size-label'"></div>

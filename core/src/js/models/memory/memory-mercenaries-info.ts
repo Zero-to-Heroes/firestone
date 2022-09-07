@@ -16,6 +16,7 @@ export interface MemoryMercenariesMap {
 	readonly DeadMercIds: readonly number[];
 	readonly CurrentStep: number;
 	readonly MaxStep: number;
+	readonly TurnsTaken: number;
 }
 
 export interface MemoryMercenary {

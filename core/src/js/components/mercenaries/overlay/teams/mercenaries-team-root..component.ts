@@ -15,9 +15,8 @@ import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
+import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
-import { OverwolfService } from '../../../../services/overwolf.service';
-import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -38,6 +37,28 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<div class="team" *ngIf="_team" [style.width.px]="overlayWidthInPx">
 						<div class="background"></div>
 						<mercenaries-team-control-bar [side]="side"></mercenaries-team-control-bar>
+						<div class="header" *ngIf="showTurnCounter$ | async">
+							<div class="label" [owTranslate]="'mercenaries.team-widget.turn-counter.turns'"></div>
+							<div
+								class="element battle-turn"
+								[helpTooltip]="
+									'mercenaries.team-widget.turn-counter.current-battle-turn-tooltip' | owTranslate
+								"
+							>
+								<svg class="icon svg-icon-fill">
+									<use xlink:href="assets/svg/sprite.svg#sword" />
+								</svg>
+								<div class="value ">
+									{{ currentBattleTurn$ | async }}
+								</div>
+							</div>
+							<div class="element map-turn" [helpTooltip]="mapTurnsTooltip$ | async">
+								<div class="icon" inlineSVG="assets/svg/map.svg"></div>
+								<div class="value ">
+									{{ totalMapTurns$ | async }}
+								</div>
+							</div>
+						</div>
 						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition">
 						</mercenaries-team-list>
 						<div class="footer">
@@ -110,9 +131,17 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
 
+	@Input() set showTurnCounter(value: boolean) {
+		this.showTurnCounter$$.next(value);
+	}
+
 	showColorChart$: Observable<boolean>;
 	showTasks$: Observable<boolean>;
 	showTaskList$: Observable<boolean>;
+	showTurnCounter$: Observable<boolean>;
+	currentBattleTurn$: Observable<number>;
+	totalMapTurns$: Observable<string>;
+	mapTurnsTooltip$: Observable<string>;
 
 	_team: MercenariesBattleTeam;
 	_tasks: readonly Task[];
@@ -122,14 +151,14 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
+	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -178,6 +207,30 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
+		);
+		this.showTurnCounter$ = this.showTurnCounter$$.asObservable();
+		this.currentBattleTurn$ = this.store
+			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
+			.pipe(
+				tap((info) => console.debug('turn info', info)),
+				// One turn is logged between each phase (order selection and combat)
+				this.mapData(([currentTurn]) => Math.ceil((isNaN(+currentTurn) ? 0 : +currentTurn) / 2)),
+			);
+		this.totalMapTurns$ = combineLatest(
+			this.currentBattleTurn$,
+			this.store.listen$(([main, nav]) => main.mercenaries.mapInfo?.Map?.TurnsTaken),
+		).pipe(
+			tap((info) => console.debug('map info', info)),
+			this.mapData(([currentBattleTurn, [totalMapTurns]]) =>
+				totalMapTurns == null ? '?' : '' + ((totalMapTurns ?? 0) + (currentBattleTurn ?? 0)),
+			),
+		);
+		this.mapTurnsTooltip$ = this.totalMapTurns$.pipe(
+			this.mapData((turns) =>
+				turns === '?'
+					? this.i18n.translateString('mercenaries.team-widget.turn-counter.total-map-turns-error-tooltip')
+					: this.i18n.translateString('mercenaries.team-widget.turn-counter.total-map-turns-tooltip'),
+			),
 		);
 	}
 
