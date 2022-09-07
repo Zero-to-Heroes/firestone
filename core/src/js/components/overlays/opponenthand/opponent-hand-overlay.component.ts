@@ -43,8 +43,8 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 		this.hand$ = this.store
 			.listenDeckState$((deckState) => deckState?.opponentDeck?.hand)
 			.pipe(this.mapData(([hand]) => hand));
-		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentTurnDraw);
-		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
-		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentBuffInHand);
+		this.displayTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.decktrackerShowOpponentTurnDraw);
+		this.displayGuess$ = this.listenForBasicPref$((prefs) => prefs.decktrackerShowOpponentGuess);
+		this.displayBuff$ = this.listenForBasicPref$((prefs) => prefs.decktrackerShowOpponentBuffInHand);
 	}
 }

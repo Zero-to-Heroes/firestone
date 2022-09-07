@@ -29,7 +29,7 @@ import { LocalStorageService } from '../../services/local-storage';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
+import { SharedDeckTrackerModule } from '../shared-decktracker/shared-decktracker.module';
 import { SharedModule } from '../shared/shared.module';
 
 init({

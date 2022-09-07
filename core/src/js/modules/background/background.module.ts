@@ -535,7 +535,7 @@ import { TipService } from '../../services/tip.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from '../../services/ui-store/app-ui-store.service';
 import { UserService } from '../../services/user.service';
-import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
+import { SharedDeckTrackerModule } from '../shared-decktracker/shared-decktracker.module';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 

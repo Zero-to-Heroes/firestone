@@ -54,7 +54,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				// Show from prefs
-				([main, nav, prefs]) => prefs.dectrackerShowOpponentGuess || prefs.dectrackerShowOpponentTurnDraw,
+				([main, nav, prefs]) => prefs.decktrackerShowOpponentGuess || prefs.decktrackerShowOpponentTurnDraw,
 			),
 			this.store.listenDeckState$(
 				(deckState) => deckState?.gameStarted,

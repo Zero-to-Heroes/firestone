@@ -161,9 +161,9 @@ export class Preferences {
 	readonly decktrackerPosition: { left: number; top: number };
 
 	readonly decktrackerShowMinionPlayOrderOnBoard: boolean = true;
-	readonly dectrackerShowOpponentTurnDraw: boolean = true;
-	readonly dectrackerShowOpponentGuess: boolean = true;
-	readonly dectrackerShowOpponentBuffInHand: boolean = true;
+	readonly decktrackerShowOpponentTurnDraw: boolean = true;
+	readonly decktrackerShowOpponentGuess: boolean = true;
+	readonly decktrackerShowOpponentBuffInHand: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;

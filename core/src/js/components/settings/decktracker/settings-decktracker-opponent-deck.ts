@@ -21,9 +21,9 @@ import { Knob } from '../preference-slider.component';
 				opponentTracker: opponentTracker$ | async,
 				opponentOverlayGroupByZone: opponentOverlayGroupByZone$ | async,
 				secretsHelper: secretsHelper$ | async,
-				dectrackerShowOpponentTurnDraw: dectrackerShowOpponentTurnDraw$ | async,
-				dectrackerShowOpponentGuess: dectrackerShowOpponentGuess$ | async,
-				dectrackerShowOpponentBuffInHand: dectrackerShowOpponentBuffInHand$ | async
+				decktrackerShowOpponentTurnDraw: decktrackerShowOpponentTurnDraw$ | async,
+				decktrackerShowOpponentGuess: decktrackerShowOpponentGuess$ | async,
+				decktrackerShowOpponentBuffInHand: decktrackerShowOpponentBuffInHand$ | async
 			} as value"
 			scrollable
 		>
@@ -100,17 +100,17 @@ import { Knob } from '../preference-slider.component';
 			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.opponent-hand-title'"></div>
 			<div class="settings-group">
 				<preference-toggle
-					field="dectrackerShowOpponentTurnDraw"
+					field="decktrackerShowOpponentTurnDraw"
 					[label]="'settings.decktracker.opponent-deck.card-turn-draw-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.card-turn-draw-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					field="dectrackerShowOpponentGuess"
+					field="decktrackerShowOpponentGuess"
 					[label]="'settings.decktracker.opponent-deck.guessed-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.guessed-cards-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					field="dectrackerShowOpponentBuffInHand"
+					field="decktrackerShowOpponentBuffInHand"
 					[label]="'settings.decktracker.opponent-deck.buff-in-hand-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.buff-in-hand-tooltip' | owTranslate"
 				></preference-toggle>
@@ -236,9 +236,9 @@ import { Knob } from '../preference-slider.component';
 					class="first-slider hand-slider"
 					field="decktrackerOpponentHandScale"
 					[enabled]="
-						value.dectrackerShowOpponentTurnDraw ||
-						value.dectrackerShowOpponentGuess ||
-						value.dectrackerShowOpponentBuffInHand
+						value.decktrackerShowOpponentTurnDraw ||
+						value.decktrackerShowOpponentGuess ||
+						value.decktrackerShowOpponentBuffInHand
 					"
 					[min]="80"
 					[max]="200"
@@ -263,7 +263,7 @@ import { Knob } from '../preference-slider.component';
 			</div>
 		</div>
 	`,
-	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuffInHand
+	// decktrackerShowOpponentTurnDraw || decktrackerShowOpponentGuess || decktrackerShowOpponentBuffInHand
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerOpponentDeckComponent
@@ -271,9 +271,9 @@ export class SettingsDecktrackerOpponentDeckComponent
 	implements AfterContentInit {
 	opponentOverlayGroupByZone$: Observable<boolean>;
 	opponentTracker$: Observable<boolean>;
-	dectrackerShowOpponentTurnDraw$: Observable<boolean>;
-	dectrackerShowOpponentGuess$: Observable<boolean>;
-	dectrackerShowOpponentBuffInHand$: Observable<boolean>;
+	decktrackerShowOpponentTurnDraw$: Observable<boolean>;
+	decktrackerShowOpponentGuess$: Observable<boolean>;
+	decktrackerShowOpponentBuffInHand$: Observable<boolean>;
 	secretsHelper$: Observable<boolean>;
 
 	sizeKnobs: readonly Knob[] = [
@@ -309,12 +309,12 @@ export class SettingsDecktrackerOpponentDeckComponent
 		this.opponentTracker$ = this.listenForBasicPref$((prefs) => prefs.opponentTracker);
 		this.secretsHelper$ = this.listenForBasicPref$((prefs) => prefs.secretsHelper);
 		this.opponentOverlayGroupByZone$ = this.listenForBasicPref$((prefs) => prefs.opponentOverlayGroupByZone);
-		this.dectrackerShowOpponentTurnDraw$ = this.listenForBasicPref$(
-			(prefs) => prefs.dectrackerShowOpponentTurnDraw,
+		this.decktrackerShowOpponentTurnDraw$ = this.listenForBasicPref$(
+			(prefs) => prefs.decktrackerShowOpponentTurnDraw,
 		);
-		this.dectrackerShowOpponentGuess$ = this.listenForBasicPref$((prefs) => prefs.dectrackerShowOpponentGuess);
-		this.dectrackerShowOpponentBuffInHand$ = this.listenForBasicPref$(
-			(prefs) => prefs.dectrackerShowOpponentBuffInHand,
+		this.decktrackerShowOpponentGuess$ = this.listenForBasicPref$((prefs) => prefs.decktrackerShowOpponentGuess);
+		this.decktrackerShowOpponentBuffInHand$ = this.listenForBasicPref$(
+			(prefs) => prefs.decktrackerShowOpponentBuffInHand,
 		);
 	}
 }
