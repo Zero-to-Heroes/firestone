@@ -225,11 +225,11 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	}
 }
 
-export const extractTime = (durationInSeconds: number): { minutes: string; seconds: string } => {
+export const extractTime = (durationInSeconds: number): { min: string; sec: string } => {
 	const seconds = `${durationInSeconds % 60}`.padStart(2, '0');
 	const minutes = `${Math.floor((durationInSeconds - (durationInSeconds % 60)) / 60)}`;
 	return {
-		minutes,
-		seconds,
+		min: minutes,
+		sec: seconds,
 	};
 };
