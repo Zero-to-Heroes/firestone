@@ -25,7 +25,7 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div
 			class="board-turn empty not-met"
 			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
-		> 
+		>
 			<span [owTranslate]="'battlegrounds.board.opponent-not-met'"></span>
 		</div>
 		<div

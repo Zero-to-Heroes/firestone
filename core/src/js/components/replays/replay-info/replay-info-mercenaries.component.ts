@@ -212,7 +212,7 @@ interface MercenaryHero {
 			<div class="portrait" [cardTooltip]="hero.cardId">
 				<img class="icon" [src]="hero.portraitUrl" />
 				<img class="frame" [src]="hero.frameUrl" />
-			</div>	
+			</div>
 			<div class="equipment" [cardTooltip]="hero.equipmentCardId" *ngIf="hero.equipmentCardId">
 				<img class="icon" [src]="hero.equipmentUrl" />
 				<img

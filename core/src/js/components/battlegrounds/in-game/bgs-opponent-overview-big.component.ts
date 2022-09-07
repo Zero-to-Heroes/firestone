@@ -51,12 +51,12 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						></div>
 					</div>
 				</div>
-				<div class="tavern-upgrades empty"
+				<div
+					class="tavern-upgrades empty"
 					*ngIf="!tavernUpgrades?.length"
 					[owTranslate]="'battlegrounds.in-game.opponents.tavern-empty-state'"
 				></div>
 			</div>
-			
 		</bgs-player-capsule>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

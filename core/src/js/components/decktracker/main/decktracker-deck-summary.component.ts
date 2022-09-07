@@ -169,12 +169,13 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
 		const date = new Date(lastUsedTimestamp);
-		return date.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-			month: 'short',
-			day: '2-digit',
-			year: 'numeric',
-		})
-		.replace(/\s+г\./, ""); //truncate date in russian
+		return date
+			.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+				month: 'short',
+				day: '2-digit',
+				year: 'numeric',
+			})
+			.replace(/\s+г\./, ''); //truncate date in russian
 	}
 
 	private buildDecoration(gameFormat: StatGameFormatType) {

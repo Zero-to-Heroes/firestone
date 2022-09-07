@@ -414,7 +414,7 @@ export class GraphWithComparisonNewComponent {
 					const left = Math.max(
 						0,
 						Math.min(
-							tooltip.caretX - tooltipWidth/2 + leftOffset,
+							tooltip.caretX - tooltipWidth / 2 + leftOffset,
 							chartParent.getBoundingClientRect().right - tooltipWidth,
 						),
 					);
@@ -456,7 +456,7 @@ export class GraphWithComparisonNewComponent {
 			<div class="section ${theClass}">
 				<div class="subtitle">${label}</div>
 				<div class="value">${turnLabel} ${datapoint?.label}</div>
-				<div class="value">${datapoint?.value ? statLabel +' '+ parseInt(datapoint.value).toFixed(0) : 'No data'}</div>
+				<div class="value">${datapoint?.value ? statLabel + ' ' + parseInt(datapoint.value).toFixed(0) : 'No data'}</div>
 				<div class="delta">${
 					this.showDeltaWithPrevious && delta != null
 						? deltaLabel.replace('{{delta}}', '' + delta.toFixed(0))

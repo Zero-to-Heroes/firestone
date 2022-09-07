@@ -120,7 +120,7 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.TheLichKingLettuce_LETL_041H_01:
 		case CardIds.TheLichKingLettuce_LETL_041H_02:
 		case CardIds.TheLichKingLettuce_LETL_041H_03:
-			return fullName == 'The Lich King' ? 'Lich King' : fullName; 
+			return fullName == 'The Lich King' ? 'Lich King' : fullName;
 		default:
 			return fullName;
 	}

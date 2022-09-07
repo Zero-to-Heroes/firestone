@@ -199,7 +199,6 @@ export class SetComponent implements AfterViewInit {
 		this.epicFill = ((10 - this.epicTimer) / 10) * 100;
 		this.legendaryTimer = set.pityTimer?.packsUntilGuaranteedLegendary ?? CollectionManager.LEGENDARY_PITY_TIMER;
 		this.legendaryFill = ((40 - this.legendaryTimer) / 40) * 100;
-		
 	}
 
 	_cardSet: Set;
@@ -209,7 +208,7 @@ export class SetComponent implements AfterViewInit {
 	epicFill = 0;
 	legendaryTimer = 40;
 	legendaryFill = 0;
-	setName : string;
+	setName: string;
 
 	flip = 'inactive';
 

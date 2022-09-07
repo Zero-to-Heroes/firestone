@@ -93,14 +93,17 @@ export class DecktrackerStatsForReplaysComponent {
 
 	private toAppropriateDurationFromSeconds(durationInSeconds: number): string {
 		if (durationInSeconds < 60) {
-			return this.i18n.translateString('global.duration.sec', {sec: durationInSeconds});
+			return this.i18n.translateString('global.duration.sec', { sec: durationInSeconds });
 		} else if (durationInSeconds < 3600) {
-			return  this.i18n.translateString('global.duration.min', {min: Math.round(durationInSeconds / 60)});
+			return this.i18n.translateString('global.duration.min', { min: Math.round(durationInSeconds / 60) });
 			// } else if (durationInSeconds < 3600 * 24) {
 		} else {
 			const hours = Math.floor(durationInSeconds / 3600);
 			const min = Math.floor((durationInSeconds - 3600 * hours) / 60);
-			return this.i18n.translateString('global.duration.hrs-min', {hrs: hours.toLocaleString(), min: min.toLocaleString().padStart(2, '0')});
+			return this.i18n.translateString('global.duration.hrs-min', {
+				hrs: hours.toLocaleString(),
+				min: min.toLocaleString().padStart(2, '0'),
+			});
 		}
 		return '';
 	}
