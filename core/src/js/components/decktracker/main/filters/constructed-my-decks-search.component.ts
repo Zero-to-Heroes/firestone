@@ -18,7 +18,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 		`../../../../../css/component/decktracker/main/filters/constructed-my-decks-search.component.scss`,
 	],
 	template: `
-		<div class="search" *ngIf="showWidget$ | async">
+		<div class="decks-search" *ngIf="showWidget$ | async">
 			<label class="search-label">
 				<div
 					class="icon"
