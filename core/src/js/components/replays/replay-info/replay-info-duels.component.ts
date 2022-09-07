@@ -229,7 +229,7 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 				}));
 			}
 		}
-		this.gameTime = this.i18n.translateString('global.duration', {
+		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
 	}

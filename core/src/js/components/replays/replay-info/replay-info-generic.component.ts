@@ -166,7 +166,7 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.visualResult = this.replayInfo.result;
-		this.gameTime = this.i18n.translateString('global.duration', {
+		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
 		});
 	}
