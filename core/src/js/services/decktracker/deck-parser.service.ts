@@ -101,7 +101,13 @@ export class DeckParserService {
 		// need to regenerate the deck
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
 		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 4);
-		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory, this.duelsDeck);
+		console.log(
+			'[deck-parser] active deck from memory',
+			this.selectedDeckId,
+			deckFromMemory,
+			this.duelsDeck,
+			this.currentNonGamePlayScene,
+		);
 		const activeDeck =
 			(this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? this.duelsDeck : deckFromMemory) ??
 			deckFromMemory;
@@ -115,7 +121,7 @@ export class DeckParserService {
 		// 	};
 		// }
 
-		console.debug(
+		console.log(
 			'[deck-parser] active deck',
 			activeDeck,
 			this.isDeckLogged(metadata.scenarioId),
@@ -322,8 +328,11 @@ export class DeckParserService {
 			JSON.stringify(deckDefinition),
 			deckDefinition.cards.map((pair) => pair[0]),
 			deckDefinition.cards.some((pair) => pair[0] == null),
+			deckDefinition.cards.some((pair) => isNaN(pair[0])),
 		);
-		const deckString = deckDefinition.cards.some((pair) => pair[0] == null) ? null : encode(deckDefinition);
+		const deckString = deckDefinition.cards.some((pair) => pair[0] == null || isNaN(pair[0]))
+			? null
+			: encode(deckDefinition);
 		console.log('[deck-parser] built deckstring', deckString);
 		const currentDeck: DeckInfo = {
 			deck: deckDefinition,
