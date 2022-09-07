@@ -251,7 +251,7 @@ export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent impl
 					value: decodedTeamName,
 			  })
 			: '';
-		const tooltip = isPlayer ? `${name} ${deckName}` : null;
+		const tooltip = isPlayer ? `${name} ${deckName}` : `${name}`;
 		if (replaysShowClassIcon) {
 			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
 			return [image, tooltip];
