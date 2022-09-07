@@ -14,23 +14,25 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 		`../../../../css/component/decktracker/main/decktracker-ladder-stats-overview.component.scss`,
 	],
 	template: `
-		<decktracker-stats-for-replays [replays]="replays$ | async"></decktracker-stats-for-replays>
-		<div class="graphs">
-			<div class="graph player-popularity">
-				<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-player'"></div>
-				<pie-chart
-					class="chart player-popularity-chart "
-					[data]="playerPieChartData$ | async"
-					[options]="pieChartOptions"
-				></pie-chart>
-			</div>
-			<div class="graph opponents-popularity">
-				<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-opponent'"></div>
-				<pie-chart
-					class="chart opponents-popularity-chart"
-					[data]="opponentPieChartData$ | async"
-					[options]="pieChartOptions"
-				></pie-chart>
+		<div class="container" scrollable>
+			<decktracker-stats-for-replays [replays]="replays$ | async"></decktracker-stats-for-replays>
+			<div class="graphs">
+				<div class="graph player-popularity">
+					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-player'"></div>
+					<pie-chart
+						class="chart player-popularity-chart "
+						[data]="playerPieChartData$ | async"
+						[options]="pieChartOptions"
+					></pie-chart>
+				</div>
+				<div class="graph opponents-popularity">
+					<div class="title" [owTranslate]="'app.decktracker.ladder-stats.title-opponent'"></div>
+					<pie-chart
+						class="chart opponents-popularity-chart"
+						[data]="opponentPieChartData$ | async"
+						[options]="pieChartOptions"
+					></pie-chart>
+				</div>
 			</div>
 		</div>
 	`,
