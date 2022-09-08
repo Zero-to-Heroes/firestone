@@ -71,7 +71,7 @@ export class BgsGame {
 			return this;
 		}
 
-		console.debug(
+		console.log(
 			'[face-off] trying to update face-off',
 			opponentHeroCardId,
 			createIfMissing,
