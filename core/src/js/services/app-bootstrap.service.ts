@@ -398,7 +398,6 @@ export class AppBootstrapService {
 		const toRemoveSuffix = ['.top', '.bottom', '.left', '.right'];
 		const prefs = await this.prefs.getPreferences();
 		// Log an event for each of the prefs
-		console.log('no-format', 'pref status', prefs);
 		const prefsToSend = { ...new Preferences() };
 		for (const prop in prefs) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSend, prop);
@@ -413,5 +412,6 @@ export class AppBootstrapService {
 		delete prefsToSend.desktopDeckDeletes;
 		delete prefsToSend.desktopDeckStatsReset;
 		amplitude.getInstance().logEvent('preferences', prefsToSend);
+		console.log('no-format', 'pref status', prefsToSend);
 	}
 }
