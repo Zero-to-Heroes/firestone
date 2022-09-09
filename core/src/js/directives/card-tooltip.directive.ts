@@ -109,7 +109,6 @@ export class CardTooltipDirective implements OnDestroy {
 		// if (this.hideTimeout) {
 		// 	clearTimeout(this.hideTimeout);
 		// }
-		console.debug('mouse enter', this.cardId, this.cardTooltipCard, this.cardTooltipRelatedCardIds);
 		if (!this.cardId && !this.cardTooltipCard && !this.cardTooltipRelatedCardIds?.length) {
 			return;
 		}

@@ -212,7 +212,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(
-				tap((info) => console.debug('turn info', info)),
 				// One turn is logged between each phase (order selection and combat)
 				this.mapData(([currentTurn]) => Math.ceil((isNaN(+currentTurn) ? 0 : +currentTurn) / 2)),
 			);
@@ -220,7 +219,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			this.currentBattleTurn$,
 			this.store.listen$(([main, nav]) => main.mercenaries.mapInfo?.Map?.TurnsTaken),
 		).pipe(
-			tap((info) => console.debug('map info', info)),
 			this.mapData(([currentBattleTurn, [totalMapTurns]]) =>
 				totalMapTurns == null ? '?' : '' + ((totalMapTurns ?? 0) + (currentBattleTurn ?? 0)),
 			),
