@@ -8,6 +8,11 @@
 	flex-shrink: 1;
 	position: relative;
 	height: calc(100% - 20px);
+	height: fit-content;
+
+	.player-info {
+		height: fit-content;
+	}
 
 	.main-info {
 		display: flex;
@@ -19,6 +24,7 @@
 		border-right: 1px solid var(--color-3);
 		justify-content: space-between;
 		position: relative;
+		height: fit-content;
 
 		::ng-deep bgs-board {
 			flex-shrink: 0;

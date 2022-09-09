@@ -83,11 +83,13 @@
 					flex-direction: row;
 					border: none;
 					width: auto;
+					height: 100%;
 				}
 
 				bgs-board {
 					min-width: 220px;
 					height: 100%;
+					min-height: auto;
 				}
 
 				.board-turn {
@@ -122,13 +124,25 @@
 				}
 
 				.triples-section {
-					//flex-direction: column;
-					//align-items: flex-start;
-					//justify-content: space-between;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					height: 100%;
+					padding-left: 10px;
+					padding-right: 10px;
+					position: relative;
 
 					.title {
 						width: 70px;
-						//margin-right: 0;
+						width: 100%;
+						text-align: center;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						margin-right: 0;
+						margin-bottom: 10px;
 					}
 
 					.triple {
@@ -140,6 +154,7 @@
 				.tavern-upgrades {
 					justify-content: space-between;
 					width: 120px;
+					border-left: 1px solid var(--color-3);
 
 					.tavern-upgrade:not(:last-child) {
 						display: none;
