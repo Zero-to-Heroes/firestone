@@ -2,7 +2,7 @@ import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { BattleAbility, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../cards-facade.service';
-import { getMercCardLevel } from '../mercenaries-utils';
+import { getMercCardLevel, isPassiveMercsTreasure } from '../mercenaries-utils';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesAbilityRevealedParser implements MercenariesParser {
@@ -43,7 +43,9 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 			cooldown: event.additionalData.abilityCooldownConfig ?? refAbilityCard.mercenaryAbilityCooldown,
 			cooldownLeft: event.additionalData.abilityCurrentCooldown ?? refAbilityCard.mercenaryAbilityCooldown,
 			level: getMercCardLevel(cardId),
-			speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? (isTreasure ? null : 0),
+			speed: isPassiveMercsTreasure(cardId, this.allCards)
+				? null
+				: event.additionalData.abilitySpeed ?? refAbilityCard.cost ?? 0,
 			totalUsed: 0,
 			isTreasure: isTreasure,
 		});

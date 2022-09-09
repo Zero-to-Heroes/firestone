@@ -173,6 +173,11 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 	);
 };
 
+export const isPassiveMercsTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
+	const refCard = allCards.getCard(cardId);
+	return refCard?.mercenaryPassiveAbility;
+};
+
 export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	// CardIds.AdventurersPackLettuceEnchantment,
 	CardIds.AmuletOfSwiftnessLettuceEnchantment,

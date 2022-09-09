@@ -3,6 +3,7 @@ import { TagRole, Zone } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
+import { isPassiveMercsTreasure } from '../../../../services/mercenaries/mercenaries-utils';
 import { Ability } from './mercenaries-team-ability.component';
 
 @Component({
@@ -64,6 +65,7 @@ export class MercenariesTeamMercenaryComponent {
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => {
 			const abilityCard = this.allCards.getCard(ability.cardId);
+			console.debug('[ability] ability', ability, abilityCard);
 			return {
 				type: 'ability',
 				cardId: ability.cardId,
@@ -71,7 +73,9 @@ export class MercenariesTeamMercenaryComponent {
 					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png)`
 					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png)`,
 				name: abilityCard.name,
-				speed: ability.speed ?? abilityCard.cost ?? (ability.isTreasure ? null : 0),
+				speed: isPassiveMercsTreasure(ability.cardId, this.allCards)
+					? null
+					: ability.speed ?? abilityCard.cost ?? 0,
 				cooldown: ability.cooldown ?? abilityCard.mercenaryAbilityCooldown,
 				cooldownLeft: ability.cooldownLeft,
 				isTreasure: ability.isTreasure,
