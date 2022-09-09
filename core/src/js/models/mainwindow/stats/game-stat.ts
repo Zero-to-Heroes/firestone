@@ -40,6 +40,10 @@ export class GameStat {
 	readonly bgsPerfectGame: boolean;
 	readonly levelAfterMatch: string;
 	readonly bgsHasPrizes: boolean;
+	readonly bgsHasQuests: boolean;
+	readonly bgsHeroQuests: readonly string[];
+	readonly bgsQuestsCompletedTimings: readonly number[];
+	readonly bgsHeroQuestRewards: readonly string[];
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];

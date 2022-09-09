@@ -101,6 +101,10 @@ export class GameStatsUpdaterService {
 			bgsAvailableTribes: game.availableTribes,
 			bgsBannedTribes: game.bannedTribes,
 			bgsHasPrizes: game.hasBgsPrizes,
+			// bgsHasQuests: replay.hasBgsQuests,
+			// bgsHeroQuests: replay?.bgsHeroQuests,
+			// bgsQuestsCompletedTimings: replay?.bgsQuestsCompletedTimings,
+			// bgsHeroQuestRewards: replay?.bgsHeroQuestRewards,
 			// xpGained: game.xpGained,
 		} as GameStat);
 
