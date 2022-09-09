@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardClass, CardIds, duelsHeroConfigs } from '@firestone-hs/reference-data';
+import { CardClass, duelsHeroConfigs } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
@@ -28,12 +28,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						[helpTooltip]="heroClass.name"
 					/>
 				</div>
-				<div
-					class="warning"
-					*ngIf="hero.warning"
-					inlineSVG="assets/svg/attention.svg"
-					[helpTooltip]="hero.warning"
-				></div>
 			</button>
 		</div>
 	`,
@@ -64,7 +58,6 @@ export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionComponent
 						c
 					].toLowerCase()}.png`,
 				})),
-				warning: this.getWarning(config.hero),
 			};
 		});
 	}
@@ -76,19 +69,6 @@ export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionComponent
 	onHeroCardClicked(hero: HeroOption) {
 		this.store.send(new DuelsDeckbuilderHeroSelectedEvent(hero.cardId));
 	}
-
-	private getWarning(hero: CardIds): string {
-		switch (hero) {
-			case CardIds.VanndarStormpikeTavernBrawl:
-			case CardIds.DrektharTavernBrawl:
-				return this.i18n.translateString('app.duels.deckbuilder.warning.neutral-hero');
-			case CardIds.BrannBronzebeardTavernBrawl_PVPDR_Hero_Brann:
-			case CardIds.RenoJacksonTavernBrawl_PVPDR_Hero_Reno:
-			case CardIds.EliseStarseekerTavernBrawl_PVPDR_Hero_Elise:
-			case CardIds.SirFinleyTavernBrawl_PVPDR_Hero_Finley:
-				return this.i18n.translateString('app.duels.deckbuilder.warning.loe-hero');
-		}
-	}
 }
 
 interface HeroOption {
@@ -96,7 +76,6 @@ interface HeroOption {
 	readonly cardImage: string;
 	readonly name: string;
 	readonly classes: readonly HeroOptionClass[];
-	readonly warning: string;
 }
 
 interface HeroOptionClass {
