@@ -112,8 +112,13 @@
 				.bottom-info {
 					border-left: 1px solid var(--color-3);
 					top: 0;
+					margin-top: 0;
 					padding-left: 20px;
 					height: 100%;
+
+					& > *:last-child {
+						border-right: none;
+					}
 				}
 
 				.triples-section {
@@ -154,7 +159,6 @@
 					justify-content: space-between;
 					width: auto;
 					border-right: 1px solid var(--color-3);
-					
 
 					.rewards-container .title {
 						display: flex;
