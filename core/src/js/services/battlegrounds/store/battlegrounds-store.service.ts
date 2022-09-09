@@ -16,6 +16,7 @@ import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
+import { GameStatusService } from '../../game-status.service';
 import { LogsUploaderService } from '../../logs-uploader.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
@@ -144,6 +145,7 @@ export class BattlegroundsStoreService {
 		private readonly owUtils: OwUtilsService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly bgsUserStatsService: BgsBestUserStatsService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -189,6 +191,12 @@ export class BattlegroundsStoreService {
 			});
 
 			this.stateUpdater = window['mainWindowStoreUpdater'];
+		});
+		this.gameStatus.onGameExit(() => {
+			if (this.memoryInterval) {
+				clearInterval(this.memoryInterval);
+				this.memoryInterval = null;
+			}
 		});
 	}
 

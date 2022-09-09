@@ -9,6 +9,7 @@ import { MemoryUpdate } from '../models/memory/memory-update';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
+import { GameStatusService } from './game-status.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
@@ -36,6 +37,7 @@ export class GameEvents {
 		private prefs: PreferencesService,
 		private store: MainWindowStoreService,
 		private memoryService: MemoryInspectionService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		this.init();
 	}
@@ -103,12 +105,9 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		// this.ow?.addGameInfoUpdatedListener(async (res: any) => {
-		//
-		// 	if (this.ow.exitGame(res)) {
-		// 		this.setSpectating(false);
-		// 	}
-		// });
+		this.gameStatus.onGameExit(() => {
+			this.processingQueue.enqueue('End Spectator Mode');
+		});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
