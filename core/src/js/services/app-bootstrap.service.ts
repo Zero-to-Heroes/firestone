@@ -25,6 +25,7 @@ import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.serv
 import { GameStateService } from './decktracker/game-state.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
+import { GameStatusService } from './game-status.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { LocalizationService } from './localization.service';
 import { LogRegisterService } from './log-register.service';
@@ -45,6 +46,7 @@ import { OwNotificationsService } from './notifications.service';
 import { OverwolfService } from './overwolf.service';
 import { OwUtilsService } from './plugins/ow-utils.service';
 import { PreferencesService } from './preferences.service';
+import { QuestsService } from './quests.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { RewardMonitorService } from './rewards/rewards-monitor';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
@@ -110,6 +112,8 @@ export class AppBootstrapService {
 		private init_OWUtilsService: OwUtilsService,
 		private init_CardsHighlightService: CardsHighlightService,
 		private init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
+		private init_gameStatus: GameStatusService,
+		private init_quests: QuestsService,
 	) {}
 
 	public async init() {

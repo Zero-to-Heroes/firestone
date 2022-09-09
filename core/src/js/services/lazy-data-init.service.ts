@@ -4,6 +4,7 @@ import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { MercenariesStateBuilderService } from './mercenaries/mercenaries-state-builder.service';
+import { QuestsService } from './quests.service';
 
 @Injectable()
 export class LazyDataInitService {
@@ -13,6 +14,7 @@ export class LazyDataInitService {
 		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
 		private readonly globalStatsService: GlobalStatsService,
 		private readonly bgsBestStatsService: BgsBestUserStatsService,
+		private readonly questsService: QuestsService,
 	) {}
 
 	public requestLoad(dataType: StateDataType) {
@@ -30,6 +32,8 @@ export class LazyDataInitService {
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'user-bgs-best-stats':
 				return this.bgsBestStatsService.loadBgsBestUserStats();
+			case 'reference-quests':
+				return this.questsService.loadReferenceQuests();
 		}
 	}
 }
@@ -40,4 +44,5 @@ export type StateDataType =
 	| 'mercenaries-reference-data'
 	| 'user-global-stats'
 	| 'user-bgs-best-stats'
+	| 'reference-quests'
 	| 'battlegrounds-perfect-games';

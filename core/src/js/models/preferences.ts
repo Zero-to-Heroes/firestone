@@ -72,6 +72,8 @@ export class Preferences {
 	readonly globalZoomLevel: number = 100;
 	readonly flashWindowOnYourTurn: boolean = true;
 	readonly allowGamesShare: boolean = true;
+	readonly enableQuestsWidget: boolean = true;
+	readonly showQuestsWidgetWhenEmpty: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
 
@@ -167,6 +169,10 @@ export class Preferences {
 	readonly overlayHighlightRelatedCards: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;
+
+	readonly hsShowQuestsWidget: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly hsQuestsWidgetPosition: { left: number; top: number };
 
 	readonly guessOpponentArchetype: boolean = true;
 

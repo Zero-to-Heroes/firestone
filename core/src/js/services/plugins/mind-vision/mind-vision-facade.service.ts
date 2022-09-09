@@ -10,6 +10,7 @@ import { MemoryMercenariesInfo } from '@models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { RewardsTrackInfos } from '@models/rewards-track-info';
 import { InternalHsAchievementsInfo } from './operations/get-achievements-info-operation';
+import { MemoryQuestsLog } from './operations/get-active-quests-operation';
 
 declare let OverwolfPlugin: any;
 
@@ -405,6 +406,20 @@ export class MindVisionFacadeService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse getBoostersInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getActiveQuests(): Promise<MemoryQuestsLog> {
+		return new Promise<MemoryQuestsLog>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getActiveQuests((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getActiveQuests', e);
 				resolve(null);
 			}
 		});

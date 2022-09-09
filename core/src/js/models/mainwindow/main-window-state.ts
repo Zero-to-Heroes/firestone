@@ -11,6 +11,7 @@ import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
+import { QuestsState } from './quests/quests-state';
 import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
 import { GameStat } from './stats/game-stat';
@@ -18,6 +19,7 @@ import { StatsState } from './stats/stats-state';
 
 export class MainWindowState {
 	readonly currentScene: SceneMode = null;
+	readonly lastNonGamePlayScene: SceneMode = null;
 	readonly currentUser: CurrentUser = null;
 	readonly showFtue: boolean = false;
 	readonly replays: ReplaysState = new ReplaysState();
@@ -30,6 +32,7 @@ export class MainWindowState {
 	readonly mercenaries: MercenariesState = new MercenariesState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
+	readonly quests: QuestsState = new QuestsState();
 	readonly showAds: boolean = true;
 
 	// See decktracker-state.ts for more info

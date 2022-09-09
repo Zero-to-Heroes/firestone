@@ -18,6 +18,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-decktracker-beta *ngSwitchCase="'beta'"></settings-decktracker-beta>
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 				<settings-general-data *ngSwitchCase="'data'"></settings-general-data>
+				<settings-general-quests *ngSwitchCase="'quests'"></settings-general-quests>
 			</ng-container>
 		</ul>
 	`,

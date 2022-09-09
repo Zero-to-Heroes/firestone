@@ -217,6 +217,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateHsQuestsWidgetPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, hsQuestsWidgetPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateTurnTimerWidgetPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, turnTimerWidgetPosition: { left, top } };

@@ -366,6 +366,7 @@ import { DecktrackerOpponentWidgetWrapperComponent } from '../../components/over
 import { DecktrackerPlayerWidgetWrapperComponent } from '../../components/overlays/decktracker-player-widget-wrapper.component';
 import { DuelsMaxLifeOpponentWidgetWrapperComponent } from '../../components/overlays/duels-max-life-player-widget-wrapper.component';
 import { DuelsMaxLifeWidgetComponent } from '../../components/overlays/duels-max-life/duels-max-life-widget.component';
+import { HsQuestsWidgetWrapperComponent } from '../../components/overlays/hs-quests-widget-wrapper.component';
 import { MercsActionQueueWidgetWrapperComponent } from '../../components/overlays/mercs-action-queue-widget-wrapper.component';
 import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overlays/mercs-opponent-team-widget-wrapper.component';
 import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
@@ -377,6 +378,10 @@ import { OpponentCardInfoComponent } from '../../components/overlays/opponenthan
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
+import {
+	HsQuestsListWidgetComponent,
+	HsQuestsWidgetComponent,
+} from '../../components/overlays/quests/hs-quests-widget.component';
 import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/secrets-helper-widget-wrapper.component';
 import { TurnTimerWidgetWrapperComponent } from '../../components/overlays/turn-timer-widget-wrapper.component';
 import {
@@ -428,6 +433,7 @@ import { SettingsGeneralDataComponent } from '../../components/settings/general/
 import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
 import { SettingsGeneralLocalizationComponent } from '../../components/settings/general/settings-general-localization.component';
 import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
+import { SettingsGeneralQuestsComponent } from '../../components/settings/general/settings-general-quests.component';
 import { SettingsGeneralThirdPartyComponent } from '../../components/settings/general/settings-general-third-party.component';
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 import { SettingsMercenariesGeneralComponent } from '../../components/settings/mercenaries/settings-mercenaries-general.component';
@@ -493,6 +499,7 @@ import { DevService } from '../../services/dev.service';
 import { DuelsStateBuilderService } from '../../services/duels/duels-state-builder.service';
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
+import { GameStatusService } from '../../services/game-status.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
@@ -523,6 +530,7 @@ import { OwNotificationsService } from '../../services/notifications.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { QuestsService } from '../../services/quests.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
 import { ReplaysNotificationService } from '../../services/replays/replays-notification.service';
 import { RewardMonitorService } from '../../services/rewards/rewards-monitor';
@@ -933,6 +941,10 @@ const components = [
 		TurnTimerWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		HeroPowerOverlayComponent,
+		HsQuestsWidgetComponent,
+		HsQuestsListWidgetComponent,
+		HsQuestsWidgetWrapperComponent,
+
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
 		DuelsDecktrackerOocComponent,
@@ -1019,6 +1031,7 @@ const components = [
 		SettingsGeneralBugReportComponent,
 		SettingsGeneralThirdPartyComponent,
 		SettingsGeneralDataComponent,
+		SettingsGeneralQuestsComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,
@@ -1086,6 +1099,8 @@ const components = [
 		ApiRunner,
 		LocalStorageService,
 		LazyDataInitService,
+		GameStatusService,
+		QuestsService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

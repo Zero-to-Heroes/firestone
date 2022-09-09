@@ -186,6 +186,8 @@ import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/merc
 import { MercenariesViewMercDetailsEvent } from './events/mercenaries/mercenaries-view-merc-details-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
+import { ActiveQuestsUpdatedEvent } from './events/quests/active-quests-updated-event';
+import { ReferenceQuestsLoadedEvent } from './events/quests/reference-quests-loaded-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
 import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
@@ -331,6 +333,8 @@ import { MercenariesViewMercDetailsProcessor } from './processors/mercenaries/me
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
+import { ActiveQuestsUpdatedProcessor } from './processors/quests/active-quests-updated-processor';
+import { ReferenceQuestsLoadedProcessor } from './processors/quests/reference-quests-loaded-processor';
 import { ChangeMatchStatsNumberOfTabsProcessor } from './processors/replays/change-match-stats-number-of-tabs-processor';
 import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
@@ -477,16 +481,7 @@ export class MainWindowStoreService {
 			} else {
 			}
 
-			// console.debug(
-			// 	'emitting new merged state',
-			// 	event.eventName(),
-			// 	this.state.mercenaries.referenceData,
-			// 	event,
-			// 	this.state,
-			// 	stateWithNavigation,
-			// 	this.navigationState,
-			// 	this.updateNavigationArrows(this.navigationState, newState),
-			// );
+			// console.debug('emitting new merged state', event.eventName(), this.state, this.state.quests);
 			this.mergedEmitter.next([
 				this.state,
 				// Because some events don't emit a new navigationState, in which case the arrows
@@ -585,6 +580,13 @@ export class MainWindowStoreService {
 
 			SceneChangedEvent.eventName(),
 			new SceneChangedProcessor(),
+
+			// Quests
+			ReferenceQuestsLoadedEvent.eventName(),
+			new ReferenceQuestsLoadedProcessor(),
+
+			ActiveQuestsUpdatedEvent.eventName(),
+			new ActiveQuestsUpdatedProcessor(this.memoryReading),
 
 			// Collection
 			CollectionInitEvent.eventName(),

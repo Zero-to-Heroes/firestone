@@ -1,0 +1,31 @@
+.general-quests {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	min-height: 0;
+	overflow: auto;
+
+	.slider-label {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		font-size: 14px;
+	}
+
+	.disabled {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+
+	::ng-deep .settings-p.settings-p.settings-p {
+		width: 270px;
+	}
+
+	::ng-deep .preference-slider {
+		width: 320px;
+	}
+
+	::ng-deep preference-toggle.disabled .preference-toggle {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+}

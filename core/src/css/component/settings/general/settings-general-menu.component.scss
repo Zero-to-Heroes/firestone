@@ -1,36 +1,45 @@
 :host {
-    display: flex;
+	display: flex;
 }
 
 .general-menu {
-    display: flex;
-    flex-direction: column;
-    width: 175px;
-    padding-right: 15px;
-    height: 100%;
-    list-style: none;
-    border-right: 1px solid #472406;
+	display: flex;
+	flex-direction: column;
+	width: 175px;
+	padding-right: 15px;
+	height: 100%;
+	list-style: none;
+	border-right: 1px solid #472406;
 
-    li {
-        width: 160px;
-        height: 40px;
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 14px;
-        color: #D9C3AB;
-        padding-left: 15px;
-        display: flex;
-        align-items: center;
+	li {
+		width: 160px;
+		height: 40px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+		padding-left: 15px;
+		display: flex;
+		align-items: center;
 
-        &.selected {
-            background: rgba(255, 255, 255, 0.08);
-            color: #FFB948;
-        }
+		&.selected {
+			background: rgba(255, 255, 255, 0.08);
+			color: #ffb948;
+		}
 
-        &:hover {
-            color: #FFB948;
-        }
-    }
+		&:hover {
+			color: #ffb948;
+		}
+	}
+
+	.separator {
+		border-bottom: 1px solid;
+		height: 10px;
+		width: 85%;
+		margin-left: auto;
+		margin-right: auto;
+		pointer-events: none;
+	}
 }

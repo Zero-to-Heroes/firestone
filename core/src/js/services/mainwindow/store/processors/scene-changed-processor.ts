@@ -1,3 +1,4 @@
+import { SceneMode } from '@firestone-hs/reference-data';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { SceneChangedEvent } from '../events/scene-changed-event';
@@ -14,6 +15,8 @@ export class SceneChangedProcessor implements Processor {
 		return [
 			currentState.update({
 				currentScene: event.scene,
+				lastNonGamePlayScene:
+					event.scene === SceneMode.GAMEPLAY ? currentState.lastNonGamePlayScene : event.scene,
 			}),
 			null,
 		];

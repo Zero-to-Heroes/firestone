@@ -34,6 +34,8 @@ export class StoreInitProcessor implements Processor {
 			decktracker: event.initialState.decktracker.update({
 				metaDecks: currentState.decktracker.metaDecks,
 			}),
+			// Hack - quests are not handled by the store init process
+			quests: currentState.quests,
 		});
 		const newState = currentState.update(stateToUpdate);
 		if (event.storeReady) {

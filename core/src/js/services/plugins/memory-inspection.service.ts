@@ -28,6 +28,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
 import { GetAchievementsInfoOperation } from './mind-vision/operations/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/operations/get-active-deck-operation';
+import { GetActiveQuestsOperation, MemoryQuestsLog } from './mind-vision/operations/get-active-quests-operation';
 import { GetArenaInfoOperation } from './mind-vision/operations/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/operations/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/operations/get-battlegrounds-info-operation';
@@ -103,6 +104,7 @@ export class MemoryInspectionService {
 		this.ow,
 	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVisionFacade, this.ow);
+	private getActiveQuestsOperation = new GetActiveQuestsOperation(this.mindVisionFacade, this.ow);
 	// private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(
 	// 	this.mindVisionFacade,
 	// 	this.ow,
@@ -276,6 +278,10 @@ export class MemoryInspectionService {
 
 	public async getCurrentSceneFromMindVision(): Promise<SceneMode> {
 		return this.mindVision.callMindVision(() => this.getCurrentSceneOperation.call());
+	}
+
+	public async getActiveQuests(): Promise<MemoryQuestsLog> {
+		return this.mindVision.callMindVision(() => this.getActiveQuestsOperation.call());
 	}
 
 	// public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {

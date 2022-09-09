@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ArenaState } from '../../../models/arena/arena-state';
@@ -238,6 +239,7 @@ export class StoreBootstrapService {
 
 		const initialWindowState = windowStateForFtue.update({
 			currentScene: currentScene,
+			lastNonGamePlayScene: currentScene === SceneMode.GAMEPLAY ? null : currentScene,
 			currentUser: currentUser,
 			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
 			replays: replayState,
