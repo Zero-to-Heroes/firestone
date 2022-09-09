@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.9.8',
+		version: '9.10.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,15 +46,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add quest rewards overview in the various widgets.`,
+								text: `Add a widget to easily see all your current Hearthstone (not BG) quests.`,
 							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
 							{
-								type: 'bug',
-								text: `Fix a sim issue where Baron Rivendare was ignored when simulating deathrattles.`,
+								type: 'feature',
+								text: `Add turn counters, both for the current battle and for the map in total.`,
 							},
 						],
 					},
@@ -65,32 +70,11 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue that ignore the Stealth attribute.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue that ignored quests after the first one (for Sire Denathrius).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Evil Twin on an empty board.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Change the wording of the Relic counter to show the power level of the next relic (instead of the number of relics already played).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where Vanessa VanCleef's counter would also consider the player's last played card.`,
+								text: `Remove warning in deckbuilder for the League of Explorer heroes.`,
 							},
 						],
 					},
@@ -98,25 +82,17 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'feature',
-								text: `Add highlight for Toxic Venom.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix Elune's Grace speed buff being incorrectly applied to all abilities.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where passive treasures could be displayed with a speed of 0.`,
+								text: `Fix an issue where some passive treasures would still show a speed.`,
 							},
 						],
 					},
 					{
-						category: 'collection',
+						category: 'replays',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the One Night in Karazhan set was not at its expected chronological place in the sets list.`,
+								text: `Fix the match time not showing properly.`,
 							},
 						],
 					},
@@ -124,8 +100,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where you couldn't drag the scrollbar in multiselect dropdowns.`,
+								type: 'ui',
+								text: `Various improvements of how the app looks, especially in non-English languages (Community Contribution!).`,
 							},
 						],
 					},
