@@ -30,6 +30,7 @@
 
 		.label {
 			flex-grow: 1;
+			margin-right: 5px;
 		}
 
 		.value {
@@ -69,12 +70,6 @@
 		&:hover {
 			opacity: 0.7;
 			background: transparent;
-		}
-	}
-
-	.face-offs {
-		.cell {
-			width: 75px;
 		}
 	}
 }
