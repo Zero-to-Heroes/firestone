@@ -49,6 +49,7 @@ export class QuestsService {
 			const changes: MemoryUpdate = data.data[0];
 			// Assumption for now is that quests can only be completed during gameplay
 			// Also, quests are not updated live while playing
+			// TODO: doesn't account for rerolls
 			if (
 				!this.hasFetchedQuestsAtLeastOnce ||
 				(this.previousScene === SceneMode.GAMEPLAY &&
@@ -58,6 +59,7 @@ export class QuestsService {
 				this.previousScene = changes.CurrentScene;
 				const activeQuests = await this.memory.getActiveQuests();
 				this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
+				this.hasFetchedQuestsAtLeastOnce = true;
 			}
 		});
 		this.gameStatus.onGameExit(() => (this.hasFetchedQuestsAtLeastOnce = false));

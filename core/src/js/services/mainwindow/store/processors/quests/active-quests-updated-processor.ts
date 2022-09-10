@@ -28,6 +28,7 @@ export class ActiveQuestsUpdatedProcessor implements Processor {
 				xpBonus: rewardTrackInfo?.XpBonusPercent,
 			}),
 		});
+		console.debug('[quests] newState', newState);
 		return [newState, null];
 	}
 }

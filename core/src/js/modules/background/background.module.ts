@@ -378,10 +378,11 @@ import { OpponentCardInfoComponent } from '../../components/overlays/opponenthan
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
+import { HsQuestsWidgetComponent } from '../../components/overlays/quests/hs-quests-widget.component';
 import {
 	HsQuestsListWidgetComponent,
-	HsQuestsWidgetComponent,
-} from '../../components/overlays/quests/hs-quests-widget.component';
+	QuestsWidgetViewComponent,
+} from '../../components/overlays/quests/quests-widget-view.component';
 import { SecretsHelperWidgetWrapperComponent } from '../../components/overlays/secrets-helper-widget-wrapper.component';
 import { TurnTimerWidgetWrapperComponent } from '../../components/overlays/turn-timer-widget-wrapper.component';
 import {
@@ -941,6 +942,7 @@ const components = [
 		TurnTimerWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		HeroPowerOverlayComponent,
+		QuestsWidgetViewComponent,
 		HsQuestsWidgetComponent,
 		HsQuestsListWidgetComponent,
 		HsQuestsWidgetWrapperComponent,
