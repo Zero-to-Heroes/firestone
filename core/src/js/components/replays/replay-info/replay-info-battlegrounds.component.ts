@@ -118,6 +118,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
+	@Input() displayPerfect = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
@@ -178,7 +179,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		this.gameMode = this.replayInfo.gameMode;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(this.replayInfo, true);
 
-		this.result = this.buildMatchResultText(this.replayInfo);
+		this.result = this.buildMatchResultText(this.replayInfo, this.displayPerfect);
 		this.reviewId = this.replayInfo.reviewId;
 
 		const isBg =
@@ -226,9 +227,9 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		}
 	}
 
-	private buildMatchResultText(info: GameStat): string {
+	private buildMatchResultText(info: GameStat, displayPerfect: boolean): string {
 		if (info.additionalResult) {
-			if (info.bgsPerfectGame) {
+			if (info.bgsPerfectGame && displayPerfect) {
 				return this.i18n.translateString('app.replays.replay-info.bgs-perfect-game-result');
 			}
 			return this.i18n.translateString(`app.replays.replay-info.bgs-result.${parseInt(info.additionalResult)}`);

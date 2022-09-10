@@ -29,6 +29,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			[showReplayLabel]="showReplayLabel"
 			[displayTime]="displayTime"
 			[replay]="replayInfo"
+			[displayPerfect]="displayPerfect"
 		></replay-info-battlegrounds>
 		<replay-info-mercenaries
 			*ngIf="isMercenaries"
@@ -71,6 +72,7 @@ export class ReplayInfoComponent extends AbstractSubscriptionComponent {
 	@Input() displayTime = true;
 	@Input() displayLoot: boolean;
 	@Input() displayShortLoot: boolean;
+	@Input() displayPerfect = true;
 
 	@Input() set replay(value: GameStat | RunStep) {
 		this.replayInfo = value;
