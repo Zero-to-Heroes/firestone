@@ -74,6 +74,7 @@ export class Preferences {
 	readonly allowGamesShare: boolean = true;
 	readonly enableQuestsWidget: boolean = true;
 	readonly showQuestsWidgetWhenEmpty: boolean = false;
+	readonly showQuestsInGame: boolean = true;
 
 	readonly advancedModeToggledOn: boolean;
 

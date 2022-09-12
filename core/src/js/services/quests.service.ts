@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QuestsInfo, SceneMode } from '@firestone-hs/reference-data';
+import { QuestsInfo } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { MemoryUpdate } from '../models/memory/memory-update';
@@ -19,8 +19,8 @@ const REFERENCE_QUESTS_URL = 'https://static.firestoneapp.com/data/quests/quests
 export class QuestsService {
 	private requestedInitialReferenceQuestsLoad = new BehaviorSubject<boolean>(false);
 
-	private previousScene: SceneMode;
-	private hasFetchedQuestsAtLeastOnce: boolean;
+	// private previousScene: SceneMode;
+	// private hasFetchedQuestsAtLeastOnce: boolean;
 
 	constructor(
 		private readonly api: ApiRunner,
@@ -50,19 +50,14 @@ export class QuestsService {
 			// Assumption for now is that quests can only be completed during gameplay
 			// Also, quests are not updated live while playing
 			// TODO: doesn't account for rerolls
-			if (
-				!this.hasFetchedQuestsAtLeastOnce ||
-				(this.previousScene === SceneMode.GAMEPLAY &&
-					changes.CurrentScene != null &&
-					changes.CurrentScene !== SceneMode.GAMEPLAY)
-			) {
-				this.previousScene = changes.CurrentScene;
+			if (changes.CurrentScene) {
+				// this.previousScene = changes.CurrentScene;
 				const activeQuests = await this.memory.getActiveQuests();
 				this.store.send(new ActiveQuestsUpdatedEvent(activeQuests));
-				this.hasFetchedQuestsAtLeastOnce = true;
+				// this.hasFetchedQuestsAtLeastOnce = true;
 			}
 		});
-		this.gameStatus.onGameExit(() => (this.hasFetchedQuestsAtLeastOnce = false));
+		// this.gameStatus.onGameExit(() => (this.hasFetchedQuestsAtLeastOnce = false));
 	}
 
 	public loadInitialReferenceQuests() {

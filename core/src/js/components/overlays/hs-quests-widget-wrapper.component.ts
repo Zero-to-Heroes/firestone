@@ -56,10 +56,11 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				([main, nav, prefs]) => main.lastNonGamePlayScene,
 				// Show from prefs
 				([main, nav, prefs]) => prefs.hsShowQuestsWidget && prefs.enableQuestsWidget,
+				([main, nav, prefs]) => prefs.showQuestsInGame,
 			),
 		).pipe(
 			// tap((info) => console.debug('quests widget', info)),
-			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs]]) => {
+			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
 				if (!displayFromPrefs) {
 					return false;
 				}
@@ -74,7 +75,7 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				return (
 					// Otherwise the quest widget flickers briefly while going into a game
 					// because the states are all empty
-					isInHearthstoneMatch || hearthstoneScenes.includes(currentScene)
+					(showQuestsInGame && isInHearthstoneMatch) || hearthstoneScenes.includes(currentScene)
 				);
 			}),
 			this.handleReposition(),

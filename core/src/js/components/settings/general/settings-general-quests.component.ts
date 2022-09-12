@@ -34,6 +34,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltip]="'settings.general.quests.show-when-empty-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="showQuestsInGame"
+					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[label]="'settings.general.quests.show-in-game-label' | owTranslate"
+					[tooltip]="'settings.general.quests.show-in-game-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="hsShowQuestsWidget"
 					[ngClass]="{ 'disabled': !value.enableQuests }"
 					[label]="'settings.general.quests.constructed-label' | owTranslate"
