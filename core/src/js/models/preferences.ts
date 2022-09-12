@@ -174,6 +174,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly hsQuestsWidgetPosition: { left: number; top: number };
 
+	readonly bgsShowQuestsWidget: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsQuestsWidgetPosition: { left: number; top: number };
+
 	readonly guessOpponentArchetype: boolean = true;
 
 	// readonly overlayDisplayMode: string;

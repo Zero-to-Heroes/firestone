@@ -10,7 +10,8 @@ import { AbstractSubscriptionComponent } from '@components/abstract-subscription
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 
 @Component({
@@ -42,6 +43,8 @@ import { Preferences } from '../../../models/preferences';
 				}"
 				[quests]="quests$ | async"
 				[theme]="theme"
+				[xpIcon]="xpIcon"
+				[xpBonusIcon]="xpBonusIcon"
 			>
 			</hs-quests-list>
 		</div>
@@ -51,13 +54,12 @@ import { Preferences } from '../../../models/preferences';
 export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() theme: string;
 	@Input() widgetIcon: string;
+	@Input() xpIcon: string;
+	@Input() xpBonusIcon: string;
 
-	@Input() set rewardsTrack(value: RewardTrackType) {
-		this.rewardsTrack$$.next(value);
-	}
-	@Input() set showPrefsExtractor(value: (prefs: Preferences) => boolean) {
-		this.showPrefsExtractor$$.next(value);
-	}
+	@Input() rewardsTrack: RewardTrackType;
+	@Input() showPrefsExtractor: (prefs: Preferences) => boolean;
+	@Input() xpBonusExtractor: (state: MainWindowState) => number;
 
 	quests$: Observable<readonly Quest[]>;
 	showQuests$: Observable<boolean>;
@@ -69,8 +71,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	private showWidget$$ = new BehaviorSubject<boolean>(false);
 	private showRight$$ = new BehaviorSubject<boolean>(false);
 	private showBottom$$ = new BehaviorSubject<boolean>(false);
-	private rewardsTrack$$ = new BehaviorSubject<RewardTrackType>(null);
-	private showPrefsExtractor$$ = new BehaviorSubject<(prefs: Preferences) => boolean>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -85,18 +85,16 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 			this.store.listen$(
 				([main, nav]) => main.quests.getReferenceQuests(),
 				([main, nav]) => main.quests.activeQuests,
-				([main, nav]) => main.quests.xpBonus, // Not relevant for BG?
+				([main, nav]) => (this.xpBonusExtractor ? this.xpBonusExtractor(main) : null),
 			),
-			this.rewardsTrack$$.asObservable(),
 		).pipe(
 			tap((info) => console.debug('quests info', info)),
-			filter(([[referenceQuests, activeQuests, xpBonus], rewardsTrack]) => rewardsTrack != null),
-			this.mapData(([[referenceQuests, activeQuests, xpBonus], rewardsTrack]) => {
+			this.mapData(([[referenceQuests, activeQuests, xpBonus]]) => {
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
 						console.debug('refQuest', refQuest, this.rewardsTrack);
-						if (refQuest.rewardTrackType !== rewardsTrack) {
+						if (refQuest.rewardTrackType !== this.rewardsTrack) {
 							return null;
 						}
 						const result: Quest = {
@@ -120,12 +118,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 				(prefs) => prefs.showQuestsWidgetWhenEmpty,
 			),
 			this.quests$,
-			this.showPrefsExtractor$$.asObservable(),
 		).pipe(
 			tap((info) => console.debug('showQuests info', info)),
-			filter(([[prefs, showWhenEmpty], quests, showPrefsExtractor]) => !!showPrefsExtractor),
-			this.mapData(([[prefs, showWhenEmpty], quests, showPrefsExtractor]) => {
-				const showQuests = showPrefsExtractor(prefs);
+			this.mapData(([[prefs, showWhenEmpty], quests]) => {
+				const showQuests = this.showPrefsExtractor && this.showPrefsExtractor(prefs);
 				return showQuests && (!!quests?.length || showWhenEmpty);
 			}),
 		);
@@ -168,16 +164,8 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 					<!-- TODO: different images for BG -->
 					<div class="quest-portrait">
 						<div class="xp" *ngIf="quest.xp">
-							<img
-								*ngIf="!quest.xpBonus"
-								class="xp-icon"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp.webp"
-							/>
-							<img
-								*ngIf="quest.xpBonus"
-								class="xp-icon"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_boost.webp"
-							/>
+							<img *ngIf="!quest.xpBonus" class="xp-icon" [src]="xpIcon" />
+							<img *ngIf="quest.xpBonus" class="xp-icon" [src]="xpBonusIcon" />
 							<div class="xp-value" [ngClass]="{ 'bonus': !!quest.xpBonus }">{{ quest.xp }}</div>
 						</div>
 					</div>
@@ -202,6 +190,8 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 export class HsQuestsListWidgetComponent {
 	@Input() theme: string;
 	@Input() quests: readonly Quest[];
+	@Input() xpIcon: string;
+	@Input() xpBonusIcon: string;
 }
 
 interface Quest {

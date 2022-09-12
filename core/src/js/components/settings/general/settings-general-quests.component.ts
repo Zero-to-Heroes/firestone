@@ -39,6 +39,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[label]="'settings.general.quests.constructed-label' | owTranslate"
 					[tooltip]="'settings.general.quests.constructed-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="bgsShowQuestsWidget"
+					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[label]="'settings.general.quests.battlegrounds-label' | owTranslate"
+					[tooltip]="'settings.general.quests.battlegrounds-tooltip' | owTranslate"
+				></preference-toggle>
 			</div>
 		</div>
 	`,

@@ -326,6 +326,7 @@ import { BgsBoardWidgetWrapperComponent } from '../../components/overlays/bgs-bo
 import { BgsHeroSelectionWidgetWrapperComponent } from '../../components/overlays/bgs-hero-selection-widget-wrapper.component';
 import { BgsLeaderboardWidgetWrapperComponent } from '../../components/overlays/bgs-leaderboard-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays/bgs-minion-tiers-widget-wrapper.component';
+import { BgsQuestsWidgetWrapperComponent } from '../../components/overlays/bgs-quests-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { MinionOnBoardOverlayComponent } from '../../components/overlays/board/minion-on-board-overlay.component';
 import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
@@ -378,6 +379,7 @@ import { OpponentCardInfoComponent } from '../../components/overlays/opponenthan
 import { OpponentCardInfosComponent } from '../../components/overlays/opponenthand/opponent-card-infos.component';
 import { OpponentCardTurnNumberComponent } from '../../components/overlays/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
+import { BgsQuestsWidgetComponent } from '../../components/overlays/quests/bgs-quests-widget.component';
 import { HsQuestsWidgetComponent } from '../../components/overlays/quests/hs-quests-widget.component';
 import {
 	HsQuestsListWidgetComponent,
@@ -946,6 +948,8 @@ const components = [
 		HsQuestsWidgetComponent,
 		HsQuestsListWidgetComponent,
 		HsQuestsWidgetWrapperComponent,
+		BgsQuestsWidgetComponent,
+		BgsQuestsWidgetWrapperComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,

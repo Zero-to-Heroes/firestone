@@ -45,7 +45,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		>
 			<!-- Global -->
 			<current-session-widget-wrapper></current-session-widget-wrapper>
+			<!-- Use different wrappers to make it easier to position each one differently -->
 			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
+			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
 
 			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper class="focusable" tabindex="0"></decktracker-player-widget-wrapper>
@@ -63,7 +65,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
 			<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
 			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
-			<!-- <bgs-quests-widget-wrapper></bgs-quests-widget-wrapper> -->
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>

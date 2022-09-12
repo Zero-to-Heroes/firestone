@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 
 @Component({
@@ -10,10 +11,16 @@ import { Preferences } from '../../../models/preferences';
 	],
 	template: `
 		<quests-widget-view
+			class="widget"
 			[theme]="'decktracker-theme'"
 			[widgetIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/quest_log_2.png'"
+			[xpIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp.webp'"
+			[xpBonusIcon]="
+				'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_boost.webp'
+			"
 			[rewardsTrack]="rewardsTrack"
 			[showPrefsExtractor]="showPrefsExtractor"
+			[xpBonusExtractor]="xpBonusExtractor"
 		>
 		</quests-widget-view>
 	`,
@@ -22,4 +29,5 @@ import { Preferences } from '../../../models/preferences';
 export class HsQuestsWidgetComponent {
 	rewardsTrack = RewardTrackType.GLOBAL;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.hsShowQuestsWidget;
+	xpBonusExtractor: (state: MainWindowState) => number = (state) => state.quests.xpBonus;
 }
