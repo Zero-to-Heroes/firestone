@@ -197,7 +197,8 @@ export class BgsGame {
 		bgsHideSimResultsOnRecruit: boolean,
 	): BgsFaceOffWithSimulation {
 		if (this.phase === 'combat') {
-			if (bgsShowSimResultsOnlyOnRecruit) {
+			// When the game has ended, we return immediately
+			if (bgsShowSimResultsOnlyOnRecruit && !this.gameEnded) {
 				return null;
 			}
 			return this.lastFaceOff();
