@@ -187,6 +187,10 @@ export const cutNumber = (x: number, precision = 10): number => {
 	return Math.floor(x * precision) / precision;
 };
 
+export const mod = (n: number, m: number): number => {
+	return ((n % m) + m) % m;
+};
+
 // https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
 export const freeRegexp = () => /\s*/g.exec('');
 

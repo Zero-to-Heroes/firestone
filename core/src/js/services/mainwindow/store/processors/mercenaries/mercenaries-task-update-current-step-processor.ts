@@ -5,6 +5,7 @@ import { MemoryVisitor } from '../../../../../models/memory/memory-mercenaries-c
 import { MercenariesMemoryCacheService } from '../../../../mercenaries/mercenaries-memory-cache.service';
 import { MercenariesReferenceData } from '../../../../mercenaries/mercenaries-state-builder.service';
 import { PreferencesService } from '../../../../preferences.service';
+import { mod } from '../../../../utils';
 import { MercenariesTaskUpdateCurrentStepEvent } from '../../events/mercenaries/mercenaries-task-update-current-step-event';
 import { Processor } from '../processor';
 
@@ -18,7 +19,7 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('[task] event', event);
-		const referenceData = await currentState?.mercenaries?.referenceData;
+		const referenceData = currentState?.mercenaries?.referenceData;
 		const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === event.mercenaryId);
 		const collectionInfo = currentState.mercenaries.collectionInfo;
 		console.debug('[task] collectionInfo', collectionInfo);
@@ -75,7 +76,8 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 		// cleaning operation that flips tasks to CLAIMED if they are not present in memory
 		if (operation === 'add') {
 			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
-				const newTaskProgress = Math.min(taskChainLength - 1, currentVisitor.TaskChainProgress + 1);
+				// So that we loop
+				const newTaskProgress = mod(currentVisitor.TaskChainProgress + 1, taskChainLength);
 				const newTask = taskChain.tasks[newTaskProgress];
 				return {
 					TaskId: newTask.id,
@@ -95,22 +97,29 @@ export class MercenariesTaskUpdateCurrentStepProcessor implements Processor {
 			}
 		} else if (operation === 'remove') {
 			if (currentVisitor.Status === TaskStatus.CLAIMED || currentVisitor.Status === TaskStatus.COMPLETE) {
-				const newTaskProgress = Math.max(0, currentVisitor.TaskChainProgress - 1);
+				const newTaskProgress = mod(currentVisitor.TaskChainProgress - 1, taskChainLength);
 				const newTask = taskChain.tasks[newTaskProgress];
 				return {
 					TaskId: newTask.id,
 					VisitorId: taskChain.mercenaryVisitorId,
-					Status: currentVisitor.TaskChainProgress === 0 ? TaskStatus.ACTIVE : TaskStatus.CLAIMED,
+					Status:
+						// Because when we loop back to completion, it's more like an auto increment than a decrement
+						currentVisitor.TaskChainProgress === 0 && newTaskProgress < currentVisitor.TaskChainProgress
+							? TaskStatus.ACTIVE
+							: TaskStatus.CLAIMED,
 					TaskProgress: 0,
 					TaskChainProgress: newTaskProgress,
 				};
 			} else {
-				const newTaskProgress = Math.max(0, currentVisitor.TaskChainProgress - 2);
+				const newTaskProgress = mod(currentVisitor.TaskChainProgress - 2, taskChainLength);
 				const newTask = taskChain.tasks[newTaskProgress];
 				return {
 					TaskId: newTask.id,
 					VisitorId: taskChain.mercenaryVisitorId,
-					Status: currentVisitor.TaskChainProgress === 0 ? TaskStatus.ACTIVE : TaskStatus.CLAIMED,
+					Status:
+						currentVisitor.TaskChainProgress === 0 && newTaskProgress < currentVisitor.TaskChainProgress
+							? TaskStatus.ACTIVE
+							: TaskStatus.CLAIMED,
 					TaskProgress: 0,
 					TaskChainProgress: newTaskProgress,
 				};
