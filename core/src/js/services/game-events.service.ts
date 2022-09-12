@@ -1230,6 +1230,7 @@ export class GameEvents {
 						abilitySpeed: gameEvent.Value.AdditionalProps?.AbilitySpeed,
 						zonePosition: gameEvent.Value.AdditionalProps?.ZonePosition,
 						zone: gameEvent.Value.AdditionalProps?.Zone,
+						revealed: gameEvent.Value.AdditionalProps?.Revealed,
 						dataNum1: gameEvent.Value.AdditionalProps?.DataNum1,
 						dataNum2: gameEvent.Value.AdditionalProps?.DataNum2,
 					}),
