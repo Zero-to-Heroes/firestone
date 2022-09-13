@@ -94,6 +94,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
 						console.debug('refQuest', refQuest, this.rewardsTrack);
+						if (!refQuest) {
+							console.warn('missing ref quest', quest.Id, referenceQuests?.quests?.length, quest);
+							return null;
+						}
 						if (refQuest.rewardTrackType !== this.rewardsTrack) {
 							return null;
 						}
