@@ -95,7 +95,7 @@ export class MercenariesTeamAbilityComponent {
 						],
 				  }
 				: null;
-		this.baseSpeed = abilityCard.cost;
+		this.baseSpeed = abilityCard.cost ?? 0;
 		this.speed =
 			value.speed == null
 				? null
