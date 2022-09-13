@@ -1,8 +1,8 @@
+import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { formatFormat } from '@firestone-hs/reference-data';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { DeckDefinition, decode } from 'deckstrings';
 import { CardsFacadeService } from '../../../../cards-facade.service';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../events/decktracker/constructed-deckbuilder-import-deck-event';
 

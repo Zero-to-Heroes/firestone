@@ -1,8 +1,8 @@
+import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { duelsHeroConfigs, normalizeDuelsHeroCardIdForDeckCode } from '@firestone-hs/reference-data';
 import { MainWindowState } from '@models/mainwindow/main-window-state';
 import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { DeckDefinition, decode } from 'deckstrings';
 import { CardsFacadeService } from '../../../../cards-facade.service';
 import { DuelsDeckbuilderImportDeckEvent } from '../../events/duels/duels-deckbuilder-import-deck-event';
 

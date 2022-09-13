@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import { allDuelsSignatureTreasures, CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { normalizeDeckHeroDbfId } from '@services/hs-utils';
-import { DeckDefinition, decode, encode } from 'deckstrings';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { OverwolfService } from '../../services/overwolf.service';
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { decode as decodeDeckstring } from '@firestone-hs/deckstrings';
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { decode as decodeDeckstring } from 'deckstrings';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import {
 	ARENAS,
 	CardClass,
@@ -13,7 +14,6 @@ import {
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
-import { DeckDefinition, decode, encode } from 'deckstrings';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { decode, encode } from '@firestone-hs/deckstrings';
 import { allDuelsSignatureTreasures, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortByProperties } from '@services/utils';
-import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { DeckCard } from '../models/decktracker/deck-card';

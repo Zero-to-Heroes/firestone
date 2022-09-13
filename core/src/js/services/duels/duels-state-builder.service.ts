@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
+import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
@@ -20,7 +21,6 @@ import { DuelsIsOnDeckBuildingLobbyScreenEvent } from '@services/mainwindow/stor
 import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duels/duels-is-on-main-screen-event';
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
-import { DeckDefinition, decode, encode } from 'deckstrings';
 import { BehaviorSubject } from 'rxjs';
 import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';

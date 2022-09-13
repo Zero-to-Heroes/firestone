@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Optional } from '@angular/core';
-import { decode } from 'deckstrings';
+import { decode } from '@firestone-hs/deckstrings';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
