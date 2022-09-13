@@ -256,7 +256,10 @@
 					border: none;
 					cursor: text;
 					flex-grow: 1;
-					color: var(--color-3);
+
+					&::placeholder{
+						color: var(--color-2);
+					}
 
 					&:focus {
 						outline: none;
@@ -274,10 +277,6 @@
 
 			::selection {
 				background-color: var(--color-4);
-			}
-
-			::-webkit-input-placeholder {
-				color: var(--color-3);
 			}
 		}
 
