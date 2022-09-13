@@ -91,7 +91,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
-					// console.debug('achievements for hero', achievementsForHero);
+					console.debug('achievements for hero', achievementsForHero);
 					return {
 						...statWithDefault,
 						id: cardId,
