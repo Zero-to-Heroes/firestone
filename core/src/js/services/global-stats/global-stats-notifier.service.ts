@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { ReviewMessage } from '@firestone-hs/build-global-stats/dist/review-message';
 import { extractStatsForGame, mergeStats } from '@firestone-hs/build-global-stats/dist/stats-builder';
+import { CardsFacadeService } from '../cards-facade.service';
 import { Events } from '../events.service';
 import { GlobalStatsUpdatedEvent } from '../mainwindow/store/events/stats/global/global-stats-updated-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
@@ -17,6 +18,7 @@ export class GlobalStatsNotifierService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly globalStats: GlobalStatsService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -47,7 +49,11 @@ export class GlobalStatsNotifierService {
 			playerRank: game.playerRank,
 			uploaderToken: undefined,
 		};
-		const statsFromGame = await extractStatsForGame(message, game.uncompressedXmlReplay);
+		const statsFromGame = await extractStatsForGame(
+			message,
+			game.uncompressedXmlReplay,
+			this.allCards.getService(),
+		);
 		if (!statsFromGame?.stats) {
 			return currentGlobalStats;
 		}

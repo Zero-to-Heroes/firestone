@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat, buildNewStats, Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
+// import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -31,7 +31,7 @@ export class BgsRunStatsService {
 	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	private worker: Worker = new Worker();
+	// private worker: Worker = new Worker();
 
 	constructor(
 		private readonly apiRunner: ApiRunner,

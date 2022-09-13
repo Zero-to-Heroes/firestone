@@ -130,7 +130,7 @@ export class EndGameUploaderService {
 		const playerInfo = matchInfo?.localPlayer;
 		const opponentInfo = matchInfo?.opponent;
 
-		const replay = parseHsReplayString(replayXml);
+		const replay = parseHsReplayString(replayXml, this.allCards.getService());
 		if (game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly') {
 			console.log(
 				'[manastorm-bridge]',

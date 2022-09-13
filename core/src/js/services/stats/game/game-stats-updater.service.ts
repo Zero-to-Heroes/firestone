@@ -13,6 +13,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
+import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
@@ -73,6 +74,8 @@ export class GameStatsUpdaterService {
 			playerCardId = playerInfoFromDeckstring?.playerCardId;
 		}
 
+		const quests = isBattlegrounds(replay.gameType) ? replay.bgsHeroQuests ?? [] : [];
+		console.debug('[game] quests', quests, isBattlegrounds(replay.gameType));
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,
@@ -101,12 +104,13 @@ export class GameStatsUpdaterService {
 			bgsAvailableTribes: game.availableTribes,
 			bgsBannedTribes: game.bannedTribes,
 			bgsHasPrizes: game.hasBgsPrizes,
-			// bgsHasQuests: replay.hasBgsQuests,
-			// bgsHeroQuests: replay?.bgsHeroQuests,
-			// bgsQuestsCompletedTimings: replay?.bgsQuestsCompletedTimings,
-			// bgsHeroQuestRewards: replay?.bgsHeroQuestRewards,
+			bgsHasQuests: replay.hasBgsQuests,
+			bgsHeroQuests: quests.map((q) => q.questCardId) as readonly string[],
+			bgsQuestsCompletedTimings: quests.map((q) => q.turnCompleted) as readonly number[],
+			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
 			// xpGained: game.xpGained,
 		} as GameStat);
+		console.debug('[game] built firstGame', firstGame);
 
 		const mainStore = this.stateEmitter?.value;
 		if (!isMercenaries(game.gameMode)) {
@@ -131,7 +135,7 @@ export class GameStatsUpdaterService {
 			mercEquipments: mercEquipments,
 			mercOpponentEquipments: mercOpponentEquipments,
 		});
-		console.debug('built game with merc stas', gameWithMercStats);
+		console.debug('[game] built game with merc stas', gameWithMercStats);
 		return gameWithMercStats;
 	}
 }
