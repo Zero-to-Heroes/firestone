@@ -65,6 +65,7 @@
 				display: grid;
 				grid-template-columns: repeat(3, 1fr);
 				column-gap: 10px;
+				align-items: center;
 
 				checkbox ::ng-deep {
 					label {
