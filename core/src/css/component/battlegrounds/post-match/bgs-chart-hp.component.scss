@@ -116,21 +116,6 @@
 		pointer-events: none;
 
 		.hp-tooltip {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			justify-content: flex-start;
-			font-family: Open Sans;
-			font-style: normal;
-			font-size: 13px;
-			color: #40032e;
-			min-width: 80px;
-			background: #ce73b4;
-
-			.content {
-				padding: 5px;
-			}
-
 			.tooltip-arrow {
 				position: absolute;
 				left: calc(50% - 14px);
@@ -139,26 +124,44 @@
 				fill: #ce73b4;
 				overflow: visible;
 			}
-
-			.title {
-				font-weight: bold;
-			}
-
-			.body {
-				flex-direction: column;
-			}
-
-			.line {
+			.content {
 				display: flex;
-				align-items: center;
+				flex-direction: column;
+				align-items: flex-start;
+				justify-content: flex-start;
+				font-family: Open Sans;
+				font-style: normal;
+				font-size: 13px;
+				color: #40032e;
+				min-width: 80px;
+				background: #ce73b4;
+				padding: 5px;
+
+				.title{
+					align-self: center;
+					span{
+						font-weight: bold;
+					}
+				}
+
+				.body {
+					flex-direction: column;
+				}
+
+				.line {
+					display: flex;
+					align-items: center;
+				}
+
+				.node {
+					width: 10px;
+					height: 10px;
+					border-radius: 50%;
+					margin-right: 5px;
+				}
 			}
 
-			.node {
-				width: 6px;
-				height: 6px;
-				border-radius: 50%;
-				margin-right: 5px;
-			}
+			
 		}
 
 		&.top {
