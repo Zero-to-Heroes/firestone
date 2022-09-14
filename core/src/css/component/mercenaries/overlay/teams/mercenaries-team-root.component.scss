@@ -348,6 +348,32 @@
 		}
 	}
 
+	.create-team-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-left: 90px;
+
+		button {
+			background: var(--color-2);
+			color: var(--color-5);
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Open Sans', sans-serif;
+			padding: 10px;
+
+			&.disabled {
+				opacity: 0.4;
+			}
+
+			&:hover:not(.disabled) {
+				background: var(--color-1);
+			}
+		}
+	}
+
 	.empty-state {
 		padding-left: 20px;
 		display: flex;

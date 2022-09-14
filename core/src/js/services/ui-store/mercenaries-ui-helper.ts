@@ -194,6 +194,7 @@ export const buildMercenariesTasksList = (
 					frameUrl: role
 						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`
 						: null,
+					type: taskChain.taskChainType,
 				} as Task;
 				return result;
 			})
