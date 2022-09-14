@@ -183,6 +183,8 @@ import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainerComponent } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { TheCoinsComponent } from '../../components/collection/the-coins.component';
+import { SearchAutocompleteItemComponent } from '../../components/common/autocomplete-search-with-list-item.component';
+import { AutocompleteSearchWithListComponent } from '../../components/common/autocomplete-search-with-list.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 import { ConstructedMetaDeckSummaryComponent } from '../../components/decktracker/main/constructed-meta-deck-summary.component';
 import { ConstructedMetaDecksComponent } from '../../components/decktracker/main/constructed-meta-decks.component';
@@ -441,6 +443,7 @@ import { SettingsGeneralThirdPartyComponent } from '../../components/settings/ge
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 import { SettingsMercenariesGeneralComponent } from '../../components/settings/mercenaries/settings-mercenaries-general.component';
 import { SettingsMercenariesMenuComponent } from '../../components/settings/mercenaries/settings-mercenaries-menu.component';
+import { SettingsMercenariesQuestsComponent } from '../../components/settings/mercenaries/settings-mercenaries-quests.component';
 import { SettingsMercenariesComponent } from '../../components/settings/mercenaries/settings-mercenaries.component';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
@@ -691,6 +694,9 @@ const components = [
 		SecretsHelperControlBarComponent,
 		SecretsHelperComponent,
 		SecretsHelperWidgetIconComponent,
+
+		AutocompleteSearchWithListComponent,
+		SearchAutocompleteItemComponent,
 
 		CardComponent,
 		CardHistoryComponent,
@@ -1074,6 +1080,7 @@ const components = [
 		SettingsMercenariesComponent,
 		SettingsMercenariesMenuComponent,
 		SettingsMercenariesGeneralComponent,
+		SettingsMercenariesQuestsComponent,
 
 		PreferenceSliderComponent,
 		LocalizationDropdownComponent,

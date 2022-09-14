@@ -1,0 +1,64 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.search {
+	position: relative;
+	width: 100%;
+
+	label {
+		@extend %search-bar-inactive;
+		width: 100%;
+		outline: 1px solid var(--color-3);
+		display: flex;
+
+		&:focus-within,
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
+	input {
+		@extend %search-bar-inactive;
+		background: transparent;
+		border: none;
+		cursor: text;
+		flex-grow: 1;
+
+		&:focus {
+			outline: none;
+			@extend %search-active;
+		}
+	}
+
+	label.search-active {
+		// background: rgba(255, 255, 255, 0.08);
+
+		input {
+			outline: none;
+			@extend %search-active;
+		}
+	}
+
+	.search-results {
+		@extend %search-active;
+		position: absolute;
+		margin-top: -1px;
+		background: var(--color-5);
+		border: 1px solid var(--color-3);
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		max-height: 155px;
+		overflow: auto;
+		z-index: 1;
+	}
+}
+
+::selection {
+	background-color: var(--color-4);
+}
+
+::-webkit-input-placeholder {
+	@extend %search-bar-inactive;
+}
