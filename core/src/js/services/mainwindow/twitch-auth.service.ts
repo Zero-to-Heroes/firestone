@@ -184,9 +184,12 @@ export class TwitchAuthService {
 
 	private cleanDeck(deckState: DeckState, isBattlegrounds: boolean, isMercenaries: boolean): DeckState {
 		if (isBattlegrounds || isMercenaries) {
+			// Just keep the quests and secrets
+			const newOther = deckState.otherZone.filter((card) => card.zone === 'SECRET');
 			return {
 				hand: this.cleanZone(deckState.hand, isBattlegrounds),
 				board: this.cleanZone(deckState.board, isBattlegrounds),
+				otherZone: this.cleanZone(newOther, isBattlegrounds),
 				heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
 				weapon: this.cleanCard(deckState.weapon, isBattlegrounds),
 			} as DeckState;
@@ -199,7 +202,7 @@ export class TwitchAuthService {
 			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
 			deckList: this.cleanZone(deckState.deckList, isBattlegrounds),
 		};
-		delete result.secrets;
+		// delete result.secrets;
 		delete result.spellsPlayedThisMatch;
 		delete result.dynamicZones;
 		delete result.cardsPlayedThisTurn;
