@@ -1,6 +1,3 @@
-@import '../../global/variables';
-@import '../../global/fonts';
-
 .search-autocomplete {
 	display: flex;
 	justify-content: flex-start;
@@ -11,7 +8,8 @@
 	&:hover {
 		// $grey03
 		// background: rgba(120, 95, 107, 0.4);
-		background: var(--color-3);
+		// background: var(--color-3);
+		background: rgba(255, 255, 255, 0.12);
 	}
 
 	span {
@@ -19,6 +17,7 @@
 	}
 
 	.match {
-		@extend %search-bar-auto;
+		color: var(--color-1);
+		font-weight: bold;
 	}
 }

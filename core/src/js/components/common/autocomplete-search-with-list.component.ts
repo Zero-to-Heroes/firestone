@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
@@ -87,20 +87,34 @@ export class AutocompleteSearchWithListComponent<T>
 			this.dataSet$$.asObservable(),
 			this.currentSearchString$$.asObservable(),
 		).pipe(
-			this.mapData(([dataSet, searchString]) =>
-				dataSet
-					.filter((item) => this.valueMatcher(item)?.toLowerCase()?.includes(searchString?.toLowerCase()))
-					.slice(0, this.maxResults),
+			filter(([dataSet, searchString]) => !!dataSet),
+			this.mapData(
+				([dataSet, searchString]) =>
+					dataSet
+						.filter((item) => this.valueMatcher(item)?.toLowerCase()?.includes(searchString?.toLowerCase()))
+						.slice(0, this.maxResults),
+				// Always reemit, so
+				(a, b) => false,
 			),
 		);
-		this.searchResults$.subscribe((result) => (this.showSearchResults = !!result?.length));
+		this.searchResults$
+			.pipe(
+				this.mapData(
+					(info) => info,
+					(a, b) => false,
+				),
+			)
+			.subscribe((result) => {
+				this.showSearchResults = !!result?.length;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 		this.searchForm.valueChanges
 			.pipe(debounceTime(200), distinctUntilChanged(), takeUntil(this.destroyed$))
 			.subscribe((data: string) => {
-				if (data.length >= 2) {
-					this.showSearchResults = false;
-					this.currentSearchString$$.next(data);
-				}
+				this.showSearchResults = false;
+				this.currentSearchString$$.next(data);
 			});
 		this.searchString$ = this.currentSearchString$$.asObservable().pipe(this.mapData((info) => info));
 	}
@@ -136,5 +150,6 @@ export class AutocompleteSearchWithListComponent<T>
 
 	clickItem(item: T) {
 		this.itemClicked.next(item);
+		this.showSearchResults = false;
 	}
 }

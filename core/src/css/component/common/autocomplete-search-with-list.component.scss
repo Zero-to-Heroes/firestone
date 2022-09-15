@@ -1,15 +1,17 @@
-@import '../../global/variables';
-@import '../../global/fonts';
-
 .search {
 	position: relative;
 	width: 100%;
 
 	label {
-		@extend %search-bar-inactive;
 		width: 100%;
 		outline: 1px solid var(--color-3);
 		display: flex;
+		height: 100%;
+		color: var(--color-3);
+
+		i {
+			width: 30px;
+		}
 
 		&:focus-within,
 		&:hover {
@@ -18,15 +20,15 @@
 	}
 
 	input {
-		@extend %search-bar-inactive;
 		background: transparent;
 		border: none;
 		cursor: text;
 		flex-grow: 1;
+		color: var(--color-3);
 
 		&:focus {
 			outline: none;
-			@extend %search-active;
+			color: var(--color-2);
 		}
 	}
 
@@ -35,12 +37,12 @@
 
 		input {
 			outline: none;
-			@extend %search-active;
+			color: var(--color-1);
 		}
 	}
 
 	.search-results {
-		@extend %search-active;
+		color: var(--color-1);
 		position: absolute;
 		margin-top: -1px;
 		background: var(--color-5);
@@ -60,5 +62,5 @@
 }
 
 ::-webkit-input-placeholder {
-	@extend %search-bar-inactive;
+	color: var(--color-3);
 }
