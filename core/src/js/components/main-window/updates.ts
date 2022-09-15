@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.10.2',
+		version: '9.11.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,33 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a widget to easily see all your current Battlegrounds quests.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a widget to easily see all your current Hearthstone quests.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where leaving the game while spectating (without closing the app) would prevent the app from recording further games until it is restarted.`,
-							},
-						],
-					},
-					{
 						category: 'mercenaries',
 						details: [
 							{
 								type: 'feature',
-								text: `Add turn counters, both for the current battle and for the map in total.`,
+								text: `Add a button to automatically create a team based on your current Tasks. See <a href="https://youtu.be/bc9hBmICksw" target="_blank">here</a> for a short video showing it in action.`,
 							},
 						],
 					},
@@ -87,11 +65,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix cards created by Magnetic Mines (Rattlegore's hero power).`,
+								text: `Fix rounding issue when showing quest XP in the quests widget.`,
 							},
 							{
 								type: 'bug',
-								text: `Add the "gift" icon in hand for some more cards.`,
+								text: `Fix an issue where the Relic Counter would be off by 1 (the tooltip was correct).`,
 							},
 						],
 					},
@@ -99,21 +77,8 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix a sim issue when Tamsin uses her hero power on an empty board.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue when gilding already golden minions.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Remove warning in deckbuilder for the League of Explorer heroes.`,
+								type: 'feature',
+								text: `Battle odds should pop right when the final match is over if you opted to show the battle odds only in the Tavern.`,
 							},
 						],
 					},
@@ -121,26 +86,8 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where some passive treasures would still show a speed.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix the match time not showing properly.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'ui',
-								text: `Various improvements of how the app looks, especially in non-English languages (Community Contribution!).`,
+								type: 'feature',
+								text: `You can now go directly from '???' to 'Maxxed' in the Tasks Completed column by just goign backward from ???.`,
 							},
 						],
 					},
