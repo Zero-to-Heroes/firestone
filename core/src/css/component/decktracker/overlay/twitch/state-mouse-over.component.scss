@@ -81,6 +81,24 @@ empty-card {
 		height: 69%;
 		left: 54%;
 	}
+
+	.secrets {
+		position: absolute;
+		width: 17vh;
+		height: 100%;
+		left: 45.5%;
+		bottom: 5%;
+		top: auto;
+
+		::ng-deep .secret {
+			.card {
+				width: 25%;
+				height: 25%;
+				position: relative;
+				display: flex;
+			}
+		}
+	}
 }
 
 .top-hero {

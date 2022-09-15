@@ -48,6 +48,17 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 				<div class="weapon">
 					<empty-card [cardId]="topWeaponCard" [cardTooltipPosition]="'left'"></empty-card>
 				</div>
+				<div class="secrets">
+					<empty-card
+						*ngFor="let card of topSecretCards; let i = index"
+						class="secret"
+						[cardId]="card"
+						[cardTooltipPosition]="'right'"
+						[cardTooltipBgs]="isBgs"
+						[leftOffset]="topSecretPositionLeft(i)"
+						[topOffset]="topSecretPositionTop(i)"
+					></empty-card>
+				</div>
 				<div class="hero-power">
 					<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
 				</div>
@@ -72,6 +83,17 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 						[cardId]="bottomWeaponCard"
 						[cardTooltipPosition]="'left'"
 						[cardTooltipBgs]="isBgs"
+					></empty-card>
+				</div>
+				<div class="secrets">
+					<empty-card
+						*ngFor="let card of bottomSecretCards; let i = index"
+						class="secret"
+						[cardId]="card"
+						[cardTooltipPosition]="'right'"
+						[cardTooltipBgs]="isBgs"
+						[leftOffset]="bottomSecretPositionLeft(i)"
+						[topOffset]="bottomSecretPositionTop(i)"
 					></empty-card>
 				</div>
 				<div class="hero-power">
@@ -132,9 +154,15 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 		this.topHeroPowerCard = this._gameState.opponentDeck?.heroPower?.cardId;
 		this.topWeaponCard = this._gameState.opponentDeck?.weapon?.cardId;
 		this.topBoardCards = this._gameState.opponentDeck?.board.map((card) => card.cardId);
+		this.topSecretCards = this._gameState.opponentDeck?.otherZone
+			.filter((card) => card.zone === 'SECRET')
+			.map((card) => card.cardId);
 		this.bottomBoardCards = this._gameState.playerDeck?.board.map((card) => card.cardId);
 		this.bottomHeroPowerCard = this._gameState.playerDeck?.heroPower?.cardId;
 		this.bottomWeaponCard = this._gameState.playerDeck?.weapon?.cardId;
+		this.bottomSecretCards = this._gameState.playerDeck?.otherZone
+			.filter((card) => card.zone === 'SECRET')
+			.map((card) => card.cardId);
 		this.bottomHandCards = this._gameState.playerDeck?.hand.map((card) => card.cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -154,9 +182,11 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 	topHeroPowerCard: string;
 	topWeaponCard: string;
 	topBoardCards: readonly string[];
+	topSecretCards: readonly string[];
 	bottomBoardCards: readonly string[];
 	bottomHeroPowerCard: string;
 	bottomWeaponCard: string;
+	bottomSecretCards: readonly string[];
 	bottomHandCards: readonly string[];
 	bgsPlayers: readonly TwitchBgsPlayer[];
 	currentTurn: number;
@@ -245,6 +275,42 @@ export class StateMouseOverComponent implements AfterContentInit, OnDestroy {
 			return 0;
 		}
 		return this.handAdjustment.get(totalCards, Adjustment.create()).positionTop.get(i, 0);
+	}
+
+	bottomSecretPositionLeft(i: number): number {
+		switch (i) {
+			case 0:
+				return 38;
+			case 1:
+				return 8;
+			case 2:
+				return 68;
+			case 3:
+				return 0;
+			case 4:
+				return 0;
+		}
+	}
+
+	bottomSecretPositionTop(i: number): number {
+		switch (i) {
+			case 0:
+				return 4;
+			case 1:
+			case 2:
+				return -4;
+			case 3:
+			case 4:
+				return -12;
+		}
+	}
+
+	topSecretPositionLeft(i: number): number {
+		return this.bottomSecretPositionLeft(i);
+	}
+
+	topSecretPositionTop(i: number): number {
+		return this.bottomSecretPositionTop(i);
 	}
 
 	private buildHandAdjustment() {

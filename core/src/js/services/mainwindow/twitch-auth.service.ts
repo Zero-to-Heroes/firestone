@@ -227,9 +227,8 @@ export class TwitchAuthService {
 		delete newCard.dormant;
 		if (isBattlegrounds) {
 			delete newCard.creatorCardId;
-			delete newCard.zone;
+			// delete newCard.zone;
 			delete newCard.playTiming;
-			delete newCard.zone;
 		}
 		return newCard as DeckCard;
 	}
