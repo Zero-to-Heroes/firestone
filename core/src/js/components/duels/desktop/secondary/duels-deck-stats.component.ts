@@ -21,9 +21,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<img class="frame" src="assets/images/deck/hero_frame.png" />
 				</div>
 				<div class="metadata">
-					<div class="deck-name" *ngIf="deckInfo.deck.deckName"> {{ deckInfo.deck.deckName }}</div>
-					<div class="deck-name default" 
-						*ngIf="!deckInfo.deck.deckName" 
+					<div class="deck-name" *ngIf="deckInfo.deck.deckName">{{ deckInfo.deck.deckName }}</div>
+					<div
+						class="deck-name default"
+						*ngIf="!deckInfo.deck.deckName"
 						[owTranslate]="'app.duels.deck-stat.default-deck-name-blank'"
 					></div>
 					<copy-deckstring
