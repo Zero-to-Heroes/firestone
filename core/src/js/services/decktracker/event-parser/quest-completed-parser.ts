@@ -4,13 +4,13 @@ import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-export class QuestDestroyedParser implements EventParser {
+export class QuestCompletedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.QUEST_DESTROYED;
+		return state && gameEvent.type === GameEvent.QUEST_COMPLETED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -20,7 +20,7 @@ export class QuestDestroyedParser implements EventParser {
 
 		const existingQuest = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
 		if (!existingQuest) {
-			console.warn('[quest-destroyed] missing quest', cardId, entityId);
+			console.warn('[quest-completed] missing quest', cardId, entityId);
 			return currentState;
 		}
 		const newQuest = existingQuest.update({
@@ -38,6 +38,6 @@ export class QuestDestroyedParser implements EventParser {
 	}
 
 	event(): string {
-		return GameEvent.QUEST_DESTROYED;
+		return GameEvent.QUEST_COMPLETED;
 	}
 }
