@@ -29,7 +29,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 	): UnaryFunction<Observable<T>, Observable<R>> {
 		return pipe(
 			debounceTime(debounceTimeMs),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			map(extractor),
 			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
 			tap((filter) =>
