@@ -56,7 +56,9 @@
 		position: relative;
 		left: -1px;
 		top: -1px;
+		width: fit-content;
 		min-width: 220px;
+		max-width: 300px;
 
 		.choices {
 			display: flex;
@@ -87,6 +89,7 @@
 					p {
 						font-size: 13px;
 						color: var(--color-1);
+						white-space: nowrap;
 					}
 
 					&:hover {
