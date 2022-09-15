@@ -45,9 +45,10 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 						<checkbox
 							[label]="option.label"
 							[value]="option.selected"
+							[image]="option.image"
+							[labelTooltip]="option.tooltip"
 							(valueChanged)="select(option, $event)"
 						></checkbox>
-						<img class="icon" [src]="option.image" [helpTooltip]="option.tooltip" />
 					</div>
 				</div>
 				<div class="controls">
