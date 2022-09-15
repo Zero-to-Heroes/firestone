@@ -519,6 +519,7 @@ export class Preferences {
 	readonly mercenariesShowHiddenTeams: boolean = true;
 	readonly mercenariesHiddenTeamIds: readonly string[] = [];
 	readonly mercenariesShowMercNamesInTeams: boolean = true;
+	readonly mercenariesBackupTeam: readonly number[] = [];
 
 	// Not the best place to store it, but the preferences are for now stored on the
 	// server and backed up when another device is used.

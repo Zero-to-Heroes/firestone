@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			</settings-mercenaries-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-mercenaries-general *ngSwitchCase="'general'"></settings-mercenaries-general>
+				<settings-mercenaries-quests *ngSwitchCase="'quests'"></settings-mercenaries-quests>
 			</ng-container>
 		</div>
 	`,

@@ -158,7 +158,6 @@ import { CardBackComponent } from '../../components/collection/card-back.compone
 import { CardBacksComponent } from '../../components/collection/card-backs.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
-import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
 import { CardSearchComponent } from '../../components/collection/card-search.component';
 import { CardComponent } from '../../components/collection/card.component';
 import { CardsComponent } from '../../components/collection/cards.component';
@@ -705,7 +704,6 @@ const components = [
 		SetStatCellComponent,
 		CardsComponent,
 		CardSearchComponent,
-		CardSearchAutocompleteItemComponent,
 		CollectionComponent,
 		CollectionMenuSelectionComponent,
 		CollectionEmptyStateComponent,

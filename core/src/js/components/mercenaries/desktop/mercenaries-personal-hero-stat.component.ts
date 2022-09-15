@@ -157,7 +157,7 @@ export class MercenariesPersonalHeroStatComponent {
 		this.level = value.currentLevel;
 
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
-		this.frameUrl = this.buildHeroFrame(value.role, value.premium);
+		this.frameUrl = buildHeroFrame(value.role, value.premium);
 
 		this.name = value.name;
 
@@ -261,17 +261,6 @@ export class MercenariesPersonalHeroStatComponent {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(decimal);
 	}
 
-	buildHeroFrame(role: string, premium: number): string {
-		switch (premium) {
-			case 1:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`;
-			case 2:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png`;
-			case 0:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`;
-		}
-	}
-
 	onTaskClick(event: MouseEvent) {
 		const operation = event.ctrlKey ? 'add' : event.altKey ? 'remove' : null;
 		if (operation) {
@@ -321,6 +310,17 @@ export class MercenariesPersonalHeroStatComponent {
 			: null;
 	}
 }
+
+export const buildHeroFrame = (role: string, premium: number): string => {
+	switch (premium) {
+		case 1:
+			return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png`;
+		case 2:
+			return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png`;
+		case 0:
+			return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`;
+	}
+};
 
 interface VisualAbility {
 	readonly cardId: string;
