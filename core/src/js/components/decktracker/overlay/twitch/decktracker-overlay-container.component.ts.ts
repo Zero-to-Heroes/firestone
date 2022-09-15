@@ -225,7 +225,11 @@ export class DeckTrackerOverlayContainerComponent
 			!this.gameState.gameEnded &&
 			(!!this.gameState.playerDeck?.deckList?.length || !!this.gameState.playerDeck?.deck?.length);
 		this.currentDisplayMode = this.showDecktracker ? 'decktracker' : 'battlegrounds';
+		this.inGameplay = true;
 		console.log('loaded fake state', this.currentDisplayMode, this.showDecktracker, this.gameState, this.bgsState);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private waitForLocaleInit(): Promise<void> {

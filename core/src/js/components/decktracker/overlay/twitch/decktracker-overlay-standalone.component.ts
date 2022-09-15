@@ -20,11 +20,11 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 @Component({
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
+		`../../../../../css/themes/decktracker-theme.scss`,
 		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
-		`../../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
 		<div
@@ -90,26 +90,6 @@ export class DeckTrackerOverlayStandaloneComponent
 		this.displayMode = 'DISPLAY_MODE_GROUPED';
 		super.listenForResize();
 	}
-
-	// onResized(event: ResizedEvent) {
-	// 	try {
-	// 		// Resize the tracker
-	// 		const scale = event.newHeight / 950;
-
-	// 		// Now shrink the scale is the tracker is taller than a portion of the container's height
-	// 		const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
-	// 		const maxTrackerHeight = containerHeight;
-	// 		const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
-	// 		const element = this.el.nativeElement.querySelector('.scalable');
-	// 		this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
-	// 		if (!(this.cdr as ViewRef)?.destroyed) {
-	// 			this.cdr.detectChanges();
-	// 		}
-	// 		this.keepOverlayInBounds();
-	// 	} catch (e) {
-	// 		console.warn('Caught exception while trying to resize overlay', e);
-	// 	}
-	// }
 
 	protected postResize() {
 		this.keepOverlayInBounds();
