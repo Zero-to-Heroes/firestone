@@ -49,11 +49,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			<div class="name">
 				<span>{{ name }}</span>
 			</div>
-			<div
-				class="cooldown-left"
-				*ngIf="!!cooldownLeft"
-				[helpTooltip]="cooldownLeftTooltip"
-			>
+			<div class="cooldown-left" *ngIf="!!cooldownLeft" [helpTooltip]="cooldownLeftTooltip">
 				<img
 					class="cooldown-icon"
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png"
@@ -85,7 +81,7 @@ export class MercenariesTeamAbilityComponent {
 		this.cooldownLeft = value.cooldownLeft;
 		this.cooldownLeftTooltip = this.i18n.translateString('mercenaries.team-widget.cooldown-left-tooltip', {
 			value: value.cooldownLeft,
-		});;
+		});
 		this.isTreasure = value.isTreasure;
 		this.totalUsed = value.totalUsed;
 		this.speedModifier =

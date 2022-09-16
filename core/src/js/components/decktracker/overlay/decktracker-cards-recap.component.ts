@@ -9,7 +9,8 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 	],
 	template: `
 		<div class="cards-recap">
-			<div class="recap cards-in-hand"
+			<div
+				class="recap cards-in-hand"
 				[helpTooltip]="'decktracker.cards-in-hand-tooltip' | owTranslate"
 				[bindTooltipToGameWindow]="true"
 			>
@@ -20,7 +21,8 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 				</div>
 				<div class="count">{{ cardsInHand }}</div>
 			</div>
-			<div class="recap cards-in-deck"
+			<div
+				class="recap cards-in-deck"
 				[helpTooltip]="'decktracker.cards-left-in-deck-tooltip' | owTranslate"
 				[bindTooltipToGameWindow]="true"
 			>

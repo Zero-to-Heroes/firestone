@@ -127,7 +127,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							pack.packType === BoosterType.STANDARD_BUNDLE,
 					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
-					.sort(sortByProperties((pack) => [ !pack.set, -pack.set?.launchDate?.getTime() ?? 0]));
+					.sort(sortByProperties((pack) => [!pack.set, -pack.set?.launchDate?.getTime() ?? 0]));
 				const mainSetsGroup: InternalPackGroup = {
 					name: this.i18n.translateString('app.collection.pack-stats.main-sets-group-name', {
 						totalPacks: sumOnArray(mainGroupPacks, (pack) => pack.totalObtained),
@@ -141,7 +141,15 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						set: sets.find((set) => set.id === pack.setId),
 					}))
 					.filter((pack) => NON_BUYABLE_BOOSTER_IDS.includes(pack.packType))
-					.sort(sortByProperties((pack) => [!CLASS_PACKS.includes(pack.packType), !YEAR_PACKS.includes(pack.packType), !pack.set, -pack.set?.launchDate?.getTime() ?? 0, pack.name]));
+					.sort(
+						sortByProperties((pack) => [
+							!CLASS_PACKS.includes(pack.packType),
+							!YEAR_PACKS.includes(pack.packType),
+							!pack.set,
+							-pack.set?.launchDate?.getTime() ?? 0,
+							pack.name,
+						]),
+					);
 				const nonBuyableGroup: InternalPackGroup = {
 					name: this.i18n.translateString('app.collection.pack-stats.non-buyable-group-name', {
 						totalPacks: sumOnArray(nonBuyablePacks, (pack) => pack.totalObtained),
@@ -220,10 +228,7 @@ const CLASS_PACKS = [
 	BoosterType.STANDARD_WARLOCK,
 ];
 
-const YEAR_PACKS = [
-	BoosterType.YEAR_OF_DRAGON,
-	BoosterType.YEAR_OF_PHOENIX,
-];
+const YEAR_PACKS = [BoosterType.YEAR_OF_DRAGON, BoosterType.YEAR_OF_PHOENIX];
 
 const NON_BUYABLE_BOOSTER_IDS = [
 	...GOLDEN_SET_PACKS,

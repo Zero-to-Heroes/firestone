@@ -113,11 +113,11 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_02:
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_03:
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_04:
-			return fullName.split(' ').shift()
+			return fullName.split(' ').shift();
 		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_01:
 		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_02:
 		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_03:
-			return fullName.split(',').shift()
+			return fullName.split(',').shift();
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_01:
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_02:
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_03:
