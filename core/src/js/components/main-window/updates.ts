@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.11.0',
+		version: '9.11.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -45,6 +45,15 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add stats for Quests Rewards. IMPORTANT NOTE: in BG, the difficulty of the Quest is also an important parameter to consider (not only the reward). They are also dependent on which hero / tribe you're playing with. All this data will probably come in the future, but for now please don't give more weight to these stats than they deserve.`,
+							},
+						],
+					},
 					{
 						category: 'mercenaries',
 						details: [
@@ -80,6 +89,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `Battle odds should pop right when the final match is over if you opted to show the battle odds only in the Tavern.`,
 							},
+							{
+								type: 'ui',
+								text: `Improve the border of the hero stats tooltips (Community Contribution!).`,
+							},
 						],
 					},
 					{
@@ -88,6 +101,45 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now go directly from '???' to 'Maxxed' in the Tasks Completed column by just goign backward from ???.`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the general look-and-feel of the team widgets (Community Contribution!)`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix deck code generation (mostly for Vanndar / Drek'Thar) incorrectly referencing vanilla heroes. Please note that older deck codes may still have the issue (the fix is not retroactive).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix hero search not working.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Pack order should now be more intuitive when looking at the "Packs" stats (Community Contribution!)`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `The Quests widget will also appear in the Collection screen.`,
+							},
+							{
+								type: 'ui',
+								text: `A few visual improvements here and there (Community Contribution!)`,
 							},
 						],
 					},
