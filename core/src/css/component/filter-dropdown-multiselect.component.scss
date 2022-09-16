@@ -79,6 +79,8 @@
 			height: 30px;
 
 			checkbox ::ng-deep {
+				width: 100%;
+				
 				label {
 					margin-bottom: 0;
 					i {
@@ -90,6 +92,8 @@
 						font-size: 13px;
 						color: var(--color-1);
 						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 
 					&:hover {
