@@ -69,13 +69,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						<div class="footer">
 							<div
 								class="mouseover-button show-tasks"
-								*ngIf="showTasks$ | async"
+								[ngClass]="{ 'visible': showTasks$ | async }"
 								(mouseenter)="showTasks()"
 								(mouseleave)="hideTasks()"
 							>
-								<div class="background-main-part"></div>
-								<div class="background-second-part"></div>
-								<div class="content">
+								<div class="tasks-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.tasks-button' | owTranslate }}
 								</div>
@@ -90,15 +88,13 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 
 							<div
 								class="mouseover-button show-roles-matchup-button"
+								[ngClass]="{ 'visible': showColorChart$ | async }"
 								[cardTooltip]="'merceanries_weakness_triangle'"
 								[cardTooltipPosition]="tooltipPosition"
 								[cardTooltipClass]="'mercenaries-weakness-triangle'"
 								[cardTooltipLocalized]="false"
-								*ngIf="showColorChart$ | async"
 							>
-								<div class="background-second-part"></div>
-								<div class="background-main-part"></div>
-								<div class="content">
+								<div class="roles-matchup-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
 								</div>
