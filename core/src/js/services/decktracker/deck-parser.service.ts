@@ -5,7 +5,6 @@ import {
 	CardClass,
 	GameFormat,
 	GameType,
-	normalizeDuelsHeroCardIdForDeckCode,
 	PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
@@ -307,15 +306,7 @@ export class DeckParserService {
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
-				? [
-						normalizeDeckHeroDbfId(
-							// normalize for Duels
-							// Still doesn't work for neutral heroes though
-							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))
-								?.dbfId ?? 7,
-							this.allCards,
-						),
-				  ]
+				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
 				: deckFromMemory.HeroClass
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],

@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
-import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
+import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { DuelsBucketsData } from '@models/duels/duels-state';
@@ -496,7 +496,8 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 						?.map((cardId) => this.allCards.getCard(cardId).dbfId)
 						.map((dbfId) => [dbfId, 1] as [number, number]) ?? [];
 				const treasureCard = this.allCards.getCard(currentSignatureTreasureCardId);
-				const duelsClass = treasureCard.classes?.length > 1 ? null : treasureCard.cardClass;
+				const duelsClass: CardClass =
+					treasureCard.classes?.length > 1 ? null : CardClass[treasureCard.cardClass.toUpperCase()];
 				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
 				console.debug('heroDbfId', heroDbfId, duelsClass, treasureCard, hero);
 				const deckDefinition: DeckDefinition = {

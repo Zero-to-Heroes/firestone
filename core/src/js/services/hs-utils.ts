@@ -1,4 +1,11 @@
-import { BoosterType, CardClass, CardIds, COIN_IDS, GameType } from '@firestone-hs/reference-data';
+import {
+	allDuelsHeroesExtended,
+	BoosterType,
+	CardClass,
+	CardIds,
+	COIN_IDS,
+	GameType,
+} from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { isBattlegrounds } from './battlegrounds/bgs-utils';
@@ -938,54 +945,62 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 export const normalizeDeckHeroDbfId = (
 	heroDbfId: number,
 	cards: CardsFacadeService,
-	inputClass?: string,
+	duelsClass?: CardClass,
+	// Should probably not be needed, but it's a safeguard in case we can't figure out the class from the Duels sign treasure
 	deckClass?: CardClass,
 ): number => {
 	const cardFromHeroDbfId = cards.getCardFromDbfId(heroDbfId);
 	// Don't normalize the dual-class heroes
 	switch (cardFromHeroDbfId.id) {
-		case CardIds.SirFinleyTavernBrawl_PVPDR_Hero_Finley:
-		case CardIds.EliseStarseekerTavernBrawl_PVPDR_Hero_Elise:
-		case CardIds.RenoJacksonTavernBrawl_PVPDR_Hero_Reno:
-		case CardIds.BrannBronzebeardTavernBrawl_PVPDR_Hero_Brann:
-			return heroDbfId;
 		// Sometimes a neutral hero is provided even though the deck has class cards
 		case CardIds.VanndarStormpikeTavernBrawl:
-			switch (deckClass) {
+			switch (duelsClass ?? deckClass) {
 				case CardClass.DEMONHUNTER:
-					return cards.getCard(CardIds.IllidanStormrageHeroSkins).dbfId;
+					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv1)
+						.dbfId;
 				case CardClass.HUNTER:
-					return cards.getCard(CardIds.RexxarHeroSkins).dbfId;
+					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv2)
+						.dbfId;
 				case CardClass.PALADIN:
-					return cards.getCard(CardIds.UtherLightbringerHeroSkins).dbfId;
+					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv3)
+						.dbfId;
 				case CardClass.PRIEST:
-					return cards.getCard(CardIds.AnduinWrynnHeroSkins).dbfId;
+					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv4)
+						.dbfId;
 				case CardClass.ROGUE:
-					return cards.getCard(CardIds.ValeeraSanguinarHeroSkins).dbfId;
+					return cards.getCard(CardIds.VanndarStormpike_VanndarStormpikeTavernBrawl_PVPDR_Hero_Vanndarv5)
+						.dbfId;
 			}
 			break;
 		case CardIds.DrektharTavernBrawl:
-			switch (deckClass) {
+			switch (duelsClass ?? deckClass) {
 				case CardClass.DRUID:
-					return cards.getCard(CardIds.MalfurionStormrageHeroSkins).dbfId;
+					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv1).dbfId;
 				case CardClass.MAGE:
-					return cards.getCard(CardIds.JainaProudmooreHeroSkins).dbfId;
+					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv2).dbfId;
 				case CardClass.SHAMAN:
-					return cards.getCard(CardIds.ThrallHeroSkins).dbfId;
+					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv3).dbfId;
 				case CardClass.WARLOCK:
-					return cards.getCard(CardIds.GuldanHeroSkins).dbfId;
+					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv4).dbfId;
 				case CardClass.WARRIOR:
-					return cards.getCard(CardIds.GarroshHellscreamHeroSkins).dbfId;
+					return cards.getCard(CardIds.Drekthar_DrektharTavernBrawl_PVPDR_Hero_DrekTharv5).dbfId;
 			}
 			break;
 	}
 
-	const playerClass: string = inputClass ?? cards.getCardFromDbfId(heroDbfId)?.playerClass;
+	// No need for further normalization, all heroes are supported in Duels
+	if (duelsClass || allDuelsHeroesExtended.includes(cardFromHeroDbfId.id as CardIds)) {
+		return heroDbfId;
+	}
+
+	const playerClass: CardClass = CardClass[cards.getCardFromDbfId(heroDbfId)?.playerClass?.toUpperCase()];
+	// Not sure this should happen anymore now that all Duels heroes are supported
 	if (!playerClass) {
 		return heroDbfId;
 	}
 
-	switch (CardClass[playerClass?.toUpperCase()]) {
+	// Used for all the skins
+	switch (playerClass) {
 		case CardClass.DEMONHUNTER:
 			return 56550;
 		case CardClass.DRUID:

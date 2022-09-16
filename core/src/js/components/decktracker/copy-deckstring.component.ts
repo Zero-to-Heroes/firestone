@@ -94,24 +94,23 @@ export const sanitizeDeckstring = (deckDefinition: DeckDefinition, allCards: Car
 			return allDuelsSignatureTreasures.includes(card.id as CardIds) ? card : null;
 		})
 		.filter((card) => !!card);
-	const duelsClass = !duelsSignatureTreasures?.length
+	const duelsClass: CardClass = !duelsSignatureTreasures?.length
 		? null
 		: duelsSignatureTreasures[0].classes?.length > 1
 		? null
-		: duelsSignatureTreasures[0].playerClass;
+		: CardClass[duelsSignatureTreasures[0].playerClass?.toUpperCase()];
 	const deckClass = deckDefinition.cards
 		.map(([dbfId, quantity]) => allCards.getCardFromDbfId(dbfId))
 		.map((card) => card?.cardClass)
 		.filter((cardClass) => !!cardClass)
 		.map((cardClass) => CardClass[cardClass.toUpperCase()] as CardClass)
 		.filter((cardClass: CardClass) => cardClass !== CardClass.NEUTRAL)[0];
-	// console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
+	console.debug('sanitize deck defnition', deckDefinition, duelsClass, deckClass);
 	deckDefinition.heroes = deckDefinition.heroes.map((hero) => {
 		// In case it's a duels deck, we need to use the base class hero, instead of the neutral variation
 		const result = normalizeDeckHeroDbfId(hero, allCards, duelsClass, deckClass) ?? 7;
 		return result;
 	});
 	deckDefinition.cards = newCards;
-	// console.debug('after sanitize', deckDefinition);
 	return deckDefinition;
 };
