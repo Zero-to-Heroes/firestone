@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
+import { BattlegroundsQuestsService } from './battlegrounds/bgs-quests.service';
 import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
 import { GlobalStatsService } from './global-stats/global-stats.service';
 import { MercenariesStateBuilderService } from './mercenaries/mercenaries-state-builder.service';
@@ -14,6 +15,7 @@ export class LazyDataInitService {
 		private readonly bgsPerfectGamesStateBuilder: BgsInitService,
 		private readonly globalStatsService: GlobalStatsService,
 		private readonly bgsBestStatsService: BgsBestUserStatsService,
+		private readonly bgsQuestsService: BattlegroundsQuestsService,
 		private readonly questsService: QuestsService,
 	) {}
 
@@ -28,6 +30,8 @@ export class LazyDataInitService {
 				return this.mercenariesStateBuilder.loadInitialReferenceData();
 			case 'battlegrounds-perfect-games':
 				return this.bgsPerfectGamesStateBuilder.loadInitialPerfectGames();
+			case 'bgs-quest-stats':
+				return this.bgsQuestsService.loadInitialReferenceData();
 			case 'user-global-stats':
 				return this.globalStatsService.loadInitialGlobalStats();
 			case 'user-bgs-best-stats':
@@ -45,4 +49,5 @@ export type StateDataType =
 	| 'user-global-stats'
 	| 'user-bgs-best-stats'
 	| 'reference-quests'
+	| 'bgs-quest-stats'
 	| 'battlegrounds-perfect-games';

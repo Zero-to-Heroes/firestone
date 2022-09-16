@@ -5,6 +5,7 @@ import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-i
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
+import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
@@ -989,13 +990,16 @@ export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsF
 	} as any);
 };
 
-export const isBattlegrounds = (gameType: GameType): boolean => {
-	return [
-		GameType.GT_BATTLEGROUNDS,
-		GameType.GT_BATTLEGROUNDS_FRIENDLY,
-		GameType.GT_BATTLEGROUNDS_AI_VS_AI,
-		GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI,
-	].includes(gameType);
+export const isBattlegrounds = (gameType: GameType | StatGameModeType): boolean => {
+	return (
+		[
+			GameType.GT_BATTLEGROUNDS,
+			GameType.GT_BATTLEGROUNDS_FRIENDLY,
+			GameType.GT_BATTLEGROUNDS_AI_VS_AI,
+			GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI,
+		].includes(gameType as GameType) ||
+		['battlegrounds', 'battlegrounds-friendly'].includes(gameType as StatGameModeType)
+	);
 };
 
 export const isBattlegroundsScene = (scene: SceneMode): boolean => {

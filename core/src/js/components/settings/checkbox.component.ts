@@ -36,6 +36,7 @@ import { uuid } from '../../services/utils';
 						<use xlink:href="assets/svg/sprite.svg#checked_box" />
 					</svg>
 				</i>
+				<img class="icon" *ngIf="image" [src]="image" />
 				<p>{{ label }}</p>
 			</label>
 		</div>
@@ -47,6 +48,7 @@ export class CheckboxComponent {
 
 	@Input() label: string;
 	@Input() labelTooltip: string;
+	@Input() image: string;
 	@Input() value: boolean;
 	@Input() disabled: boolean;
 

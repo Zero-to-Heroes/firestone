@@ -69,6 +69,7 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 					SceneMode.FRIENDLY,
 					SceneMode.TOURNAMENT,
 					SceneMode.TAVERN_BRAWL,
+					SceneMode.COLLECTIONMANAGER,
 				];
 				const isInHearthstoneMatch =
 					currentScene === SceneMode.GAMEPLAY && hearthstoneScenes.includes(lastNonGamePlayScene);

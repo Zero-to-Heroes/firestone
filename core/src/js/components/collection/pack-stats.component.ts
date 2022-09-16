@@ -127,7 +127,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							pack.packType === BoosterType.STANDARD_BUNDLE,
 					)
 					.filter((pack) => !GOLDEN_SET_PACKS.includes(pack.packType))
-					.sort(sortByProperties((pack) => [-pack.set?.launchDate?.getTime() ?? 0]));
+					.sort(sortByProperties((pack) => [ !pack.set, -pack.set?.launchDate?.getTime() ?? 0]));
 				const mainSetsGroup: InternalPackGroup = {
 					name: this.i18n.translateString('app.collection.pack-stats.main-sets-group-name', {
 						totalPacks: sumOnArray(mainGroupPacks, (pack) => pack.totalObtained),
@@ -136,8 +136,12 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 				};
 
 				const nonBuyablePacks = packs
+					.map((pack) => ({
+						...pack,
+						set: sets.find((set) => set.id === pack.setId),
+					}))
 					.filter((pack) => NON_BUYABLE_BOOSTER_IDS.includes(pack.packType))
-					.sort(sortByProperties((pack) => [pack.name]));
+					.sort(sortByProperties((pack) => [!CLASS_PACKS.includes(pack.packType), !YEAR_PACKS.includes(pack.packType), !pack.set, -pack.set?.launchDate?.getTime() ?? 0, pack.name]));
 				const nonBuyableGroup: InternalPackGroup = {
 					name: this.i18n.translateString('app.collection.pack-stats.non-buyable-group-name', {
 						totalPacks: sumOnArray(nonBuyablePacks, (pack) => pack.totalObtained),
@@ -194,28 +198,16 @@ const EXCLUDED_BOOSTER_IDS = [
 ];
 
 const GOLDEN_SET_PACKS = [
-	BoosterType.GOLDEN_CLASSIC_PACK,
 	BoosterType.GOLDEN_SCHOLOMANCE,
 	BoosterType.GOLDEN_DARKMOON_FAIRE,
 	BoosterType.GOLDEN_THE_BARRENS,
 	BoosterType.GOLDEN_STORMWIND,
 	BoosterType.GOLDEN_THE_SUNKEN_CITY,
-	BoosterType.GOLDEN_STORMWIND,
-	BoosterType.GOLDEN_THE_BARRENS,
-	BoosterType.GOLDEN_DARKMOON_FAIRE,
 	BoosterType.GOLDEN_ALTERAC_VALLEY,
 	BoosterType.GOLDEN_REVENDRETH,
 ];
 
-const NON_BUYABLE_BOOSTER_IDS = [
-	...GOLDEN_SET_PACKS,
-	BoosterType.INVALID,
-	BoosterType.FIRST_PURCHASE_OLD,
-	BoosterType.FIRST_PURCHASE,
-	BoosterType.SIGNUP_INCENTIVE,
-	BoosterType.MAMMOTH_BUNDLE,
-	BoosterType.YEAR_OF_DRAGON,
-	BoosterType.YEAR_OF_PHOENIX,
+const CLASS_PACKS = [
 	BoosterType.STANDARD_DEMONHUNTER,
 	BoosterType.STANDARD_DRUID,
 	BoosterType.STANDARD_HUNTER,
@@ -226,6 +218,18 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARRIOR,
 	BoosterType.STANDARD_WARLOCK,
+];
+
+const YEAR_PACKS = [
+	BoosterType.YEAR_OF_DRAGON,
+	BoosterType.YEAR_OF_PHOENIX,
+];
+
+const NON_BUYABLE_BOOSTER_IDS = [
+	...GOLDEN_SET_PACKS,
+	...CLASS_PACKS,
+	...YEAR_PACKS,
+	BoosterType.GOLDEN_CLASSIC_PACK,
 	BoosterType.GOLDEN_STANDARD_BUNDLE,
 ];
 

@@ -1,7 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
@@ -19,12 +19,13 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 			[componentInput]="_hero"
 			componentTooltipPosition="left"
 		>
-			<!-- <img [src]="icon" class="portrait" /> -->
 			<bgs-hero-portrait
+				*ngIf="!isQuest"
 				class="portrait"
 				[heroCardId]="heroCardId"
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
+			<img *ngIf="isQuest" [src]="icon" class="icon" />
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,14 +33,17 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 export class BgsHeroMiniComponent {
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
 
-	_hero: BgsHeroStat;
-	// icon: string;
+	_hero: BgsHeroStat | BgsQuestStat;
+	icon: string;
 	heroCardId: string;
 	heroStartingHealth: number;
+	isQuest: boolean;
 
-	@Input() set hero(value: BgsHeroStat) {
+	@Input() set hero(value: BgsHeroStat | BgsQuestStat) {
 		this._hero = value;
 		this.heroCardId = value.id;
 		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
+		this.isQuest = !(value as BgsHeroStat).heroPowerCardId;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.id}.jpg`;
 	}
 }
