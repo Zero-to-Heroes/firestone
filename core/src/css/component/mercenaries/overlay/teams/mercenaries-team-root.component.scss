@@ -52,7 +52,6 @@
 		display: flex;
 		align-items: stretch;
 		padding-left: 10px;
-		border: 1px solid var(--color-1);
 
 		color: var(--color-1);
 		z-index: 1;
@@ -65,7 +64,6 @@
 		.label {
 			margin-right: 10px;
 			padding-right: 10px;
-			border-right: 1px solid var(--color-1);
 			display: flex;
 			align-items: center;
 			flex-grow: 1;
@@ -78,7 +76,6 @@
 
 			&:not(:last-child) {
 				margin-right: 10px;
-				border-right: 1px solid var(--color-1);
 			}
 
 			.icon {
