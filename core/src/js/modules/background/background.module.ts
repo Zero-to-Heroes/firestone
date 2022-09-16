@@ -122,10 +122,12 @@ import { BattlegroundsDesktopOverviewComponent } from '../../components/battlegr
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
+import { BattlegroundsPersonalStatsQuestsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-quests.component';
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
 import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-simulator.component';
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
+import { BattlegroundsStatsQuestVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component';
 import {
 	BgsGlobalValueComponent,
 	BgsHeroDetailedStatsComponent,
@@ -143,6 +145,7 @@ import { BattlegroundsTribesFilterDropdownComponent } from '../../components/bat
 import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
+import { BattlegroundsQuestsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-quests-tier-list.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
@@ -474,6 +477,7 @@ import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-u
 import { BgsCustomSimulationService } from '../../services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from '../../services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
+import { BattlegroundsQuestsService } from '../../services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from '../../services/battlegrounds/store/real-time-stats/real-time-stats.service';
@@ -809,13 +813,16 @@ const components = [
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
+		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsHeroVignetteComponent,
+		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
 		BattlegroundsPerfectGamesComponent,
 		BattlegroundsSimulatorComponent,
 		BattlegroundsPersonalStatsStatsComponent,
 		BattlegroundsPersonalStatsHeroDetailsComponent,
 		BattlegroundsTierListComponent,
+		BattlegroundsQuestsTierListComponent,
 		BattlegroundsHeroesRecordsBrokenComponent,
 		BattlegroundsHeroRecordsBrokenComponent,
 		BattlegroundsReplaysRecapComponent,
@@ -1162,6 +1169,7 @@ const components = [
 		BattlegroundsStoreService,
 		BgsInitService,
 		BgsGlobalStatsService,
+		BattlegroundsQuestsService,
 		BgsBattleSimulationService,
 		BgsBattlePositioningService,
 		BgsRunStatsService,

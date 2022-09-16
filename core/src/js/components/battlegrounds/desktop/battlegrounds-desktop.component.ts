@@ -46,6 +46,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[ngClass]="{
 								'top':
 									category.value?.id !== 'bgs-category-personal-heroes' &&
+									category.value?.id !== 'bgs-category-personal-quests' &&
 									category.value?.id !== 'bgs-category-simulator'
 							}"
 						>
@@ -57,6 +58,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<battlegrounds-tier-list
 					*ngIf="category.value?.id === 'bgs-category-personal-heroes'"
 				></battlegrounds-tier-list>
+				<battlegrounds-quests-tier-list
+					*ngIf="category.value?.id === 'bgs-category-personal-quests'"
+				></battlegrounds-quests-tier-list>
 				<battlegrounds-heroes-records-broken
 					*ngIf="category.value?.id === 'bgs-category-personal-stats'"
 				></battlegrounds-heroes-records-broken>

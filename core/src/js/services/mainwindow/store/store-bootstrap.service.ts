@@ -16,6 +16,7 @@ import { ArenaStateBuilderService } from '../../arena/arena-state-builder.servic
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
+import { BattlegroundsQuestsService } from '../../battlegrounds/bgs-quests.service';
 import { CardsInitService } from '../../cards-init.service';
 import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../../decktracker/dungeon-loot-parser.service';
@@ -52,6 +53,7 @@ export class StoreBootstrapService {
 		private readonly gameStatsLoader: GameStatsLoaderService,
 		private readonly bgsInit: BgsInitService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
+		private readonly init_bgsQuestsService: BattlegroundsQuestsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly globalStats: GlobalStatsService,

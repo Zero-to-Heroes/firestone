@@ -83,6 +83,7 @@ import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsQuestsDataLoadedEvent } from './events/battlegrounds/bgs-quests-data-loaded-event';
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsRequestNewGlobalStatsLoadEvent } from './events/battlegrounds/bgs-request-new-global-stats-load-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
@@ -232,6 +233,7 @@ import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegro
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsQuestsDataLoadedProcessor } from './processors/battlegrounds/bgs-quests-data-loaded-processor';
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsRequestNewGlobalStatsLoadProcessor } from './processors/battlegrounds/bgs-request-new-global-stats-load-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
@@ -848,6 +850,9 @@ export class MainWindowStoreService {
 
 			BattlegroundsPerfectGamesLoadedEvent.eventName(),
 			new BattlegroundsPerfectGamesLoadedProcessor(),
+
+			BgsQuestsDataLoadedEvent.eventName(),
+			new BgsQuestsDataLoadedProcessor(),
 
 			// Mercenaries
 			MercenariesGlobalStatsLoadedEvent.eventName(),

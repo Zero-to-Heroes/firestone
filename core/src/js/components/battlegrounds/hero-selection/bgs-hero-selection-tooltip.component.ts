@@ -14,6 +14,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ 'hidden': !_visible }">
 			<!-- <img class="buddy" [src]="buddyImage" *ngIf="buddyImage" /> -->
 			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage" />
+			<img class="hero-power" [src]="questImage" *ngIf="questImage" />
 			<div class="infos">
 				<div class="name">{{ _hero.name }} ({{ totalMatchesText }})</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
@@ -27,6 +28,7 @@ export class BgsHeroSelectionTooltipComponent {
 	_visible = true;
 	_cssClass: string;
 	heroPowerImage: string;
+	questImage: string;
 	// buddyImage: string;
 	totalMatches: number;
 	totalMatchesText: string;
@@ -42,6 +44,7 @@ export class BgsHeroSelectionTooltipComponent {
 		this._hero = value;
 		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = this.i18n.getCardImage(value.heroPowerCardId);
+		this.questImage = !!this.heroPowerImage ? null : this.i18n.getCardImage(value.id);
 		// this.buddyImage = this.i18n.getCardImage(getBuddy(value.id as CardIds, this.allCards), {
 		// 	isBgs: true,
 		// });

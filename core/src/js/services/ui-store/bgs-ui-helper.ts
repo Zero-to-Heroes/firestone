@@ -1,12 +1,12 @@
 import { BgsGlobalHeroStat2, BgsHeroTier, MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsQuestStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../models/patches';
-import { getHeroPower, normalizeHeroCardId } from '../battlegrounds/bgs-utils';
+import { getHeroPower, isBattlegrounds, normalizeHeroCardId } from '../battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../cards-facade.service';
 import { cutNumber, groupByFunction, sumOnArray } from '../utils';
 
@@ -32,10 +32,55 @@ export const buildHeroStats = (
 	const totalMatches = sumOnArray(filteredGlobalStats, (stat) => stat.totalMatches);
 	const mmrThreshold: number = getMmrThreshold(rankFilter, globalStats.mmrPercentiles);
 	const bgMatches = filterBgsMatchStats(playerMatches, timeFilter, mmrThreshold, patch);
-	const heroStats: readonly BgsHeroStat[] = Object.keys(groupedByHero).map((heroCardId) =>
-		buildHeroStat(heroCardId, groupedByHero[heroCardId], bgMatches, totalMatches, allCards),
+	const questStats: readonly BgsHeroStat[] = Object.keys(groupedByHero).map((heroCardId) =>
+		buildHeroStat(
+			heroCardId,
+			groupedByHero[heroCardId],
+			bgMatches,
+			(stat) => stat.playerCardId,
+			totalMatches,
+			allCards,
+		),
 	);
-	const result = [...heroStats].sort(buildSortingFunction(heroSortFilter));
+	const result = [...questStats].sort(buildSortingFunction(heroSortFilter));
+	return result;
+};
+
+export const buildQuestStats = (
+	questStats: readonly BgsGlobalHeroStat2[],
+	mmrPercentiles: readonly MmrPercentile[],
+	playerMatches: readonly GameStat[],
+	timeFilter: BgsActiveTimeFilterType,
+	rankFilter: BgsRankFilterType,
+	heroSortFilter: BgsHeroSortFilterType,
+	patch: PatchInfo,
+	allCards: CardsFacadeService,
+): readonly BgsQuestStat[] => {
+	const relevantMatches = playerMatches
+		.filter((stat) => isBattlegrounds(stat.gameMode))
+		.filter((stat) => !!stat.bgsHeroQuestRewards?.length);
+	const cleanRankFilter = rankFilter <= 100 ? rankFilter : 100;
+
+	const filteredGlobalStats = questStats
+		.filter((stat) => stat.date === timeFilter)
+		// Backward compatilibity
+		.filter((stat) => stat.mmrPercentile === cleanRankFilter);
+	const groupedByHero = groupByFunction((stat: BgsGlobalHeroStat2) => stat.cardId)(filteredGlobalStats);
+	const totalMatches = sumOnArray(filteredGlobalStats, (stat) => stat.totalMatches);
+	const mmrThreshold: number = getMmrThreshold(cleanRankFilter, mmrPercentiles);
+	const bgMatches = filterBgsMatchStats(relevantMatches, timeFilter, mmrThreshold, patch);
+	// They work the same way
+	const finalStats: readonly BgsQuestStat[] = Object.keys(groupedByHero).map((heroCardId) =>
+		buildHeroStat(
+			heroCardId,
+			groupedByHero[heroCardId],
+			bgMatches,
+			(stat) => stat.bgsHeroQuestRewards[0],
+			totalMatches,
+			allCards,
+		),
+	);
+	const result = [...finalStats].sort(buildSortingFunction(heroSortFilter));
 	return result;
 };
 
@@ -46,7 +91,7 @@ const filterBgsMatchStats = (
 	currentBattlegroundsMetaPatch: PatchInfo,
 ): readonly GameStat[] => {
 	return bgsMatchStats
-		.filter((stat) => filterType(stat, timeFilter, currentBattlegroundsMetaPatch))
+		.filter((stat) => filterTime(stat, timeFilter, currentBattlegroundsMetaPatch))
 		.filter((stat) => filterRank(stat, mmrThreshold));
 };
 
@@ -54,11 +99,12 @@ const buildHeroStat = (
 	heroCardId: string,
 	stats: readonly BgsGlobalHeroStat2[],
 	playerMatches: readonly GameStat[],
+	statCardExtractor: (stat: GameStat) => string,
 	totalMatches: number,
 	allCards: CardsFacadeService,
 ): BgsHeroStat => {
 	const playerGamesPlayed = playerMatches.filter(
-		(stat) => normalizeHeroCardId(stat.playerCardId, allCards) === normalizeHeroCardId(heroCardId, allCards),
+		(stat) => normalizeHeroCardId(statCardExtractor(stat), allCards) === normalizeHeroCardId(heroCardId, allCards),
 	);
 	const totalPlayerGamesPlayed = playerGamesPlayed.length;
 	const playerPopularity = (100 * totalPlayerGamesPlayed) / playerMatches.length;
@@ -283,7 +329,9 @@ const mergeHeroStats = (stats: readonly BgsGlobalHeroStat2[]): BgsGlobalHeroStat
 	};
 };
 
-const buildSortingFunction = (heroSortFilter: BgsHeroSortFilterType): ((a: BgsHeroStat, b: BgsHeroStat) => number) => {
+const buildSortingFunction = (
+	heroSortFilter: BgsHeroSortFilterType,
+): ((a: BgsHeroStat | BgsQuestStat, b: BgsHeroStat | BgsQuestStat) => number) => {
 	switch (heroSortFilter) {
 		case 'tier':
 			return (a, b) => a.averagePosition - b.averagePosition;
@@ -318,7 +366,7 @@ const buildSortingFunction = (heroSortFilter: BgsHeroSortFilterType): ((a: BgsHe
 	}
 };
 
-const filterType = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: PatchInfo) => {
+const filterTime = (stat: GameStat, timeFilter: BgsActiveTimeFilterType, patch: PatchInfo) => {
 	if (!timeFilter) {
 		return true;
 	}
