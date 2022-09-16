@@ -7,4 +7,9 @@
 		pointer-events: none;
 		opacity: 0.4;
 	}
+	.icon {
+		width: 30px;
+		height: 30px;
+		clip-path: ellipse(35% 35% at 50% 50%);
+	}
 }
