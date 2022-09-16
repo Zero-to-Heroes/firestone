@@ -97,7 +97,27 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.EliseStarseekerLettuce_LT23_032H_01:
 		case CardIds.EliseStarseekerLettuce_LT23_032H_02:
 		case CardIds.EliseStarseekerLettuce_LT23_032H_03:
-			return fullName.split(' ').shift();
+		case CardIds.VanndarStormpikeLettuce_LT22_001H_01:
+		case CardIds.VanndarStormpikeLettuce_LT22_001H_02:
+		case CardIds.VanndarStormpikeLettuce_LT22_001H_03:
+		case CardIds.LeeroyJenkinsLettuce_LT22_015H_01:
+		case CardIds.LeeroyJenkinsLettuce_LT22_015H_02:
+		case CardIds.LeeroyJenkinsLettuce_LT22_015H_03:
+		case CardIds.GuffRunetotemLettuce_LETL_036H_01:
+		case CardIds.GuffRunetotemLettuce_LETL_036H_02:
+		case CardIds.GuffRunetotemLettuce_LETL_036H_03:
+		case CardIds.KurtrusAshfallenLettuce_LETL_007H_01:
+		case CardIds.KurtrusAshfallenLettuce_LETL_007H_02:
+		case CardIds.KurtrusAshfallenLettuce_LETL_007H_03:
+		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_01:
+		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_02:
+		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_03:
+		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_04:
+			return fullName.split(' ').shift()
+		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_01:
+		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_02:
+		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_03:
+			return fullName.split(',').shift()
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_01:
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_02:
 		case CardIds.BlademasterSamuroLettuce_BARL_024H_03:
@@ -116,6 +136,18 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.QueenAzsharaLettuce_LT23_016H_01:
 		case CardIds.QueenAzsharaLettuce_LT23_016H_02:
 		case CardIds.QueenAzsharaLettuce_LT23_016H_03:
+		case CardIds.LadyAnacondraLettuce_BARL_007H_01:
+		case CardIds.LadyAnacondraLettuce_BARL_007H_02:
+		case CardIds.LadyAnacondraLettuce_BARL_007H_03:
+		case CardIds.LadyVashjLettuce_LT23_021H_01:
+		case CardIds.LadyVashjLettuce_LT23_021H_02:
+		case CardIds.LadyVashjLettuce_LT23_021H_03:
+		case CardIds.KingMuklaLettuce_LETL_038H_01:
+		case CardIds.KingMuklaLettuce_LETL_038H_02:
+		case CardIds.KingMuklaLettuce_LETL_038H_03:
+		case CardIds.KingKrushLettuce_LETL_037H_01:
+		case CardIds.KingKrushLettuce_LETL_037H_02:
+		case CardIds.KingKrushLettuce_LETL_037H_03:
 			return fullName.split(' ').pop();
 		case CardIds.TheLichKingLettuce_LETL_041H_01:
 		case CardIds.TheLichKingLettuce_LETL_041H_02:
