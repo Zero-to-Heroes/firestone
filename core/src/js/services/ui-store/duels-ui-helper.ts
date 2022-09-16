@@ -26,42 +26,41 @@ export const filterDuelsHeroStats = (
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
-	return (
-		(heroStats ?? [])
-			.filter((stat) =>
-				!heroesFilter?.length
-					? false
-					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
-			)
-			.filter((stat) =>
-				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
-				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-				heroPowerFilter === 'all' || statType !== 'signature-treasure'
-					? true
-					: stat.heroPowerCardId === heroPowerFilter,
-			)
-			.filter((stat) =>
-				// Similar
-				signatureTreasureFilter === 'all' || statType !== 'hero-power'
-					? true
-					: stat.signatureTreasureCardId === signatureTreasureFilter,
-			)
-			// TODO: update for Vanndar
-			.filter((stat) => {
-				// console.debug('considering stat', stat);
-				if (!searchString?.length) {
-					return true;
-				}
+	const result = (heroStats ?? [])
+		.filter((stat) =>
+			!heroesFilter?.length
+				? false
+				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+		)
+		.filter((stat) =>
+			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
+			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
+			heroPowerFilter === 'all' || statType !== 'signature-treasure'
+				? true
+				: stat.heroPowerCardId === heroPowerFilter,
+		)
+		.filter((stat) =>
+			// Similar
+			signatureTreasureFilter === 'all' || statType !== 'hero-power'
+				? true
+				: stat.signatureTreasureCardId === signatureTreasureFilter,
+		)
+		// TODO: update for Vanndar
+		.filter((stat) => {
+			if (!searchString?.length) {
+				return true;
+			}
 
-				let cardId = normalizeDuelsHeroCardId(stat.heroPowerCardId);
-				if (statType === 'hero-power') {
-					cardId = stat.heroPowerCardId;
-				} else if (statType === 'signature-treasure') {
-					cardId = stat.signatureTreasureCardId;
-				}
-				return allCards.getCard(cardId)?.name.toLowerCase().includes(searchString.toLowerCase());
-			})
-	);
+			let cardId = normalizeDuelsHeroCardId(stat.hero);
+			if (statType === 'hero-power') {
+				cardId = stat.heroPowerCardId;
+			} else if (statType === 'signature-treasure') {
+				cardId = stat.signatureTreasureCardId;
+			}
+			const refCard = allCards.getCard(cardId);
+			return refCard?.name.toLowerCase().includes(searchString.toLowerCase());
+		});
+	return result;
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
 	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
