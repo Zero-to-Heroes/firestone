@@ -7,7 +7,7 @@
 	width: 75px;
 	height: 85px;
 	background: #dfb3d3;
-	clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+	clip-path: circle(35px at 50% 50%);
 }
 
 .icon {
@@ -16,7 +16,7 @@
 	left: -8px;
 	width: 91px;
 	height: 78px;
-	clip-path: polygon(50% 4%, 85% 25%, 85% 75%, 50% 98%, 15% 75%, 15% 25%);
+	clip-path: circle(30px at 50% 50%);
 }
 
 .center-wrapper {
