@@ -570,21 +570,14 @@ export class OverwolfService {
 		});
 	}
 
-    public async openFilePicker(filter: string): Promise<any> {
+	public async openWindowsExplorer(path: string): Promise<any> {
 		return new Promise<boolean>((resolve) => {
-            overwolf.utils.openFilePicker(filter, (res: any) => {
+			overwolf.utils.openWindowsExplorer(path, (res: any) => {
 				resolve(res);
 			});
 		});
-    }
+	}
 
-    public async openWindowsExplorer(path: string): Promise<any> {
-        return new Promise<boolean>((resolve) => {
-            overwolf.utils.openWindowsExplorer(path, (res: any) => {
-                resolve(res);
-            });
-        });
-    }
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
 		return new Promise<void>((resolve) => {
 			try {
@@ -947,7 +940,7 @@ export class OverwolfService {
 			overwolf.utils.placeOnClipboard(value);
 			resolve();
 		});
-}
+	}
 
 	public async getMonitorsList(): Promise<any> {
 		return new Promise<any>((resolve) => {

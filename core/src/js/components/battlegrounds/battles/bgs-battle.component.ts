@@ -171,14 +171,6 @@ declare let amplitude;
 						<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
 						<div class="text" [owTranslate]="'battlegrounds.sim.import-button'"></div>
 					</div>
- 					<div
-						class="button importfile"
-						(click)="importBoardsFromFile()"
-					>
-						<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
-						<div class="text" [owTranslate]="'battlegrounds.sim.importfile-button'"></div>
-					</div>       
-
 					<div
 						class="button export"
 						(click)="exportBoards()"
@@ -188,14 +180,6 @@ declare let amplitude;
 					>
 						<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
 						<div class="text" [owTranslate]="'battlegrounds.sim.export-button'"></div>
-					</div>
-
-                    <div
-						class="button exportfile"
-						(click)="exportBoardstoFile()"
-					>
-						<div class="icon" inlineSVG="assets/svg/video_folder.svg"></div>
-						<div class="text" [owTranslate]="'battlegrounds.sim.exportfile-button'"></div>
 					</div>
 					<div class="button reset" (click)="resetBoards()">
 						<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
@@ -646,58 +630,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		} catch (e) {
 			console.warn('could not import from clipboard', fromClipboard, e);
 		}
-    }
-
-    async importBoardsFromFile() {
-        const importfile = await this.ow.openFilePicker("*.json");
-        try {
-            const filecontent = await this.ow.readTextFile(importfile.file);
-            if (!filecontent) {
-                return;
-            }
-            const faceOff: BgsFaceOffWithSimulation = {
-                ...JSON.parse(filecontent),
-                battleResult: undefined,
-                battleInfoStatus: undefined,
-                battleInfoMesage: undefined,
-            } as BgsFaceOffWithSimulation;
-
-            this.simulationUpdater(null, faceOff);
-            amplitude.getInstance().logEvent('import-bgs-from-file');
-        } catch (e) {
-            console.warn('could not import from File', importfile, e);
-        }
-    }
-
-    async exportBoardstoFile() {
-
-        const exportfilepath = OverwolfService.getLocalAppDataFolder() + "/Temp/firestone/export.json";
-        try {
-            const fileExists = await this.ow.fileExists(exportfilepath);
-            if (!fileExists) {
-                await this.ow.writeFileContents(exportfilepath, '');
-            }
-            amplitude.getInstance().logEvent('export-bgs-sim-to-file');
-        
-
-            if (!(this.cdr as ViewRef) ?.destroyed) {
-                this.cdr.detectChanges();
-            }
-            const sim: BgsFaceOffWithSimulation = {
-                ...this._faceOff,
-                battleResult: undefined,
-                battleInfoStatus: undefined,
-                battleInfoMesage: undefined,
-            } as BgsFaceOffWithSimulation;
-        
-            this.ow.writeFileContents(exportfilepath, JSON.stringify(sim));
-
-            this.ow.openWindowsExplorer(OverwolfService.getLocalAppDataFolder() + "\/Temp/firestone/");
-            amplitude.getInstance().logEvent('export-bgs-sim-file');
-        } catch (e) {
-            console.warn('Export failure', exportfilepath, e);
-        }
-    }
+	}
 
 	async exportBoards() {
 		amplitude.getInstance().logEvent('export-bgs-sim-code');
