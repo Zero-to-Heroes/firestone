@@ -24,6 +24,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				role="region"
 			>
 			</battlegrounds-personal-stats-heroes>
+			<battlegrounds-personal-stats-quests
+				*ngIf="selectedCategoryId === 'bgs-category-personal-quests'"
+				role="region"
+			>
+			</battlegrounds-personal-stats-quests>
 			<battlegrounds-personal-stats-rating *ngIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>
 			<battlegrounds-personal-stats-stats *ngIf="selectedCategoryId === 'bgs-category-personal-stats'">

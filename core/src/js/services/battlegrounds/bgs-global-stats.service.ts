@@ -22,7 +22,7 @@ export class BgsGlobalStatsService {
 		const timeSuffix = timePeriod;
 		const url = BGS_STATS_RETRIEVE_URL.replace('%tribeSuffix%', tribesSuffix).replace(
 			'%timeSuffix%',
-			this.fixInvalidTimeSuffix(timeSuffix),
+			fixInvalidTimeSuffix(timeSuffix),
 		);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
 		const globalStats = BgsStats.create(result as BgsStats);
@@ -32,14 +32,14 @@ export class BgsGlobalStatsService {
 		}
 		return globalStats;
 	}
-
-	private fixInvalidTimeSuffix(timeSuffix: string): BgsActiveTimeFilterType {
-		switch (timeSuffix) {
-			case 'past-7':
-				return 'past-seven';
-			case 'past-3':
-				return 'past-three';
-		}
-		return timeSuffix as BgsActiveTimeFilterType;
-	}
 }
+
+export const fixInvalidTimeSuffix = (timeSuffix: string): BgsActiveTimeFilterType => {
+	switch (timeSuffix) {
+		case 'past-7':
+			return 'past-seven';
+		case 'past-3':
+			return 'past-three';
+	}
+	return timeSuffix as BgsActiveTimeFilterType;
+};

@@ -10,12 +10,11 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DuelsHeroSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -61,10 +60,7 @@ export class DuelsHeroSearchComponent
 	ngAfterContentInit() {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
-			.pipe(
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(([heroSearchString]) => {
 				this.searchString = heroSearchString;
 			});

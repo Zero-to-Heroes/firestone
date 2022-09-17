@@ -1,0 +1,52 @@
+.bgs-quest-tier {
+	display: flex;
+}
+
+.tier {
+	font-size: 20px;
+	width: 30px;
+	margin-top: 26px;
+	flex-shrink: 0;
+	flex-grow: 0;
+
+	&.s {
+		color: #b5bcfb;
+	}
+
+	&.a {
+		color: #ce73b4;
+	}
+
+	&.b {
+		color: #a2ccb0;
+	}
+
+	&.c {
+		color: #ffb948;
+	}
+
+	&.d {
+		color: #ff4747;
+	}
+
+	&.e {
+		color: #b34100;
+	}
+}
+
+.quests {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+bgs-quest-mini {
+	width: 55px;
+	height: 65px;
+	position: relative;
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	opacity: 0.8;
+	margin-right: 10px;
+	margin-bottom: 5px;
+}

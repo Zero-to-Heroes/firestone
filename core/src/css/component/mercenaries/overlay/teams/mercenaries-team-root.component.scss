@@ -52,7 +52,6 @@
 		display: flex;
 		align-items: stretch;
 		padding-left: 10px;
-		border: 1px solid var(--color-1);
 
 		color: var(--color-1);
 		z-index: 1;
@@ -65,7 +64,6 @@
 		.label {
 			margin-right: 10px;
 			padding-right: 10px;
-			border-right: 1px solid var(--color-1);
 			display: flex;
 			align-items: center;
 			flex-grow: 1;
@@ -78,7 +76,6 @@
 
 			&:not(:last-child) {
 				margin-right: 10px;
-				border-right: 1px solid var(--color-1);
 			}
 
 			.icon {
@@ -112,6 +109,7 @@
 			right: 0;
 			bottom: 28px;
 			background: #07081f;
+			border-radius: 10px 10px 0px 0px;
 		}
 
 		mercenaries-team-control-bar {
@@ -139,68 +137,19 @@
 
 .footer {
 	display: flex;
+	justify-content: space-between;
 }
 
 .mouseover-button {
 	color: var(--color-2);
 	font-family: Open Sans;
 	font-size: 13px;
-	width: 120px;
 	height: 26px;
-	margin-left: auto;
 	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
-
-	.background-main-part,
-	.background-second-part {
-		height: 100%;
-		background: var(--color-7);
-		overflow: hidden;
-	}
-
-	&:after {
-		content: '';
-		background: var(--color-1);
-		display: block;
-		position: absolute;
-		padding-top: 300%;
-		padding-left: 350%;
-		margin-left: -20px !important;
-		margin-top: -120%;
-		opacity: 0;
-		transition: all 0.8s;
-		right: 0;
-		pointer-events: none;
-	}
-
-	// Click effect
-	&:active:after {
-		padding: 0;
-		margin: 0;
-		opacity: 1;
-		transition: 0s;
-	}
-
-	.background-main-part {
-		width: 80px;
-	}
-	.background-second-part {
-		width: 40px;
-		border-bottom-left-radius: 33px 33px;
-		z-index: -1;
-	}
-
-	.content {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		padding-right: 10px;
-	}
+	visibility: hidden;
+	position: relative;
 
 	.icon {
 		width: 16px;
@@ -211,37 +160,47 @@
 	}
 
 	&:hover {
-		.content {
+		.tasks-button, .roles-matchup-button {
 			color: var(--color-1);
 			--icon-color: var(--color-1);
 		}
 	}
+
+	&.visible {
+		visibility: visible;
+	}
 }
 
 .show-roles-matchup-button {
+	.roles-matchup-button{
+		border-bottom-left-radius: 33px;
+		border-bottom-right-radius: 10px;
+		background: var(--color-7);
+		display: flex;
+		align-items: center;
+		padding: 5px 5px 5px 15px;
+	}
+
 }
 
 .show-tasks {
-	width: 85px;
-	margin-left: 0;
-	margin-right: auto;
-
-	.content {
-		justify-content: flex-start;
-		padding-left: 10px;
-		padding-right: 0;
-	}
-	.background-second-part {
-		transform: scale(-1, 1);
+	.tasks-button {
+		border-bottom-right-radius: 33px;
+		border-bottom-left-radius: 10px;
+		background: var(--color-7);
+		display: flex;
+		align-items: center;
+		padding: 5px 15px 5px 7px;
 	}
 }
 
 .task-list {
 	position: absolute;
-	right: 90px;
+	left: -325px;
 	bottom: 0;
 	width: 320px;
 	background: var(--color-7);
+	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
 	padding: 20px;
@@ -344,6 +303,32 @@
 					align-items: center;
 					justify-content: center;
 				}
+			}
+		}
+	}
+
+	.create-team-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-left: 90px;
+
+		button {
+			background: var(--color-2);
+			color: var(--color-5);
+			border: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Open Sans', sans-serif;
+			padding: 10px;
+
+			&.disabled {
+				opacity: 0.4;
+			}
+
+			&:hover:not(.disabled) {
+				background: var(--color-1);
 			}
 		}
 	}

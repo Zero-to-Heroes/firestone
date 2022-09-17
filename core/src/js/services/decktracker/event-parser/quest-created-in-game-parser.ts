@@ -25,6 +25,7 @@ export class QuestCreatedInGameParser implements EventParser {
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
+		console.debug('[quest] isPlayer', isPlayer, gameEvent, currentState);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const dbCard = this.cards.getCard(cardId);
@@ -37,8 +38,12 @@ export class QuestCreatedInGameParser implements EventParser {
 			creatorCardId: creatorCardId,
 			zone: 'SECRET',
 		} as DeckCard);
+		console.debug('[quest] created quest card', card);
 		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, card);
+		console.debug('[quest] previousOtherZone', previousOtherZone);
+		// Because when we discover a quest (BG), the quest is already in the otherZone, but with another "zone" attribute
+		const newOtherZone: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(previousOtherZone, card, true);
+		console.debug('[quest] newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		// console.debug('should consider?', cardId);
@@ -65,6 +70,7 @@ export class QuestCreatedInGameParser implements EventParser {
 			otherZone: newOtherZone,
 			globalEffects: newGlobalEffects,
 		} as DeckState);
+		console.debug('[quest] newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import {
 	ARENAS,
 	CardClass,
 	GameFormat,
 	GameType,
-	normalizeDuelsHeroCardIdForDeckCode,
 	PRACTICE_ALL,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
@@ -13,7 +13,6 @@ import {
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsStateBuilderService } from '@services/duels/duels-state-builder.service';
-import { DeckDefinition, decode, encode } from 'deckstrings';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
@@ -307,15 +306,7 @@ export class DeckParserService {
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
-				? [
-						normalizeDeckHeroDbfId(
-							// normalize for Duels
-							// Still doesn't work for neutral heroes though
-							this.allCards.getCard(normalizeDuelsHeroCardIdForDeckCode(deckFromMemory.HeroCardId))
-								?.dbfId ?? 7,
-							this.allCards,
-						),
-				  ]
+				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
 				: deckFromMemory.HeroClass
 				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],

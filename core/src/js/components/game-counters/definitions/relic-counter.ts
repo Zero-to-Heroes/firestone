@@ -20,7 +20,7 @@ export class RelicCounterDefinition implements CounterDefinition {
 		const relicsPlayed = deck.relicsPlayedThisMatch || 0;
 		return {
 			type: 'relic',
-			value: relicsPlayed,
+			value: relicsPlayed + 1,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.RelicOfDimensions}.jpg`,
 			cssClass: 'relic-counter',
 			tooltip: i18n.translateString(`counters.relic.${side}`, { value: relicsPlayed + 1 }),

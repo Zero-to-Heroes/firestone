@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "9.10.3",
+	"version": "9.11.1",
 	"scripts": {
 		"lint": "node --max_old_space_size=10000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=10000 ./node_modules/jest/bin/jest.js --colors",
@@ -37,10 +37,11 @@
 		"@firestone-hs/coliseum-components": "0.0.21",
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
 		"@firestone-hs/deck-stats": "^1.0.3",
+		"@firestone-hs/deckstrings": "^2.2.3",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.101",
-		"@firestone-hs/reference-data": "^1.0.24",
+		"@firestone-hs/reference-data": "^1.0.25",
 		"@firestone-hs/replay-parser": "^1.1.44",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
@@ -61,7 +62,6 @@
 		"chart.js": "^2.9.3",
 		"chartjs-plugin-datalabels": "^0.7.0",
 		"cross-fetch": "^3.1.5",
-		"deckstrings": "^2.2.1",
 		"deepmerge": "^4.2.2",
 		"dist": "^0.1.2",
 		"elementtree": "^0.1.7",

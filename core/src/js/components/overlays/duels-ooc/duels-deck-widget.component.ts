@@ -2,11 +2,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { sanitizeDeckstring } from '@components/decktracker/copy-deckstring.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
+import { decode, encode } from '@firestone-hs/deckstrings';
 import { SetCard } from '@models/set';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OverwolfService } from '@services/overwolf.service';
-import { decode, encode } from 'deckstrings';
 
 declare let amplitude;
 

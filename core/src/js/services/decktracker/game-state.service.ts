@@ -103,6 +103,7 @@ import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
 import { PassiveTriggeredParser } from './event-parser/passive-triggered-parser';
 import { PlayersInfoParser } from './event-parser/players-info-parser';
 import { PogoPlayedParser } from './event-parser/pogo-played-parser';
+import { QuestCompletedParser } from './event-parser/quest-completed-parser';
 import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
 import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
 import { QuestPlayedFromDeckParser } from './event-parser/quest-played-from-deck-parser';
@@ -404,7 +405,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
@@ -551,7 +552,8 @@ export class GameStateService {
 			new SecretWillTriggerParser(this.helper),
 			new SecretTriggeredParser(this.helper),
 			new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n),
-			new QuestDestroyedParser(),
+			new QuestDestroyedParser(this.helper),
+			new QuestCompletedParser(this.helper),
 			new QuestPlayedFromDeckParser(this.helper),
 			new QuestPlayedFromHandParser(this.helper),
 			new MinionOnBoardAttackUpdatedParser(this.helper),

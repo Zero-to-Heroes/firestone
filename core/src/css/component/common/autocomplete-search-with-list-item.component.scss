@@ -1,0 +1,23 @@
+.search-autocomplete {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 30px;
+	padding-left: 12px;
+
+	&:hover {
+		// $grey03
+		// background: rgba(120, 95, 107, 0.4);
+		// background: var(--color-3);
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	span {
+		white-space: pre-wrap;
+	}
+
+	.match {
+		color: var(--color-1);
+		font-weight: bold;
+	}
+}

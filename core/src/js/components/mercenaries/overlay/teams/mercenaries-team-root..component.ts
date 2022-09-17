@@ -10,15 +10,20 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@firestone-hs/deckstrings';
+import { VillageVisitorType } from '@firestone-hs/reference-data';
+import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
+import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
+import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
+import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -64,13 +69,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						<div class="footer">
 							<div
 								class="mouseover-button show-tasks"
-								*ngIf="showTasks$ | async"
+								[ngClass]="{ 'visible': showTasks$ | async }"
 								(mouseenter)="showTasks()"
 								(mouseleave)="hideTasks()"
 							>
-								<div class="background-main-part"></div>
-								<div class="background-second-part"></div>
-								<div class="content">
+								<div class="tasks-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.tasks-button' | owTranslate }}
 								</div>
@@ -79,20 +82,19 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									[ngClass]="{ 'visible': showTaskList$ | async }"
 									[style.bottom.px]="taskListBottomPx"
 									[tasks]="_tasks"
+									[taskTeamDeckstring]="taskTeamDeckstring$ | async"
 								></mercs-tasks-list>
 							</div>
 
 							<div
 								class="mouseover-button show-roles-matchup-button"
+								[ngClass]="{ 'visible': showColorChart$ | async }"
 								[cardTooltip]="'merceanries_weakness_triangle'"
 								[cardTooltipPosition]="tooltipPosition"
 								[cardTooltipClass]="'mercenaries-weakness-triangle'"
 								[cardTooltipLocalized]="false"
-								*ngIf="showColorChart$ | async"
 							>
-								<div class="background-second-part"></div>
-								<div class="background-main-part"></div>
-								<div class="content">
+								<div class="roles-matchup-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
 								</div>
@@ -123,6 +125,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			return;
 		}
 		this._tasks = value;
+		this.tasks$$.next(value);
 		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -142,6 +145,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	currentBattleTurn$: Observable<number>;
 	totalMapTurns$: Observable<string>;
 	mapTurnsTooltip$: Observable<string>;
+	taskTeamDeckstring$: Observable<string>;
 
 	_team: MercenariesBattleTeam;
 	_tasks: readonly Task[];
@@ -152,6 +156,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
 	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
+	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -159,20 +164,27 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
+		this.taskTeamDeckstring$ = combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.mercenaries.getReferenceData(),
+				([main, nav]) => main.mercenaries.collectionInfo,
+			),
+			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
+			this.tasks$$.asObservable(),
+		).pipe(
+			this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
+				this.buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds),
+			),
+		);
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
-			.pipe(
-				map(([pref]) => pref),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting showColorChart in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 		this.scale = this.store
 			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
 			.pipe(
@@ -196,19 +208,10 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			this.store.listenPrefs$((prefs) => (this.showTasksExtractor ? this.showTasksExtractor(prefs) : null)),
 		).pipe(
 			// Because when out of combat
-			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting showTasks in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
+			this.mapData(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
 		);
-		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(
-			map((info) => info),
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
-		);
-		this.showTurnCounter$ = this.showTurnCounter$$.asObservable();
+		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(this.mapData((info) => info));
+		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(
@@ -274,6 +277,80 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	hideTasks() {
 		this.showTaskList$$.next(false);
 	}
+
+	private buildTeamForTasks(
+		tasks: readonly Task[],
+		mercReferenceData: MercenariesReferenceData,
+		mercCollectionInfo: MemoryMercenariesCollectionInfo,
+		backupMercIds: readonly number[],
+	): string {
+		console.debug('building team for tasks', tasks, mercReferenceData);
+		if (!mercReferenceData?.mercenaries?.length || !tasks?.length) {
+			console.warn('missing reference data');
+			return null;
+		}
+
+		const taskMercs = tasks
+			.filter((task) => task.type === VillageVisitorType.STANDARD)
+			.map((task) => this.allCards.getCard(task.mercenaryCardId)?.dbfId)
+			.map((mercDbfId) =>
+				this.buildMerc(
+					mercReferenceData.mercenaries.find((merc) => merc.cardDbfId === mercDbfId),
+					mercCollectionInfo,
+				),
+			)
+			.filter((m) => !!m);
+		const backupMercs = [...new Array(6 - (taskMercs?.length ?? 0)).keys()]
+			.map((_, i) => backupMercIds[i])
+			.filter((id) => !!id)
+			.map((backupId) =>
+				this.buildMerc(
+					mercReferenceData.mercenaries.find((merc) => merc.id === backupId),
+					mercCollectionInfo,
+				),
+			)
+			.filter((m) => !!m);
+		const finalMercs = [...taskMercs, ...backupMercs];
+		console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
+
+		const definition: MercenariesTeamDefinition = {
+			teamId: 1,
+			type: 1,
+			name: this.i18n.translateString('mercenaries.team-widget.task-team-default-name'),
+			mercenaries: finalMercs,
+		};
+		if (!definition?.mercenaries?.length) {
+			return null;
+		}
+
+		console.debug('mercs definition', definition);
+		const deckstring = encodeMercs(definition);
+		return deckstring;
+	}
+
+	private buildMerc(
+		refMerc: MercenariesReferenceData['mercenaries'][0],
+		mercCollectionInfo: MemoryMercenariesCollectionInfo,
+	): MercenaryDefinition {
+		if (!refMerc) {
+			return null;
+		}
+
+		const memMerc = mercCollectionInfo?.Mercenaries?.find((m) => m.Id === refMerc.id);
+		const equipmentId =
+			(memMerc?.Equipments ?? []).find((e) => e.Equipped)?.Id ??
+			[...(memMerc?.Equipments ?? [])].sort((a, b) => b.Tier - a.Tier)[0]?.Id ??
+			refMerc.equipments[0]?.equipmentId;
+		const result: MercenaryDefinition = {
+			mercenaryId: refMerc.id,
+			selectedArtVariationId: 0,
+			selectedArtVariationPremium: 0,
+			selectedEquipmentId: equipmentId,
+			sharedTeamMercenaryIsFullyUpgraded: 0,
+			sharedTeamMercenaryXp: 0,
+		};
+		return result;
+	}
 }
 
 @Component({
@@ -301,6 +378,15 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						</div>
 					</div>
 				</div>
+				<div class="create-team-button" *ngIf="taskTeamDeckstring">
+					<button
+						[helpTooltip]="buttonTooltip"
+						(click)="createTeamFromTasks()"
+						[ngClass]="{ 'disabled': isCopied }"
+					>
+						{{ buttonLabel }}
+					</button>
+				</div>
 			</ng-container>
 			<ng-template #emptyState
 				><div class="empty-state" [owTranslate]="'mercenaries.team-widget.tasks-completed'"></div>
@@ -311,6 +397,37 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 })
 export class MercsTasksListComponent {
 	@Input() tasks: readonly Task[];
+	@Input() taskTeamDeckstring: string;
+
+	isCopied: boolean;
+	buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-label');
+	buttonTooltip = this.i18n.translateString('mercenaries.team-widget.create-team-button-tooltip');
+
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	createTeamFromTasks() {
+		if (this.isCopied) {
+			return;
+		}
+
+		this.isCopied = true;
+		this.ow.placeOnClipboard(this.taskTeamDeckstring);
+		this.buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-ok-label');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-label');
+			this.isCopied = false;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 5000);
+	}
 }
 
 export interface Task {
@@ -324,4 +441,5 @@ export interface Task {
 	readonly progress: number;
 	readonly portraitUrl?: string;
 	readonly frameUrl?: string;
+	readonly type: VillageVisitorType;
 }

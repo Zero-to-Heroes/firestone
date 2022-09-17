@@ -246,7 +246,7 @@ export class BgsPostMatchStatsRecapComponent {
 		this.percentageOfBattlesGoingFirst =
 			this._stats.stats.wentFirstInBattleOverTurn.length === 0
 				? 0
-				: (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
+				: (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond) || 0; // 0 if NaN
 		this.luckFactor = 100 * this._stats.stats.luckFactor;
 	}
 

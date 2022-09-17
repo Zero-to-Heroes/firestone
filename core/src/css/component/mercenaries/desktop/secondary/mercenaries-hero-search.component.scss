@@ -29,6 +29,7 @@
 
 	input {
 		@extend %search-bar-inactive;
+		width: 100%;
 		background: transparent;
 		border: none;
 		cursor: text;

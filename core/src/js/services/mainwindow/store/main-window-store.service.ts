@@ -83,6 +83,7 @@ import { BattlegroundsPerfectGamesLoadedEvent } from './events/battlegrounds/bgs
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsQuestsDataLoadedEvent } from './events/battlegrounds/bgs-quests-data-loaded-event';
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsRequestNewGlobalStatsLoadEvent } from './events/battlegrounds/bgs-request-new-global-stats-load-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
@@ -164,6 +165,7 @@ import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { GenericPreferencesUpdateEvent } from './events/generic-preferences-update-event';
 import { LocalizationUpdateEvent } from './events/localization-update-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
+import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesGlobalStatsLoadedEvent } from './events/mercenaries/mercenaries-global-stats-loaded-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
@@ -176,6 +178,7 @@ import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercena
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
 import { MercenariesPvpMmrFilterSelectedEvent } from './events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
 import { MercenariesReferenceDataLoadedEvent } from './events/mercenaries/mercenaries-reference-data-loaded-event';
+import { MercenariesRemoveMercToBackupTeamEvent } from './events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
 import { MercenariesRestoreTeamSummaryEvent } from './events/mercenaries/mercenaries-restore-team-summary-event';
 import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
 import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
@@ -230,6 +233,7 @@ import { BattlegroundsPerfectGamesLoadedProcessor } from './processors/battlegro
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsQuestsDataLoadedProcessor } from './processors/battlegrounds/bgs-quests-data-loaded-processor';
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsRequestNewGlobalStatsLoadProcessor } from './processors/battlegrounds/bgs-request-new-global-stats-load-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
@@ -310,6 +314,7 @@ import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
 import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
+import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
 import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
 import { MercenariesGlobalStatsLoadedProcessor } from './processors/mercenaries/mercenaries-global-stats-loaded-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
@@ -322,6 +327,7 @@ import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
 import { MercenariesPvpMmrFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pvp-mmr-filter-selected-processor';
 import { MercenariesReferenceDataLoadedProcessor } from './processors/mercenaries/mercenaries-reference-data-loaded-processor';
+import { MercenariesRemoveMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-remove-merc-to-backup-team-processor';
 import { MercenariesRestoreTeamSummaryProcessor } from './processors/mercenaries/mercenaries-restore-team-summary-processor';
 import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
 import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
@@ -845,6 +851,9 @@ export class MainWindowStoreService {
 			BattlegroundsPerfectGamesLoadedEvent.eventName(),
 			new BattlegroundsPerfectGamesLoadedProcessor(),
 
+			BgsQuestsDataLoadedEvent.eventName(),
+			new BgsQuestsDataLoadedProcessor(),
+
 			// Mercenaries
 			MercenariesGlobalStatsLoadedEvent.eventName(),
 			new MercenariesGlobalStatsLoadedProcessor(),
@@ -905,6 +914,12 @@ export class MainWindowStoreService {
 
 			MercenariesViewMercDetailsEvent.eventName(),
 			new MercenariesViewMercDetailsProcessor(),
+
+			MercenariesAddMercToBackupTeamEvent.eventName(),
+			new MercenariesAddMercToBackupTeamProcessor(this.prefs),
+
+			MercenariesRemoveMercToBackupTeamEvent.eventName(),
+			new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 
 			// Duels
 			DuelsStateUpdatedEvent.eventName(),

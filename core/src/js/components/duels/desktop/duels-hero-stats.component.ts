@@ -1,6 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
@@ -43,9 +42,8 @@ export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent imple
 				(prefs) => prefs.duelsHideStatsBelowThreshold,
 			),
 		).pipe(
-			filter(([stats, [heroSorting, hideThreshold]]) => !!stats?.length),
 			this.mapData(([stats, [heroSorting, hideThreshold]]) =>
-				[...stats]
+				[...(stats ?? [])]
 					.sort(this.sortBy(heroSorting))
 					.filter((stat) =>
 						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,

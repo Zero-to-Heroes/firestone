@@ -108,7 +108,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 							quota: refQuest?.quota,
 							progress: quest.Progress ?? 0,
 							progressPercentage: !!refQuest?.quota ? (100 * (quest.Progress ?? 0)) / refQuest.quota : 0,
-							xp: refQuest?.rewardTrackXp * (1 + (xpBonus ?? 0) / 100),
+							xp: Math.round(refQuest?.rewardTrackXp * (1 + (xpBonus ?? 0) / 100)),
 							xpBonus: xpBonus,
 						};
 						return result;

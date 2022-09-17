@@ -21,7 +21,7 @@ decktracker-cards-recap {
 decktracker-winrate-recap {
 	flex-shrink: 1;
 	flex-grow: 1;
-	max-width: 100%;
+	width: 100%;
 
 	::ng-deep .text {
 		width: calc(100% - 120px);

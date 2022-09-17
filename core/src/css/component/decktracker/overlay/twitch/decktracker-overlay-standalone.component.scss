@@ -8,10 +8,16 @@
 
 	.scalable {
 		transform: scale(1);
+		height: 100%;
+	}
+
+	.decktracker-container {
+		height: 100%;
 	}
 
 	.decktracker {
-		max-height: none;
+		// max-height: none;
+		max-height: 100%;
 	}
 
 	::ng-deep {

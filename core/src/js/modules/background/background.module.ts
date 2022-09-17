@@ -122,10 +122,12 @@ import { BattlegroundsDesktopOverviewComponent } from '../../components/battlegr
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
+import { BattlegroundsPersonalStatsQuestsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-quests.component';
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
 import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-simulator.component';
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
+import { BattlegroundsStatsQuestVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component';
 import {
 	BgsGlobalValueComponent,
 	BgsHeroDetailedStatsComponent,
@@ -143,6 +145,7 @@ import { BattlegroundsTribesFilterDropdownComponent } from '../../components/bat
 import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
+import { BattlegroundsQuestsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-quests-tier-list.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
@@ -158,7 +161,6 @@ import { CardBackComponent } from '../../components/collection/card-back.compone
 import { CardBacksComponent } from '../../components/collection/card-backs.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
-import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
 import { CardSearchComponent } from '../../components/collection/card-search.component';
 import { CardComponent } from '../../components/collection/card.component';
 import { CardsComponent } from '../../components/collection/cards.component';
@@ -183,6 +185,8 @@ import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainerComponent } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { TheCoinsComponent } from '../../components/collection/the-coins.component';
+import { SearchAutocompleteItemComponent } from '../../components/common/autocomplete-search-with-list-item.component';
+import { AutocompleteSearchWithListComponent } from '../../components/common/autocomplete-search-with-list.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 import { ConstructedMetaDeckSummaryComponent } from '../../components/decktracker/main/constructed-meta-deck-summary.component';
 import { ConstructedMetaDecksComponent } from '../../components/decktracker/main/constructed-meta-decks.component';
@@ -441,6 +445,7 @@ import { SettingsGeneralThirdPartyComponent } from '../../components/settings/ge
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 import { SettingsMercenariesGeneralComponent } from '../../components/settings/mercenaries/settings-mercenaries-general.component';
 import { SettingsMercenariesMenuComponent } from '../../components/settings/mercenaries/settings-mercenaries-menu.component';
+import { SettingsMercenariesQuestsComponent } from '../../components/settings/mercenaries/settings-mercenaries-quests.component';
 import { SettingsMercenariesComponent } from '../../components/settings/mercenaries/settings-mercenaries.component';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
@@ -472,6 +477,7 @@ import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-u
 import { BgsCustomSimulationService } from '../../services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from '../../services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
+import { BattlegroundsQuestsService } from '../../services/battlegrounds/bgs-quests.service';
 import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from '../../services/battlegrounds/store/real-time-stats/real-time-stats.service';
@@ -692,6 +698,9 @@ const components = [
 		SecretsHelperComponent,
 		SecretsHelperWidgetIconComponent,
 
+		AutocompleteSearchWithListComponent,
+		SearchAutocompleteItemComponent,
+
 		CardComponent,
 		CardHistoryComponent,
 		CardHistoryItemComponent,
@@ -699,7 +708,6 @@ const components = [
 		SetStatCellComponent,
 		CardsComponent,
 		CardSearchComponent,
-		CardSearchAutocompleteItemComponent,
 		CollectionComponent,
 		CollectionMenuSelectionComponent,
 		CollectionEmptyStateComponent,
@@ -805,13 +813,16 @@ const components = [
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsDesktopOverviewComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
+		BattlegroundsPersonalStatsQuestsComponent,
 		BattlegroundsStatsHeroVignetteComponent,
+		BattlegroundsStatsQuestVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
 		BattlegroundsPerfectGamesComponent,
 		BattlegroundsSimulatorComponent,
 		BattlegroundsPersonalStatsStatsComponent,
 		BattlegroundsPersonalStatsHeroDetailsComponent,
 		BattlegroundsTierListComponent,
+		BattlegroundsQuestsTierListComponent,
 		BattlegroundsHeroesRecordsBrokenComponent,
 		BattlegroundsHeroRecordsBrokenComponent,
 		BattlegroundsReplaysRecapComponent,
@@ -1074,6 +1085,7 @@ const components = [
 		SettingsMercenariesComponent,
 		SettingsMercenariesMenuComponent,
 		SettingsMercenariesGeneralComponent,
+		SettingsMercenariesQuestsComponent,
 
 		PreferenceSliderComponent,
 		LocalizationDropdownComponent,
@@ -1157,6 +1169,7 @@ const components = [
 		BattlegroundsStoreService,
 		BgsInitService,
 		BgsGlobalStatsService,
+		BattlegroundsQuestsService,
 		BgsBattleSimulationService,
 		BgsBattlePositioningService,
 		BgsRunStatsService,
