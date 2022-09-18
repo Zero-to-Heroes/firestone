@@ -93,7 +93,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 		this.player$ = combineLatest(
 			interval(1000),
 			this.store.listenDeckState$(
-				(state) => state?.playerDeck?.hero?.playerName,
+				(state) => this.i18n.translateString('turn-timer.player'),
 				(state) => state?.playerDeck?.turnDuration,
 				(state) => state?.playerDeck?.turnTimings,
 			),
@@ -105,7 +105,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 		this.opponent$ = combineLatest(
 			interval(1000),
 			this.store.listenDeckState$(
-				(state) => state?.opponentDeck?.hero?.playerName,
+				(state) => this.i18n.translateString('turn-timer.opponent'),
 				(state) => state?.opponentDeck?.turnDuration,
 				(state) => state?.opponentDeck?.turnTimings,
 			),
