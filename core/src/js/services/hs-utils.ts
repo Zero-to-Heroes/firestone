@@ -346,6 +346,7 @@ export const publicCardGiftCreators = [
 	CardIds.FullBlownEvil,
 	CardIds.GalakrondsGuile,
 	CardIds.GalakrondsWit,
+	CardIds.GildedGargoyle,
 	CardIds.GoldenScarab,
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
