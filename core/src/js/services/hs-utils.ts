@@ -345,6 +345,7 @@ export const publicCardGiftCreators = [
 	CardIds.FrozenTouch_FrozenTouchToken,
 	CardIds.FullBlownEvil,
 	CardIds.GalakrondsGuile,
+	CardIds.GalakrondsWit,
 	CardIds.GoldenScarab,
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
@@ -388,6 +389,7 @@ export const publicCardGiftCreators = [
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
 	CardIds.MarvelousMyceliumTavernBrawlToken,
+	CardIds.MindrenderIllucia,
 	CardIds.MindVisionLegacy,
 	CardIds.MindVisionVanilla,
 	CardIds.MuckbornServant,
@@ -430,6 +432,7 @@ export const publicCardGiftCreators = [
 	CardIds.Schooling,
 	CardIds.SchoolTeacher,
 	CardIds.Scrapsmith,
+	CardIds.Seance,
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
 	CardIds.SelectiveBreederCore,
