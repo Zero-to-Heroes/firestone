@@ -384,6 +384,7 @@ export const publicCardGiftCreators = [
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
+	CardIds.MadameLazul,
 	CardIds.MailboxDancer,
 	CardIds.Mankrik,
 	CardIds.MarkedShot,
