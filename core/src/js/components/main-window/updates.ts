@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.11.1',
+		version: '9.11.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -73,12 +73,32 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Add more card highlights and oracles.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix info leak with Bibliomite.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix rounding issue when showing quest XP in the quests widget.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the Relic Counter would be off by 1 (the tooltip was correct).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Vanessa VanCleef counter would show the last card played by the player, insted of the opponent.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix deck detection for the Wild Heroic Brawliseum.`,
+							},
+							{
+								type: 'ui',
+								text: `Fix the position of the minimized tracker icon.`,
 							},
 						],
 					},
@@ -88,6 +108,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Battle odds should pop right when the final match is over if you opted to show the battle odds only in the Tavern.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix various simulation issues relating to the ordering of spawned minions.`,
 							},
 							{
 								type: 'ui',
@@ -101,6 +125,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now go directly from '???' to 'Maxxed' in the Tasks Completed column by just goign backward from ???.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix Start of Game abilities showing a speed value when (de)buffed`,
 							},
 							{
 								type: 'ui',
@@ -136,6 +164,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `The Quests widget will also appear in the Collection screen.`,
+							},
+							{
+								type: 'feature',
+								text: `The "Reset Positions" button in the Decktracker settings now resets the position of all widgets.`,
 							},
 							{
 								type: 'ui',
