@@ -225,13 +225,14 @@
 			}
 
 			.filter {
-
 				::ng-deep filter-dropdown {
 					width: 100%;
 				}
 			}
 
-			.tribe-filter {
+			.tribe-filter,
+			.tier-filter {
+				margin-right: 15px;
 			}
 
 			label {
