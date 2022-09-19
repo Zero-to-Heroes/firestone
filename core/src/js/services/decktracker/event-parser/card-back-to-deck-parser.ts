@@ -4,6 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { forcedHiddenCardCreators } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -27,10 +28,15 @@ export class CardBackToDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [initialCardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const initialZone: string = gameEvent.additionalData.initialZone;
-
 		const isPlayer = controllerId === localPlayer.PlayerId;
+
+		// Hack
+		const cardId =
+			!isPlayer && forcedHiddenCardCreators.includes(gameEvent.additionalData.influencedByCardId)
+				? null
+				: initialCardId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
 

@@ -221,6 +221,7 @@ export const forcedHiddenCardCreators = [
 	// CardIds.PsychicConjurerCore,
 	// CardIds.PsychicConjurerLegacy,
 	// CardIds.TheotarTheMadDuke,
+	CardIds.Bibliomite,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information
