@@ -219,6 +219,7 @@ export class Preferences {
 	readonly opponentOverlayShowBottomCardsSeparately: boolean = true;
 	readonly opponentOverlayShowTopCardsSeparately: boolean = true;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
+	readonly hideOpponentDecktrackerWhenFriendsListIsOpen: boolean = true;
 	readonly opponentTracker: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayWidthInPx: number = 227;

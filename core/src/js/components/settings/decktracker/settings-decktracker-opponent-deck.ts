@@ -95,6 +95,15 @@ import { Knob } from '../preference-slider.component';
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.hide-generated-cards-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					class="indented"
+					field="hideOpponentDecktrackerWhenFriendsListIsOpen"
+					[label]="'settings.battlegrounds.session-widget.hide-when-friends-list-open' | owTranslate"
+					[tooltip]="
+						'settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip' | owTranslate
+					"
+				></preference-toggle>
 			</div>
 
 			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.opponent-hand-title'"></div>

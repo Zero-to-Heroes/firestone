@@ -22,8 +22,9 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	],
 	template: `
 		<decktracker-overlay-opponent
-			class="widget"
 			*ngIf="showWidget$ | async"
+			class="widget"
+			[ngClass]="{ 'hidden': hidden$ | async }"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
@@ -48,6 +49,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	};
 
 	showWidget$: Observable<boolean>;
+	hidden$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -105,6 +107,15 @@ export class DecktrackerOpponentWidgetWrapperComponent
 				},
 			),
 			this.handleReposition(),
+		);
+		this.hidden$ = combineLatest(
+			this.store.listenPrefs$((prefs) => prefs.hideOpponentDecktrackerWhenFriendsListIsOpen),
+			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
+		).pipe(
+			this.mapData(
+				([[hideOpponentDecktrackerWhenFriendsListIsOpen], [isFriendsListOpen]]) =>
+					hideOpponentDecktrackerWhenFriendsListIsOpen && isFriendsListOpen,
+			),
 		);
 	}
 }
