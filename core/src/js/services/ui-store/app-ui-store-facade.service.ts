@@ -12,6 +12,7 @@ import {
 	MercenariesHighlightsSelector,
 	MercenariesOutOfCombatStateSelector,
 	MercenariesStateSelector,
+	NativeGameStateSelector,
 	PrefsSelector,
 	Selector,
 } from './app-ui-store.service';
@@ -54,6 +55,12 @@ export class AppUiStoreFacadeService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.debugObservable(this.store.listenDeckState$(...selectors));
+	}
+
+	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
+		return this.debugObservable(this.store.listenNativeGameState$(...selectors));
 	}
 
 	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(

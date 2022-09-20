@@ -81,6 +81,7 @@ export class Preferences {
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
 	readonly showCurrentSessionWidgetBgs: boolean = false;
+	readonly hideCurrentSessionWidgetWhenFriendsListIsOpen: boolean = true;
 	readonly showTurnTimer: boolean = true;
 	readonly showTurnTimerMatchLength: boolean = true;
 	readonly currentSessionStartDate: Date = null;

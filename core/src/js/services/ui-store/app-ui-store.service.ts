@@ -30,6 +30,7 @@ import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-com
 import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
+import { GameNativeState } from '../game/game-native-state';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../overwolf.service';
@@ -39,6 +40,7 @@ import { buildHeroStats } from './bgs-ui-helper';
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 export type GameStateSelector<T> = (gameState: GameState) => T;
 export type PrefsSelector<T> = (prefs: Preferences) => T;
+export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 export type MercenariesStateSelector<T> = (
 	state: [MercenariesBattleState, { name: string; preferences: Preferences }?],
@@ -53,6 +55,7 @@ export type MercenariesHighlightsSelector<T> = (
 @Injectable()
 export class AppUiStoreService {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
+	private gameNativeState: BehaviorSubject<GameNativeState>;
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
 	private deckStore: BehaviorSubject<{ state: GameState }>;
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
@@ -77,6 +80,7 @@ export class AppUiStoreService {
 		window['debugAppStore'] = () =>
 			console.debug({
 				mainStore: this.mainStore.observers,
+				gameNativeState: this.gameNativeState.observers,
 				prefs: this.prefs.observers,
 				deckStore: this.deckStore.observers,
 				battlegroundsStore: this.battlegroundsStore.observers,
@@ -94,6 +98,7 @@ export class AppUiStoreService {
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.ow.getMainWindow().preferencesEventBus;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
+		this.gameNativeState = this.ow.getMainWindow().gameNativeStateStore;
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
@@ -102,6 +107,7 @@ export class AppUiStoreService {
 
 		if (
 			!this.mainStore ||
+			!this.gameNativeState ||
 			!this.prefs ||
 			!this.deckStore ||
 			!this.battlegroundsStore ||
@@ -154,6 +160,16 @@ export class AppUiStoreService {
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }>;
+	}
+
+	public listenNativeGameState$<S extends NativeGameStateSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }> {
+		return this.gameNativeState.asObservable().pipe(
+			filter((state) => !!state),
+			map((state) => selectors.map((selector) => selector(state))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends NativeGameStateSelector<infer T> ? T : never }>;
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(

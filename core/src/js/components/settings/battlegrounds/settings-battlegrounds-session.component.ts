@@ -37,6 +37,14 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.battlegrounds.session-widget.show-groups-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="hideCurrentSessionWidgetWhenFriendsListIsOpen"
+					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
+					[label]="'settings.battlegrounds.session-widget.hide-when-friends-list-open' | owTranslate"
+					[tooltip]="
+						'settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip' | owTranslate
+					"
+				></preference-toggle>
+				<preference-toggle
 					field="sessionWidgetShowMatches"
 					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
 					[label]="'settings.battlegrounds.session-widget.show-matches' | owTranslate"

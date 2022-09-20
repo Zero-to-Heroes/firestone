@@ -3,7 +3,6 @@ import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { Preferences } from '../models/preferences';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../services/utils';
 
 @Injectable()
@@ -39,7 +38,6 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 					}
 				}, 0),
 			),
-			tap((filter) => cdLog('emitting value in ', this.constructor.name, filter)),
 			takeUntil(this.destroyed$),
 		);
 	}

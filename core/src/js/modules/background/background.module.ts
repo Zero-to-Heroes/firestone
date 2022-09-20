@@ -509,6 +509,7 @@ import { DuelsStateBuilderService } from '../../services/duels/duels-state-build
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
 import { GameStatusService } from '../../services/game-status.service';
+import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
@@ -1140,6 +1141,7 @@ const components = [
 		SettingsCommunicationService,
 		TwitchAuthService,
 		OutOfCardsService,
+		GameNativeStateStoreService,
 
 		CollectionBootstrapService,
 		PackMonitor,
