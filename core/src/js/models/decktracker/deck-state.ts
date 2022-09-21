@@ -96,6 +96,8 @@ export class DeckState {
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly currentOptions?: readonly CardOption[] = [];
+
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
@@ -344,4 +346,9 @@ export interface TurnTiming {
 	readonly turn: number;
 	readonly startTimestamp: number;
 	readonly endTimestamp: number;
+}
+
+export interface CardOption {
+	readonly entityId: number;
+	readonly cardId: string;
 }

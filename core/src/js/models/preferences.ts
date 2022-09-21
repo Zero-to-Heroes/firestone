@@ -169,6 +169,7 @@ export class Preferences {
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
+	readonly overlayEnableDiscoverHelp: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;
 

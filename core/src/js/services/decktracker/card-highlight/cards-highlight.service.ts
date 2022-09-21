@@ -145,6 +145,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		if (selector) {
 			// console.debug(
 			// 	'highlighting',
+			// 	side,
 			// 	this.handlers,
 			// 	Object.keys(this.handlers).filter((key) => key.startsWith(side)),
 			// 	Object.keys(this.handlers)
@@ -192,7 +193,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildCardIdSelector(
 		cardId: string,
-		card: DeckCard,
+		card?: DeckCard,
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
 			case CardIds.AbyssalDepths:
@@ -347,7 +348,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(dragon);
 			case CardIds.Drekthar_AV_100:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return !!card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
 				return and(inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.DunBaldarBunker:
@@ -690,6 +691,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, neutral);
 			case CardIds.TheUpperHand:
 				return and(inDeck, spell);
+			case CardIds.ThriveInTheShadowsCore:
+				return and(inDeck, spell);
 			case CardIds.TortollanPilgrim:
 				return and(inDeck, spell);
 			case CardIds.TotemOfTheDead_LOOTA_845:
@@ -705,7 +708,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(or(inDeck, inHand), spell, arcane);
 			case CardIds.VanndarStormpike_AV_223:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
+				return !!card ? and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1)) : null;
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
 			case CardIds.Vectus:

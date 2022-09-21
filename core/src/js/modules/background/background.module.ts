@@ -333,6 +333,10 @@ import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays
 import { BgsQuestsWidgetWrapperComponent } from '../../components/overlays/bgs-quests-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { MinionOnBoardOverlayComponent } from '../../components/overlays/board/minion-on-board-overlay.component';
+import {
+	ChoosingCardOptionComponent,
+	ChoosingCardWidgetWrapperComponent,
+} from '../../components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
@@ -962,6 +966,8 @@ const components = [
 		HsQuestsWidgetWrapperComponent,
 		BgsQuestsWidgetComponent,
 		BgsQuestsWidgetWrapperComponent,
+		ChoosingCardWidgetWrapperComponent,
+		ChoosingCardOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
