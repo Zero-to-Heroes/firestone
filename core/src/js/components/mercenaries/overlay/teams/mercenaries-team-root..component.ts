@@ -89,14 +89,18 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 							<div
 								class="mouseover-button show-roles-matchup-button"
 								[ngClass]="{ 'visible': showColorChart$ | async }"
-								[cardTooltip]="'merceanries_weakness_triangle'"
-								[cardTooltipPosition]="tooltipPosition"
-								[cardTooltipClass]="'mercenaries-weakness-triangle'"
-								[cardTooltipLocalized]="false"
+								(mouseenter)="showRolesChart()"
+								(mouseleave)="hideRolesChart()"
 							>
 								<div class="roles-matchup-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
+								</div>
+								<div 
+									class="roles-chart {{ tooltipPosition }}"
+									[ngClass]="{ 'visible': showRolesChart$ | async }"
+								>
+									<img class="chart" src="assets/images/mercenaries-weakness-triangle.png" />
 								</div>
 							</div>
 						</div>
@@ -141,6 +145,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	showColorChart$: Observable<boolean>;
 	showTasks$: Observable<boolean>;
 	showTaskList$: Observable<boolean>;
+	showRolesChart$: Observable<boolean>;
 	showTurnCounter$: Observable<boolean>;
 	currentBattleTurn$: Observable<number>;
 	totalMapTurns$: Observable<string>;
@@ -155,6 +160,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
+	private showRolesChart$$ = new BehaviorSubject<boolean>(false);
 	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
 	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
@@ -211,6 +217,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			this.mapData(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
 		);
 		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(this.mapData((info) => info));
+		this.showRolesChart$ = this.showRolesChart$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
@@ -276,6 +283,14 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	hideTasks() {
 		this.showTaskList$$.next(false);
+	}
+
+	showRolesChart() {
+		this.showRolesChart$$.next(true);
+	}
+
+	hideRolesChart() {
+		this.showRolesChart$$.next(false);
 	}
 
 	private buildTeamForTasks(
