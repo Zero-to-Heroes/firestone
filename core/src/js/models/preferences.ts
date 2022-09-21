@@ -414,7 +414,8 @@ export class Preferences {
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
-	readonly bgsShowHeroSelectionTooltip = true;
+	readonly bgsShowHeroSelectionTooltip: boolean = true;
+	readonly bgsShowHeroSelectionTiers: boolean = false;
 	readonly bgsShowNextOpponentRecapSeparately = true;
 	readonly bgsHideSimResultsOnRecruit: boolean = true;
 	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;

@@ -24,16 +24,83 @@
 		}
 	}
 
+	&.with-tier-overlay {
+		bgs-hero-overview {
+			::ng-deep .hero-overview {
+				.tier {
+					background: currentColor;
+					top: 19vh;
+					left: 2vh;
+					width: 45px;
+					height: 45px;
+					font-size: 20px;
+
+					.tier-value {
+						color: var(--color-9);
+					}
+				}
+
+				bgs-hero-stats {
+					.placement {
+						.average-position .global-value {
+							position: absolute;
+							top: 24vh;
+							left: 2vh;
+							font-size: 20px;
+							background: var(--color-8);
+							color: var(--color-9);
+							border-radius: 50%;
+							width: 45px;
+							height: 45px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							margin: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&:not(.with-tier-overlay) {
+		bgs-hero-overview {
+			::ng-deep .hero-overview {
+				.tier {
+					display: none !important;
+				}
+
+				bgs-hero-stats {
+					.placement {
+						.average-position .global-value {
+							display: none;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	bgs-hero-overview {
 		width: 25%;
 
 		::ng-deep .hero-overview {
 			background: transparent;
 
+			bgs-hero-stats {
+				.placement {
+					.title,
+					.placement-distribution,
+					.matches-played,
+					.average-position .label,
+					.average-position .player-value {
+						display: none;
+					}
+				}
+			}
+
 			.name,
-			.tier,
 			.winrate,
-			bgs-hero-stats,
 			bgs-hero-tribes,
 			.portrait-container > .portrait {
 				display: none !important;
