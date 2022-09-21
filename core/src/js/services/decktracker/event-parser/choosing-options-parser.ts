@@ -18,6 +18,8 @@ export class ChoosingOptionsParser implements EventParser {
 				return {
 					entityId: o.EntityId,
 					cardId: o.CardId,
+					source: cardId,
+					context: gameEvent.additionalData.context,
 				};
 			}),
 		});

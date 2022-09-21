@@ -9,7 +9,7 @@ export class GameStateMetaInfoService {
 		return Object.assign(new DeckState(), deckState, {
 			board: this.cleanZone(deckState.board, true),
 			deck: this.cleanBottomPositions(this.cleanZone(deckState.deck, false)),
-			hand: this.updateZone(deckState.hand, currentTurn, true),
+			hand: this.updateHand(deckState.hand, currentTurn, true),
 			otherZone: this.cleanZone(deckState.otherZone, true),
 		} as DeckState);
 	}
@@ -46,21 +46,25 @@ export class GameStateMetaInfoService {
 		} as DeckCard);
 	}
 
-	private updateZone(
+	private updateHand(
 		zone: readonly DeckCard[],
 		currentTurn: number | 'mulligan',
 		removeBottomInfo: boolean,
 	): readonly DeckCard[] {
 		return zone.map((card) =>
 			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined
-				? this.updateCard(card, currentTurn, removeBottomInfo)
+				? this.updateCardInHand(card, currentTurn, removeBottomInfo)
 				: card,
 		);
 	}
 
-	private updateCard(card: DeckCard, currentTurn: number | 'mulligan', removeBottomInfo: boolean): DeckCard {
+	private updateCardInHand(card: DeckCard, currentTurn: number | 'mulligan', removeBottomInfo: boolean): DeckCard {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: currentTurn,
+			turnAtWhichCardEnteredHand:
+				card.metaInfo.turnAtWhichCardEnteredHand == null
+					? currentTurn
+					: card.metaInfo.turnAtWhichCardEnteredHand,
 		} as CardMetaInfo);
 		return card.update({
 			metaInfo: newMeta,

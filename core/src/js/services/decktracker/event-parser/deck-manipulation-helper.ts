@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
-import { CardMetaInfo } from '../../../models/decktracker/card-meta-info';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -233,7 +232,11 @@ export class DeckManipulationHelper {
 			...cardTemplate,
 			buffingEntityCardIds: keepBuffs ? cardTemplate.buffingEntityCardIds : undefined,
 			buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
-			metaInfo: new CardMetaInfo(),
+			metaInfo: {
+				// Keep the turn at which it entered hand, if present
+				...cardTemplate.metaInfo,
+				turnAtWhichCardEnteredCurrentZone: undefined,
+			},
 		} as DeckCard);
 
 		return [...zone, newCard];

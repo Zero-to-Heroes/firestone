@@ -9,10 +9,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
+import { CardOption } from '../../../models/decktracker/deck-state';
+import { GameState } from '../../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -92,20 +94,55 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			}),
 			this.handleReposition(),
 		);
-		this.options$ = this.store
-			.listenDeckState$((state) => state.playerDeck?.currentOptions)
-			.pipe(
-				this.mapData(([options]) => {
-					return (
-						options?.map((o) => {
-							return {
-								cardId: o.cardId,
-								entityId: o.entityId,
-							};
-						}) ?? []
-					);
-				}),
-			);
+		this.options$ = combineLatest(
+			this.store.listenDeckState$(
+				(state) => state.playerDeck?.currentOptions,
+				(state) => state,
+			),
+		).pipe(
+			this.mapData(([[options, state]]) => {
+				return (
+					options?.map((o) => {
+						return {
+							cardId: o.cardId,
+							entityId: o.entityId,
+							flag: this.buildFlag(o, state),
+						};
+					}) ?? []
+				);
+			}),
+		);
+	}
+
+	private buildFlag(option: CardOption, state: GameState): CardOptionFlag {
+		switch (option.source) {
+			case CardIds.MurlocHolmes_REV_022:
+			case CardIds.MurlocHolmes_REV_770:
+				switch (option.context?.DataNum1) {
+					case 1:
+						const isInStartingHand = state.opponentDeck
+							.getAllCardsInDeck()
+							.filter((c) => c.cardId === option.cardId)
+							.some(
+								(c) =>
+									c.metaInfo?.turnAtWhichCardEnteredHand === 'mulligan' ||
+									c.metaInfo?.turnAtWhichCardEnteredHand === 0,
+							);
+						console.debug('matching cards', isInStartingHand);
+						return isInStartingHand ? 'flag' : null;
+					case 2:
+						const isInHand = !!state.opponentDeck.hand.filter((c) => c.cardId === option.cardId).length;
+						console.debug('matching cards', isInHand);
+						return isInHand ? 'flag' : null;
+					case 3:
+						// const isInDeck = !!state.opponentDeck.deck.filter((c) => c.cardId === option.cardId).length;
+						// console.debug('matching cards', isInDeck);
+						// return isInDeck ? 'flag' : null;
+						// Don't return a flag here, because we don't know if the card could be in their hand
+						return null;
+				}
+		}
+		return null;
 	}
 
 	protected async doResize(): Promise<void> {
@@ -125,21 +162,31 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 @Component({
 	selector: 'choosing-card-option',
 	styleUrls: ['../../../../css/component/overlays/card-choice/choosing-card-widget-wrapper.component.scss'],
-	template: ` <div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)"></div> `,
+	template: `
+		<div class="option" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
+			<div class="flag-container" *ngIf="showFlag">
+				<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
+			</div>
+		</div>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChoosingCardOptionComponent {
 	@Input() set option(value: CardChoiceOption) {
 		this._option = value;
 		this._referenceCard = this.allCards.getCard(value?.cardId);
+		this.shouldHighlight = !NO_HIGHLIGHT_CARD_IDS.includes(value?.cardId as CardIds);
+		this.showFlag = value?.flag === 'flag';
 		this.registerHighlight();
 	}
 
 	_option: CardChoiceOption;
+	showFlag: boolean;
 
 	private _referenceCard: ReferenceCard;
 	private side: 'player' | 'opponent' = 'player';
 	private _uniqueId: string;
+	private shouldHighlight: boolean;
 
 	constructor(
 		private readonly cardsHighlightService: CardsHighlightFacadeService,
@@ -149,30 +196,44 @@ export class ChoosingCardOptionComponent {
 	registerHighlight() {
 		this._uniqueId && this.cardsHighlightService.unregister(this._uniqueId, this.side);
 		this._uniqueId = this._uniqueId || uuid();
-		this.cardsHighlightService.register(
-			this._uniqueId,
-			{
-				referenceCardProvider: () => this._referenceCard,
-				// We don't react to highlights, only trigger them
-				deckCardProvider: () => null,
-				zoneProvider: () => null,
-				highlightCallback: () => {},
-				unhighlightCallback: () => {},
-			},
-			'player',
-		);
+		if (this.shouldHighlight) {
+			this.cardsHighlightService.register(
+				this._uniqueId,
+				{
+					referenceCardProvider: () => this._referenceCard,
+					// We don't react to highlights, only trigger them
+					deckCardProvider: () => null,
+					zoneProvider: () => null,
+					highlightCallback: () => {},
+					unhighlightCallback: () => {},
+				},
+				'player',
+			);
+		}
 	}
 
 	onMouseEnter(event: MouseEvent) {
+		if (!this.shouldHighlight) {
+			return;
+		}
 		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this.side, null);
 	}
 
 	onMouseLeave(event: MouseEvent) {
+		if (!this.shouldHighlight) {
+			return;
+		}
 		this.cardsHighlightService?.onMouseLeave(this._option?.cardId);
 	}
 }
 
+// For discovers for which knowing the effect on your deck isn't relevant
+const NO_HIGHLIGHT_CARD_IDS = [CardIds.MurlocHolmes_REV_022, CardIds.MurlocHolmes_REV_770];
+
 export interface CardChoiceOption {
 	readonly cardId: string;
 	readonly entityId: number;
+	readonly flag?: CardOptionFlag;
 }
+
+export type CardOptionFlag = 'flag' | null;

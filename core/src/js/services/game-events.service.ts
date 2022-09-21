@@ -918,6 +918,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					ChoosingOptionsGameEvent.build(GameEvent.CHOOSING_OPTIONS, gameEvent, {
 						options: gameEvent.Value.AdditionalProps.Options,
+						context: gameEvent.Value.AdditionalProps.Context,
 					}),
 				);
 				break;
