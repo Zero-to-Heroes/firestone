@@ -444,6 +444,7 @@ export const publicCardGiftCreators = [
 	CardIds.SinfulSousChef,
 	CardIds.SinisterDeal,
 	CardIds.SirakessCultist,
+	CardIds.SirFinleySeaGuide,
 	CardIds.SkyRaider,
 	CardIds.Sleetbreaker,
 	CardIds.SludgeSlurper,
