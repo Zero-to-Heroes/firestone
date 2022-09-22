@@ -90,11 +90,13 @@ export class PreferencesService {
 
 	public async resetDecktrackerPositions() {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			decktrackerPosition: undefined,
-			opponentOverlayPosition: undefined,
-		};
+		const newPrefs: Preferences = { ...prefs };
+		for (const key of Object.keys(newPrefs)) {
+			const value = newPrefs[key];
+			if (value?.left != null || value?.top != null) {
+				newPrefs[key] = undefined;
+			}
+		}
 		await this.savePreferences(newPrefs);
 	}
 

@@ -216,6 +216,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
 				return and(or(inDeck, inHand), battlecry);
+			case CardIds.Ancharrr:
+				return and(inDeck, minion, pirate);
 			case CardIds.ArcaneBrilliance:
 				return and(
 					inDeck,
@@ -418,6 +420,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
 				return and(inDeck, spell, shadow);
+			case CardIds.HighAbbessAlura:
+				return and(inDeck, spell);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
 			case CardIds.Hullbreaker:
@@ -482,6 +486,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LadyAshvane_TSC_943:
 			case CardIds.LadyAshvane_Story_11_LadyAshvane:
 				return and(inDeck, weapon);
+			case CardIds.LadyInWhite:
+				return and(inDeck, minion);
 			case CardIds.LadyVashj_VashjPrimeToken:
 				return and(inDeck, spell);
 			case CardIds.LineHopper:
@@ -550,6 +556,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
+			case CardIds.Psychopomp:
+				return and(inGraveyard, minion);
 			case CardIds.RaiseDead_SCH_514:
 				return and(inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
