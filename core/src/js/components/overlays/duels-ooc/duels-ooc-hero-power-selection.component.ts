@@ -148,16 +148,6 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 									};
 									return result;
 								});
-							// console.debug(
-							// 	'hero power deck',
-							// 	currentHeroPowerCardId,
-							// 	heroPowerDecks,
-							// 	topDecks,
-							// 	duelsTopDecks
-							// 		.flatMap((deck) => deck.decks)
-							// 		.filter((deck) => deck.heroCardId.startsWith('PVPDR_Hero_DrekThar'))
-							// 		.filter((deck) => deck.heroPowerCardId !== '"PVPDR_AV_Neutralp6"'),
-							// );
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
 								(deck: DuelsHeroInfoTopDeck) =>
@@ -220,13 +210,11 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 	async onMouseEnter(cardId: string) {
 		this.selectedHeroPowerCardId.next(null);
 		await sleep(100);
-		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
 		this.selectedHeroPowerCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event.shiftKey) {
-			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
 			this.selectedHeroPowerCardId.next(null);
 		}
 	}

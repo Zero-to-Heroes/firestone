@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, ReferenceCard } from '@firestone-hs/reference-data';
+import { allDuelsHeroes, normalizeDuelsHeroCardId, ReferenceCard } from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -102,16 +102,18 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 									'hero',
 								),
 							).filter((stat) =>
-								// Because of Drek'That and Vanndar
-								// It's not necessary to update the Hero Power and Signature Treasures
-								// components because at that point the Hero Power uniquely identifies
-								// the stat
 								allHeroCards
 									.map((card) => card.id)
-									.some((heroCardId) => stat.cardId.startsWith(heroCardId)),
+									.some(
+										(heroCardId) =>
+											normalizeDuelsHeroCardId(heroCardId) ===
+											normalizeDuelsHeroCardId(stat.cardId),
+									),
 							);
 							const stat: DuelsHeroPlayerStat = mergeDuelsHeroPlayerStats(
-								stats.filter((s) => s.cardId.startsWith(cardId)),
+								stats.filter(
+									(s) => normalizeDuelsHeroCardId(s.cardId) === normalizeDuelsHeroCardId(cardId),
+								),
 								cardId,
 							);
 							const card = this.allCards.getCard(cardId);
@@ -160,10 +162,17 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 								.filter((deck) =>
 									allHeroCards
 										.map((hero) => hero.id)
-										.some((heroCardId) => deck.heroCardId.startsWith(heroCardId)),
+										.some(
+											(heroCardId) =>
+												normalizeDuelsHeroCardId(deck.heroCardId) ===
+												normalizeDuelsHeroCardId(heroCardId),
+										),
 								);
 							const heroDecks = topDecks
-								.filter((deck) => deck.heroCardId.startsWith(cardId))
+								.filter(
+									(deck) =>
+										normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(cardId),
+								)
 								.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime())
 								.map((deck) => {
 									const result: DuelsHeroInfoTopDeck = {
@@ -211,7 +220,9 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				if (!currentHeroCardId) {
 					return null;
 				}
-				return allStats.find((stat) => stat?.cardId === currentHeroCardId)?.stat;
+				return allStats.find(
+					(stat) => normalizeDuelsHeroCardId(stat?.cardId) === normalizeDuelsHeroCardId(currentHeroCardId),
+				)?.stat;
 			}),
 		);
 	}
@@ -219,13 +230,11 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 	async onMouseEnter(cardId: string) {
 		this.selectedHeroCardId.next(null);
 		await sleep(100);
-		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
 		this.selectedHeroCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event.shiftKey) {
-			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
 			this.selectedHeroCardId.next(null);
 		}
 	}
