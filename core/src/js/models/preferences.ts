@@ -15,7 +15,7 @@ import {
 } from './collection/filter-types';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
-import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
+import { DuelsDeckSortFilterType, DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
@@ -471,6 +471,7 @@ export class Preferences {
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
+	readonly duelsActiveDeckSortFilter: DuelsDeckSortFilterType = 'last-played';
 	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
 	// readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';

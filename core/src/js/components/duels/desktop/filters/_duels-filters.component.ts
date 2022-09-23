@@ -45,6 +45,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<duels-dust-filter-dropdown class="filter dust-filter"></duels-dust-filter-dropdown>
 			<duels-passive-filter-dropdown class="filter dust-filter"></duels-passive-filter-dropdown>
 			<duels-hero-sort-dropdown class="filter hero-sort"></duels-hero-sort-dropdown>
+			<duels-deck-sort-dropdown class="filter deck-sort"></duels-deck-sort-dropdown>
 
 			<preference-toggle
 				class="show-hidden-decks-link"

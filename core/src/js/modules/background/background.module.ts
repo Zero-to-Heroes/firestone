@@ -247,6 +247,7 @@ import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.comp
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
+import { DuelsDeckSortDropdownComponent } from '../../components/duels/desktop/filters/duels-deck-sort-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
 import { DuelsHeroFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-filter-dropdown.component';
@@ -890,6 +891,7 @@ const components = [
 		DuelsStatTypeFilterDropdownComponent,
 		DuelsTreasurePassiveTypeFilterDropdownComponent,
 		DuelsHeroSortDropdownComponent,
+		DuelsDeckSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
 		DuelsPassiveFilterDropdownComponent,
