@@ -112,6 +112,8 @@ export const battlecryGlobalEffectCards = [
 	CardIds.WyrmrestPurifier,
 ];
 
+export const startOfGameGlobalEffectCards = [CardIds.PrinceRenathal];
+
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
 	CardIds.CelestialAlignment,
@@ -128,7 +130,6 @@ export const globalEffectCards = [
 	CardIds.InvigoratingSermon,
 	CardIds.LunasPocketGalaxy,
 	CardIds.MenAtArmsTavernBrawlToken,
-	CardIds.PrinceRenathal,
 	CardIds.ReductomaraToken,
 	// CardIds.RelicOfDimensions,
 	// CardIds.RelicOfExtinction,

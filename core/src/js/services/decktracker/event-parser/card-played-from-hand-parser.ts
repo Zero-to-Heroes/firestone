@@ -4,7 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { COUNTERSPELLS, globalEffectCards } from '../../hs-utils';
+import { COUNTERSPELLS, globalEffectCards, startOfGameGlobalEffectCards } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDeckForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -119,7 +119,11 @@ export class CardPlayedFromHandParser implements EventParser {
 		// console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		if (!isCardCountered && globalEffectCards.includes(card?.cardId as CardIds)) {
+		if (
+			!isCardCountered &&
+			globalEffectCards.includes(card?.cardId as CardIds) &&
+			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds)
+		) {
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				cardWithZone?.update({
