@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.11.1',
+		version: '9.12.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,20 +46,32 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add stats for Quests Rewards. IMPORTANT NOTE: in BG, the difficulty of the Quest is also an important parameter to consider (not only the reward). They are also dependent on which hero / tribe you're playing with. All this data will probably come in the future, but for now please don't give more weight to these stats than they deserve.`,
+								text: `When playing Murloc Holmes, he now tells you if he saw one of the offered cards in your opponent's starting hand.`,
+							},
+							{
+								type: 'feature',
+								text: `Mousing over a card when Discovering now highlights the related cards in your deck.`,
+							},
+							{
+								type: 'feature',
+								text: `There is now an option to hide the opponent's tracker when opening the friends list.`,
 							},
 						],
 					},
 					{
-						category: 'mercenaries',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a button to automatically create a team based on your current Tasks. See <a href="https://youtu.be/bc9hBmICksw" target="_blank">here</a> for a short video showing it in action.`,
+								text: `Add an option to show the hero tier and average position directly on the hero selection screen. This is disabled by default, so you need to enable it from the Settings > Battlegrounds if you want to use it.`,
+							},
+							{
+								type: 'feature',
+								text: `There is now an option to hide the session widget when opening the friends list.`,
 							},
 						],
 					},
@@ -70,76 +82,15 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix rounding issue when showing quest XP in the quests widget.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Relic Counter would be off by 1 (the tooltip was correct).`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Battle odds should pop right when the final match is over if you opted to show the battle odds only in the Tavern.`,
-							},
-							{
-								type: 'ui',
-								text: `Improve the border of the hero stats tooltips (Community Contribution!).`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now go directly from '???' to 'Maxxed' in the Tasks Completed column by just goign backward from ???.`,
-							},
-							{
-								type: 'ui',
-								text: `Improve the general look-and-feel of the team widgets (Community Contribution!)`,
-							},
-						],
-					},
-					{
 						category: 'duels',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix deck code generation (mostly for Vanndar / Drek'Thar) incorrectly referencing vanilla heroes. Please note that older deck codes may still have the issue (the fix is not retroactive).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix hero search not working.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
 								type: 'feature',
-								text: `Pack order should now be more intuitive when looking at the "Packs" stats (Community Contribution!)`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `The Quests widget will also appear in the Collection screen.`,
+								text: `Add an option to sort the personal decks by average wins.`,
 							},
 							{
-								type: 'ui',
-								text: `A few visual improvements here and there (Community Contribution!)`,
+								type: 'bug',
+								text: `Fix an issue where sometimes no high-wins decks were propersed after choosing the hero power for Vanndar and Drek'Thar.`,
 							},
 						],
 					},

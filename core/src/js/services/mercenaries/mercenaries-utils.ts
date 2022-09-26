@@ -1,4 +1,4 @@
-import { CardIds, GameType, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../cards-facade.service';
 import { MercenariesReferenceData } from './mercenaries-state-builder.service';
 
@@ -207,7 +207,12 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 
 export const isPassiveMercsTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
 	const refCard = allCards.getCard(cardId);
-	return refCard?.mercenaryPassiveAbility;
+	return (
+		refCard?.mercenaryPassiveAbility ||
+		// For Start of game effects
+		refCard.mechanics?.includes(GameTag[GameTag.HIDE_STATS]) ||
+		refCard.mechanics?.includes(GameTag[GameTag.START_OF_GAME])
+	);
 };
 
 export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [

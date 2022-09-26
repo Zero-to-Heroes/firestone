@@ -221,6 +221,7 @@ export const forcedHiddenCardCreators = [
 	// CardIds.PsychicConjurerCore,
 	// CardIds.PsychicConjurerLegacy,
 	// CardIds.TheotarTheMadDuke,
+	CardIds.Bibliomite,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information
@@ -345,6 +346,8 @@ export const publicCardGiftCreators = [
 	CardIds.FrozenTouch_FrozenTouchToken,
 	CardIds.FullBlownEvil,
 	CardIds.GalakrondsGuile,
+	CardIds.GalakrondsWit,
+	CardIds.GildedGargoyle,
 	CardIds.GoldenScarab,
 	CardIds.GorillabotA3,
 	CardIds.GorillabotA3Core,
@@ -383,11 +386,13 @@ export const publicCardGiftCreators = [
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
+	CardIds.MadameLazul,
 	CardIds.MailboxDancer,
 	CardIds.Mankrik,
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
 	CardIds.MarvelousMyceliumTavernBrawlToken,
+	CardIds.MindrenderIllucia,
 	CardIds.MindVisionLegacy,
 	CardIds.MindVisionVanilla,
 	CardIds.MuckbornServant,
@@ -430,6 +435,7 @@ export const publicCardGiftCreators = [
 	CardIds.Schooling,
 	CardIds.SchoolTeacher,
 	CardIds.Scrapsmith,
+	CardIds.Seance,
 	CardIds.SecureTheDeck,
 	CardIds.SeekGuidance_IlluminateTheVoidToken, // Xyrella, the Sanctified
 	CardIds.SelectiveBreederCore,
@@ -438,6 +444,7 @@ export const publicCardGiftCreators = [
 	CardIds.SinfulSousChef,
 	CardIds.SinisterDeal,
 	CardIds.SirakessCultist,
+	CardIds.SirFinleySeaGuide,
 	CardIds.SkyRaider,
 	CardIds.Sleetbreaker,
 	CardIds.SludgeSlurper,
@@ -454,6 +461,7 @@ export const publicCardGiftCreators = [
 	CardIds.SketchyStranger,
 	CardIds.StaffOfAmmunae_ULDA_041,
 	CardIds.StewardOfScrolls_SCH_245,
+	CardIds.SunkenSweeper,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPirate,

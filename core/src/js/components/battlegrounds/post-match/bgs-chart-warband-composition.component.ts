@@ -191,7 +191,7 @@ export class BgsChartWarbandCompositionComponent {
 			return true;
 		}
 
-		return this._availableTribes.includes(Race[tribe.toUpperCase()]);
+		return !!tribe?.length && this._availableTribes.includes(Race[tribe.toUpperCase()]);
 	}
 
 	onActivate(event) {

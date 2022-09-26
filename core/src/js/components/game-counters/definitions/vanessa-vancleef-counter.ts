@@ -25,7 +25,7 @@ export class VanessaVanCleefCounterDefinition implements CounterDefinition {
 			return null;
 		}
 
-		const cardsPlayedBySide = gameState.cardsPlayedThisMatch?.filter((card) => card.side === side);
+		const cardsPlayedBySide = gameState.cardsPlayedThisMatch?.filter((card) => card.side !== side);
 		const lastPlayedCard: string = !!cardsPlayedBySide?.length
 			? cardsPlayedBySide[cardsPlayedBySide.length - 1]?.cardId
 			: null;

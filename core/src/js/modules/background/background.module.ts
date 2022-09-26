@@ -247,6 +247,7 @@ import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.comp
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
+import { DuelsDeckSortDropdownComponent } from '../../components/duels/desktop/filters/duels-deck-sort-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
 import { DuelsHeroFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-filter-dropdown.component';
@@ -333,6 +334,10 @@ import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays
 import { BgsQuestsWidgetWrapperComponent } from '../../components/overlays/bgs-quests-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { MinionOnBoardOverlayComponent } from '../../components/overlays/board/minion-on-board-overlay.component';
+import {
+	ChoosingCardOptionComponent,
+	ChoosingCardWidgetWrapperComponent,
+} from '../../components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
@@ -509,6 +514,7 @@ import { DuelsStateBuilderService } from '../../services/duels/duels-state-build
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
 import { GameStatusService } from '../../services/game-status.service';
+import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
@@ -885,6 +891,7 @@ const components = [
 		DuelsStatTypeFilterDropdownComponent,
 		DuelsTreasurePassiveTypeFilterDropdownComponent,
 		DuelsHeroSortDropdownComponent,
+		DuelsDeckSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
 		DuelsPassiveFilterDropdownComponent,
@@ -961,6 +968,8 @@ const components = [
 		HsQuestsWidgetWrapperComponent,
 		BgsQuestsWidgetComponent,
 		BgsQuestsWidgetWrapperComponent,
+		ChoosingCardWidgetWrapperComponent,
+		ChoosingCardOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
@@ -1140,6 +1149,7 @@ const components = [
 		SettingsCommunicationService,
 		TwitchAuthService,
 		OutOfCardsService,
+		GameNativeStateStoreService,
 
 		CollectionBootstrapService,
 		PackMonitor,

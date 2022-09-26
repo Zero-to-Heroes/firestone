@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, sumOnArray } from '../../../services/utils';
@@ -25,7 +25,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 					[id]="'placementDistribution' + cardId"
 					[midLineValue]="100 / 8"
 				></basic-bar-chart-2>
-				<div class="entry">
+				<div class="entry average-position">
 					<div
 						class="label"
 						[helpTooltip]="'battlegrounds.hero-stats.avg-position-tooltip' | owTranslate"
@@ -44,7 +44,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 						({{ buildValue(playerAveragePosition) }})
 					</div>
 				</div>
-				<div class="entry">
+				<div class="entry matches-played">
 					<div
 						class="label"
 						[helpTooltip]="'battlegrounds.hero-stats.matches-played-tooltip' | owTranslate"
@@ -58,7 +58,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 					</div>
 				</div>
 			</div>
-			<div class="winrate">
+			<div class="winrate" *ngIf="showTurnWinrates">
 				<div
 					class="title"
 					[helpTooltip]="'battlegrounds.hero-stats.turn-winrate-tooltip' | owTranslate"
@@ -76,12 +76,13 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 	playerAveragePosition: number;
 	totalPlayerMatches: number;
 	cardId: string;
-	_hero: BgsHeroStat;
+	_hero: BgsHeroStat | BgsQuestStat;
+	showTurnWinrates: boolean;
 
 	private placementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 	private playerPlacementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 
-	@Input() set hero(value: BgsHeroStat) {
+	@Input() set hero(value: BgsHeroStat | BgsQuestStat) {
 		if (!value) {
 			return;
 		}
@@ -92,6 +93,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 		this.playerAveragePosition = value.playerAveragePosition;
 		this.placementDistribution$.next(value.placementDistribution);
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
+		this.showTurnWinrates = !!(value as BgsHeroStat)?.combatWinrate?.length;
 	}
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

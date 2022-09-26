@@ -145,6 +145,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		if (selector) {
 			// console.debug(
 			// 	'highlighting',
+			// 	side,
 			// 	this.handlers,
 			// 	Object.keys(this.handlers).filter((key) => key.startsWith(side)),
 			// 	Object.keys(this.handlers)
@@ -192,7 +193,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildCardIdSelector(
 		cardId: string,
-		card: DeckCard,
+		card?: DeckCard,
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
 			case CardIds.AbyssalDepths:
@@ -216,6 +217,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
 				return and(or(inDeck, inHand), battlecry);
+			case CardIds.Ancharrr:
+				return and(inDeck, minion, pirate);
 			case CardIds.ArcaneBrilliance:
 				return and(
 					inDeck,
@@ -345,7 +348,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(dragon);
 			case CardIds.Drekthar_AV_100:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return !!card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
 				return and(inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.DunBaldarBunker:
@@ -418,6 +421,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
 				return and(inDeck, spell, shadow);
+			case CardIds.HighAbbessAlura:
+				return and(inDeck, spell);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
 			case CardIds.Hullbreaker:
@@ -482,6 +487,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LadyAshvane_TSC_943:
 			case CardIds.LadyAshvane_Story_11_LadyAshvane:
 				return and(inDeck, weapon);
+			case CardIds.LadyInWhite:
+				return and(inDeck, minion);
 			case CardIds.LadyVashj_VashjPrimeToken:
 				return and(inDeck, spell);
 			case CardIds.LineHopper:
@@ -550,6 +557,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
+			case CardIds.Psychopomp:
+				return and(inGraveyard, minion);
 			case CardIds.RaiseDead_SCH_514:
 				return and(inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
@@ -682,6 +691,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, neutral);
 			case CardIds.TheUpperHand:
 				return and(inDeck, spell);
+			case CardIds.ThriveInTheShadowsCore:
+				return and(inDeck, spell);
 			case CardIds.TortollanPilgrim:
 				return and(inDeck, spell);
 			case CardIds.TotemOfTheDead_LOOTA_845:
@@ -697,7 +708,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(or(inDeck, inHand), spell, arcane);
 			case CardIds.VanndarStormpike_AV_223:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
+				return !!card ? and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1)) : null;
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
 			case CardIds.Vectus:

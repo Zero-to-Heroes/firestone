@@ -7,6 +7,7 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -18,8 +19,9 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	styleUrls: ['../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
 	template: `
 		<current-session-widget
-			class="widget"
 			*ngIf="showWidget$ | async"
+			class="widget"
+			[ngClass]="{ 'hidden': hidden$ | async }"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
@@ -42,6 +44,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	};
 
 	showWidget$: Observable<boolean>;
+	hidden$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -58,6 +61,15 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 		this.showWidget$ = combineLatest(this.store.listenPrefs$((prefs) => prefs.showCurrentSessionWidgetBgs)).pipe(
 			this.mapData(([[displayBgs]]) => displayBgs),
 			this.handleReposition(),
+		);
+		this.hidden$ = combineLatest(
+			this.store.listenPrefs$((prefs) => prefs.hideCurrentSessionWidgetWhenFriendsListIsOpen),
+			this.store.listenNativeGameState$((state) => state.isFriendsListOpen),
+		).pipe(
+			this.mapData(
+				([[hideCurrentSessionWidgetWhenFriendsListIsOpen], [isFriendsListOpen]]) =>
+					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
+			),
 		);
 	}
 }
