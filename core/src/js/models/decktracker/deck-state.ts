@@ -2,6 +2,7 @@ import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
 import { ShortCard } from '@models/decktracker/game-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
+import { ChoosingOptionsGameEvent } from '../mainwindow/game-events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -95,6 +96,8 @@ export class DeckState {
 	readonly otherZone: readonly DeckCard[] = [];
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
+
+	readonly currentOptions?: readonly CardOption[] = [];
 
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
@@ -344,4 +347,11 @@ export interface TurnTiming {
 	readonly turn: number;
 	readonly startTimestamp: number;
 	readonly endTimestamp: number;
+}
+
+export interface CardOption {
+	readonly entityId: number;
+	readonly cardId: string;
+	readonly source: string;
+	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
 }

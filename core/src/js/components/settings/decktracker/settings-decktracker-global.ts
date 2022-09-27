@@ -82,6 +82,11 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.decktracker.global.highlight-related-cards-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayEnableDiscoverHelp"
+						[label]="'settings.decktracker.global.discover-help' | owTranslate"
+						[tooltip]="'settings.decktracker.global.discover-help-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="decktrackerCloseOnGameEnd"
 						[label]="'settings.decktracker.global.close-tracker-on-end' | owTranslate"
 						[tooltip]="'settings.decktracker.global.close-tracker-on-end-tooltip' | owTranslate"

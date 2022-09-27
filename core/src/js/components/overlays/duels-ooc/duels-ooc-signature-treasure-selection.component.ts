@@ -1,7 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	allDuelsHeroes,
+	CardIds,
+	duelsHeroConfigs,
+	normalizeDuelsHeroCardId,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -209,9 +215,10 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 				const result = allStats.find(
 					(stat) =>
 						stat?.cardId === currentSignatureTreasureCardId &&
-						stat?.stat?.heroCardId === heroPowerConfig?.hero,
+						normalizeDuelsHeroCardId(stat?.stat?.heroCardId) ===
+							normalizeDuelsHeroCardId(heroPowerConfig?.hero),
 				)?.stat;
-				console.log('result', currentSignatureTreasureCardId, result, allStats);
+				// console.log('result', currentSignatureTreasureCardId, result, allStats);
 				if (!!result) {
 					return result;
 				}
@@ -243,13 +250,13 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	async onMouseEnter(cardId: string) {
 		this.selectedSignatureTreasureCardId.next(null);
 		await sleep(100);
-		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
+		// console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
 		this.selectedSignatureTreasureCardId.next(cardId);
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event.shiftKey) {
-			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
+			// console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
 			this.selectedSignatureTreasureCardId.next(null);
 		}
 	}

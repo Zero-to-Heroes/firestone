@@ -49,7 +49,7 @@ export const capitalizeEachWord = (input: string): string => {
 };
 
 export const isCharLowerCase = (character: string): boolean => {
-	return character === character.toLowerCase() && character !== character.toUpperCase();
+	return !!character?.length && character === character.toLowerCase() && character !== character.toUpperCase();
 };
 
 export const isVersionBefore = (appVersion: string, reference: string): boolean => {

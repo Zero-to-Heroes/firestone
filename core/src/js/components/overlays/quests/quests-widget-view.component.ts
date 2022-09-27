@@ -10,7 +10,6 @@ import { AbstractSubscriptionComponent } from '@components/abstract-subscription
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 
@@ -88,12 +87,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 				([main, nav]) => (this.xpBonusExtractor ? this.xpBonusExtractor(main) : null),
 			),
 		).pipe(
-			tap((info) => console.debug('quests info', info)),
 			this.mapData(([[referenceQuests, activeQuests, xpBonus]]) => {
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
-						console.debug('refQuest', refQuest, this.rewardsTrack);
 						if (!refQuest) {
 							console.warn('missing ref quest', quest.Id, referenceQuests?.quests?.length, quest);
 							return null;
@@ -123,7 +120,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 			),
 			this.quests$,
 		).pipe(
-			tap((info) => console.debug('showQuests info', info)),
 			this.mapData(([[prefs, showWhenEmpty], quests]) => {
 				const showQuests = this.showPrefsExtractor && this.showPrefsExtractor(prefs);
 				return showQuests && (!!quests?.length || showWhenEmpty);

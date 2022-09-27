@@ -25,7 +25,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 					[id]="'placementDistribution' + cardId"
 					[midLineValue]="100 / 8"
 				></basic-bar-chart-2>
-				<div class="entry">
+				<div class="entry average-position">
 					<div
 						class="label"
 						[helpTooltip]="'battlegrounds.hero-stats.avg-position-tooltip' | owTranslate"
@@ -44,7 +44,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 						({{ buildValue(playerAveragePosition) }})
 					</div>
 				</div>
-				<div class="entry">
+				<div class="entry matches-played">
 					<div
 						class="label"
 						[helpTooltip]="'battlegrounds.hero-stats.matches-played-tooltip' | owTranslate"

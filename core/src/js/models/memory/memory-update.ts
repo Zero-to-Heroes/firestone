@@ -22,6 +22,7 @@ export interface MemoryUpdate {
 	readonly DuelsCurrentOptionSelection: DungeonCrawlOptionType;
 	readonly DuelsCurrentCardsInDeck: number;
 	readonly IsDuelsRewardsPending: boolean;
+	readonly isFriendsListOpen: boolean;
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPack: PackInfo;

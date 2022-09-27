@@ -18,7 +18,9 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 	template: `
 		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
-			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
+			<div class="tier {{ tier?.toLowerCase() }}">
+				<div class="tier-value">{{ tier }}</div>
+			</div>
 			<!-- Used only for the in-game overlay -->
 			<div
 				class="portrait-tooltip"

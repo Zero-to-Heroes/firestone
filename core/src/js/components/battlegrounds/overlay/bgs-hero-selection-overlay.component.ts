@@ -24,7 +24,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div
 			class="app-container battlegrounds-theme bgs-hero-selection-overlay"
-			[ngClass]="{ 'with-hero-tooltips': heroTooltipActive$ | async }"
+			[ngClass]="{
+				'with-hero-tooltips': heroTooltipActive$ | async,
+				'with-tier-overlay': showTierOverlay$ | async
+			}"
 		>
 			<bgs-hero-overview
 				*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
@@ -41,6 +44,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroOverviews$: Observable<InternalBgsHeroStat[]>;
 	heroTooltipActive$: Observable<boolean>;
+	showTierOverlay$: Observable<boolean>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -53,16 +57,8 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	}
 
 	ngAfterContentInit() {
-		this.heroTooltipActive$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting heroTooltipActive in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+		this.heroTooltipActive$ = this.listenForBasicPref$((prefs) => prefs.bgsShowHeroSelectionTooltip);
+		this.showTierOverlay$ = this.listenForBasicPref$((prefs) => prefs.bgsShowHeroSelectionTiers);
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(([main, nav]) => main.achievements),

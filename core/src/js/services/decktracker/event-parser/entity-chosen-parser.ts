@@ -21,6 +21,18 @@ export class EntityChosenParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const newState = this.handleEvent(currentState, gameEvent);
+		return newState.update({
+			playerDeck: newState.playerDeck.update({
+				currentOptions: [],
+			}),
+			opponentDeck: newState.opponentDeck.update({
+				currentOptions: [],
+			}),
+		});
+	}
+
+	private handleEvent(currentState: GameState, gameEvent: GameEvent): GameState {
 		const originCreatorCardId = gameEvent.additionalData?.context?.creatorCardId;
 		if (CARDS_THAT_PUT_ON_TOP.includes(originCreatorCardId)) {
 			return this.handleCardOnTop(currentState, gameEvent);

@@ -444,6 +444,7 @@ export const publicCardGiftCreators = [
 	CardIds.SinfulSousChef,
 	CardIds.SinisterDeal,
 	CardIds.SirakessCultist,
+	CardIds.SirFinleySeaGuide,
 	CardIds.SkyRaider,
 	CardIds.Sleetbreaker,
 	CardIds.SludgeSlurper,
@@ -460,6 +461,7 @@ export const publicCardGiftCreators = [
 	CardIds.SketchyStranger,
 	CardIds.StaffOfAmmunae_ULDA_041,
 	CardIds.StewardOfScrolls_SCH_245,
+	CardIds.SunkenSweeper,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
 	CardIds.SuspiciousPirate,

@@ -26,6 +26,7 @@ import { GameStateService } from './decktracker/game-state.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { GameStatusService } from './game-status.service';
+import { GameNativeStateStoreService } from './game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { LocalizationService } from './localization.service';
 import { LogRegisterService } from './log-register.service';
@@ -114,6 +115,7 @@ export class AppBootstrapService {
 		private init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
 		private init_gameStatus: GameStatusService,
 		private init_quests: QuestsService,
+		private init_GameNativeStateStoreService: GameNativeStateStoreService,
 	) {}
 
 	public async init() {

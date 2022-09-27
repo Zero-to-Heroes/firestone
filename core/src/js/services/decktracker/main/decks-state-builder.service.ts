@@ -291,13 +291,13 @@ export class DecksStateBuilderService {
 			prefs,
 			patch,
 		);
-		console.debug(
-			'[deck] built valid replays',
-			validStats.length && validStats[0].playerDeckName,
-			prefs,
-			filters,
-			validStats,
-		);
+		// console.debug(
+		// 	'[deck] built valid replays',
+		// 	validStats.length && validStats[0].playerDeckName,
+		// 	prefs,
+		// 	filters,
+		// 	validStats,
+		// );
 
 		const deckName =
 			stats.filter((stat) => stat.playerDeckName).length > 0
