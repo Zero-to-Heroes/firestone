@@ -135,10 +135,14 @@ export const pirate = race(Race.PIRATE);
 export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
 
+export const currentClass = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
+	return handler.referenceCardProvider()?.cardClass === deckState?.hero?.playerClass;
+};
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
 };
 export const neutral = cardClass(CardClass.NEUTRAL);
+export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
 
 export const rarity = (rarity: RarityTYpe) => (handler: Handler): boolean => {

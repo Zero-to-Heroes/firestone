@@ -24,6 +24,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.RepentanceVanilla,
 		CardIds.SacredTrial,
 		CardIds.Ambush,
+		CardIds.Objection,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}

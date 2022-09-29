@@ -4,7 +4,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
-const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt];
+const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt, CardIds.OrderInTheCourt];
 
 export class SpecialCardPowerTriggeredParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

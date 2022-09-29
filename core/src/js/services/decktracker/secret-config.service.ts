@@ -17,28 +17,35 @@ export class SecretConfigService {
 	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
 		const mode: string = this.getMode(metadata);
 		const config = this.secretConfigs.find((conf) => conf.mode === mode);
+		console.debug(
+			'[secret] found config',
+			config,
+			this.secretConfigs,
+			creatorCardId === CardIds.BeaststalkerTavish,
+		);
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
 			return null;
 		}
 
-		if ([CardIds.BeaststalkerTavish].includes(creatorCardId as CardIds)) {
-			const allTavishSecrets = [
-				CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
-				CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
-				CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
-				CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
-				CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
-				CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
-				CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
-			];
-			return allTavishSecrets.filter((secret) =>
-				config.sets.includes(this.allCards.getCard(secret).set?.toLowerCase()),
-			);
-		}
+		// if ([CardIds.BeaststalkerTavish].includes(creatorCardId as CardIds)) {
+		// 	const allTavishSecrets = [
+		// 		CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
+		// 		CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
+		// 		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
+		// 		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
+		// 		CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
+		// 		CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
+		// 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
+		// 	];
+		// 	return allTavishSecrets.filter((secret) =>
+		// 		config.sets.includes(this.allCards.getCard(secret).set?.toLowerCase()),
+		// 	);
+		// }
 
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
+			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
 			.map((secret) => secret.cardId);
 		return result;
 	}
@@ -46,6 +53,7 @@ export class SecretConfigService {
 	private async init() {
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
+		console.debug('[secret] loaded config', this.secretConfigs);
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {
@@ -112,4 +120,5 @@ interface SecretsConfig {
 interface SecretConfig {
 	readonly cardId: string;
 	readonly playerClass: string;
+	readonly isTavish: boolean;
 }

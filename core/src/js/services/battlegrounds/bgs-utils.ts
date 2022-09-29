@@ -22,12 +22,14 @@ export const allBgsRaces = [
 ];
 
 export const NON_BUYABLE_MINION_IDS = [
-	CardIds.CuddlgamBattlegrounds,
-	CardIds.ArgentBraggart,
+	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A,
+	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A_G,
+	CardIds.ArgentBraggart_BG_SCH_149,
 	CardIds.ArgentBraggartBattlegrounds,
 	CardIds.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
 	CardIds.FishOfNzothBattlegrounds,
-	CardIds.CattlecarpOfNzothBattlegrounds,
+	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A,
+	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A_G,
 	CardIds.SnakeTrap_SnakeLegacyToken,
 	CardIds.SnakeTrap_SnakeVanillaToken,
 	CardIds.ImprovedSnakeTrap_SnakeToken,
@@ -171,8 +173,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return 'TB_BaconShop_HP_047';
 		case 'TB_BaconShop_HERO_43':
 			return 'TB_BaconShop_HP_048';
-		case 'TB_BaconShop_HERO_44':
-			return 'TB_BaconShop_HP_050';
+		// case 'TB_BaconShop_HERO_44':
+		// 	return 'TB_BaconShop_HP_050';
 		case 'TB_BaconShop_HERO_45':
 			return 'TB_BaconShop_HP_053';
 		case 'TB_BaconShop_HERO_47':
@@ -299,6 +301,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.MurlocHolmes_DetectiveForHire;
 		case CardIds.SireDenathrius_BG24_HERO_100:
 			return CardIds.SireDenathrius_Whodunitquestion;
+		case CardIds.SylvanasWindrunner_BG23_HERO_306:
+			return CardIds.SylvanasWindrunner_ReclaimedSouls;
 
 		case '':
 			return null; // new heroes
@@ -665,6 +669,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 426;
 		case CardIds.SireDenathrius_BG24_HERO_100:
 			return 427;
+		case CardIds.SylvanasWindrunner_BG23_HERO_306:
+			return 431;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

@@ -26,7 +26,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="wrapper-for-flip" [@flipState]="flip">
 				<div class="box-side set-view">
 					<div class="logo-container">
-						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
+						<img [src]="logoUrl" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName" [owTranslate]="setName"></span>
 					</div>
 					<span
@@ -190,6 +190,7 @@ export class SetComponent implements AfterViewInit {
 
 	@Input() set cardSet(set: Set) {
 		this._cardSet = set;
+		this.logoUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/sets/${set.id}.png`;
 		this.setName = `global.set.${set.id}`;
 		this.released = set.allCards && set.allCards.length > 0;
 		if (['classic', 'core', 'legacy', 'demon_hunter_initiate'].includes(set.id)) {
@@ -202,6 +203,7 @@ export class SetComponent implements AfterViewInit {
 	}
 
 	_cardSet: Set;
+	logoUrl: string;
 	_displayName = false;
 	released = true;
 	epicTimer = 10;

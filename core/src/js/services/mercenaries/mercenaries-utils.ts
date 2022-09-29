@@ -221,6 +221,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.BootsOfHasteLettuceEnchantment,
 	CardIds.CenarionSurgeLettuceEnchantment,
 	CardIds.CasterHasteLettuceEnchantment,
+	CardIds.DealOfTime_DontWasteItLettuceEnchantment,
 	CardIds.DreadbladesLettuceEnchantment,
 	// CardIds.ElunesGraceLettuceEnchantment,
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
@@ -232,6 +233,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.HeroicLeapLettuceEnchantment,
 	CardIds.ManaBlinkLettuceEnchantment,
 	CardIds.ProtectorHasteLettuceEnchantment,
+	CardIds.RainOfChaosLettuceEnchantment,
 	CardIds.RingOfHasteLettuceEnchantment,
 	CardIds.SlipperyWhenWetLettuceEnchantment_LT23_024E2e2,
 	CardIds.StringOfFateLettuceEnchantment,
@@ -239,6 +241,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
+	CardIds.OffBalanceLettuceEnchantment,
 	CardIds.DoomedLettuceEnchantment,
 	CardIds.EarthStompLettuceEnchantment,
 	CardIds.EmeraldRootsLettuceEnchantment,
@@ -249,5 +252,6 @@ export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.ShadowShockLettuceEnchantment,
 	CardIds.StaggeredLettuceEnchantment,
 	CardIds.ThunderStruckLettuceEnchantment,
+	// CardIds.ThreeMovesAheadLettuceEnchantment,
 	CardIds.VaingloriousRebukeLettuceEnchantment,
 ];

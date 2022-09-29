@@ -208,6 +208,8 @@ export class SetsService {
 	// Used for pity timers mostly
 	public normalizeSetId(setId: string): string {
 		switch (setId) {
+			case 'maw_and_disorder':
+				return 'revendreth';
 			case 'darkmoon_races':
 				return 'darkmoon_faire';
 			case 'wailing_caverns':

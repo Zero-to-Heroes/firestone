@@ -23,6 +23,7 @@ import {
 	chooseOne,
 	corrupt,
 	corrupted,
+	currentClass,
 	damage as dealsDamage,
 	deathrattle,
 	demon,
@@ -60,9 +61,9 @@ import {
 	or,
 	outcast,
 	overload,
+	paladin,
 	pirate,
 	race,
-	rogue,
 	rush,
 	secret,
 	shadow,
@@ -283,6 +284,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, beast);
 			case CardIds.ChattyBartender:
 				return and(inDeck, secret);
+			case CardIds.ClassActionLawyer:
+				return and(inDeck, neutral);
 			case CardIds.ClickClocker:
 				return and(inDeck, minion, mech);
 			case CardIds.ClockworkAssistant_GILA_907:
@@ -295,7 +298,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
+				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(or(inDeck, inHand), murloc);
 			case CardIds.Commencement:
@@ -322,6 +325,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeepwaterEvoker:
 				return and(inDeck, spell);
+			case CardIds.DefenseAttorneyNathanos:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DinnerPerformer:
@@ -359,6 +364,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(spell, shadow);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(spell, shadow);
+			case CardIds.ElitistSnob:
+				return and(inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return and(minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
@@ -406,6 +413,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, holy);
 			case CardIds.GuffRunetotem_BAR_720:
 				return and(spell, spellSchool(SpellSchool.NATURE));
+			case CardIds.HabeasCorpses:
+				return and(inGraveyard, minion);
 			case CardIds.Hadronox:
 				return and(inGraveyard, minion, taunt);
 			case CardIds.HarborScamp:
@@ -543,6 +552,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.PillageTheFallenTavernBrawl:
 				return and(weapon);
+			case CardIds.PitCommander:
+				return and(inDeck, minion, demon);
 			case CardIds.PlaguebringerTavernBrawl:
 				return and(spell, effectiveCostMore(1));
 			case CardIds.Plunder:
@@ -658,6 +669,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, shadow);
 			case CardIds.StaffOfRenewalTavernBrawl:
 				return and(inGraveyard, minion);
+			case CardIds.StageDive:
+			case CardIds.StageDive_StageDive:
+				return and(inDeck, minion, rush);
 			case CardIds.StakingAClaimTavernBrawl:
 				return and(or(inDeck, inHand), discover);
 			case CardIds.StarvingTavernBrawl:
@@ -686,7 +700,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TessGreymane_GIL_598:
 			case CardIds.TessGreymaneCore:
-				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
+				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
 				return and(inDeck, neutral);
 			case CardIds.TheUpperHand:
@@ -721,6 +735,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, neutral, effectiveCostLess(4));
 			case CardIds.WarsongWrangler:
 				return and(inDeck, beast);
+			case CardIds.WarsongWrangler:
+				return and(inDeck, beast);
+			case CardIds.WeaponsExpert:
+				return and(inDeck, weapon);
 			case CardIds.WidowbloomSeedsman:
 				return and(inDeck, spell, nature);
 			case CardIds.WingCommanderIchman_AV_336:
