@@ -295,6 +295,7 @@ export const publicCardGiftCreators = [
 	CardIds.BringOnRecruitsTavernBrawl,
 	CardIds.BronzeExplorer,
 	CardIds.BronzeHerald,
+	CardIds.BronzeSignetTavernBrawl,
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
 	CardIds.BuildASnowman_BuildASnowgreToken,
@@ -316,6 +317,7 @@ export const publicCardGiftCreators = [
 	CardIds.CorsairCache,
 	CardIds.CrystallineOracle,
 	CardIds.DeathBlossomWhomper,
+	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
 	CardIds.DevouringSwarm,
@@ -402,6 +404,8 @@ export const publicCardGiftCreators = [
 	CardIds.LorewalkerCho,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
+	CardIds.LyraTheSunshard,
+	CardIds.LyraTheSunshardCore,
 	CardIds.MadameLazul,
 	CardIds.MailboxDancer,
 	CardIds.Mankrik,

@@ -338,8 +338,8 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			return null;
 		}
 
-		console.debug('mercs definition', definition);
 		const deckstring = encodeMercs(definition);
+		console.debug('mercs definition', deckstring, definition);
 		return deckstring;
 	}
 
@@ -353,17 +353,22 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 		const memMerc = mercCollectionInfo?.Mercenaries?.find((m) => m.Id === refMerc.id);
 		const equipmentId =
+			memMerc?.Loadout?.Equipment?.Id ??
 			(memMerc?.Equipments ?? []).find((e) => e.Equipped)?.Id ??
 			[...(memMerc?.Equipments ?? [])].sort((a, b) => b.Tier - a.Tier)[0]?.Id ??
 			refMerc.equipments[0]?.equipmentId;
+		const artVariationId = memMerc?.Loadout?.ArtVariation?.Id ?? memMerc.Skins.find((s) => s.Default)?.Id ?? 0;
+		const artVariationPremium =
+			memMerc?.Loadout?.ArtVariationPremium ?? memMerc.Skins.find((s) => s.Default)?.Id ?? 0;
 		const result: MercenaryDefinition = {
 			mercenaryId: refMerc.id,
-			selectedArtVariationId: 0,
-			selectedArtVariationPremium: 0,
+			selectedArtVariationId: artVariationId,
+			selectedArtVariationPremium: artVariationPremium,
 			selectedEquipmentId: equipmentId,
 			sharedTeamMercenaryIsFullyUpgraded: 0,
 			sharedTeamMercenaryXp: 0,
 		};
+		console.debug('resuilt', result, memMerc, equipmentId);
 		return result;
 	}
 }
