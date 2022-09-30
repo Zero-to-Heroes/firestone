@@ -75,6 +75,7 @@ export class Preferences {
 	readonly enableQuestsWidget: boolean = true;
 	readonly showQuestsWidgetWhenEmpty: boolean = false;
 	readonly showQuestsInGame: boolean = true;
+	readonly useStreamerMode: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
 

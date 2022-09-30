@@ -97,9 +97,14 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 				(state) => state?.playerDeck?.turnDuration,
 				(state) => state?.playerDeck?.turnTimings,
 			),
+			this.listenForBasicPref$((prefs) => prefs.useStreamerMode),
 		).pipe(
-			this.mapData(([interval, [playerName, turnDuration, turnTimings]]) =>
-				this.buildPlayer(playerName, turnDuration, turnTimings),
+			this.mapData(([interval, [playerName, turnDuration, turnTimings], useStreamerMode]) =>
+				this.buildPlayer(
+					useStreamerMode ? this.i18n.translateString('decktracker.streamer-mode.you') : playerName,
+					turnDuration,
+					turnTimings,
+				),
 			),
 		);
 		this.opponent$ = combineLatest(
@@ -109,9 +114,14 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 				(state) => state?.opponentDeck?.turnDuration,
 				(state) => state?.opponentDeck?.turnTimings,
 			),
+			this.listenForBasicPref$((prefs) => prefs.useStreamerMode),
 		).pipe(
-			this.mapData(([interval, [playerName, turnDuration, turnTimings]]) =>
-				this.buildPlayer(playerName, turnDuration, turnTimings),
+			this.mapData(([interval, [playerName, turnDuration, turnTimings], useStreamerMode]) =>
+				this.buildPlayer(
+					useStreamerMode ? this.i18n.translateString('decktracker.streamer-mode.opponent') : playerName,
+					turnDuration,
+					turnTimings,
+				),
 			),
 		);
 

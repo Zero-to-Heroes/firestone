@@ -18,6 +18,15 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<div class="subgroup">
 					<preference-toggle
+						field="useStreamerMode"
+						[label]="'settings.decktracker.global.streamer-mode' | owTranslate"
+						[tooltip]="'settings.decktracker.global.streamer-mode-tooltip' | owTranslate"
+					></preference-toggle>
+				</div>
+			</div>
+			<div class="settings-group">
+				<div class="subgroup">
+					<preference-toggle
 						field="overlayShowTitleBar"
 						[label]="'settings.decktracker.global.show-title-bar' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-title-bar-tooltip' | owTranslate"
