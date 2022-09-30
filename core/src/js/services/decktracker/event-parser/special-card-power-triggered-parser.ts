@@ -53,6 +53,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 					),
 				});
 		}
+		return deck;
 	}
 
 	event(): string {
