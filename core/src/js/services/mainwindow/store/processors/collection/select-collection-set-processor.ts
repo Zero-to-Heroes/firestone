@@ -29,7 +29,7 @@ export class SelectCollectionSetProcessor implements Processor {
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 				text: `global.set.${event.setId}`,
-				image: `assets/images/sets/${selectedSet.id}.png`,
+				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/sets/${selectedSet.id}.png`,
 			} as NavigationState),
 		];
 	}
