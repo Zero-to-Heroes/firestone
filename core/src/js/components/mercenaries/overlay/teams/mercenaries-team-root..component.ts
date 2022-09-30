@@ -96,7 +96,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
 								</div>
-								<div 
+								<div
 									class="roles-chart {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showRolesChart$ | async }"
 								>
