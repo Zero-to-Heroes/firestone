@@ -101,6 +101,7 @@ export class DeckState {
 
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
+	readonly lastDeathrattleTriggered?: string;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
@@ -303,6 +304,10 @@ export class DeckState {
 
 	public hasBrilliantMacaw() {
 		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+	}
+
+	public hasMonstrousParrot() {
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.MonstrousParrot);
 	}
 
 	public hasVanessaVanCleef() {

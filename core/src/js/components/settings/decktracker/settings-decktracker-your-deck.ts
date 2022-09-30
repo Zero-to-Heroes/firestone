@@ -173,6 +173,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerMonstrousParrotCounter"
+					[label]="'settings.decktracker.your-deck.counters.monstrous-parrot-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.monstrous-parrot-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerVanessaVanCleefCounter"
 					[label]="'settings.decktracker.your-deck.counters.vanessa-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.vanessa-tooltip' | owTranslate"

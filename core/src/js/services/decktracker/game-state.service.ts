@@ -70,6 +70,7 @@ import { CthunRevealedParser } from './event-parser/cthun-revealed-parser';
 import { CustomEffectsParser } from './event-parser/custom-effects-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DataScriptChangedParser } from './event-parser/data-script-changed-parser';
+import { DeathrattleTriggeredParser } from './event-parser/deathrattle-triggered-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
@@ -581,6 +582,7 @@ export class GameStateService {
 			new CostChangedParser(this.helper),
 			new DataScriptChangedParser(this.helper, this.allCards),
 			new ChoosingOptionsParser(),
+			new DeathrattleTriggeredParser(),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),
