@@ -6,6 +6,7 @@ import {
 	EventEmitter,
 	Input,
 	Output,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
@@ -178,6 +179,10 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 				this.flavor = flavorSource?.length
 					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
 					: null;
+				console.debug('updated flavor', this.flavor, flavorSource, card);
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
 			});
 	}
 

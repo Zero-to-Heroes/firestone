@@ -1,19 +1,20 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
 	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 declare let amplitude;
 
@@ -49,8 +50,15 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryItemComponent implements AfterViewInit {
+export class CardHistoryItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() active: boolean;
+
+	@Input('historyItem') set historyItem(history: CardHistory) {
+		if (!history) {
+			return;
+		}
+		this.history$$.next(history);
+	}
 
 	newCard: boolean;
 	relevantCount: number;
@@ -61,63 +69,60 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	cardId: string;
 	cardType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private history$$ = new BehaviorSubject<CardHistory>(null);
 
 	constructor(
-		private readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly cards: CardsFacadeService,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	) {
+		super(store, cdr);
 	}
 
-	@Input('historyItem') set historyItem(history: CardHistory) {
-		if (!history) {
-			return;
-		}
-		this.cardId = history.cardId;
-		this.newCard = history.isNewCard;
-		this.relevantCount = history.relevantCount;
-		this.updateCard(history);
-	}
+	ngAfterContentInit(): void {
+		combineLatest(
+			this.history$$.asObservable(),
+			this.listenForBasicPref$((prefs) => prefs.locale),
+		)
+			.pipe(this.mapData(([history, locale]) => ({ history, locale })))
+			.subscribe((info) => {
+				const history = info.history;
 
-	private updateCard(history: CardHistory, retriesLeft = 5) {
-		if (retriesLeft < 0) {
-			return;
-		}
-		if (!this.cards.getCards() || this.cards.getCards().length === 0) {
-			// Cards service not initialized yet
-			setTimeout(() => this.updateCard(history, retriesLeft - 1), 500);
-			return;
-		}
-		const dbCard = this.cards.getCard(history.cardId);
+				this.cardId = history.cardId;
+				this.newCard = history.isNewCard;
+				this.relevantCount = history.relevantCount;
 
-		this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
-		const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
-		this.cardName = history.isPremium
-			? this.i18n.translateString('app.collection.card-history.golden-card', { cardName: name })
-			: name;
-		this.dustValue = this.getDust(dbCard, history.isPremium);
-		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(this.i18n.formatCurrentLocale(), {
-			day: '2-digit',
-			month: '2-digit',
-			year: '2-digit',
-		});
-		this.cardType = history.isPremium ? 'GOLDEN' : 'NORMAL';
-		// FIXME: Why do I need this?
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+				const dbCard = this.cards.getCard(history.cardId);
+				this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
+
+				const name = dbCard && dbCard.name ? dbCard.name : this.i18n.getUnknownCardName();
+				this.cardName = history.isPremium
+					? this.i18n.translateString('app.collection.card-history.golden-card', { cardName: name })
+					: name;
+
+				this.dustValue = this.getDust(dbCard, history.isPremium);
+				this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(
+					this.i18n.formatCurrentLocale(),
+					{
+						day: '2-digit',
+						month: '2-digit',
+						year: '2-digit',
+					},
+				);
+				this.cardType = history.isPremium ? 'GOLDEN' : 'NORMAL';
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	@HostListener('mousedown') onClick() {
 		amplitude.getInstance().logEvent('history', {
 			'page': 'collection',
 		});
-		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
+		this.store.send(new ShowCardDetailsEvent(this.cardId));
 	}
 
 	private getDust(dbCard: any, isPremium: boolean) {
