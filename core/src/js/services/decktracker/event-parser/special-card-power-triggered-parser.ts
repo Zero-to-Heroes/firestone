@@ -43,6 +43,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 	private applySpecialCardEffect(deck: DeckState, cardId: string) {
 		switch (cardId) {
 			case CardIds.LorekeeperPolkelt:
+			case CardIds.OrderInTheCourt:
 				return deck.update({
 					deck: deck.deck.map((card) =>
 						card.update({
