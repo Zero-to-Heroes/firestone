@@ -441,6 +441,7 @@ export const publicCardGiftCreators = [
 	CardIds.RamCommander,
 	CardIds.RamkahenWildtamer,
 	CardIds.RapidFire_DAL_373,
+	CardIds.RatsOfExtraordinarySize,
 	CardIds.RayOfFrost_DAL_577,
 	CardIds.Reconnaissance,
 	CardIds.Renew_BT_252,
