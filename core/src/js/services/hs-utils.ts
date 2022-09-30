@@ -218,6 +218,7 @@ export const forcedHiddenCardCreators = [
 	// CardIds.MadameLazul,
 	CardIds.MaskOfMimicry,
 	CardIds.MaskOfMimicryTavernBrawl,
+	CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
 	// CardIds.MindVisionLegacy,
 	// CardIds.MindVisionVanilla,
 	// So that even "revealed when drawn" cards are not revelaed when plundered by Hooktusk
