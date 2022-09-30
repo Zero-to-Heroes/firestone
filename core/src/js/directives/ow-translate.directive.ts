@@ -17,6 +17,8 @@ export class OwTranslateDirective extends TranslateDirective {
 		// Used when OW is not available
 		@Optional() translate: TranslateService,
 	) {
-		super((ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null) ?? translate, element, _ref);
+		const translateService: TranslateService =
+			(ow?.isOwEnabled() ? ow?.getMainWindow()?.translateService : null) ?? translate;
+		super(translateService, element, _ref);
 	}
 }

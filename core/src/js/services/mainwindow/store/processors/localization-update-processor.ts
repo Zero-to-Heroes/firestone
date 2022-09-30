@@ -19,7 +19,7 @@ export class LocalizationUpdateProcessor implements Processor {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = { ...prefs, locale: event.locale };
 		await this.prefs.savePreferences(newPrefs);
-		await this.translate.use(prefs.locale).toPromise();
+		await this.translate.use(event.locale).toPromise();
 		console.log('updated localization', event.locale);
 		return [null, null];
 	}
