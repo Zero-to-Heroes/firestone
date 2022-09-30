@@ -1,12 +1,23 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 declare let amplitude;
 
@@ -76,7 +87,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardComponent {
+export class FullCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	// eslint-disable-next-line @angular-eslint/no-output-native
 	@Output() close = new EventEmitter();
 
@@ -95,59 +106,80 @@ export class FullCardComponent {
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips: readonly AudioClip[] = [];
 
+	private selectedCard$$ = new BehaviorSubject<SetCard | ReferenceCard>(null);
+
 	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {
 		if (!selectedCard) {
 			return;
 		}
 
-		console.debug('set card', selectedCard);
-		this.previousClips = this.audioClips || [];
-		this.audioCategories = this.buildAudio(selectedCard);
-		this.audioClips = this.audioCategories
-			.map((cat: AudioClipCategory) => cat.clips)
-			.reduce((a, b) => a.concat(b), []);
-
-		const card = this.cards.getCard(selectedCard.id);
-		// Because the high res images we have for the heroes are a bit weird
-		this.isHero = card.type === 'Hero';
-		this.card = card as InternalReferenceCard;
-		if (
-			(selectedCard as SetCard).ownedNonPremium ||
-			(selectedCard as SetCard).ownedPremium ||
-			(selectedCard as SetCard).ownedDiamond
-		) {
-			this.showCount = true;
-			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
-			this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
-			this.card.ownedDiamond = (selectedCard as SetCard).ownedDiamond;
-		} else {
-			this.showCount = false;
-		}
-		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
-		this.class = card.classes?.length
-			? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
-			: card.playerClass != null
-			? formatClass(card.playerClass, this.i18n)
-			: null;
-
-		this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
-		this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);
-		this.rarity =
-			card.rarity != null
-				? this.i18n.translateString(`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`)
-				: null;
-		const flavorSource = card.flavor ?? card.text;
-		this.flavor = flavorSource?.length
-			? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
-			: null;
+		this.selectedCard$$.next(selectedCard);
 	}
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly cards: SetsService,
 		private readonly allCards: CardsFacadeService,
 		private readonly sanitizer: DomSanitizer,
-	) {}
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		combineLatest(
+			this.selectedCard$$.asObservable(),
+			this.listenForBasicPref$((prefs) => prefs.locale),
+		)
+			.pipe(this.mapData(([selectedCard, locale]) => ({ selectedCard, locale })))
+			.subscribe((info) => {
+				const selectedCard = info.selectedCard;
+				const locale = info.locale;
+				console.debug('set card', selectedCard);
+				this.previousClips = this.audioClips || [];
+				this.audioCategories = this.buildAudio(selectedCard, locale);
+				this.audioClips = this.audioCategories
+					.map((cat: AudioClipCategory) => cat.clips)
+					.reduce((a, b) => a.concat(b), []);
+
+				const card = this.cards.getCard(selectedCard.id);
+				// Because the high res images we have for the heroes are a bit weird
+				this.isHero = card.type === 'Hero';
+				this.card = card as InternalReferenceCard;
+				if (
+					(selectedCard as SetCard).ownedNonPremium ||
+					(selectedCard as SetCard).ownedPremium ||
+					(selectedCard as SetCard).ownedDiamond
+				) {
+					this.showCount = true;
+					this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
+					this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
+					this.card.ownedDiamond = (selectedCard as SetCard).ownedDiamond;
+				} else {
+					this.showCount = false;
+				}
+				this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
+				this.class = card.classes?.length
+					? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
+					: card.playerClass != null
+					? formatClass(card.playerClass, this.i18n)
+					: null;
+
+				this.type = this.i18n.translateString(`app.collection.card-details.types.${card.type?.toLowerCase()}`);
+				this.set = this.i18n.translateString(`global.set.${card.set?.toLowerCase()}`);
+				this.rarity =
+					card.rarity != null
+						? this.i18n.translateString(
+								`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`,
+						  )
+						: null;
+				const flavorSource = card.flavor ?? card.text;
+				this.flavor = flavorSource?.length
+					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
+					: null;
+			});
+	}
 
 	playSound(audioClip: AudioClip) {
 		amplitude.getInstance().logEvent('sound', {
@@ -178,7 +210,7 @@ export class FullCardComponent {
 		this.close.emit(null);
 	}
 
-	private buildAudio(inputCard: ReferenceCard | SetCard): readonly AudioClipCategory[] {
+	private buildAudio(inputCard: ReferenceCard | SetCard, locale: string): readonly AudioClipCategory[] {
 		const card = this.allCards.getCard(inputCard.id);
 		if (!(card as ReferenceCard).audio2) {
 			return [];
@@ -187,23 +219,23 @@ export class FullCardComponent {
 		const result = [
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.basic'),
-				clips: this.buildAudioClips(card.audio2, 'basic'),
+				clips: this.buildAudioClips(card.audio2, 'basic', locale),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.spell'),
-				clips: this.buildAudioClips(card.audio2, 'spell'),
+				clips: this.buildAudioClips(card.audio2, 'spell', locale),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.emote'),
-				clips: this.buildAudioClips(card.audio2, 'emote', 'emote'),
+				clips: this.buildAudioClips(card.audio2, 'emote', locale, 'emote'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.event'),
-				clips: this.buildAudioClips(card.audio2, 'emote', 'event'),
+				clips: this.buildAudioClips(card.audio2, 'emote', locale, 'event'),
 			},
 			{
 				name: this.i18n.translateString('app.collection.card-details.sounds.category.error'),
-				clips: this.buildAudioClips(card.audio2, 'emote', 'error'),
+				clips: this.buildAudioClips(card.audio2, 'emote', locale, 'error'),
 			},
 		];
 		const allMappedClips = result
@@ -214,7 +246,7 @@ export class FullCardComponent {
 		allMappedClips.forEach((key) => delete otherAudio[key]);
 		const otherCategory = {
 			name: this.i18n.translateString('app.collection.card-details.sounds.category.other'),
-			clips: this.buildAudioClips(otherAudio, null),
+			clips: this.buildAudioClips(otherAudio, null, locale),
 		};
 
 		return [...result, otherCategory].filter((cat) => cat.clips.length > 0);
@@ -223,6 +255,7 @@ export class FullCardComponent {
 	private buildAudioClips(
 		audio: ReferenceCardAudio,
 		type: 'basic' | 'spell' | 'emote' | null,
+		locale: string,
 		category?: string,
 	): readonly AudioClip[] {
 		return Object.keys(audio)
@@ -247,8 +280,18 @@ export class FullCardComponent {
 					name: this.getSoundName(key),
 					originalKey: key,
 					audioGroup: audioGroup,
-					audios: files.map((file) =>
-						this.createAudio(file, `https://static.zerotoheroes.com/hearthstone/audio/${file}`),
+					audios: files.flatMap((file) =>
+						// We don't know beforehand if the file is localized or not, so we try to load both versions
+						[
+							this.createAudio(
+								file,
+								`https://static.zerotoheroes.com/hearthstone/audio/sounds/common/${file}`,
+							),
+							this.createAudio(
+								file,
+								`https://static.zerotoheroes.com/hearthstone/audio/sounds/${locale}/${file}`,
+							),
+						],
 					),
 				};
 				audioClip.audios.forEach((audio) => audio.load());

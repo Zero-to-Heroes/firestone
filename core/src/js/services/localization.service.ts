@@ -9,7 +9,7 @@ import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service'
 
 @Injectable()
 export class LocalizationService {
-	private locale = 'enUS';
+	private _locale = 'enUS';
 	private useHighResImages: boolean;
 
 	private translate: TranslateService;
@@ -36,8 +36,12 @@ export class LocalizationService {
 		window['localizationService'] = this;
 	}
 
+	public get locale() {
+		return this._locale;
+	}
+
 	public setLocale(locale: string) {
-		this.locale = locale;
+		this._locale = locale;
 	}
 
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
@@ -47,7 +51,7 @@ export class LocalizationService {
 		const bgs = options?.isBgs ? 'bgs/' : '';
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
-		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this.locale}/${highRes}`;
+		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
 		const suffix = `${cardId}${options?.isPremium ? '_golden' : ''}.png`;
 		return `${base}/${suffix}`;
 	}
@@ -100,7 +104,7 @@ export class LocalizationService {
 
 	// TODO translate
 	public formatCurrentLocale(): string {
-		switch (this.locale) {
+		switch (this._locale) {
 			case 'deDE':
 				return 'de-DE';
 			case 'enUS':
