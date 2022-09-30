@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.12.0',
+		version: '9.12.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,32 +46,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'collection',
 						details: [
 							{
 								type: 'feature',
-								text: `When playing Murloc Holmes, he now tells you if he saw one of the offered cards in your opponent's starting hand.`,
-							},
-							{
-								type: 'feature',
-								text: `Mousing over a card when Discovering now highlights the related cards in your deck.`,
-							},
-							{
-								type: 'feature',
-								text: `There is now an option to hide the opponent's tracker when opening the friends list.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an option to show the hero tier and average position directly on the hero selection screen. This is disabled by default, so you need to enable it from the Settings > Battlegrounds if you want to use it.`,
-							},
-							{
-								type: 'feature',
-								text: `There is now an option to hide the session widget when opening the friends list.`,
+								text: `All card sounds are now localized! Go listen to your favorite lines in whatever language your app happens to be in! :)`,
 							},
 						],
 					},
@@ -82,15 +61,58 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Amber Guardian Start of Game effect was ignored.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to sort the personal decks by average wins.`,
+								text: `Add a widget for Monstrous Parrot that tells you the last friendly deathrattle that triggered.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where sometimes no high-wins decks were propersed after choosing the hero power for Vanndar and Drek'Thar.`,
+								text: `Fix a bug that would crash the tracker in some rare cases.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an info leak with Nellie's Pirate Ship.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix cards highlight when playing Tess (and similar cards) as a non-Rogue.`,
+							},
+							{
+								type: 'bug',
+								text: `Reset the bottom / top positions of cards in the tracker after Order in the Court is played.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `Creating a Task Team from the Tasks List should now properly use the current default portrait and equipment.`,
+							},
+							{
+								type: 'ui',
+								text: `Redesign the roles charts in the mercs team widget (Community Contribution!).`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where you could click on "watch" on the BG replays that are displayed on the side of the app on certain screens (Community Contribution!).`,
 							},
 						],
 					},
