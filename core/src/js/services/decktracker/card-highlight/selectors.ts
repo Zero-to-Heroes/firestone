@@ -136,7 +136,7 @@ export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
 
 export const currentClass = (handler: Handler, deckState: DeckState, options?: SelectorOptions): boolean => {
-	return handler.referenceCardProvider()?.cardClass === deckState?.hero?.playerClass;
+	return handler.referenceCardProvider()?.cardClass === deckState?.hero?.playerClass?.toUpperCase();
 };
 export const cardClass = (cardClass: CardClass) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.cardClass === CardClass[cardClass];
