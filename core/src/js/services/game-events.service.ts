@@ -748,6 +748,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
 						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
+						zone: gameEvent.Value.AdditionalProps.zone,
 					}),
 				);
 				break;
