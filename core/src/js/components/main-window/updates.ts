@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.12.2',
+		version: '9.12.4',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -77,8 +77,16 @@ export const updates: readonly Update[] = [
 								text: `Add a widget for Monstrous Parrot that tells you the last friendly deathrattle that triggered.`,
 							},
 							{
+								type: 'feature',
+								text: `Add a "streamer mode" option to hide the names on the turn timer.`,
+							},
+							{
 								type: 'bug',
-								text: `Fix a bug that would crash the tracker in some rare cases.`,
+								text: `Fix an issue that would crash the tracker in some rare cases.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards stolen from the deck were not properly handled.`,
 							},
 							{
 								type: 'bug',
