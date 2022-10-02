@@ -339,7 +339,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		}
 
 		const deckstring = encodeMercs(definition);
-		console.debug('mercs definition', deckstring, definition);
+		console.log('mercs definition', deckstring, definition);
 		return deckstring;
 	}
 
@@ -368,7 +368,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			sharedTeamMercenaryIsFullyUpgraded: 0,
 			sharedTeamMercenaryXp: 0,
 		};
-		console.debug('resuilt', result, memMerc, equipmentId);
+		console.log('merc for tasks', result);
 		return result;
 	}
 }
