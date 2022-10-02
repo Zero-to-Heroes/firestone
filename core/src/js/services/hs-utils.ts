@@ -370,6 +370,7 @@ export const publicCardGiftCreators = [
 	CardIds.GrandLackeyErkh,
 	CardIds.Guidance_YOP_024,
 	CardIds.HalazziTheLynx,
+	CardIds.Harpoon,
 	CardIds.HeadcrackLegacy,
 	CardIds.HeadcrackVanilla,
 	CardIds.HeistbaronTogwaggle_DAL_417,
