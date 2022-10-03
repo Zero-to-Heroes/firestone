@@ -80,7 +80,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<mercs-tasks-list
 									class="task-list {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showTaskList$ | async }"
-									[style.bottom.px]="taskListBottomPx"
+									[style.bottom]="taskListBottom"
+									[style.top]="taskListTop"
 									[tasks]="_tasks"
 									[taskTeamDeckstring]="taskTeamDeckstring$ | async"
 								></mercs-tasks-list>
@@ -99,6 +100,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<div
 									class="roles-chart {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showRolesChart$ | async }"
+									[style.bottom]="taskListBottom"
+									[style.top]="taskListTop"
 								>
 									<img class="chart" src="assets/images/mercenaries-weakness-triangle.png" />
 								</div>
@@ -118,7 +121,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		this._team = value;
-		this.updateTaskListBottomPx();
+		this.updateTaskListBottom();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -130,7 +133,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		}
 		this._tasks = value;
 		this.tasks$$.next(value);
-		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -156,7 +158,8 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	_tasks: readonly Task[];
 
 	overlayWidthInPx = 225;
-	taskListBottomPx = 0;
+	taskListBottom = 'auto';
+	taskListTop = 'auto';
 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
@@ -188,6 +191,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 				this.buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds),
 			),
 		);
+		this.taskTeamDeckstring$.pipe(this.mapData((info) => info)).subscribe((info) => this.updateTaskListBottom());
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(this.mapData(([pref]) => pref));
@@ -246,7 +250,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		return task.description;
 	}
 
-	private updateTaskListBottomPx() {
+	private updateTaskListBottom() {
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
 			if (!taskListEl) {
@@ -255,7 +259,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 			const taskEls = this.el.nativeElement.querySelectorAll('.task');
 			if (taskEls?.length != this._tasks?.length) {
-				setTimeout(() => this.updateTaskListBottomPx(), 100);
+				setTimeout(() => this.updateTaskListBottom(), 100);
 				return;
 			}
 
@@ -264,11 +268,29 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			const widgetEl = this.el.nativeElement.querySelector('.team-container');
 			const widgetRect = widgetEl.getBoundingClientRect();
 			const widgetHeight = widgetRect.height;
-			this.taskListBottomPx = widgetHeight > taskListHeight ? 0 : widgetHeight - taskListHeight;
+			// We either align the bottom of the list with the bottom of the button (when the widget is
+			// bigger than the list), or the top of the list with the top of the widget
+			if (widgetHeight > taskListHeight) {
+				this.taskListBottom = '0';
+				this.taskListTop = 'auto';
+			} else {
+				this.taskListBottom = 'auto';
+				this.taskListTop = '0';
+			}
+			console.debug(
+				'setting margin',
+				this.taskListBottom,
+				this.taskListTop,
+				widgetHeight,
+				taskListHeight,
+				widgetRect,
+				rect,
+				taskListEl,
+			);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-		}, 100);
+		}, 500);
 	}
 
 	@HostListener('window:beforeunload')
