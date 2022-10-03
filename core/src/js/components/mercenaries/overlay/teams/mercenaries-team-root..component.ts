@@ -446,7 +446,7 @@ export class MercsTasksListComponent {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-		}, 5000);
+		}, 3000);
 	}
 }
 
