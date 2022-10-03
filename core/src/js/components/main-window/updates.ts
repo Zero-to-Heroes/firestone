@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.12.4',
+		version: '9.12.5',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -112,6 +112,22 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Redesign the roles charts in the mercs team widget (Community Contribution!).`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the positioning of the Tasks List when the team is empty (typically on the Collection screen).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Create Task Team button would produce an invalid deck code when using Firestone in some languages.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Team widget would sometimes not display outside of a run.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where wins in PvP would sometimes be considered draws.`,
 							},
 						],
 					},
