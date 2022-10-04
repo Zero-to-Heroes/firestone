@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormControl } from '@angular/forms';
 import { BucketCard } from '@components/duels/desktop/deckbuilder/duels-bucket-cards-list.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { CardClass, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { DuelsBucketsData } from '@models/duels/duels-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -679,6 +679,12 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
 			card.race?.toLowerCase().includes(searchFilters.text) ||
+			(Object.values(Race)
+				.filter((race) => isNaN(Number(race)))
+				.map((r) => r as string)
+				.map((r) => r.toLowerCase())
+				.includes(searchFilters.text) &&
+				card.race === Race[Race.ALL]) ||
 			card.rarity?.toLowerCase().includes(searchFilters.text) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
 		);

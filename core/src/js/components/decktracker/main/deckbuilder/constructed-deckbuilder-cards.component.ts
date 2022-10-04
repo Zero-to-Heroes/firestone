@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { CardClass, CardIds, CardType, GameFormat, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
@@ -467,6 +467,12 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
 			card.race?.toLowerCase().includes(searchFilters.text) ||
+			(Object.values(Race)
+				.filter((race) => isNaN(Number(race)))
+				.map((r) => r as string)
+				.map((r) => r.toLowerCase())
+				.includes(searchFilters.text) &&
+				card.race === Race[Race.ALL]) ||
 			card.rarity?.toLowerCase().includes(searchFilters.text) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
 		);
