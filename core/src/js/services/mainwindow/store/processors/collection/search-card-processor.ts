@@ -1,6 +1,5 @@
 import { LocalizationService } from '@services/localization.service';
 import { Card } from '../../../../../models/card';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -36,7 +35,6 @@ export class SearchCardProcessor implements Processor {
 				collectionCard ? collectionCard.premiumCount : 0,
 			);
 		});
-		const newBinder = Object.assign(new BinderState(), currentState.binder, {} as BinderState);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
@@ -45,9 +43,7 @@ export class SearchCardProcessor implements Processor {
 			searchResults: undefined,
 		} as NavigationCollection);
 		return [
-			currentState.update({
-				binder: newBinder,
-			} as MainWindowState),
+			null,
 			navigationState.update({
 				isVisible: true,
 				navigationCollection: newCollection,

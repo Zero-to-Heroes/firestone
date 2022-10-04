@@ -28,7 +28,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			(keyup)="onValidateSearch($event, value.searchString)"
 		>
 			<label class="search-label" [ngClass]="{ 'search-active': value.searchString }">
-				<i class="i-30">
+				<i class="i-30" [helpTooltip]="tooltip">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#search" />
 					</svg>
@@ -63,6 +63,7 @@ export class AutocompleteSearchWithListComponent<T>
 	@Input() valueMatcher: (element: T) => string;
 	@Input() placeholder: string;
 	@Input() maxResults = 20;
+	@Input() tooltip: string;
 
 	@Input() set dataSet(value: readonly T[]) {
 		this.dataSet$$.next(value);

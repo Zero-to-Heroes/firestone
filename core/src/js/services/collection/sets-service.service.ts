@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
 import { ReferenceSet } from '../../models/collection/reference-set';
@@ -76,30 +76,43 @@ export class SetsService {
 
 		const filterFunctions = [];
 
-		const fragments = searchString.indexOf(' ') !== -1 ? searchString.split(' ') : [searchString];
+		const fragments = searchString.includes(' ') ? searchString.split(' ') : [searchString];
 		let nameSearch = searchString;
 		let collectibleOnly = true;
 		for (const fragment of fragments) {
 			console.debug('processing fragment', fragment);
-			if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
-				const textToFind = searchString.split('text:')[1];
-				filterFunctions.push(
-					(card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1,
-				);
+			if (fragment.includes('text:') && fragment.split('text:')[1]) {
+				const textToFind = fragment.split('text:')[1].trim().toLowerCase();
+				filterFunctions.push((card) => card.text && card.text.toLowerCase().includes(textToFind));
 			}
-			if (fragment.indexOf('name:') !== -1 && fragment.split('name:')[1]) {
-				const textToFind = searchString.split('name:')[1];
-				filterFunctions.push(
-					(card) => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1,
-				);
+			if (fragment.includes('name:') && fragment.split('name:')[1]) {
+				const textToFind = fragment.split('name:')[1].trim().toLowerCase();
+				filterFunctions.push((card) => {
+					return card.name && card.name.toLowerCase().includes(textToFind);
+				});
 			}
 			// Include non-collectible
-			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {
+			if (fragment.includes('cards:') && fragment.split('cards:')[1] === 'all') {
 				collectibleOnly = false;
 				nameSearch = nameSearch.replace(/cards:all\s?/, '');
 			}
 
-			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'extra') {
+			// Tribe
+			if (fragment.includes('tribe:') && fragment.split('tribe:')[1]) {
+				const textToFind = fragment.split('tribe:')[1].trim().toLowerCase();
+				filterFunctions.push(
+					(card) =>
+						card.race?.toLowerCase().includes(textToFind) ||
+						(Object.values(Race)
+							.filter((race) => isNaN(Number(race)))
+							.map((r) => r as string)
+							.map((r) => r.toLowerCase())
+							.includes(textToFind) &&
+							card.race === Race[Race.ALL]),
+				);
+			}
+
+			if (fragment.includes('cards:') && fragment.split('cards:')[1] === 'extra') {
 				filterFunctions.push((card: ReferenceCard) => {
 					const collectionCard = collection.find((c) => c.id === card.id);
 					if (!collectionCard) {
@@ -115,16 +128,16 @@ export class SetsService {
 				});
 			}
 
-			if (fragment.indexOf('-set:') !== -1 && fragment.split('-set:')[1]) {
+			if (fragment.includes('-set:') && fragment.split('-set:')[1]) {
 				const excludedSetId = fragment.split('-set:')[1].toLowerCase();
 				filterFunctions.push((card: ReferenceCard) => !card.set || card.set.toLowerCase() !== excludedSetId);
 			}
 
-			if (fragment.indexOf('-rarity:') !== -1 && fragment.split('-rarity:')[1]) {
+			if (fragment.includes('-rarity:') && fragment.split('-rarity:')[1]) {
 				const rarity = fragment.split('-rarity:')[1].toLowerCase();
 				filterFunctions.push((card: ReferenceCard) => !card.rarity || card.rarity.toLowerCase() !== rarity);
 				console.debug('added -rarity function', filterFunctions, rarity);
-			} else if (fragment.indexOf('rarity:') !== -1 && fragment.split('rarity:')[1]) {
+			} else if (fragment.includes('rarity:') && fragment.split('rarity:')[1]) {
 				const rarity = fragment.split('rarity:')[1].toLowerCase();
 				filterFunctions.push((card: ReferenceCard) => card.rarity && card.rarity.toLowerCase() === rarity);
 			}
@@ -132,7 +145,7 @@ export class SetsService {
 		nameSearch = nameSearch.trim().toLowerCase();
 		// Default filtering based on name
 		if (filterFunctions.length === 0) {
-			filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(nameSearch) !== -1);
+			filterFunctions.push((card) => card.name && card.name.toLowerCase().includes(nameSearch));
 		}
 
 		const basicFiltered = collectibleOnly
@@ -140,10 +153,12 @@ export class SetsService {
 					.getCards()
 					.filter((card) => card.collectible)
 					.filter((card) => card.set !== 'Hero_skins')
-					.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+					.filter((card) => !this.NON_COLLECTIBLE_HEROES.includes(card.id))
 			: this.allCards.getCards();
-		return filterFunctions
-			.reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
+		const result = filterFunctions
+			.reduce((data, filterFunction) => {
+				return data.filter(filterFunction);
+			}, basicFiltered)
 			.map((card) => {
 				let cardName = card.name;
 				if (card.type === 'Hero') {
@@ -152,6 +167,7 @@ export class SetsService {
 				const rarity = card.rarity ? card.rarity.toLowerCase() : '';
 				return new SetCard(card.id, cardName, card.playerClass, rarity, card.cost);
 			});
+		return result;
 	}
 
 	public getCard(id: string): ReferenceCard {
@@ -227,7 +243,7 @@ export class SetsService {
 			.getCards()
 			.filter((card) => card.collectible)
 			.filter((card) => card.set)
-			.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+			.filter((card) => !this.NON_COLLECTIBLE_HEROES.includes(card.id))
 			.filter((card) => setId === card.set?.toLowerCase())
 			.map((card) => new SetCard(card.id, card.name, card.playerClass, card.rarity?.toLowerCase(), card.cost));
 	}
