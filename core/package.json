@@ -47,6 +47,7 @@
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.207",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.9",
+		"@firestone-hs/twitch-presence": "^1.0.1",
 		"@firestone-hs/user-bgs-post-match-stats": "^1.0.3",
 		"@firestone-hs/user-packs": "^1.0.1",
 		"@ng-select/ng-select": "^6.1.0",

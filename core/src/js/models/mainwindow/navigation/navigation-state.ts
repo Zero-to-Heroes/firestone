@@ -9,6 +9,7 @@ import { NavigationDuels } from './navigation-duels';
 import { NavigationMercenaries } from './navigation-mercenaries';
 import { NavigationReplays } from './navigation-replays';
 import { NavigationStats } from './navigation-stats';
+import { NavigationStreams } from './navigation-streams';
 
 export class NavigationState {
 	readonly isVisible: boolean = false;
@@ -22,6 +23,7 @@ export class NavigationState {
 	readonly navigationDuels: NavigationDuels = new NavigationDuels();
 	readonly navigationArena: NavigationArena = new NavigationArena();
 	readonly navigationStats: NavigationStats = new NavigationStats();
+	readonly navigationStreams: NavigationStreams = new NavigationStreams();
 
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;

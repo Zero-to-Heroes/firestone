@@ -30,6 +30,7 @@ import { GameNativeStateStoreService } from './game/game-native-state-store.serv
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { LocalizationService } from './localization.service';
 import { LogRegisterService } from './log-register.service';
+import { LiveStreamsService } from './mainwindow/live-streams.service';
 import { OutOfCardsService } from './mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
 import { ChangeVisibleApplicationEvent } from './mainwindow/store/events/change-visible-application-event';
@@ -38,6 +39,7 @@ import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-stor
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
+import { TwitchPresenceService } from './mainwindow/twitch-presence.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
 import { MercenariesSynergiesHighlightService } from './mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesMemoryUpdateService } from './mercenaries/mercenaries-memory-updates.service';
@@ -72,6 +74,7 @@ export class AppBootstrapService {
 		private ow: OverwolfService,
 		private ads: AdService,
 		private twitchAuth: TwitchAuthService,
+		private init_TwitchPresenceService: TwitchPresenceService,
 		private init_OutOfCardsAuth: OutOfCardsService,
 		private debugService: DebugService,
 		private dev: DevService,
@@ -115,6 +118,7 @@ export class AppBootstrapService {
 		private init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
 		private init_gameStatus: GameStatusService,
 		private init_quests: QuestsService,
+		private init_LiveStreamsService: LiveStreamsService,
 		private init_GameNativeStateStoreService: GameNativeStateStoreService,
 	) {}
 

@@ -466,6 +466,12 @@ import { StatsXpSeasonFilterDropdownComponent } from '../../components/stats/des
 import { StatsFiltersComponent } from '../../components/stats/desktop/filters/_stats-filters.component';
 import { StatsDesktopComponent } from '../../components/stats/desktop/stats-desktop.component';
 import { StatsXpGraphComponent } from '../../components/stats/desktop/stats-xp-graph.component';
+import {
+	LiveStreamInfoComponent,
+	StreamHeroInfosComponent,
+} from '../../components/streams/desktop/live-stream-info.component';
+import { LiveStreamsComponent } from '../../components/streams/desktop/live-streams.component';
+import { StreamsDesktopComponent } from '../../components/streams/desktop/streams-desktop.component';
 import { OutOfCardsCallbackComponent } from '../../components/third-party/out-of-cards-callback.component';
 import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
@@ -525,6 +531,7 @@ import { LocalizationService } from '../../services/localization.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
+import { LiveStreamsService } from '../../services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
@@ -532,6 +539,7 @@ import { AchievementUpdateHelper } from '../../services/mainwindow/store/helper/
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from '../../services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
+import { TwitchPresenceService } from '../../services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../services/manastorm-bridge/end-game-listener.service';
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
@@ -948,6 +956,11 @@ const components = [
 		MercenariesFullyUpgradedFilterDropdownComponent,
 		MercenariesOwnedFilterDropdownComponent,
 
+		StreamsDesktopComponent,
+		LiveStreamsComponent,
+		LiveStreamInfoComponent,
+		StreamHeroInfosComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -1130,6 +1143,7 @@ const components = [
 		LazyDataInitService,
 		GameStatusService,
 		QuestsService,
+		LiveStreamsService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,
@@ -1150,6 +1164,7 @@ const components = [
 		LogRegisterService,
 		SettingsCommunicationService,
 		TwitchAuthService,
+		TwitchPresenceService,
 		OutOfCardsService,
 		GameNativeStateStoreService,
 

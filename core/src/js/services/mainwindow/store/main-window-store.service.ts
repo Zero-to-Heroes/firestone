@@ -61,6 +61,7 @@ import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { UserService } from '../../user.service';
+import { LiveStreamsService } from '../live-streams.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
@@ -210,6 +211,8 @@ import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-upda
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
 import { StoreInitEvent } from './events/store-init-event';
+import { LiveStreamsDataLoadedEvent } from './events/streams/live-streams-data-loaded-event';
+import { LiveStreamsForceReloadEvent } from './events/streams/live-streams-force-reload-event';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
@@ -359,6 +362,8 @@ import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-sta
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
+import { LiveStreamsDataLoadedProcessor } from './processors/sterams/live-streams-data-loaded-processor';
+import { LiveStreamsForceReloadProcessor } from './processors/sterams/live-streams-force-reload-processor';
 import { StoreInitProcessor } from './processors/store-init-processor';
 import { StateHistory } from './state-history';
 import { StoreBootstrapService } from './store-bootstrap.service';
@@ -411,6 +416,7 @@ export class MainWindowStoreService {
 		private readonly translate: TranslateService,
 		private readonly i18n: LocalizationService,
 		private readonly packsService: PackStatsService,
+		private readonly streamsService: LiveStreamsService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
@@ -853,6 +859,13 @@ export class MainWindowStoreService {
 
 			BgsQuestsDataLoadedEvent.eventName(),
 			new BgsQuestsDataLoadedProcessor(),
+
+			// Streams
+			LiveStreamsDataLoadedEvent.eventName(),
+			new LiveStreamsDataLoadedProcessor(),
+
+			LiveStreamsForceReloadEvent.eventName(),
+			new LiveStreamsForceReloadProcessor(this.streamsService),
 
 			// Mercenaries
 			MercenariesGlobalStatsLoadedEvent.eventName(),

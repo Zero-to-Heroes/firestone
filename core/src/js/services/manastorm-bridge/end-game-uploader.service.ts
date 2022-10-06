@@ -3,6 +3,8 @@ import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { Race } from '@firestone-hs/reference-data';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
+import { toFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
+import { toGameType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MemoryMercenariesCollectionInfo, MemoryTeam } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
@@ -91,9 +93,9 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'Creating new game', 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentReviewId);
 		console.log('[manastorm-bridge]', currentReviewId, 'Created new game');
-		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
+		game.gameFormat = toFormatType(gameResult.FormatType);
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', gameResult.FormatType, game.gameFormat);
-		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
+		game.gameMode = toGameType(gameResult.GameType);
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed type', gameResult.GameType, game.gameMode);
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it

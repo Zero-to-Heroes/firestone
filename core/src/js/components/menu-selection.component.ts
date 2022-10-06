@@ -145,6 +145,21 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.collection-header'"></div>
 				</div>
 			</button>
+			<li class="main-menu-separator"></li>
+			<button
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item"
+				[attr.aria-label]="'app.menu.streams-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'streams' }"
+				(click)="selectModule('streams')"
+			>
+				<div class="icon" inlineSVG="assets/svg/streams.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.streams-header'"></div>
+				</div>
+			</button>
 			<button
 				tabindex="-1"
 				type="button"

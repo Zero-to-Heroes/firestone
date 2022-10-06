@@ -16,6 +16,7 @@ import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
 import { GameStat } from './stats/game-stat';
 import { StatsState } from './stats/stats-state';
+import { StreamsState } from './streams/streams-state';
 
 export class MainWindowState {
 	readonly currentScene: SceneMode = null;
@@ -33,6 +34,7 @@ export class MainWindowState {
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly quests: QuestsState = new QuestsState();
+	readonly streams: StreamsState = new StreamsState();
 	readonly showAds: boolean = true;
 
 	// See decktracker-state.ts for more info
