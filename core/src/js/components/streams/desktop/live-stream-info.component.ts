@@ -10,6 +10,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 
+declare let amplitude;
+
 @Component({
 	selector: 'live-stream-info',
 	styleUrls: [
@@ -62,6 +64,7 @@ export class LiveStreamInfoComponent {
 
 	watchOnTwitch() {
 		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}`);
+		amplitude.getInstance().logEvent('stream-click', { 'channel': this.streamerName });
 	}
 }
 
