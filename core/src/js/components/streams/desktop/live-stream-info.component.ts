@@ -63,7 +63,7 @@ export class LiveStreamInfoComponent {
 	constructor(private readonly ow: OverwolfService) {}
 
 	watchOnTwitch() {
-		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}`);
+		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}?utm_source=firestone`);
 		amplitude.getInstance().logEvent('stream-click', { 'channel': this.streamerName });
 	}
 }
