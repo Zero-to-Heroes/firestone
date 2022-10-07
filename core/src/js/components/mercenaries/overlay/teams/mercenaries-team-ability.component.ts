@@ -15,7 +15,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			class="item"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="tooltipPosition"
-			[ngClass]="{ 'inactive': cooldownLeft > 0 }"
+			[ngClass]="{ 'inactive': cooldownLeft > 0 && !uncapacitated }"
 			[mercenariesHighlight]="cardId"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
@@ -69,6 +69,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 })
 export class MercenariesTeamAbilityComponent {
 	@Input() tooltipPosition: boolean;
+	@Input() uncapacitated: boolean;
 
 	@Input() set ability(value: Ability) {
 		// console.debug('set ability', this.allCards.getCard(value.cardId).name, value);

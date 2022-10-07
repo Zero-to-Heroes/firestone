@@ -10,17 +10,6 @@
 		opacity: 0.3;
 	}
 
-	&:not(.bench):not(.dead) {
-		.ability,
-		.equipment {
-			::ng-deep {
-				.inactive {
-					opacity: 0.3;
-				}
-			}
-		}
-	}
-
 	.header {
 		background: #07081f;
 

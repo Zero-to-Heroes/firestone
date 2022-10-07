@@ -37,12 +37,14 @@ import { Ability } from './mercenaries-team-ability.component';
 				*ngFor="let ability of abilities"
 				[ability]="ability"
 				[tooltipPosition]="tooltipPosition"
+				[uncapacitated]="isDead || isBench"
 			></mercenaries-team-ability>
 			<mercenaries-team-ability
 				*ngIf="equipment?.cardId"
 				class="equipment"
 				[ability]="equipment"
 				[tooltipPosition]="tooltipPosition"
+				[uncapacitated]="isDead || isBench"
 			></mercenaries-team-ability>
 		</div>
 	`,

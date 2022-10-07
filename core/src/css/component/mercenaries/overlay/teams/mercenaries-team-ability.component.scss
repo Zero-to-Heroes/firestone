@@ -7,6 +7,17 @@
 	padding-left: 15px;
 	padding-right: 5px;
 
+	&.inactive {
+		& > *:not(.gradiant):not(.number-of-uses):not(.cooldown-left) {
+			opacity: 0.3;
+		}
+		& > .gradiant,
+		& > .number-of-uses,
+		& > .cooldown-left {
+			opacity: 0.6;
+		}
+	}
+
 	&:hover {
 		transform: scale(1.1);
 		z-index: 9;
@@ -31,7 +42,6 @@
 		right: 0;
 		bottom: 0;
 		background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
-		opacity: 0.6;
 	}
 
 	.name {
