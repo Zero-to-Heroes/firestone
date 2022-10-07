@@ -13,7 +13,9 @@
 	}
 
 	.background-image {
-		background-repeat: no-repeat;
+		background-size: contain;
+		background-position-x: 3px;
+		background-repeat: repeat-x;
 	}
 
 	.gradiant {
@@ -75,7 +77,10 @@
 			right: -20px;
 		}
 
-		.background-image,
+		.background-image {
+			background-position-x: -20px;
+		}
+
 		.gradiant {
 			transform: scaleX(-1);
 		}
