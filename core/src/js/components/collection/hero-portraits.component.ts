@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { sortBy } from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Card } from '../../models/card';
@@ -22,7 +21,7 @@ import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/col
 import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction } from '../../services/utils';
+import { groupByFunction, sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
@@ -288,7 +287,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 						numberOwned: 0,
 				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
-		const sortedHeroes = sortBy(heroPortraits, 'id');
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;
 	}
 
@@ -329,7 +328,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 							numberOwned: 0,
 					  } as CollectionReferenceCard),
 			) as CollectionReferenceCard[];
-		const sortedHeroes = sortBy(heroPortraits, 'id');
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;
 	}
 
@@ -356,7 +355,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 						numberOwned: 0,
 				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
-		const sortedHeroes = sortBy(heroPortraits, 'id', 'playerClass');
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.playerClass, card.id]));
 		return sortedHeroes;
 	}
 
@@ -371,7 +370,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 					numberOwned: 1,
 				} as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
-		const sortedHeroes = sortBy(heroPortraits, 'id');
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
 		return sortedHeroes;
 	}
 

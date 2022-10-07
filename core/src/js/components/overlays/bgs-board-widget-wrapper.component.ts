@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { Race, SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
-import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';

@@ -68,7 +68,6 @@
 		"elementtree": "^0.1.7",
 		"immutable": "3.8.2",
 		"jszip": "^3.7.1",
-		"lodash": "^4.17.20",
 		"ng-inline-svg": "10.1.0",
 		"ng-select": "1.0.1",
 		"ng2-charts": "^2.3.0",

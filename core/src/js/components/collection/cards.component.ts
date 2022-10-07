@@ -4,11 +4,11 @@ import {
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 } from '@models/collection/filter-types';
-import { sortBy } from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
@@ -94,14 +94,13 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 				(prefs) => prefs.collectionCardOwnedFilter,
 			),
 		).pipe(
-			this.mapData(([[cardList], [classFilter, rarityFilter, ownedFilter]]) => {
-				const filteredCards = cardList
+			this.mapData(([[cardList], [classFilter, rarityFilter, ownedFilter]]) =>
+				cardList
 					.filter((card) => this.filterRarity(card, rarityFilter))
 					.filter((card) => this.filterClass(card, classFilter))
-					.filter((card) => this.filterCardsOwned(card, ownedFilter));
-				const sortedCards = sortBy(filteredCards, 'cost', 'name');
-				return sortedCards;
-			}),
+					.filter((card) => this.filterCardsOwned(card, ownedFilter))
+					.sort(sortByProperties((card) => [card.cost, card.name])),
+			),
 		);
 	}
 

@@ -10,8 +10,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
-import {} from 'jszip';
-import {} from 'lodash';
 import { combineLatest, Observable } from 'rxjs';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';

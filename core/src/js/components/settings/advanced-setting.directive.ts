@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2, ViewRef } from '@angular/core';
-import {} from 'lodash';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';

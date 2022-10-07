@@ -8,7 +8,6 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import {} from 'lodash';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
