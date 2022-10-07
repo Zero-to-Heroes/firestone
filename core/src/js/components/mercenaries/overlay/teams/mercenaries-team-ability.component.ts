@@ -13,6 +13,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 	template: `
 		<div
 			class="item"
+			*ngIf="cardId"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="tooltipPosition"
 			[ngClass]="{ 'inactive': cooldownLeft > 0 }"
