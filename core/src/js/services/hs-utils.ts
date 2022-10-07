@@ -240,6 +240,7 @@ export const hideInfoWhenPlayerPlaysIt = [
 	// However, it has the side-effect of hiding the cards drawn by the opponent
 	CardIds.GhastlyGravedigger,
 	CardIds.IdentityTheft,
+	CardIds.IncriminatingPsychic,
 	CardIds.KoboldIllusionist,
 	CardIds.MadameLazul,
 	CardIds.MindVisionLegacy,
@@ -316,7 +317,6 @@ export const publicCardGiftCreators = [
 	CardIds.ConjurersCalling_DAL_177,
 	CardIds.CorsairCache,
 	CardIds.CrystallineOracle,
-	CardIds.DeathBlossomWhomper,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
@@ -518,6 +518,9 @@ export const publicCardGiftCreators = [
 	CardIds.Wandmaker,
 	CardIds.WandThief_SCH_350,
 	CardIds.WhispersOfEvil,
+	CardIds.WildGrowthCore,
+	CardIds.WildGrowthLegacy,
+	CardIds.WildGrowthVanilla,
 	CardIds.WitchwoodApple,
 	CardIds.WorthyExpedition,
 	CardIds.YseraTheDreamerCore,
@@ -563,6 +566,7 @@ export const cardTutors = [
 	CardIds.Crystology,
 	CardIds.CursedCastaway,
 	CardIds.DeadRinger,
+	CardIds.DeathBlossomWhomper,
 	CardIds.DeepwaterEvoker,
 	CardIds.DivingGryphon,
 	CardIds.DoorOfShadows,
