@@ -48,8 +48,8 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 				this.mapData(([data]) => data?.streams ?? []),
 			);
 		this.loading$ = this.streams$.pipe(this.mapData((data) => data == null));
-		// Refresh the stream data every 3 minutes while the user is on the page
-		this.interval = setInterval(() => this.refreshStreamsData(), 5 * 60 * 1000);
+		// Refresh the stream data every minute while the user is on the page
+		this.interval = setInterval(() => this.refreshStreamsData(), 60 * 1000);
 		this.refreshStreamsData();
 	}
 
