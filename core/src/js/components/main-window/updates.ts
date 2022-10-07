@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.12.5',
+		version: '9.13.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -46,102 +46,31 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'collection',
+						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `All card sounds are now localized! Go listen to your favorite lines in whatever language your app happens to be in! :)`,
+								text: `Add a "live stream" tab where you can see who is streaming Hearthstone (and using Firestone). It is still in its very early stage, and am looking for feedback in how to make this as useful as possible for viewers and streamers alike`,
 							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Amber Guardian Start of Game effect was ignored.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a widget for Monstrous Parrot that tells you the last friendly deathrattle that triggered.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a "streamer mode" option to hide the names on the turn timer.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue that would crash the tracker in some rare cases.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards stolen from the deck were not properly handled.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an info leak with Nellie's Pirate Ship.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix cards highlight when playing Tess (and similar cards) as a non-Rogue.`,
-							},
-							{
-								type: 'bug',
-								text: `Reset the bottom / top positions of cards in the tracker after Order in the Court is played.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `Creating a Task Team from the Tasks List should now properly use the current default portrait and equipment.`,
-							},
-							{
-								type: 'ui',
-								text: `Redesign the roles charts in the mercs team widget (Community Contribution!).`,
-							},
-							{
-								type: 'ui',
-								text: `Improve the positioning of the Tasks List when the team is empty (typically on the Collection screen).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Create Task Team button would produce an invalid deck code when using Firestone in some languages.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Team widget would sometimes not display outside of a run.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where wins in PvP would sometimes be considered draws.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where you could click on "watch" on the BG replays that are displayed on the side of the app on certain screens (Community Contribution!).`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'battlegrounds',
+			// 			details: [
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix a sim issue where Amber Guardian Start of Game effect was ignored.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
