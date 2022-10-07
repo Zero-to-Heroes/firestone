@@ -145,11 +145,12 @@
 	font-family: Open Sans;
 	font-size: 13px;
 	height: 26px;
-	position: relative;
 	display: flex;
 	align-items: center;
 	visibility: hidden;
-	position: relative;
+	// It's important not to have any position set, so that the top/bottom attributes of the lists
+	// is taken from the widget as a whole, and not the mouseover buttons
+	// position: relative;
 
 	.icon {
 		width: 16px;
@@ -160,7 +161,8 @@
 	}
 
 	&:hover {
-		.tasks-button, .roles-matchup-button {
+		.tasks-button,
+		.roles-matchup-button {
 			color: var(--color-1);
 			--icon-color: var(--color-1);
 		}
@@ -172,7 +174,7 @@
 }
 
 .show-roles-matchup-button {
-	.roles-matchup-button{
+	.roles-matchup-button {
 		border-bottom-left-radius: 33px;
 		border-bottom-right-radius: 10px;
 		background: var(--color-7);
@@ -180,7 +182,6 @@
 		align-items: center;
 		padding: 5px 5px 5px 15px;
 	}
-
 }
 
 .show-tasks {
@@ -215,6 +216,32 @@
 	&.right {
 		right: auto;
 		left: 230px;
+	}
+
+	&.visible {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+.roles-chart {
+	position: absolute;
+	right: 230px;
+	bottom: 0;
+	width: 300px;
+	background: var(--color-7);
+	border-radius: 10px;
+	z-index: 1;
+	opacity: 0;
+	pointer-events: none;
+
+	img {
+		width: 300px;
+	}
+
+	&.right {
+		right: auto;
+		left: 77px;
 	}
 
 	&.visible {

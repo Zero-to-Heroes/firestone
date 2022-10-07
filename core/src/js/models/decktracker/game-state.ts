@@ -2,6 +2,7 @@ import { CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
 import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { NonFunctionProperties } from '../../services/utils';
+import { MatchInfo } from '../match-info';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
 
@@ -14,6 +15,7 @@ export class GameState {
 	// - doing this :)
 	public static playTiming = 0;
 
+	readonly matchInfo: MatchInfo;
 	readonly playerDeck: DeckState = new DeckState();
 	readonly opponentDeck: DeckState = new DeckState();
 	readonly mulliganOver: boolean = false;

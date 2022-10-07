@@ -51,13 +51,4 @@ export class BgsHeroTribesComponent {
 	trackByTribeFn(index, item: { tribe: string; percent: string }) {
 		return item.tribe;
 	}
-
-	private getTribe(tribe: string): string {
-		if (tribe === 'mechanical') {
-			tribe = 'mech';
-		} else if (tribe === 'blank') {
-			tribe = 'no tribe';
-		}
-		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
-	}
 }

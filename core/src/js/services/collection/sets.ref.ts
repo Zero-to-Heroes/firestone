@@ -11,9 +11,15 @@ export const standardSets: readonly string[] = [
 	'the_sunken_city',
 	'throne_of_tides',
 	'revendreth',
+	'maw_and_disorder',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'maw_and_disorder',
+		name: `Maw and Disorder`,
+		launchDate: new Date('2022-09-27'),
+	},
 	{
 		id: 'revendreth',
 		name: `Murder at Castle Nathria`,

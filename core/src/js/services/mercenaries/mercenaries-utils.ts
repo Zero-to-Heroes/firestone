@@ -1,4 +1,4 @@
-import { CardIds, GameType, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, TagRole } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../cards-facade.service';
 import { MercenariesReferenceData } from './mercenaries-state-builder.service';
 
@@ -207,7 +207,12 @@ export const isMercenariesPvE = (gameType: GameType | string): boolean => {
 
 export const isPassiveMercsTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
 	const refCard = allCards.getCard(cardId);
-	return refCard?.mercenaryPassiveAbility;
+	return (
+		refCard?.mercenaryPassiveAbility ||
+		// For Start of game effects
+		refCard.mechanics?.includes(GameTag[GameTag.HIDE_STATS]) ||
+		refCard.mechanics?.includes(GameTag[GameTag.START_OF_GAME])
+	);
 };
 
 export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
@@ -216,6 +221,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.BootsOfHasteLettuceEnchantment,
 	CardIds.CenarionSurgeLettuceEnchantment,
 	CardIds.CasterHasteLettuceEnchantment,
+	CardIds.DealOfTime_DontWasteItLettuceEnchantment,
 	CardIds.DreadbladesLettuceEnchantment,
 	// CardIds.ElunesGraceLettuceEnchantment,
 	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
@@ -227,6 +233,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.HeroicLeapLettuceEnchantment,
 	CardIds.ManaBlinkLettuceEnchantment,
 	CardIds.ProtectorHasteLettuceEnchantment,
+	CardIds.RainOfChaosLettuceEnchantment,
 	CardIds.RingOfHasteLettuceEnchantment,
 	CardIds.SlipperyWhenWetLettuceEnchantment_LT23_024E2e2,
 	CardIds.StringOfFateLettuceEnchantment,
@@ -234,6 +241,7 @@ export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
+	CardIds.OffBalanceLettuceEnchantment,
 	CardIds.DoomedLettuceEnchantment,
 	CardIds.EarthStompLettuceEnchantment,
 	CardIds.EmeraldRootsLettuceEnchantment,
@@ -244,5 +252,6 @@ export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.ShadowShockLettuceEnchantment,
 	CardIds.StaggeredLettuceEnchantment,
 	CardIds.ThunderStruckLettuceEnchantment,
+	// CardIds.ThreeMovesAheadLettuceEnchantment,
 	CardIds.VaingloriousRebukeLettuceEnchantment,
 ];

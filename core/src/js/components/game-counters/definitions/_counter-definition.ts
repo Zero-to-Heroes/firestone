@@ -24,6 +24,7 @@ export type CounterType =
 	| 'libram'
 	| 'bolner'
 	| 'brilliantMacaw'
+	| 'monstrousParrot'
 	| 'vanessaVanCleef'
 	| 'murozondTheInfinite'
 	| 'ladyDarkvein'

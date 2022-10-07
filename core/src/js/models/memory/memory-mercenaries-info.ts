@@ -35,6 +35,25 @@ export interface MemoryMercenary {
 	readonly Premium: number;
 	readonly Rarity: RarityTYpe;
 	readonly Role: TagRole;
+	readonly Loadout: MercenaryLoadout;
+}
+
+export interface MercenaryLoadout {
+	readonly ArtVariationPremium: number;
+	readonly ArtVariation: MercenaryLoadoutArtVariation;
+	readonly Equipment: MercenaryLoadoutEquipment;
+}
+
+export interface MercenaryLoadoutArtVariation {
+	readonly Id: number;
+	readonly CardDbfId: number;
+	readonly Default: boolean;
+	readonly MercenaryId: number;
+}
+
+export interface MercenaryLoadoutEquipment {
+	readonly Id: number;
+	readonly Name: string;
 }
 
 export interface MemoryMercenarySkin {

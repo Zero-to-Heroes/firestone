@@ -56,6 +56,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.AzsharanInfluence4Lettuce:
 		case CardIds.AzsharanInfluence5Lettuce:
 			return or(dealsDamage, naga);
+		case CardIds.BakuTheMooneater1Lettuce:
+		case CardIds.BakuTheMooneater2Lettuce:
+		case CardIds.BakuTheMooneater3Lettuce:
+		case CardIds.BakuTheMooneater4Lettuce:
+		case CardIds.BakuTheMooneater5Lettuce:
+			return speedIsOdd;
 		case CardIds.BannerOfTheHorde1Lettuce:
 		case CardIds.BannerOfTheHorde2Lettuce:
 		case CardIds.BannerOfTheHorde3Lettuce:
@@ -68,6 +74,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BestialWrath4Lettuce:
 		case CardIds.BestialWrath5Lettuce:
 			return beast;
+		case CardIds.BirdBuddy1Lettuce_LT24_008T2_01:
+		case CardIds.BirdBuddy2Lettuce_LT24_008T2_02:
+		case CardIds.BirdBuddy3Lettuce_LT24_008T2_03:
+		case CardIds.BirdBuddy4Lettuce_LT24_008T2_04:
+		case CardIds.BirdBuddy5Lettuce_LT24_008T2_05:
+			return speedIsEven;
 		case CardIds.BlessingOfTheMoon1Lettuce:
 		case CardIds.BlessingOfTheMoon2Lettuce:
 		case CardIds.BlessingOfTheMoon3Lettuce:
@@ -170,12 +182,24 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ElvenBanner4Lettuce:
 		case CardIds.ElvenBanner5Lettuce:
 			return or(nightelf, bloodelf);
+		case CardIds.EmeraldBlessing1Lettuce:
+		case CardIds.EmeraldBlessing2Lettuce:
+		case CardIds.EmeraldBlessing3Lettuce:
+		case CardIds.EmeraldBlessing4Lettuce:
+		case CardIds.EmeraldBlessing5Lettuce:
+			return dragon;
 		case CardIds.EssenceOfTheBlack1Lettuce:
 		case CardIds.EssenceOfTheBlack2Lettuce:
 		case CardIds.EssenceOfTheBlack3Lettuce:
 		case CardIds.EssenceOfTheBlack4Lettuce:
 		case CardIds.EssenceOfTheBlack5Lettuce:
 			return or(and(dealsDamage, shadow), dragon);
+		case CardIds.EverywhereWorgen1Lettuce:
+		case CardIds.EverywhereWorgen2Lettuce:
+		case CardIds.EverywhereWorgen3Lettuce:
+		case CardIds.EverywhereWorgen4Lettuce:
+		case CardIds.EverywhereWorgen5Lettuce:
+			return human;
 		// case CardIds.EnchantedRaven1:
 		// case CardIds.EnchantedRaven2Lettuce:
 		// case CardIds.EnchantedRaven3Lettuce:
@@ -198,6 +222,10 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FelCorruption4Lettuce:
 		case CardIds.FelCorruption5Lettuce:
 			return orc;
+		case CardIds.FelosophicalInsight1Lettuce:
+		case CardIds.FelosophicalInsight2Lettuce:
+		case CardIds.FelosophicalInsight3Lettuce:
+			return and(fel, dealsDamage);
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
 		case CardIds.FelStaff1Lettuce:
@@ -617,6 +645,9 @@ const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_S
 const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
 const stealth = (card: ReferenceCard) => hasMechanic(card, GameTag.STEALTH);
 const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
+
+const speedIsOdd = (card: ReferenceCard) => card.cost % 2 === 1;
+const speedIsEven = (card: ReferenceCard) => card.cost != null && card.cost % 2 === 0;
 
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);

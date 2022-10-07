@@ -15,7 +15,7 @@ import {
 } from './collection/filter-types';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
-import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
+import { DuelsDeckSortFilterType, DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
@@ -75,12 +75,14 @@ export class Preferences {
 	readonly enableQuestsWidget: boolean = true;
 	readonly showQuestsWidgetWhenEmpty: boolean = false;
 	readonly showQuestsInGame: boolean = true;
+	readonly useStreamerMode: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
 
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
 	readonly showCurrentSessionWidgetBgs: boolean = false;
+	readonly hideCurrentSessionWidgetWhenFriendsListIsOpen: boolean = true;
 	readonly showTurnTimer: boolean = true;
 	readonly showTurnTimerMatchLength: boolean = true;
 	readonly currentSessionStartDate: Date = null;
@@ -168,6 +170,7 @@ export class Preferences {
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
+	readonly overlayEnableDiscoverHelp: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;
 
@@ -218,6 +221,7 @@ export class Preferences {
 	readonly opponentOverlayShowBottomCardsSeparately: boolean = true;
 	readonly opponentOverlayShowTopCardsSeparately: boolean = true;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
+	readonly hideOpponentDecktrackerWhenFriendsListIsOpen: boolean = true;
 	readonly opponentTracker: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayWidthInPx: number = 227;
@@ -359,6 +363,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBrilliantMacawCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerMonstrousParrotCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerMonstrousParrotCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerVanessaVanCleefCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerVanessaVanCleefCounterWidgetPosition: { left: number; top: number };
@@ -411,7 +419,8 @@ export class Preferences {
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
-	readonly bgsShowHeroSelectionTooltip = true;
+	readonly bgsShowHeroSelectionTooltip: boolean = true;
+	readonly bgsShowHeroSelectionTiers: boolean = false;
 	readonly bgsShowNextOpponentRecapSeparately = true;
 	readonly bgsHideSimResultsOnRecruit: boolean = true;
 	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;
@@ -467,6 +476,7 @@ export class Preferences {
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
+	readonly duelsActiveDeckSortFilter: DuelsDeckSortFilterType = 'last-played';
 	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
 	// readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';

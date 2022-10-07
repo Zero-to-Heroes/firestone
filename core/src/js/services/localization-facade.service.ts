@@ -14,6 +14,10 @@ export class LocalizationFacadeService {
 		this.service.setLocale(locale);
 	}
 
+	public get locale() {
+		return this.service.locale;
+	}
+
 	public init() {
 		this.service = this.ow.getMainWindow().localizationService;
 		if (!this.service) {

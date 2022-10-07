@@ -2,7 +2,7 @@ import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/publi
 import { GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
-import { capitalizeEachWord } from '../../../services/utils';
+import { capitalizeEachWord, NonFunctionProperties } from '../../../services/utils';
 import { CoinPlayType } from '../replays/coin-play.type';
 import { MatchResultType } from '../replays/match-result.type';
 import { StatGameFormatType } from './stat-game-format.type';
@@ -51,11 +51,11 @@ export class GameStat {
 	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 
-	public static create(base: GameStat): GameStat {
+	public static create(base: Partial<NonFunctionProperties<GameStat>>): GameStat {
 		return Object.assign(new GameStat(), base);
 	}
 
-	public update(base: Partial<GameStat>): GameStat {
+	public update(base: Partial<NonFunctionProperties<GameStat>>): GameStat {
 		return Object.assign(new GameStat(), this, base);
 	}
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
+import { ChoosingOptionsGameEvent } from '../models/mainwindow/game-events/choosing-options-game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
@@ -747,6 +748,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
 						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
+						zone: gameEvent.Value.AdditionalProps.zone,
 					}),
 				);
 				break;
@@ -910,6 +912,14 @@ export class GameEvents {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
 						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
+					}),
+				);
+				break;
+			case 'CHOOSING_OPTIONS':
+				this.gameEventsEmitter.allEvents.next(
+					ChoosingOptionsGameEvent.build(GameEvent.CHOOSING_OPTIONS, gameEvent, {
+						options: gameEvent.Value.AdditionalProps.Options,
+						context: gameEvent.Value.AdditionalProps.Context,
 					}),
 				);
 				break;

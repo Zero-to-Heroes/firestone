@@ -247,6 +247,7 @@ import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.comp
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
+import { DuelsDeckSortDropdownComponent } from '../../components/duels/desktop/filters/duels-deck-sort-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
 import { DuelsHeroFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-filter-dropdown.component';
@@ -333,6 +334,10 @@ import { BgsMinionsTiersWidgetWrapperComponent } from '../../components/overlays
 import { BgsQuestsWidgetWrapperComponent } from '../../components/overlays/bgs-quests-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from '../../components/overlays/bgs-window-button-widget-wrapper.component';
 import { MinionOnBoardOverlayComponent } from '../../components/overlays/board/minion-on-board-overlay.component';
+import {
+	ChoosingCardOptionComponent,
+	ChoosingCardWidgetWrapperComponent,
+} from '../../components/overlays/card-choice/choosing-card-widget-wrapper.component';
 import { ConstructedBoardWidgetWrapperComponent } from '../../components/overlays/constructed-board-widget-wrapper.component';
 import { AbstractCounterWidgetWrapperComponent } from '../../components/overlays/counters/abstract-counter-widget-wrapper.component';
 import { OpponentCounterWidgetWrapperComponent } from '../../components/overlays/counters/opponent-attack-widget-wrapper.component';
@@ -359,6 +364,7 @@ import { PlayerHeroPowerDamageWidgetWrapperComponent } from '../../components/ov
 import { PlayerJadeWidgetWrapperComponent } from '../../components/overlays/counters/player-jade-widget-wrapper.component';
 import { PlayerLadyDarkveinWidgetWrapperComponent } from '../../components/overlays/counters/player-lady-darkvein-widget-wrapper.component';
 import { PlayerLibramWidgetWrapperComponent } from '../../components/overlays/counters/player-libram-widget-wrapper.component';
+import { PlayerMonstrousParrotWidgetWrapperComponent } from '../../components/overlays/counters/player-monstrous-parrot-widget-wrapper.component';
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
@@ -460,6 +466,12 @@ import { StatsXpSeasonFilterDropdownComponent } from '../../components/stats/des
 import { StatsFiltersComponent } from '../../components/stats/desktop/filters/_stats-filters.component';
 import { StatsDesktopComponent } from '../../components/stats/desktop/stats-desktop.component';
 import { StatsXpGraphComponent } from '../../components/stats/desktop/stats-xp-graph.component';
+import {
+	LiveStreamInfoComponent,
+	StreamHeroInfosComponent,
+} from '../../components/streams/desktop/live-stream-info.component';
+import { LiveStreamsComponent } from '../../components/streams/desktop/live-streams.component';
+import { StreamsDesktopComponent } from '../../components/streams/desktop/streams-desktop.component';
 import { OutOfCardsCallbackComponent } from '../../components/third-party/out-of-cards-callback.component';
 import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
@@ -509,6 +521,7 @@ import { DuelsStateBuilderService } from '../../services/duels/duels-state-build
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
 import { GameStatusService } from '../../services/game-status.service';
+import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LazyDataInitService } from '../../services/lazy-data-init.service';
@@ -518,6 +531,7 @@ import { LocalizationService } from '../../services/localization.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
+import { LiveStreamsService } from '../../services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
@@ -525,6 +539,7 @@ import { AchievementUpdateHelper } from '../../services/mainwindow/store/helper/
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from '../../services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
+import { TwitchPresenceService } from '../../services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../services/manastorm-bridge/end-game-listener.service';
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
@@ -885,6 +900,7 @@ const components = [
 		DuelsStatTypeFilterDropdownComponent,
 		DuelsTreasurePassiveTypeFilterDropdownComponent,
 		DuelsHeroSortDropdownComponent,
+		DuelsDeckSortDropdownComponent,
 		DuelsTimeFilterDropdownComponent,
 		DuelsHeroFilterDropdownComponent,
 		DuelsPassiveFilterDropdownComponent,
@@ -940,6 +956,11 @@ const components = [
 		MercenariesFullyUpgradedFilterDropdownComponent,
 		MercenariesOwnedFilterDropdownComponent,
 
+		StreamsDesktopComponent,
+		LiveStreamsComponent,
+		LiveStreamInfoComponent,
+		StreamHeroInfosComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -961,6 +982,8 @@ const components = [
 		HsQuestsWidgetWrapperComponent,
 		BgsQuestsWidgetComponent,
 		BgsQuestsWidgetWrapperComponent,
+		ChoosingCardWidgetWrapperComponent,
+		ChoosingCardOptionComponent,
 
 		DuelsMaxLifeOpponentWidgetWrapperComponent,
 		DuelsDecktrackerOocWidgetWrapperComponent,
@@ -1012,6 +1035,7 @@ const components = [
 		PlayerCthunWidgetWrapperComponent,
 		PlayerBolnerWidgetWrapperComponent,
 		PlayerBrilliantMacawWidgetWrapperComponent,
+		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
@@ -1119,6 +1143,7 @@ const components = [
 		LazyDataInitService,
 		GameStatusService,
 		QuestsService,
+		LiveStreamsService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,
@@ -1139,7 +1164,9 @@ const components = [
 		LogRegisterService,
 		SettingsCommunicationService,
 		TwitchAuthService,
+		TwitchPresenceService,
 		OutOfCardsService,
+		GameNativeStateStoreService,
 
 		CollectionBootstrapService,
 		PackMonitor,

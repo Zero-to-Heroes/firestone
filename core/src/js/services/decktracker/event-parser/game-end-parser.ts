@@ -25,7 +25,9 @@ export class GameEndParser implements EventParser {
 		// );
 		// this.deckParser.reset(currentState.metadata.gameType === GameType.GT_VS_AI);
 		if (prefs && prefs.decktrackerCloseOnGameEnd) {
-			return new GameState();
+			return GameState.create({
+				gameEnded: true,
+			});
 		}
 		return currentState.update({
 			gameEnded: true,

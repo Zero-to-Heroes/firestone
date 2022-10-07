@@ -4,7 +4,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
-const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt];
+const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt, CardIds.OrderInTheCourt];
 
 export class SpecialCardPowerTriggeredParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -43,6 +43,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 	private applySpecialCardEffect(deck: DeckState, cardId: string) {
 		switch (cardId) {
 			case CardIds.LorekeeperPolkelt:
+			case CardIds.OrderInTheCourt:
 				return deck.update({
 					deck: deck.deck.map((card) =>
 						card.update({
@@ -53,6 +54,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 					),
 				});
 		}
+		return deck;
 	}
 
 	event(): string {

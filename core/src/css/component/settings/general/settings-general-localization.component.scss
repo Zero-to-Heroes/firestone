@@ -38,8 +38,11 @@
 			width: 100%;
 		}
 
-		select-dropdown .below .options {
-			max-height: 250px;
+		select-dropdown {
+			.below .options,
+			.above .options {
+				max-height: 250px;
+			}
 		}
 	}
 }

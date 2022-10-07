@@ -1,3 +1,4 @@
+import { Zone } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -23,11 +24,15 @@ export class CardStolenParser implements EventParser {
 		const stolenFromDeck = isPlayerStolenFrom ? currentState.playerDeck : currentState.opponentDeck;
 		console.debug('[card-stolen] isPlayerStolenFrom', isPlayerStolenFrom, stolenFromDeck);
 
-		const cardInHand = this.helper.findCardInZone(stolenFromDeck.hand, null, entityId);
+		const zone = gameEvent.additionalData.zone;
+		const cardInHand =
+			zone === Zone.HAND ? this.helper.findCardInZone(stolenFromDeck.hand, cardId, entityId) : null;
 		console.debug('[card-stolen] cardInHand', cardInHand);
-		const cardInBoard = this.helper.findCardInZone(stolenFromDeck.board, null, entityId);
+		const cardInBoard =
+			zone === Zone.PLAY ? this.helper.findCardInZone(stolenFromDeck.board, cardId, entityId) : null;
 		console.debug('[card-stolen] cardInBoard', cardInBoard);
-		const cardInDeck = this.helper.findCardInZone(stolenFromDeck.deck, null, entityId);
+		const cardInDeck =
+			zone === Zone.DECK ? this.helper.findCardInZone(stolenFromDeck.deck, cardId, entityId) : null;
 		console.debug('[card-stolen] cardInDeck', cardInDeck);
 
 		const secret = stolenFromDeck.secrets.find((entity) => entity.entityId === entityId);
@@ -73,34 +78,37 @@ export class CardStolenParser implements EventParser {
 		// Here we just keep the card in the same zone, but in the other deck. Another event will
 		// trigger afterwards to put the card in the right zone, if needed
 		const stealingToDeck = isPlayerStolenFrom ? currentState.opponentDeck : currentState.playerDeck;
-		const stealingHand = cardInHand
-			? this.helper.addSingleCardToZone(
-					stealingToDeck.hand,
-					cardInHand.update({
-						cardId: cardInHand.cardId || cardId,
-						cardName: this.i18n.getCardName(cardInHand.cardId) ?? this.i18n.getCardName(cardId),
-					} as DeckCard),
-			  )
-			: stealingToDeck.hand;
+		const stealingHand =
+			zone === Zone.HAND
+				? this.helper.addSingleCardToZone(
+						stealingToDeck.hand,
+						cardInHand.update({
+							cardId: cardInHand.cardId || cardId,
+							cardName: this.i18n.getCardName(cardInHand.cardId) ?? this.i18n.getCardName(cardId),
+						} as DeckCard),
+				  )
+				: stealingToDeck.hand;
 
-		const stealingBoard = cardInBoard
-			? this.helper.addSingleCardToZone(
-					stealingToDeck.board,
-					cardInBoard.update({
-						cardId: cardInBoard.cardId || cardId,
-						cardName: this.i18n.getCardName(cardInBoard.cardId) ?? this.i18n.getCardName(cardId),
-					} as DeckCard),
-			  )
-			: stealingToDeck.board;
-		const stealingDeck = cardInDeck
-			? this.helper.addSingleCardToZone(
-					stealingToDeck.deck,
-					cardInDeck.update({
-						cardId: cardInDeck.cardId || cardId,
-						cardName: this.i18n.getCardName(cardInDeck.cardId) ?? this.i18n.getCardName(cardId),
-					} as DeckCard),
-			  )
-			: stealingToDeck.deck;
+		const stealingBoard =
+			zone === Zone.PLAY
+				? this.helper.addSingleCardToZone(
+						stealingToDeck.board,
+						cardInBoard.update({
+							cardId: cardInBoard.cardId || cardId,
+							cardName: this.i18n.getCardName(cardInBoard.cardId) ?? this.i18n.getCardName(cardId),
+						} as DeckCard),
+				  )
+				: stealingToDeck.board;
+		const stealingDeck =
+			zone === Zone.DECK
+				? this.helper.addSingleCardToZone(
+						stealingToDeck.deck,
+						cardInDeck.update({
+							cardId: cardInDeck.cardId || cardId,
+							cardName: this.i18n.getCardName(cardInDeck.cardId) ?? this.i18n.getCardName(cardId),
+						} as DeckCard),
+				  )
+				: stealingToDeck.deck;
 
 		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;
 

@@ -16,6 +16,16 @@ export interface DuelsDeckSummary {
 	readonly isPersonalDeck?: boolean;
 }
 
+export const getLatestTimestampForDuelsDeckSummary = (deck: DuelsDeckSummary): number => {
+	if (!deck?.runs?.length) {
+		return 0;
+	}
+
+	const orderedRuns = [...deck.runs].sort((a, b) => b.creationTimestamp - a.creationTimestamp);
+	const lastRun = orderedRuns[orderedRuns.length - 1];
+	return lastRun.creationTimestamp;
+};
+
 export interface DuelsDeckSummaryForType {
 	readonly type: 'duels' | 'paid-duels';
 	readonly global: DuelsDeckStatInfo;

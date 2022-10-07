@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { decode, encode } from '@firestone-hs/deckstrings';
+import { decode, decodeMercs, encode } from '@firestone-hs/deckstrings';
 import { allDuelsSignatureTreasures, CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortByProperties } from '@services/utils';
@@ -165,6 +165,9 @@ export class DevService {
 		};
 		window['decodeDeck'] = (deckstring) => {
 			console.debug(decode(deckstring));
+		};
+		window['decodeMercs'] = (deckstring) => {
+			console.debug(decodeMercs(deckstring));
 		};
 		window['decodeDeckFull'] = (deckstring) => {
 			const decoded = decode(deckstring);

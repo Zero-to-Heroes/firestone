@@ -1,0 +1,95 @@
+:host() {
+	display: flex;
+	font-size: 14px;
+}
+
+.stream-info {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 10px 20px 10px 0;
+	background: rgba(255, 255, 255, 0.08);
+
+	& > * {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		position: relative;
+	}
+
+	.left-info {
+		& > * {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			position: relative;
+		}
+
+		.rank-image {
+			// Counterbalance the padding top/bottom
+			height: 130%;
+			margin-right: 20px;
+		}
+	}
+
+	.group {
+		display: flex;
+		padding-right: 20px;
+		margin-right: 20px;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+
+		&:not(:last-child) {
+			border-right: 1px solid var(--default-text-color);
+		}
+
+		&.player-images {
+			padding-left: 0px;
+			padding-right: 10px;
+		}
+
+		&.viewers {
+			flex-direction: column;
+
+			.viewers-value {
+			}
+
+			.viewers-text {
+				font-size: 12px;
+			}
+		}
+	}
+
+	.watch-button {
+		margin-left: auto;
+		opacity: 0.5;
+
+		::ng-deep svg {
+			width: auto;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.stream-hero-infos {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+
+	img {
+		height: 100%;
+		clip-path: ellipse(50% 50% at 50% 50%);
+	}
+
+	.vs {
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+}

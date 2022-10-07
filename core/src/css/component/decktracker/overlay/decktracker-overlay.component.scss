@@ -37,7 +37,7 @@
 		position: absolute;
 		top: 10px;
 		z-index: 1;
-		right: 260px;
+		right: 0;
 		opacity: 1;
 		transition-property: opacity;
 		transition-duration: 0.2s;
@@ -67,7 +67,7 @@
 		}
 		.icon {
 			right: auto;
-			left: 260px;
+			left: 0;
 		}
 	}
 

@@ -3,7 +3,8 @@ import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
+import { DuelsDeckSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
+import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -46,6 +47,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveDeckSortFilter,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckNames,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,
 				([main, nav, prefs]) => prefs.duelsPersonalDeckShowHiddenDecks,
@@ -60,6 +62,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 						timeFilter,
 						heroesFilter,
 						gameMode,
+						deckSort,
 						deckNames,
 						hiddenCodes,
 						showHidden,
@@ -88,7 +91,7 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 										deck.deckName ??
 										this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
 									hidden: hiddenCodes?.includes(deck.initialDeckList),
-								};
+								} as DuelsDeckSummary;
 							})
 							.filter((deck) => {
 								const matchesHero = !heroesFilter?.length
@@ -97,7 +100,8 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 											(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
 									  );
 								return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
-							}),
+							})
+							.sort(this.getSort(deckSort)),
 				),
 				this.mapData((decks) => (!!decks.length ? decks : null)),
 			);
@@ -105,5 +109,14 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 
 	trackByDeck(index: number, deck: DuelsDeckSummary): string {
 		return deck.initialDeckList;
+	}
+
+	private getSort(deckSort: DuelsDeckSortFilterType): (a: DuelsDeckSummary, b: DuelsDeckSummary) => number {
+		switch (deckSort) {
+			case 'last-played':
+				return (a, b) => getLatestTimestampForDuelsDeckSummary(b) - getLatestTimestampForDuelsDeckSummary(a);
+			case 'winrate':
+				return (a, b) => (b?.global?.averageWinsPerRun ?? 0) - (a?.global?.averageWinsPerRun ?? 0);
+		}
 	}
 }

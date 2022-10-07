@@ -622,4 +622,7 @@ const TOKEN_CARD_IDS = [
 	CardIds.Menagerist_AmalgamTokenBattlegrounds,
 ];
 
-const EXCLUDED_CARD_IDS = [CardIds.CattlecarpOfNzothBattlegrounds];
+const EXCLUDED_CARD_IDS = [
+	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A,
+	CardIds.CattlecarpOfNzothBattlegrounds_TB_BaconShop_HP_105t_SKIN_A_G,
+];

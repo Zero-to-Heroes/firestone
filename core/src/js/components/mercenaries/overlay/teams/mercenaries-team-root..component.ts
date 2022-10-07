@@ -80,7 +80,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								<mercs-tasks-list
 									class="task-list {{ tooltipPosition }}"
 									[ngClass]="{ 'visible': showTaskList$ | async }"
-									[style.bottom.px]="taskListBottomPx"
+									[style.bottom]="taskListBottom"
+									[style.top]="taskListTop"
 									[tasks]="_tasks"
 									[taskTeamDeckstring]="taskTeamDeckstring$ | async"
 								></mercs-tasks-list>
@@ -89,14 +90,20 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 							<div
 								class="mouseover-button show-roles-matchup-button"
 								[ngClass]="{ 'visible': showColorChart$ | async }"
-								[cardTooltip]="'merceanries_weakness_triangle'"
-								[cardTooltipPosition]="tooltipPosition"
-								[cardTooltipClass]="'mercenaries-weakness-triangle'"
-								[cardTooltipLocalized]="false"
+								(mouseenter)="showRolesChart()"
+								(mouseleave)="hideRolesChart()"
 							>
 								<div class="roles-matchup-button">
 									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
 									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
+								</div>
+								<div
+									class="roles-chart {{ tooltipPosition }}"
+									[ngClass]="{ 'visible': showRolesChart$ | async }"
+									[style.bottom]="taskListBottom"
+									[style.top]="taskListTop"
+								>
+									<img class="chart" src="assets/images/mercenaries-weakness-triangle.png" />
 								</div>
 							</div>
 						</div>
@@ -114,7 +121,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		this._team = value;
-		this.updateTaskListBottomPx();
+		this.updateTaskListBottom();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -126,7 +133,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		}
 		this._tasks = value;
 		this.tasks$$.next(value);
-		this.updateTaskListBottomPx();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -141,6 +147,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	showColorChart$: Observable<boolean>;
 	showTasks$: Observable<boolean>;
 	showTaskList$: Observable<boolean>;
+	showRolesChart$: Observable<boolean>;
 	showTurnCounter$: Observable<boolean>;
 	currentBattleTurn$: Observable<number>;
 	totalMapTurns$: Observable<string>;
@@ -151,10 +158,12 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	_tasks: readonly Task[];
 
 	overlayWidthInPx = 225;
-	taskListBottomPx = 0;
+	taskListBottom = 'auto';
+	taskListTop = 'auto';
 
 	private scale: Subscription;
 	private showTaskList$$ = new BehaviorSubject<boolean>(false);
+	private showRolesChart$$ = new BehaviorSubject<boolean>(false);
 	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
 	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
@@ -182,6 +191,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 				this.buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds),
 			),
 		);
+		this.taskTeamDeckstring$.pipe(this.mapData((info) => info)).subscribe((info) => this.updateTaskListBottom());
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(this.mapData(([pref]) => pref));
@@ -211,6 +221,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			this.mapData(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
 		);
 		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(this.mapData((info) => info));
+		this.showRolesChart$ = this.showRolesChart$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
@@ -239,7 +250,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		return task.description;
 	}
 
-	private updateTaskListBottomPx() {
+	private updateTaskListBottom() {
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
 			if (!taskListEl) {
@@ -248,7 +259,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 			const taskEls = this.el.nativeElement.querySelectorAll('.task');
 			if (taskEls?.length != this._tasks?.length) {
-				setTimeout(() => this.updateTaskListBottomPx(), 100);
+				setTimeout(() => this.updateTaskListBottom(), 100);
 				return;
 			}
 
@@ -257,11 +268,29 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			const widgetEl = this.el.nativeElement.querySelector('.team-container');
 			const widgetRect = widgetEl.getBoundingClientRect();
 			const widgetHeight = widgetRect.height;
-			this.taskListBottomPx = widgetHeight > taskListHeight ? 0 : widgetHeight - taskListHeight;
+			// We either align the bottom of the list with the bottom of the button (when the widget is
+			// bigger than the list), or the top of the list with the top of the widget
+			if (widgetHeight > taskListHeight) {
+				this.taskListBottom = '0';
+				this.taskListTop = 'auto';
+			} else {
+				this.taskListBottom = 'auto';
+				this.taskListTop = '0';
+			}
+			console.debug(
+				'setting margin',
+				this.taskListBottom,
+				this.taskListTop,
+				widgetHeight,
+				taskListHeight,
+				widgetRect,
+				rect,
+				taskListEl,
+			);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-		}, 100);
+		}, 500);
 	}
 
 	@HostListener('window:beforeunload')
@@ -276,6 +305,14 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	hideTasks() {
 		this.showTaskList$$.next(false);
+	}
+
+	showRolesChart() {
+		this.showRolesChart$$.next(true);
+	}
+
+	hideRolesChart() {
+		this.showRolesChart$$.next(false);
 	}
 
 	private buildTeamForTasks(
@@ -323,8 +360,8 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			return null;
 		}
 
-		console.debug('mercs definition', definition);
 		const deckstring = encodeMercs(definition);
+		console.log('mercs definition', deckstring, definition);
 		return deckstring;
 	}
 
@@ -338,17 +375,22 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 		const memMerc = mercCollectionInfo?.Mercenaries?.find((m) => m.Id === refMerc.id);
 		const equipmentId =
+			memMerc?.Loadout?.Equipment?.Id ??
 			(memMerc?.Equipments ?? []).find((e) => e.Equipped)?.Id ??
 			[...(memMerc?.Equipments ?? [])].sort((a, b) => b.Tier - a.Tier)[0]?.Id ??
 			refMerc.equipments[0]?.equipmentId;
+		const artVariationId = memMerc?.Loadout?.ArtVariation?.Id ?? memMerc.Skins.find((s) => s.Default)?.Id ?? 0;
+		const artVariationPremium =
+			memMerc?.Loadout?.ArtVariationPremium ?? memMerc.Skins.find((s) => s.Default)?.Id ?? 0;
 		const result: MercenaryDefinition = {
 			mercenaryId: refMerc.id,
-			selectedArtVariationId: 0,
-			selectedArtVariationPremium: 0,
+			selectedArtVariationId: artVariationId,
+			selectedArtVariationPremium: artVariationPremium,
 			selectedEquipmentId: equipmentId,
 			sharedTeamMercenaryIsFullyUpgraded: 0,
 			sharedTeamMercenaryXp: 0,
 		};
+		console.log('merc for tasks', result);
 		return result;
 	}
 }
@@ -426,7 +468,7 @@ export class MercsTasksListComponent {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-		}, 5000);
+		}, 3000);
 	}
 }
 

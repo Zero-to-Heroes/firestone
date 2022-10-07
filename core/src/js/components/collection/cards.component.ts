@@ -100,7 +100,6 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 					.filter((card) => this.filterClass(card, classFilter))
 					.filter((card) => this.filterCardsOwned(card, ownedFilter));
 				const sortedCards = sortBy(filteredCards, 'cost', 'name');
-				console.debug('sortedCards', sortedCards);
 				return sortedCards;
 			}),
 		);

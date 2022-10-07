@@ -1,0 +1,15 @@
+.streams {
+	width: 100%;
+
+	.streams-list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		live-stream-info {
+			height: 60px;
+			margin-right: 10px;
+			margin-bottom: 10px;
+		}
+	}
+}

@@ -18,6 +18,15 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<div class="subgroup">
 					<preference-toggle
+						field="useStreamerMode"
+						[label]="'settings.decktracker.global.streamer-mode' | owTranslate"
+						[tooltip]="'settings.decktracker.global.streamer-mode-tooltip' | owTranslate"
+					></preference-toggle>
+				</div>
+			</div>
+			<div class="settings-group">
+				<div class="subgroup">
+					<preference-toggle
 						field="overlayShowTitleBar"
 						[label]="'settings.decktracker.global.show-title-bar' | owTranslate"
 						[tooltip]="'settings.decktracker.global.show-title-bar-tooltip' | owTranslate"
@@ -80,6 +89,11 @@ import { Knob } from '../preference-slider.component';
 						field="overlayHighlightRelatedCards"
 						[label]="'settings.decktracker.global.highlight-related-cards' | owTranslate"
 						[tooltip]="'settings.decktracker.global.highlight-related-cards-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
+						field="overlayEnableDiscoverHelp"
+						[label]="'settings.decktracker.global.discover-help' | owTranslate"
+						[tooltip]="'settings.decktracker.global.discover-help-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="decktrackerCloseOnGameEnd"

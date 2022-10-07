@@ -23,6 +23,7 @@ import {
 	chooseOne,
 	corrupt,
 	corrupted,
+	currentClass,
 	damage as dealsDamage,
 	deathrattle,
 	demon,
@@ -60,9 +61,9 @@ import {
 	or,
 	outcast,
 	overload,
+	paladin,
 	pirate,
 	race,
-	rogue,
 	rush,
 	secret,
 	shadow,
@@ -145,6 +146,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		if (selector) {
 			// console.debug(
 			// 	'highlighting',
+			// 	side,
 			// 	this.handlers,
 			// 	Object.keys(this.handlers).filter((key) => key.startsWith(side)),
 			// 	Object.keys(this.handlers)
@@ -192,7 +194,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 
 	private buildCardIdSelector(
 		cardId: string,
-		card: DeckCard,
+		card?: DeckCard,
 	): (handler: Handler, deckState?: DeckState, options?: SelectorOptions) => boolean {
 		switch (cardId) {
 			case CardIds.AbyssalDepths:
@@ -216,6 +218,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, demon);
 			case CardIds.AllTogetherNowTavernBrawl:
 				return and(or(inDeck, inHand), battlecry);
+			case CardIds.Ancharrr:
+				return and(inDeck, minion, pirate);
 			case CardIds.ArcaneBrilliance:
 				return and(
 					inDeck,
@@ -280,6 +284,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, beast);
 			case CardIds.ChattyBartender:
 				return and(inDeck, secret);
+			case CardIds.ClassActionLawyer:
+				return and(inDeck, neutral);
 			case CardIds.ClickClocker:
 				return and(inDeck, minion, mech);
 			case CardIds.ClockworkAssistant_GILA_907:
@@ -292,7 +298,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ConchsCall:
 				return and(inDeck, or(naga, spell));
 			case CardIds.ContrabandStash:
-				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
+				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.CookiesLadleTavernBrawl:
 				return and(or(inDeck, inHand), murloc);
 			case CardIds.Commencement:
@@ -319,6 +325,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.DeepwaterEvoker:
 				return and(inDeck, spell);
+			case CardIds.DefenseAttorneyNathanos:
+				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DevoutBlessingsTavernBrawlToken:
 				return and(inGraveyard, minion, deathrattle);
 			case CardIds.DinnerPerformer:
@@ -345,7 +353,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(dragon);
 			case CardIds.Drekthar_AV_100:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return !!card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
 				return and(inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.DunBaldarBunker:
@@ -356,6 +364,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(spell, shadow);
 			case CardIds.EerieStoneTavernBrawl:
 				return and(spell, shadow);
+			case CardIds.ElitistSnob:
+				return and(inHand, paladin);
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return and(minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
@@ -403,6 +413,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, holy);
 			case CardIds.GuffRunetotem_BAR_720:
 				return and(spell, spellSchool(SpellSchool.NATURE));
+			case CardIds.HabeasCorpses:
+				return and(inGraveyard, minion);
 			case CardIds.Hadronox:
 				return and(inGraveyard, minion, taunt);
 			case CardIds.HarborScamp:
@@ -418,6 +430,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.HeraldOfShadows:
 				return and(inDeck, spell, shadow);
+			case CardIds.HighAbbessAlura:
+				return and(inDeck, spell);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
 			case CardIds.Hullbreaker:
@@ -482,6 +496,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LadyAshvane_TSC_943:
 			case CardIds.LadyAshvane_Story_11_LadyAshvane:
 				return and(inDeck, weapon);
+			case CardIds.LadyInWhite:
+				return and(inDeck, minion);
 			case CardIds.LadyVashj_VashjPrimeToken:
 				return and(inDeck, spell);
 			case CardIds.LineHopper:
@@ -536,6 +552,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion);
 			case CardIds.PillageTheFallenTavernBrawl:
 				return and(weapon);
+			case CardIds.PitCommander:
+				return and(inDeck, minion, demon);
 			case CardIds.PlaguebringerTavernBrawl:
 				return and(spell, effectiveCostMore(1));
 			case CardIds.Plunder:
@@ -550,6 +568,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, secret);
 			case CardIds.ProvingGrounds:
 				return and(inDeck, minion);
+			case CardIds.Psychopomp:
+				return and(inGraveyard, minion);
 			case CardIds.RaiseDead_SCH_514:
 				return and(inGraveyard, minion);
 			case CardIds.ImpendingCatastrophe:
@@ -649,6 +669,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, shadow);
 			case CardIds.StaffOfRenewalTavernBrawl:
 				return and(inGraveyard, minion);
+			case CardIds.StageDive:
+			case CardIds.StageDive_StageDive:
+				return and(inDeck, minion, rush);
 			case CardIds.StakingAClaimTavernBrawl:
 				return and(or(inDeck, inHand), discover);
 			case CardIds.StarvingTavernBrawl:
@@ -677,10 +700,12 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, deathrattle);
 			case CardIds.TessGreymane_GIL_598:
 			case CardIds.TessGreymaneCore:
-				return and(cardsPlayedThisMatch, and(not(rogue), not(neutral)));
+				return and(cardsPlayedThisMatch, and(not(currentClass), not(neutral)));
 			case CardIds.TheCountess:
 				return and(inDeck, neutral);
 			case CardIds.TheUpperHand:
+				return and(inDeck, spell);
+			case CardIds.ThriveInTheShadowsCore:
 				return and(inDeck, spell);
 			case CardIds.TortollanPilgrim:
 				return and(inDeck, spell);
@@ -697,7 +722,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.UnstableMagicTavernBrawl:
 				return and(or(inDeck, inHand), spell, arcane);
 			case CardIds.VanndarStormpike_AV_223:
-				return and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1));
+				return !!card ? and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1)) : null;
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
 			case CardIds.Vectus:
@@ -710,6 +735,10 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, neutral, effectiveCostLess(4));
 			case CardIds.WarsongWrangler:
 				return and(inDeck, beast);
+			case CardIds.WarsongWrangler:
+				return and(inDeck, beast);
+			case CardIds.WeaponsExpert:
+				return and(inDeck, weapon);
 			case CardIds.WidowbloomSeedsman:
 				return and(inDeck, spell, nature);
 			case CardIds.WingCommanderIchman_AV_336:

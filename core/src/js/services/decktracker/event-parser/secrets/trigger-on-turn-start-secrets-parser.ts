@@ -10,6 +10,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 	private secretsTriggeringOnTurnStart = [
 		CardIds.CompetitiveSpirit_AT_073,
 		CardIds.OpenTheCages,
+		CardIds.Perjury,
 		CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
 	];
 

@@ -26,6 +26,7 @@ import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damag
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LadyDarkveinCounterDefinition } from './definitions/lady-darkvein-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
+import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -142,6 +143,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards, this.i18n);
 			case 'brilliantMacaw':
 				return BrilliantMacawCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'monstrousParrot':
+				return MonstrousParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':

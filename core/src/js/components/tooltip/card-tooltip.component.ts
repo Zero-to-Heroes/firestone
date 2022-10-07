@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -13,7 +14,9 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'card-tooltip',
@@ -64,7 +67,9 @@ import { groupByFunction } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardTooltipComponent implements AfterViewInit, OnDestroy {
+export class CardTooltipComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, OnDestroy, AfterContentInit {
 	cards: readonly InternalCard[];
 	relatedCards: readonly InternalCard[] = [];
 	_displayBuffs: boolean;
@@ -72,8 +77,6 @@ export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 
 	public viewRef: ComponentRef<CardTooltipComponent>;
 
-	// private image: string;
-	// private _text: string;
 	private _cardIds: string[];
 	private _relatedCardIds: readonly string[] = [];
 	private isBgs: boolean;
@@ -154,11 +157,14 @@ export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 	private timeout;
 
 	constructor(
-		private cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		@Optional() private prefs: PreferencesService,
-	) {}
+	) {
+		super(store, cdr);
+	}
 
 	ngAfterViewInit(): void {
 		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
@@ -168,6 +174,10 @@ export class CardTooltipComponent implements AfterViewInit, OnDestroy {
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
+	}
+
+	ngAfterContentInit(): void {
+		this.listenForBasicPref$((prefs) => prefs.locale).subscribe((info) => this.updateInfos());
 	}
 
 	refresh() {

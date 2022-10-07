@@ -2,6 +2,7 @@ import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
 import { ShortCard } from '@models/decktracker/game-state';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
+import { ChoosingOptionsGameEvent } from '../mainwindow/game-events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -96,8 +97,11 @@ export class DeckState {
 	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly currentOptions?: readonly CardOption[] = [];
+
 	readonly cardsPlayedLastTurn: readonly DeckCard[] = [];
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
+	readonly lastDeathrattleTriggered?: string;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
@@ -302,6 +306,10 @@ export class DeckState {
 		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
 	}
 
+	public hasMonstrousParrot() {
+		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.MonstrousParrot);
+	}
+
 	public hasVanessaVanCleef() {
 		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.VanessaVancleefCore);
 	}
@@ -344,4 +352,11 @@ export interface TurnTiming {
 	readonly turn: number;
 	readonly startTimestamp: number;
 	readonly endTimestamp: number;
+}
+
+export interface CardOption {
+	readonly entityId: number;
+	readonly cardId: string;
+	readonly source: string;
+	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
 }

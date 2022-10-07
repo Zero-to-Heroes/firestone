@@ -100,6 +100,12 @@ import { Knob } from '../preference-slider.component';
 						[tooltip]="'settings.battlegrounds.general.show-hero-tooltip-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowHeroSelectionTiers"
+						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[label]="'settings.battlegrounds.general.show-hero-tier-label' | owTranslate"
+						[tooltip]="'settings.battlegrounds.general.show-hero-tier-tooltip' | owTranslate"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsShowOverlayButton"
 						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle || !value.bgsUseOverlay }"
 						[label]="'settings.battlegrounds.general.show-overlay-button' | owTranslate"

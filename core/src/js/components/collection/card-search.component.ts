@@ -18,6 +18,7 @@ declare let amplitude;
 			[valueMatcher]="valueMatcher"
 			[placeholder]="'app.collection.card-search.search-box-placeholder' | owTranslate"
 			[dataSet]="cards$ | async"
+			[tooltip]="'app.collection.card-search.search-box-tooltip' | owTranslate"
 		></autocomplete-search-with-list>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

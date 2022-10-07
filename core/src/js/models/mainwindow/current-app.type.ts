@@ -9,4 +9,5 @@ export type CurrentAppType =
 	| 'duels'
 	| 'arena'
 	| 'stats'
+	| 'streams'
 	| 'live';
