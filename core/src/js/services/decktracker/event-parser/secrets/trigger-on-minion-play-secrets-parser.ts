@@ -4,6 +4,7 @@ import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
+import { COUNTERSPELLS } from '../../../hs-utils';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
@@ -33,14 +34,39 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.CARD_PLAYED;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer] = gameEvent.parse();
+	async parse(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		additionalInfo?: {
+			secretWillTrigger?: {
+				cardId: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
+			};
+			minionsWillDie?: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
+		},
+	): Promise<GameState> {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const dbCard = this.allCards.getCard(cardId);
 		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {
 			return currentState;
 		}
 		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
+
+		const isCardCountered =
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+		if (isCardCountered) {
+			console.log('[trigger-on-spell-play] counterspell triggered, no secrets will trigger');
+			return currentState;
+		}
 
 		const secretsWeCantRuleOut = [];
 		// The only case where we can for sure know that the secret could be HiddenCache without
