@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.13.0',
+		version: '9.13.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -56,21 +56,59 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a sim issue where Amber Guardian Start of Game effect was ignored.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add support for Steamcleaner.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix C'Thun counter.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix card highlight for Jace Darkweaver.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a bug with some secrets being greyed out after a minion was countered by Objection!.`,
+							},
+							{
+								type: 'content',
+								text: `Add card oracle for Cheat Death.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue when Leapfroggers and Fish of N'Zoth are involved together.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'ui',
+								text: `Make ability usage and cooldown counters easier to see when the ability is in cooldown.`,
+							},
+							{
+								type: 'ui',
+								text: `Fix the display of tiers for mercenary equipments that don't start at tier 1 (like Reno"s 3rd equipment).`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
