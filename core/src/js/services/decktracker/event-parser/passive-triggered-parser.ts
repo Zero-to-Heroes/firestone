@@ -4,7 +4,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
-import { modifyDeckForSpecialCards } from './deck-contents-utils';
+import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -43,15 +43,17 @@ export class PassiveTriggeredParser implements EventParser {
 			globalEffects: newGlobalEffects,
 		});
 
-		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCards(
+		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardId,
 			newPlayerDeck,
+			isPlayer ? currentState.opponentDeck : currentState.playerDeck,
 			this.allCards,
 			this.i18n,
 		);
 
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
+			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeckAfterSpecialCaseUpdate,
 		});
 	}
 

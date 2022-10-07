@@ -540,6 +540,7 @@ export const cardTutors = [
 	CardIds.Arcanologist,
 	CardIds.ArcanologistCore,
 	CardIds.AxeBerserker,
+	CardIds.BadLuckAlbatross,
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane_BAR_551,
 	CardIds.Bogshaper,

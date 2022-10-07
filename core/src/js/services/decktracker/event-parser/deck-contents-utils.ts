@@ -4,53 +4,59 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 
-export const modifyDeckForSpecialCards = (
+export const modifyDecksForSpecialCards = (
 	cardId: string,
 	deckState: DeckState,
+	opponentDeckState: DeckState,
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
-): DeckState => {
+): [DeckState, DeckState] => {
 	switch (cardId) {
 		case CardIds.CelestialAlignment:
-			return handleCelestialAlignment(deckState, allCards, i18n);
+			return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.Embiggen:
-			return handleEmbiggen(deckState, allCards, i18n);
+			return [handleEmbiggen(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.DeckOfLunacy:
-			return handleDeckOfLunacy(deckState, allCards, i18n);
+			return [handleDeckOfLunacy(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.FrizzKindleroost:
-			return handleFrizzKindleroost(deckState, allCards, i18n);
+			return [handleFrizzKindleroost(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.TheFiresOfZinAzshari:
-			return handleFiresOfZinAzshari(deckState, allCards, i18n);
+			return [handleFiresOfZinAzshari(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.IncantersFlow:
-			return handleIncantersFlow(deckState, allCards, i18n);
+			return [handleIncantersFlow(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LunasPocketGalaxy:
-			return handleLunasPocketGalaxy(deckState, allCards, i18n);
+			return [handleLunasPocketGalaxy(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.PrinceLiam:
-			return handlePrinceLiam(deckState, allCards, i18n);
+			return [handlePrinceLiam(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.AldorAttendant:
 		case CardIds.LordaeronAttendantToken:
-			return handleLibram(deckState, allCards, i18n, 1);
+			return [handleLibram(deckState, allCards, i18n, 1), opponentDeckState];
 		case CardIds.AldorTruthseeker:
 		case CardIds.RadiantLightspawn:
-			return handleLibram(deckState, allCards, i18n, 2);
+			return [handleLibram(deckState, allCards, i18n, 2), opponentDeckState];
 		case CardIds.DeckOfChaos:
-			return handleDeckOfChaos(deckState, allCards, i18n);
+			return [handleDeckOfChaos(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.ExploreUngoro:
-			return handleExploreUngoro(deckState, allCards, i18n);
+			return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.HemetJungleHunter:
-			return handleHemet(deckState, allCards, i18n);
+			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LadyPrestor_SW_078:
-			return handleLadyPrestor(deckState, allCards, i18n);
+			return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.OopsAllSpellsTavernBrawl:
-			return handleOoopsAllSpells(deckState, allCards, i18n);
+			return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.ScepterOfSummoning:
-			return handleScepterOfSummoning(deckState, allCards, i18n);
+			return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.SkulkingGeist:
-			return handleSkulkingGeist(deckState, allCards, i18n);
+			return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
+		case CardIds.Steamcleaner:
+			return [
+				handleSteamcleaner(deckState, allCards, i18n),
+				handleSteamcleaner(opponentDeckState, allCards, i18n),
+			];
 		case CardIds.WyrmrestPurifier:
-			return handleWyrmrestPurifier(deckState, allCards, i18n);
+			return [handleWyrmrestPurifier(deckState, allCards, i18n), opponentDeckState];
 		default:
-			return deckState;
+			return [deckState, opponentDeckState];
 	}
 };
 
@@ -357,6 +363,20 @@ const handleSkulkingGeist = (
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
 		(card, refCard) => refCard?.cost == 1 && refCard?.type === 'Spell',
+		(card) => null,
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleSteamcleaner = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => !!card.creatorCardId,
 		(card) => null,
 		deckState,
 		allCards,
