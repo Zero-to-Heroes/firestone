@@ -20,7 +20,7 @@ import { getHeroRole, normalizeMercenariesCardId } from '../../../services/merce
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
-import { areDeepEqual, sumOnArray } from '../../../services/utils';
+import { areDeepEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -226,6 +226,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 		const abilities = this.buildAbilities(refMerc, memMerc);
 		const equipments = this.buildEquipments(refMerc, memMerc);
+		// console.debug('equipments', equipments, refMerc, memMerc);
 		const bountiesForMerc: readonly BountyForMerc[] = buildBounties(refMerc, referenceData.bountySets);
 
 		const totalCoinsForFullUpgrade =
@@ -312,16 +313,29 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			// 	refEquip,
 			// 	memEquip,
 			// );
+			const tierIndex =
+				currentUnlockedTier > 0
+					? [...refEquip.tiers]
+							.sort(sortByProperties((e) => [e.tier]))
+							.map((e) => e.tier)
+							.indexOf(currentUnlockedTier)
+					: null;
+			// console.debug(
+			// 	'tierIndex',
+			// 	refMerc.name,
+			// 	equipmentCard.name,
+			// 	tierIndex,
+			// 	currentUnlockedTier,
+			// 	[...refEquip.tiers].sort(sortByProperties((e) => [e.tier])).map((e) => e.tier),
+			// 	refEquip,
+			// );
+			// Some equipments that only have 1 or 2 tiers still number their tiers as 1, 2, etc. while we would expect
+			// them to be 3, 4
+			const actualTier = tierIndex != null ? tierIndex + 1 + (4 - refEquip.tiers.length) : null;
 			return {
 				cardId: equipmentCard.id ?? baseEquipmentCard.id,
 				coinsToCraft: coinsToCraft,
-				tier:
-					currentUnlockedTier > 0
-						? refEquip.tiers?.length === 1
-							? // For some reason a few single-tier equipments are stored as tier 1 instead of tier 4, so we manually correct this
-							  4
-							: currentUnlockedTier
-						: currentUnlockedTier,
+				tier: actualTier,
 				owned: !!memEquip?.Owned,
 				isEquipped: !!memEquip ? memEquip.Equipped : false,
 			};
