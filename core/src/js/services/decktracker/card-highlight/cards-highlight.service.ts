@@ -456,7 +456,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.ItsRainingFin:
 				return and(inDeck, murloc);
 			case CardIds.JaceDarkweaver:
-				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
+				return and(spellPlayedThisMatch, spellSchool(SpellSchool.FEL));
 			case CardIds.JerryRigCarpenter:
 				return and(inDeck, spell, chooseOne);
 			case CardIds.JewelOfNzoth:
