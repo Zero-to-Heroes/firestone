@@ -54,7 +54,7 @@ export class LiveStreamInfoComponent {
 			gameMode: toGameType(value.gameType),
 			gameFormat: toFormatType(value.formatType),
 		});
-		this.streamerName = value.twitchUserName;
+		this.streamerName = value.user_name;
 		this.streamTitle = value.title;
 		this.currentViewers = value.viewer_count;
 		console.debug('set stream info', value, this.rankInfoStat, this.streamerName);

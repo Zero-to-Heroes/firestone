@@ -19,7 +19,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div class="streams">
 			<with-loading [isLoading]="loading$ | async">
 				<ul class="streams-list">
-					<live-stream-info *ngFor="let stream of streams$ | async" [stream]="stream"></live-stream-info>
+					<live-stream-info
+						*ngFor="let stream of streams$ | async; trackBy: trackByFn"
+						[stream]="stream"
+					></live-stream-info>
 				</ul>
 			</with-loading>
 		</div>
@@ -63,6 +66,10 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 
 	getName(categoryId: StreamsCategoryType): string {
 		return this.i18n.translateString(`app.streams.category.${categoryId}`);
+	}
+
+	trackByFn(index: number, item: PresenceInfo) {
+		return item.user_name;
 	}
 
 	private refreshStreamsData() {

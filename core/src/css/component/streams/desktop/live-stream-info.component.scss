@@ -31,6 +31,7 @@
 			// Counterbalance the padding top/bottom
 			height: 130%;
 			margin-right: 20px;
+			justify-content: flex-start;
 		}
 
 		.name,
@@ -45,35 +46,6 @@
 		}
 	}
 
-	.group {
-		display: flex;
-		padding-right: 20px;
-		margin-right: 20px;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-
-		&:not(:last-child) {
-			border-right: 1px solid var(--default-text-color);
-		}
-
-		&.player-images {
-			padding-left: 0px;
-			padding-right: 10px;
-		}
-
-		&.viewers {
-			flex-direction: column;
-
-			.viewers-value {
-			}
-
-			.viewers-text {
-				font-size: 12px;
-			}
-		}
-	}
-
 	.watch-button {
 		margin-left: auto;
 		opacity: 0.5;
@@ -84,6 +56,36 @@
 
 		&:hover {
 			opacity: 1;
+		}
+	}
+}
+
+.group {
+	display: flex;
+	padding-right: 20px;
+	margin-right: 20px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+
+	&:not(:last-child) {
+		border-right: 1px solid var(--default-text-color);
+	}
+
+	&.player-images {
+		padding-left: 0px;
+		padding-right: 10px;
+		border-right: 1px solid var(--default-text-color);
+	}
+
+	&.viewers {
+		flex-direction: column;
+
+		.viewers-value {
+		}
+
+		.viewers-text {
+			font-size: 12px;
 		}
 	}
 }
