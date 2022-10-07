@@ -17,14 +17,20 @@ declare let amplitude;
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,
 		`../../../../css/component/menu-selection.component.scss`,
+		`../../../../css/component/streams/desktop/live-stream-info-elements-sizes.scss`,
 		`../../../../css/component/streams/desktop/live-stream-info.component.scss`,
 	],
 	template: `
 		<div class="stream-info">
 			<div class="left-info">
 				<rank-image class="rank-image" [stat]="rankInfoStat"></rank-image>
-				<div class="group name">{{ streamerName }}</div>
-				<stream-hero-infos class="group player-images" [stream]="_stream"></stream-hero-infos>
+				<div class="group name" [helpTooltip]="streamerName">
+					<span>{{ streamerName }}</span>
+				</div>
+				<div class="group title" [helpTooltip]="streamTitle">
+					<span>{{ streamTitle }}</span>
+				</div>
+				<stream-hero-infos [stream]="_stream"></stream-hero-infos>
 				<div class="group viewers" *ngIf="currentViewers != null">
 					<span class="viewers-value">{{ currentViewers }}</span>
 					<span class="viewers-text" [owTranslate]="'app.streams.current-viewers'"></span>
@@ -49,6 +55,7 @@ export class LiveStreamInfoComponent {
 			gameFormat: toFormatType(value.formatType),
 		});
 		this.streamerName = value.twitchUserName;
+		this.streamTitle = value.title;
 		this.currentViewers = value.viewer_count;
 		console.debug('set stream info', value, this.rankInfoStat, this.streamerName);
 	}
@@ -57,6 +64,7 @@ export class LiveStreamInfoComponent {
 
 	rankInfoStat: GameStat;
 	streamerName: string;
+	streamTitle: string;
 	currentViewers: number;
 	watchTooltip = 'Watch on Twitch';
 
@@ -76,7 +84,7 @@ export class LiveStreamInfoComponent {
 		`../../../../css/component/streams/desktop/live-stream-info.component.scss`,
 	],
 	template: `
-		<div class="stream-hero-infos" *ngIf="playerClassImage">
+		<div class="group player-images stream-hero-infos" *ngIf="playerClassImage">
 			<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
 			<div class="vs" *ngIf="opponentClassImage" [owTranslate]="'app.replays.replay-info.versus'"></div>
 			<img

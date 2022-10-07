@@ -32,6 +32,17 @@
 			height: 130%;
 			margin-right: 20px;
 		}
+
+		.name,
+		.title {
+			justify-content: flex-start;
+
+			span {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
 	}
 
 	.group {

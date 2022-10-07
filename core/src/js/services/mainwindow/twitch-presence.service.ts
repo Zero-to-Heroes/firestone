@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { Metadata } from '../../models/decktracker/metadata';
@@ -11,7 +12,7 @@ import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../utils';
 
-const UPDATE_URL = 'https://api.firestoneapp.com/twitch-presence/save/twitch-presence/{proxy+}';
+const UPDATE_URL = 'https://api.firestoneapp.com/twitch-presence';
 
 @Injectable()
 export class TwitchPresenceService {
@@ -110,24 +111,23 @@ export class TwitchPresenceService {
 			});
 		// TODO: send the current rating
 		combineLatest(
-			this.store.listenDeckState$((state) => state?.metadata),
-			this.store.listenMercenaries$(([state]) => state?.playerTeam?.mercenaries),
+			this.store.listenMercenaries$(
+				([state]) => state?.gameMode,
+				([state]) => state?.playerTeam?.mercenaries,
+			),
 		)
 			.pipe(
 				tap((info) => console.debug('[twitch-presence] mercs game started?', info)),
 				debounceTime(200),
-				filter(
-					([[metadata], [mercenaries]]) =>
-						!!metadata?.gameType && !!metadata?.formatType && !!mercenaries?.length,
-				),
+				filter(([[gameMode, mercenaries]]) => !!gameMode && !!mercenaries?.length),
 				tap((info) => console.debug('[twitch-presence] mercs game started 2', info)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => console.debug('[twitch-presence] mercs game started 3', info)),
 				debounceTime(200),
 			)
-			.subscribe(([[metadata], [mercenaries]]) => {
-				console.debug('[twitch-presence] mercs considering data to send', mercenaries, metadata);
-				this.sendNewMercsGameEvent(metadata, mercenaries);
+			.subscribe(([[gameMode, mercenaries]]) => {
+				console.debug('[twitch-presence] mercs considering data to send', mercenaries, gameMode);
+				this.sendNewMercsGameEvent(gameMode, mercenaries);
 			});
 		this.store
 			.listenDeckState$(
@@ -207,12 +207,12 @@ export class TwitchPresenceService {
 		});
 	}
 
-	private async sendNewMercsGameEvent(metadata: Metadata, mercenaries: readonly BattleMercenary[]) {
+	private async sendNewMercsGameEvent(gameMode: GameType, mercenaries: readonly BattleMercenary[]) {
 		if (!this.twitchAccessToken || !this.twitchUserName) {
 			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken);
 			return;
 		}
-		console.debug('[twitch-presence] will send new mercs game event', metadata, mercenaries);
+		console.debug('[twitch-presence] will send new mercs game event', gameMode, mercenaries);
 		const currentUser = await this.ow.getCurrentUser();
 		this.api.callPostApi(UPDATE_URL, {
 			type: 'game-start-mercs',
@@ -223,7 +223,11 @@ export class TwitchPresenceService {
 			},
 			data: {
 				mercenaries: mercenaries.map((m) => m.cardId),
-				metadata: metadata,
+				metadata: {
+					gameType: gameMode,
+					formatType: GameFormat.FT_WILD,
+					scenarioId: null,
+				} as Metadata,
 			},
 		});
 	}
