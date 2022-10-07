@@ -556,6 +556,7 @@ export const cardTutors = [
 	CardIds.CaptureColdtoothMine_MoreSupplies,
 	CardIds.CaptureColdtoothMine_MoreResources,
 	CardIds.CavernShinyfinder,
+	CardIds.CheatDeath,
 	CardIds.ClawMachine,
 	CardIds.CountessAshmore,
 	CardIds.Crystology,
