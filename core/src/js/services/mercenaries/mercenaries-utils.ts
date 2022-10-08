@@ -209,8 +209,8 @@ export const isPassiveMercsTreasure = (cardId: string, allCards: CardsFacadeServ
 	const refCard = allCards.getCard(cardId);
 	return (
 		refCard?.mercenaryPassiveAbility ||
-		// For Start of game effects
 		refCard.mechanics?.includes(GameTag[GameTag.HIDE_STATS]) ||
+		refCard.mechanics?.includes(GameTag[GameTag.HIDE_COST]) ||
 		refCard.mechanics?.includes(GameTag[GameTag.START_OF_GAME])
 	);
 };
