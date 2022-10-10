@@ -47,21 +47,24 @@ export class TwitchPresenceService {
 				(state) => state?.metadata,
 				(state) => state?.gameStarted,
 			),
+			this.store.listenPrefs$((prefs) => prefs.appearOnLiveStreams),
 		)
 			.pipe(
-				tap((info) => console.debug('[twitch-presence] game started?', info)),
 				debounceTime(200),
 				filter(
-					([[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted]]) =>
-						!!playerClass && !!opponentClass && !!metadata?.gameType && !!metadata?.formatType,
+					([
+						[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+						[appearOnLiveStreams],
+					]) => !!playerClass && !!opponentClass && !!metadata?.gameType && !!metadata?.formatType,
 				),
-				tap((info) => console.debug('[twitch-presence] game started 2', info)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('[twitch-presence] game started 3', info)),
 				debounceTime(200),
 			)
 			.subscribe(
-				([[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted]]) => {
+				([
+					[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+					[appearOnLiveStreams],
+				]) => {
 					console.debug(
 						'[twitch-presence] considering data to send',
 						playerCardId,
@@ -69,7 +72,12 @@ export class TwitchPresenceService {
 						metadata,
 						gameStarted,
 					);
-					if (gameStarted && !isBattlegrounds(metadata.gameType) && !isMercenaries(metadata.gameType)) {
+					if (
+						gameStarted &&
+						appearOnLiveStreams &&
+						!isBattlegrounds(metadata.gameType) &&
+						!isMercenaries(metadata.gameType)
+					) {
 						this.sendNewGameEvent(
 							matchInfo,
 							metadata,

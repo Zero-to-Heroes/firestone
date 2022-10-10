@@ -570,6 +570,7 @@ export class Preferences {
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
 	readonly twitchDelay: number = 0;
+	readonly appearOnLiveStreams: boolean = true;
 
 	readonly outOfCardsToken: OutOfCardsToken;
 	readonly outOfCardsShowNotifOnSync: boolean = false;

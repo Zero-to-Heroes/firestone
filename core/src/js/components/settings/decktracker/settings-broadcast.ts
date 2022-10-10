@@ -97,6 +97,17 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					></preference-numeric-input>
 				</div>
 			</section>
+
+			<section>
+				<h2 class="title" [owTranslate]="'settings.general.twitch.other-options-title'"></h2>
+				<div class="settings-group">
+					<preference-toggle
+						field="appearOnLiveStreams"
+						[label]="'settings.general.twitch.appear-on-live-streams-label' | owTranslate"
+						[tooltip]="'settings.general.twitch.appear-on-live-streams-tooltip' | owTranslate"
+					></preference-toggle>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
