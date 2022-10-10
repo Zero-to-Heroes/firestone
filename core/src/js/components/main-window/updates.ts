@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.13.2',
+		version: '9.13.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -45,12 +45,21 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					// {
+					// 	category: 'general',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `Add a "live stream" tab where you can see who is streaming Hearthstone (and using Firestone). It is still in its very early stage, and am looking for feedback in how to make this as useful as possible for viewers and streamers alike`,
+					// 		},
+					// 	],
+					// },
 					{
 						category: 'general',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a "live stream" tab where you can see who is streaming Hearthstone (and using Firestone). It is still in its very early stage, and am looking for feedback in how to make this as useful as possible for viewers and streamers alike`,
+								text: `Add an "appear on live streams" option in the Twitch settings, in preparation for a future feature. If you're a streamer and don't want to be referenced in Firestone in the future, you probably should probably turn that option off.`,
 							},
 						],
 					},
@@ -80,6 +89,10 @@ export const updates: readonly Update[] = [
 								text: `Fix a bug with some secrets being greyed out after a minion was countered by Objection!.`,
 							},
 							{
+								type: 'bug',
+								text: `Fix an info leak with Incriminating Psychic.`,
+							},
+							{
 								type: 'content',
 								text: `Add card oracle for Cheat Death.`,
 							},
@@ -104,6 +117,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Fix the display of tiers for mercenary equipments that don't start at tier 1 (like Reno"s 3rd equipment).`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the background image of the tiles in the Action Queue to make the skill more visible.`,
 							},
 						],
 					},
