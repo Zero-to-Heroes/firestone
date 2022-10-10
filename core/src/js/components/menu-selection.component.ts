@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
+import { FeatureFlags } from '../services/feature-flags';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -147,6 +148,7 @@ declare let amplitude;
 			</button>
 			<li class="main-menu-separator"></li>
 			<button
+				*ngIf="enableStreamsTab"
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
@@ -219,6 +221,8 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+	enableStreamsTab = FeatureFlags.ENABLE_STREAMS_TAB;
+
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
 	tabIndex$: Observable<number>;
