@@ -40,6 +40,7 @@ export class CardPlayedByEffectParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const isCardCountered =
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
@@ -92,14 +93,8 @@ export class CardPlayedByEffectParser implements EventParser {
 		} as DeckState);
 		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
-			? [newPlayerDeck, currentState.opponentDeck]
-			: modifyDecksForSpecialCards(
-					cardId,
-					newPlayerDeck,
-					isPlayer ? currentState.opponentDeck : currentState.playerDeck,
-					this.allCards,
-					this.i18n,
-			  );
+			? [newPlayerDeck, opponentDeck]
+			: modifyDecksForSpecialCards(cardId, newPlayerDeck, opponentDeck, this.allCards, this.i18n);
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,

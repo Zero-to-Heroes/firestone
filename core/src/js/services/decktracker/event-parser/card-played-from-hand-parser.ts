@@ -40,6 +40,7 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
@@ -166,14 +167,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			side: isPlayer ? 'player' : 'opponent',
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
-			? [newPlayerDeck, currentState.opponentDeck]
-			: modifyDecksForSpecialCards(
-					cardId,
-					newPlayerDeck,
-					isPlayer ? currentState.opponentDeck : currentState.playerDeck,
-					this.allCards,
-					this.i18n,
-			  );
+			? [newPlayerDeck, opponentDeck]
+			: modifyDecksForSpecialCards(cardId, newPlayerDeck, opponentDeck, this.allCards, this.i18n);
 		const finalPlayerDeck = playerDeckAfterSpecialCaseUpdate.update({
 			cardsPlayedThisMatch: [
 				...newPlayerDeck.cardsPlayedThisMatch,

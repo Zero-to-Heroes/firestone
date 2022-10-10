@@ -28,6 +28,7 @@ export class PassiveTriggeredParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const card = DeckCard.create({
@@ -46,7 +47,7 @@ export class PassiveTriggeredParser implements EventParser {
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardId,
 			newPlayerDeck,
-			isPlayer ? currentState.opponentDeck : currentState.playerDeck,
+			opponentDeck,
 			this.allCards,
 			this.i18n,
 		);
