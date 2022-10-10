@@ -201,7 +201,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		if (!refMerc) {
 			return null;
 		}
-		// const debug = refMerc.name === 'Chi-Ji';
+		const debug = refMerc.id === 329;
 		const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 		const taskChain = referenceData.taskChains
 			.filter((chain) => chain.mercenaryId === refMerc.id)
@@ -225,8 +225,10 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
 		const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
 		const abilities = this.buildAbilities(refMerc, memMerc);
+		debug && console.log('abilities 1', abilities);
+		debug && console.log('abilities 1', refMerc.abilities);
+		debug && console.log('abilities 1', memMerc.Abilities);
 		const equipments = this.buildEquipments(refMerc, memMerc);
-		// console.debug('equipments', equipments, refMerc, memMerc);
 		const bountiesForMerc: readonly BountyForMerc[] = buildBounties(refMerc, referenceData.bountySets);
 
 		const totalCoinsForFullUpgrade =
