@@ -16,7 +16,7 @@ import {
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -352,8 +352,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.filter((info) => info)
 			.map((info) => {
 				const baseAbilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-				const memAbility = memMerc.Abilities.find(
-					(a) => normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(baseAbilityCard.id),
+				const memAbility = memMerc.Abilities.find((a) =>
+					info.tiers.some((t) => this.allCards.getCardFromDbfId(t.cardDbfId).id === a.CardId),
 				);
 				const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
 
