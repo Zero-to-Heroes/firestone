@@ -74,16 +74,16 @@ export class DuelsDustFilterDropdownComponent
 				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 100 }),
 			} as DustFilterOption,
 			{
-				value: '200',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 200 }),
+				value: '400',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 400 }),
 			} as DustFilterOption,
 			{
-				value: '500',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 500 }),
+				value: '1600',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 1600 }),
 			} as DustFilterOption,
 			{
-				value: '1000',
-				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 1000 }),
+				value: '3200',
+				label: this.i18n.translateString('app.duels.filters.dust.dust', { value: 3200 }),
 			} as DustFilterOption,
 		] as readonly DustFilterOption[];
 		this.filter$ = this.store
