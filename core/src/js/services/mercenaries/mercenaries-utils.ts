@@ -163,7 +163,7 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 };
 
 export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'protector' => {
-	switch (roleFromEnum) {
+	switch (roleFromEnum?.toUpperCase()) {
 		case TagRole[TagRole.CASTER]:
 			return 'caster';
 		case TagRole[TagRole.FIGHTER]:

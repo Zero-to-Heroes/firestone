@@ -15,6 +15,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
+import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -172,12 +173,12 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 							const heroStats = heroStatsByHero[heroCardId];
 							// The hero card id is already normalized in the global stats
 							// const gameStats = gameStatsByHero[heroCardId];
-							const refHeroStat = heroStats[0];
+							// const refHeroStat = heroStats[0];
 							const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
 							return {
 								id: heroCardId,
 								name: this.allCards.getCard(heroCardId)?.name ?? heroCardId,
-								role: refHeroStat.heroRole,
+								role: getHeroRole(this.allCards.getCard(heroCardId).mercenaryRole),
 								globalTotalMatches: globalTotalMatches,
 								globalWinrate:
 									globalTotalMatches === 0
