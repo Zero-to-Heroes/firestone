@@ -64,15 +64,14 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 				),
 			);
 		this.team$ = combineLatest(
-			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
 				([main, nav, prefs]) => main.mercenaries?.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries?.mapInfo,
 			),
 		).pipe(
-			filter(([[state], [currentScene, referenceData, mapInfo]]) => !!referenceData),
-			this.mapData(([[state], [currentScene, referenceData, refMapInfo]]) => {
+			filter(([[currentScene, referenceData, mapInfo]]) => !!referenceData),
+			this.mapData(([[currentScene, referenceData, refMapInfo]]) => {
 				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
 				return MercenariesBattleTeam.create({
 					mercenaries:
