@@ -13,7 +13,7 @@ import {
 	mergeDuelsHeroPlayerStats,
 	topDeckApplyFilters,
 } from '@services/ui-store/duels-ui-helper';
-import { groupByFunction, sleep, uuid } from '@services/utils';
+import { groupByFunction, uuid } from '@services/utils';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -228,8 +228,8 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 	}
 
 	async onMouseEnter(cardId: string) {
-		this.selectedHeroCardId.next(null);
-		await sleep(100);
+		// this.selectedHeroCardId.next(null);
+		// await sleep(100);
 		this.selectedHeroCardId.next(cardId);
 	}
 
