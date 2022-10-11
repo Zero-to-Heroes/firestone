@@ -14,7 +14,7 @@ import { MercenariesReferenceDataLoadedEvent } from '../mainwindow/store/events/
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 const MERCENARIES_REFERENCE_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries';
-const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json';
+const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats-no-bench.gz.json?v=3';
 
 @Injectable()
 export class MercenariesStateBuilderService {
