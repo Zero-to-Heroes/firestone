@@ -124,7 +124,7 @@ export class BgsPlayer implements IBgsPlayer {
 
 	private buildEnchantments(
 		enchantments: { EntityId: number; CardId: string }[],
-	): { cardId: string; originEntityId: number }[] {
+	): { cardId: string; originEntityId: number; timing: number }[] {
 		if (!enchantments?.length) {
 			return [];
 		}
@@ -132,6 +132,7 @@ export class BgsPlayer implements IBgsPlayer {
 		return enchantments.map((enchant) => ({
 			originEntityId: enchant.EntityId,
 			cardId: enchant.CardId,
+			timing: 0,
 		}));
 	}
 }
