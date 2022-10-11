@@ -102,7 +102,9 @@ export class CardDrawParser implements EventParser {
 			// case, if we draw them via a tutor, they will also be flagged
 			// FIX: we remove the "standard tutors" from this check, and they will be only kept for the
 			// creator field
-			(!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
+			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
+			// This field is only used to flag "created by", so we should be fine even with tradeable cards
+			publicCardCreators.includes(lastInfluencedByCardId);
 		console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
