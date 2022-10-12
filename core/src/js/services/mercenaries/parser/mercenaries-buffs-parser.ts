@@ -87,7 +87,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 				// const speedDiff =
 				// 	playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ??
 				// 	ability.speed - ability.speed;
-				const speedModifier = this.buildSpeedModifier(playerAbility);
+				const speedModifier = this.buildSpeedModifier(playerAbility, playerEntity);
 				// if ((speedModifier?.value ?? 0) !== (speedDiff ?? 0)) {
 				// 	console.warn('incompatible computations', speedModifier, speedDiff, playerAbility, ability);
 				// }
@@ -100,7 +100,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			playerTeam = playerTeam.updateMercenary(
 				mercenary.entityId,
 				BattleMercenary.create({
-					speedModifier: this.buildSpeedModifier(playerEntity),
+					speedModifier: this.buildSpeedModifier(playerEntity, null),
 					abilities: abilities,
 				}),
 			);
@@ -108,24 +108,33 @@ export class MercenariesBuffsParser implements MercenariesParser {
 		return playerTeam;
 	}
 
-	private buildSpeedModifier(boardEntity: EntityGameState): BattleSpeedModifier {
+	private buildSpeedModifier(boardEntity: EntityGameState, playerEntity: EntityGameState): BattleSpeedModifier {
 		if (!boardEntity) {
 			return null;
 		}
 
-		// console.debug(
-		// 	'computing buffs for',
-		// 	this.allCards.getCard(boardEntity.cardId).name,
-		// 	boardEntity.cardId,
-		// 	boardEntity,
-		// );
-		const debuffs = (boardEntity.enchantments ?? [])
+		console.debug(
+			'computing buffs for',
+			this.allCards.getCard(boardEntity.cardId).name,
+			boardEntity.cardId,
+			boardEntity,
+		);
+		const enchantments = [...(boardEntity.enchantments ?? []), ...(playerEntity?.enchantments ?? [])];
+		const debuffs = enchantments
 			.filter((e) => DEBUFF_SPEED_MODIFIER_ENCHANTMENTS.includes(e.cardId as CardIds))
 			.filter((e) => !!e.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value);
-		const buffs = (boardEntity.enchantments ?? [])
-			.filter((e) => BUFF_SPEED_MODIFIER_ENCHANTMENTS.includes(e.cardId as CardIds))
+		const buffs = enchantments
+			.filter((e) => {
+				const mappedEnchantment = BUFF_SPEED_MODIFIER_ENCHANTMENTS.find(
+					(b) => b.enchantment === (e.cardId as CardIds),
+				);
+				return (
+					!!mappedEnchantment &&
+					(!mappedEnchantment?.targets?.length || mappedEnchantment.targets.includes(boardEntity.cardId))
+				);
+			})
 			.filter((e) => !!e.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value);
-		// console.debug('buffs', buffs, debuffs);
+		console.debug('buffs', buffs, boardEntity);
 		const debuffValue = sumOnArray(
 			debuffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
@@ -134,7 +143,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			buffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
 		);
-		// console.debug('buffValue', buffValue, debuffValue);
+		console.debug('buffValue', buffValue, debuffValue);
 		return !!buffValue || !!debuffValue
 			? {
 					value: debuffValue - buffValue,

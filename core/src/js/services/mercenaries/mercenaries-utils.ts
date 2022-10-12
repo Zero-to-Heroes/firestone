@@ -219,29 +219,81 @@ export const isPassiveMercsTreasure = (cardId: string, allCards: CardsFacadeServ
 	);
 };
 
-export const BUFF_SPEED_MODIFIER_ENCHANTMENTS = [
-	// CardIds.AdventurersPackLettuceEnchantment,
-	CardIds.AmuletOfSwiftnessLettuceEnchantment,
-	CardIds.BootsOfHasteLettuceEnchantment,
-	CardIds.CenarionSurgeLettuceEnchantment,
-	CardIds.CasterHasteLettuceEnchantment,
-	CardIds.DealOfTime_DontWasteItLettuceEnchantment,
-	CardIds.DreadbladesLettuceEnchantment,
-	// CardIds.ElunesGraceLettuceEnchantment,
-	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
-	CardIds.EnduranceAuraLettuceEnchantment_LETL_319e3,
-	CardIds.FanOfKnivesLettuceEnchantment, // Check that it's the correct card ID
-	CardIds.FighterHasteLettuceEnchantment,
-	CardIds.HammerOfJusticeLettuceEnchantment,
-	CardIds.HeatingUpLettuceEnchantment,
-	CardIds.HeroicLeapLettuceEnchantment,
-	CardIds.ManaBlinkLettuceEnchantment,
-	CardIds.ProtectorHasteLettuceEnchantment,
-	CardIds.RainOfChaosLettuceEnchantment,
-	CardIds.RingOfHasteLettuceEnchantment,
-	CardIds.SlipperyWhenWetLettuceEnchantment_LT23_024E2e2,
-	CardIds.StringOfFateLettuceEnchantment,
-	CardIds.UnnaturalSmokeLettuceEnchantment,
+export const BUFF_SPEED_MODIFIER_ENCHANTMENTS: readonly {
+	enchantment: string;
+	targets?: readonly string[];
+}[] = [
+	{
+		enchantment: CardIds.AmuletOfSwiftnessLettuceEnchantment,
+		targets: [
+			CardIds.DragonqueensGambit1Lettuce,
+			CardIds.DragonqueensGambit2Lettuce,
+			CardIds.DragonqueensGambit3Lettuce,
+			CardIds.DragonqueensGambit4Lettuce,
+			CardIds.DragonqueensGambit5Lettuce,
+		],
+	},
+	{
+		enchantment: CardIds.BootsOfHasteLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.CenarionSurgeLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.CasterHasteLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.DealOfTime_DontWasteItLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.DreadbladesLettuceEnchantment,
+		targets: [
+			CardIds.BurgleBarrage1Lettuce,
+			CardIds.BurgleBarrage2Lettuce,
+			CardIds.BurgleBarrage3Lettuce,
+			CardIds.BurgleBarrage4Lettuce,
+			CardIds.BurgleBarrage5Lettuce,
+		],
+	},
+	{
+		enchantment: CardIds.EnduranceAuraLettuceEnchantment_LETL_319e2, // 1 is the taunt
+	},
+	{
+		enchantment: CardIds.EnduranceAuraLettuceEnchantment_LETL_319e3,
+	},
+	{
+		enchantment: CardIds.FanOfKnivesLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.FighterHasteLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.HeatingUpLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.HeroicLeapLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.ManaBlinkLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.ProtectorHasteLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.RainOfChaosLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.RingOfHasteLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.SlipperyWhenWetLettuceEnchantment_LT23_024E2e2,
+	},
+	{
+		enchantment: CardIds.StringOfFateLettuceEnchantment,
+	},
+	{
+		enchantment: CardIds.UnnaturalSmokeLettuceEnchantment,
+	},
 ];
 
 export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
@@ -251,6 +303,7 @@ export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	CardIds.EmeraldRootsLettuceEnchantment,
 	CardIds.FlurryLettuceEnchantment,
 	CardIds.FrostbiteLettuceEnchantment,
+	CardIds.HammerOfJusticeLettuceEnchantment,
 	CardIds.MuddyFootingLettuceEnchantment,
 	// CardIds.RingOfSluggishnessLettuceEnchantment,
 	CardIds.ShadowShockLettuceEnchantment,
