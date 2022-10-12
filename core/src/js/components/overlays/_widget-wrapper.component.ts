@@ -104,6 +104,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		gameHeight: number,
 		positionFromPrefs: { left: number; top: number },
 	): Promise<{ left: number; top: number }> {
+		return;
 		let widgetRect = this.getRect();
 		while (!(widgetRect = this.getRect())?.width) {
 			await sleep(500);
