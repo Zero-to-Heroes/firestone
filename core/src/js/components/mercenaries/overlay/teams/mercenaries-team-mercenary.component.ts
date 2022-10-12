@@ -58,7 +58,7 @@ export class MercenariesTeamMercenaryComponent {
 		this.mercCardId = value.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg)`;
 		this.roleIcon =
-			!value.role || value.role === TagRole[TagRole.NEUTRAL] || value.role === TagRole[TagRole.INVALID]
+			!value.role || value.role === TagRole[TagRole.INVALID]
 				? null
 				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png`;
 		this.name = value.cardId
