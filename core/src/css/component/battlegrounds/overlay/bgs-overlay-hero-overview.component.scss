@@ -42,6 +42,10 @@
 	height: 100%;
 	transform-origin: top left;
 
+	&.bottom {
+		top: -3vh;
+	}
+
 	bgs-opponent-overview-big {
 		height: 100%;
 

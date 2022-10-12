@@ -84,6 +84,22 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 					console.debug('error', e);
 				}
 			});
+		this.store
+			.listenPrefs$((prefs) => prefs.bgsOpponentOverlayAtTop)
+			.pipe(this.mapData(([pref]) => pref))
+			.subscribe((pref) => {
+				try {
+					const element = this.el.nativeElement.querySelector('.scalable');
+					this.renderer.setStyle(element, 'transform-origin', pref ? 'top left' : 'bottom left');
+					this.renderer.removeClass(element, 'bottom');
+					if (!pref) {
+						this.renderer.addClass(element, 'bottom');
+					}
+				} catch (e) {
+					// Do nothing
+					console.debug('error', e);
+				}
+			});
 	}
 
 	async ngAfterContentInit() {
