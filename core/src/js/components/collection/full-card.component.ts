@@ -304,7 +304,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 	private getSoundName(key: string): string {
 		if (!key) {
 			return null;
-		}		
+		}
 		for (const regex of this.REGEXES) {
 			if (key.match(regex.regex)) {
 				return regex.value;
@@ -319,8 +319,8 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 						.replace(/FEMALE_[A-Z-]+_/gi, '')
 						.replace(/MALE_[A-Z-]+_/gi, '')
 						.replace(/_/g, ' ')
-						.trim()
-				)
+						.trim(),
+			  )
 			: '';
 	}
 
@@ -387,7 +387,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.holiday'),
 			category: 'event',
 		},
-		
+
 		{
 			regex: /.*GREETINGS_DISABLED.*/gi,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.greetings'),
@@ -434,7 +434,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.greetings'),
 			category: 'emote',
 		},
-		
+
 		{
 			regex: /.*WELL_?PLAYED.*|VO_HERO_03_Female_BloodElf_Emote_04/gi,
 			value: this.i18n.translateString('app.collection.card-details.sounds.effect.well-played'),

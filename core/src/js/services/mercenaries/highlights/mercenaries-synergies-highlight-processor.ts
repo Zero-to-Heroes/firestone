@@ -361,7 +361,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.LeagueRecruitmentFlyer2Lettuce:
 		case CardIds.LeagueRecruitmentFlyer3Lettuce:
 		case CardIds.LeagueRecruitmentFlyer4Lettuce:
-		case CardIds.LeagueRecruitmentFlyer5Lettuce:			
+		case CardIds.LeagueRecruitmentFlyer5Lettuce:
 			return explorer;
 		case CardIds.LeechingPoison1Lettuce:
 		case CardIds.LeechingPoison2Lettuce:
