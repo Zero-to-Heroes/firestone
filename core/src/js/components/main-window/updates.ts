@@ -32,15 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.13.4',
+		version: '9.13.7',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		I'm aware of a recent info leak that lets you see the card picked by your opponent after a Discover effect. I suspect that this change (in the Hearthstone logs) is not intended and will be fixed. I have contacted Blizzard to get their stance on this. If they decide not to fix it, I will then patch the app to hide the information.
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `This release, and probably the next couple ones, will focus on bug fixes and often requested Quality of Life improvements. So nothing super exciting, but I hope you'll enjoy the updates nonetheless.`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -54,15 +52,6 @@ export const updates: readonly Update[] = [
 					// 		},
 					// 	],
 					// },
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add an "appear on live streams" option in the Twitch settings, in preparation for a future feature. If you're a streamer and don't want to be referenced in Firestone in the future, you probably should probably turn that option off.`,
-							},
-						],
-					},
 				],
 			},
 			{
@@ -74,27 +63,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add support for Steamcleaner.`,
+								text: `Add support for multiple activations of Dew Process (via Solar Eclipse for instance) in the "global effects" section to better track how many cards you will draw.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix C'Thun counter.`,
+								text: `Fix an issue where "Unknown card"s would be removed from the list every time a card was played.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix card highlight for Jace Darkweaver.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a bug with some secrets being greyed out after a minion was countered by Objection!.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an info leak with Incriminating Psychic.`,
-							},
-							{
-								type: 'content',
-								text: `Add card oracle for Cheat Death.`,
+								text: `Fix an info leak that revelead the card's cost and rarity in the "Hand" section of the tracker when drawing a card from the deck that was previously reveleaed (like Renathal).`,
 							},
 						],
 					},
@@ -103,7 +80,16 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue when Leapfroggers and Fish of N'Zoth are involved together.`,
+								text: `Fix an issue where the opponent board overview would be half hidden if using both "display at the bottom" and "increased size" options.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `The values for the "dust filter" dropdown now match more closely the dust values of the different rarities (Community Contribution!).`,
 							},
 						],
 					},
@@ -111,16 +97,42 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'ui',
-								text: `Make ability usage and cooldown counters easier to see when the ability is in cooldown.`,
+								type: 'bug',
+								text: `Fix an issue where some speed buffs (like Alexstrasza's Amulet of Swiftness) were incorrectly applied to all abilities.`,
 							},
 							{
-								type: 'ui',
-								text: `Fix the display of tiers for mercenary equipments that don't start at tier 1 (like Reno"s 3rd equipment).`,
+								type: 'bug',
+								text: `Fix broken stats tabs. The sample size is still very small, so take the data with a grain of salt.`,
 							},
 							{
-								type: 'ui',
-								text: `Improve the background image of the tiles in the Action Queue to make the skill more visible.`,
+								type: 'bug',
+								text: `Hide speed value for abilities with Discover and Battlecry effects (Community Contribution!).`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Fix and improve how sounds are organized when looking at a card's details (Community Contribution!).`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Remove the safeguard that prevented users from moving the overlays / widgets outside of the game bounds. Let me know if you'd prefer to have it back, at the cost of a bit less control over how everything is positioned.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the notifications would get cropped when using a Windows zoom level of more than 100%.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix the behavior of the "maximize" button when a window is restored as maximized.`,
 							},
 						],
 					},
