@@ -391,8 +391,12 @@ export class OverwolfService {
 		});
 	}
 
-	public dragMove(windowId: string, callback?) {
-		overwolf.windows.dragMove(windowId, callback);
+	public async dragMove(windowId: string) {
+		return new Promise<void>((resolve) => {
+			overwolf.windows.dragMove(windowId, () => {
+				resolve();
+			});
+		});
 	}
 
 	public async dragResize(windowId: string, edge: string) {

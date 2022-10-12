@@ -56,21 +56,21 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
-		const windowName = (await this.ow.getCurrentWindow()).name;
+		const currentWindow = await this.ow.getCurrentWindow();
+		console.debug('currentWindow', currentWindow);
+		const windowName = currentWindow.name;
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
-			if (message.window_state_ex === 'maximized') {
-				this.maximized = true;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			} else {
-				this.maximized = false;
-
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+			this.maximized = message.window_state_ex === 'maximized';
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
 			}
 		});
+
+		// Set the "maximized" status if the window is effectively maximized (esp. when restoring a window)
+		this.maximized = currentWindow.stateEx === 'maximized';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 
 		if (this.doubleClickListenerParentClass) {
 			let parent = this.el.nativeElement;

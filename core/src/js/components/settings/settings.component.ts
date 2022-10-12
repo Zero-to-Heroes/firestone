@@ -75,14 +75,14 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 
 			this.selectApp(selectedApp, selectedMenu);
 		});
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
-			if (message.id === 'move') {
-				const window = await this.ow.getCurrentWindow();
-				const newX = message.content.x - window.width / 2;
-				const newY = message.content.y - window.height / 2;
-				this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
-			}
-		});
+		// this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
+		// 	if (message.id === 'move') {
+		// 		const window = await this.ow.getCurrentWindow();
+		// 		const newX = message.content.x - window.width / 2;
+		// 		const newY = message.content.y - window.height / 2;
+		// 		this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
+		// 	}
+		// });
 	}
 
 	@HostListener('window:beforeunload')
