@@ -47,8 +47,8 @@ declare let amplitude;
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 // TODO: https://github.com/scttcper/ngx-toastr (19/11/2020)
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
-	timeout = 6000;
-	// timeout = 9999999;
+	// timeout = 6000;
+	timeout = 9999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
@@ -404,7 +404,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
 			console.log('changing notifs window size', width, gameInfo.height - 20, dpi);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-			const newLeft = gameWidth - width;
+			const newLeft = gameWidth - width * dpi;
 			const newTop = 1;
 			console.log('changing notifs window position', newLeft, newTop);
 			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
