@@ -122,7 +122,6 @@ export const globalEffectCards = [
 	CardIds.CelestialAlignment,
 	CardIds.DeckOfChaos,
 	CardIds.DeckOfLunacy,
-	CardIds.DewProcess,
 	CardIds.DraconicMunitionTavernBrawl,
 	CardIds.TheFiresOfZinAzshari,
 	CardIds.Embiggen,
@@ -146,6 +145,9 @@ export const globalEffectCards = [
 	CardIds.UpgradedPackMule,
 	CardIds.Wildfire,
 ];
+
+export const globalEffectPowers = [CardIds.DewProcess];
+export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
 
 export const globalEffectTriggers = [
 	{

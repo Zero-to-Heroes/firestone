@@ -586,7 +586,7 @@ export class GameStateService {
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),
-			new SpecialCardPowerTriggeredParser(),
+			new SpecialCardPowerTriggeredParser(this.allCards, this.helper),
 			new SphereOfSapienceParser(this.helper),
 
 			new ReconnectStartParser(),
