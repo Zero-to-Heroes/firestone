@@ -181,9 +181,9 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 
-	public async setTwitchUserName(pref: string) {
+	public async setTwitchUserName(userName: string, loginName: string) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, twitchUserName: pref };
+		const newPrefs: Preferences = { ...prefs, twitchUserName: userName, twitchLoginName: loginName };
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 

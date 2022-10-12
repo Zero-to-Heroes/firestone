@@ -17,7 +17,7 @@ const UPDATE_URL = 'https://api.firestoneapp.com/twitch-presence';
 @Injectable()
 export class TwitchPresenceService {
 	private twitchAccessToken: string;
-	private twitchUserName: string;
+	private twitchLoginName: string;
 
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
@@ -158,7 +158,7 @@ export class TwitchPresenceService {
 		this.store
 			.listenPrefs$((prefs) => prefs.twitchAccessToken)
 			.subscribe(([token]) => (this.twitchAccessToken = token));
-		this.store.listenPrefs$((prefs) => prefs.twitchUserName).subscribe(([info]) => (this.twitchUserName = info));
+		this.store.listenPrefs$((prefs) => prefs.twitchLoginName).subscribe(([info]) => (this.twitchLoginName = info));
 	}
 
 	private async sendNewGameEvent(
@@ -169,7 +169,7 @@ export class TwitchPresenceService {
 		opponentCardId: string,
 		opponentClass: string,
 	) {
-		if (!this.twitchAccessToken || !this.twitchUserName) {
+		if (!this.twitchAccessToken || !this.twitchLoginName) {
 			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken);
 			return;
 		}
@@ -180,7 +180,7 @@ export class TwitchPresenceService {
 			user: {
 				userId: currentUser?.userId,
 				userName: currentUser?.username,
-				twitchUserName: this.twitchUserName,
+				twitchUserName: this.twitchLoginName,
 			},
 			data: {
 				matchInfo: matchInfo,
@@ -194,7 +194,7 @@ export class TwitchPresenceService {
 	}
 
 	private async sendNewBgsGameEvent(metadata: Metadata, mmrAtStart: number, playerCardId: string) {
-		if (!this.twitchAccessToken || !this.twitchUserName) {
+		if (!this.twitchAccessToken || !this.twitchLoginName) {
 			console.debug('[twitch-presence] bgs no twitch token', this.twitchAccessToken);
 			return;
 		}
@@ -205,7 +205,7 @@ export class TwitchPresenceService {
 			user: {
 				userId: currentUser?.userId,
 				userName: currentUser?.username,
-				twitchUserName: this.twitchUserName,
+				twitchUserName: this.twitchLoginName,
 			},
 			data: {
 				mmrAtStart: mmrAtStart,
@@ -216,7 +216,7 @@ export class TwitchPresenceService {
 	}
 
 	private async sendNewMercsGameEvent(gameMode: GameType, mercenaries: readonly BattleMercenary[]) {
-		if (!this.twitchAccessToken || !this.twitchUserName) {
+		if (!this.twitchAccessToken || !this.twitchLoginName) {
 			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken);
 			return;
 		}
@@ -227,7 +227,7 @@ export class TwitchPresenceService {
 			user: {
 				userId: currentUser?.userId,
 				userName: currentUser?.username,
-				twitchUserName: this.twitchUserName,
+				twitchUserName: this.twitchLoginName,
 			},
 			data: {
 				mercenaries: mercenaries.map((m) => m.cardId),
@@ -252,7 +252,7 @@ export class TwitchPresenceService {
 			user: {
 				userId: currentUser?.userId,
 				userName: currentUser?.username,
-				twitchUserName: this.twitchUserName,
+				twitchUserName: this.twitchLoginName,
 			},
 		});
 	}

@@ -430,7 +430,9 @@ export class TwitchAuthService {
 			this.http.get(`${TWITCH_USER_URL}`, { headers: httpHeaders }).subscribe(
 				(data: any) => {
 					console.log('[twitch-auth] received user info', data);
-					this.prefs.setTwitchUserName(data.data && data.data.length > 0 && data.data[0].display_name);
+					if (!!data?.data?.length) {
+						this.prefs.setTwitchUserName(data.data[0].display_name, data.data[0].login);
+					}
 				},
 				(error) => {
 					console.log('[twitch-auth] could not retrieve user info', error);

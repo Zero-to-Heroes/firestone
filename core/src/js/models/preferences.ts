@@ -569,6 +569,7 @@ export class Preferences {
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
+	readonly twitchLoginName: string;
 	readonly twitchDelay: number = 0;
 	readonly appearOnLiveStreams: boolean = true;
 
