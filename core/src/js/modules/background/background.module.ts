@@ -292,6 +292,8 @@ import { MercenariesPvpMmrFilterDropdownComponent } from '../../components/merce
 import { MercenariesRoleFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-role-filter-dropdown.component';
 import { MercenariesStarterFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-starter-filter-dropdown.component';
 import { MercenariesFiltersComponent } from '../../components/mercenaries/desktop/filters/_mercenaries-filters.component';
+import { MercenariesCompositionStatComponent } from '../../components/mercenaries/desktop/mercenaries-composition-stat.component';
+import { MercenariesCompositionsStatsComponent } from '../../components/mercenaries/desktop/mercenaries-compositions-stats.component';
 import { MercenariesDesktopComponent } from '../../components/mercenaries/desktop/mercenaries-desktop.component';
 import { MercenariesEmptyStateComponent } from '../../components/mercenaries/desktop/mercenaries-empty-state.component';
 import { MercenariesMetaHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-meta-hero-details.component';
@@ -307,8 +309,6 @@ import { MercenariesPersonalTeamSummaryComponent } from '../../components/mercen
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/toberebuilt_mercenaries-hero-details.component';
 import { MercenariesComposiionDetailsComponent } from '../../components/mercenaries/desktop/unused_mercenaries-composition-details.component';
-import { MercenariesCompositionStatComponent } from '../../components/mercenaries/desktop/unused_mercenaries-composition-stat.component';
-import { MercenariesCompositionsStatsComponent } from '../../components/mercenaries/desktop/unused_mercenaries-compositions-stats.component';
 import { MercenariesActionsQueueComponent } from '../../components/mercenaries/overlay/action-queue/mercenaries-action-queue..component';
 import { MercenariesActionComponent } from '../../components/mercenaries/overlay/action-queue/mercenaries-action.component';
 import { MercenariesHighlightDirective } from '../../components/mercenaries/overlay/teams/mercenaries-highlight.directive';

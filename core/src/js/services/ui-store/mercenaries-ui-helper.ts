@@ -110,7 +110,7 @@ export const filterMercenariesCompositions = (
 	// difficultyFilter: MercenariesPveDifficultyFilterType,
 	mmrFilter: MercenariesPvpMmrFilterType,
 ): readonly MercenariesComposition[] => {
-	return stats.filter((stat) => stat.date === 'past-seven').filter((stat) => stat.mmrPercentile === mmrFilter);
+	return stats.filter((stat) => stat.date === 'last-patch').filter((stat) => stat.mmrPercentile === mmrFilter);
 };
 
 export const filterMercenariesRuns = (

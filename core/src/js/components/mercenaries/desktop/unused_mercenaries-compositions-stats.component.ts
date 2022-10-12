@@ -1,16 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-filter-types';
-import {
-	MercenariesComposition,
-	MercenariesGlobalStatsPvp,
-} from '../../../services/mercenaries/mercenaries-state-builder.service';
+import { filter } from 'rxjs/operators';
+import { MercenariesComposition } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
-import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 
@@ -59,59 +54,21 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 	}
 
 	ngAfterContentInit() {
-		this.showMercNames$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.mercenariesShowMercNamesInTeams)
-			.pipe(
-				map(([pref]) => pref),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting showMercNames in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+		this.showMercNames$ = this.listenForBasicPref$((prefs) => prefs.mercenariesShowMercNamesInTeams);
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.getGlobalStats(),
-				([main, nav]) => main.stats.gameStats,
-				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
-				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 			)
 			.pipe(
-				filter(
-					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
-						!!globalStats?.pvp?.compositions?.length,
-				),
-				map(
-					([globalStats, gameStats, modeFilter, difficultyFilter, mmrFilter]) =>
-						[
-							globalStats.pvp,
-							// modeFilter === 'pve'
-							// 	? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
-							// 	: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
-							// modeFilter,
-							// difficultyFilter,
-							mmrFilter,
-						] as [
-							MercenariesGlobalStatsPvp,
-							// readonly GameStat[],
-							// MercenariesModeFilterType,
-							// MercenariesPveDifficultyFilterType,
-							MercenariesPvpMmrFilterType,
-						],
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([pvpStats, mmrFilter]) => filterMercenariesCompositions(pvpStats.compositions, mmrFilter)),
-				map((compositionStats) => {
+				filter(([globalStats, mmrFilter]) => !!globalStats?.pvp?.compositions?.length),
+				this.mapData(([globalStats, mmrFilter]) => {
+					const compositionStats = filterMercenariesCompositions(globalStats.pvp.compositions, mmrFilter);
 					const statsByStarterTrio = groupByFunction((stat: MercenariesComposition) =>
 						stat.heroCardIds.join(','),
 					)(compositionStats);
 					const totalMatches = sumOnArray(compositionStats, (stat) => stat.totalMatches);
-					return Object.keys(statsByStarterTrio)
+					const finalStats = Object.keys(statsByStarterTrio)
 						.map((compositionKey: string) => {
 							const compositions: readonly MercenariesComposition[] = statsByStarterTrio[compositionKey];
 							const ref = compositions[0];
@@ -149,20 +106,11 @@ export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionC
 								// benches: benches,
 							} as MercenaryCompositionInfo;
 						})
-						.filter((stat) => stat.globalTotalMatches >= 100)
+						.filter((stat) => stat.globalTotalMatches >= 20)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.slice(0, 15);
+					return !finalStats?.length ? null : finalStats;
 				}),
-				map((stats) => (!stats?.length ? null : stats)),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 	}
 
