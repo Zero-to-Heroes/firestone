@@ -277,16 +277,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 				this.taskListBottom = 'auto';
 				this.taskListTop = '0';
 			}
-			console.debug(
-				'setting margin',
-				this.taskListBottom,
-				this.taskListTop,
-				widgetHeight,
-				taskListHeight,
-				widgetRect,
-				rect,
-				taskListEl,
-			);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -321,7 +311,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		mercCollectionInfo: MemoryMercenariesCollectionInfo,
 		backupMercIds: readonly number[],
 	): string {
-		console.debug('building team for tasks', tasks, mercReferenceData);
+		// console.debug('building team for tasks', tasks, mercReferenceData);
 		if (!mercReferenceData?.mercenaries?.length || !tasks?.length) {
 			console.warn('missing reference data');
 			return null;
@@ -348,7 +338,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			)
 			.filter((m) => !!m);
 		const finalMercs = [...taskMercs, ...backupMercs];
-		console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
+		// console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
 
 		const definition: MercenariesTeamDefinition = {
 			teamId: 1,
@@ -361,7 +351,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		}
 
 		const deckstring = encodeMercs(definition);
-		console.log('mercs definition', deckstring, definition);
+		// console.debug('mercs definition', deckstring, definition);
 		return deckstring;
 	}
 
@@ -390,7 +380,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 			sharedTeamMercenaryIsFullyUpgraded: 0,
 			sharedTeamMercenaryXp: 0,
 		};
-		console.log('merc for tasks', result);
+		// console.debug('merc for tasks', result);
 		return result;
 	}
 }
