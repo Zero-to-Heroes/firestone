@@ -32,17 +32,20 @@ export const filterMercenariesHeroStats = (
 	referenceData: MercenariesReferenceData,
 	searchString: string = null,
 ): readonly MercenariesHeroStat[] => {
-	return (heroStats ?? [])
-		.filter((stat) => stat.date === 'past-seven')
-		.filter((stat) =>
-			modeFilter === 'pvp'
-				? stat.mmrPercentile === mmrFilter
-				: difficultyFilter === 'all' || stat.mmrPercentile === difficultyFilter,
-		)
-		.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
-		.filter((stat) => applyStarterFilter(stat, starterFilter))
-		.filter((stat) => applyHeroLevelFilter(stat, 30))
-		.filter((stat) => applySearchStringFilter(stat.heroCardId, searchString, allCards, referenceData));
+	return (
+		(heroStats ?? [])
+			// TODO: add proper support for time period, but I don't have enough data for now
+			.filter((stat) => stat.date === 'last-patch')
+			.filter((stat) =>
+				modeFilter === 'pvp'
+					? stat.mmrPercentile === mmrFilter
+					: difficultyFilter === 'all' || stat.mmrPercentile === difficultyFilter,
+			)
+			.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
+			.filter((stat) => applyStarterFilter(stat, starterFilter))
+			.filter((stat) => applyHeroLevelFilter(stat, 30))
+			.filter((stat) => applySearchStringFilter(stat.heroCardId, searchString, allCards, referenceData))
+	);
 };
 
 export const applySearchStringFilter = (

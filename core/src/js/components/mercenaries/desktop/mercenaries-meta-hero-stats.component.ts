@@ -1,25 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ScenarioId } from '@firestone-hs/reference-data';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import {
-	MercenariesHeroLevelFilterType,
-	MercenariesPvpMmrFilterType,
-	MercenariesRoleFilterType,
-	MercenariesStarterFilterType,
-} from '../../../models/mercenaries/mercenaries-filter-types';
+import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
-import {
-	MercenariesGlobalStats,
-	MercenariesHeroStat,
-	MercenariesReferenceData,
-} from '../../../services/mercenaries/mercenaries-state-builder.service';
+import { MercenariesHeroStat } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats } from '../../../services/ui-store/mercenaries-ui-helper';
-import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryInfo } from './mercenary-info';
 
@@ -65,7 +52,6 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 			.listen$(
 				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.stats.gameStats,
 				([main, nav]) => nav.navigationMercenaries.heroSearchString,
 				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
@@ -77,7 +63,6 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 					([
 						globalStats,
 						referenceData,
-						gameStats,
 						heroSearchString,
 						roleFilter,
 						mmrFilter,
@@ -85,125 +70,65 @@ export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionCompo
 						levelFilter,
 					]) => !!globalStats?.pvp?.heroStats?.length && !!referenceData,
 				),
-				map(
+				this.mapData(
 					([
 						globalStats,
 						referenceData,
-						gameStats,
-						heroSearchString,
-						roleFilter,
-						mmrFilter,
-						starterFilter,
-						levelFilter,
-					]) =>
-						[
-							globalStats,
-							referenceData,
-							gameStats.stats.filter((stat) => stat.scenarioId === ScenarioId.LETTUCE_PVP),
-							heroSearchString,
-							roleFilter,
-							mmrFilter,
-							starterFilter,
-							levelFilter,
-						] as [
-							MercenariesGlobalStats,
-							MercenariesReferenceData,
-							readonly GameStat[],
-							string,
-							MercenariesRoleFilterType,
-							MercenariesPvpMmrFilterType,
-							MercenariesStarterFilterType,
-							MercenariesHeroLevelFilterType,
-						],
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(
-					([
-						globalStats,
-						referenceData,
-						gameStats,
 						heroSearchString,
 						roleFilter,
 						mmrFilter,
 						starterFilter,
 						levelFilter,
 					]) => {
-						return [
-							filterMercenariesHeroStats(
-								globalStats.pvp.heroStats,
-								'pvp',
-								roleFilter,
-								null,
-								mmrFilter,
-								starterFilter,
-								levelFilter,
-								this.allCards,
-								referenceData,
-								heroSearchString,
-							),
-							// filterMercenariesRuns(
-							// 	gameStats,
-							// 	'pvp',
-							// 	roleFilter,
-							// 	null,
-							// 	mmrFilter,
-							// 	starterFilter,
-							// 	levelFilter,
-							// ),
+						const heroStats = filterMercenariesHeroStats(
+							globalStats.pvp.heroStats,
+							'pvp',
 							roleFilter,
-							heroSearchString,
+							null,
+							mmrFilter,
+							starterFilter,
+							levelFilter,
+							this.allCards,
 							referenceData,
-						] as [
-							readonly MercenariesHeroStat[],
-							// readonly GameStat[],
-							MercenariesRoleFilterType,
-							string,
-							MercenariesReferenceData,
-						];
+							heroSearchString,
+						);
+						const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(
+							heroStats,
+						);
+						// const gameStatsByHero = groupByFunction((stat: GameStat) =>
+						// 	normalizeMercenariesCardId(stat.playerCardId),
+						// )(gameStats);
+						const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
+						const result = Object.keys(heroStatsByHero)
+							.map((heroCardId) => {
+								const heroStats = heroStatsByHero[heroCardId];
+								// The hero card id is already normalized in the global stats
+								// const gameStats = gameStatsByHero[heroCardId];
+								// const refHeroStat = heroStats[0];
+								const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
+								return {
+									id: heroCardId,
+									name: this.allCards.getCard(heroCardId)?.name ?? heroCardId,
+									role: getHeroRole(this.allCards.getCard(heroCardId).mercenaryRole),
+									globalTotalMatches: globalTotalMatches,
+									globalWinrate:
+										globalTotalMatches === 0
+											? null
+											: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) /
+											  globalTotalMatches,
+									globalPopularity: (100 * globalTotalMatches) / totalMatches,
+									// playerTotalMatches: gameStats?.length ?? 0,
+									// playerWinrate: !gameStats?.length
+									// 	? null
+									// 	: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
+									// 	  gameStats.length,
+								} as MercenaryInfo;
+							})
+							.filter((stat) => stat.globalTotalMatches > THRESHOLD)
+							.sort((a, b) => b.globalWinrate - a.globalWinrate);
+						return result;
 					},
 				),
-				map(([heroStats, roleFilter, heroSearchString, referenceData]) => {
-					const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(heroStats);
-					// const gameStatsByHero = groupByFunction((stat: GameStat) =>
-					// 	normalizeMercenariesCardId(stat.playerCardId),
-					// )(gameStats);
-					const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
-					return Object.keys(heroStatsByHero)
-						.map((heroCardId) => {
-							const heroStats = heroStatsByHero[heroCardId];
-							// The hero card id is already normalized in the global stats
-							// const gameStats = gameStatsByHero[heroCardId];
-							// const refHeroStat = heroStats[0];
-							const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
-							return {
-								id: heroCardId,
-								name: this.allCards.getCard(heroCardId)?.name ?? heroCardId,
-								role: getHeroRole(this.allCards.getCard(heroCardId).mercenaryRole),
-								globalTotalMatches: globalTotalMatches,
-								globalWinrate:
-									globalTotalMatches === 0
-										? null
-										: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
-								globalPopularity: (100 * globalTotalMatches) / totalMatches,
-								// playerTotalMatches: gameStats?.length ?? 0,
-								// playerWinrate: !gameStats?.length
-								// 	? null
-								// 	: (100 * gameStats.filter((stat) => stat.result === 'won').length) /
-								// 	  gameStats.length,
-							} as MercenaryInfo;
-						})
-						.filter((stat) => stat.globalTotalMatches > THRESHOLD)
-						.sort((a, b) => b.globalWinrate - a.globalWinrate);
-				}),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 	}
 
