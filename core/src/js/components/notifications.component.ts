@@ -47,8 +47,8 @@ declare let amplitude;
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 // TODO: https://github.com/scttcper/ngx-toastr (19/11/2020)
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
-	// timeout = 6000;
-	timeout = 9999999;
+	timeout = 6000;
+	// timeout = 9999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
