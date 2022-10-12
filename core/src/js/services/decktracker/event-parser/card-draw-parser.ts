@@ -114,6 +114,8 @@ export class CardDrawParser implements EventParser {
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? this.i18n.getCardName(card?.cardId) : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
+			manaCost: isCardInfoPublic ? card.manaCost : null,
+			rarity: isCardInfoPublic ? card.rarity : null,
 		} as DeckCard);
 		console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;

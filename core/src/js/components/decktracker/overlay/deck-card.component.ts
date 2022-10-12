@@ -48,7 +48,7 @@ import { uuid } from '../../../services/utils';
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
-				<span>{{ manaCost === undefined ? '?' : manaCost }}</span>
+				<span>{{ manaCost == null ? '?' : manaCost }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
 			<div class="gradiant"></div>
