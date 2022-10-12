@@ -23,7 +23,7 @@ declare let amplitude;
 	template: `
 		<div class="stream-info">
 			<div class="left-info">
-				<rank-image class="rank-image" [stat]="rankInfoStat"></rank-image>
+				<rank-image class="rank-image" [stat]="rankInfoStat" [gameMode]="gameMode"></rank-image>
 				<div class="group name" [helpTooltip]="streamerName">
 					<span>{{ streamerName }}</span>
 				</div>
@@ -49,6 +49,7 @@ declare let amplitude;
 export class LiveStreamInfoComponent {
 	@Input() set stream(value: PresenceInfo) {
 		this._stream = value;
+		this.gameMode = toGameType(value.gameType);
 		this.rankInfoStat = GameStat.create({
 			playerRank: value.playerRank,
 			gameMode: toGameType(value.gameType),
@@ -63,6 +64,7 @@ export class LiveStreamInfoComponent {
 	_stream: PresenceInfo;
 
 	rankInfoStat: GameStat;
+	gameMode: string;
 	streamerName: string;
 	streamTitle: string;
 	currentViewers: number;

@@ -32,6 +32,32 @@
 			height: 130%;
 			margin-right: 20px;
 			justify-content: flex-start;
+
+			::ng-deep {
+				.rank-image {
+					&.battlegrounds {
+						.frame {
+							height: inherit;
+							left: auto;
+						}
+						.rank-text {
+							font-size: 18px;
+							padding: 0;
+						}
+					}
+					&.ranked {
+						left: 3px;
+						&.legend {
+							.rank-text {
+								font-size: 24px;
+								left: auto;
+								padding: 0;
+								bottom: 13px;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		.name,
