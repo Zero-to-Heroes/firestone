@@ -62,7 +62,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				newDeck,
 				cardId,
 				entityId,
-				deck.deckList.length === 0,
+				false, // Only remove known cards
 			);
 			console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 
