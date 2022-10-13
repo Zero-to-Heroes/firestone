@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -17,6 +17,11 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="streams">
+			<div class="info" [helpTooltip]="'app.streams.info-tooltip' | owTranslate" (click)="toggleInfo()">
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#info" />
+				</svg>
+			</div>
 			<with-loading [isLoading]="loading$ | async">
 				<ng-container *ngIf="{ streams: streams$ | async } as value">
 					<ul class="streams-list" *ngIf="!!value.streams?.length; else emptyState">
@@ -44,6 +49,8 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 	loading$: Observable<boolean>;
 
 	private interval;
+
+	private infoToggle$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -76,6 +83,10 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 
 	getName(categoryId: StreamsCategoryType): string {
 		return this.i18n.translateString(`app.streams.category.${categoryId}`);
+	}
+
+	toggleInfo() {
+		this.infoToggle$$.next(!this.infoToggle$$.value);
 	}
 
 	trackByFn(index: number, item: PresenceInfo) {
