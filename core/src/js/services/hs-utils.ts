@@ -146,6 +146,7 @@ export const globalEffectCards = [
 	CardIds.Wildfire,
 ];
 
+// Also whitelist in the parser
 export const globalEffectPowers = [CardIds.DewProcess];
 export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
 
