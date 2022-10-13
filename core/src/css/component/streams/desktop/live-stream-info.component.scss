@@ -41,7 +41,7 @@
 							left: auto;
 						}
 						.rank-text {
-							font-size: 18px;
+							font-size: 20px;
 							padding: 0;
 						}
 					}
@@ -54,6 +54,40 @@
 								padding: 0;
 								bottom: 13px;
 							}
+						}
+					}
+					&.duels,
+					&.paid-duels {
+						left: -2px;
+						.frame {
+							left: auto;
+						}
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 80%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+					}
+					&.arena {
+						left: -6px;
+						top: -9px;
+						.frame {
+							height: 135%;
+						}
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 65%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
 						}
 					}
 				}

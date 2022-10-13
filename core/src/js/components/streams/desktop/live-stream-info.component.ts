@@ -24,9 +24,13 @@ declare let amplitude;
 		<div class="stream-info">
 			<div class="left-info">
 				<rank-image class="rank-image" [stat]="rankInfoStat" [gameMode]="gameMode"></rank-image>
-				<div class="group name" [helpTooltip]="streamerName">
-					<span class="value">{{ streamerName }}</span>
-					<span class="language fi fi-{{ streamLanguage }}" *ngIf="streamLanguage"></span>
+				<div class="group name">
+					<span class="value" [helpTooltip]="streamerName">{{ streamerName }}</span>
+					<span
+						class="language fi fi-{{ streamLanguage }}"
+						*ngIf="streamLanguage"
+						[helpTooltip]="'app.streams.language-tooltip' | owTranslate"
+					></span>
 				</div>
 				<div class="group title" [helpTooltip]="streamTitle">
 					<span>{{ streamTitle }}</span>
