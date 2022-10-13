@@ -184,7 +184,6 @@ export class GameEvents {
 						localPlayer: localPlayer,
 					} as GameEvent),
 				);
-				this.triggerMatchInfoRetrieve();
 				break;
 			case 'OPPONENT_PLAYER':
 				console.log(gameEvent.Type + ' event');
@@ -1523,38 +1522,5 @@ export class GameEvents {
 			return dateWithMillis.getTime();
 		}
 		freeRegexp();
-	}
-
-	// Send the info separately and asynchronously, so that we don't block
-	// the main processing loop
-	// This info is not needed by the tracker, but it is needed by some achievements
-	// that rely on the rank
-	// Also needed by the Twitch Presence service
-	private async triggerMatchInfoRetrieve() {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
-			const [matchInfo, playerDeck] = await Promise.all([
-				this.memoryService.getMatchInfo(),
-				this.deckParser.getCurrentDeck(10000),
-			]);
-			if (!!matchInfo?.localPlayer && !!matchInfo?.opponent) {
-				console.log('matchInfo', matchInfo);
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.MATCH_INFO,
-						additionalData: {
-							matchInfo: matchInfo,
-						},
-						localPlayer: {
-							deck: playerDeck,
-						},
-					} as GameEvent),
-				);
-				return;
-			}
-			console.debug('missing matchInfo', matchInfo);
-			retriesLeft--;
-		}
-		console.warn('[match-info] could not retrieve match info');
 	}
 }

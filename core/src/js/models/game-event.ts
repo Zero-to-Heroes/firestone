@@ -11,6 +11,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
 	public static readonly MATCH_INFO = 'MATCH_INFO';
+	public static readonly DUELS_INFO = 'DUELS_INFO';
+	public static readonly ARENA_INFO = 'ARENA_INFO';
 	public static readonly GAME_RUNNING = 'GAME_RUNNING';
 	public static readonly INITIAL_CARD_IN_DECK = 'INITIAL_CARD_IN_DECK';
 	public static readonly HERO_POWER_USED = 'HERO_POWER_USED';

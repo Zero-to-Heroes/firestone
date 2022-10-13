@@ -520,6 +520,7 @@ import { DevService } from '../../services/dev.service';
 import { DuelsStateBuilderService } from '../../services/duels/duels-state-builder.service';
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
+import { GameModeDataService } from '../../services/game-mode-data.service';
 import { GameStatusService } from '../../services/game-status.service';
 import { GameNativeStateStoreService } from '../../services/game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
@@ -1159,6 +1160,7 @@ const components = [
 		GameEvents,
 		GameEventsEmitterService,
 		GameEventsPluginService,
+		GameModeDataService,
 		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,

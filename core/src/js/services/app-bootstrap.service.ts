@@ -25,6 +25,7 @@ import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.serv
 import { GameStateService } from './decktracker/game-state.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
+import { GameModeDataService } from './game-mode-data.service';
 import { GameStatusService } from './game-status.service';
 import { GameNativeStateStoreService } from './game/game-native-state-store.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
@@ -120,6 +121,7 @@ export class AppBootstrapService {
 		private init_quests: QuestsService,
 		private init_LiveStreamsService: LiveStreamsService,
 		private init_GameNativeStateStoreService: GameNativeStateStoreService,
+		private init_GameModeDataService: GameModeDataService,
 	) {}
 
 	public async init() {
