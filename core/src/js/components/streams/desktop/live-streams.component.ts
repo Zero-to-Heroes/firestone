@@ -18,12 +18,22 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	template: `
 		<div class="streams">
 			<with-loading [isLoading]="loading$ | async">
-				<ul class="streams-list">
-					<live-stream-info
-						*ngFor="let stream of streams$ | async; trackBy: trackByFn"
-						[stream]="stream"
-					></live-stream-info>
-				</ul>
+				<ng-container *ngIf="{ streams: streams$ | async } as value">
+					<ul class="streams-list" *ngIf="!!value.streams?.length; else emptyState">
+						<live-stream-info
+							*ngFor="let stream of value.streams; trackBy: trackByFn"
+							[stream]="stream"
+						></live-stream-info>
+					</ul>
+					<ng-template #emptyState>
+						<battlegrounds-empty-state
+							class="empty-state"
+							emptyStateIcon="assets/svg/streams.svg"
+							[title]="'app.streams.empty-state-title' | owTranslate"
+							[subtitle]="'app.streams.empty-state-tooltip' | owTranslate"
+						></battlegrounds-empty-state>
+					</ng-template>
+				</ng-container>
 			</with-loading>
 		</div>
 	`,
