@@ -66,6 +66,7 @@
 		"deepmerge": "^4.2.2",
 		"dist": "^0.1.2",
 		"elementtree": "^0.1.7",
+		"flag-icons": "^6.6.6",
 		"immutable": "3.8.2",
 		"jszip": "^3.7.1",
 		"ng-inline-svg": "10.1.0",

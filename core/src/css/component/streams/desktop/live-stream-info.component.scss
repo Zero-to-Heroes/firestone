@@ -98,6 +98,12 @@
 		border-right: 1px solid var(--default-text-color);
 	}
 
+	&.name {
+		.language {
+			margin-left: 15px;
+		}
+	}
+
 	&.player-images {
 		padding-left: 0px;
 		padding-right: 10px;

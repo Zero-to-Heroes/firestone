@@ -25,7 +25,8 @@ declare let amplitude;
 			<div class="left-info">
 				<rank-image class="rank-image" [stat]="rankInfoStat" [gameMode]="gameMode"></rank-image>
 				<div class="group name" [helpTooltip]="streamerName">
-					<span>{{ streamerName }}</span>
+					<span class="value">{{ streamerName }}</span>
+					<span class="language fi fi-{{ streamLanguage }}" *ngIf="streamLanguage"></span>
 				</div>
 				<div class="group title" [helpTooltip]="streamTitle">
 					<span>{{ streamTitle }}</span>
@@ -56,6 +57,7 @@ export class LiveStreamInfoComponent {
 			gameFormat: toFormatType(value.formatType),
 		});
 		this.streamerName = value.user_name;
+		this.streamLanguage = !!value.language?.length ? mapTwitchLanguageToIsoCode(value.language) : null;
 		this.streamTitle = value.title;
 		this.currentViewers = value.viewer_count;
 		console.debug('set stream info', value, this.rankInfoStat, this.streamerName);
@@ -66,6 +68,7 @@ export class LiveStreamInfoComponent {
 	rankInfoStat: GameStat;
 	gameMode: string;
 	streamerName: string;
+	streamLanguage: string;
 	streamTitle: string;
 	currentViewers: number;
 	watchTooltip = 'Watch on Twitch';
@@ -138,3 +141,26 @@ export class StreamHeroInfosComponent {
 		}
 	}
 }
+
+const mapTwitchLanguageToIsoCode = (twitchLanguage: string): string => {
+	const mapping = {
+		'de': 'de',
+		'en': 'us',
+		'en-gb': 'gb',
+		'es': 'es',
+		'es-mx': 'mx',
+		'fr': 'fr',
+		'it': 'it',
+		'ja': 'jp',
+		'ko': 'kr',
+		'pl': 'pl',
+		'pt': 'pt',
+		'pt-br': 'br',
+		'ru': 'ru',
+		'th': 'th',
+		'zh-cn': 'cn',
+		'zh-tw': 'tw',
+	};
+	const hsLocale = mapping[twitchLanguage] ?? twitchLanguage;
+	return hsLocale;
+};
