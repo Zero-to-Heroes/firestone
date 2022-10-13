@@ -6,7 +6,7 @@ import { ApiRunner } from '../api-runner';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { LiveStreamsDataLoadedEvent } from './store/events/streams/live-streams-data-loaded-event';
 
-const LIVE_STREAMS_URL = ' https://api.firestoneapp.com/twitch-presence';
+const LIVE_STREAMS_URL = 'https://api.firestoneapp.com/twitch-presence';
 
 @Injectable()
 export class LiveStreamsService {
