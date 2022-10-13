@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { ArenaInfo } from '../../models/arena-info';
 import { Metadata } from '../../models/decktracker/metadata';
+import { GameEvent } from '../../models/game-event';
 import { MatchInfo } from '../../models/match-info';
+import { DuelsInfo } from '../../models/memory/memory-duels';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
+import { Rank } from '../../models/player-info';
 import { ApiRunner } from '../api-runner';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
+import { isDuels } from '../duels/duels-utils';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { OverwolfService } from '../overwolf.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
@@ -23,6 +29,7 @@ export class TwitchPresenceService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
+		private readonly gameEvents: GameEventsEmitterService,
 	) {
 		this.init();
 	}
@@ -31,15 +38,29 @@ export class TwitchPresenceService {
 		console.debug('[twitch-presence] store init starting');
 		await this.store.initComplete();
 		console.debug('[twitch-presence] store init complete');
-		// Need to send an update when:
-		// - game starts and player/opponent class is known and game type is known
-		// - game ends
-		// // - decklist is known
-		// // - hero is selected (for BG)
-		// TODO: add support for BG rating, as well as mercs stuff
-		combineLatest(
+
+		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+			filter((event) => event.type === GameEvent.MATCH_INFO),
+			map((event) => event.additionalData.matchInfo as MatchInfo),
+			startWith(null),
+			tap((info) => console.debug('[twitch-presence] matchInfo', info)),
+		);
+		const duelsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+			filter((event) => event.type === GameEvent.DUELS_INFO),
+			map((event) => event.additionalData.duelsInfo as DuelsInfo),
+			startWith(null),
+			tap((info) => console.debug('[twitch-presence] duelsInfo', info)),
+		);
+		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+			filter((event) => event.type === GameEvent.ARENA_INFO),
+			map((event) => event.additionalData.arenaInfo as ArenaInfo),
+			startWith(null),
+			tap((info) => console.debug('[twitch-presence] arenaInfo', info)),
+		);
+
+		// "Normal" Hearthstone mode infos
+		const hearthstoneInfo$ = combineLatest(
 			this.store.listenDeckState$(
-				(state) => state?.matchInfo,
 				(state) => state?.playerDeck?.hero?.cardId,
 				(state) => state?.playerDeck?.hero?.playerClass,
 				(state) => state?.opponentDeck?.hero?.cardId,
@@ -48,47 +69,70 @@ export class TwitchPresenceService {
 				(state) => state?.gameStarted,
 			),
 			this.store.listenPrefs$((prefs) => prefs.appearOnLiveStreams),
-		)
-			.pipe(
-				debounceTime(200),
-				filter(
-					([
-						[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
-						[appearOnLiveStreams],
-					]) => !!playerClass && !!opponentClass && !!metadata?.gameType && !!metadata?.formatType,
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				debounceTime(200),
-			)
-			.subscribe(
+		).pipe(
+			debounceTime(200),
+			filter(
 				([
-					[matchInfo, playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+					[playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
 					[appearOnLiveStreams],
-				]) => {
-					console.debug(
-						'[twitch-presence] considering data to send',
-						playerCardId,
-						opponentCardId,
-						metadata,
-						gameStarted,
-					);
-					if (
-						gameStarted &&
-						appearOnLiveStreams &&
-						!isBattlegrounds(metadata.gameType) &&
-						!isMercenaries(metadata.gameType)
-					) {
-						this.sendNewGameEvent(
-							matchInfo,
-							metadata,
-							playerCardId,
-							playerClass,
-							opponentCardId,
-							opponentClass,
-						);
+				]) =>
+					gameStarted &&
+					appearOnLiveStreams &&
+					!!metadata?.gameType &&
+					!!metadata?.formatType &&
+					!isBattlegrounds(metadata.gameType) &&
+					!isMercenaries(metadata.gameType) &&
+					!!playerClass &&
+					!!opponentClass,
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(
+				([
+					[playerCardId, playerClass, opponentCardId, opponentClass, metadata, gameStarted],
+					[appearOnLiveStreams],
+				]) => ({
+					playerCardId: playerCardId,
+					playerClass: playerClass,
+					opponentCardId: opponentCardId,
+					opponentClass: opponentClass,
+					metadata: metadata,
+					gameStarted: gameStarted,
+					appearOnLiveStreams: appearOnLiveStreams,
+				}),
+			),
+			tap((info) => console.debug('[twitch-presence] HS info', info)),
+		);
+
+		combineLatest(hearthstoneInfo$, duelsInfo$, arenaInfo$, matchInfo$)
+			.pipe(
+				tap((info) => console.debug('[twitch-presence] considering', info)),
+				filter(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+					if (hearthstoneInfo.metadata.gameType === GameType.GT_RANKED) {
+						return !!matchInfo;
 					}
-				},
-			);
+					if (hearthstoneInfo.metadata.gameType === GameType.GT_ARENA) {
+						return !!arenaInfo;
+					}
+					if (isDuels(hearthstoneInfo.metadata.gameType)) {
+						return !!duelsInfo;
+					}
+					return true;
+				}),
+				tap((info) => console.debug('[twitch-presence] considering 2', info)),
+			)
+			.subscribe(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+				const playerRank = buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo);
+				console.debug('[twitch-presence] playerRank', playerRank);
+				this.sendNewGameEvent(
+					playerRank,
+					hearthstoneInfo.metadata,
+					hearthstoneInfo.playerCardId,
+					hearthstoneInfo.playerClass,
+					hearthstoneInfo.opponentCardId,
+					hearthstoneInfo.opponentClass,
+				);
+			});
+
 		combineLatest(
 			this.store.listenDeckState$((state) => state?.metadata),
 			this.store.listenBattlegrounds$(
@@ -162,7 +206,7 @@ export class TwitchPresenceService {
 	}
 
 	private async sendNewGameEvent(
-		matchInfo: MatchInfo,
+		playerRank: string,
 		metadata: Metadata,
 		playerCardId: string,
 		playerClass: string,
@@ -183,7 +227,7 @@ export class TwitchPresenceService {
 				twitchUserName: this.twitchLoginName,
 			},
 			data: {
-				matchInfo: matchInfo,
+				playerRank: playerRank,
 				playerCardId: playerCardId,
 				playerClass: playerClass,
 				opponentCardId: opponentCardId,
@@ -257,3 +301,45 @@ export class TwitchPresenceService {
 		});
 	}
 }
+
+const buildRankInfo = (
+	metadata: Metadata,
+	duelsInfo: DuelsInfo,
+	arenaInfo: ArenaInfo,
+	matchInfo: MatchInfo,
+): string => {
+	switch (metadata?.gameType) {
+		case GameType.GT_RANKED:
+			return buildRankedRankInfo(metadata, matchInfo);
+		case GameType.GT_PVPDR:
+			return '' + duelsInfo.Rating;
+		case GameType.GT_PVPDR_PAID:
+			return '' + duelsInfo.PaidRating;
+		case GameType.GT_ARENA:
+			return `${arenaInfo.wins}-${arenaInfo.losses}`;
+	}
+};
+
+const buildRankedRankInfo = (metadata: Metadata, matchInfo: MatchInfo): string => {
+	switch (metadata.formatType) {
+		case GameFormat.FT_WILD:
+			return extractRankInfo(matchInfo?.localPlayer?.wild);
+		case GameFormat.FT_CLASSIC:
+			return extractRankInfo(matchInfo?.localPlayer?.classic);
+		default:
+			return extractRankInfo(matchInfo?.localPlayer?.standard);
+	}
+};
+
+const extractRankInfo = (rank: Rank): string => {
+	if (!rank) {
+		return null;
+	}
+
+	if (rank.legendRank > 0) {
+		return `legend-${rank.legendRank}`;
+	} else if (rank.leagueId >= 0 && rank.rankValue >= 0) {
+		return `${rank.leagueId}-${rank.rankValue}`;
+	}
+	return null;
+};
