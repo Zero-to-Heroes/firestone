@@ -49,7 +49,35 @@ export class GameModeDataService {
 			case GameType.GT_ARENA:
 				this.triggerArenaInfoRetrieve();
 				return;
+			case GameType.GT_MERCENARIES_PVP:
+				this.triggerMercsPvPInfoRetrieve();
+				return;
 		}
+	}
+
+	private async triggerMercsPvPInfoRetrieve() {
+		let retriesLeft = 20;
+		while (retriesLeft > 0) {
+			console.debug('[match-info] will get mercsInfo');
+			const mercsInfo = await this.memoryService.getMercenariesInfo();
+			console.debug('[match-info] afdter mercsInfo mercsInfo', mercsInfo);
+			if (mercsInfo?.PvpRating != null) {
+				console.debug('[match-info]sending mercsInfo', mercsInfo);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.MERCENARIES_INFO,
+						additionalData: {
+							mercsInfo: mercsInfo,
+						},
+					} as GameEvent),
+				);
+				return;
+			}
+			console.debug('[match-info] missing mercsInfo', mercsInfo);
+			await sleep(3000);
+			retriesLeft--;
+		}
+		console.warn('[match-info] could not retrieve mercsInfo');
 	}
 
 	private async triggerArenaInfoRetrieve() {

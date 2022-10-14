@@ -90,6 +90,19 @@
 							justify-content: center;
 						}
 					}
+					&.mercenaries-pvp {
+						left: 10px;
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 65%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+					}
 				}
 			}
 		}

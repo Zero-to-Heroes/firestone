@@ -10,9 +10,6 @@ export class GameEvent implements GameStateEvent {
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
-	public static readonly MATCH_INFO = 'MATCH_INFO';
-	public static readonly DUELS_INFO = 'DUELS_INFO';
-	public static readonly ARENA_INFO = 'ARENA_INFO';
 	public static readonly GAME_RUNNING = 'GAME_RUNNING';
 	public static readonly INITIAL_CARD_IN_DECK = 'INITIAL_CARD_IN_DECK';
 	public static readonly HERO_POWER_USED = 'HERO_POWER_USED';
@@ -161,6 +158,11 @@ export class GameEvent implements GameStateEvent {
 
 	public static readonly RECONNECT_START = 'RECONNECT_START';
 	public static readonly RECONNECT_OVER = 'RECONNECT_OVER';
+
+	public static readonly MATCH_INFO = 'MATCH_INFO';
+	public static readonly DUELS_INFO = 'DUELS_INFO';
+	public static readonly ARENA_INFO = 'ARENA_INFO';
+	public static readonly MERCENARIES_INFO = 'MERCENARIES_INFO';
 
 	readonly type: string;
 	readonly cardId: string;

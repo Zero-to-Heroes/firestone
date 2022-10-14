@@ -7,6 +7,7 @@ import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { MatchInfo } from '../../models/match-info';
 import { DuelsInfo } from '../../models/memory/memory-duels';
+import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
 import { Rank } from '../../models/player-info';
 import { ApiRunner } from '../api-runner';
@@ -56,6 +57,12 @@ export class TwitchPresenceService {
 			map((event) => event.additionalData.arenaInfo as ArenaInfo),
 			startWith(null),
 			tap((info) => console.debug('[twitch-presence] arenaInfo', info)),
+		);
+		const mercsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
+			filter((event) => event.type === GameEvent.MERCENARIES_INFO),
+			map((event) => event.additionalData.mercsInfo as MemoryMercenariesInfo),
+			startWith(null),
+			tap((info) => console.debug('[twitch-presence] mercsInfo', info)),
 		);
 
 		// "Normal" Hearthstone mode infos
@@ -161,25 +168,30 @@ export class TwitchPresenceService {
 				console.debug('[twitch-presence] bgs considering data to send', playerCardId, mmrAtStart);
 				this.sendNewBgsGameEvent(metadata, mmrAtStart, playerCardId);
 			});
-		// TODO: send the current rating
+
 		combineLatest(
 			this.store.listenMercenaries$(
 				([state]) => state?.gameMode,
 				([state]) => state?.playerTeam?.mercenaries,
 			),
+			mercsInfo$,
 		)
 			.pipe(
+				debounceTime(500),
 				tap((info) => console.debug('[twitch-presence] mercs game started?', info)),
-				debounceTime(200),
-				filter(([[gameMode, mercenaries]]) => !!gameMode && !!mercenaries?.length),
+				filter(
+					([[gameMode, mercenaries], mercsInfo]) =>
+						!!gameMode &&
+						!!mercenaries?.length &&
+						(gameMode !== GameType.GT_MERCENARIES_PVP || !!mercsInfo?.PvpRating),
+				),
 				tap((info) => console.debug('[twitch-presence] mercs game started 2', info)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => console.debug('[twitch-presence] mercs game started 3', info)),
-				debounceTime(200),
 			)
-			.subscribe(([[gameMode, mercenaries]]) => {
-				console.debug('[twitch-presence] mercs considering data to send', mercenaries, gameMode);
-				this.sendNewMercsGameEvent(gameMode, mercenaries);
+			.subscribe(([[gameMode, mercenaries], mercsInfo]) => {
+				console.debug('[twitch-presence] mercs considering data to send', mercenaries, gameMode, mercsInfo);
+				this.sendNewMercsGameEvent(gameMode, mercenaries, mercsInfo?.PvpRating);
 			});
 		this.store
 			.listenDeckState$(
@@ -259,7 +271,11 @@ export class TwitchPresenceService {
 		});
 	}
 
-	private async sendNewMercsGameEvent(gameMode: GameType, mercenaries: readonly BattleMercenary[]) {
+	private async sendNewMercsGameEvent(
+		gameMode: GameType,
+		mercenaries: readonly BattleMercenary[],
+		mmrAtStart: number,
+	) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
 			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken);
 			return;
@@ -274,6 +290,7 @@ export class TwitchPresenceService {
 				twitchUserName: this.twitchLoginName,
 			},
 			data: {
+				mmrAtStart: mmrAtStart,
 				mercenaries: mercenaries.map((m) => m.cardId),
 				metadata: {
 					gameType: gameMode,

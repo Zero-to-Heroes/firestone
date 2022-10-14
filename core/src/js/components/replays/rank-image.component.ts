@@ -8,7 +8,15 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 	template: `
 		<div
 			class="rank-image {{ gameMode }}"
-			[helpTooltip]="rankTooltip ? rankTooltip : playerRank ? playerRankImageTooltip : rankIssueTooltip"
+			[helpTooltip]="
+				rankTooltip
+					? rankTooltip
+					: playerRankImageTooltip
+					? playerRankImageTooltip
+					: rankIssue
+					? rankIssueTooltip
+					: null
+			"
 			[ngClass]="{ 'legend': isLegend }"
 		>
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
@@ -39,6 +47,21 @@ export class RankImageComponent {
 		this.playerRankImageTooltip = rankImage.tooltip;
 		this.playerRankDecoration = rankImage.frameDecoration;
 		this.rankText = buildRankText(value.playerRank, value.gameMode, value.additionalResult);
+		this.rankIssue =
+			!this.playerRank &&
+			![
+				'mercenaries-ai-vs-ai',
+				'mercenaries-pve',
+				'mercenaries-pve-coop',
+				'mercenaries-friendly',
+				'unknown',
+				'arena-draft',
+				'casual',
+				'friendly',
+				'practice',
+				'tutorial',
+				'tavern-brawl',
+			].includes(value.gameMode);
 	}
 
 	@Input() gameMode: string;
@@ -51,6 +74,7 @@ export class RankImageComponent {
 	playerRankImageTooltip: string;
 	isLegend: boolean;
 	rankText: string;
+	rankIssue: boolean;
 	rankIssueTooltip = this.i18n.translateString('app.replays.replay-info.rank-issue-tooltip');
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
