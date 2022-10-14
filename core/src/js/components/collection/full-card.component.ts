@@ -11,6 +11,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { getHeroFaction } from '@services/mercenaries/mercenaries-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
@@ -64,6 +65,14 @@ declare let amplitude;
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.rarity'"></span>
 						<span class="value">{{ rarity }}</span>
 					</div>
+					<div class="card-info race" *ngIf="race">
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.race'"></span>
+						<span class="value">{{ race }}</span>
+					</div>
+					<div class="card-info faction" *ngIf="faction">
+						<span class="sub-title" [owTranslate]="'app.collection.card-details.faction'"></span>
+						<span class="value">{{ faction }}</span>
+					</div>
 					<div class="card-info flavor-text" *ngIf="flavor">
 						<span class="sub-title" [owTranslate]="'app.collection.card-details.flavor'"></span>
 						<p class="value" [innerHTML]="flavor"></p>
@@ -99,6 +108,8 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 	card: InternalReferenceCard;
 	showCount: boolean;
 	flavor: SafeHtml;
+	race: string;
+	faction: string;
 	isHero: boolean;
 
 	audioCategories: readonly AudioClipCategory[];
@@ -175,6 +186,8 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 								`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`,
 						  )
 						: null;
+				this.race = card.race != null ? this.i18n.translateString(`global.tribe.${card.race?.toLowerCase()}`) : null;  
+				this.faction = card.mercenary ? this.i18n.translateString(`app.collection.card-details.factions.${getHeroFaction(card.race)}`) : null;
 				const flavorSource = card.flavor ?? card.text;
 				this.flavor = flavorSource?.length
 					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
