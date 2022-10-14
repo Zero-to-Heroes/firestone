@@ -32,37 +32,58 @@ export class GameModeDataService {
 	// This info is not needed by the tracker, but it is needed by some achievements
 	// that rely on the rank
 	// Also needed by the Twitch Presence service
-	private async triggerMatchInfoRetrieve(metadata: {
-		GameType: GameType;
-		FormatType: GameFormat;
-		ScenarioID: number;
-	}) {
+	private async triggerMatchInfoRetrieve(metadata: HsGameMetaData) {
 		console.debug('[match-info] considering', metadata);
 		switch (metadata.GameType) {
-			case GameType.GT_RANKED:
-				this.triggerRankMatchInfoRetrieve();
-				return;
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
 				this.triggerDuelsMatchInfoRetrieve();
 				return;
 			case GameType.GT_ARENA:
 				this.triggerArenaInfoRetrieve();
+				this.triggerPlayerDeckInfoRetrieve();
 				return;
 			case GameType.GT_MERCENARIES_PVP:
 				this.triggerMercsPvPInfoRetrieve();
 				return;
+			case GameType.GT_BATTLEGROUNDS:
+			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
+			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
+			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
+				this.triggerBattlegroundsInfoRetrieve();
+				return;
+			case GameType.GT_RANKED:
+				this.triggerRankMatchInfoRetrieve();
+				this.triggerPlayerDeckInfoRetrieve();
+				return;
+			default:
+				this.triggerPlayerDeckInfoRetrieve();
+				return;
 		}
 	}
 
+	private async triggerBattlegroundsInfoRetrieve() {
+		await this.runLoop(async () => {
+			const bgInfo = await this.memoryService.getBattlegroundsInfo();
+			if (bgInfo?.Rating != null && !!bgInfo.Game?.AvailableRaces?.length) {
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_INFO,
+						additionalData: {
+							bgInfo: bgInfo,
+						},
+					} as GameEvent),
+				);
+				return true;
+			}
+			return false;
+		}, 'bgInfo');
+	}
+
 	private async triggerMercsPvPInfoRetrieve() {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
-			console.debug('[match-info] will get mercsInfo');
+		await this.runLoop(async () => {
 			const mercsInfo = await this.memoryService.getMercenariesInfo();
-			console.debug('[match-info] afdter mercsInfo mercsInfo', mercsInfo);
 			if (mercsInfo?.PvpRating != null) {
-				console.debug('[match-info]sending mercsInfo', mercsInfo);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MERCENARIES_INFO,
@@ -71,18 +92,14 @@ export class GameModeDataService {
 						},
 					} as GameEvent),
 				);
-				return;
+				return true;
 			}
-			console.debug('[match-info] missing mercsInfo', mercsInfo);
-			await sleep(3000);
-			retriesLeft--;
-		}
-		console.warn('[match-info] could not retrieve mercsInfo');
+			return false;
+		}, 'mercsInfo');
 	}
 
 	private async triggerArenaInfoRetrieve() {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
+		await this.runLoop(async () => {
 			const arenaInfo = await this.memoryService.getArenaInfo();
 			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
 				this.gameEventsEmitter.allEvents.next(
@@ -93,18 +110,14 @@ export class GameModeDataService {
 						},
 					} as GameEvent),
 				);
-				return;
+				return true;
 			}
-			console.debug('missing arenaInfo', arenaInfo);
-			await sleep(3000);
-			retriesLeft--;
-		}
-		console.warn('[match-info] could not retrieve arenaInfo');
+			return false;
+		}, 'arenaInfo');
 	}
 
 	private async triggerDuelsMatchInfoRetrieve() {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
+		await this.runLoop(async () => {
 			const duelsInfo = await this.memoryService.getDuelsInfo();
 			if (!!duelsInfo?.Rating) {
 				this.gameEventsEmitter.allEvents.next(
@@ -115,18 +128,14 @@ export class GameModeDataService {
 						},
 					} as GameEvent),
 				);
-				return;
+				return true;
 			}
-			console.debug('missing duels rank info', duelsInfo);
-			await sleep(3000);
-			retriesLeft--;
-		}
-		console.warn('[match-info] could not retrieve duels');
+			return false;
+		}, 'duelsInfo');
 	}
 
 	private async triggerRankMatchInfoRetrieve() {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
+		await this.runLoop(async () => {
 			const [matchInfo, playerDeck] = await Promise.all([
 				this.memoryService.getMatchInfo(),
 				this.deckParser.getCurrentDeck(10000),
@@ -139,17 +148,54 @@ export class GameModeDataService {
 						additionalData: {
 							matchInfo: matchInfo,
 						},
+						// Kept for backward compability, but should use PLAYER_DECK event
 						localPlayer: {
 							deck: playerDeck,
 						},
 					} as GameEvent),
 				);
+				return true;
+			}
+			return false;
+		}, 'matchInfo');
+	}
+
+	private async triggerPlayerDeckInfoRetrieve() {
+		await this.runLoop(async () => {
+			const playerDeck = await this.deckParser.getCurrentDeck(10000);
+			if (!!playerDeck?.deckstring) {
+				console.log('[match-info] playerDeckInfo', playerDeck);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.PLAYER_DECK_INFO,
+						additionalData: {
+							playerDeck: playerDeck,
+						},
+					} as GameEvent),
+				);
+				return true;
+			}
+			return false;
+		}, 'playerDeckInfo');
+	}
+
+	private async runLoop(coreLoop: () => Promise<boolean>, type: string) {
+		let retriesLeft = 20;
+		while (retriesLeft > 0) {
+			if (await coreLoop()) {
 				return;
 			}
-			console.debug('[match-info] missing matchInfo', matchInfo);
+			console.debug('[match-info] missing', type);
 			await sleep(3000);
 			retriesLeft--;
 		}
-		console.warn('[match-info] could not retrieve match info');
+		console.warn('[match-info] could not retrieve ', type);
 	}
+}
+
+export interface HsGameMetaData {
+	GameType: GameType;
+	FormatType: GameFormat;
+	ScenarioID: number;
+	BuildNumber: number;
 }

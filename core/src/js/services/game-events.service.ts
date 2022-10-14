@@ -10,6 +10,7 @@ import { MemoryUpdate } from '../models/memory/memory-update';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
+import { HsGameMetaData } from './game-mode-data.service';
 import { GameStatusService } from './game-status.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
@@ -166,7 +167,7 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
-							metaData: gameEvent.Value?.MetaData ?? {},
+							metaData: (gameEvent.Value?.MetaData ?? {}) as HsGameMetaData,
 							spectating: gameEvent.Value?.Spectating,
 							stats: this.store.state?.stats,
 							state: this.store.state,

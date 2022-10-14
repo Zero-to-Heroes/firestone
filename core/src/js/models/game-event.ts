@@ -160,9 +160,11 @@ export class GameEvent implements GameStateEvent {
 	public static readonly RECONNECT_OVER = 'RECONNECT_OVER';
 
 	public static readonly MATCH_INFO = 'MATCH_INFO';
+	public static readonly PLAYER_DECK_INFO = 'PLAYER_DECK_INFO';
 	public static readonly DUELS_INFO = 'DUELS_INFO';
 	public static readonly ARENA_INFO = 'ARENA_INFO';
 	public static readonly MERCENARIES_INFO = 'MERCENARIES_INFO';
+	public static readonly BATTLEGROUNDS_INFO = 'BATTLEGROUNDS_INFO';
 
 	readonly type: string;
 	readonly cardId: string;
