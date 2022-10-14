@@ -73,6 +73,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 				[!isPlayer ? 'playerDeck' : 'opponentDeck']: newOpponentDeck,
 			});
 		}
+		return currentState;
 	}
 
 	private applySpecialCardEffect(deck: DeckState, cardId: string) {
