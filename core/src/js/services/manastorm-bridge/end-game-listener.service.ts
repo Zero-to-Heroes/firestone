@@ -10,51 +10,29 @@ import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-sett
 import { MatchInfo } from '../../models/match-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { BattlegroundsStoreService } from '../battlegrounds/store/battlegrounds-store.service';
-import { DeckInfo, DeckParserService } from '../decktracker/deck-parser.service';
-import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
-import { GameStateService } from '../decktracker/game-state.service';
+import { DeckInfo } from '../decktracker/deck-parser.service';
 import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { sleep } from '../utils';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
 import { ManastormInfo } from './manastorm-info';
 
 @Injectable()
 export class EndGameListenerService {
-	private currentDeckstring: string;
-	private currentDeckname: string;
-	private currentBuildNumber: number;
-	private currentScenarioId: number;
-	private currentGameMode: number;
-	private bgsHasPrizes: boolean;
-	private bgsCurrentRating: number;
-	private bgsNewRating: number;
-	private reviewId: string;
-
-	private paramsMap: Map<
-		string,
-		{
-			duelsInfo: DuelsInfo;
-		}
-	> = new Map();
-
 	private uploadStarted$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		private gameEvents: GameEventsEmitterService,
-		private events: Events,
-		private deckService: DeckParserService,
-		private endGameUploader: EndGameUploaderService,
-		private gameState: GameStateService,
-		private duelsMonitor: DungeonLootParserService,
-		private bgsStore: BattlegroundsStoreService,
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly events: Events,
+		private readonly endGameUploader: EndGameUploaderService,
 		private readonly mercsMemoryCache: MercenariesMemoryCacheService,
 		private readonly memoryInspection: MemoryInspectionService,
+		private readonly rewards: RewardMonitorService,
 	) {
 		this.init();
 	}
@@ -236,9 +214,10 @@ export class EndGameListenerService {
 				: info.metadata.GameType === GameType.GT_PVPDR
 				? info.duelsInfo?.Rating
 				: null;
-		const [battlegroundsInfoAfterGameOver, duelsPlayerRankAfterGameOver] = await Promise.all([
+		const [battlegroundsInfoAfterGameOver, duelsPlayerRankAfterGameOver, xpForGame] = await Promise.all([
 			isBattlegrounds(info.metadata.GameType) ? this.getBattlegroundsEndGame() : null,
 			isDuels(info.metadata.GameType) ? this.getDuelsNewPlayerRank(duelsInitialRank) : null,
+			this.rewards.getXpForGameInfo(),
 		]);
 		console.log('[manastorm-bridge] read memory info');
 
@@ -246,6 +225,7 @@ export class EndGameListenerService {
 			...info,
 			battlegroundsInfoAfterGameOver: battlegroundsInfoAfterGameOver,
 			duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
+			xpForGame: xpForGame,
 		};
 		await this.endGameUploader.upload2(augmentedInfo);
 	}

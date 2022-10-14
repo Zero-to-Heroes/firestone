@@ -27,7 +27,7 @@ import {
 	isMercenariesPvP,
 	normalizeMercenariesCardId,
 } from '../mercenaries/mercenaries-utils';
-import { RewardMonitorService } from '../rewards/rewards-monitor';
+import { XpForGameInfo } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
 import { sleep } from '../utils';
 import { GameForUpload } from './game-for-upload';
@@ -53,7 +53,6 @@ export class EndGameUploaderService {
 		private dungeonLootParser: DungeonLootParserService,
 		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
-		private rewards: RewardMonitorService,
 		private mainWindowStore: MainWindowStoreService,
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
@@ -65,29 +64,7 @@ export class EndGameUploaderService {
 		await this.replayUploadService.uploadGame(game);
 	}
 
-	// public async upload(
-	// 	gameEvent: GameEvent,
-	// 	currentReviewId: string,
-	// 	deckstring: any,
-	// 	deckName: string,
-	// 	buildNumber: number,
-	// 	scenarioId: number,
-	// 	params?: UploadParams,
-	// ): Promise<void> {
-	// 	console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
-	// 	const game: GameForUpload = await this.initializeGame(
-	// 		gameEvent,
-	// 		currentReviewId,
-	// 		deckstring,
-	// 		deckName,
-	// 		buildNumber,
-	// 		params,
-	// 	);
-	// 	await this.replayUploadService.uploadGame(game);
-	// }
-
 	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {
-		// TODO: xp for game
 		const currentReviewId = info.reviewId;
 		const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
@@ -107,35 +84,12 @@ export class EndGameUploaderService {
 		// being removed from memory by the player clicking away
 		let playerRank;
 		let newPlayerRank;
-		// const [
-		// 	battlegroundsInfo,
-		// 	mercenariesCollectionInfo,
-		// 	mercenariesInfo,
-		// 	duelsInfo,
-		// 	arenaInfo,
-		// 	matchInfo,
-		// 	xpForGame,
-		// ] = await Promise.all([
-		// 	game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly'
-		// 		? this.getBattlegroundsEndGame(currentReviewId)
-		// 		: null,
-		// 	isMercenaries(game.gameMode) ? this.getMercenariesCollectionInfo(currentReviewId) : null,
-		// 	isMercenaries(game.gameMode) ? this.getMercenariesInfo(currentReviewId) : null,
-		// 	game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
-		// 	game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
-		// 	isMercenaries(game.gameMode) ||
-		// 	game.gameMode === 'battlegrounds' ||
-		// 	game.gameMode === 'battlegrounds-friendly'
-		// 		? null
-		// 		: this.memoryInspection.getMatchInfo(),
-		// 	this.rewards.getXpForGameInfo(),
-		// ]);
 
 		const playerInfo = info.matchInfo?.localPlayer;
 		const opponentInfo = info.matchInfo?.opponent;
 
 		const replay = parseHsReplayString(replayXml, this.allCards.getService());
-		if (game.gameMode === 'battlegrounds' || game.gameMode === 'battlegrounds-friendly') {
+		if (isBattlegrounds(game.gameMode)) {
 			console.log(
 				'[manastorm-bridge]',
 				currentReviewId,
@@ -143,9 +97,6 @@ export class EndGameUploaderService {
 				info.bgInfo?.Rating,
 				info.bgInfo?.NewRating,
 			);
-			// Rely on the MMR at start instead of the memory info, as if the info comes too late
-			// (there are sometimes quite big lags after a game, for some reason) it will already
-			// have the new rating
 			playerRank = info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
 			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating;
@@ -178,7 +129,7 @@ export class EndGameUploaderService {
 				: null;
 			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
 
-			const referenceData = await this.mainWindowStore?.state?.mercenaries?.referenceData;
+			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
 			const { mercHeroTimings, ...other } = await extractHeroTimings(
 				{ gameMode: game.gameMode },
 				replay,
@@ -218,17 +169,8 @@ export class EndGameUploaderService {
 					: null;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
-			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
-			// if (duelsInfo) {
 			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', info.duelsInfo);
 			playerRank = game.gameMode === 'duels' ? info.duelsInfo?.Rating : info.duelsInfo?.PaidRating;
-			// Not sure which one is the most reliable. I'm putting the one we just got from the memory as I suspect the information
-			// is more up-to-date, but maybe that could be wrong if there is some lag and the user has already started a new game
-			// UPDATE: the other way around is used everywhere else, so sticking with it, as it hasn't
-			// revealed any major bug
-			// UPDATE2: there are some issues where the game data that is sent already contains the info for the next game
-			// which leads to duplicate entries in terms of win/loss (eg at 3-1, lost, the data is only retrieved after it has
-			// been update to 3-2, and so we send twice the info with 3-2)
 			const wins = info.duelsInfo?.Wins;
 			const losses = info.duelsInfo?.Losses;
 			if (wins != null && losses != null) {
@@ -237,7 +179,6 @@ export class EndGameUploaderService {
 			}
 			try {
 				if ((replay.result === 'won' && wins === 11) || (replay.result === 'lost' && losses === 2)) {
-					// const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
 					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
 					if (info.duelsPlayerRankAfterGameOver != null) {
 						game.newPlayerRank = '' + info.duelsPlayerRankAfterGameOver;
@@ -248,13 +189,11 @@ export class EndGameUploaderService {
 			}
 			// }
 		} else if (game.gameMode === 'arena') {
-			// const arenaInfo = await this.memoryInspection.getArenaInfo();
 			// TODO: move away from player rank for arena to match what is done in duels
 			playerRank = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			game.additionalResult = info.arenaInfo ? info.arenaInfo.wins + '-' + info.arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
 		} else if (game.gameFormat !== 'unknown') {
-			// const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
 				if (playerInfo.standard?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.standard.legendRank}`;
@@ -303,7 +242,6 @@ export class EndGameUploaderService {
 		if (isBattlegrounds(game.gameMode) || isDuels(game.gameMode) || isMercenaries(game.gameMode)) {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
-			// const opponentInfo = await this.playersInfo.getOpponentInfo();
 			if (opponentInfo && game.gameFormat === 'standard') {
 				if (opponentInfo.standard?.legendRank > 0) {
 					opponentRank = `legend-${opponentInfo.standard.legendRank}`;
@@ -343,7 +281,7 @@ export class EndGameUploaderService {
 		game.buildNumber = info.metadata.BuildNumber;
 		// So that we can have overwrites, eg for LETTUCE_PVP_VS_AI
 		game.scenarioId = gameResult.ScenarioID; // scenarioId;
-		// game.xpForGame = xpForGame; // TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		game.xpForGame = info.xpForGame;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			console.log(
 				'[manastorm-bridge]',
@@ -527,5 +465,6 @@ export interface UploadInfo {
 	};
 	battlegroundsInfoAfterGameOver: BattlegroundsInfo;
 	duelsPlayerRankAfterGameOver: number;
+	xpForGame: XpForGameInfo;
 	// bgNewRating: number;
 }
