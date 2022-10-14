@@ -27,7 +27,6 @@ import {
 	isMercenariesPvP,
 	normalizeMercenariesCardId,
 } from '../mercenaries/mercenaries-utils';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
 import { sleep } from '../utils';
@@ -51,7 +50,6 @@ export class EndGameUploaderService {
 	constructor(
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
-		private memoryInspection: MemoryInspectionService,
 		private dungeonLootParser: DungeonLootParserService,
 		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
@@ -109,16 +107,6 @@ export class EndGameUploaderService {
 		// being removed from memory by the player clicking away
 		let playerRank;
 		let newPlayerRank;
-		// Get the memory info first, because parsing the XML can take some time and make the
-		// info in memory stale / unavailable
-		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
-		// Here we get the information that is only available once the game is over
-		// TODO: move this elsewhere? So that this method doesn't care about memory reading at all anymore
-		const [battlegroundsInfoAfterGameOver, duelsPlayerRankAfterGameOver] = await Promise.all([
-			isBattlegrounds(game.gameMode) ? this.getBattlegroundsEndGame(currentReviewId) : null,
-			isDuels(game.gameMode) ? this.getDuelsNewPlayerRank(playerRank) : null,
-		]);
-		console.log('[manastorm-bridge]', currentReviewId, 'read memory info');
 		// const [
 		// 	battlegroundsInfo,
 		// 	mercenariesCollectionInfo,
@@ -160,7 +148,7 @@ export class EndGameUploaderService {
 			// have the new rating
 			playerRank = info.bgInfo?.Rating;
 			// Some issues with bgsNewRating + spectate?
-			newPlayerRank = battlegroundsInfoAfterGameOver?.NewRating;
+			newPlayerRank = info.battlegroundsInfoAfterGameOver?.NewRating;
 			let [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
 				info.bgInfo?.Game?.AvailableRaces,
 			);
@@ -251,8 +239,8 @@ export class EndGameUploaderService {
 				if ((replay.result === 'won' && wins === 11) || (replay.result === 'lost' && losses === 2)) {
 					// const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
 					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
-					if (newPlayerRank != null) {
-						game.newPlayerRank = '' + duelsPlayerRankAfterGameOver;
+					if (info.duelsPlayerRankAfterGameOver != null) {
+						game.newPlayerRank = '' + info.duelsPlayerRankAfterGameOver;
 					}
 				}
 			} catch (e) {
@@ -490,12 +478,6 @@ export class EndGameUploaderService {
 		return bounty.heroic === 1 ? 'heroic' : 'normal';
 	}
 
-	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
-		const result = await this.memoryInspection.getBattlegroundsEndGame();
-		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
-		return result;
-	}
-
 	// private async getMercenariesCollectionInfo(currentReviewId: string): Promise<MemoryMercenariesCollectionInfo> {
 	// 	const result = await this.memoryInspection.getMercenariesCollectionInfo();
 	// 	console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesCollectionInfo', result);
@@ -507,20 +489,6 @@ export class EndGameUploaderService {
 	// 	console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesInfo', result);
 	// 	return result;
 	// }
-
-	private async getDuelsNewPlayerRank(initialRank: number): Promise<number> {
-		let duelsInfo = await this.memoryInspection.getDuelsInfo();
-		let retriesLeft = 10;
-		while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
-			await sleep(2000);
-			duelsInfo = await this.memoryInspection.getDuelsInfo();
-			retriesLeft--;
-		}
-		if (!duelsInfo) {
-			return null;
-		}
-		return duelsInfo.LastRatingChange + initialRank;
-	}
 }
 
 export interface UploadParams {
@@ -557,5 +525,7 @@ export interface UploadInfo {
 		battlegroundsPrizes: boolean;
 		battlegroundsQuests: boolean;
 	};
+	battlegroundsInfoAfterGameOver: BattlegroundsInfo;
+	duelsPlayerRankAfterGameOver: number;
 	// bgNewRating: number;
 }
