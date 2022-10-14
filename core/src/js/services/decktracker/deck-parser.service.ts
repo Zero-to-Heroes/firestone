@@ -201,7 +201,7 @@ export class DeckParserService {
 				}
 			}
 		});
-		this.duelsService.duelsDeck.subscribe((deck) => {
+		this.duelsService.duelsInfo$$.subscribe((deck) => {
 			console.debug('[deck-parser] duels deck', deck);
 			this.duelsDeck = deck;
 		});

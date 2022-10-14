@@ -30,7 +30,7 @@ export class AppUiStoreFacadeService {
 		this.store = this.ow.getMainWindow()?.appStore;
 		if (!this.store) {
 			console.warn('could not retrieve store from main window');
-			setTimeout(() => this.init(), 10);
+			setTimeout(() => this.init(), 100);
 		}
 	}
 

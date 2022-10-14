@@ -50,7 +50,6 @@ export class Events {
 	public static readonly POPULATE_HERO_DETAILS_FOR_BG = 'POPULATE_HERO_DETAILS_FOR_BG';
 
 	public static readonly DUELS_LOAD_TOP_DECK_RUN_DETAILS = 'DUELS_LOAD_TOP_DECK_RUN_DETAILS';
-	public static readonly DUELS_INFO_UPDATED = 'DUELS_INFO_UPDATED';
 
 	public static readonly ACHIEVEMENT_PROGRESSION = 'ACHIEVEMENT_PROGRESSION';
 

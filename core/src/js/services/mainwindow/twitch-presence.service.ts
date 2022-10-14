@@ -12,6 +12,7 @@ import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-sta
 import { Rank } from '../../models/player-info';
 import { ApiRunner } from '../api-runner';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
+import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
@@ -31,6 +32,7 @@ export class TwitchPresenceService {
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly gameEvents: GameEventsEmitterService,
+		private readonly duelsState: DuelsStateBuilderService,
 	) {
 		this.init();
 	}
@@ -46,12 +48,9 @@ export class TwitchPresenceService {
 			startWith(null),
 			tap((info) => console.debug('[twitch-presence] matchInfo', info)),
 		);
-		const duelsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.DUELS_INFO),
-			map((event) => event.additionalData.duelsInfo as DuelsInfo),
-			startWith(null),
-			tap((info) => console.debug('[twitch-presence] duelsInfo', info)),
-		);
+		const duelsInfo$ = this.duelsState.duelsInfo$$
+			.asObservable()
+			.pipe(tap((info) => console.debug('[twitch-presence] duelsInfo', info)));
 		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.ARENA_INFO),
 			map((event) => event.additionalData.arenaInfo as ArenaInfo),

@@ -19,9 +19,9 @@ import { BgsInitService } from '../../battlegrounds/bgs-init.service';
 import { BattlegroundsQuestsService } from '../../battlegrounds/bgs-quests.service';
 import { CardsInitService } from '../../cards-init.service';
 import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
-import { DungeonLootParserService } from '../../decktracker/dungeon-loot-parser.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
+import { DuelsLootParserService } from '../../duels/duels-loot-parser.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
@@ -62,7 +62,7 @@ export class StoreBootstrapService {
 		private readonly patchConfig: PatchesConfigService,
 		private readonly duels: DuelsStateBuilderService,
 		private readonly arena: ArenaStateBuilderService,
-		private readonly dungeonLoot: DungeonLootParserService,
+		private readonly dungeonLoot: DuelsLootParserService,
 		private readonly arenaService: ArenaRunParserService,
 		private readonly stats: StatsStateBuilderService,
 		private readonly mercenariesService: MercenariesStateBuilderService,
@@ -198,11 +198,6 @@ export class StoreBootstrapService {
 			filters: AchievementsState.buildFilterOptions(this.i18n),
 		} as AchievementsState);
 
-		this.dungeonLoot.setLastDuelsMatch(
-			newStatsState.gameStats?.stats?.filter(
-				(stat) => stat.gameMode === 'duels' || stat.gameMode === 'paid-duels',
-			),
-		);
 		this.arenaService.setLastArenaMatch(
 			newStatsState.gameStats?.stats?.filter((stat) => stat.gameMode === 'arena'),
 		);

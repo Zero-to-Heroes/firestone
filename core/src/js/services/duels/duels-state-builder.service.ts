@@ -8,8 +8,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DuelsConfig } from '@models/duels/duels-config';
-import { DeckInfoFromMemory } from '@models/mainwindow/decktracker/deck-info-from-memory';
-import { AdventuresInfo } from '@models/memory/memory-duels';
+import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
@@ -44,6 +43,7 @@ import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
+import { runLoop } from '../game-mode-data.service';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
@@ -67,8 +67,8 @@ const DUELS_BUCKETS_URL = 'https://static.zerotoheroes.com/api/duels/duels-bucke
 export class DuelsStateBuilderService {
 	public static STATS_THRESHOLD = 40;
 
-	public duelsDeck = new BehaviorSubject<DeckInfoFromMemory>(null);
 	public isOnMainScreen = new BehaviorSubject<boolean>(false);
+	public duelsInfo$$ = new BehaviorSubject<DuelsInfo>(null);
 
 	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -86,24 +86,14 @@ export class DuelsStateBuilderService {
 	}
 
 	private async init() {
+		this.initDuelsInfoObservable();
+
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
 			.subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
-			if (changes.IsDuelsMainRunScreen || (this.isOnMainScreen.value && changes.DuelsCurrentCardsInDeck)) {
-				const duelsInfo = await this.memory.getDuelsInfo();
-				console.debug('[duels-state-builder] duels info', duelsInfo);
-				if (duelsInfo) {
-					this.duelsDeck.next({
-						...duelsInfo,
-						// Give priority to the cardIds, as this is what we get when reading the duels deck
-						// from the main Duels manager, instead of the dungeon run scene
-						DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-					});
-				}
-			}
 			// null simply means "no change"
 			if (changes.IsDuelsMainRunScreen === true) {
 				console.debug('[duels-state-builder] duels main screen');
@@ -131,7 +121,7 @@ export class DuelsStateBuilderService {
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
-			this.duelsDeck.asObservable().subscribe((deck) => {
+			this.duelsInfo$$.asObservable().subscribe((deck) => {
 				this.mainWindowStateUpdater.next(new DuelsCurrentDeckEvent(deck));
 			});
 			this.isOnMainScreen.asObservable().subscribe((deck) => {
@@ -139,24 +129,28 @@ export class DuelsStateBuilderService {
 			});
 		});
 
-		const duelsInfo = await this.memory.getDuelsInfo();
-		if (duelsInfo) {
-			this.duelsDeck.next({
-				...duelsInfo,
-				// Give priority to the cardIds, as this is what we get when reading the duels deck
-				// from the main Duels manager, instead of the dungeon run scene
-				DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
-			});
-			console.log('[duels-state-builder] initial duels deck', this.duelsDeck?.value?.DeckList?.length);
-			console.debug('[duels-state-builder] initial duels deck', this.duelsDeck);
-		}
-
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
 				const [updatedAdventuresInfo] = await Promise.all([this.duelsMemoryCeche.getAdventuresInfo()]);
 				this.mainWindowStateUpdater.next(new DuelsStateUpdatedEvent(updatedAdventuresInfo));
 			}
 		});
+	}
+
+	public async triggerDuelsMatchInfoRetrieve(waitForRating = true) {
+		await runLoop(async () => {
+			const duelsInfo = await this.memory.getDuelsInfo();
+			if (!!duelsInfo?.Rating) {
+				this.duelsInfo$$.next({
+					...duelsInfo,
+					// Give priority to the cardIds, as this is what we get when reading the duels deck
+					// from the main Duels manager, instead of the dungeon run scene
+					DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
+				});
+				return true;
+			}
+			return false;
+		}, 'duelsInfo');
 	}
 
 	public async loadLeaderboard(): Promise<DuelsLeaderboard> {
@@ -745,5 +739,28 @@ export class DuelsStateBuilderService {
 		return (
 			(firstStep as DuelsRunInfo).adventureType || ((firstStep as GameStat).gameMode as 'duels' | 'paid-duels')
 		);
+	}
+
+	private initDuelsInfoObservable() {
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
+			const changes: MemoryUpdate = data.data[0];
+			if (changes.IsDuelsMainRunScreen || (this.isOnMainScreen.value && changes.DuelsCurrentCardsInDeck)) {
+				this.updateDuelsInfo();
+			}
+		});
+		this.updateDuelsInfo();
+	}
+
+	private async updateDuelsInfo() {
+		const duelsInfo = await this.memory.getDuelsInfo();
+		console.debug('[duels-state-builder] duels info', duelsInfo);
+		if (duelsInfo) {
+			this.duelsInfo$$.next({
+				...duelsInfo,
+				// Give priority to the cardIds, as this is what we get when reading the duels deck
+				// from the main Duels manager, instead of the dungeon run scene
+				DeckList: duelsInfo.DeckListWithCardIds ?? duelsInfo.DeckList,
+			});
+		}
 	}
 }

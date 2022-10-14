@@ -15,7 +15,7 @@ export class CardsFacadeService {
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards
 	// is the first thing we do
-	public getCard(id: string, errorWhenUndefined = true): ReferenceCard {
+	public getCard(id: string | number, errorWhenUndefined = true): ReferenceCard {
 		return this.service.getCard(id, errorWhenUndefined);
 	}
 

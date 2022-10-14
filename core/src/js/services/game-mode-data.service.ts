@@ -3,6 +3,7 @@ import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { filter } from 'rxjs/operators';
 import { GameEvent } from '../models/game-event';
 import { DeckParserService } from './decktracker/deck-parser.service';
+import { DuelsStateBuilderService } from './duels/duels-state-builder.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { sleep } from './utils';
@@ -13,6 +14,7 @@ export class GameModeDataService {
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly memoryService: MemoryInspectionService,
 		private readonly deckParser: DeckParserService,
+		private readonly duelsState: DuelsStateBuilderService,
 	) {
 		this.init();
 	}
@@ -20,7 +22,10 @@ export class GameModeDataService {
 	async init() {
 		this.gameEventsEmitter.allEvents
 			.asObservable()
-			.pipe(filter((event) => event.type === GameEvent.MATCH_METADATA))
+			.pipe(
+				filter((event) => event.type === GameEvent.MATCH_METADATA),
+				filter((event) => !event.additionalData?.spectating),
+			)
 			.subscribe((event) => {
 				console.debug('[match-info] got metadata event', event);
 				this.triggerMatchInfoRetrieve(event.additionalData.metaData);
@@ -37,7 +42,7 @@ export class GameModeDataService {
 		switch (metadata.GameType) {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
-				this.triggerDuelsMatchInfoRetrieve();
+				this.duelsState.triggerDuelsMatchInfoRetrieve(true);
 				return;
 			case GameType.GT_ARENA:
 				this.triggerArenaInfoRetrieve();
@@ -63,7 +68,7 @@ export class GameModeDataService {
 	}
 
 	private async triggerBattlegroundsInfoRetrieve() {
-		await this.runLoop(async () => {
+		await runLoop(async () => {
 			const bgInfo = await this.memoryService.getBattlegroundsInfo();
 			if (bgInfo?.Rating != null && !!bgInfo.Game?.AvailableRaces?.length) {
 				this.gameEventsEmitter.allEvents.next(
@@ -81,7 +86,7 @@ export class GameModeDataService {
 	}
 
 	private async triggerMercsPvPInfoRetrieve() {
-		await this.runLoop(async () => {
+		await runLoop(async () => {
 			const mercsInfo = await this.memoryService.getMercenariesInfo();
 			if (mercsInfo?.PvpRating != null) {
 				this.gameEventsEmitter.allEvents.next(
@@ -99,7 +104,7 @@ export class GameModeDataService {
 	}
 
 	private async triggerArenaInfoRetrieve() {
-		await this.runLoop(async () => {
+		await runLoop(async () => {
 			const arenaInfo = await this.memoryService.getArenaInfo();
 			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
 				this.gameEventsEmitter.allEvents.next(
@@ -116,26 +121,8 @@ export class GameModeDataService {
 		}, 'arenaInfo');
 	}
 
-	private async triggerDuelsMatchInfoRetrieve() {
-		await this.runLoop(async () => {
-			const duelsInfo = await this.memoryService.getDuelsInfo();
-			if (!!duelsInfo?.Rating) {
-				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.DUELS_INFO,
-						additionalData: {
-							duelsInfo: duelsInfo,
-						},
-					} as GameEvent),
-				);
-				return true;
-			}
-			return false;
-		}, 'duelsInfo');
-	}
-
 	private async triggerRankMatchInfoRetrieve() {
-		await this.runLoop(async () => {
+		await runLoop(async () => {
 			const [matchInfo, playerDeck] = await Promise.all([
 				this.memoryService.getMatchInfo(),
 				this.deckParser.getCurrentDeck(10000),
@@ -161,7 +148,7 @@ export class GameModeDataService {
 	}
 
 	private async triggerPlayerDeckInfoRetrieve() {
-		await this.runLoop(async () => {
+		await runLoop(async () => {
 			const playerDeck = await this.deckParser.getCurrentDeck(10000);
 			if (!!playerDeck?.deckstring) {
 				console.log('[match-info] playerDeckInfo', playerDeck);
@@ -178,20 +165,20 @@ export class GameModeDataService {
 			return false;
 		}, 'playerDeckInfo');
 	}
-
-	private async runLoop(coreLoop: () => Promise<boolean>, type: string) {
-		let retriesLeft = 20;
-		while (retriesLeft > 0) {
-			if (await coreLoop()) {
-				return;
-			}
-			console.debug('[match-info] missing', type);
-			await sleep(3000);
-			retriesLeft--;
-		}
-		console.warn('[match-info] could not retrieve ', type);
-	}
 }
+
+export const runLoop = async (coreLoop: () => Promise<boolean>, type: string) => {
+	let retriesLeft = 20;
+	while (retriesLeft > 0) {
+		if (await coreLoop()) {
+			return;
+		}
+		console.debug('[match-info] missing', type);
+		await sleep(3000);
+		retriesLeft--;
+	}
+	console.warn('[match-info] could not retrieve ', type);
+};
 
 export interface HsGameMetaData {
 	GameType: GameType;

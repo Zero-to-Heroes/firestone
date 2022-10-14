@@ -15,7 +15,7 @@ import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers
 import { CardsFacadeService } from '../cards-facade.service';
 import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DeckInfo } from '../decktracker/deck-parser.service';
-import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
+import { DuelsLootParserService } from '../duels/duels-loot-parser.service';
 import { isDuels } from '../duels/duels-utils';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LogsUploaderService } from '../logs-uploader.service';
@@ -29,7 +29,6 @@ import {
 } from '../mercenaries/mercenaries-utils';
 import { XpForGameInfo } from '../rewards/rewards-monitor';
 import { extractHeroTimings } from '../stats/game/game-stats-updater.service';
-import { sleep } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
 import { ReplayUploadService } from './replay-upload.service';
@@ -50,7 +49,7 @@ export class EndGameUploaderService {
 	constructor(
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
-		private dungeonLootParser: DungeonLootParserService,
+		private dungeonLootParser: DuelsLootParserService,
 		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
 		private mainWindowStore: MainWindowStoreService,
@@ -60,11 +59,11 @@ export class EndGameUploaderService {
 
 	public async upload2(info: UploadInfo): Promise<void> {
 		console.log('[manastorm-bridge]', info.reviewId, 'Uploading game info');
-		const game: GameForUpload = await this.initializeGame(info);
+		const game: GameForUpload = this.initializeGame(info);
 		await this.replayUploadService.uploadGame(game);
 	}
 
-	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {
+	private initializeGame(info: UploadInfo): GameForUpload {
 		const currentReviewId = info.reviewId;
 		const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
@@ -310,40 +309,8 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
-			game.runId = this.dungeonLootParser.currentDuelsRunId;
-			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.runId);
-			if (!game.runId) {
-				console.log(
-					'[manastorm-bridge]',
-					currentReviewId,
-					'currentDuelsRunId is missing, waiting for dungeon loot info to be retrieved',
-				);
-				while (this.dungeonLootParser.busyRetrievingInfo) {
-					await sleep(200);
-				}
-				game.runId = this.dungeonLootParser.currentDuelsRunId;
-				console.log(
-					'[manastorm-bridge]',
-					currentReviewId,
-					'dungeon loot info retrieved, continuing',
-					game.runId,
-				);
-			}
-			if (!game.runId) {
-				console.warn(
-					'[manastorm-bridge]',
-					currentReviewId,
-					'currentDuelsRunId is missing',
-					game.runId,
-					game.gameMode,
-					this.dungeonLootParser.currentDuelsRunId,
-				);
-				game.runId = this.dungeonLootParser.currentDuelsRunId;
-				// So that we have time to collect more logs, especially the ones linked to replay upload
-				setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
-			}
-			// this.dungeonLootParser.resetDuelsRunId();
+		if (isDuels(game.gameMode)) {
+			game.runId = info.duelsRunId;
 		} else if (game.gameMode === 'arena') {
 			game.runId = this.arenaService.currentArenaRunId;
 		}
@@ -451,8 +418,8 @@ export interface UploadInfo {
 		battlegroundsPrizes: boolean;
 		battlegroundsQuests: boolean;
 	};
-	battlegroundsInfoAfterGameOver: BattlegroundsInfo;
-	duelsPlayerRankAfterGameOver: number;
-	xpForGame: XpForGameInfo;
-	// bgNewRating: number;
+	duelsRunId: string;
+	battlegroundsInfoAfterGameOver?: BattlegroundsInfo;
+	duelsPlayerRankAfterGameOver?: number;
+	xpForGame?: XpForGameInfo;
 }

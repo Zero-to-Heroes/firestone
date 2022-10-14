@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { DuelsInfo } from '@models/memory/memory-duels';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
@@ -11,16 +10,18 @@ import { MatchInfo } from '../../models/match-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DeckInfo } from '../decktracker/deck-parser.service';
+import { DuelsRunIdService } from '../duels/duels-run-id.service';
+import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
 import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { ReviewIdService } from '../review-id.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { sleep } from '../utils';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
-import { ManastormInfo } from './manastorm-info';
 
 @Injectable()
 export class EndGameListenerService {
@@ -33,6 +34,9 @@ export class EndGameListenerService {
 		private readonly mercsMemoryCache: MercenariesMemoryCacheService,
 		private readonly memoryInspection: MemoryInspectionService,
 		private readonly rewards: RewardMonitorService,
+		private readonly duelsState: DuelsStateBuilderService,
+		private readonly reviewIdService: ReviewIdService,
+		private readonly duelsRunIdService: DuelsRunIdService,
 	) {
 		this.init();
 	}
@@ -57,11 +61,11 @@ export class EndGameListenerService {
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
 		);
-		const duelsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
-			filter((event) => event.type === GameEvent.DUELS_INFO),
-			map((event) => event.additionalData.duelsInfo as DuelsInfo),
-			startWith(null),
-			tap((info) => console.debug('[manastorm-bridge] duelsInfo', info)),
+		const duelsInfo$ = this.duelsState.duelsInfo$$
+			.asObservable()
+			.pipe(tap((info) => console.debug('[manastorm-bridge] duelsInfo', info)));
+		const duelsRunId$ = this.duelsRunIdService.duelsRunId$.pipe(
+			tap((info) => console.debug('[manastorm-bridge] duelsRunId', info)),
 		);
 		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.ARENA_INFO),
@@ -98,14 +102,7 @@ export class EndGameListenerService {
 			startWith(null),
 			tap((info) => console.debug('[manastorm-bridge] bgNewRating', info)),
 		);
-		const reviewId$ = this.events.on(Events.REVIEW_INITIALIZED).pipe(
-			map((event) => event.data[0] as ManastormInfo),
-			filter((info) => !!info.reviewId),
-			map((info) => info.reviewId),
-			startWith(null),
-			distinctUntilChanged(),
-			tap((info) => console.debug('[manastorm-bridge] reviewId', info)),
-		);
+		const reviewId$ = this.reviewIdService.reviewId$;
 		// Doesn't work, reviewId arrives earlier
 		const gameEnded$ = merge(
 			this.gameEvents.allEvents.asObservable().pipe(filter((event) => event.type === GameEvent.GAME_END)),
@@ -147,23 +144,19 @@ export class EndGameListenerService {
 		);
 
 		combineLatest(
-			reviewId$,
-			metadata$,
-			gameEnded$,
-			gameSettings$,
 			// Groups of 6 max to have type inferrence
+			combineLatest(reviewId$, metadata$, gameEnded$, gameSettings$),
 			combineLatest(mercsInfo$, mercsCollectionInfo$),
-			combineLatest(matchInfo$, playerDeck$, duelsInfo$, arenaInfo$, bgInfo$, bgNewRating$),
+			combineLatest(duelsRunId$, duelsInfo$),
+			combineLatest(matchInfo$, playerDeck$, arenaInfo$, bgInfo$, bgNewRating$),
 		)
 			.pipe(
 				map(
 					([
-						reviewId,
-						metadata,
-						gameEnded,
-						gameSettings,
+						[reviewId, metadata, gameEnded, gameSettings],
 						[mercsInfo, mercsCollectionInfo],
-						[matchInfo, playerDeck, duelsInfo, arenaInfo, bgInfo, bgNewRating],
+						[duelsRunId, duelsInfo],
+						[matchInfo, playerDeck, arenaInfo, bgInfo, bgNewRating],
 					]) =>
 						({
 							reviewId: reviewId,
@@ -177,7 +170,7 @@ export class EndGameListenerService {
 							mercsCollectionInfo: mercsCollectionInfo,
 							bgInfo: bgInfo,
 							gameSettings: gameSettings,
-							// bgNewRating: bgNewRating,
+							duelsRunId: duelsRunId,
 						} as UploadInfo),
 				),
 				// We don't want to trigger anything unless the gameEnded status changed (to mark the end of
@@ -193,6 +186,7 @@ export class EndGameListenerService {
 				),
 				filter((info) => !info.gameEnded.spectating),
 				tap((info) => console.log('[manastorm-bridge] not a spectate game, continuing', info.metadata)),
+				tap((info) => console.debug('[manastorm-bridge] will prepare for upload', info)),
 				// map(info => )
 			)
 			.subscribe((info) => {

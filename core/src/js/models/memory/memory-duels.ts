@@ -6,7 +6,7 @@ export interface DuelsInfo {
 	readonly Rating: number;
 	readonly PaidRating: number;
 	readonly LastRatingChange: number;
-	readonly DeckList: readonly number[];
+	readonly DeckList: readonly (string | number)[];
 	// Use that in priority
 	readonly DeckListWithCardIds: readonly string[];
 	readonly ChosenLoot: number;

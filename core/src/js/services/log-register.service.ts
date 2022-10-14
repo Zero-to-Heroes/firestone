@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Events } from '../services/events.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
-import { DeckParserService } from './decktracker/deck-parser.service';
-import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 import { OverwolfService } from './overwolf.service';
@@ -17,11 +15,9 @@ export class LogRegisterService {
 
 	constructor(
 		private events: Events,
-		private decksService: DeckParserService,
 		private cardsMonitor: CardsMonitorService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
-		private dungeonLootParser: DungeonLootParserService,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
 		// the app from starting to parse the game logs while in an uninitialized state, which in
