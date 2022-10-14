@@ -44,15 +44,15 @@ export class GameStatsUpdaterService {
 	}
 
 	private init() {
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe((data) => {
 			const info: ManastormInfo = data.data[0];
-			const newGameStat: GameStat = await this.buildGameStat(info.reviewId, info.game);
+			const newGameStat: GameStat = this.buildGameStat(info.reviewId, info.game);
 			console.log('built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 
-	private async buildGameStat(reviewId: string, game: GameForUpload): Promise<GameStat> {
+	private buildGameStat(reviewId: string, game: GameForUpload): GameStat {
 		// console.debug('uncompressedXmlReplay', game.uncompressedXmlReplay, game);
 		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
 		// console.debug('[debug] parsed replay', replay, game);
@@ -117,17 +117,17 @@ export class GameStatsUpdaterService {
 			return firstGame;
 		}
 
-		const refData = await mainStore[0]?.mercenaries?.referenceData;
+		const refData = mainStore[0]?.mercenaries?.referenceData;
 		if (!refData) {
 			return firstGame;
 		}
 
-		const {
-			mercHeroTimings,
-			mercOpponentHeroTimings,
-			mercEquipments,
-			mercOpponentEquipments,
-		} = await extractHeroTimings(firstGame, replay, refData, this.allCards.getService());
+		const { mercHeroTimings, mercOpponentHeroTimings, mercEquipments, mercOpponentEquipments } = extractHeroTimings(
+			firstGame,
+			replay,
+			refData,
+			this.allCards.getService(),
+		);
 
 		const gameWithMercStats = firstGame.update({
 			mercHeroTimings: mercHeroTimings,
@@ -140,18 +140,18 @@ export class GameStatsUpdaterService {
 	}
 }
 
-export const extractHeroTimings = async (
+export const extractHeroTimings = (
 	game: { gameMode: StatGameModeType },
 	replay: Replay,
 	referenceData: MercenariesReferenceData,
 	allCards: AllCardsService,
-): Promise<{
+): {
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
 	readonly mercOpponentHeroTimings: readonly { cardId: string; turnInPlay: number }[];
 	readonly mercEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
-}> => {
-	const mercStats = await extractStats(game as ReviewMessage, replay, null, referenceData, allCards);
+} => {
+	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData, allCards);
 	// console.debug('mercStats', mercStats, game, replay, referenceData, allCards);
 
 	if (!mercStats?.filter((stat) => stat.statName === 'mercs-hero-timing').length) {

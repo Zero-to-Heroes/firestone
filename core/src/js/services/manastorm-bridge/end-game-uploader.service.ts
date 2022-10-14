@@ -130,7 +130,7 @@ export class EndGameUploaderService {
 			game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
 
 			const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
-			const { mercHeroTimings, ...other } = await extractHeroTimings(
+			const { mercHeroTimings, ...other } = extractHeroTimings(
 				{ gameMode: game.gameMode },
 				replay,
 				referenceData,
@@ -415,18 +415,6 @@ export class EndGameUploaderService {
 		}
 		return bounty.heroic === 1 ? 'heroic' : 'normal';
 	}
-
-	// private async getMercenariesCollectionInfo(currentReviewId: string): Promise<MemoryMercenariesCollectionInfo> {
-	// 	const result = await this.memoryInspection.getMercenariesCollectionInfo();
-	// 	console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesCollectionInfo', result);
-	// 	return result;
-	// }
-
-	// private async getMercenariesInfo(currentReviewId: string): Promise<MemoryMercenariesInfo> {
-	// 	const result = await this.memoryInspection.getMercenariesInfo();
-	// 	console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesInfo', result);
-	// 	return result;
-	// }
 }
 
 export interface UploadParams {
