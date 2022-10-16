@@ -250,6 +250,8 @@ export const hideInfoWhenPlayerPlaysIt = [
 	CardIds.MindVisionVanilla,
 	CardIds.PsychicConjurerCore,
 	CardIds.PsychicConjurerLegacy,
+	CardIds.RenosCraftyLasso,
+	CardIds.RenosCraftyLassoTavernBrawl,
 	CardIds.TheotarTheMadDuke,
 ];
 
