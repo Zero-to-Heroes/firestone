@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, merge } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
@@ -7,12 +6,12 @@ import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { MatchInfo } from '../../models/match-info';
+import { DuelsInfo } from '../../models/memory/memory-duels';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { DeckInfo } from '../decktracker/deck-parser.service';
 import { DuelsRunIdService } from '../duels/duels-run-id.service';
 import { DuelsStateBuilderService } from '../duels/duels-state-builder.service';
-import { isDuels } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { HsGameMetaData } from '../game-mode-data.service';
@@ -202,15 +201,23 @@ export class EndGameListenerService {
 		console.log('[manastorm-bridge] reading memory info');
 		// Here we get the information that is only available once the game is over
 		// TODO: move this elsewhere? So that this method doesn't care about memory reading at all anymore
-		const duelsInitialRank =
-			info.metadata.GameType === GameType.GT_PVPDR_PAID
-				? info.duelsInfo?.PaidRating
-				: info.metadata.GameType === GameType.GT_PVPDR
-				? info.duelsInfo?.Rating
-				: null;
-		const [battlegroundsInfoAfterGameOver, duelsPlayerRankAfterGameOver, xpForGame] = await Promise.all([
+		// const duelsInitialRank =
+		// 	info.metadata.GameType === GameType.GT_PVPDR_PAID
+		// 		? info.duelsInfo?.PaidRating
+		// 		: info.metadata.GameType === GameType.GT_PVPDR
+		// 		? info.duelsInfo?.Rating
+		// 		: null;
+		const [
+			battlegroundsInfoAfterGameOver,
+			// The timing doesn't work, the diff is only computed later apparently, once the user is on the
+			// end screen
+			// Maybe this could be sent asynchronously via another API call, but for now I think it's
+			// ok to not have the new rank
+			//  duelsPlayerRankAfterGameOver,
+			xpForGame,
+		] = await Promise.all([
 			isBattlegrounds(info.metadata.GameType) ? this.getBattlegroundsEndGame() : null,
-			isDuels(info.metadata.GameType) ? this.getDuelsNewPlayerRank(duelsInitialRank) : null,
+			// isDuels(info.metadata.GameType) ? this.getDuelsNewPlayerRank(duelsInitialRank, info.duelsInfo) : null,
 			this.rewards.getXpForGameInfo(),
 		]);
 		console.log('[manastorm-bridge] read memory info');
@@ -218,7 +225,7 @@ export class EndGameListenerService {
 		const augmentedInfo = {
 			...info,
 			battlegroundsInfoAfterGameOver: battlegroundsInfoAfterGameOver,
-			duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
+			// duelsPlayerRankAfterGameOver: duelsPlayerRankAfterGameOver,
 			xpForGame: xpForGame,
 		};
 		await this.endGameUploader.upload2(augmentedInfo);
@@ -230,12 +237,19 @@ export class EndGameListenerService {
 		return result;
 	}
 
-	private async getDuelsNewPlayerRank(initialRank: number): Promise<number> {
+	private async getDuelsNewPlayerRank(initialRank: number, existingDuelsInfo: DuelsInfo): Promise<number> {
+		// Ideally should trigger this only when winning at 11 or losing at 2, but we don't have the match result yet
+		// Could add it somewhere, but for now I think it's good enough like that
+		if (existingDuelsInfo.Wins !== 11 && existingDuelsInfo.Losses !== 2) {
+			return null;
+		}
+		// This only matters when a run is over, so we need to be careful no to take too much time
 		let duelsInfo = await this.memoryInspection.getDuelsInfo();
 		let retriesLeft = 10;
 		while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
-			await sleep(2000);
+			await sleep(500);
 			duelsInfo = await this.memoryInspection.getDuelsInfo();
+			console.debug('[manastorm-bridge] no last rating change');
 			retriesLeft--;
 		}
 		if (!duelsInfo) {
