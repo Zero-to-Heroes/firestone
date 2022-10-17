@@ -52,7 +52,7 @@ export class MercenariesActionComponent {
 		this.ownerCardId = value.ownerCardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.abilityCardId}.jpg)`;
 		this.name = abilityCard.name;
-		this.speed = value.speed;
+		this.speed = value.speed != null ? Math.max(value.speed, 0) : null;
 		this.side = value.side;
 		this.portraitUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.ownerCardId}.jpg`;
 		this.frameUrl = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${
