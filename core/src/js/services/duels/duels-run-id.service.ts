@@ -49,12 +49,29 @@ export class DuelsRunIdService {
 			),
 			startWith(null),
 		);
-		const duelsInfo$ = this.duelsState.duelsInfo$$
-			.asObservable()
-			.pipe(tap((info) => console.debug('[duels-run] duelsInfo', info)));
+		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe(
+			tap((info) => console.debug('[duels-run] duelsInfo', info)),
+			filter((info) => !!info),
+			// Only things that are caracteristic of a new run are of interest here
+			// We ignore the decklist because it evolves during a single run
+			distinctUntilChanged((a, b) => {
+				return (
+					a.HeroCardId === b.HeroCardId &&
+					a.Rating === b.Rating &&
+					a.PaidRating === b.PaidRating &&
+					a.Wins === b.Wins &&
+					a.Losses === b.Losses &&
+					a.StartingHeroPower === b.StartingHeroPower &&
+					a.StartingHeroPowerCardId === b.StartingHeroPowerCardId &&
+					a.PlayerClass === b.PlayerClass
+				);
+			}),
+		);
 
 		combineLatest(duelsInfo$, currentRun$, this.lastDuelsGame$)
 			.pipe(
+				tap((info) => console.debug('[duels-run] will build new run id', info)),
+				filter(([duelsInfo, currentRun, latestDuelsMatch]) => !!duelsInfo),
 				map(([duelsInfo, currentRun, latestDuelsMatch]) => {
 					if (!latestDuelsMatch) {
 						const newRunId = uuid();
@@ -65,11 +82,14 @@ export class DuelsRunIdService {
 						return latestDuelsMatch.runId;
 					}
 					if (isNewRun(duelsInfo, currentRun, latestDuelsMatch, this.allCards)) {
+						console.log('[duels-run] new run', duelsInfo, currentRun, latestDuelsMatch);
 						return uuid();
 					}
 
+					console.log('[duels-run] default new run', duelsInfo, currentRun, latestDuelsMatch);
 					return uuid();
 				}),
+				startWith(uuid()),
 				distinctUntilChanged(),
 				tap((info) => console.debug('[duels-run] currentRunId', info)),
 			)
@@ -83,10 +103,7 @@ const isNewRun = (
 	lastDuelsMatch: GameStat,
 	allCards: CardsFacadeService,
 ): boolean => {
-	if (!duelsInfo) {
-		return false;
-	}
-	if (!lastDuelsMatch || !currentRun) {
+	if (!duelsInfo || !lastDuelsMatch || !currentRun) {
 		return true;
 	}
 
