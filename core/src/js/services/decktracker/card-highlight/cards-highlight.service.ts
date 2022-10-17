@@ -267,6 +267,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, outcast);
 			case CardIds.BladeOfTheBurningSun:
 				return and(inDeck, minion);
+			case CardIds.BloodOfGhuun:
+				return and(inDeck, minion);
 			case CardIds.BloodreaverGuldan:
 				return and(inGraveyard, minion, demon);
 			case CardIds.BookOfSpecters:
