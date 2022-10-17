@@ -43,6 +43,7 @@ export class GameModeDataService {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
 				this.duelsState.triggerDuelsMatchInfoRetrieve(true);
+				this.triggerPlayerDeckInfoRetrieve();
 				return;
 			case GameType.GT_ARENA:
 				this.triggerArenaInfoRetrieve();

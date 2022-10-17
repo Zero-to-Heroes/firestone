@@ -240,6 +240,7 @@ export class DeckParserService {
 					// this means that we're reconnecting and that have just received the full list of decks
 					if (
 						lines.some((line) => line.includes('Finding Game With Deck')) ||
+						lines.some((line) => line.includes('Finding Game With Hero')) ||
 						// When reconnecting, the sequence of scenes is always the same: LOGIN, then GAMEPLAY
 						// So if we go to through another non-gameplay scene that isn't LOGIN, it means that
 						// we can safely reset
@@ -379,7 +380,10 @@ export class DeckParserService {
 		// ignore everythine if the lines don't contain any "finding game with deck"
 		// this means that we're reconnecting and that have just received the full list of decks
 		// TODO: test other languages
-		if (!lines.some((line) => line.includes('Finding Game With Deck'))) {
+		if (
+			!lines.some((line) => line.includes('Finding Game With Deck')) &&
+			!lines.some((line) => line.includes('Finding Game With Hero'))
+		) {
 			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
 			return;
 		}
