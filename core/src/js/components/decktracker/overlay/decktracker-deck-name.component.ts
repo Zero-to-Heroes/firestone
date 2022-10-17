@@ -12,6 +12,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="deck-name">
+			<img class="class-image" *ngIf="playerClassImage" [src]="playerClassImage" />
 			<span class="name" [helpTooltip]="deckName" [bindTooltipToGameWindow]="true">{{ deckName }}</span>
 			<copy-deckstring
 				*ngIf="deckstring && !missingInitialDeckstring"
@@ -34,6 +35,7 @@ export class DeckTrackerDeckNameComponent {
 	deckName: string;
 	deckstring: string;
 	copyText: string;
+	playerClassImage: string;
 	_tooltipPosition: CardTooltipPositionType;
 	missingInitialDeckstring: boolean;
 	side: 'player' | 'opponent';
@@ -47,13 +49,11 @@ export class DeckTrackerDeckNameComponent {
 			return;
 		}
 
+		this.playerClassImage = value.isOpponent ? `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${(value.hero.playerClass ?? 'neutral').toLowerCase()}.png` : null;
 		this.deckName =
 			value.name ||
 			(value.hero
-				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
-						playerName: value.hero.playerName || value.hero.name,
-						playerClass: this.i18n.translateString(`global.class.${value.hero.playerClass}`),
-				  })
+				? value.hero.playerName || value.hero.name || this.i18n.translateString('decktracker.streamer-mode.opponent')
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 		this.deckstring = value.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
