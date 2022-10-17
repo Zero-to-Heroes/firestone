@@ -254,17 +254,19 @@ export class DeckZoneComponent implements AfterViewInit {
 			: keyWithBottom;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
 		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
+		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
+		const keyWithRelatedCards = keyWithCost + '-' + relatedCardIds;
 		if (!this._collection?.length) {
-			return keyWithCost;
+			return keyWithRelatedCards;
 		}
 
 		const quantityToAllocate = quantitiesLeftForCard[card.cardId];
 		quantitiesLeftForCard[card.cardId] = quantityToAllocate - 1;
 		if (quantityToAllocate > 0) {
-			return keyWithCost;
+			return keyWithRelatedCards;
 		}
 
-		return keyWithCost + '-missing';
+		return keyWithRelatedCards + '-missing';
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
