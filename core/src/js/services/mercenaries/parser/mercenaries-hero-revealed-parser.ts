@@ -49,7 +49,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
-		const refData = await mainWindowState?.mercenaries?.referenceData;
+		const refData = mainWindowState?.mercenaries?.referenceData;
 		const refMerc = normalizedCardId
 			? refData?.mercenaries?.find(
 					(merc) =>
