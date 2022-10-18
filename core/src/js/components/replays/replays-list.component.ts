@@ -84,7 +84,7 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		);
 		this.replays$ = this.store
 			.listen$(
-				([main, nav]) => main.replays.allReplays,
+				([main, nav]) => main.stats.gameStats?.stats,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,

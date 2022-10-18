@@ -52,7 +52,7 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 	ngAfterContentInit(): void {
 		this.replays$ = this.store
 			.listen$(
-				([main, nav]) => main.replays.allReplays,
+				([main, nav]) => main.stats.gameStats?.stats,
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)

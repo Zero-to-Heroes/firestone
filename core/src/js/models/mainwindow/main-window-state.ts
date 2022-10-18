@@ -49,7 +49,7 @@ export class MainWindowState {
 	}
 
 	public findReplay(reviewId: string): GameStat {
-		const result = this.replays.allReplays.find((replay) => replay.reviewId === reviewId);
+		const result = this.stats.gameStats?.stats.find((replay) => replay.reviewId === reviewId);
 		if (result) {
 			return result;
 		}
