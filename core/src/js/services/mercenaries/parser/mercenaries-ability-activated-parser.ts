@@ -34,6 +34,10 @@ export class MercenariesAbilityActivatedParser implements MercenariesParser {
 			return battleState;
 		}
 		const existingAbility = abilityOwner.getAbility(entityId);
+		if (!existingAbility) {
+			console.warn('[merc-ability-activated-parser] missing ability', entityId, cardId);
+			return battleState;
+		}
 		const newMerc = abilityOwner.updateAbility(
 			entityId,
 			cardId,
