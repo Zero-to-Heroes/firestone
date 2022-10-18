@@ -113,12 +113,12 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			return null;
 		}
 
-		console.debug(
-			'computing buffs for',
-			this.allCards.getCard(boardEntity.cardId).name,
-			boardEntity.cardId,
-			boardEntity,
-		);
+		// console.debug(
+		// 	'computing buffs for',
+		// 	this.allCards.getCard(boardEntity.cardId).name,
+		// 	boardEntity.cardId,
+		// 	boardEntity,
+		// );
 		const enchantments = [...(boardEntity.enchantments ?? []), ...(playerEntity?.enchantments ?? [])];
 		const debuffs = enchantments
 			.filter((e) => DEBUFF_SPEED_MODIFIER_ENCHANTMENTS.includes(e.cardId as CardIds))
@@ -134,7 +134,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 				);
 			})
 			.filter((e) => !!e.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value);
-		console.debug('buffs', buffs, boardEntity);
+		// console.debug('buffs', buffs, boardEntity);
 		const debuffValue = sumOnArray(
 			debuffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
@@ -143,7 +143,7 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			buffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
 		);
-		console.debug('buffValue', buffValue, debuffValue);
+		// console.debug('buffValue', buffValue, debuffValue);
 		return !!buffValue || !!debuffValue
 			? {
 					value: debuffValue - buffValue,
