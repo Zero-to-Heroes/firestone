@@ -3,6 +3,7 @@ import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable } from 'rxjs';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import {
@@ -97,6 +98,10 @@ export class AppUiStoreFacadeService {
 
 	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
 		return this.debugObservable(this.store.duelsTopDecks$());
+	}
+
+	public gameStats$(): Observable<readonly GameStat[]> {
+		return this.debugObservable(this.store.gameStats$());
 	}
 
 	public send(event: MainWindowStoreEvent) {

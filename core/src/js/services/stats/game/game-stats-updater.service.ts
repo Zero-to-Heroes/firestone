@@ -23,6 +23,7 @@ import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { MercenariesReferenceData } from '../../mercenaries/mercenaries-state-builder.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../overwolf.service';
+import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { extractPlayerInfoFromDeckstring } from './game-stats-loader.service';
 
 @Injectable()
@@ -36,6 +37,7 @@ export class GameStatsUpdaterService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.init();
 		setTimeout(() => {
@@ -43,7 +45,8 @@ export class GameStatsUpdaterService {
 		});
 	}
 
-	private init() {
+	private async init() {
+		// For now we keep the main store as the source of truth, but maybe this should be moved away at some point?
 		this.events.on(Events.REVIEW_FINALIZED).subscribe((data) => {
 			const info: ManastormInfo = data.data[0];
 			const newGameStat: GameStat = this.buildGameStat(info.reviewId, info.game);

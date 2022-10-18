@@ -1,5 +1,5 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
+import { BnetRegion, GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
 import { capitalizeEachWord, NonFunctionProperties } from '../../../services/utils';
@@ -44,6 +44,7 @@ export class GameStat {
 	readonly bgsHeroQuests: readonly string[];
 	readonly bgsQuestsCompletedTimings: readonly number[];
 	readonly bgsHeroQuestRewards: readonly string[];
+	readonly region: BnetRegion;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];

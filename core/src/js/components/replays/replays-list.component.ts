@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
@@ -20,6 +20,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			} as value"
 		>
 			<div class="filters">
+				<region-filter-dropdown class="filter"></region-filter-dropdown>
 				<replays-game-mode-filter-dropdown class="filter"></replays-game-mode-filter-dropdown>
 				<replays-deckstring-filter-dropdown class="filter"></replays-deckstring-filter-dropdown>
 				<replays-bg-hero-filter-dropdown class="filter"></replays-bg-hero-filter-dropdown>
@@ -82,37 +83,33 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 					].includes(gameModeFilter) || gameModeFilter?.startsWith('mercenaries'),
 			),
 		);
-		this.replays$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats?.stats,
+		this.replays$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveBgHeroFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
 				([main, nav, prefs]) => prefs.replaysActivePlayerClassFilter,
 				([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
-			)
-			.pipe(
-				filter(([gameStats]) => !!gameStats?.length),
-				this.mapData(
-					([
-						gameStats,
+			),
+		).pipe(
+			filter(([gameStats, [other]]) => !!gameStats?.length),
+			this.mapData(
+				([
+					gameStats,
+					[gameModeFilter, bgHeroFilter, deckstringsFilter, playerClassFilter, opponentClassFilter],
+				]) => {
+					return this.applyFilters(
+						gameStats ?? [],
 						gameModeFilter,
 						bgHeroFilter,
 						deckstringsFilter,
 						playerClassFilter,
 						opponentClassFilter,
-					]) => {
-						return this.applyFilters(
-							gameStats ?? [],
-							gameModeFilter,
-							bgHeroFilter,
-							deckstringsFilter,
-							playerClassFilter,
-							opponentClassFilter,
-						);
-					},
-				),
-			);
+					);
+				},
+			),
+		);
 	}
 
 	onScrolling(scrolling: boolean) {

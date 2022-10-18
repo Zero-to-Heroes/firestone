@@ -57,6 +57,7 @@ import { ReplaysNotificationService } from './replays/replays-notification.servi
 import { ReviewIdService } from './review-id.service';
 import { RewardMonitorService } from './rewards/rewards-monitor';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
+import { GameStatsProviderService } from './stats/game/game-stats-provider.service';
 import { AppUiStoreService } from './ui-store/app-ui-store.service';
 import { sleep } from './utils';
 
@@ -128,6 +129,7 @@ export class AppBootstrapService {
 		private init_LiveStreamsService: LiveStreamsService,
 		private init_GameNativeStateStoreService: GameNativeStateStoreService,
 		private init_GameModeDataService: GameModeDataService,
+		private init_GameStatsProviderService: GameStatsProviderService,
 	) {}
 
 	public async init() {

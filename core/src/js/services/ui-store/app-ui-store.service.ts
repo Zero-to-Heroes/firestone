@@ -34,10 +34,12 @@ import { GameNativeState } from '../game/game-native-state';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../overwolf.service';
+import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
 import { buildHeroStats } from './bgs-ui-helper';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
+export type GameStatsSelector<T> = (stats: readonly GameStat[]) => T;
 export type GameStateSelector<T> = (gameState: GameState) => T;
 export type PrefsSelector<T> = (prefs: Preferences) => T;
 export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
@@ -63,19 +65,16 @@ export class AppUiStoreService {
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 
-	private bgsHeroStats: BehaviorSubject<readonly BgsHeroStat[]> = new BehaviorSubject<readonly BgsHeroStat[]>(null);
-	private duelsHeroStats: BehaviorSubject<readonly DuelsHeroPlayerStat[]> = new BehaviorSubject<
-		readonly DuelsHeroPlayerStat[]
-	>(null);
-	private duelsTopDecks: BehaviorSubject<readonly DuelsGroupedDecks[]> = new BehaviorSubject<
-		readonly DuelsGroupedDecks[]
-	>(null);
+	private bgsHeroStats = new BehaviorSubject<readonly BgsHeroStat[]>(null);
+	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
+	private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
+	private gameStats = new BehaviorSubject<readonly GameStat[]>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	private initialized = false;
 
-	constructor(private readonly ow: OverwolfService, private allCards: CardsFacadeService) {
+	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {
 		window['appStore'] = this;
 		window['debugAppStore'] = () =>
 			console.debug({
@@ -90,6 +89,7 @@ export class AppUiStoreService {
 				bgsHeroStats: this.bgsHeroStats.observers,
 				duelsHeroStats: this.duelsHeroStats.observers,
 				duelsTopDecks: this.duelsTopDecks.observers,
+				gameStats: this.gameStats.observers,
 			});
 	}
 
@@ -224,24 +224,19 @@ export class AppUiStoreService {
 	}
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
-		return this.bgsHeroStats.asObservable().pipe(
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
-		);
+		return this.bgsHeroStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsHeroStats$(): Observable<readonly DuelsHeroPlayerStat[]> {
-		return this.duelsHeroStats.asObservable().pipe(
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
-		);
+		return this.duelsHeroStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public duelsTopDecks$(): Observable<readonly DuelsGroupedDecks[]> {
-		return this.duelsTopDecks.asObservable().pipe(
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
-		);
+		return this.duelsTopDecks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
+	public gameStats$(): Observable<readonly GameStat[]> {
+		return this.gameStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
 	public send(event: MainWindowStoreEvent) {
@@ -254,7 +249,15 @@ export class AppUiStoreService {
 		this.initBgsHeroStats();
 		this.initDuelsHeroStats();
 		this.initDuelsTopDecks();
+		this.initGameStats();
 		this.initialized = true;
+	}
+
+	private initGameStats() {
+		console.debug('gameStatsProvider', this.ow.getMainWindow().gameStatsProvider);
+		const gameStats$: BehaviorSubject<readonly GameStat[]> = (this.ow.getMainWindow()
+			.gameStatsProvider as GameStatsProviderService).gameStats$;
+		gameStats$.subscribe(this.gameStats);
 	}
 
 	private initDuelsTopDecks() {

@@ -403,6 +403,7 @@ import {
 } from '../../components/overlays/turntimer/turn-timer-widget.component';
 import { FullScreenOverlaysClickthroughComponent } from '../../components/overlays/_full-screen-overlays-clickthrough.component';
 import { FullScreenOverlaysComponent } from '../../components/overlays/_full-screen-overlays.component';
+import { RegionFilterDropdownComponent } from '../../components/replays/filters/region-filter-dropdown.component';
 import { ReplaysBgHeroFilterDropdownComponent } from '../../components/replays/filters/replays-bg-hero-filter-dropdown.component';
 import { ReplaysDeckstringFilterDropdownComponent } from '../../components/replays/filters/replays-deckstring-filter-dropdown.component';
 import { ReplaysGameModeFilterDropdownComponent } from '../../components/replays/filters/replays-game-mode-filter-dropdown.component';
@@ -565,6 +566,7 @@ import { RewardMonitorService } from '../../services/rewards/rewards-monitor';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
+import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
 import { TipService } from '../../services/tip.service';
@@ -827,6 +829,7 @@ const components = [
 		ReplaysBgHeroFilterDropdownComponent,
 		ReplaysPlayerClassFilterDropdownComponent,
 		ReplaysOpponentClassFilterDropdownComponent,
+		RegionFilterDropdownComponent,
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsCategoryDetailsComponent,
@@ -1221,6 +1224,7 @@ const components = [
 
 		GameStatsLoaderService,
 		GameStatsUpdaterService,
+		GameStatsProviderService,
 
 		OverlayDisplayService,
 		DeckCardService,
