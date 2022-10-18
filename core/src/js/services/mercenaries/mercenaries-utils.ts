@@ -13,15 +13,15 @@ export const normalizeMercenariesCardId = (
 	// Some abilities (like Ysera's Emerald Oracle) have an id that finishes with an "a" for all levels
 	// except the last one.
 	// However, some other abilities (like Anathema / Benediction) share the same root id, and differ
-	// only wiht a/b, so we need to keep the suffix
-	let skinMatch = cardId.match(/.*_(\d\d)([ab]?)$/);
+	// only wiht a/b (or x/y, for Malfurion's Archdruid's Call variations), so we need to keep the suffix
+	let skinMatch = cardId.match(/.*_(\d\d)([a-z]?)$/);
 	if (skinMatch) {
-		return cardId.replace(/(.*)(_\d\d)([ab]?)$/, '$1_01$3');
+		return cardId.replace(/(.*)(_\d\d)([a-z]?)$/, '$1_01$3');
 	}
 	// Sometimes it is 01, sometimes 001
-	skinMatch = cardId.match(/.*_(\d\d\d)([ab]?)$/);
+	skinMatch = cardId.match(/.*_(\d\d\d)([a-z]?)$/);
 	if (skinMatch) {
-		return cardId.replace(/(.*)(_\d\d\d)([ab]?)$/, '$1_001$3');
+		return cardId.replace(/(.*)(_\d\d\d)([a-z]?)$/, '$1_001$3');
 	}
 	return cardId;
 };

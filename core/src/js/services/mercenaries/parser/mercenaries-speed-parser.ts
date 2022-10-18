@@ -37,6 +37,15 @@ export class MercenariesSpeedParser implements MercenariesParser {
 				speed: event.additionalData.cost,
 			}),
 		);
+
+		if (newMerc.abilities.some((a) => !a.cardId)) {
+			// This happens when a speed change is applied to all the abilities, including the variations
+			// from a base ability (like Archdruid's Rage/Blessing which are variations of Malfurion's
+			// Archdruid's Call)
+			// In that case, we simply ignore the speed change
+			console.debug('created empty ability for speed', abilityOwner, newMerc, event, battleState);
+			return battleState;
+		}
 		console.debug('[merc-speed-parser] newMerc', newMerc);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
 		return battleState.update({
