@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { BgsHeroStat, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -42,31 +42,31 @@ export class BattlegroundsPersonalStatsQuestsComponent
 	}
 
 	ngAfterContentInit() {
-		this.stats$ = this.store
-			.listen$(
+		this.stats$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds.globalStats.getQuestStats(),
 				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
-				([main, nav]) => main.stats.gameStats?.stats,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
 				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-			)
-			.pipe(
-				filter(([stats, mmrPercentiles, matches, timeFilter, rankFilter, heroSort, patch]) => !!stats?.length),
-				this.mapData(([stats, mmrPercentiles, matches, timeFilter, rankFilter, heroSort, patch]) => {
-					return buildQuestStats(
-						stats,
-						mmrPercentiles,
-						matches,
-						timeFilter,
-						rankFilter,
-						heroSort,
-						patch,
-						this.allCards,
-					);
-				}),
-			);
+			),
+		).pipe(
+			filter(([gameStats, [stats, mmrPercentiles, timeFilter, rankFilter, heroSort, patch]]) => !!stats?.length),
+			this.mapData(([gameStats, [stats, mmrPercentiles, timeFilter, rankFilter, heroSort, patch]]) => {
+				return buildQuestStats(
+					stats,
+					mmrPercentiles,
+					gameStats,
+					timeFilter,
+					rankFilter,
+					heroSort,
+					patch,
+					this.allCards,
+				);
+			}),
+		);
 	}
 
 	trackByFn(index: number, stat: BgsHeroStat) {

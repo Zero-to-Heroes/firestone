@@ -67,6 +67,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 		).pipe(
 			this.mapData(
 				([gameStats, [region]]) =>
+					// Don't filter for only ranked games, so that the user can clearly understand what they are seeing
 					[...new Set(gameStats.map((s) => s.region))].length === 1 || (!!region && region !== 'all'),
 			),
 		);

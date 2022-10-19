@@ -1,17 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../../models/patches';
+import { isBattlegrounds } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
-import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
+import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -22,12 +21,21 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-rating" *ngIf="value$ | async as value">
-			<div class="header" [owTranslate]="'app.battlegrounds.personal-stats.rating.title'"></div>
-			<graph-with-single-value
-				[data]="value.data"
-				[labels]="value.labels"
-				[emptyStateMessage]="'app.battlegrounds.personal-stats.rating.empty-state-message' | owTranslate"
-			></graph-with-single-value>
+			<ng-container *ngIf="regionSelected$ | async; else emptyState">
+				<div class="header" [owTranslate]="'app.battlegrounds.personal-stats.rating.title'"></div>
+				<graph-with-single-value
+					[data]="value.data"
+					[labels]="value.labels"
+					[emptyStateMessage]="'app.battlegrounds.personal-stats.rating.empty-state-message' | owTranslate"
+				></graph-with-single-value>
+			</ng-container>
+			<ng-template #emptyState>
+				<battlegrounds-empty-state
+					class="empty-state"
+					[title]="'app.decktracker.rating-graph.missing-region-title' | owTranslate"
+					[subtitle]="''"
+				></battlegrounds-empty-state>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +44,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit {
 	value$: Observable<Value>;
+	regionSelected$: Observable<boolean>;
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
@@ -46,42 +55,43 @@ export class BattlegroundsPersonalStatsRatingComponent
 	}
 
 	ngAfterContentInit(): void {
-		this.value$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats.stats,
-				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
+		// Force a region select only if multiple regions are available in the stats
+		this.regionSelected$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listenPrefs$((prefs) => prefs.regionFilter),
+		).pipe(
+			this.mapData(
+				([gameStats, [region]]) =>
+					// Don't filter for only ranked games, so that the user can clearly understand what they are seeing
+					[...new Set(gameStats.map((s) => s.region))].length === 1 || (!!region && region !== 'all'),
+			),
+		);
+		this.value$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
 				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-			)
-			.pipe(
-				filter(
-					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
-						!!stats && !!currentBattlegroundsMetaPatch,
-				),
-				map(
-					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
-						[
-							stats
-								.filter(
-									(stat) =>
-										stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
-								)
-								.filter((stat) => stat.playerRank),
-							timeFilter,
-							getMmrThreshold(mmrFilter <= 100 ? mmrFilter : 100, mmrPercentiles),
-							mmrGroupFilter,
-							currentBattlegroundsMetaPatch,
-						] as [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
-				),
-				distinctUntilChanged((a, b) => this.compare(a, b)),
-				map(([stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
-					this.buildValue(stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch),
-				),
-				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		).pipe(
+			filter(
+				([stats, [timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]]) =>
+					!!stats && !!currentBattlegroundsMetaPatch,
+			),
+			this.mapData(([stats, [timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]]) => {
+				const relevantGames = stats
+					.filter((stat) => isBattlegrounds(stat.gameMode))
+					.filter((stat) => stat.playerRank);
+				return this.buildValue(
+					relevantGames,
+					timeFilter,
+					mmrFilter,
+					mmrGroupFilter,
+					currentBattlegroundsMetaPatch,
+				);
+			}),
+		);
 	}
 
 	private buildValue(
@@ -171,16 +181,6 @@ export class BattlegroundsPersonalStatsRatingComponent
 			default:
 				return true; //Date.now() - stat.creationTimestamp <= 30 * 24 * 60 * 60 * 1000;
 		}
-	}
-
-	private compare(
-		a: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
-		b: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, PatchInfo],
-	): boolean {
-		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]);
 	}
 }
 
