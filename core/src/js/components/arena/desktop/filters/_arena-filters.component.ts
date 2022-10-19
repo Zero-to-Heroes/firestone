@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
 	selector: 'arena-filters',
@@ -9,10 +12,23 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	],
 	template: `
 		<div class="filters arena-filters">
+			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
 			<arena-time-filter-dropdown class="filter time-filter"></arena-time-filter-dropdown>
 			<arena-class-filter-dropdown class="filter class-filter"></arena-class-filter-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaFiltersComponent {}
+export class ArenaFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	showRegionFilter$: Observable<boolean>;
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		this.showRegionFilter$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationArena.selectedCategoryId)
+			.pipe(this.mapData(([currentView]) => true));
+	}
+}

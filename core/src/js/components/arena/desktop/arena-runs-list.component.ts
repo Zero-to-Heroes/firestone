@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { HeaderInfo } from '@components/replays/replays-list-view.component';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
@@ -18,18 +18,20 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [`../../../../css/component/arena/desktop/arena-runs-list.component.scss`],
 	template: `
 		<div class="arena-runs-container">
-			<virtual-scroller
-				#scroll
-				*ngIf="runs$ | async as runs; else emptyState"
-				class="runs-list"
-				[items]="runs"
-				scrollable
-			>
-				<ng-container *ngFor="let run of scroll.viewPortItems; trackBy: trackByRun">
-					<div class="header" *ngIf="run.header">{{ run.header }}</div>
-					<arena-run *ngIf="!run.header" [run]="run"></arena-run>
-				</ng-container>
-			</virtual-scroller>
+			<ng-container *ngIf="{ runs: runs$ | async } as value">
+				<virtual-scroller
+					#scroll
+					*ngIf="value.runs?.length; else emptyState"
+					class="runs-list"
+					[items]="value.runs"
+					scrollable
+				>
+					<ng-container *ngFor="let run of scroll.viewPortItems; trackBy: trackByRun">
+						<div class="header" *ngIf="run.header">{{ run.header }}</div>
+						<arena-run *ngIf="!run.header" [run]="run"></arena-run>
+					</ng-container>
+				</virtual-scroller>
+			</ng-container>
 
 			<ng-template #emptyState>
 				<arena-empty-state></arena-empty-state>
@@ -52,38 +54,36 @@ export class ArenaRunsListComponent extends AbstractSubscriptionComponent implem
 	ngAfterContentInit() {
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
-		this.runs$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats.stats,
+		this.runs$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.arena.rewards,
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
 				([main, nav]) => main.arena.currentArenaMetaPatch,
-			)
-			.pipe(
-				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
-				this.mapData(([stats, rewards, timeFilter, heroFilter, patch]) => {
-					const arenaMatches = stats
-						.filter((stat) => stat.gameMode === 'arena')
-						.filter((stat) => !!stat.runId);
-					const arenaRuns = this.buildArenaRuns(arenaMatches, rewards);
-					const filteredRuns = arenaRuns
-						.filter((match) => this.isCorrectHero(match, heroFilter))
-						.filter((match) => this.isCorrectTime(match, timeFilter, patch));
-					const groupedRuns = this.groupRuns(filteredRuns);
-					const flat = groupedRuns
-						.filter((group) => group?.runs?.length)
-						.flatMap((group) => {
-							return [
-								{
-									header: group.header,
-								} as HeaderInfo,
-								...group.runs,
-							];
-						});
-					return flat;
-				}),
-			);
+			),
+		).pipe(
+			filter(([stats, [rewards, timeFilter, heroFilter, patch]]) => !!stats?.length),
+			this.mapData(([stats, [rewards, timeFilter, heroFilter, patch]]) => {
+				const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena').filter((stat) => !!stat.runId);
+				const arenaRuns = this.buildArenaRuns(arenaMatches, rewards);
+				const filteredRuns = arenaRuns
+					.filter((match) => this.isCorrectHero(match, heroFilter))
+					.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+				const groupedRuns = this.groupRuns(filteredRuns);
+				const flat = groupedRuns
+					.filter((group) => group?.runs?.length)
+					.flatMap((group) => {
+						return [
+							{
+								header: group.header,
+							} as HeaderInfo,
+							...group.runs,
+						];
+					});
+				return flat;
+			}),
+		);
 	}
 
 	trackByRun(index: number, item: ArenaRun) {
