@@ -14,8 +14,9 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+
+declare let amplitude;
 
 @Component({
 	selector: 'mercenaries-desktop',
@@ -104,38 +105,24 @@ export class MercenariesDesktopComponent
 	ngAfterContentInit() {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.loading)
-			.pipe(
-				map(([loading]) => loading),
-				distinctUntilChanged(),
-				// startWith(true),
-				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([loading]) => loading));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.menuDisplayType)
-			.pipe(
-				map(([menuDisplayType]) => menuDisplayType),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
 				map(([selectedCategoryId]) => selectedCategoryId),
 				filter((selectedCategoryId) => !!selectedCategoryId),
 				distinctUntilChanged(),
-				tap((info) => cdLog('emitting selectedCategoryId in ', this.constructor.name, info)),
+				tap((info) => {
+					amplitude.getInstance().logEvent('mercs-navigation', { 'page': info });
+				}),
 				takeUntil(this.destroyed$),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)
-			.pipe(
-				map(([categories]) => categories ?? []),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([categories]) => categories ?? []));
 	}
 
 	ngAfterViewInit() {
