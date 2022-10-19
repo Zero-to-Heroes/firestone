@@ -57,10 +57,10 @@ export class DecktrackerLadderStatsOverviewComponent
 
 	ngAfterContentInit() {
 		this.replays$ = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => main.decktracker.decks),
+			this.store.decks$(),
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
-			this.mapData(([[decks], [deckstringsFilter]]) =>
+			this.mapData(([decks, [deckstringsFilter]]) =>
 				decks
 					.filter(
 						(deck) =>

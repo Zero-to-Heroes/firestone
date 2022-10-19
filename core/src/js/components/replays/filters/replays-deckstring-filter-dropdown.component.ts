@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { formatClass } from '../../../services/hs-utils';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
@@ -47,55 +47,53 @@ export class ReplaysDeckstringFilterDropdownComponent
 	}
 
 	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.decktracker.decks,
+		this.filter$ = combineLatest(
+			this.store.decks$(),
+			this.store.listen$(
 				([main, nav]) => nav.currentApp,
 				([main, nav]) => nav.navigationDecktracker.currentView,
 				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.replaysActiveDeckstringsFilter,
 				([main, nav, prefs]) => prefs.desktopDeckHiddenDeckCodes,
-			)
-			.pipe(
-				this.mapData(([decks, currentApp, currentView, gameModeFilter, deckstringFilter, archivedDecks]) => {
-					const options: readonly MultiselectOption[] = (
-						decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []
-					)
-						.filter((deck) => !archivedDecks.includes(deck.deckstring))
-						.sort(sortByProperties((deck: DeckSummary) => [-deck.lastUsedTimestamp]))
-						.map(
-							(deck) =>
-								({
-									label: deck.deckName,
-									value: deck.deckstring,
-									image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${deck.skin}.jpg`,
-									tooltip: this.i18n.translateString('app.replays.filters.deck.deckstring-tooltip', {
-										deckName: deck.deckName,
-										deckClass: formatClass(deck.class, this.i18n),
-										lastPlayedDate: new Date(deck.lastUsedTimestamp).toLocaleDateString(
-											this.i18n.formatCurrentLocale(),
-											{
-												month: 'short',
-												day: '2-digit',
-												year: 'numeric',
-											},
-										),
-									}),
-								} as MultiselectOption),
-						);
-					return {
-						options: options,
-						selected: deckstringFilter,
-						placeholder: this.i18n.translateString('app.replays.filters.deck.all'),
-						visible:
-							(currentApp === 'replays' &&
-								['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(
-									gameModeFilter,
-								)) ||
-							(currentApp === 'decktracker' && currentView === 'ladder-stats'),
-					};
-				}),
-			);
+			),
+		).pipe(
+			this.mapData(([decks, [currentApp, currentView, gameModeFilter, deckstringFilter, archivedDecks]]) => {
+				const options: readonly MultiselectOption[] = (
+					decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? []
+				)
+					.filter((deck) => !archivedDecks.includes(deck.deckstring))
+					.sort(sortByProperties((deck: DeckSummary) => [-deck.lastUsedTimestamp]))
+					.map(
+						(deck) =>
+							({
+								label: deck.deckName,
+								value: deck.deckstring,
+								image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${deck.skin}.jpg`,
+								tooltip: this.i18n.translateString('app.replays.filters.deck.deckstring-tooltip', {
+									deckName: deck.deckName,
+									deckClass: formatClass(deck.class, this.i18n),
+									lastPlayedDate: new Date(deck.lastUsedTimestamp).toLocaleDateString(
+										this.i18n.formatCurrentLocale(),
+										{
+											month: 'short',
+											day: '2-digit',
+											year: 'numeric',
+										},
+									),
+								}),
+							} as MultiselectOption),
+					);
+				return {
+					options: options,
+					selected: deckstringFilter,
+					placeholder: this.i18n.translateString('app.replays.filters.deck.all'),
+					visible:
+						(currentApp === 'replays' &&
+							['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(gameModeFilter)) ||
+						(currentApp === 'decktracker' && currentView === 'ladder-stats'),
+				};
+			}),
+		);
 	}
 
 	onSelected(selectedDeckstrings: readonly string[]) {

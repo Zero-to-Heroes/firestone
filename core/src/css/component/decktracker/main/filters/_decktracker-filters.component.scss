@@ -21,10 +21,13 @@
 	flex-wrap: wrap;
 	max-width: 100%;
 
-	.filter, .filter-info{
-		margin-bottom: 5px;
+	.filter,
+	.filter-info {
+		// margin-bottom: 5px;
+		// To handle wrapping
+		margin-bottom: 15px;
 	}
-	.filter-dropdown{
+	.filter-dropdown {
 		margin-right: 15px;
 	}
 	.filter-info {
@@ -56,9 +59,8 @@
 		}
 	}
 
-	
-	.filter.search{
-		::ng-deep .decks-search{
+	.filter.search {
+		::ng-deep .decks-search {
 			width: 155px;
 			height: 30px;
 			margin-right: 15px;

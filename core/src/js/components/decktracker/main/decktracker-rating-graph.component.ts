@@ -11,7 +11,7 @@ import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PatchInfo } from '../../../models/patches';
-import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -129,7 +129,7 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 			: null;
 		const dataWithCurrentMmr = fakeMatchWithCurrentMmr ? [...data, fakeMatchWithCurrentMmr] : data;
 		const dataWithTime = dataWithCurrentMmr.filter((stat) =>
-			DecksStateBuilderService.isValidDate(stat, timeFilter, patch),
+			DecksProviderService.isValidDate(stat, timeFilter, patch),
 		);
 		// Remove the first match if we're on a "last patch" filter
 		const finalData =

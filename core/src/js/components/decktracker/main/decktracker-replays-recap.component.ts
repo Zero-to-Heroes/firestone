@@ -44,13 +44,11 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 
 	ngAfterContentInit() {
 		this.replays$ = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.decktracker.decks,
-				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
-			),
+			this.store.decks$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring),
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
-			this.mapData(([[decks, selectedDeckstring], [deckstringsFilter]]) =>
+			this.mapData(([decks, [selectedDeckstring], [deckstringsFilter]]) =>
 				decks
 					.filter((deck) =>
 						selectedDeckstring

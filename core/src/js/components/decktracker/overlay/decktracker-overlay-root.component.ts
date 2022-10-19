@@ -19,7 +19,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { gameFormatToStatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { Preferences } from '../../../models/preferences';
-import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
+import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -195,34 +195,54 @@ export class DeckTrackerOverlayRootComponent
 				(gameState) => gameState?.metadata?.formatType,
 			),
 			this.store.listen$(
-				([main, nav, prefs]) => main.stats.gameStats,
 				([main, nav, prefs]) => main.decktracker.filters.time,
 				([main, nav, prefs]) => main.decktracker.filters.rank,
 				([main, nav, prefs]) => main.decktracker.patch,
-				([main, nav, prefs]) => main.decktracker.decks,
-				([main, nav, prefs]) => prefs,
+			),
+			this.store.gameStats$(),
+			this.store.decks$(),
+			this.store.listenPrefs$(
+				(prefs) => prefs.desktopDeckDeletes,
+				(prefs) => prefs.desktopDeckStatsReset,
+				(prefs) => prefs.desktopDeckHiddenDeckCodes,
+				(prefs) => prefs.desktopDeckShowHiddenDecks,
 			),
 		).pipe(
 			filter(
-				([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, decks, prefs]]) =>
-					!!gameStats?.stats?.length && !!decks?.length,
-			),
-			this.mapData(([[deckstring, formatType], [gameStats, timeFilter, rankFilter, patch, decks, prefs]]) => {
-				const result = DecksStateBuilderService.buildValidReplays(
-					deckstring,
-					gameStats.stats,
-					// 'standard',
-					gameFormatToStatGameFormatType(formatType),
-					'ranked',
-					timeFilter,
-					rankFilter,
-					prefs,
-					patch,
+				([
+					[deckstring, formatType],
+					[timeFilter, rankFilter, patch],
+					gameStats,
 					decks,
-				);
-				// console.debug('returning gamesForDeck', result);
-				return result;
-			}),
+					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
+				]) => !!gameStats?.length && !!decks?.length,
+			),
+			this.mapData(
+				([
+					[deckstring, formatType],
+					[timeFilter, rankFilter, patch],
+					gameStats,
+					decks,
+					[desktopDeckDeletes, desktopDeckStatsReset, desktopDeckHiddenDeckCodes, desktopDeckShowHiddenDecks],
+				]) => {
+					const result = DecksProviderService.buildValidReplays(
+						deckstring,
+						gameStats,
+						gameFormatToStatGameFormatType(formatType),
+						'ranked',
+						timeFilter,
+						rankFilter,
+						patch,
+						desktopDeckDeletes,
+						desktopDeckStatsReset,
+						desktopDeckHiddenDeckCodes,
+						desktopDeckShowHiddenDecks,
+						decks,
+					);
+					// console.debug('returning gamesForDeck', result);
+					return result;
+				},
+			),
 		);
 
 		this.matchupStatsRecap$ = combineLatest(

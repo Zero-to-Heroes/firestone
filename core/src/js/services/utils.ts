@@ -79,6 +79,16 @@ export const arraysEqual = (a: readonly any[] | any[] | any, b: readonly any[] |
 	return a.length === b.length && a.every((el, ix) => (Array.isArray(el) ? arraysEqual(el, b[ix]) : el === b[ix]));
 };
 
+export const deepEqual = (x: any, y: any): boolean => {
+	const ok = Object.keys,
+		tx = typeof x,
+		ty = typeof y;
+	return x && y && tx === 'object' && tx === ty
+		? ok(x).length === ok(y).length && ok(x).every((key) => deepEqual(x[key], y[key]))
+		: x === y;
+};
+
+/** @deprecated use deepEqual */
 export const areDeepEqual = (a: any, b: any): boolean => {
 	return JSON.stringify(a) == JSON.stringify(b);
 };

@@ -10,10 +10,9 @@ import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/de
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -25,6 +24,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="filters decktracker-filters">
+			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
 			<decktracker-format-filter-dropdown class="filter format-filter"></decktracker-format-filter-dropdown>
 			<decktracker-rank-category-dropdown class="filter rank-category"></decktracker-rank-category-dropdown>
 			<decktracker-rank-group-dropdown class="filter rank-group"></decktracker-rank-group-dropdown>
@@ -59,6 +59,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class DecktrackerFiltersComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit {
+	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
@@ -76,6 +77,14 @@ export class DecktrackerFiltersComponent
 
 	ngAfterContentInit() {
 		this.helpTooltip = this.i18n.translateString('app.decktracker.filters.filter-info-tooltip');
+		this.showRegionFilter$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(
+					([currentView]) => currentView !== 'deck-details' && currentView !== 'constructed-deckbuilder',
+				),
+			);
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.currentView,
@@ -83,14 +92,12 @@ export class DecktrackerFiltersComponent
 			)
 			.pipe(
 				filter(([currentView, hiddenDeckCodes]) => !!currentView && !!hiddenDeckCodes),
-				map(
+				this.mapData(
 					([currentView, hiddenDeckCodes]) =>
 						currentView !== 'deck-details' &&
 						currentView !== 'constructed-deckbuilder' &&
 						hiddenDeckCodes.length > 0,
 				),
-				tap((info) => cdLog('emitting hidden deck codes in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 		this.showInfo$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.currentView)

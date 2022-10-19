@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
-import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-state-builder.service';
+import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';

@@ -22,6 +22,7 @@ import { ArenaRunParserService } from './decktracker/arena-run-parser.service';
 import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
+import { DecksProviderService } from './decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { DuelsLootParserService } from './duels/duels-loot-parser.service';
@@ -124,6 +125,7 @@ export class AppBootstrapService {
 		private init_OWUtilsService: OwUtilsService,
 		private init_CardsHighlightService: CardsHighlightService,
 		private init_ConstructedMetaDecksStateBuilderService: ConstructedMetaDecksStateBuilderService,
+		private ini_DecksProviderService: DecksProviderService,
 		private init_gameStatus: GameStatusService,
 		private init_quests: QuestsService,
 		private init_LiveStreamsService: LiveStreamsService,

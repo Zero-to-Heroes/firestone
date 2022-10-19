@@ -109,10 +109,10 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 
 		// TODO: the standard/wild filter doesn't work, as it gives more result in Standard than in All...
 		this.replays$ = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => main.decktracker.decks),
+			this.store.decks$(),
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
-			this.mapData(([[decks], [deckstringsFilter]]) => {
+			this.mapData(([decks, [deckstringsFilter]]) => {
 				const result = decks
 					.filter(
 						(deck) =>

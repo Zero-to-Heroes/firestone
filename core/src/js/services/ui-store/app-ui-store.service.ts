@@ -22,6 +22,7 @@ import { BgsActiveTimeFilterType } from '../../models/mainwindow/battlegrounds/b
 import { BgsHeroSortFilterType } from '../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -30,6 +31,7 @@ import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-com
 import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
+import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { GameNativeState } from '../game/game-native-state';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
@@ -69,6 +71,7 @@ export class AppUiStoreService {
 	private duelsHeroStats = new BehaviorSubject<readonly DuelsHeroPlayerStat[]>(null);
 	private duelsTopDecks = new BehaviorSubject<readonly DuelsGroupedDecks[]>(null);
 	private gameStats = new BehaviorSubject<readonly GameStat[]>(null);
+	private decks = new BehaviorSubject<readonly DeckSummary[]>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -90,6 +93,7 @@ export class AppUiStoreService {
 				duelsHeroStats: this.duelsHeroStats.observers,
 				duelsTopDecks: this.duelsTopDecks.observers,
 				gameStats: this.gameStats.observers,
+				decks: this.decks.observers,
 			});
 	}
 
@@ -239,6 +243,10 @@ export class AppUiStoreService {
 		return this.gameStats.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public decks$(): Observable<readonly DeckSummary[]> {
+		return this.decks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public send(event: MainWindowStoreEvent) {
 		this.stateUpdater.next(event);
 	}
@@ -250,7 +258,15 @@ export class AppUiStoreService {
 		this.initDuelsHeroStats();
 		this.initDuelsTopDecks();
 		this.initGameStats();
+		this.initDecks();
 		this.initialized = true;
+	}
+
+	private initDecks() {
+		console.debug('decks', this.ow.getMainWindow().decksProvider);
+		const decks$: BehaviorSubject<readonly DeckSummary[]> = (this.ow.getMainWindow()
+			.decksProvider as DecksProviderService).decks$;
+		decks$.subscribe(this.decks);
 	}
 
 	private initGameStats() {
@@ -373,21 +389,23 @@ export class AppUiStoreService {
 	}
 
 	private initBgsHeroStats() {
-		this.listen$(
-			([main, nav]) => main.battlegrounds.globalStats,
-			([main, nav]) => main.stats.gameStats?.stats,
-			([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
-			([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-			([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
-			([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
+		combineLatest(
+			this.gameStats$(),
+			this.listen$(
+				([main, nav]) => main.battlegrounds.globalStats,
+				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
+				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
+			),
 		)
 			.pipe(
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(
-					([stats, matches, timeFilter, rankFilter, heroSort, patch]) =>
+					([gameStats, [stats, timeFilter, rankFilter, heroSort, patch]]) =>
 						[
 							stats,
-							matches.filter(
+							gameStats.filter(
 								(stat) =>
 									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
 							),

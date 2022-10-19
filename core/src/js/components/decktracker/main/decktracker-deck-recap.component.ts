@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
@@ -99,25 +99,25 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 	}
 
 	ngAfterContentInit() {
-		this.deck$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.decktracker.decks,
+		this.deck$ = combineLatest(
+			this.store.decks$(),
+			this.store.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
 				([main, nav, prefs]) => nav.navigationDecktracker.selectedVersionDeckstring,
-			)
-			.pipe(
-				tap((info) => console.debug('[deck] info', info)),
-				this.mapData(([decks, selectedDeckstring, selectedVersionDeckstring]) => {
-					const deck: DeckSummary = decks.find(
-						(deck) =>
-							deck?.deckstring === selectedDeckstring ||
-							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
-					);
-					return !!selectedVersionDeckstring
-						? deck.allVersions?.find((v) => v.deckstring === selectedVersionDeckstring)
-						: deck;
-				}),
-			);
+			),
+		).pipe(
+			tap((info) => console.debug('[deck] info', info)),
+			this.mapData(([decks, [selectedDeckstring, selectedVersionDeckstring]]) => {
+				const deck: DeckSummary = decks.find(
+					(deck) =>
+						deck?.deckstring === selectedDeckstring ||
+						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
+				);
+				return !!selectedVersionDeckstring
+					? deck.allVersions?.find((v) => v.deckstring === selectedVersionDeckstring)
+					: deck;
+			}),
+		);
 		this.deck$.subscribe((deck) => (this.deckstring = deck?.deckstring));
 		this.info$ = this.deck$.pipe(
 			this.mapData((deck) => {

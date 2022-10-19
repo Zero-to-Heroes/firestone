@@ -209,7 +209,6 @@ import {
 import { DecktrackerLadderStatsMatchupsComponent } from '../../components/decktracker/main/decktracker-ladder-stats-matchups.component';
 import { DecktrackerLadderStatsOverviewComponent } from '../../components/decktracker/main/decktracker-ladder-stats-overview.component';
 import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
-import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerRatingGraphComponent } from '../../components/decktracker/main/decktracker-rating-graph.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { DecktrackerStatsForReplaysComponent } from '../../components/decktracker/main/decktracker-stats-for-replays.component';
@@ -510,7 +509,7 @@ import { DeckManipulationHelper } from '../../services/decktracker/event-parser/
 import { SecretsParserService } from '../../services/decktracker/event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from '../../services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../services/decktracker/game-state.service';
-import { DecksStateBuilderService } from '../../services/decktracker/main/decks-state-builder.service';
+import { DecksProviderService } from '../../services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from '../../services/decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../services/decktracker/main/replays-state-builder.service';
 import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
@@ -783,7 +782,6 @@ const components = [
 		DeckManaCurveComponent,
 		DeckManaCurveBarComponent,
 		DecktrackerReplaysRecapComponent,
-		DecktrackerPersonalStatsRankingComponent,
 		DecktrackerLadderStatsComponent,
 		DecktrackerLadderStatsOverviewComponent,
 		DecktrackerLadderStatsMatchupsComponent,
@@ -1188,7 +1186,7 @@ const components = [
 		AchievementUpdateHelper,
 
 		DecktrackerStateLoaderService,
-		DecksStateBuilderService,
+		DecksProviderService,
 		ReplaysStateBuilderService,
 		ConstructedMetaDecksStateBuilderService,
 

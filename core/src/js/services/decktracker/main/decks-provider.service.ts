@@ -2,6 +2,8 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSummary, DeckSummaryVersion } from '../../../models/mainwindow/decktracker/deck-summary';
@@ -11,31 +13,103 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
-import { Preferences } from '../../../models/preferences';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { classes } from '../../hs-utils';
-import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
+import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
+import { deepEqual, groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 @Injectable()
-export class DecksStateBuilderService {
-	constructor(private readonly allCards: CardsFacadeService) {}
+export class DecksProviderService {
+	public decks$ = new BehaviorSubject<readonly DeckSummary[]>(null);
+
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
+		window['decksProvider'] = this;
+		this.init();
+	}
+
+	private async init() {
+		await this.store.initComplete();
+
+		combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
+				([main, nav]) => main.decktracker.filters,
+				([main, nav]) => main.decktracker.patch,
+			),
+			this.store.listenPrefs$(
+				(prefs) => prefs.constructedPersonalAdditionalDecks,
+				(prefs) => prefs.desktopDeckDeletes,
+				(prefs) => prefs.desktopDeckHiddenDeckCodes,
+				(prefs) => prefs.constructedDeckVersions,
+				(prefs) => prefs.desktopDeckStatsReset,
+				(prefs) => prefs.desktopDeckShowHiddenDecks,
+			),
+		)
+			.pipe(
+				filter(
+					([
+						stats,
+						[filters, patch],
+						[
+							constructedPersonalAdditionalDecks,
+							desktopDeckDeletes,
+							desktopDeckHiddenDeckCodes,
+							constructedDeckVersions,
+							desktopDeckStatsReset,
+							desktopDeckShowHiddenDecks,
+						],
+					]) => !!stats?.length && !!patch,
+				),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				tap((info) => console.debug('[decks-provider] preparing', info)),
+				map(
+					([
+						stats,
+						[filters, patch],
+						[
+							constructedPersonalAdditionalDecks,
+							desktopDeckDeletes,
+							desktopDeckHiddenDeckCodes,
+							constructedDeckVersions,
+							desktopDeckStatsReset,
+							desktopDeckShowHiddenDecks,
+						],
+					]) => {
+						return this.buildState(
+							stats,
+							filters,
+							patch,
+							constructedPersonalAdditionalDecks,
+							desktopDeckDeletes,
+							desktopDeckStatsReset,
+							desktopDeckHiddenDeckCodes,
+							constructedDeckVersions,
+							desktopDeckShowHiddenDecks,
+						);
+					},
+				),
+				tap((info) => console.debug('[decks-provider] rebuilt decks', info)),
+			)
+			.subscribe(this.decks$);
+	}
 
 	public buildState(
-		stats: StatsState,
+		stats: readonly GameStat[],
 		filters: DeckFilters,
 		patch: PatchInfo,
-		prefs: Preferences,
+		personalDecks: readonly DeckSummary[],
+		desktopDeckDeletes: { [deckstring: string]: readonly number[] },
+		desktopDeckStatsReset: { [deckstring: string]: readonly number[] },
+		desktopDeckHiddenDeckCodes: readonly string[],
+		constructedDeckVersions: readonly ConstructedDeckVersions[],
+		desktopDeckShowHiddenDecks: boolean,
 	): readonly DeckSummary[] {
-		const personalDecks = prefs.constructedPersonalAdditionalDecks ?? [];
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
-		if (!stats || !stats.gameStats?.stats?.length) {
+		if (!stats || !stats?.length) {
 			return personalDecks;
 		}
-		const rankedStats = stats.gameStats.stats
-			.filter((stat) => stat.gameMode === 'ranked')
-			.filter((stat) => !!stat.playerDecklist);
+		const rankedStats = stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => !!stat.playerDecklist);
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
@@ -43,7 +117,10 @@ export class DecksStateBuilderService {
 			this.buildDeckSummary(
 				deckstring,
 				statsByDeck[deckstring],
-				prefs,
+				desktopDeckHiddenDeckCodes,
+				desktopDeckDeletes,
+				desktopDeckStatsReset,
+				desktopDeckShowHiddenDecks,
 				filters,
 				patch,
 				statsByDeck[deckstring][0],
@@ -53,7 +130,7 @@ export class DecksStateBuilderService {
 		// These only include the personal decks that haven't seen any play (otherwise they appear in the usual decks)
 		const finalPersonalDecks = personalDecks
 			.filter((deck) => !deckstrings.includes(deck.deckstring))
-			.filter((deck) => !Object.keys(prefs.desktopDeckDeletes).includes(deck.deckstring))
+			.filter((deck) => !Object.keys(desktopDeckDeletes).includes(deck.deckstring))
 			// Still need to filter these
 			.filter((deck) => filters.gameFormat === 'all' || filters.gameFormat === deck.format)
 			.map((deck) => {
@@ -65,15 +142,11 @@ export class DecksStateBuilderService {
 					replays: [],
 					totalGames: 0,
 					totalWins: 0,
-					hidden: prefs.desktopDeckHiddenDeckCodes.includes(deck.deckstring),
+					hidden: desktopDeckHiddenDeckCodes.includes(deck.deckstring),
 				} as DeckSummary;
 			});
 
-		const versionedDecks = this.consolidateDeckVersions(
-			decks,
-			prefs.constructedDeckVersions,
-			prefs.desktopDeckHiddenDeckCodes,
-		);
+		const versionedDecks = this.consolidateDeckVersions(decks, constructedDeckVersions, desktopDeckHiddenDeckCodes);
 		return [...versionedDecks, ...finalPersonalDecks];
 	}
 
@@ -149,13 +222,16 @@ export class DecksStateBuilderService {
 		gameModeFilter: StatGameModeType,
 		timeFilter: DeckTimeFilterType,
 		rankFilter: DeckRankFilterType,
-		prefs: Preferences,
 		patch: PatchInfo,
+		desktopDeckDeletes: { [deckstring: string]: readonly number[] },
+		desktopDeckStatsReset: { [deckstring: string]: readonly number[] },
+		desktopDeckHiddenDeckCodes: readonly string[],
+		desktopDeckShowHiddenDecks: boolean,
 		decks: readonly DeckSummary[] = null,
 	): readonly GameStat[] {
-		const resetForDeck = (prefs?.desktopDeckStatsReset ?? {})[deckstring] ?? [];
+		const resetForDeck = (desktopDeckStatsReset ?? {})[deckstring] ?? [];
 		const lastResetDate = resetForDeck[0] ?? 0;
-		const deleteForDeck = (prefs?.desktopDeckDeletes ?? {})[deckstring] ?? [];
+		const deleteForDeck = (desktopDeckDeletes ?? {})[deckstring] ?? [];
 		const lastDeleteDate = deleteForDeck[0] ?? 0;
 
 		// Because the method is used also to build the initial decks, we can't rely on the decks
@@ -173,7 +249,7 @@ export class DecksStateBuilderService {
 			.filter((stat) => !!stat.opponentClass)
 			.filter((stat) => stat.gameMode === gameModeFilter)
 			.filter((stat) => gameFormatFilter === 'all' || stat.gameFormat === gameFormatFilter)
-			.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
+			.filter((stat) => DecksProviderService.isValidDate(stat, timeFilter, patch))
 			// We have to also filter the info here, as otherwise we need to do a full state reset
 			// after the user presses the delete button
 			.filter((stat) => stat.creationTimestamp > lastResetDate)
@@ -183,24 +259,22 @@ export class DecksStateBuilderService {
 		const replaysForSeasons =
 			timeFilter === 'season-start'
 				? [
-						...DecksStateBuilderService.replaysForSeason(
+						...DecksProviderService.replaysForSeason(
 							statsWithReset.filter((stat) => stat.gameFormat === 'standard'),
 						),
-						...DecksStateBuilderService.replaysForSeason(
+						...DecksProviderService.replaysForSeason(
 							statsWithReset.filter((stat) => stat.gameFormat === 'wild'),
 						),
-						...DecksStateBuilderService.replaysForSeason(
+						...DecksProviderService.replaysForSeason(
 							statsWithReset.filter((stat) => stat.gameFormat === 'classic'),
 						),
 				  ]
 				: statsWithReset;
-		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
+		const hiddenDeckCodes = desktopDeckHiddenDeckCodes ?? [];
 		const result = replaysForSeasons
-			.filter((stat) => DecksStateBuilderService.isValidRank(stat, rankFilter))
+			.filter((stat) => DecksProviderService.isValidRank(stat, rankFilter))
 			.filter((stat) => stat.playerDecklist && stat.playerDecklist !== 'undefined')
-			.filter(
-				(stat) => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
-			);
+			.filter((stat) => desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist));
 		return result;
 	}
 
@@ -276,28 +350,27 @@ export class DecksStateBuilderService {
 	private buildDeckSummary(
 		deckstring: string,
 		stats: readonly GameStat[],
-		prefs: Preferences,
+		desktopDeckHiddenDeckCodes: readonly string[],
+		desktopDeckDeletes: { [deckstring: string]: readonly number[] },
+		desktopDeckStatsReset: { [deckstring: string]: readonly number[] },
+		desktopDeckShowHiddenDecks: boolean,
 		filters: DeckFilters,
 		patch: PatchInfo,
 		sampleGame?: GameStat,
 	): DeckSummary {
-		const validStats: readonly GameStat[] = DecksStateBuilderService.buildValidReplays(
+		const validStats: readonly GameStat[] = DecksProviderService.buildValidReplays(
 			deckstring,
 			stats,
 			filters.gameFormat,
 			filters.gameMode,
 			filters.time,
 			filters.rank,
-			prefs,
 			patch,
+			desktopDeckDeletes,
+			desktopDeckStatsReset,
+			desktopDeckHiddenDeckCodes,
+			desktopDeckShowHiddenDecks,
 		);
-		// console.debug(
-		// 	'[deck] built valid replays',
-		// 	validStats.length && validStats[0].playerDeckName,
-		// 	prefs,
-		// 	filters,
-		// 	validStats,
-		// );
 
 		const deckName =
 			stats.filter((stat) => stat.playerDeckName).length > 0
@@ -339,7 +412,7 @@ export class DecksStateBuilderService {
 			totalGames: totalGames,
 			totalWins: totalWins,
 			winRatePercentage: totalGames > 0 ? (100.0 * totalWins) / totalGames : null,
-			hidden: prefs.desktopDeckHiddenDeckCodes.includes(deckstring),
+			hidden: desktopDeckHiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
 			format: this.buildFormat(deckstring),
 			replays: validStats,

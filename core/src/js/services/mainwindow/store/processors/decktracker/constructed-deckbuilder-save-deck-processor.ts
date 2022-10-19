@@ -3,11 +3,10 @@ import { NavigationState } from '@models/mainwindow/navigation/navigation-state'
 import { Processor } from '@services/mainwindow/store/processors/processor';
 import { PreferencesService } from '@services/preferences.service';
 import { DeckSummary } from '../../../../../models/mainwindow/decktracker/deck-summary';
-import { DecksStateBuilderService } from '../../../../decktracker/main/decks-state-builder.service';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../events/decktracker/constructed-deckbuilder-save-deck-event';
 
 export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly stateBuilder: DecksStateBuilderService) {}
+	constructor(private readonly prefs: PreferencesService) {}
 
 	public async process(
 		event: ConstructedDeckbuilderSaveDeckEvent,
@@ -32,21 +31,6 @@ export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
 		const newPrefs = { ...prefs, constructedPersonalAdditionalDecks: existingDecks };
 		await this.prefs.savePreferences(newPrefs);
 		console.debug('newPrefs', newPrefs);
-		const newDecks = this.stateBuilder.buildState(
-			currentState.stats,
-			currentState.decktracker.filters,
-			currentState.decktracker.patch,
-			newPrefs,
-		);
-		console.debug('newDecks', newDecks);
-		const newDecktrackerState = currentState.decktracker.update({
-			decks: newDecks,
-		});
-		return [
-			currentState.update({
-				decktracker: newDecktrackerState,
-			}),
-			null,
-		];
+		return [null, null];
 	}
 }

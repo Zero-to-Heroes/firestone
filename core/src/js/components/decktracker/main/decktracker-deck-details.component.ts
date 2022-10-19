@@ -95,20 +95,18 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 	}
 
 	ngAfterContentInit() {
-		this.deck$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.decktracker.decks,
-				([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring,
-			)
-			.pipe(
-				this.mapData(([decks, selectedDeckstring]) =>
-					decks.find(
-						(deck) =>
-							deck.deckstring === selectedDeckstring ||
-							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
-					),
+		this.deck$ = combineLatest(
+			this.store.decks$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring),
+		).pipe(
+			this.mapData(([decks, [selectedDeckstring]]) =>
+				decks.find(
+					(deck) =>
+						deck.deckstring === selectedDeckstring ||
+						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
 				),
-			);
+			),
+		);
 		this.selectedVersion$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.selectedVersionDeckstring)
 			.pipe(this.mapData(([deckstring]) => deckstring));

@@ -89,13 +89,13 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 
 	ngAfterContentInit() {
 		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.decktracker.decks,
-				([main, nav, prefs]) => prefs.desktopDeckFilters?.sort,
+			this.store.decks$(),
+			this.store.listenPrefs$(
+				(prefs) => prefs.desktopDeckFilters?.sort,
+				(prefs) => prefs.constructedDecksSearchString,
 			),
-			this.store.listenPrefs$((prefs) => prefs.constructedDecksSearchString),
 		).pipe(
-			this.mapData(([[decks, sort], [search]]) => {
+			this.mapData(([decks, [sort, search]]) => {
 				// console.debug('[deck] updating decks', decks);
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
