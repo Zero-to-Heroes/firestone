@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
-import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
+import { DeckDefinition, decode } from '@firestone-hs/deckstrings';
 import { DeckStat, DuelsStat, DuelsStatDecks } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
@@ -12,7 +12,6 @@ import { AdventuresInfo, DuelsInfo } from '@models/memory/memory-duels';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsMemoryCacheService } from '@services/duels/duels-memory-cache.service';
-import { getDuelsModeName } from '@services/duels/duels-utils';
 import { DuelsChoosingHeroEvent } from '@services/mainwindow/store/events/duels/duels-choosing-hero-event';
 import { DuelsCurrentDeckEvent } from '@services/mainwindow/store/events/duels/duels-current-deck-event';
 import { DuelsCurrentOptionEvent } from '@services/mainwindow/store/events/duels/duels-current-option-event';
@@ -21,30 +20,18 @@ import { DuelsIsOnMainScreenEvent } from '@services/mainwindow/store/events/duel
 import { DuelsStateUpdatedEvent } from '@services/mainwindow/store/events/duels/duels-state-updated-event';
 import { MemoryInspectionService } from '@services/plugins/memory-inspection.service';
 import { BehaviorSubject } from 'rxjs';
-import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
-import {
-	DuelsDeckStatInfo,
-	DuelsDeckSummary,
-	DuelsDeckSummaryForType,
-	HeroPowerDuelsDeckStatInfo,
-	LootDuelsDeckStatInfo,
-	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo,
-} from '../../models/duels/duels-personal-deck';
+import { DuelsDeckStatInfo } from '../../models/duels/duels-personal-deck';
 import { DuelsDeckStat } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsBucketsData, DuelsState } from '../../models/duels/duels-state';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
-import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
-import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { runLoop } from '../game-mode-data.service';
-import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -247,6 +234,7 @@ export class DuelsStateBuilderService {
 		bucketsData: readonly DuelsBucketsData[],
 		collectionState: BinderState,
 		adventuresInfo: AdventuresInfo,
+		currentDuelsMetaPatch?: PatchInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
@@ -263,36 +251,8 @@ export class DuelsStateBuilderService {
 			bucketsData: bucketsData,
 			leaderboard: leaderboard,
 			adventuresInfo: adventuresInfo,
-		} as DuelsState);
-	}
-
-	public async updateState(
-		currentState: DuelsState,
-		matchStats: GameStats,
-		currentDuelsMetaPatch?: PatchInfo,
-	): Promise<DuelsState> {
-		const duelMatches = matchStats?.stats?.filter((match) => match.isDuels()).filter((match) => match.runId) ?? [];
-		const matchesByRun = groupByFunction((match: GameStat) => match.runId)(duelMatches);
-		const runIds = Object.keys(matchesByRun);
-		const runs: readonly DuelsRun[] = runIds
-			.map((runId) =>
-				this.buildRun(
-					runId,
-					matchesByRun[runId],
-					currentState.duelsRunInfos.filter((runInfo) => runInfo.runId === runId),
-					currentState.duelsRewardsInfo.filter((runInfo) => runInfo.runId === runId),
-				),
-			)
-			.filter((run) => run);
-		console.log('[duels-state-builder] built runs', runs?.length);
-		const prefs = await this.prefs.getPreferences();
-		const personalDeckStats: readonly DuelsDeckSummary[] = this.buildPersonalDeckStats(runs, prefs);
-		console.log('[duels-state-builder] built deck stats');
-		return currentState.update({
-			runs: runs,
+			currentDuelsMetaPatch: currentDuelsMetaPatch,
 			loading: false,
-			personalDeckStats: personalDeckStats,
-			currentDuelsMetaPatch: currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch,
 		} as DuelsState);
 	}
 
@@ -410,167 +370,6 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
-		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
-			(run: DuelsRun) => run.initialDeckList,
-		)(runs.filter((run) => run.initialDeckList));
-		const decks: DuelsDeckSummary[] = Object.keys(groupedByDecklist)
-			.filter((deckstring) => deckstring)
-			.map((deckstring) => {
-				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
-					(run: DuelsRun) => run.type,
-				)(groupedByDecklist[deckstring] ?? []);
-
-				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map((type) => {
-					return {
-						type: type,
-						...this.buildMainPersonalDecktats(groupedByType[type]),
-					} as DuelsDeckSummaryForType;
-				});
-				const firstMatch = groupedByDecklist[deckstring][0];
-				const heroCardId = firstMatch.heroCardId;
-				const mainStats = this.buildMainPersonalDecktats(groupedByDecklist[deckstring]);
-				const playerClass = this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase();
-
-				const defaultDeckName = this.i18n.translateString('app.duels.deck-stat.default-deck-name', {
-					wins: mainStats.global.averageWinsPerRun.toFixed(1),
-					playerClass: formatClass(playerClass, this.i18n),
-					gameMode: getDuelsModeName(firstMatch.type, this.i18n),
-				});
-
-				// Make sure the decklist doesn't include signature treasures
-				const deckDefinition = decode(firstMatch.initialDeckList);
-				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
-				const sanitizedDeckstring = encode(updatedDeckDefinition);
-				console.debug(
-					'[debug] sanitizedDeckstring',
-					sanitizedDeckstring,
-					deckDefinition,
-					prefs.duelsPersonalAdditionalDecks,
-				);
-				return ({
-					...mainStats,
-					initialDeckList: sanitizedDeckstring,
-					heroCardId: heroCardId,
-					playerClass: playerClass,
-					deckStatsForTypes: decksForTypes,
-					// FIXME: use prefs in component to override deck name
-					deckName: this.getDeckName(sanitizedDeckstring, prefs) ?? defaultDeckName,
-					runs: groupedByDecklist[deckstring],
-					debug1: deckDefinition,
-					debug2: updatedDeckDefinition,
-				} as any) as DuelsDeckSummary;
-			});
-		for (const personalDeck of prefs.duelsPersonalAdditionalDecks) {
-			console.debug(
-				'[debug] personalDeck',
-				personalDeck?.deckName,
-				personalDeck,
-				decode(personalDeck.initialDeckList),
-				decks,
-			);
-			if (decks.find((deck) => deck.initialDeckList === personalDeck.initialDeckList)) {
-				continue;
-			}
-			decks.push(personalDeck);
-		}
-		console.log('[duels-state-builder] personal decks', decks?.length);
-		return decks;
-	}
-
-	private getDeckName(initialDeckList: string, prefs: Preferences): string {
-		return prefs.duelsPersonalDeckNames[initialDeckList] ?? null;
-	}
-
-	private buildMainPersonalDecktats(
-		runs: readonly DuelsRun[],
-	): {
-		readonly global: DuelsDeckStatInfo;
-		readonly heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[];
-		readonly signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[];
-		readonly treasureStats: readonly TreasureDuelsDeckStatInfo[];
-		readonly lootStats: readonly LootDuelsDeckStatInfo[];
-	} {
-		const groupedByHeroPower = groupByFunction((run: DuelsRun) => run.heroPowerCardId)(runs);
-		const heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[] = Object.keys(groupedByHeroPower).map(
-			(heroPowerCardId) => ({
-				...this.buildDeckStatInfo(groupedByHeroPower[heroPowerCardId]),
-				heroPowerCardId: heroPowerCardId,
-			}),
-		);
-
-		const groupedBySignatureTreasure = groupByFunction((run: DuelsRun) => run.signatureTreasureCardId)(runs);
-		const signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[] = Object.keys(
-			groupedBySignatureTreasure,
-		).map((signatureTreasureCardId) => ({
-			...this.buildDeckStatInfo(groupedBySignatureTreasure[signatureTreasureCardId]),
-			signatureTreasureCardId: signatureTreasureCardId,
-		}));
-
-		const extractTreasuresForRun = (run: DuelsRun) => {
-			return run.steps
-				.filter((step) => (step as DuelsRunInfo).bundleType === 'treasure')
-				.map((step) => step as DuelsRunInfo)
-				.map((step) =>
-					step.chosenOptionIndex === 1
-						? step.option1
-						: step.chosenOptionIndex === 2
-						? step.option2
-						: step.chosenOptionIndex === 2
-						? step.option3
-						: null,
-				)
-				.filter((treasure) => treasure);
-		};
-		const allTreasures: readonly string[] = [
-			...new Set(runs.map((run) => extractTreasuresForRun(run)).reduce((a, b) => a.concat(b), [])),
-		];
-		const treasureStats: readonly TreasureDuelsDeckStatInfo[] = allTreasures.map((treasureId) => {
-			const runsWithTreasure: readonly DuelsRun[] = runs.filter((run) =>
-				extractTreasuresForRun(run).includes(treasureId),
-			);
-			return {
-				...this.buildDeckStatInfo(runsWithTreasure),
-				cardId: treasureId,
-			};
-		});
-
-		const extractLootsForRun = (run: DuelsRun) => {
-			return run.steps
-				.filter((step) => (step as DuelsRunInfo).bundleType === 'loot')
-				.map((step) => step as DuelsRunInfo)
-				.map((step) =>
-					step.chosenOptionIndex === 1
-						? step.option1Contents
-						: step.chosenOptionIndex === 2
-						? step.option2Contents
-						: step.chosenOptionIndex === 2
-						? step.option3Contents
-						: null,
-				)
-				.reduce((a, b) => a.concat(b), [])
-				.filter((cardId) => cardId);
-		};
-		const allCardLooted: readonly string[] = [
-			...new Set(runs.map((run) => extractLootsForRun(run)).reduce((a, b) => a.concat(b), [])),
-		];
-		const lootStats: readonly LootDuelsDeckStatInfo[] = allCardLooted.map((cardId) => {
-			const runsWithTheLoot: readonly DuelsRun[] = runs.filter((run) => extractLootsForRun(run).includes(cardId));
-			return {
-				...this.buildDeckStatInfo(runsWithTheLoot),
-				cardId: cardId,
-			};
-		});
-
-		return {
-			global: this.buildDeckStatInfo(runs),
-			heroPowerStats: heroPowerStats,
-			signatureTreasureStats: signatureTreasureStats,
-			treasureStats: treasureStats,
-			lootStats: lootStats,
-		};
-	}
-
 	private buildTopDeckStats(
 		deckStats: readonly DeckStat[],
 		collectionState: BinderState,
@@ -633,112 +432,6 @@ export class DuelsStateBuilderService {
 			.filter((card) => card.getNumberCollected() === 0)
 			.map((card) => card.getRegularDustCost())
 			.reduce((a, b) => a + b, 0);
-	}
-
-	private buildRun(
-		runId: string,
-		matchesForRun: readonly GameStat[],
-		runInfo: readonly DuelsRunInfo[],
-		rewardsInfo: readonly DuelsRewardsInfo[],
-	): DuelsRun {
-		if (!matchesForRun && !runInfo) {
-			return null;
-		}
-		const sortedMatches = [...matchesForRun].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
-		const firstMatch = this.getFirstMatchForRun(sortedMatches);
-		const sortedInfo = [...runInfo].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
-		const steps: readonly (GameStat | DuelsRunInfo)[] = [
-			...(sortedMatches || []),
-			...(sortedInfo || []),
-		].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
-		const [wins, losses] = this.extractWins(sortedMatches);
-		let normalizedDeckstring = firstMatch?.playerDecklist;
-		if (!!firstMatch?.playerDecklist) {
-			const deckDefinition = decode(firstMatch?.playerDecklist);
-			const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
-			normalizedDeckstring = encode(updatedDeckDefinition);
-		}
-		return DuelsRun.create({
-			id: runId,
-			type: this.getDuelsType(steps[0]),
-			creationTimestamp: steps[0].creationTimestamp,
-			buildNumberAtStart: firstMatch?.buildNumber,
-			heroCardId: this.extractHeroCardId(sortedMatches),
-			heroPowerCardId: this.extractHeroPowerCardId(sortedInfo),
-			signatureTreasureCardId: this.extractSignatureTreasureCardId(sortedInfo),
-			initialDeckList: normalizedDeckstring,
-			wins: wins,
-			losses: losses,
-			ratingAtStart: this.extractRatingAtStart(sortedMatches),
-			ratingAtEnd: this.extractRatingAtEnd(sortedMatches),
-			steps: steps,
-			rewards: rewardsInfo,
-		} as DuelsRun);
-	}
-
-	private getFirstMatchForRun(sortedMatches: readonly GameStat[]): GameStat {
-		const firstMatch = sortedMatches[0];
-		const [wins, losses] = firstMatch.additionalResult?.split('-')?.map((info) => parseInt(info)) ?? [null, null];
-		if (wins !== 0 || losses !== 0) {
-			return null;
-		}
-		return firstMatch;
-	}
-
-	private extractRatingAtEnd(sortedMatches: readonly GameStat[]): number {
-		if (sortedMatches.length === 0) {
-			return null;
-		}
-		const lastMatch = sortedMatches[sortedMatches.length - 1];
-		return lastMatch.newPlayerRank ? parseInt(lastMatch.newPlayerRank) : null;
-	}
-
-	private extractRatingAtStart(sortedMatches: readonly GameStat[]): number {
-		if (sortedMatches.length === 0) {
-			return null;
-		}
-		const lastMatch = sortedMatches[sortedMatches.length - 1];
-		return lastMatch.playerRank ? parseInt(lastMatch.playerRank) : null;
-	}
-
-	private extractWins(sortedMatches: readonly GameStat[]): [number, number] {
-		if (sortedMatches.length === 0) {
-			return [null, null];
-		}
-		const lastMatch = sortedMatches[sortedMatches.length - 1];
-		if (!lastMatch.additionalResult || lastMatch.additionalResult.indexOf('-') === -1) {
-			return [null, null];
-		}
-		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
-
-		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
-	}
-
-	private extractSignatureTreasureCardId(steps: readonly DuelsRunInfo[]): string {
-		if (!steps || steps.length === 0) {
-			return null;
-		}
-		return steps.find((step) => step.bundleType === 'signature-treasure')?.option1;
-	}
-
-	private extractHeroPowerCardId(steps: readonly DuelsRunInfo[]): string {
-		if (!steps || steps.length === 0) {
-			return null;
-		}
-		return steps.find((step) => step.bundleType === 'hero-power')?.option1;
-	}
-
-	private extractHeroCardId(sortedMatches: readonly GameStat[]): string {
-		if (sortedMatches.length === 0) {
-			return null;
-		}
-		return sortedMatches[0].playerCardId;
-	}
-
-	private getDuelsType(firstStep: DuelsRunInfo | GameStat): 'duels' | 'paid-duels' {
-		return (
-			(firstStep as DuelsRunInfo).adventureType || ((firstStep as GameStat).gameMode as 'duels' | 'paid-duels')
-		);
 	}
 
 	private initDuelsInfoObservable() {

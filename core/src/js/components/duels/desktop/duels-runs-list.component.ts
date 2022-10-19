@@ -5,9 +5,12 @@ import {
 	Component,
 	Input,
 	OnDestroy,
+	ViewChild,
+	ViewRef,
 } from '@angular/core';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -20,16 +23,16 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [`../../../../css/component/duels/desktop/duels-runs-list.component.scss`],
 	template: `
 		<div class="duels-runs-container">
-			<virtual-scroller
-				#scroll
-				*ngIf="runs$ | async as runs; else emptyState"
-				class="runs-list"
-				[items]="runs"
-				bufferAmount="5"
-				scrollable
-			>
-				<!-- Because the virtual-scroller needs elements of the same size to work, we can't give it groups -->
-				<ng-container *ngIf="{ expandedRunIds: expandedRunIds$ | async } as value">
+			<ng-container *ngIf="{ runs: runs$ | async, expandedRunIds: expandedRunIds$ | async } as value">
+				<virtual-scroller
+					#scroll
+					*ngIf="value.runs?.length; else emptyState"
+					class="runs-list"
+					[items]="value.runs"
+					bufferAmount="5"
+					scrollable
+				>
+					<!-- Because the virtual-scroller needs elements of the same size to work, we can't give it groups -->
 					<ng-container *ngFor="let run of scroll.viewPortItems; trackBy: trackByRun">
 						<div class="header" *ngIf="run.header">{{ run.header }}</div>
 						<duels-run
@@ -40,17 +43,20 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[isExpanded]="value.expandedRunIds?.includes(run.id)"
 						></duels-run>
 					</ng-container>
-				</ng-container>
-			</virtual-scroller>
+				</virtual-scroller>
 
-			<ng-template #emptyState>
-				<duels-empty-state></duels-empty-state>
-			</ng-template>
+				<ng-template #emptyState>
+					<duels-empty-state></duels-empty-state>
+				</ng-template>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	@ViewChild('scroll', { static: false })
+	private scroll: VirtualScrollerComponent;
+
 	runs$: Observable<readonly (DuelsRun | HeaderInfo)[]>;
 	expandedRunIds$: Observable<readonly string[]>;
 
@@ -75,8 +81,8 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(this.mapData(([expandedRunIds]) => expandedRunIds));
 		this.runs$ = combineLatest(
+			this.store.duelsRuns$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.runs,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
@@ -86,10 +92,12 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 			),
 			this.deckstring$.asObservable(),
 		).pipe(
-			filter(
-				([[runs, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => !!runs?.length,
-			),
-			this.mapData(([[runs, timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => {
+			map(([runs, [timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => {
+				if (!runs?.length) {
+					console.debug('no runs', runs);
+					return null;
+				}
+
 				const filteredRuns = filterDuelsRuns(
 					runs,
 					timeFilter,
@@ -113,8 +121,28 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 							...group.runs,
 						];
 					});
-				return flat;
+				console.debug('flat info', flat);
+				return !!flat?.length ? flat : null;
 			}),
+			tap((filter) => {
+				// FIXME: it is necessary to call scroll.refresh(), but I don't know why
+				// Maybe upgrade the lib to its latest version?
+				setTimeout(() => {
+					console.debug('scroll', this.scroll);
+					this.scroll.refresh();
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0);
+				setTimeout(() => {
+					console.debug('scroll 2', this.scroll);
+					this.scroll.refresh();
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 500);
+			}),
+			takeUntil(this.destroyed$),
 		);
 	}
 

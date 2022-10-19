@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
@@ -45,11 +45,11 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 	}
 
 	ngAfterContentInit() {
-		this.stats$ = this.store
-			.listen$(
+		this.stats$ = combineLatest(
+			this.store.duelsRuns$(),
+			this.store.listen$(
 				([main, nav]) => main.duels?.globalStats?.treasures,
 				([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
-				([main, nav]) => main.duels?.runs,
 				([main, nav]) => nav.navigationDuels.treasureSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
@@ -61,13 +61,14 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 				([main, nav, prefs]) => main.duels?.currentDuelsMetaPatch,
-			)
-			.pipe(
-				map(
-					([
+			),
+		).pipe(
+			map(
+				([
+					runs,
+					[
 						duelStats,
 						mmrPercentiles,
-						runs,
 						treasureSearchString,
 						statType,
 						gameMode,
@@ -79,52 +80,53 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 						mmrFilter,
 						hideThreshold,
 						patch,
-					]) =>
-						[
-							filterDuelsTreasureStats(
-								duelStats,
-								classFilter,
-								heroPowerFilter,
-								sigTreasureFilter,
-								statType,
-								this.allCards,
-								treasureSearchString,
-							),
-							filterDuelsRuns(
-								runs,
-								timeFilter,
-								classFilter,
-								gameMode,
-								null,
-								patch,
-								0,
-								heroPowerFilter,
-								sigTreasureFilter,
-							),
-							treasureSorting,
-							hideThreshold,
-						] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
-				),
-				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
-					[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
-						.sort(this.sortBy(treasureSorting))
-						.filter((stat) =>
-							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+					],
+				]) =>
+					[
+						filterDuelsTreasureStats(
+							duelStats,
+							classFilter,
+							heroPowerFilter,
+							sigTreasureFilter,
+							statType,
+							this.allCards,
+							treasureSearchString,
 						),
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+						filterDuelsRuns(
+							runs,
+							timeFilter,
+							classFilter,
+							gameMode,
+							null,
+							patch,
+							0,
+							heroPowerFilter,
+							sigTreasureFilter,
+						),
+						treasureSorting,
+						hideThreshold,
+					] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
+			),
+			distinctUntilChanged((a, b) => this.areEqual(a, b)),
+			map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
+				[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
+					.sort(this.sortBy(treasureSorting))
+					.filter((stat) =>
+						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+					),
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// FIXME
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
+			tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	private sortBy(heroSorting: DuelsHeroSortFilterType): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {

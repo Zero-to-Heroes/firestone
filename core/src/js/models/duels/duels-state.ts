@@ -11,9 +11,7 @@ import { NonFunctionProperties } from '../../services/utils';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
 import { DuelsGroupedDecks } from './duels-grouped-decks';
-import { DuelsDeckSummary } from './duels-personal-deck';
 import { DuelsDeckStat } from './duels-player-stats';
-import { DuelsRun } from './duels-run';
 
 export class DuelsState {
 	readonly loading: boolean = true;
@@ -21,12 +19,9 @@ export class DuelsState {
 	readonly config: DuelsConfig;
 	readonly duelsRunInfos: readonly DuelsRunInfo[];
 	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
-	readonly runs: readonly DuelsRun[];
 	readonly globalStats: DuelsStat;
 	readonly topDecks: readonly DuelsGroupedDecks[] = [];
-	readonly personalDeckStats: readonly DuelsDeckSummary[] = [];
 	readonly bucketsData: readonly DuelsBucketsData[] = [];
-	// readonly playerStats: DuelsPlayerStats;
 	readonly leaderboard: DuelsLeaderboard;
 	// Used to store additional deck data loaded during the course of the app's use,
 	// like the 12-wins additional data. If we store it directly in the deck stats,

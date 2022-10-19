@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -31,33 +31,29 @@ export class DuelsReplaysRecapForRunComponent extends AbstractSubscriptionCompon
 	}
 
 	ngAfterContentInit() {
-		this.replays$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.duels.personalDeckStats,
-				([main, nav, prefs]) => nav.navigationReplays.selectedReplay,
-			)
-			.pipe(
-				this.mapData(([duelsDeckStats, selectedReplay]) => {
-					const runId = selectedReplay?.replayInfo?.runId;
-					if (!runId) {
-						return [];
-					}
-					return duelsDeckStats
-						.map((deck) => deck.runs)
-						.reduce((a, b) => a.concat(b), [])
-						.filter((run) => run.id === runId)
-						.map((run) => run.steps)
-						.reduce((a, b) => a.concat(b), [])
-						.filter((step) => (step as GameStat).opponentCardId)
-						.map((step) => step as GameStat)
-						.sort((a: GameStat, b: GameStat) => {
-							if (a.creationTimestamp <= b.creationTimestamp) {
-								return 1;
-							}
-							return -1;
-						})
-						.slice(0, 20);
-				}),
-			);
+		this.replays$ = combineLatest(
+			this.store.duelsDecks$(),
+			this.store.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay),
+		).pipe(
+			this.mapData(([duelsDeckStats, [selectedReplay]]) => {
+				const runId = selectedReplay?.replayInfo?.runId;
+				if (!runId) {
+					return [];
+				}
+				return duelsDeckStats
+					.flatMap((deck) => deck.runs)
+					.filter((run) => run.id === runId)
+					.flatMap((run) => run.steps)
+					.filter((step) => (step as GameStat).opponentCardId)
+					.map((step) => step as GameStat)
+					.sort((a: GameStat, b: GameStat) => {
+						if (a.creationTimestamp <= b.creationTimestamp) {
+							return 1;
+						}
+						return -1;
+					})
+					.slice(0, 20);
+			}),
+		);
 	}
 }

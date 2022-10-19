@@ -63,11 +63,11 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 				this.mapData(([options]) => options.map((option) => this.allCards.getCardFromDbfId(option.DatabaseId))),
 			);
 		const allStats$ = combineLatest(
+			this.store.duelsRuns$(),
 			this.heroPowers$,
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => main.duels.topDecks,
-				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.adventuresInfo,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
@@ -77,8 +77,9 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 		).pipe(
 			this.mapData(
 				([
+					runs,
 					allHeroPowerCards,
-					[duelStats, duelsTopDecks, runs, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
+					[duelStats, duelsTopDecks, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
 				]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)

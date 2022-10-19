@@ -516,6 +516,7 @@ import { OverlayDisplayService } from '../../services/decktracker/overlay-displa
 import { SecretConfigService } from '../../services/decktracker/secret-config.service';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 import { DevService } from '../../services/dev.service';
+import { DuelsDecksProviderService } from '../../services/duels/duels-decks-provider.service';
 import { DuelsLootParserService } from '../../services/duels/duels-loot-parser.service';
 import { DuelsRewardsService } from '../../services/duels/duels-rewards.service';
 import { DuelsRunIdService } from '../../services/duels/duels-run-id.service';
@@ -1230,6 +1231,7 @@ const components = [
 		DuelsLootParserService,
 		DuelsRewardsService,
 		DuelsRunIdService,
+		DuelsDecksProviderService,
 		ReviewIdService,
 		ArenaRunParserService,
 		GameStateService,

@@ -3,6 +3,8 @@ import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable } from 'rxjs';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
+import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
+import { DuelsRun } from '../../models/duels/duels-run';
 import { DeckSummary } from '../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -103,6 +105,14 @@ export class AppUiStoreFacadeService {
 
 	public gameStats$(): Observable<readonly GameStat[]> {
 		return this.debugObservable(this.store.gameStats$());
+	}
+
+	public duelsDecks$(): Observable<readonly DuelsDeckSummary[]> {
+		return this.debugObservable(this.store.duelsDecks$());
+	}
+
+	public duelsRuns$(): Observable<readonly DuelsRun[]> {
+		return this.debugObservable(this.store.duelsRuns$());
 	}
 
 	public decks$(): Observable<readonly DeckSummary[]> {

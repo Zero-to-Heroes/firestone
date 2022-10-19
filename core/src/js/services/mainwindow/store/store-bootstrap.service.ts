@@ -215,11 +215,7 @@ export class StoreBootstrapService {
 			duelsBucketsData,
 			collectionState,
 			adventuresInfo,
-		);
-		const newDuelsState = await this.duels.updateState(
-			duelsStats,
-			matchStats,
-			duelsStats?.currentDuelsMetaPatch || currentDuelsMetaPatch,
+			currentDuelsMetaPatch,
 		);
 
 		const currentArenaMetaPatch = patchConfig?.patches
@@ -227,7 +223,7 @@ export class StoreBootstrapService {
 			: null;
 		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
 
-		const mercenariesState: MercenariesState = await this.mercenariesService.initState(
+		const mercenariesState: MercenariesState = this.mercenariesService.initState(
 			windowStateForFtue.mercenaries,
 			// mercenariesGlobalStats,
 			// mercenariesReferenceData,
@@ -244,7 +240,7 @@ export class StoreBootstrapService {
 			achievements: newAchievementState,
 			decktracker: decktracker,
 			battlegrounds: battlegroundsAppState,
-			duels: newDuelsState,
+			duels: duelsStats,
 			arena: arenaState,
 			mercenaries: mercenariesState,
 			socialShareUserInfo: socialShareUserInfo,

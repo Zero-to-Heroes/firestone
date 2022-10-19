@@ -38,11 +38,8 @@ export class DuelsRunIdService {
 				tap((info) => console.debug('[duels-run] latest duels game', info)),
 			)
 			.subscribe(this.lastDuelsGame$);
-		const currentRun$ = combineLatest(
-			this.lastDuelsGame$,
-			this.store.listen$(([main, nav]) => main.duels.runs),
-		).pipe(
-			map(([lastDuelsGame, [runs]]) =>
+		const currentRun$ = combineLatest(this.lastDuelsGame$, this.store.duelsRuns$()).pipe(
+			map(([lastDuelsGame, runs]) =>
 				lastDuelsGame?.reviewId
 					? runs?.find((run) => run.steps.some((s) => (s as GameStat).reviewId === lastDuelsGame?.reviewId))
 					: null,

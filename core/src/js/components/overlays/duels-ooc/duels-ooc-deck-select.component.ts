@@ -99,8 +99,8 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 				this.mapData(([tempDuelsDeck]) => tempDuelsDeck),
 			);
 		this.decks$ = combineLatest(
+			this.store.duelsRuns$(),
 			this.store.listen$(
-				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.tempDuelsDeck,
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
@@ -108,10 +108,10 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			this.store.listenPrefs$((prefs) => prefs.duelsActiveMmrFilter),
 		).pipe(
 			filter(
-				([[runs, groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) =>
+				([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) =>
 					tempDuelsDeck?.HeroCardId && tempDuelsDeck?.HeroPowerCardId && !!tempDuelsDeck?.Decklist?.length,
 			),
-			this.mapData(([[runs, groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) => {
+			this.mapData(([runs, [groupedTopDecks, tempDuelsDeck, patch], [mmrFilter]]) => {
 				const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(tempDuelsDeck);
 				const lastPlayedDeck: DuelsDeckWidgetDeck = this.buildLastPlayedDeck(
 					runs,

@@ -29,7 +29,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
-						{{ value }}
 						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li

@@ -1,4 +1,3 @@
-import { DuelsState } from '../../../../../models/duels/duels-state';
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -8,7 +7,6 @@ import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
-import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
 import { Events } from '../../../../events.service';
 import { PreferencesService } from '../../../../preferences.service';
 import { RecomputeGameStatsEvent } from '../../events/stats/recompute-game-stats-event';
@@ -18,7 +16,6 @@ export class RecomputeGameStatsProcessor implements Processor {
 	constructor(
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
-		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
 	) {}
@@ -52,16 +49,11 @@ export class RecomputeGameStatsProcessor implements Processor {
 			newStatsState,
 		);
 
-		const duels: DuelsState = event.gameStat.isDuels()
-			? await this.duelsBuilder.updateState(currentState.duels, newGameStats)
-			: currentState.duels;
-
 		return [
 			currentState.update({
 				stats: newStatsState,
 				decktracker: decktracker,
 				replays: replayState,
-				duels: duels,
 			} as MainWindowState),
 			null,
 		];

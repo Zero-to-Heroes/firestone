@@ -61,19 +61,21 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 
 		const allStats$ = combineLatest(
 			this.heroes$,
+			this.store.duelsRuns$(),
 			this.store.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => main.duels.topDecks,
-				([main, nav]) => main.duels.runs,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
-			filter(([allHeroCards, [duelStats, duelsTopDecks]]) => !!duelStats?.length && !!duelsTopDecks?.length),
+			filter(
+				([allHeroCards, runs, [duelStats, duelsTopDecks]]) => !!duelStats?.length && !!duelsTopDecks?.length,
+			),
 			this.mapData(
-				([allHeroCards, [duelStats, duelsTopDecks, runs, mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
+				([allHeroCards, runs, [duelStats, duelsTopDecks, mmrPercentiles, mmrFilter, dustFilter, patch]]) => {
 					return allHeroCards
 						.map((card) => card.id)
 						.map((cardId) => {

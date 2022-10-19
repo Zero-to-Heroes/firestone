@@ -1,12 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { SetCard } from '../../../models/set';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -106,25 +104,20 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 	ngAfterContentInit(): void {
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
-			.pipe(
-				map(([runIds]) => runIds),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([runIds]) => runIds));
 		this.collection$ = combineLatest(
 			this.currentDeck.asObservable(),
 			this.store.listen$(([main, nav]) => main.binder.allSets),
 		).pipe(
-			map(([currentDeck, [allSets]]) =>
+			this.mapData(([currentDeck, [allSets]]) =>
 				currentDeck === 'final'
 					? null
 					: (allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[]),
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			takeUntil(this.destroyed$),
 		);
-		this.deck$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.personalDeckStats,
+		this.deck$ = combineLatest(
+			this.store.duelsDecks$(),
+			this.store.listen$(
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
@@ -134,15 +127,16 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				filter(
-					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
-						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
-				),
-				map(
-					([
-						decks,
+			),
+		).pipe(
+			filter(
+				([decks, [topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]]) =>
+					(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
+			),
+			this.mapData(
+				([
+					decks,
+					[
 						topDecks,
 						deckDetails,
 						deckstring,
@@ -152,31 +146,30 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 						gameMode,
 						duelsDeckDeletes,
 						patch,
-					]) =>
-						getCurrentDeck(
-							decks,
-							deckstring,
-							topDecks,
-							deckId,
-							timeFilter,
-							heroesFilter,
-							gameMode,
-							duelsDeckDeletes,
-							patch,
-							0,
-							deckDetails,
-						),
-				),
-				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+					],
+				]) =>
+					getCurrentDeck(
+						decks,
+						deckstring,
+						topDecks,
+						deckId,
+						timeFilter,
+						heroesFilter,
+						gameMode,
+						duelsDeckDeletes,
+						patch,
+						0,
+						deckDetails,
+					),
+			),
+		);
 		this.decklist$ = combineLatest(
 			this.deck$,
 			this.expandedRunIds$,
 			this.currentDeck$,
 			this.currentRunIndex.asObservable(),
 		).pipe(
-			map(([deck, expandedRunIds, currentDeck, currentRunIndex]) => {
+			this.mapData(([deck, expandedRunIds, currentDeck, currentRunIndex]) => {
 				const result =
 					currentDeck === 'initial'
 						? deck.deck.initialDeckList
@@ -186,9 +179,6 @@ export class DuelsPersonalDeckDetailsComponent extends AbstractSubscriptionCompo
 				setTimeout(() => this.cdr?.detectChanges(), 0);
 				return result;
 			}),
-			distinctUntilChanged(),
-			tap((info) => cdLog('emitting decklist in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

@@ -50,6 +50,7 @@ import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
+import { DuelsDecksProviderService } from '../../duels/duels-decks-provider.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
 import { MercenariesMemoryCacheService } from '../../mercenaries/mercenaries-memory-cache.service';
@@ -409,6 +410,7 @@ export class MainWindowStoreService {
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
+		private readonly duelsDeckProvider: DuelsDecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
@@ -705,7 +707,6 @@ export class MainWindowStoreService {
 			new RecomputeGameStatsProcessor(
 				this.decktrackerStateLoader,
 				this.replaysStateBuilder,
-				this.duelsBuilder,
 				this.events,
 				this.prefs,
 			),
@@ -991,7 +992,7 @@ export class MainWindowStoreService {
 			new DuelsViewDeckDetailsProcessor(this.events, this.i18n),
 
 			DuelsViewPersonalDeckDetailsEvent.eventName(),
-			new DuelsViewPersonalDeckDetailsProcessor(this.prefs, this.i18n),
+			new DuelsViewPersonalDeckDetailsProcessor(this.prefs, this.i18n, this.duelsDeckProvider),
 
 			DuelsTopDeckRunDetailsLoadedEvent.eventName(),
 			new DuelsTopDeckRunDetailsLoadedProcessor(),
@@ -1000,7 +1001,7 @@ export class MainWindowStoreService {
 			new DuelsHidePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsDeletePersonalDeckSummaryEvent.eventName(),
-			new DuelsDeletePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
+			new DuelsDeletePersonalDeckSummaryProcessor(this.prefs),
 
 			DuelsRestorePersonalDeckSummaryEvent.eventName(),
 			new DuelsRestorePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
@@ -1054,7 +1055,7 @@ export class MainWindowStoreService {
 			new DuelsDeckbuilderSignatureTreasureSelectedProcessor(this.cards),
 
 			DuelsDeckbuilderSaveDeckEvent.eventName(),
-			new DuelsDeckbuilderSaveDeckProcessor(this.prefs, this.duelsBuilder),
+			new DuelsDeckbuilderSaveDeckProcessor(this.prefs),
 
 			DuelsDeckbuilderImportDeckEvent.eventName(),
 			new DuelsDeckbuilderImportDeckProcessor(this.cards),

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -97,46 +97,46 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 	}
 
 	ngAfterContentInit(): void {
-		this.stat$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.runs,
+		this.stat$ = combineLatest(
+			this.store.duelsRuns$(),
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
-				map(([runs, timeFilter, classFilter, gameMode, patch]) =>
-					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, null, patch, 0),
-				),
-				map((runs) => {
-					return {
-						totalRuns: runs.length,
-						averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
-						mostPlayedClasses: this.buildPlayerClass(runs, (a, b) => b.length - a.length),
-						bestWinrateClasses: this.buildPlayerClass(
-							runs,
-							(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
-						),
-						mostFacedClasses: this.buildFacedClass(runs, (a, b) => b.length - a.length),
-						bestWinrateAgainstClasses: this.buildFacedClass(
-							runs,
-							(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
-						),
-					};
-				}),
-				// FIXME (same as all filters)
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		).pipe(
+			filter(([runs, [timeFilter, classFilter, gameMode, patch]]) => !!runs?.length),
+			map(([runs, [timeFilter, classFilter, gameMode, patch]]) =>
+				filterDuelsRuns(runs, timeFilter, classFilter, gameMode, null, patch, 0),
+			),
+			map((runs) => {
+				return {
+					totalRuns: runs.length,
+					averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
+					mostPlayedClasses: this.buildPlayerClass(runs, (a, b) => b.length - a.length),
+					bestWinrateClasses: this.buildPlayerClass(
+						runs,
+						(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+					),
+					mostFacedClasses: this.buildFacedClass(runs, (a, b) => b.length - a.length),
+					bestWinrateAgainstClasses: this.buildFacedClass(
+						runs,
+						(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
+					),
+				};
+			}),
+			// FIXME (same as all filters)
+			tap((filter) =>
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0),
+			),
+			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	private buildPlayerClass(

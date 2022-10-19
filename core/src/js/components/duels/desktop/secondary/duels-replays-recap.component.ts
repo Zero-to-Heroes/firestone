@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -36,29 +35,23 @@ export class DuelsReplaysRecapComponent extends AbstractSubscriptionComponent im
 	}
 
 	ngAfterContentInit(): void {
-		this.replays$ = this.store
-			.listen$(([main, nav]) => main.duels.personalDeckStats)
-			.pipe(
-				filter(([decks]) => !!decks?.length),
-				map(([decks]) =>
-					decks
-						.map((deck) => deck.runs)
-						.reduce((a, b) => a.concat(b), [])
-						.filter((run) => run)
-						.map((run) => run.steps)
-						.reduce((a, b) => a.concat(b), [])
-						.filter((step) => (step as GameStat).opponentCardId)
-						.map((step) => step as GameStat)
-						.sort((a: GameStat, b: GameStat) => {
-							if (a.creationTimestamp <= b.creationTimestamp) {
-								return 1;
-							}
-							return -1;
-						})
-						.slice(0, 20),
-				),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			);
+		this.replays$ = this.store.duelsDecks$().pipe(
+			filter((decks) => !!decks?.length),
+			this.mapData((decks) =>
+				decks
+					.flatMap((deck) => deck.runs)
+					.filter((run) => run)
+					.flatMap((run) => run.steps)
+					.filter((step) => (step as GameStat).opponentCardId)
+					.map((step) => step as GameStat)
+					.sort((a: GameStat, b: GameStat) => {
+						if (a.creationTimestamp <= b.creationTimestamp) {
+							return 1;
+						}
+						return -1;
+					})
+					.slice(0, 20),
+			),
+		);
 	}
 }

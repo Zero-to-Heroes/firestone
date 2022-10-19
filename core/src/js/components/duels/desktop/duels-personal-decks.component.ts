@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { DuelsDeckSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -41,9 +41,9 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 	}
 
 	ngAfterContentInit(): void {
-		this.decks$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.personalDeckStats,
+		this.decks$ = combineLatest(
+			this.store.duelsDecks$(),
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroesFilter2,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
@@ -53,12 +53,13 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => prefs.duelsPersonalDeckShowHiddenDecks,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				filter(([decks]) => !!decks?.length),
-				map(
-					([
-						decks,
+			),
+		).pipe(
+			tap((info) => console.debug('preparing info', info)),
+			map(
+				([
+					decks,
+					[
 						timeFilter,
 						heroesFilter,
 						gameMode,
@@ -68,43 +69,44 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 						showHidden,
 						duelsDeckDeletes,
 						patch,
-					]) =>
-						decks
-							.filter(
-								(deck) =>
-									!hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
-							)
-							.map((deck) => {
-								return {
-									...deck,
-									runs: filterDuelsRuns(
-										deck.runs,
-										timeFilter,
-										heroesFilter,
-										gameMode,
-										duelsDeckDeletes,
-										patch,
-										0,
-									),
-									deckName:
-										deckNames[deck.initialDeckList] ??
-										deck.deckName ??
-										this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
-									hidden: hiddenCodes?.includes(deck.initialDeckList),
-								} as DuelsDeckSummary;
-							})
-							.filter((deck) => {
-								const matchesHero = !heroesFilter?.length
-									? false
-									: heroesFilter.some(
-											(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
-									  );
-								return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
-							})
-							.sort(this.getSort(deckSort)),
-				),
-				this.mapData((decks) => (!!decks.length ? decks : null)),
-			);
+					],
+				]) =>
+					decks
+						?.filter(
+							(deck) => !hiddenCodes?.length || showHidden || !hiddenCodes.includes(deck.initialDeckList),
+						)
+						.map((deck) => {
+							return {
+								...deck,
+								runs: filterDuelsRuns(
+									deck.runs,
+									timeFilter,
+									heroesFilter,
+									gameMode,
+									duelsDeckDeletes,
+									patch,
+									0,
+								),
+								deckName:
+									deckNames[deck.initialDeckList] ??
+									deck.deckName ??
+									this.i18n.translateString('decktracker.deck-name.unnamed-deck'),
+								hidden: hiddenCodes?.includes(deck.initialDeckList),
+							} as DuelsDeckSummary;
+						})
+						.filter((deck) => {
+							const matchesHero = !heroesFilter?.length
+								? false
+								: heroesFilter.some(
+										(heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter,
+								  );
+							return matchesHero && (!!deck.runs?.length || deck.isPersonalDeck);
+						})
+						.sort(this.getSort(deckSort)),
+			),
+			tap((info) => console.debug('decks info', info)),
+			this.mapData((decks) => (!!decks?.length ? decks : null)),
+		);
 	}
 
 	trackByDeck(index: number, deck: DuelsDeckSummary): string {

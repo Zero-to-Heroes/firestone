@@ -9,6 +9,7 @@ import {
 import { Preferences } from '@models/preferences';
 import { GenericPreferencesUpdateEvent } from '@services/mainwindow/store/events/generic-preferences-update-event';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
@@ -26,6 +27,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="filters duels-filters">
+			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
 			<duels-treasures-sort-dropdown class="filter treasures-sort"></duels-treasures-sort-dropdown>
 			<duels-stat-type-filter-dropdown class="filter stat-type-filter"></duels-stat-type-filter-dropdown>
 			<duels-game-mode-filter-dropdown class="filter game-mode-filter"></duels-game-mode-filter-dropdown>
@@ -69,6 +71,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class DuelsFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
 	threshold = DuelsStateBuilderService.STATS_THRESHOLD;
 
+	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showHideBelowThresholdLink$: Observable<boolean>;
 
@@ -88,6 +91,18 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	ngAfterContentInit() {
+		this.showRegionFilter$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationDuels.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(
+					([currentView]) =>
+						currentView !== 'duels-deckbuilder' &&
+						currentView !== 'duels-top-decks' &&
+						currentView !== 'duels-leaderboard' &&
+						currentView !== 'duels-buckets',
+				),
+			);
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.duelsPersonalDeckHiddenDeckCodes,

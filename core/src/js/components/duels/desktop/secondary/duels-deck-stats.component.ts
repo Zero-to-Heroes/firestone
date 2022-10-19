@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
@@ -65,9 +64,9 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent imple
 	}
 
 	ngAfterContentInit() {
-		this.deckInfo$ = this.store
-			.listen$(
-				([main, nav]) => main.duels.personalDeckStats,
+		this.deckInfo$ = combineLatest(
+			this.store.duelsDecks$(),
+			this.store.listen$(
 				([main, nav]) => main.duels.topDecks,
 				([main, nav]) => main.duels.additionalDeckDetails,
 				([main, nav]) => nav.navigationDuels.selectedPersonalDeckstring,
@@ -77,15 +76,16 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent imple
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsDeckDeletes,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
-			)
-			.pipe(
-				filter(
-					([decks, topDecks, deckDetails, deckstring, deckId]) =>
-						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
-				),
-				map(
-					([
-						decks,
+			),
+		).pipe(
+			filter(
+				([decks, [topDecks, deckDetails, deckstring, deckId]]) =>
+					(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
+			),
+			this.mapData(
+				([
+					decks,
+					[
 						topDecks,
 						deckDetails,
 						deckstring,
@@ -95,24 +95,22 @@ export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent imple
 						gameMode,
 						duelsDeckDeletes,
 						patch,
-					]) =>
-						getCurrentDeck(
-							decks,
-							deckstring,
-							topDecks,
-							deckId,
-							timeFilter,
-							classFilter,
-							gameMode,
-							duelsDeckDeletes,
-							patch,
-							0,
-							deckDetails,
-						),
-				),
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+					],
+				]) =>
+					getCurrentDeck(
+						decks,
+						deckstring,
+						topDecks,
+						deckId,
+						timeFilter,
+						classFilter,
+						gameMode,
+						duelsDeckDeletes,
+						patch,
+						0,
+						deckDetails,
+					),
+			),
+		);
 	}
 }

@@ -1,15 +1,11 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
 import { PreferencesService } from '../../../../preferences.service';
 import { DuelsDeletePersonalDeckSummaryEvent } from '../../events/duels/duels-delete-personal-deck-summary-event';
 import { Processor } from '../processor';
 
 export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
-	constructor(
-		private readonly duelsStateBuilder: DuelsStateBuilderService,
-		private readonly prefs: PreferencesService,
-	) {}
+	constructor(private readonly prefs: PreferencesService) {}
 
 	public async process(
 		event: DuelsDeletePersonalDeckSummaryEvent,
@@ -25,13 +21,7 @@ export class DuelsDeletePersonalDeckSummaryProcessor implements Processor {
 
 		const deletedDeckDates: readonly number[] = currentPrefs.duelsDeckDeletes[event.deckstring] ?? [];
 		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
-		const newPrefs = await this.prefs.setDuelsDeckDeleteDates(event.deckstring, newDeleteDates);
-		const newState = await this.duelsStateBuilder.updateState(currentState.duels, currentState.stats.gameStats);
-		return [
-			currentState.update({
-				duels: newState,
-			}),
-			null,
-		];
+		await this.prefs.setDuelsDeckDeleteDates(event.deckstring, newDeleteDates);
+		return [null, null];
 	}
 }

@@ -25,6 +25,7 @@ import { GameStateService } from './decktracker/game-state.service';
 import { DecksProviderService } from './decktracker/main/decks-provider.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
+import { DuelsDecksProviderService } from './duels/duels-decks-provider.service';
 import { DuelsLootParserService } from './duels/duels-loot-parser.service';
 import { DuelsRewardsService } from './duels/duels-rewards.service';
 import { DuelsRunIdService } from './duels/duels-run-id.service';
@@ -132,6 +133,7 @@ export class AppBootstrapService {
 		private init_GameNativeStateStoreService: GameNativeStateStoreService,
 		private init_GameModeDataService: GameModeDataService,
 		private init_GameStatsProviderService: GameStatsProviderService,
+		private init_DuelsDecksProviderService: DuelsDecksProviderService,
 	) {}
 
 	public async init() {
