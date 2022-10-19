@@ -4,7 +4,7 @@ import { cdLog } from '@services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
@@ -25,20 +25,31 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div class="decktracker-rating-graph" *ngIf="value$ | async as value">
-			<graph-with-single-value
-				[data]="value.data"
-				[labels]="value.labels"
-				[labelFormattingFn]="value.labelFormattingFn"
-				[reverse]="value.reverse"
-				[emptyStateMessage]="'app.decktracker.rating-graph.empty-state-message' | owTranslate"
-				emptyStateIcon="assets/svg/ftue/decktracker.svg"
-			></graph-with-single-value>
+			<ng-container *ngIf="regionSelected$ | async; else emptyState">
+				<graph-with-single-value
+					[data]="value.data"
+					[labels]="value.labels"
+					[labelFormattingFn]="value.labelFormattingFn"
+					[reverse]="value.reverse"
+					[emptyStateMessage]="'app.decktracker.rating-graph.empty-state-message' | owTranslate"
+					emptyStateIcon="assets/svg/ftue/decktracker.svg"
+				></graph-with-single-value>
+			</ng-container>
+			<ng-template #emptyState>
+				<battlegrounds-empty-state
+					class="empty-state"
+					emptyStateIcon="assets/svg/ftue/decktracker.svg"
+					[title]="'app.decktracker.rating-graph.missing-region-title' | owTranslate"
+					[subtitle]="''"
+				></battlegrounds-empty-state>
+			</ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerRatingGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
+	regionSelected$: Observable<boolean>;
 
 	constructor(
 		private i18n: LocalizationFacadeService,
@@ -49,45 +60,54 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 	}
 
 	ngAfterContentInit() {
-		this.value$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats.stats,
+		// Force a region select only if multiple regions are available in the stats
+		this.regionSelected$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listenPrefs$((prefs) => prefs.regionFilter),
+		).pipe(
+			this.mapData(
+				([gameStats, [region]]) =>
+					[...new Set(gameStats.map((s) => s.region))].length === 1 || (!!region && region !== 'all'),
+			),
+		);
+		this.value$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
 				([main, nav]) => main.decktracker.filters.rankingGroup,
 				([main, nav]) => main.decktracker.filters.rankingCategory,
 				([main, nav]) => main.decktracker.patch,
-			)
-			.pipe(
-				map(
-					([stats, gameFormat, time, rankingGroup, rankingCategory, patch]) =>
-						[
-							stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => stat.playerRank),
-							gameFormat,
-							time,
-							rankingGroup,
-							rankingCategory,
-							patch,
-						] as [
-							GameStat[],
-							StatGameFormatType,
-							DeckTimeFilterType,
-							MmrGroupFilterType,
-							DeckRankingCategoryType,
-							PatchInfo,
-						],
-				),
-				filter(
-					([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
-						!!stats && !!patch?.number,
-				),
-				distinctUntilChanged((a, b) => this.compare(a, b)),
-				map(([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
-					this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
-				),
-				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		).pipe(
+			map(
+				([stats, [gameFormat, time, rankingGroup, rankingCategory, patch]]) =>
+					[
+						stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => stat.playerRank),
+						gameFormat,
+						time,
+						rankingGroup,
+						rankingCategory,
+						patch,
+					] as [
+						GameStat[],
+						StatGameFormatType,
+						DeckTimeFilterType,
+						MmrGroupFilterType,
+						DeckRankingCategoryType,
+						PatchInfo,
+					],
+			),
+			filter(
+				([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) => !!stats && !!patch?.number,
+			),
+			distinctUntilChanged((a, b) => this.compare(a, b)),
+			map(([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
+				this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
+			),
+			tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+			takeUntil(this.destroyed$),
+		);
 	}
 
 	private buildValue(

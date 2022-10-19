@@ -15,7 +15,8 @@
 	.menu-selection {
 		justify-content: flex-end;
 		position: relative;
-		margin-top: -35px;
+		// If all filters are present, the top is a full line and there is an overlap
+		margin-top: 0;
 		padding-right: 40px;
 		top: -7px;
 
@@ -44,9 +45,10 @@
 				width: 27px;
 			}
 		}
+	}
 
-		decktracker-ladder-stats-overview {
-			overflow: scroll;
-		}
+	decktracker-ladder-stats-overview,
+	decktracker-ladder-stats-matchups {
+		overflow: scroll;
 	}
 }
