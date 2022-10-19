@@ -15,7 +15,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { areDeepEqual } from '../../../../services/utils';
+import { deepEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -61,7 +61,7 @@ export class BattlegroundsPersonalStatsHeroesComponent
 			map((stats) => stats.filter((stat) => stat.id !== 'average')),
 			// FIXME
 			distinctUntilChanged((a, b) => {
-				return areDeepEqual(a, b);
+				return deepEqual(a, b);
 			}),
 			// FIXME
 			tap((filter) =>

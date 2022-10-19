@@ -8,7 +8,7 @@ import { Events } from '../events.service';
 import { LocalStorageService } from '../local-storage';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
-import { areDeepEqual, groupByFunction, sleep } from '../utils';
+import { deepEqual, groupByFunction, sleep } from '../utils';
 
 export const MERCENARIES_SCENES = [
 	SceneMode.LETTUCE_BOUNTY_BOARD,
@@ -81,7 +81,7 @@ export class MercenariesMemoryCacheService {
 			}
 
 			const mapInfo = await this.memoryService.getMercenariesInfo();
-			if (!areDeepEqual(mapInfo, this.previousMapInfo)) {
+			if (!deepEqual(mapInfo, this.previousMapInfo)) {
 				this.previousMapInfo = mapInfo;
 				this.memoryMapInfo$.next(mapInfo);
 			}

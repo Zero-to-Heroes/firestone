@@ -35,7 +35,7 @@ import { ApiRunner } from './api-runner';
 import { GenericStorageService } from './generic-storage.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { OverwolfService } from './overwolf.service';
-import { areDeepEqual, capitalizeFirstLetter } from './utils';
+import { capitalizeFirstLetter, deepEqual } from './utils';
 
 declare let amplitude;
 
@@ -719,7 +719,7 @@ export class PreferencesService {
 					}
 				}
 
-				if (!areDeepEqual(userPrefsLocal, remotePrefsLocal)) {
+				if (!deepEqual(userPrefsLocal, remotePrefsLocal)) {
 					console.log('[preferences] updating remote prefs');
 					this.lastSyncPrefs = userPrefs;
 					this.currentSyncDate = userPrefs.lastUpdateDate;

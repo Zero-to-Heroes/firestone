@@ -16,7 +16,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { areDeepEqual } from '../../services/utils';
+import { deepEqual } from '../../services/utils';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -106,7 +106,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 					),
 				),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting bgsPlayers in ', this.constructor.name, info)),

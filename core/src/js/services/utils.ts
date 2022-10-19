@@ -88,11 +88,6 @@ export const deepEqual = (x: any, y: any): boolean => {
 		: x === y;
 };
 
-/** @deprecated use deepEqual */
-export const areDeepEqual = (a: any, b: any): boolean => {
-	return JSON.stringify(a) == JSON.stringify(b);
-};
-
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;
 };

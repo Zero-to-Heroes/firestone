@@ -6,7 +6,7 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { areDeepEqual, groupByFunction } from '../../../services/utils';
+import { deepEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -64,7 +64,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
 				),
 				filter((panel) => !!panel?.opponentOverview),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) =>
 					setTimeout(() => {
@@ -96,7 +96,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 				// Prevent NPE
 				// startWith([]),
 				map(([faceOffs]) => groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(faceOffs ?? [])),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) =>
 					setTimeout(() => {
@@ -131,7 +131,7 @@ export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent impl
 							return 0;
 						}),
 				),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) =>
 					setTimeout(() => {

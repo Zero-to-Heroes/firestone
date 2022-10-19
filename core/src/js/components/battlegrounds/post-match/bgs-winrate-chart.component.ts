@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { areDeepEqual } from '../../../services/utils';
+import { deepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-winrate-chart',
@@ -53,7 +53,7 @@ export class BgsWinrateChartComponent {
 			})
 			.filter((stat) => stat)
 			.slice(0, 15);
-		if (areDeepEqual(this.communityValues, communityValues)) {
+		if (deepEqual(this.communityValues, communityValues)) {
 			return;
 		}
 		this.id = value.id;
@@ -74,7 +74,7 @@ export class BgsWinrateChartComponent {
 					value: turnInfo.simulationResult?.wonPercent || 0,
 				} as NumericTurnInfo),
 		);
-		if (areDeepEqual(this.yourValues, yourValues)) {
+		if (deepEqual(this.yourValues, yourValues)) {
 			return;
 		}
 		this.yourValues = yourValues;

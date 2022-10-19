@@ -15,7 +15,7 @@ import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { areDeepEqual } from '../../services/utils';
+import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -129,7 +129,7 @@ export class BattlegroundsContentComponent
 				debounceTime(200),
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
 				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
@@ -185,7 +185,7 @@ export class BattlegroundsContentComponent
 				debounceTime(1000),
 				filter(([faceOffs]) => !!faceOffs?.length),
 				map(([faceOffs]) => faceOffs),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),

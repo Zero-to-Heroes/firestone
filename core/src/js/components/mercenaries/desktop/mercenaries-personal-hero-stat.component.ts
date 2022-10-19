@@ -5,7 +5,7 @@ import { FeatureFlags } from '../../../services/feature-flags';
 import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesViewMercDetailsEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-view-merc-details-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { areDeepEqual } from '../../../services/utils';
+import { deepEqual } from '../../../services/utils';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -143,7 +143,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 })
 export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
-		if (areDeepEqual(this._stat, value)) {
+		if (deepEqual(this._stat, value)) {
 			return;
 		}
 		console.debug('setting stat', value.name, value);

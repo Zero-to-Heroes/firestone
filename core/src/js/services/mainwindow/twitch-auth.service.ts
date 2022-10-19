@@ -23,7 +23,7 @@ import { Preferences } from '../../models/preferences';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { areDeepEqual } from '../utils';
+import { deepEqual } from '../utils';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
@@ -98,7 +98,7 @@ export class TwitchAuthService {
 				map(([[currentScene], deckEvent, bgsState, twitchAccessToken, streamerPrefs]) =>
 					this.buildEvent(currentScene, deckEvent, bgsState, twitchAccessToken, streamerPrefs),
 				),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				delay(this.twitchDelay),
 			)
 			.subscribe((event) => this.sendEvent(event));

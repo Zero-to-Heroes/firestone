@@ -20,7 +20,7 @@ import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
-import { areDeepEqual, sortByProperties, sumOnArray } from '../../../services/utils';
+import { deepEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -185,7 +185,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
 					!!stats?.length && !!referenceData,
 			),
-			distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+			distinctUntilChanged((a, b) => deepEqual(a, b)),
 			this.mapData(([stats, [referenceData, sortCriteria, fullyUpgraded, owned, heroSearchString]]) =>
 				this.sortPersonalHeroStats(stats, heroSearchString, fullyUpgraded, owned, sortCriteria, referenceData),
 			),

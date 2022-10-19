@@ -9,7 +9,7 @@ import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { areDeepEqual } from '../../../services/utils';
+import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -125,7 +125,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
 				),
 				filter((panel) => !!panel?.opponentOverview),
-				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
+				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				// FIXME
 				tap((filter) =>
 					setTimeout(() => {
@@ -169,7 +169,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 							}
 							return 0;
 						}),
-					areDeepEqual,
+					deepEqual,
 				),
 			)
 			.subscribe((opponents) => this.opponentsSubject$$.next(opponents));

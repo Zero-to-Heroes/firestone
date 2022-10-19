@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { areDeepEqual } from '../../../services/utils';
+import { deepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-chart-warband-stats',
@@ -47,7 +47,7 @@ export class BgsChartWarbandStatsComponent {
 			})
 			.filter((stat) => stat)
 			.slice(0, 15);
-		if (areDeepEqual(this.communityValues, communityValues)) {
+		if (deepEqual(this.communityValues, communityValues)) {
 			return;
 		}
 		this.communityValues = communityValues;
