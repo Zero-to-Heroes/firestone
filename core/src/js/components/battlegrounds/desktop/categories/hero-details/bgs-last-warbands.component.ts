@@ -2,14 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual } from '../../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
@@ -112,38 +111,20 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 	}
 
 	ngAfterContentInit() {
-		this.boards$ = this.store
-			.listen$(
-				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
-				([main, nav]) => main.stats.gameStats,
-			)
-			.pipe(
-				filter(([postMatch, gameStats]) => !!postMatch && !!gameStats),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(
-					([postMatch, gameStats]) =>
-						[
-							postMatch.filter((postMatch) => !!postMatch?.stats?.boardHistory?.length).slice(0, 5),
-							gameStats.stats,
-						] as [readonly BgsPostMatchStatsForReview[], readonly GameStat[]],
-				),
-				distinctUntilChanged((a, b) => this.compareValues(a, b)),
-				map(([stats, gameStats]) =>
-					stats.map((stat) => this.buildLastKnownBoard(stat, gameStats)).filter((board) => board),
-				),
-				tap((boards) => console.debug('[cd] emitting boards in ', this.constructor.name, boards)),
-				takeUntil(this.destroyed$),
-			);
-	}
-
-	private compareValues(
-		a: [readonly BgsPostMatchStatsForReview[], readonly GameStat[]],
-		b: [readonly BgsPostMatchStatsForReview[], readonly GameStat[]],
-	): boolean {
-		if (!arraysEqual(a[1], b[1])) {
-			return false;
-		}
-		return JSON.stringify(a[0]) === JSON.stringify(b[0]);
+		this.boards$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(([main, nav]) => main.battlegrounds.lastHeroPostMatchStats),
+		).pipe(
+			filter(([gameStats, [postMatch]]) => !!postMatch && !!gameStats),
+			this.mapData(([gameStats, [postMatch]]) =>
+				postMatch
+					.filter((postMatch) => !!postMatch?.stats?.boardHistory?.length)
+					.slice(0, 15)
+					.map((stat) => this.buildLastKnownBoard(stat, gameStats))
+					.filter((board) => board)
+					.slice(0, 5),
+			),
+		);
 	}
 
 	private buildLastKnownBoard(postMatch: BgsPostMatchStatsForReview, gameStats: readonly GameStat[]): KnownBoard {

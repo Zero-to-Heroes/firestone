@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
-import { cdLog } from '@services/ui-store/app-ui-store.service';
-import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
+import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	computeXpFromLevel,
@@ -45,25 +44,18 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	ngAfterContentInit(): void {
-		this.value$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats.stats,
-				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
-			)
-			.pipe(
-				map(
-					([stats, seasonFilter]) =>
-						[stats.filter((stat) => stat.levelAfterMatch), seasonFilter] as [
-							GameStat[],
-							StatsXpGraphSeasonFilterType,
-						],
+		this.value$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter),
+		).pipe(
+			filter(([stats, seasonFilter]) => !!seasonFilter),
+			this.mapData(([stats, [seasonFilter]]) =>
+				this.buildValue(
+					stats.filter((stat) => stat.levelAfterMatch),
+					seasonFilter,
 				),
-				filter(([stats, seasonFilter]) => !!stats?.length && !!seasonFilter),
-				distinctUntilChanged((a, b) => this.compare(a, b)),
-				map(([stats, seasonFilter]) => this.buildValue(stats, seasonFilter)),
-				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		);
 	}
 
 	private buildValue(stats: readonly GameStat[], seasonFilter: StatsXpGraphSeasonFilterType): Value {
@@ -123,17 +115,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 			default:
 				return true;
 		}
-	}
-
-	private compare(
-		a: [GameStat[], StatsXpGraphSeasonFilterType],
-		b: [GameStat[], StatsXpGraphSeasonFilterType],
-	): boolean {
-		if (a[1] !== b[1]) {
-			// || a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4] || a[5]?.number !== b[5]?.number) {
-			return false;
-		}
-		return arraysEqual(a[0], b[0]);
 	}
 }
 

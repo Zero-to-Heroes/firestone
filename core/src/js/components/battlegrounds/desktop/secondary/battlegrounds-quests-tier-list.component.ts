@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -77,93 +77,88 @@ export class BattlegroundsQuestsTierListComponent extends AbstractSubscriptionCo
 		// 	.subscribe((percentiles) => {
 		// 		this.percentiles = percentiles;
 		// 	});
-		this.stats$ = this.store
-			.listen$(
+		this.stats$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds.globalStats.getQuestStats(),
 				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav]) => main.battlegrounds.globalStats.lastUpdateDate,
-				([main, nav]) => main.stats.gameStats?.stats,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
 				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-			)
-			.pipe(
-				filter(
-					([stats, mmrPercentiles, lastUpdateDate, matches, timeFilter, rankFilter, heroSort, patch]) =>
-						!!stats?.length,
-				),
-				this.mapData(
-					([stats, mmrPercentiles, lastUpdateDate, matches, timeFilter, rankFilter, heroSort, patch]) => {
-						const questStats = buildQuestStats(
-							stats,
-							mmrPercentiles,
-							matches,
-							timeFilter,
-							rankFilter,
-							heroSort,
-							patch,
-							this.allCards,
-						);
-						const totalMatches = sumOnArray(questStats, (stat) => stat.totalMatches);
-						const groupingByTier = groupByFunction((overview: BgsQuestStat) => overview.tier);
-						const groupedByTier: (readonly BgsQuestStat[])[] = Object.values(groupingByTier(questStats));
-						const tiers: readonly HeroTier[] = [
-							{
-								tier: 'S' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'S')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-							{
-								tier: 'A' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'A')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-							{
-								tier: 'B' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'B')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-							{
-								tier: 'C' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'C')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-							{
-								tier: 'D' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-							{
-								tier: 'E' as BgsHeroTier,
-								heroes: [
-									...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'E')) ?? []),
-								].sort((a, b) => a.averagePosition - b.averagePosition),
-							},
-						].filter((tier) => !!tier.heroes?.length);
-						const title = this.i18n.translateString(
-							'battlegrounds.hero-selection.tier-list-title-tooltip',
-							{
-								totalMatches: totalMatches.toLocaleString('en-US'),
-							},
-						);
-						const lastUpdateText = this.i18n.translateString(
-							'battlegrounds.hero-selection.tier-list-title-footer',
-							{
-								lastUpdateDate: new Date(lastUpdateDate).toLocaleString(
-									this.i18n.formatCurrentLocale(),
-								),
-							},
-						);
-						return {
-							tiers: tiers,
-							totalMatches: totalMatches,
-							tooltip: `
+			),
+		).pipe(
+			filter(
+				([gameStats, [stats, mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, heroSort, patch]]) =>
+					!!stats?.length,
+			),
+			this.mapData(
+				([gameStats, [stats, mmrPercentiles, lastUpdateDate, timeFilter, rankFilter, heroSort, patch]]) => {
+					const questStats = buildQuestStats(
+						stats,
+						mmrPercentiles,
+						gameStats,
+						timeFilter,
+						rankFilter,
+						heroSort,
+						patch,
+						this.allCards,
+					);
+					const totalMatches = sumOnArray(questStats, (stat) => stat.totalMatches);
+					const groupingByTier = groupByFunction((overview: BgsQuestStat) => overview.tier);
+					const groupedByTier: (readonly BgsQuestStat[])[] = Object.values(groupingByTier(questStats));
+					const tiers: readonly HeroTier[] = [
+						{
+							tier: 'S' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'S')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'A' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'A')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'B' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'B')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'C' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'C')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'D' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'E' as BgsHeroTier,
+							heroes: [
+								...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'E')) ?? []),
+							].sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+					].filter((tier) => !!tier.heroes?.length);
+					const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {
+						totalMatches: totalMatches.toLocaleString('en-US'),
+					});
+					const lastUpdateText = this.i18n.translateString(
+						'battlegrounds.hero-selection.tier-list-title-footer',
+						{
+							lastUpdateDate: new Date(lastUpdateDate).toLocaleString(this.i18n.formatCurrentLocale()),
+						},
+					);
+					return {
+						tiers: tiers,
+						totalMatches: totalMatches,
+						tooltip: `
 								<div class="content">
 									<div class="title">${title}</div>
 									<ul class="filters">
@@ -176,10 +171,10 @@ export class BattlegroundsQuestsTierListComponent extends AbstractSubscriptionCo
 									<div class="footer">${lastUpdateText}</div>
 								</div>
 							`,
-						};
-					},
-				),
-			);
+					};
+				},
+			),
+		);
 	}
 
 	trackByTierFn(index, item: HeroTier) {

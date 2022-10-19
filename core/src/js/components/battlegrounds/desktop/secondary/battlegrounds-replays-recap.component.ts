@@ -1,14 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { combineLatest, Observable } from 'rxjs';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
+import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -50,41 +46,30 @@ export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComp
 	}
 
 	ngAfterContentInit(): void {
-		this.replays$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats?.stats,
+		this.replays$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				map(
-					([replays, battlegrounds, selectedCategoryId]) =>
-						[replays, battlegrounds.findCategory(selectedCategoryId)] as [
-							GameStat[],
-							BattlegroundsCategory,
-						],
-				),
-				filter(([replays, category]) => !!replays?.length && !!category),
-				map(([replays, category]) => {
-					const heroId = (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;
-					return replays
-						.filter(
-							(replay) =>
-								replay.gameMode === 'battlegrounds' || replay.gameMode === 'battlegrounds-friendly',
-						)
-						.filter((replay) => replay.playerRank != null)
-						.filter(
-							(replay) =>
-								!heroId ||
-								normalizeHeroCardId(heroId, this.allCards) ===
-									normalizeHeroCardId(replay.playerCardId, this.allCards),
-						)
-						.slice(0, 10);
-				}),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => cdLog('emitting replays in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		).pipe(
+			this.mapData(([replays, [battlegrounds, selectedCategoryId]]) => {
+				const category = battlegrounds.findCategory(
+					selectedCategoryId,
+				) as BattlegroundsPersonalStatsHeroDetailsCategory;
+				const heroId = category?.heroId;
+				return replays
+					.filter((replay) => isBattlegrounds(replay.gameMode))
+					.filter((replay) => replay.playerRank != null)
+					.filter(
+						(replay) =>
+							!heroId ||
+							normalizeHeroCardId(heroId, this.allCards) ===
+								normalizeHeroCardId(replay.playerCardId, this.allCards),
+					)
+					.slice(0, 10);
+			}),
+		);
 	}
 
 	trackByFn(index, item: GameStat) {

@@ -203,8 +203,8 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			);
 
 		const lastModeGames$ = this.store
-			.listen$(([main, nav, prefs]) => main.stats.gameStats?.stats)
-			.pipe(this.mapData(([stats]) => stats?.filter((stat) => this.gameModeFilter(stat, this.currentMode))));
+			.gameStats$()
+			.pipe(this.mapData((stats) => stats?.filter((stat) => this.gameModeFilter(stat, this.currentMode))));
 		const lastGames$: Observable<readonly GameStat[]> = combineLatest(
 			this.store.listenPrefs$((prefs) => prefs.currentSessionStartDate),
 			lastModeGames$,

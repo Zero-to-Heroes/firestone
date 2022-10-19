@@ -1,25 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import {
-	MercenariesHeroLevelFilterType,
-	MercenariesModeFilterType,
-	MercenariesPveDifficultyFilterType,
-	MercenariesPvpMmrFilterType,
-	MercenariesStarterFilterType,
-} from '../../../models/mercenaries/mercenaries-filter-types';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import {
-	MercenariesGlobalStats,
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
-import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
+import { groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
@@ -184,112 +174,74 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 	}
 
 	ngAfterContentInit(): void {
-		this.heroStats$ = this.store
-			.listen$(
+		this.heroStats$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.mercenaries.getGlobalStats(),
 				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.stats.gameStats,
 				([main, nav, prefs]) => nav.navigationMercenaries.selectedHeroId,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
-			)
-			.pipe(
-				filter(
-					([
+			),
+		).pipe(
+			filter(
+				([
+					gameStats,
+					[
 						globalStats,
 						referenceData,
-						gameStats,
 						selectedHeroId,
 						modeFilter,
 						difficultyFilter,
 						mmrFilter,
 						starterFilter,
 						levelFilter,
-					]) => !!referenceData,
-				),
-				map(
-					([
+					],
+				]) => !!referenceData,
+			),
+			this.mapData(
+				([
+					gameStats,
+					[
 						globalStats,
 						referenceData,
-						gameStats,
-						selectedHeroId,
-						modeFilter,
-						difficultyFilter,
-						mmrFilter,
-						starterFilter,
-						levelFilter,
-					]) =>
-						[
-							globalStats,
-							referenceData,
-							modeFilter === 'pve'
-								? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
-								: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
-							selectedHeroId,
-							modeFilter,
-							difficultyFilter,
-							mmrFilter,
-							starterFilter,
-							levelFilter,
-						] as [
-							MercenariesGlobalStats,
-							MercenariesReferenceData,
-							readonly GameStat[],
-							string,
-							MercenariesModeFilterType,
-							MercenariesPveDifficultyFilterType,
-							MercenariesPvpMmrFilterType,
-							MercenariesStarterFilterType,
-							MercenariesHeroLevelFilterType,
-						],
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(
-					([
-						globalStats,
-						referenceData,
-						gameStats,
 						heroCardId,
 						modeFilter,
 						difficultyFilter,
 						mmrFilter,
 						starterFilter,
 						levelFilter,
-					]) => {
-						const infos = modeFilter === 'pve' ? globalStats?.pve : globalStats?.pvp;
-						return [
-							filterMercenariesHeroStats(
-								infos?.heroStats?.filter((stat) => stat.heroCardId === heroCardId),
-								modeFilter,
-								'all',
-								difficultyFilter,
-								mmrFilter,
-								starterFilter,
-								levelFilter,
-								this.allCards,
-								referenceData,
-							),
-							filterMercenariesRuns(
-								gameStats.filter(
-									(stat) => normalizeMercenariesCardId(stat.playerCardId) === heroCardId,
-								),
-								modeFilter,
-								'all',
-								difficultyFilter,
-								mmrFilter,
-								starterFilter,
-								levelFilter,
-							),
-							heroCardId,
-							referenceData,
-						] as [readonly MercenariesHeroStat[], readonly GameStat[], string, MercenariesReferenceData];
-					},
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([heroStats, gameStats, heroCardId, referenceData]) => {
+					],
+				]) => {
+					const relevantStats =
+						modeFilter === 'pve'
+							? gameStats?.filter((stat) => (stat.gameMode as any) === 'mercenaries')
+							: gameStats?.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp');
+					const infos = modeFilter === 'pve' ? globalStats?.pve : globalStats?.pvp;
+					const heroStats = filterMercenariesHeroStats(
+						infos?.heroStats?.filter((stat) => stat.heroCardId === heroCardId),
+						modeFilter,
+						'all',
+						difficultyFilter,
+						mmrFilter,
+						starterFilter,
+						levelFilter,
+						this.allCards,
+						referenceData,
+					);
+					const mercenariesMatches = filterMercenariesRuns(
+						relevantStats?.filter((stat) => normalizeMercenariesCardId(stat.playerCardId) === heroCardId) ??
+							[],
+						modeFilter,
+						'all',
+						difficultyFilter,
+						mmrFilter,
+						starterFilter,
+						levelFilter,
+					);
 					if (heroStats?.length) {
 						const refHeroStat = heroStats[0];
 						const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
@@ -302,10 +254,11 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 								globalTotalMatches === 0
 									? null
 									: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
-							playerTotalMatches: gameStats?.length ?? 0,
-							playerWinrate: !gameStats?.length
+							playerTotalMatches: mercenariesMatches?.length ?? 0,
+							playerWinrate: !mercenariesMatches?.length
 								? null
-								: (100 * gameStats.filter((stat) => stat.result === 'won').length) / gameStats.length,
+								: (100 * mercenariesMatches.filter((stat) => stat.result === 'won').length) /
+								  mercenariesMatches.length,
 							equipment: this.buildEquipment(heroStats),
 							abilities: this.buildAbilities(heroStats, referenceData),
 						} as MercenaryInfo;
@@ -358,17 +311,9 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 							}),
 						} as MercenaryInfo;
 					}
-				}),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+				},
+			),
+		);
 	}
 
 	private buildAbilities(

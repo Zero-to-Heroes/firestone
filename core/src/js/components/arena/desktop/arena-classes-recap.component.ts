@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -10,7 +9,6 @@ import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -119,43 +117,38 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 	}
 
 	ngAfterContentInit(): void {
-		this.stats$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.gameStats.stats,
+		this.stats$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
 				([main, nav]) => main.arena.currentArenaMetaPatch,
-			)
-			.pipe(
-				filter(([stats, timeFilter, heroFilter, patch]) => !!stats?.length),
-				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([stats, timeFilter, heroFilter, patch]) => {
-					const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena');
-					if (!arenaMatches.length) {
-						return null;
-					}
+			),
+		).pipe(
+			this.mapData(([stats, [timeFilter, heroFilter, patch]]) => {
+				const arenaMatches = stats?.filter((stat) => stat.gameMode === 'arena');
+				if (!arenaMatches.length) {
+					return null;
+				}
 
-					const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch);
-					const totalRuns = arenaRuns.length;
-					return {
-						totalRuns: totalRuns,
-						averageWinsPerRun: arenaRuns.map((run) => run.wins).reduce((a, b) => a + b, 0) / totalRuns,
-						mostPlayedClasses: this.buildPlayerClass(arenaRuns, (a, b) => b.length - a.length),
-						bestWinrateClasses: this.buildPlayerClass(
-							arenaRuns,
-							(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
-						),
-						mostFacedClasses: this.buildFacedClass(arenaRuns, (a, b) => b.length - a.length),
-						bestWinrateAgainstClasses: this.buildFacedClass(
-							arenaRuns,
-							(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
-						),
-					};
-				}),
-				filter((result) => !!result),
-				tap((info) => cdLog('emitting arena classes recap in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+				const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch);
+				const totalRuns = arenaRuns.length;
+				return {
+					totalRuns: totalRuns,
+					averageWinsPerRun: arenaRuns.map((run) => run.wins).reduce((a, b) => a + b, 0) / totalRuns,
+					mostPlayedClasses: this.buildPlayerClass(arenaRuns, (a, b) => b.length - a.length),
+					bestWinrateClasses: this.buildPlayerClass(
+						arenaRuns,
+						(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+					),
+					mostFacedClasses: this.buildFacedClass(arenaRuns, (a, b) => b.length - a.length),
+					bestWinrateAgainstClasses: this.buildFacedClass(
+						arenaRuns,
+						(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
+					),
+				};
+			}),
+		);
 	}
 
 	trackByMostPlayedClass(index: number, item: MostPlayedClass) {

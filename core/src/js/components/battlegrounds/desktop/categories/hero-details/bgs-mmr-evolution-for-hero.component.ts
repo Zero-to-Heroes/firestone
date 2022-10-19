@@ -1,13 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
+import { isBattlegrounds } from '../../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../../../services/utils';
+import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 
 @Component({
@@ -41,29 +41,20 @@ export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionCompone
 	}
 
 	ngAfterContentInit() {
-		this.value$ = this.store
-			.listen$(
+		this.value$ = combineLatest(
+			this.store.gameStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-				([main, nav]) => main.stats.gameStats.stats,
-			)
-			.pipe(
-				map(
-					([battlegrounds, selectedCategoryId, stats]) =>
-						[
-							stats.filter(
-								(stat) =>
-									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
-							),
-							currentBgHeroId(battlegrounds, selectedCategoryId),
-						] as [GameStat[], string],
+			),
+		).pipe(
+			this.mapData(([gameStats, [battlegrounds, selectedCategoryId]]) =>
+				this.buildValue(
+					gameStats.filter((stat) => isBattlegrounds(stat.gameMode)),
+					currentBgHeroId(battlegrounds, selectedCategoryId),
 				),
-				filter(([heroStats, heroId]) => !!heroStats && !!heroId),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([heroStats, heroId]) => this.buildValue(heroStats, heroId)),
-				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-				takeUntil(this.destroyed$),
-			);
+			),
+		);
 	}
 
 	private buildValue(matchStats: readonly GameStat[], heroId: string) {

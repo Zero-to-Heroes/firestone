@@ -27,10 +27,10 @@ export class DuelsRunIdService {
 		await this.store.initComplete();
 
 		this.store
-			.listen$(([main, nav]) => main.stats.gameStats?.stats)
+			.gameStats$()
 			.pipe(
-				filter(([stats]) => !!stats?.length),
-				map(([stats]) => stats?.filter((s) => isDuels(s.gameMode)) ?? []),
+				filter((stats) => !!stats?.length),
+				map((stats) => stats?.filter((s) => isDuels(s.gameMode)) ?? []),
 				map((stats) => stats[0]),
 				filter((latestDuelsMatch) => !!latestDuelsMatch),
 				distinctUntilChanged(),
