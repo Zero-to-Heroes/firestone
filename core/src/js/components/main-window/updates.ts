@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.13.8',
+		version: '9.13.9',
 		sections: [
 			{
 				type: 'intro',
@@ -43,15 +43,19 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					// {
-					// 	category: 'general',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `Add a "live stream" tab where you can see who is streaming Hearthstone (and using Firestone). It is still in its very early stage, and am looking for feedback in how to make this as useful as possible for viewers and streamers alike`,
-					// 		},
-					// 	],
-					// },
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a filter to see your stats on a specific region across the app. Please note that this filter only appears if you have games logged from multiple regions.`,
+							},
+							// {
+							// 	type: 'feature',
+							// 	text: `Add a "live stream" tab where you can see who is streaming Hearthstone (and using Firestone). It is still in its very early stage, and am looking for feedback in how to make this as useful as possible for viewers and streamers alike`,
+							// },
+						],
+					},
 				],
 			},
 			{
@@ -127,6 +131,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Hide speed value for abilities with Discover and Battlecry effects (Community Contribution!).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where an empty ability would sometimes appear in the abilities list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where abilities could have a negative speed in the actions queue.`,
 							},
 						],
 					},
