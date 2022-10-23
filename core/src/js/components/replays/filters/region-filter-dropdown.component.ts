@@ -72,6 +72,10 @@ export class RegionFilterDropdownComponent
 				const allOptions = ['all'];
 				const allRegions = new Set(stats.map((stat) => stat.region).filter((region) => !!region));
 				console.debug('allRegions', allRegions, stats);
+				// Don't show the filter when only one region
+				if (allRegions.size === 1) {
+					return null;
+				}
 				for (const region of allRegions) {
 					allOptions.push(BnetRegion[region].toLowerCase());
 				}
