@@ -1,10 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ScenarioId } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
+import {
+	isMercenaries,
+	isMercenariesPvP,
+	normalizeMercenariesCardId,
+} from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -59,9 +62,16 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent i
 					globalStats?.pvp?.mmrPercentiles?.find((percentile) => percentile.percentile === mmrFilter)?.mmr ??
 					0;
 				const relevantStats = gameStats
-					?.filter((stat) => stat.scenarioId === ScenarioId.LETTUCE_PVP)
+					// Include the AI games here, as otherwise this is confusing
+					?.filter((stat) => isMercenariesPvP(stat.gameMode))
 					.filter((stat) => (mmrThreshold === 0 ? true : stat.playerRank && +stat.playerRank >= mmrThreshold))
 					.filter((stat) => !!stat.mercHeroTimings?.length);
+				console.debug(
+					'[mercs-pvp] relevantStats',
+					relevantStats,
+					gameStats?.filter((stat) => isMercenaries(stat.gameMode)),
+					gameStats?.filter((stat) => stat.reviewId === 'e25f0e9b-6c95-49b2-a765-609943e8a9bb'),
+				);
 				const groupedByTeam = groupByFunction((stat: GameStat) =>
 					this.normalizeMercDecklist(stat.mercHeroTimings, referenceData),
 				)(relevantStats);

@@ -183,6 +183,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsQuestsWidgetPosition: { left: number; top: number };
 
+	readonly mercsShowQuestsWidget: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly mercsQuestsWidgetPosition: { left: number; top: number };
+
 	readonly guessOpponentArchetype: boolean = true;
 
 	// readonly overlayDisplayMode: string;

@@ -48,6 +48,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<!-- Use different wrappers to make it easier to position each one differently -->
 			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
 			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
+			<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
 
 			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper class="focusable" tabindex="0"></decktracker-player-widget-wrapper>

@@ -381,6 +381,7 @@ import { MercsActionQueueWidgetWrapperComponent } from '../../components/overlay
 import { MercsOpponentTeamWidgetWrapperComponent } from '../../components/overlays/mercs-opponent-team-widget-wrapper.component';
 import { MercsOutOfCombatPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-out-of-combat-player-team-widget-wrapper.component';
 import { MercsPlayerTeamWidgetWrapperComponent } from '../../components/overlays/mercs-player-team-widget-wrapper.component';
+import { MercsQuestsWidgetWrapperComponent } from '../../components/overlays/mercs-quests-widget-wrapper.component';
 import { MercsTreasureSelectionWidgetWrapperComponent } from '../../components/overlays/mercs-treasure-selection-widget-wrapper.component';
 import { OpponentHandWidgetWrapperComponent } from '../../components/overlays/opponent-hand-widget-wrapper.component';
 import { OpponentCardInfoIdComponent } from '../../components/overlays/opponenthand/opponent-card-info-id.component';
@@ -390,6 +391,7 @@ import { OpponentCardTurnNumberComponent } from '../../components/overlays/oppon
 import { OpponentHandOverlayComponent } from '../../components/overlays/opponenthand/opponent-hand-overlay.component';
 import { BgsQuestsWidgetComponent } from '../../components/overlays/quests/bgs-quests-widget.component';
 import { HsQuestsWidgetComponent } from '../../components/overlays/quests/hs-quests-widget.component';
+import { MercsQuestsWidgetComponent } from '../../components/overlays/quests/mercs-quests-widget.component';
 import {
 	HsQuestsListWidgetComponent,
 	QuestsWidgetViewComponent,
@@ -988,6 +990,8 @@ const components = [
 		HsQuestsWidgetWrapperComponent,
 		BgsQuestsWidgetComponent,
 		BgsQuestsWidgetWrapperComponent,
+		MercsQuestsWidgetComponent,
+		MercsQuestsWidgetWrapperComponent,
 		ChoosingCardWidgetWrapperComponent,
 		ChoosingCardOptionComponent,
 
