@@ -1,4 +1,4 @@
-import { ReferenceCard, ScenarioId, TaskStatus, VillageVisitorType } from '@firestone-hs/reference-data';
+import { ReferenceCard, TaskStatus, VillageVisitorType } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
@@ -18,7 +18,12 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../mercenaries/mercenaries-state-builder.service';
-import { getHeroRole, isMercenariesPvE, normalizeMercenariesCardId } from '../mercenaries/mercenaries-utils';
+import {
+	getHeroRole,
+	isMercenariesPvE,
+	isMercenariesPvP,
+	normalizeMercenariesCardId,
+} from '../mercenaries/mercenaries-utils';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],
@@ -123,7 +128,7 @@ export const filterMercenariesRuns = (
 	heroLevelFilter: MercenariesHeroLevelFilterType,
 ): readonly GameStat[] => {
 	return games.filter((stat) =>
-		modeFilter === 'pve' ? isMercenariesPvE(stat.gameMode) : stat.scenarioId === ScenarioId.LETTUCE_PVP,
+		modeFilter === 'pve' ? isMercenariesPvE(stat.gameMode) : isMercenariesPvP(stat.gameMode),
 	);
 };
 
