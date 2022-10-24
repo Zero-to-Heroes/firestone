@@ -14,6 +14,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	],
 	template: `
 		<div class="mercenaries-filters">
+			<region-filter-dropdown class="filter" *ngIf="showRegionFilter$ | async"></region-filter-dropdown>
 			<mercenaries-mode-filter-dropdown class="mode"></mercenaries-mode-filter-dropdown>
 			<mercenaries-pve-difficulty-filter-dropdown
 				class="pve-difficulty"
@@ -47,6 +48,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 export class MercenariesFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showHiddenTeamsLink$: Observable<boolean>;
 	showMercNamesInTeamsLink$: Observable<boolean>;
+	showRegionFilter$: Observable<boolean>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
@@ -88,6 +90,12 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent i
 				),
 				// tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
 				takeUntil(this.destroyed$),
+			);
+		this.showRegionFilter$ = this.store
+			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
+			.pipe(
+				filter(([currentView]) => !!currentView),
+				this.mapData(([currentView]) => currentView === 'mercenaries-my-teams'),
 			);
 	}
 
