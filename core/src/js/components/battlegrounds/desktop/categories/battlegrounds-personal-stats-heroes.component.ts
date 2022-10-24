@@ -5,17 +5,14 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { deepEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -58,21 +55,7 @@ export class BattlegroundsPersonalStatsHeroesComponent
 	ngAfterContentInit() {
 		this.stats$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats?.length),
-			map((stats) => stats.filter((stat) => stat.id !== 'average')),
-			// FIXME
-			distinctUntilChanged((a, b) => {
-				return deepEqual(a, b);
-			}),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((stats) => cdLog('emitting stats in ', this.constructor.name, stats)),
-			takeUntil(this.destroyed$),
+			this.mapData((stats) => stats.filter((stat) => stat.id !== 'average')),
 		);
 	}
 
