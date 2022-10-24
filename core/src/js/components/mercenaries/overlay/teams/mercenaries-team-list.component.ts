@@ -32,6 +32,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					*ngFor="let mercenary of mercenaries; trackBy: trackByFn"
 					[mercenary]="mercenary"
 					[tooltipPosition]="tooltipPosition"
+					[enableHighlight]="enableHighlight"
 				></mercenaries-team-mercenary>
 			</ng-container>
 			<ng-template #emptyState>
@@ -45,6 +46,7 @@ export class MercenariesTeamListComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy {
 	@Input() tooltipPosition: boolean;
+	@Input() enableHighlight: boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		this.mercenaries = [...(value.mercenaries ?? [])]

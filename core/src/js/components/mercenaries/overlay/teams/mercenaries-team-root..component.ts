@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 								</div>
 							</div>
 						</div>
-						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition">
+						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition" [enableHighlight]="side!=='opponent'">
 						</mercenaries-team-list>
 						<div class="footer">
 							<div
