@@ -11,8 +11,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.AllianceWarBanner4Lettuce:
 		case CardIds.AllianceWarBanner5Lettuce:
 			return alliance;
-		case CardIds.Aluneth:
-			return arcane;
+		case CardIds.AlunethLettuce:
+			return and(dealsDamage, arcane);
 		case CardIds.ArcaneBlast1Lettuce:
 		case CardIds.ArcaneBlast2Lettuce:
 		case CardIds.ArcaneBlast3Lettuce:
@@ -43,8 +43,8 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ArcaneVolley4Lettuce:
 		case CardIds.ArcaneVolley5Lettuce:
 			return arcane;
-		case CardIds.Atiesh:
-			return or(and(fire, dealsDamage), and(frost, dealsDamage));
+		case CardIds.AtieshLettuce:
+			return and(dealsDamage, or(fire, frost));
 		case CardIds.AvatarOfStormpike1Lettuce:
 		case CardIds.AvatarOfStormpike2Lettuce:
 		case CardIds.AvatarOfStormpike3Lettuce:
@@ -98,6 +98,10 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BloodPact4Lettuce:
 		case CardIds.BloodPact5Lettuce:
 			return or(orc, demon);
+		case CardIds.BoonOfAtiesh2Lettuce:
+		case CardIds.BoonOfAtiesh3Lettuce:
+		case CardIds.BoonOfAtiesh4Lettuce:
+			return and(dealsDamage, or(fire, frost, arcane));
 		case CardIds.BrilliantAmity1Lettuce:
 		case CardIds.BrilliantAmity2Lettuce:
 		case CardIds.BrilliantAmity3Lettuce:
@@ -146,7 +150,13 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.CorruptedPower3Lettuce:
 		case CardIds.CorruptedPower4Lettuce:
 		case CardIds.CorruptedPower5Lettuce:
-			return oldgod;
+			return and(merc,oldgod);
+		case CardIds.CorruptionRunsDeep1Lettuce:
+		case CardIds.CorruptionRunsDeep2Lettuce:
+		case CardIds.CorruptionRunsDeep3Lettuce:
+		case CardIds.CorruptionRunsDeep4Lettuce:
+		case CardIds.CorruptionRunsDeep5Lettuce:
+			return shadow;
 		case CardIds.DarkShamanCowl1Lettuce:
 		case CardIds.DarkShamanCowl2Lettuce:
 		case CardIds.DarkShamanCowl3Lettuce:
@@ -187,7 +197,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ElvenBanner3Lettuce:
 		case CardIds.ElvenBanner4Lettuce:
 		case CardIds.ElvenBanner5Lettuce:
-			return or(nightelf, bloodelf);
+			return or(bloodelf, highelf, nightelf);
 		case CardIds.EmeraldBlessing1Lettuce:
 		case CardIds.EmeraldBlessing2Lettuce:
 		case CardIds.EmeraldBlessing3Lettuce:
@@ -206,6 +216,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.EverywhereWorgen4Lettuce:
 		case CardIds.EverywhereWorgen5Lettuce:
 			return human;
+		case CardIds.ExtraTentacles1Lettuce:
+			return (card: ReferenceCard) =>
+			[CardIds.MindFlay1Lettuce, CardIds.MindFlay2Lettuce, CardIds.MindFlay3Lettuce, CardIds.MindFlay4Lettuce, CardIds.MindFlay5Lettuce].includes(
+				normalizeMercenariesCardId(card.id) as CardIds,
+			);
 		// case CardIds.EnchantedRaven1:
 		// case CardIds.EnchantedRaven2Lettuce:
 		// case CardIds.EnchantedRaven3Lettuce:
@@ -232,11 +247,17 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.FelosophicalInsight2Lettuce:
 		case CardIds.FelosophicalInsight3Lettuce:
 			return and(fel, dealsDamage);
+		case CardIds.FelRitual1Lettuce:
+		case CardIds.FelRitual2Lettuce:
+		case CardIds.FelRitual3Lettuce:
+		case CardIds.FelRitual4Lettuce:
+		case CardIds.FelRitual5Lettuce:
+			return and(fel, dealsDamage);
 		case CardIds.FelStaff1Lettuce:
-		case CardIds.FelStaff1Lettuce:
-		case CardIds.FelStaff1Lettuce:
-		case CardIds.FelStaff1Lettuce:
-		case CardIds.FelStaff1Lettuce:
+		case CardIds.FelStaff2Lettuce:
+		case CardIds.FelStaff3Lettuce:
+		case CardIds.FelStaff4Lettuce:
+		case CardIds.FelStaff5Lettuce:
 			return fel;
 		case CardIds.FelVolley1Lettuce:
 		case CardIds.FelVolley2Lettuce:
@@ -401,7 +422,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.MurkysLuckyFish3Lettuce:
 		case CardIds.MurkysLuckyFish4Lettuce:
 		case CardIds.MurkysLuckyFish5Lettuce:
-			return murloc;
+			return and(murloc, merc);
 		case CardIds.MurlocInfestation1Lettuce:
 		case CardIds.MurlocInfestation2Lettuce:
 		case CardIds.MurlocInfestation3Lettuce:
@@ -437,7 +458,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.NegativeEquilibrium3Lettuce:
 		case CardIds.NegativeEquilibrium4Lettuce:
 		case CardIds.NegativeEquilibrium5Lettuce:
-			return or(beast, dragon);
+			return or(beast, dragon, restoresHealth);
 		case CardIds.NephriteArmy1Lettuce:
 		case CardIds.NephriteArmy2Lettuce:
 			return or(dragon, and(dealsDamage, nature));
@@ -529,6 +550,18 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SplittingStrike4Lettuce:
 		case CardIds.SplittingStrike5Lettuce:
 			return human;
+		case CardIds.SproutingTentacles1Lettuce:
+		case CardIds.SproutingTentacles2Lettuce:
+		case CardIds.SproutingTentacles3Lettuce:
+		case CardIds.SproutingTentacles4Lettuce:
+		case CardIds.SproutingTentacles5Lettuce:
+			return and(or(merc,minion), not(oldgod));
+		case CardIds.StaffOfJordan1Lettuce:
+		case CardIds.StaffOfJordan2Lettuce:
+		case CardIds.StaffOfJordan3Lettuce:
+		case CardIds.StaffOfJordan4Lettuce:
+		case CardIds.StaffOfJordan5Lettuce:
+			return restoresHealth;
 		case CardIds.SteadfastShield1Lettuce:
 		case CardIds.SteadfastShield2Lettuce:
 		case CardIds.SteadfastShield3Lettuce:
@@ -619,7 +652,12 @@ const or = (...selectors: HighlightSelector[]): HighlightSelector => {
 	return (card: ReferenceCard) => selectors.some((selector) => selector(card));
 };
 
+const not = (selector: HighlightSelector): HighlightSelector => {
+	return (card: ReferenceCard) => !selector(card);
+};
+
 const merc = (card: ReferenceCard) => card.mercenary;
+const minion = (card: ReferenceCard) => !!card.race && !card.mercenary;
 const race = (card: ReferenceCard, race: Race) => Race[race] === card.race?.toUpperCase();
 const beast = (card: ReferenceCard) => race(card, Race.BEAST);
 const bloodelf = (card: ReferenceCard) => race(card, Race.BLOODELF);
@@ -665,10 +703,11 @@ const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
 const stealth = (card: ReferenceCard) => hasMechanic(card, GameTag.STEALTH);
 const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
 
-const speedIsOdd = (card: ReferenceCard) => card.cost % 2 === 1;
-const speedIsEven = (card: ReferenceCard) => card.cost != null && card.cost % 2 === 0;
+const isAbility  = (card: ReferenceCard) => !card.mercenary && !card.mercenaryEquipment;
+const speedIsOdd  = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 1;
+const speedIsEven = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 0;
 
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
-const dealsDamage = (card: ReferenceCard) =>
-	true || hasText(card, /deal \$?\{?\#?\d+\}? damage/) || hasText(card, /restore \$?\{?\#?\d+\}? health/);
+const dealsDamage = (card: ReferenceCard) => isAbility(card) || hasText(card, /deal (\$\{\d+\} )?damage/) || hasText(card, /наносит (\$\{\d+\} )?урон/);
+const restoresHealth = (card: ReferenceCard) => hasText(card, /restore (\$\{\d+\} )?health/);
