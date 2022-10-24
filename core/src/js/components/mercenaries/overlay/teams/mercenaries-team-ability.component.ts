@@ -16,7 +16,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="tooltipPosition"
 			[ngClass]="{ 'inactive': cooldownLeft > 0 && !uncapacitated }"
-			[mercenariesHighlight]="cardId"
+			[mercenariesHighlight]="enableHighlight ? cardId : null"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
@@ -70,6 +70,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 export class MercenariesTeamAbilityComponent {
 	@Input() tooltipPosition: boolean;
 	@Input() uncapacitated: boolean;
+	@Input() enableHighlight: boolean;
 
 	@Input() set ability(value: Ability) {
 		// console.debug('set ability', this.allCards.getCard(value.cardId).name, value);

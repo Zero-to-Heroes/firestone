@@ -37,6 +37,7 @@ import { Ability } from './mercenaries-team-ability.component';
 				*ngFor="let ability of abilities"
 				[ability]="ability"
 				[tooltipPosition]="tooltipPosition"
+				[enableHighlight]="enableHighlight"
 				[uncapacitated]="isDead || isBench"
 			></mercenaries-team-ability>
 			<mercenaries-team-ability
@@ -44,6 +45,7 @@ import { Ability } from './mercenaries-team-ability.component';
 				class="equipment"
 				[ability]="equipment"
 				[tooltipPosition]="tooltipPosition"
+				[enableHighlight]="enableHighlight"
 				[uncapacitated]="isDead || isBench"
 			></mercenaries-team-ability>
 		</div>
@@ -52,6 +54,7 @@ import { Ability } from './mercenaries-team-ability.component';
 })
 export class MercenariesTeamMercenaryComponent {
 	@Input() tooltipPosition: boolean;
+	@Input() enableHighlight: boolean;
 
 	@Input() set mercenary(value: BattleMercenary) {
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
