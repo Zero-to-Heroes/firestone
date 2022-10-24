@@ -1,4 +1,4 @@
-import { CardIds, GameTag, GameType, TagRole } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, GameType, TagRole, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../cards-facade.service';
 import { MercenariesReferenceData } from './mercenaries-state-builder.service';
 
@@ -178,6 +178,29 @@ export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'prote
 		default:
 			console.error('Invalid role passed', roleFromEnum);
 			return null;
+	}
+};
+
+export const getHeroFaction = (race: string): 'alliance' | 'horde' | 'none' | null => {
+	switch (race.toUpperCase()) {
+		case Race[Race.DRAENEI]:
+		case Race[Race.DWARF]:
+		case Race[Race.GNOME]:		
+		case Race[Race.HIGHELF]:
+		case Race[Race.HUMAN]:
+		case Race[Race.NIGHTELF]:	
+		case Race[Race.WORGEN]:
+			return 'alliance';
+		case Race[Race.BLOODELF]:
+		case Race[Race.GOBLIN]:
+		case Race[Race.HALFORC]:		
+		case Race[Race.ORC]:
+		case Race[Race.TAUREN]:
+		case Race[Race.TROLL]:	
+		case Race[Race.UNDEAD]:
+			return 'horde';
+		default:
+			return 'none';
 	}
 };
 
