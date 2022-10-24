@@ -129,14 +129,14 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 				// Maybe upgrade the lib to its latest version?
 				setTimeout(() => {
 					console.debug('scroll', this.scroll);
-					this.scroll.refresh();
+					this.scroll?.refresh();
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
 				}, 0);
 				setTimeout(() => {
 					console.debug('scroll 2', this.scroll);
-					this.scroll.refresh();
+					this.scroll?.refresh();
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
