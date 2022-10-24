@@ -439,10 +439,10 @@ export class AppUiStoreService {
 					([gameStats, [stats, timeFilter, rankFilter, heroSort, patch]]) =>
 						[
 							stats,
-							gameStats.filter(
+							gameStats?.filter(
 								(stat) =>
 									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
-							),
+							) ?? [],
 							timeFilter,
 							rankFilter <= 100 ? rankFilter : 100,
 							heroSort,
