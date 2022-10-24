@@ -61,7 +61,7 @@ export class DecktrackerLadderStatsOverviewComponent
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
 			this.mapData(([decks, [deckstringsFilter]]) =>
-				decks
+				(decks ?? [])
 					.filter(
 						(deck) =>
 							!deckstringsFilter?.length ||

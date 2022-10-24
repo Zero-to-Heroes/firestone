@@ -49,7 +49,7 @@ export class DecktrackerReplaysRecapComponent extends AbstractSubscriptionCompon
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
 			this.mapData(([decks, [selectedDeckstring], [deckstringsFilter]]) =>
-				decks
+				(decks ?? [])
 					.filter((deck) =>
 						selectedDeckstring
 							? deck.deckstring === selectedDeckstring ||

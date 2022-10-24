@@ -108,7 +108,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 		).pipe(
 			tap((info) => console.debug('[deck] info', info)),
 			this.mapData(([decks, [selectedDeckstring, selectedVersionDeckstring]]) => {
-				const deck: DeckSummary = decks.find(
+				const deck: DeckSummary = (decks ?? []).find(
 					(deck) =>
 						deck?.deckstring === selectedDeckstring ||
 						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),

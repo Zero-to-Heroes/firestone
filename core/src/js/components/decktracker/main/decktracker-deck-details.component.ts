@@ -100,7 +100,7 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 			this.store.listen$(([main, nav, prefs]) => nav.navigationDecktracker.selectedDeckstring),
 		).pipe(
 			this.mapData(([decks, [selectedDeckstring]]) =>
-				decks.find(
+				(decks ?? []).find(
 					(deck) =>
 						deck.deckstring === selectedDeckstring ||
 						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),

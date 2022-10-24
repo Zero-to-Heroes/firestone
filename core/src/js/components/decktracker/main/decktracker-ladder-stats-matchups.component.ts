@@ -113,7 +113,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			this.store.listenPrefs$((prefs) => prefs.replaysActiveDeckstringsFilter),
 		).pipe(
 			this.mapData(([decks, [deckstringsFilter]]) => {
-				const result = decks
+				const result = (decks ?? [])
 					.filter(
 						(deck) =>
 							!deckstringsFilter?.length ||
