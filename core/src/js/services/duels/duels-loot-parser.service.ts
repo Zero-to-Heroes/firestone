@@ -59,7 +59,7 @@ export class DuelsLootParserService {
 		}
 
 		const user = await this.ow.getCurrentUser();
-		const treasures: readonly string[] = !!duelsInfo.TreasureOption
+		const treasures: readonly string[] = !!duelsInfo?.TreasureOption
 			? duelsInfo.TreasureOption.map((option) => this.allCards.getCard(+option)?.id || '' + option)
 			: [];
 		const signatureTreasure: string = findSignatureTreasure(duelsInfo.DeckList, this.allCards);
