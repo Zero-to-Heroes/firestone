@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsGame } from './bgs-game';
 import { BgsPanel } from './bgs-panel';
 import { BgsPanelId } from './bgs-panel-id.type';
@@ -19,6 +19,7 @@ export class BattlegroundsState {
 	readonly postMatchStats: BgsPostMatchStats;
 
 	readonly highlightedTribes: readonly Race[] = [];
+	readonly highlightedMechanics: readonly GameTag[] = [];
 	readonly highlightedMinions: readonly string[] = [];
 
 	public static create(base: BattlegroundsState): BattlegroundsState {

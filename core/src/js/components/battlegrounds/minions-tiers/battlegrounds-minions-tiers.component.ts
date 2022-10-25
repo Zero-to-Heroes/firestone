@@ -8,7 +8,7 @@ import {
 	Renderer2,
 	ViewEncapsulation,
 } from '@angular/core';
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
@@ -22,18 +22,21 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
+		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-minions-tiers scalable">
+		<div class="battlegrounds-minions-tiers scalable battlegrounds-theme">
 			<battlegrounds-minions-tiers-view
 				[tiers]="tiers$ | async"
 				[currentTurn]="currentTurn$ | async"
 				[tavernTier]="tavernTier$ | async"
 				[showMinionsList]="showMinionsList$ | async"
 				[showTribesHighlight]="showTribesHighlight$ | async"
+				[showBattlecryHighlight]="showBattlecryHighlight$ | async"
 				[highlightedMinions]="highlightedMinions$ | async"
 				[highlightedTribes]="highlightedTribes$ | async"
+				[highlightedMechanics]="highlightedMechanics$ | async"
 				[enableMouseOver]="enableMouseOver$ | async"
 				[showGoldenCards]="showGoldenCards$ | async"
 				[showTurnNumber]="showTurnNumber$ | async"
@@ -50,10 +53,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 
 	tiers$: Observable<readonly Tier[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedMechanics$: Observable<readonly GameTag[]>;
 	highlightedMinions$: Observable<readonly string[]>;
 	currentTurn$: Observable<number>;
 	tavernTier$: Observable<number>;
 	showTribesHighlight$: Observable<boolean>;
+	showBattlecryHighlight$: Observable<boolean>;
 	showMinionsList$: Observable<boolean>;
 	showTurnNumber$: Observable<boolean>;
 	enableMouseOver$: Observable<boolean>;
@@ -77,18 +82,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				this.mapData(([races]) => {
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					const result = this.buildTiers(cardsInGame);
-					console.debug(
-						'minions list',
-						cardsInGame,
-						result,
-						cardsInGame.filter((c) => c.name?.toLowerCase()?.includes('menace')),
-					);
 					return result;
 				}),
 			);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
 			.pipe(this.mapData(([tribes]) => tribes));
+		this.highlightedMechanics$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.highlightedMechanics)
+			.pipe(this.mapData(([highlightedMechanics]) => highlightedMechanics));
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
 			.pipe(this.mapData(([tribes]) => tribes));
@@ -99,6 +101,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.getMainPlayer()?.getCurrentTavernTier())
 			.pipe(this.mapData(([tavernTier]) => tavernTier));
 		this.showTribesHighlight$ = this.listenForBasicPref$((prefs) => prefs.bgsShowTribesHighlight);
+		this.showBattlecryHighlight$ = this.listenForBasicPref$((prefs) => prefs.bgsShowMechanicsHighlight);
 		this.showMinionsList$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListOverlay);
 		this.showTurnNumber$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableTurnNumbertOverlay);
 		this.enableMouseOver$ = this.listenForBasicPref$((prefs) => prefs.bgsEnableMinionListMouseOver);

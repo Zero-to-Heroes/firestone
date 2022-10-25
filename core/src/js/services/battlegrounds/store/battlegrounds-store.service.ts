@@ -65,6 +65,7 @@ import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
+import { BgsToggleHighlightMechanicsOnBoardParser } from './event-parsers/bgs-toggle-highlight-mechanics-on-board-parser';
 import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggle-highlight-minion-on-board-parser';
 import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
@@ -572,6 +573,7 @@ export class BattlegroundsStoreService {
 			new BgsFilterLiveMmrParser(this.prefs, () => this.stateUpdater),
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
+			new BgsToggleHighlightMechanicsOnBoardParser(),
 			new BgsToggleHighlightMinionOnBoardParser(),
 			new BgsResetHighlightsParser(),
 			new BgsReconnectStatusParser(),

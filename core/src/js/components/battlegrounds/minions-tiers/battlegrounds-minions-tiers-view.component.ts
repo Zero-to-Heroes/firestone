@@ -6,7 +6,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',
@@ -54,8 +54,10 @@ import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 							}"
 							[cards]="tier.cards"
 							[showTribesHighlight]="showTribesHighlight"
+							[showBattlecryHighlight]="showBattlecryHighlight"
 							[highlightedMinions]="highlightedMinions"
 							[highlightedTribes]="highlightedTribes"
+							[highlightedMechanics]="highlightedMechanics"
 							[showGoldenCards]="showGoldenCards"
 						></bgs-minions-list>
 					</ng-container>
@@ -69,9 +71,11 @@ import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 export class BattlegroundsMinionsTiersViewOverlayComponent {
 	@Input() tiers: readonly Tier[];
 	@Input() highlightedTribes: readonly Race[];
+	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
 	@Input() currentTurn: number;
 	@Input() showTribesHighlight: boolean;
+	@Input() showBattlecryHighlight: boolean;
 	@Input() showMinionsList: boolean;
 	@Input() showTurnNumber: boolean;
 	@Input() enableMouseOver: boolean;

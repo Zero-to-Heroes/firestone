@@ -63,15 +63,23 @@
 				}
 			}
 
-			.highlight-minion-button {
+			.highlight-buttons {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
 				--icon-color: var(--color-2);
 				--icon-secondary-color: var(--color-7);
 				position: absolute;
+				right: 0;
+				top: 0;
+				height: 100%;
+				padding-right: 6px;
+			}
+
+			.highlight-minion-button {
 				width: 26px;
 				max-width: 26px;
 				padding: 5px;
-				right: 0;
-				top: 0;
 				display: none;
 
 				&:not(.no-highlight):hover {
@@ -80,7 +88,7 @@
 
 				&:not(.no-highlight).highlighted {
 					--icon-color: var(--default-title-color);
-					display: block;
+					display: flex;
 
 					&:hover {
 						--icon-secondary-color: var(--color-4);
@@ -89,6 +97,30 @@
 
 				&.no-highlight {
 					display: none;
+				}
+
+				&.battlecry,
+				&.deathrattle {
+					display: flex;
+					background: var(--icon-secondary-color);
+					padding: 5px;
+					width: 18px;
+					height: 18px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					border-radius: 50%;
+					border: 2px solid var(--icon-color);
+
+					.label {
+						font-family: Sumana;
+						font-style: normal;
+						font-weight: bold;
+						line-height: normal;
+						font-size: 11px;
+						color: var(--icon-color);
+						padding-bottom: 3px;
+					}
 				}
 			}
 

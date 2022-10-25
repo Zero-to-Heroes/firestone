@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsResetHighlightsEvent } from '../events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -12,9 +12,11 @@ export class BgsResetHighlightsParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsResetHighlightsEvent): Promise<BattlegroundsState> {
 		const highlightedTribes: readonly Race[] = [];
 		const highlightedMinions: readonly string[] = [];
+		const highlightedMechanics: readonly GameTag[] = [];
 		return currentState.update({
 			highlightedTribes: highlightedTribes,
 			highlightedMinions: highlightedMinions,
+			highlightedMechanics: highlightedMechanics,
 		} as BattlegroundsState);
 	}
 }

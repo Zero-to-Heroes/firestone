@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -41,6 +41,7 @@ export class BgsMatchStartParser implements EventParser {
 					currentPanelId: 'bgs-hero-selection-overview',
 					highlightedMinions: [] as readonly string[],
 					highlightedTribes: [] as readonly Race[],
+					highlightedMechanics: [] as readonly GameTag[],
 					postMatchStats: undefined,
 				} as BattlegroundsState);
 			}
@@ -55,6 +56,7 @@ export class BgsMatchStartParser implements EventParser {
 				spectating: event.spectating,
 				highlightedMinions: [] as readonly string[],
 				highlightedTribes: [] as readonly Race[],
+				highlightedMechanics: [] as readonly GameTag[],
 				postMatchStats: undefined,
 			} as BattlegroundsState);
 		}

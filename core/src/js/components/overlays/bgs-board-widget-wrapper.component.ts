@@ -7,15 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { Race, SceneMode } from '@firestone-hs/reference-data';
+import { GameTag, Race, SceneMode } from '@firestone-hs/reference-data';
 import {} from 'jszip';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../services/utils';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -26,6 +24,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 			*ngIf="{
 				showTribesHighlight: showTribesHighlight$ | async,
 				highlightedTribes: highlightedTribes$ | async,
+				highlightedMechanics: highlightedMechanics$ | async,
 				highlightedMinions: highlightedMinions$ | async
 			} as value"
 		>
@@ -37,6 +36,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 						[minion]="minion"
 						[showTribesHighlight]="value.showTribesHighlight"
 						[highlightedTribes]="value.highlightedTribes"
+						[highlightedMechanics]="value.highlightedMechanics"
 						[highlightedMinions]="value.highlightedMinions"
 					></bgs-tavern-minion>
 				</ul>
@@ -55,6 +55,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	showWidget$: Observable<boolean>;
 	minionCardIds$: Observable<readonly string[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedMechanics$: Observable<readonly GameTag[]>;
 	highlightedMinions$: Observable<readonly string[]>;
 	showTribesHighlight$: Observable<boolean>;
 	windowWidth: number;
@@ -90,45 +91,22 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		).pipe(
 			debounceTime(500),
 			filter(([[phase], [opponentBoard]]) => !!phase && !!opponentBoard),
-			map(([[phase], [opponentBoard]]) =>
+			this.mapData(([[phase], [opponentBoard]]) =>
 				phase === 'recruit' ? opponentBoard.map((minion) => minion.cardId) : [],
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((info) => cdLog('emitting minions in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([state]) => state.highlightedTribes)
-			.pipe(
-				map(([highlightedTribes]) => highlightedTribes),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting highlightedTribes in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([highlightedTribes]) => highlightedTribes));
+		this.highlightedMechanics$ = this.store
+			.listenBattlegrounds$(([state]) => state.highlightedMechanics)
+			.pipe(this.mapData(([highlightedMechanics]) => highlightedMechanics));
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([state]) => state.highlightedMinions)
-			.pipe(
-				map(([highlightedMinions]) => highlightedMinions),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting highlightedMinions in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([highlightedMinions]) => highlightedMinions));
 		this.showTribesHighlight$ = this.store
 			.listen$(([state, nav, prefs]) => prefs.bgsShowTribesHighlight)
-			.pipe(
-				map(([bgsShowTribesHighlight]) => bgsShowTribesHighlight),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting showTribesHighlight in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([bgsShowTribesHighlight]) => bgsShowTribesHighlight));
 	}
 
 	trackByMinion(index: number, minion: string) {

@@ -451,6 +451,7 @@ export class Preferences {
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
+	readonly bgsShowMechanicsHighlight: boolean = true;
 	readonly bgsMinionListShowGoldenCard: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;

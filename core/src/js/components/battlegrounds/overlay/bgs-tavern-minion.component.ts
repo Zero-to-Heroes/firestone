@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 
 @Component({
@@ -45,6 +45,11 @@ export class BgsTavernMinionComponent {
 		this.updateValues();
 	}
 
+	@Input() set highlightedMechanics(value: readonly GameTag[]) {
+		this._highlightedMechanics = value ?? [];
+		this.updateValues();
+	}
+
 	@Input() set highlightedMinions(value: readonly string[]) {
 		this._highlightedMinions = value ?? [];
 		this.updateValues();
@@ -52,6 +57,7 @@ export class BgsTavernMinionComponent {
 
 	_minionCardId: string;
 	_highlightedTribes: readonly Race[] = [];
+	_highlightedMechanics: readonly GameTag[] = [];
 	_highlightedMinions: readonly string[] = [];
 
 	highlightedFromTribe: boolean;
@@ -69,15 +75,20 @@ export class BgsTavernMinionComponent {
 		if (
 			!this.showTribesHighlight ||
 			!this._minionCardId ||
-			(!this._highlightedTribes?.length && !this._highlightedMinions?.length)
+			(!this._highlightedTribes?.length &&
+				!this._highlightedMinions?.length &&
+				!this._highlightedMechanics?.length)
 		) {
 			return;
 		}
 
 		const card = this.allCards.getCard(this._minionCardId);
+		const highlightedFromMechanics = card?.mechanics?.some((m) => this._highlightedMechanics.includes(GameTag[m]));
 		const tribe: Race = card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
 		this.highlightedFromTribe =
-			this._highlightedTribes.includes(tribe) || (this._highlightedTribes.length > 0 && tribe === Race.ALL);
+			this._highlightedTribes.includes(tribe) ||
+			(this._highlightedTribes.length > 0 && tribe === Race.ALL) ||
+			highlightedFromMechanics;
 		this.highlightedFromMinion = this._highlightedMinions.includes(card.id);
 
 		if (this.highlightedFromTribe) {

@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getEffectiveTribe, tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
@@ -29,6 +29,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				*ngFor="let group of groups"
 				[group]="group"
 				[showTribesHighlight]="_showTribesHighlight"
+				[showBattlecryHighlight]="_showBattlecryHighlight"
 				[showGoldenCards]="_showGoldenCards"
 			></bgs-minions-group>
 			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="_showTribesHighlight">
@@ -59,8 +60,20 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
+	@Input() set highlightedMechanics(value: readonly GameTag[]) {
+		this._highlightedMechanics = value;
+		this.updateInfos();
+	}
+
 	@Input() set showTribesHighlight(value: boolean) {
 		this._showTribesHighlight = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set showBattlecryHighlight(value: boolean) {
+		this._showBattlecryHighlight = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -76,7 +89,9 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	_cards: readonly ReferenceCard[];
 	_highlightedMinions: readonly string[];
 	_highlightedTribes: readonly Race[];
+	_highlightedMechanics: readonly GameTag[];
 	_showTribesHighlight: boolean;
+	_showBattlecryHighlight: boolean;
 	_showGoldenCards: boolean;
 	groups: readonly BgsMinionsGroup[];
 
@@ -97,12 +112,6 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 			return;
 		}
 
-		// this.groups = [];
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-
-		// setTimeout(() => {
 		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(this._cards);
 		this.groups = Object.keys(groupedByTribe)
 			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
@@ -111,10 +120,10 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 				minions: groupedByTribe[tribeString],
 				highlightedMinions: this._highlightedMinions || [],
 				highlightedTribes: this._highlightedTribes || [],
+				highlightedMechanics: this._highlightedMechanics || [],
 			}));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 }

@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
+import { GameTag, Race } from '@firestone-hs/reference-data';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
@@ -71,6 +71,7 @@ export class BgsGameEndParser implements EventParser {
 			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			highlightedMinions: [] as readonly string[],
 			highlightedTribes: [] as readonly Race[],
+			highlightedMechanics: [] as readonly GameTag[],
 			heroSelectionDone: false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
