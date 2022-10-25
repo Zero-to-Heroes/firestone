@@ -193,7 +193,7 @@ export const buildMercenariesTasksList = (
 								taskNumber: visitor.TaskChainProgress + 1,
 								taskTitle: task.title,
 						  }),
-					description: task.description,
+					description: normalizeTaskText(task.description),
 					progress: visitor.TaskProgress,
 					quota: task.quota,
 					progressPercentage: !!task.quota ? (100 * (visitor.TaskProgress ?? 0)) / task.quota : 0,
@@ -229,6 +229,26 @@ export const buildMercenariesTasksList = (
 				return a.mercenaryName < b.mercenaryName ? -1 : 1;
 			})
 	);
+};
+
+const normalizeTaskText = (taskText: string): string => {
+	return taskText
+	.replace('5 |4(героическое поручение,героических поручения,героических поручений)', '5 героических поручений')
+	.replace('|4(героическое поручение,героических поручения,героических поручений)', 'героических поручения')
+	.replace('|4(героического босса,героических боссов,героических боссов)', 'героических боссов')
+	.replace('|4(поручение,поручения,поручений)', 'поручение')
+	.replace('|4(противника,противников,противников)', 'противников')
+	.replace('|4(существо,существа,существ)', 'существ')
+	.replace('|4(существо,существ,существ)', 'существ')
+	.replace('|4(врага,врагов,врагов)', 'врагов')
+	.replace('|4(битву,битвы,битв)', 'битв')
+	.replace('|4(раз,раза,раз)', 'раз')
+	.replace('|4(элементаля,элементалей,элементалей)', 'элементалей')
+	.replace('|4(фурболга,фурболгов,фурболгов)', 'фурболгов')
+	.replace('|4(мурлока,мурлоков,мурлоков)', 'мурлоков')
+	.replace('|4(дракона,драконов,драконов)', 'драконов')
+	.replace('|4(демона,демонов,демонов)', 'демонов')
+	.replace('|4(зверя,зверей,зверей)', 'зверей');
 };
 
 const isTaskChainStory = (task: MercenariesReferenceData['taskChains'][0]): boolean => {
