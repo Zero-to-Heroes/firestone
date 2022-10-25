@@ -51,6 +51,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[label]="'settings.general.quests.battlegrounds-label' | owTranslate"
 					[tooltip]="'settings.general.quests.battlegrounds-tooltip' | owTranslate"
 				></preference-toggle>
+				<preference-toggle
+					field="mercsShowQuestsWidget"
+					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[label]="'settings.general.quests.mercenaries-label' | owTranslate"
+					[tooltip]="'settings.general.quests.mercenaries-tooltip' | owTranslate"
+				></preference-toggle>
 			</div>
 		</div>
 	`,

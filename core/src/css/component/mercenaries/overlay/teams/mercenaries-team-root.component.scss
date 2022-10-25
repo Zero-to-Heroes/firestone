@@ -200,13 +200,8 @@
 	left: -325px;
 	bottom: 0;
 	width: 320px;
-	background: var(--color-7);
-	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
-	// Because the hero portraits do this already
-	padding-left: 0;
 	z-index: 1;
 	// Because we need the size to compute where to position it
 	// If we display: none, the size isn't available until it becomes visible
@@ -250,123 +245,123 @@
 	}
 }
 
-.tasks-container {
-	.task {
-		display: flex;
-		position: relative;
+// .tasks-container {
+// 	.task {
+// 		display: flex;
+// 		position: relative;
 
-		&:not(:last-child) {
-			margin-bottom: 30px;
-		}
+// 		&:not(:last-child) {
+// 			margin-bottom: 30px;
+// 		}
 
-		.portrait {
-			flex-grow: 0;
-			flex-shrink: 0;
-			display: flex;
-			flex-direction: column;
-			width: 90px;
-			position: relative;
-			top: 0;
-			left: 0;
-			z-index: 9;
-			margin-top: 0;
-			margin-bottom: 0;
+// 		.portrait {
+// 			flex-grow: 0;
+// 			flex-shrink: 0;
+// 			display: flex;
+// 			flex-direction: column;
+// 			width: 90px;
+// 			position: relative;
+// 			top: 0;
+// 			left: 0;
+// 			z-index: 9;
+// 			margin-top: 0;
+// 			margin-bottom: 0;
 
-			.art {
-				position: absolute;
-				top: 11%;
-				left: 13%;
-				width: 76%;
-				clip-path: ellipse(40% 44% at 50% 50%);
-			}
+// 			.art {
+// 				position: absolute;
+// 				top: 11%;
+// 				left: 13%;
+// 				width: 76%;
+// 				clip-path: ellipse(40% 44% at 50% 50%);
+// 			}
 
-			.frame {
-				width: 100%;
-				z-index: 1;
-			}
-		}
+// 			.frame {
+// 				width: 100%;
+// 				z-index: 1;
+// 			}
+// 		}
 
-		.task-content {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
+// 		.task-content {
+// 			display: flex;
+// 			flex-direction: column;
+// 			width: 100%;
 
-			.header {
-				color: var(--default-title-color);
-				margin-bottom: 5px;
-			}
+// 			.header {
+// 				color: var(--default-title-color);
+// 				margin-bottom: 5px;
+// 			}
 
-			.description {
-				margin-bottom: 5px;
-			}
+// 			.description {
+// 				margin-bottom: 5px;
+// 			}
 
-			.progress {
-				display: flex;
-				flex-direction: row;
-				width: 100%;
-				position: relative;
+// 			.progress {
+// 				display: flex;
+// 				flex-direction: row;
+// 				width: 100%;
+// 				position: relative;
 
-				.background {
-					width: 100%;
-					height: 30px;
-					background-color: var(--color-6);
-				}
+// 				.background {
+// 					width: 100%;
+// 					height: 30px;
+// 					background-color: var(--color-6);
+// 				}
 
-				.current-progress {
-					position: absolute;
-					top: 0;
-					left: 0;
-					height: 100%;
-					background-color: var(--color-4);
-				}
+// 				.current-progress {
+// 					position: absolute;
+// 					top: 0;
+// 					left: 0;
+// 					height: 100%;
+// 					background-color: var(--color-4);
+// 				}
 
-				.text {
-					position: absolute;
-					top: 0;
-					left: 0;
-					height: 100%;
-					width: 100%;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-				}
-			}
-		}
-	}
+// 				.text {
+// 					position: absolute;
+// 					top: 0;
+// 					left: 0;
+// 					height: 100%;
+// 					width: 100%;
+// 					display: flex;
+// 					align-items: center;
+// 					justify-content: center;
+// 				}
+// 			}
+// 		}
+// 	}
 
-	.create-team-button {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding-left: 90px;
+// 	.create-team-button {
+// 		display: flex;
+// 		align-items: center;
+// 		justify-content: center;
+// 		padding-left: 90px;
 
-		button {
-			background: var(--color-2);
-			color: var(--color-5);
-			border: none;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-family: 'Open Sans', sans-serif;
-			padding: 10px;
+// 		button {
+// 			background: var(--color-2);
+// 			color: var(--color-5);
+// 			border: none;
+// 			display: flex;
+// 			align-items: center;
+// 			justify-content: center;
+// 			font-family: 'Open Sans', sans-serif;
+// 			padding: 10px;
 
-			&.disabled {
-				opacity: 0.4;
-			}
+// 			&.disabled {
+// 				opacity: 0.4;
+// 			}
 
-			&:hover:not(.disabled) {
-				background: var(--color-1);
-			}
-		}
-	}
+// 			&:hover:not(.disabled) {
+// 				background: var(--color-1);
+// 			}
+// 		}
+// 	}
 
-	.empty-state {
-		padding-left: 20px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-}
+// 	.empty-state {
+// 		padding-left: 20px;
+// 		display: flex;
+// 		align-items: center;
+// 		justify-content: center;
+// 	}
+// }
 
 ::ng-deep .cdk-overlay-container {
 	.card-tooltip.mercenaries-weakness-triangle.mercenaries-weakness-triangle.mercenaries-weakness-triangle {

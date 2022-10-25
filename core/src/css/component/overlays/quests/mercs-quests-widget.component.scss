@@ -1,0 +1,26 @@
+.task-list {
+	position: absolute;
+	right: 7vh;
+	bottom: 6vh;
+	width: 320px;
+	z-index: 1;
+	// Because we need the size to compute where to position it
+	// If we display: none, the size isn't available until it becomes visible
+	opacity: 0;
+	pointer-events: none;
+
+	&.right {
+		right: auto;
+		left: 7vh;
+	}
+
+	&.bottom {
+		bottom: auto;
+		top: 3vh;
+	}
+
+	&.visible {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
