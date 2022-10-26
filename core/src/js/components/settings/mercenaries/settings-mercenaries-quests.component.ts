@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesAddMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesRemoveMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
-import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-hero-stat.component';
@@ -36,7 +36,7 @@ import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-h
 							<img class="icon" [src]="merc.portraitUrl" />
 							<img class="frame" [src]="merc.frameUrl" />
 						</div>
-						<div class="name" [helpTooltip]="merc.name">{{ merc.name }}</div>
+						<div class="name">{{ merc.name }}</div>
 						<button
 							class="remove-button"
 							inlineSVG="assets/svg/close.svg"
@@ -89,7 +89,7 @@ export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionComp
 						const finalMerc: BackupTeamMerc = {
 							id: refMerc.id,
 							cardId: mercenaryCard.id,
-							name: refMerc.name,
+							name: getShortMercHeroName(mercenaryCard.id, this.allCards),
 							portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCard.id}.jpg`,
 							frameUrl: buildHeroFrame(role, memMerc.Premium),
 						};
