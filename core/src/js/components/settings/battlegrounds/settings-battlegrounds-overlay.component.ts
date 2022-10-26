@@ -173,6 +173,12 @@ import { Knob } from '../preference-slider.component';
 					"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowMechanicsTiers"
+					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[label]="'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-label' | owTranslate"
+					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
 					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"

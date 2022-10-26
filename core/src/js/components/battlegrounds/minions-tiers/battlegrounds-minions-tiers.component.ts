@@ -10,12 +10,14 @@ import {
 } from '@angular/core';
 import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Observable } from 'rxjs';
-import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
+import { combineLatest, Observable } from 'rxjs';
+import { getAllCardsInGame, getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { Tier } from './battlegrounds-minions-tiers-view.component';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
@@ -65,26 +67,28 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	showGoldenCards$: Observable<boolean>;
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly init_DebugService: DebugService,
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit() {
-		this.tiers$ = this.store
-			.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces)
-			.pipe(
-				this.mapData(([races]) => {
-					const cardsInGame = getAllCardsInGame(races, this.allCards);
-					const result = this.buildTiers(cardsInGame);
-					return result;
-				}),
-			);
+		this.tiers$ = combineLatest(
+			this.store.listenPrefs$((prefs) => prefs.bgsShowMechanicsTiers),
+			this.store.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces),
+		).pipe(
+			this.mapData(([[showMechanicsTiers], [races]]) => {
+				const cardsInGame = getAllCardsInGame(races, this.allCards);
+				const result = this.buildTiers(cardsInGame, showMechanicsTiers);
+				return result;
+			}),
+		);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
 			.pipe(this.mapData(([tribes]) => tribes));
@@ -113,7 +117,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		});
 	}
 
-	private buildTiers(cardsInGame: readonly ReferenceCard[]): readonly Tier[] {
+	private buildTiers(cardsInGame: readonly ReferenceCard[], showMechanicsTiers: boolean): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
 		}
@@ -121,14 +125,33 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
 		)(cardsInGame);
-		return Object.keys(groupedByTier).map((tierLevel) => ({
+		const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
+			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, false),
 		}));
+		const mechanicsTiers = showMechanicsTiers ? this.buildMechanicsTiers(cardsInGame) : [];
+		return [...standardTiers, ...mechanicsTiers];
 	}
-}
 
-interface Tier {
-	tavernTier: number;
-	cards: readonly ReferenceCard[];
+	private buildMechanicsTiers(cardsInGame: readonly ReferenceCard[]): readonly Tier[] {
+		return [
+			{
+				tavernTier: 'B',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BATTLECRY])),
+				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
+				}),
+			},
+			{
+				tavernTier: 'D',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
+				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
+				}),
+			},
+		];
+	}
 }

@@ -31,6 +31,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				<div>{{ title }}</div>
 				<div
 					class="highlight-button"
+					*ngIf="tribe"
 					[ngClass]="{
 						'highlighted': _showTribesHighlight && highlighted,
 						'no-highlight': !_showTribesHighlight
@@ -150,6 +151,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	highlighted: boolean;
 	minions: readonly Minion[] = [];
 	_group: BgsMinionsGroup;
+	tribe: Race;
 	_showTribesHighlight: boolean;
 	_showBattlecryHighlight: boolean;
 
@@ -209,14 +211,13 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		if (!this._showTribesHighlight) {
 			return;
 		}
-		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(this._group.tribe));
+		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(this.tribe));
 	}
 
 	highlightBattlecry() {
 		if (!this._showBattlecryHighlight) {
 			return;
 		}
-		console.debug('highlighting battlecry minion');
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.BATTLECRY));
 	}
 
@@ -224,7 +225,6 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		if (!this._showBattlecryHighlight) {
 			return;
 		}
-		console.debug('highlighting deathrattle minion');
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DEATHRATTLE));
 	}
 
@@ -237,7 +237,8 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			return;
 		}
 
-		this.title = this.buildTitle(this._group.tribe);
+		this.title = this._group.title;
+		this.tribe = this._group.tribe;
 		this.highlightTribeOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-tribe', {
 			value: this.title,
 		});
@@ -325,10 +326,6 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		}
 
 		return [id, `${premiumCard.id}_golden`].join(',');
-	}
-
-	private buildTitle(tribe: Race): string {
-		return this.i18n.translateString(`global.tribe.${Race[tribe].toLowerCase()}`);
 	}
 }
 
