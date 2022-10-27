@@ -23,6 +23,7 @@ export class CardChangedInHandParser implements EventParser {
 		// cardId is the new card id here
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
+		const lastAffectedByCardId = gameEvent.additionalData.lastAffectedByCardId;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -45,6 +46,7 @@ export class CardChangedInHandParser implements EventParser {
 						isCardInfoPublic && cardData && cardData.rarity
 							? cardData.rarity.toLowerCase()
 							: cardInHand.rarity,
+					lastAffectedByCardId: lastAffectedByCardId,
 			  } as DeckCard)
 			: null;
 

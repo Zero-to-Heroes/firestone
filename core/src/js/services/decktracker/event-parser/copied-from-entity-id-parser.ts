@@ -33,7 +33,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		const newCopy: DeckCard = deck.findCard(entityId)?.card;
 		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
-		console.debug('copiedCard', copiedCard, copiedDeck, copiedCardEntityId, newCopy, gameEvent, deck);
+		// console.debug('copiedCard', copiedCard, copiedDeck, copiedCardEntityId, newCopy, gameEvent, deck);
 
 		// Cards like Masked Reveler summon a copy of a card from the deck. Because we don't store the entityId of
 		// unknown cards in deck (to avoid info leaks), we can't find the right card from the event info, and so

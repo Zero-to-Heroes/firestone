@@ -212,7 +212,7 @@ export const cardsRevealedWhenDrawn = [
 // These are used to prevent info leaks in hand because we might know too much information
 // Mostly useful when the opponent plays it
 export const forcedHiddenCardCreators = [
-	// CardIds.Chameleos,
+	CardIds.Chameleos,
 	// CardIds.CoilfangConstrictor,
 	// // Prevent the player from knowing too much about the opponent's hand when we play IT
 	// // However, it has the side-effect of hiding the cards drawn by the opponent
