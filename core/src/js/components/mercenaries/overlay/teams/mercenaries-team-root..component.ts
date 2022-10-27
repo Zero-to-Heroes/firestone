@@ -14,7 +14,7 @@ import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@fi
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -57,7 +57,11 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									{{ currentBattleTurn$ | async }}
 								</div>
 							</div>
-							<div class="element map-turn" [helpTooltip]="mapTurnsTooltip$ | async">
+							<div
+								class="element map-turn"
+								[helpTooltip]="mapTurnsTooltip$ | async"
+								*ngIf="showMapTurnCounter$ | async"
+							>
 								<div class="icon" inlineSVG="assets/svg/map.svg"></div>
 								<div class="value ">
 									{{ totalMapTurns$ | async }}
@@ -153,6 +157,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	showTaskList$: Observable<boolean>;
 	showRolesChart$: Observable<boolean>;
 	showTurnCounter$: Observable<boolean>;
+	showMapTurnCounter$: Observable<boolean>;
 	currentBattleTurn$: Observable<number>;
 	totalMapTurns$: Observable<string>;
 	mapTurnsTooltip$: Observable<string>;
@@ -233,6 +238,12 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(this.mapData((info) => info));
 		this.showRolesChart$ = this.showRolesChart$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
+		this.showMapTurnCounter$ = this.store
+			.listenMercenaries$(([state]) => state.gameMode)
+			.pipe(
+				tap((info) => console.debug('[merc] info', info)),
+				this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)),
+			);
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(
