@@ -59,6 +59,10 @@ export const healthBiggerThanAttack = (handler: Handler): boolean => {
 	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
 };
 
+export const attackLessThan = (attack: number) => (handler: Handler): boolean => {
+	return handler.referenceCardProvider().attack != null && handler.referenceCardProvider().attack < attack;
+};
+
 export const cardIs = (...cardIds: readonly CardIds[]) => (handler: Handler): boolean => {
 	return cardIds.includes(handler.referenceCardProvider()?.id as CardIds);
 };
@@ -91,6 +95,7 @@ export const discover = hasMechanic(GameTag.DISCOVER);
 export const divineShield = hasMechanic(GameTag.DIVINE_SHIELD);
 export const freeze = hasMechanic(GameTag.FREEZE);
 export const frenzy = hasMechanic(GameTag.FRENZY);
+export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
