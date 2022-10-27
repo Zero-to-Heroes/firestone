@@ -114,6 +114,8 @@ export class StreamHeroInfosComponent {
 				value.opponentCardId,
 				value.gameType,
 			);
+		} else {
+			[this.opponentClassImage, this.opponentClassTooltip] = [null, null];
 		}
 		console.debug('set stream info', value);
 	}

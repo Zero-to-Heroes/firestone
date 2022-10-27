@@ -113,6 +113,9 @@ export class TwitchPresenceService {
 			.pipe(
 				tap((info) => console.debug('[twitch-presence] considering', info)),
 				filter(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
+					if (!hearthstoneInfo.gameStarted) {
+						return false;
+					}
 					if (hearthstoneInfo.metadata.gameType === GameType.GT_RANKED) {
 						return !!matchInfo;
 					}

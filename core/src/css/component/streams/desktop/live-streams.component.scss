@@ -18,6 +18,8 @@
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		overflow: scroll;
+		height: 100%;
 
 		live-stream-info {
 			height: 60px;
