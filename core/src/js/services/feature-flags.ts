@@ -4,10 +4,10 @@ export class FeatureFlags {
 	public static readonly ENABLE_DUELS_DECK_BUILDER = true;
 	public static readonly ENABLE_DUELS_DECK_BUILDER_BUCKETS = true;
 	public static readonly ENABLE_DECK_VERSIONS = true;
-	public static readonly ENABLE_STREAMS_TAB = false;
-	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;
+	public static readonly ENABLE_STREAMS_TAB = true;
 
 	// Shelved for now
+	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;
 	public static readonly ENABLE_DETAILED_MERC = false;
 	public static readonly ENABLE_MULTI_GRAPHS = false;
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false; // Doesn't work anymore?
