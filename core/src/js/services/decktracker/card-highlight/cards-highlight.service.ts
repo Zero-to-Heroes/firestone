@@ -173,6 +173,38 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 		}
 	}
 
+	getHighlightedCards(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard): readonly Handler[] {
+		// Happens when using the deck-list component outside of a game
+		if (!this.options?.skipGameState && !this.gameState) {
+			console.debug('skipping game state', this.options, this.gameState);
+			return [];
+		}
+
+		const selector: (
+			handler: Handler,
+			deckState?: DeckState,
+			options?: SelectorOptions,
+			gameState?: GameState,
+		) => boolean = this.buildSelector(cardId, card);
+		console.debug('selector', selector);
+		const result = !!selector
+			? Object.keys(this.handlers)
+					.filter((key) => key.startsWith(side))
+					.map((key) => this.handlers[key])
+					.filter((handler) => {
+						return selector(
+							handler,
+							side === 'player' ? this.gameState?.playerDeck : this.gameState?.opponentDeck,
+							this.options,
+							this.gameState,
+						);
+					})
+					.map((handler) => handler)
+			: [];
+		console.debug('result', result);
+		return result;
+	}
+
 	onMouseLeave(cardId: string) {
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}

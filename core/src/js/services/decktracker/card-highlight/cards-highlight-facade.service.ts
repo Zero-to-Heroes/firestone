@@ -39,6 +39,10 @@ export class CardsHighlightFacadeService {
 		this.service.onMouseEnter(cardId, side, card);
 	}
 
+	getHighlightedCards(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard): readonly Handler[] {
+		return this.service.getHighlightedCards(cardId, side, card);
+	}
+
 	onMouseLeave(cardId: string) {
 		this.service.onMouseLeave(cardId);
 	}

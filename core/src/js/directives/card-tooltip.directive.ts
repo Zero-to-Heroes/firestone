@@ -32,8 +32,8 @@ export class CardTooltipDirective implements OnDestroy {
 	// So that the related card ids can be refreshed while the tooltip is displayed
 	// (otherwise it only refreshes on mouseenter)
 	@Input() set cardTooltipRelatedCardIds(value: readonly string[]) {
+		this._cardTooltipRelatedCardIds = value;
 		if (!!this.tooltipRef && !arraysEqual(value, this._cardTooltipRelatedCardIds)) {
-			this._cardTooltipRelatedCardIds = value;
 			const shouldShowRelatedCards =
 				this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
 			this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
@@ -148,7 +148,6 @@ export class CardTooltipDirective implements OnDestroy {
 			: this._cardTooltipRelatedCardIds?.length
 			? this._cardTooltipRelatedCardIds
 			: this.relatedCardIds;
-		// console.debug('mouseenter relatedcardIds', this.tooltipRef.instance.relatedCardIds);
 		this.tooltipRef.instance.viewRef = this.tooltipRef;
 
 		if (this.cardTooltipCard) {
