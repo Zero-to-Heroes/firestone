@@ -80,12 +80,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 
 	ngAfterContentInit() {
 		this.tiers$ = combineLatest(
-			this.store.listenPrefs$((prefs) => prefs.bgsShowMechanicsTiers),
+			this.store.listenPrefs$(
+				(prefs) => prefs.bgsShowMechanicsTiers,
+				(prefs) => prefs.bgsGroupMinionsIntoTheirTribeGroup,
+			),
 			this.store.listenBattlegrounds$(([main, prefs]) => main?.currentGame?.availableRaces),
 		).pipe(
-			this.mapData(([[showMechanicsTiers], [races]]) => {
+			this.mapData(([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races]]) => {
 				const cardsInGame = getAllCardsInGame(races, this.allCards);
-				const result = this.buildTiers(cardsInGame, showMechanicsTiers);
+				const result = this.buildTiers(cardsInGame, bgsGroupMinionsIntoTheirTribeGroup, showMechanicsTiers);
 				return result;
 			}),
 		);
@@ -117,7 +120,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		});
 	}
 
-	private buildTiers(cardsInGame: readonly ReferenceCard[], showMechanicsTiers: boolean): readonly Tier[] {
+	private buildTiers(
+		cardsInGame: readonly ReferenceCard[],
+		groupMinionsIntoTheirTribeGroup: boolean,
+		showMechanicsTiers: boolean,
+	): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
 		}
@@ -128,7 +135,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
-			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, false),
+			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, groupMinionsIntoTheirTribeGroup),
 		}));
 		const mechanicsTiers = showMechanicsTiers ? this.buildMechanicsTiers(cardsInGame) : [];
 		return [...standardTiers, ...mechanicsTiers];
