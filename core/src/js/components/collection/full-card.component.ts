@@ -186,8 +186,11 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 								`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`,
 						  )
 						: null;
-				this.race = card.race != null ? this.i18n.translateString(`global.tribe.${card.race?.toLowerCase()}`) : null;  
-				this.faction = card.mercenary ? this.i18n.translateString(`app.collection.card-details.factions.${getHeroFaction(card.race)}`) : null;
+				this.race =
+					card.race != null ? this.i18n.translateString(`global.tribe.${card.race?.toLowerCase()}`) : null;
+				this.faction = card.mercenary
+					? this.i18n.translateString(`app.collection.card-details.factions.${getHeroFaction(card.race)}`)
+					: null;
 				const flavorSource = card.flavor ?? card.text;
 				this.flavor = flavorSource?.length
 					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))

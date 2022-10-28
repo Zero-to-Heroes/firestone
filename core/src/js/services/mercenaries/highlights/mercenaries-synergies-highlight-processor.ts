@@ -150,7 +150,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.CorruptedPower3Lettuce:
 		case CardIds.CorruptedPower4Lettuce:
 		case CardIds.CorruptedPower5Lettuce:
-			return and(merc,oldgod);
+			return and(merc, oldgod);
 		case CardIds.CorruptionRunsDeep1Lettuce:
 		case CardIds.CorruptionRunsDeep2Lettuce:
 		case CardIds.CorruptionRunsDeep3Lettuce:
@@ -218,9 +218,13 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return human;
 		case CardIds.ExtraTentacles1Lettuce:
 			return (card: ReferenceCard) =>
-			[CardIds.MindFlay1Lettuce, CardIds.MindFlay2Lettuce, CardIds.MindFlay3Lettuce, CardIds.MindFlay4Lettuce, CardIds.MindFlay5Lettuce].includes(
-				normalizeMercenariesCardId(card.id) as CardIds,
-			);
+				[
+					CardIds.MindFlay1Lettuce,
+					CardIds.MindFlay2Lettuce,
+					CardIds.MindFlay3Lettuce,
+					CardIds.MindFlay4Lettuce,
+					CardIds.MindFlay5Lettuce,
+				].includes(normalizeMercenariesCardId(card.id) as CardIds);
 		// case CardIds.EnchantedRaven1:
 		// case CardIds.EnchantedRaven2Lettuce:
 		// case CardIds.EnchantedRaven3Lettuce:
@@ -555,7 +559,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SproutingTentacles3Lettuce:
 		case CardIds.SproutingTentacles4Lettuce:
 		case CardIds.SproutingTentacles5Lettuce:
-			return and(or(merc,minion), not(oldgod));
+			return and(or(merc, minion), not(oldgod));
 		case CardIds.StaffOfJordan1Lettuce:
 		case CardIds.StaffOfJordan2Lettuce:
 		case CardIds.StaffOfJordan3Lettuce:
@@ -703,11 +707,12 @@ const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
 const stealth = (card: ReferenceCard) => hasMechanic(card, GameTag.STEALTH);
 const taunt = (card: ReferenceCard) => hasMechanic(card, GameTag.TAUNT);
 
-const isAbility  = (card: ReferenceCard) => !card.mercenary && !card.mercenaryEquipment;
-const speedIsOdd  = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 1;
+const isAbility = (card: ReferenceCard) => !card.mercenary && !card.mercenaryEquipment;
+const speedIsOdd = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 1;
 const speedIsEven = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 0;
 
 // TODO translate
 const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
-const dealsDamage = (card: ReferenceCard) => isAbility(card) || hasText(card, /deal (\$\{\d+\} )?damage/) || hasText(card, /наносит (\$\{\d+\} )?урон/);
+const dealsDamage = (card: ReferenceCard) =>
+	isAbility(card) || hasText(card, /deal (\$\{\d+\} )?damage/) || hasText(card, /наносит (\$\{\d+\} )?урон/);
 const restoresHealth = (card: ReferenceCard) => hasText(card, /restore (\$\{\d+\} )?health/);
