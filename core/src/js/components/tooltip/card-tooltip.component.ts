@@ -7,13 +7,12 @@ import {
 	ComponentRef,
 	Input,
 	OnDestroy,
-	Optional,
-	ViewRef,
 } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -22,106 +21,91 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'card-tooltip',
 	styleUrls: [`../../../css/component/tooltip/card-tooltip.component.scss`],
 	template: `
-		<div
-			class="card-tooltip {{ card.additionalClass }}"
-			*ngFor="let card of cards"
-			[ngClass]="{ 'hidden': !_relativePosition }"
+		<ng-container
+			*ngIf="{
+				cards: cards$ | async,
+				relatedCards: relatedCards$ | async,
+				relativePosition: relativePosition$ | async,
+				displayBuffs: displayBuffs$ | async
+			} as value"
 		>
-			<div *ngIf="card.createdBy" class="created-by">Created by</div>
-			<img *ngIf="card.image" [src]="card.image" (onload)="refresh()" class="tooltip-image" />
-			<!-- <video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
-				<source
-					src="{{
-						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + card.cardId + '.webm'
-					}}"
-					type="video/webm"
-				/>
-			</video> -->
-			<!-- <div *ngIf="card.text" class="text">{{ card.text }}</div> -->
-			<div class="buffs" *ngIf="card.buffs && _displayBuffs" [ngClass]="{ 'only-buffs': !card.image }">
-				<div class="background">
-					<div class="body"></div>
-					<div class="bottom"></div>
-				</div>
-				<div class="content">
-					<buff-info *ngFor="let buff of card.buffs" [buff]="buff"></buff-info>
-				</div>
-			</div>
-		</div>
-		<div
-			class="related-cards-wrapper"
-			*ngIf="relatedCards.length"
-			[ngClass]="{
-				'left': _relativePosition === 'left',
-				'hidden': !_relativePosition
-			}"
-		>
-			<div class="related-cards-container" [ngClass]="{ 'wide': relatedCards.length > 6 }">
-				<div class="related-cards">
-					<div class="related-card" *ngFor="let card of relatedCards">
-						<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+			<div
+				*ngFor="let card of value.cards"
+				class="card-tooltip {{ card.additionalClass }}"
+				[ngClass]="{ 'hidden': !value.relativePosition }"
+			>
+				<div *ngIf="card.createdBy" class="created-by">Created by</div>
+				<img *ngIf="card.image" [src]="card.image" (onload)="refresh()" class="tooltip-image" />
+				<div class="buffs" *ngIf="card.buffs && value.displayBuffs" [ngClass]="{ 'only-buffs': !card.image }">
+					<div class="background">
+						<div class="body"></div>
+						<div class="bottom"></div>
+					</div>
+					<div class="content">
+						<buff-info *ngFor="let buff of card.buffs" [buff]="buff"></buff-info>
 					</div>
 				</div>
 			</div>
-		</div>
+			<div
+				class="related-cards-wrapper"
+				*ngIf="value.relatedCards?.length"
+				[ngClass]="{
+					'left': value.relativePosition === 'left',
+					'hidden': !value.relativePosition
+				}"
+			>
+				<div class="related-cards-container" [ngClass]="{ 'wide': value.relatedCards.length > 6 }">
+					<div class="related-cards">
+						<div class="related-card" *ngFor="let card of value.relatedCards">
+							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTooltipComponent
 	extends AbstractSubscriptionComponent
 	implements AfterViewInit, OnDestroy, AfterContentInit {
-	cards: readonly InternalCard[];
-	relatedCards: readonly InternalCard[] = [];
-	_displayBuffs: boolean;
-	_relativePosition: 'left' | 'right';
-
 	public viewRef: ComponentRef<CardTooltipComponent>;
 
-	private _cardIds: string[];
-	private _relatedCardIds: readonly string[] = [];
-	private isBgs: boolean;
-	private _additionalClass: string;
-	private createdBy: boolean;
-	private buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
-	private _cardType: 'NORMAL' | 'GOLDEN' = 'NORMAL';
+	cards$: Observable<readonly InternalCard[]>;
+	relatedCards$: Observable<readonly InternalCard[]>;
+	relativePosition$: Observable<'left' | 'right'>;
+	displayBuffs$: Observable<boolean>;
 
-	// Call last in directive
 	@Input() set cardId(value: string) {
-		this._cardIds = value?.length ? value.split(',') : [];
-		this.updateInfos();
+		console.debug('setting card ids', value);
+		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
-
 	@Input() set relatedCardIds(value: readonly string[]) {
-		this._relatedCardIds = value ?? [];
+		console.debug('setting related card ids', value);
+		this.relatedCardIds$$.next(value ?? []);
 	}
-
-	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
-		this._cardType = value;
+	@Input() set localized(value: boolean) {
+		this.localized$$.next(value);
 	}
-
 	@Input() set cardTooltipBgs(value: boolean) {
-		this.isBgs = value;
+		this.isBgs$$.next(value);
 	}
-
-	// Position of the tooltip relative to its origin element
 	@Input() set relativePosition(value: 'left' | 'right') {
-		this._relativePosition = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.relativePosition$$.next(value);
 	}
-
-	@Input() localized = true;
-
+	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
+		this.cardType$$.next(value);
+	}
+	@Input() set additionalClass(value: string) {
+		this.additionalClass$$.next(value);
+	}
+	@Input() set displayBuffs(value: boolean) {
+		this.displayBuffs$$.next(value);
+	}
 	@Input() set cardTooltipCard(value: DeckCard) {
-		if (!value) {
-			this.updateInfos();
-			return;
-		}
-
-		this.buffs =
-			!value.buffCardIds || value.buffCardIds.length === 0
-				? undefined
+		this.buffs$$.next(
+			!value?.buffCardIds?.length
+				? null
 				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds))
 						.map((buff: string[]) => buff ?? [])
 						.map((buff: string[]) => buff.filter((b) => !!b))
@@ -130,29 +114,22 @@ export class CardTooltipComponent
 							buffCardId: buff[0],
 							bufferCardId: buff[0].slice(0, buff[0].length - 1),
 							count: buff.length,
-						}));
-		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
-		this._cardIds = [value.cardId || value.creatorCardId || value.lastAffectedByCardId];
-		this.updateInfos();
+						})),
+		);
+		this.createdBy$$.next((value?.creatorCardId || value?.lastAffectedByCardId) && !value?.cardId);
+		this.cardIds$$.next([value?.cardId || value?.creatorCardId || value?.lastAffectedByCardId]);
 	}
 
-	@Input() set additionalClass(value: string) {
-		this._additionalClass = value;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-	}
-
-	@Input() set displayBuffs(value: boolean) {
-		this._displayBuffs = value;
-	}
-
-	@Input() set text(value: string) {
-		// this._text = value;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-	}
+	private cardIds$$ = new BehaviorSubject<readonly string[]>([]);
+	private relatedCardIds$$ = new BehaviorSubject<readonly string[]>([]);
+	private localized$$ = new BehaviorSubject<boolean>(true);
+	private isBgs$$ = new BehaviorSubject<boolean>(false);
+	private relativePosition$$ = new BehaviorSubject<'left' | 'right'>('left');
+	private cardType$$ = new BehaviorSubject<'NORMAL' | 'GOLDEN'>('NORMAL');
+	private additionalClass$$ = new BehaviorSubject<string>(null);
+	private displayBuffs$$ = new BehaviorSubject<boolean>(false);
+	private createdBy$$ = new BehaviorSubject<boolean>(false);
+	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>(null);
 
 	private timeout;
 
@@ -161,86 +138,122 @@ export class CardTooltipComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
-		@Optional() private prefs: PreferencesService,
 	) {
 		super(store, cdr);
+		console.debug('constructor start');
+		// FIXME: For some reason, lifecycle methods are not called systematically
+		setTimeout(() => this.ngAfterContentInit(), 0);
 	}
 
 	ngAfterViewInit(): void {
+		console.debug('ngAfterContentInit start');
 		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
 	}
 
 	ngOnDestroy(): void {
+		console.debug('ngOnDestroy start');
+		super.ngOnDestroy();
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
 	}
 
 	ngAfterContentInit(): void {
-		this.listenForBasicPref$((prefs) => prefs.locale).subscribe((info) => this.updateInfos());
-	}
-
-	refresh() {
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private async updateInfos() {
-		if (!this._cardIds?.length && !this._relatedCardIds?.length) {
-			return;
-		}
-
-		const highRes = (await this.prefs?.getPreferences())?.collectionUseHighResImages;
-		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
-		this.cards = (this._cardIds ?? [])
-			// Empty card IDs are necessary when showing buff only
-			// .filter((cardId) => cardId)
-			.reverse()
-			.map((cardId) => {
-				const card = this.allCards.getCard(cardId);
-				const isPremium =
-					cardId?.endsWith('_golden') || this._cardType === 'GOLDEN' || !!card.battlegroundsNormalDbfId;
-				const realCardId = cardId?.split('_golden')[0];
-				const image = !!realCardId
-					? this.localized
-						? this.i18n.getCardImage(realCardId, {
-								isBgs: this.isBgs,
-								isPremium: isPremium,
-								isHighRes: highRes,
-						  })
-						: this.i18n.getNonLocalizedCardImage(realCardId)
-					: null;
-				const result = {
-					cardId: realCardId,
-					image: image,
-					// For now there are no cases where we have multiple card IDs, and different buffs for
-					// each one. If the case arises, we'll have to handle this differently
-					buffs: this.buffs,
-					cardType: this._cardType,
-					createdBy: this.createdBy,
-					additionalClass: this._additionalClass,
-				};
-				return result;
-			});
-		this.relatedCards = this._relatedCardIds.map((cardId) => {
-			const image = !!cardId
-				? this.localized
-					? this.i18n.getCardImage(cardId, {
-							isBgs: this.isBgs,
-							isHighRes: highRes,
-					  })
-					: this.i18n.getNonLocalizedCardImage(cardId)
-				: null;
-			return {
-				cardId: cardId,
-				image: image,
-				cardType: 'NORMAL',
-			};
-		});
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		setTimeout(() => this.ngAfterViewInit(), 10);
+		console.debug('ngAfterContentInit start');
+		this.relativePosition$ = this.relativePosition$$.asObservable();
+		this.displayBuffs$ = this.displayBuffs$$.asObservable();
+		this.relatedCards$ = combineLatest(
+			this.relatedCardIds$$.asObservable(),
+			this.localized$$.asObservable(),
+			this.isBgs$$.asObservable(),
+			this.store.listenPrefs$(
+				(prefs) => prefs.locale, // We don't use it, but we want to rebuild images when it changes
+				(prefs) => prefs.collectionUseHighResImages,
+			),
+		).pipe(
+			tap((info) => console.debug('related cards info', info)),
+			this.mapData(
+				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
+					return relatedCardIds.map((cardId) => {
+						const image = !!cardId
+							? localized
+								? this.i18n.getCardImage(cardId, {
+										isBgs: isBgs,
+										isHighRes: highRes,
+								  })
+								: this.i18n.getNonLocalizedCardImage(cardId)
+							: null;
+						return {
+							cardId: cardId,
+							image: image,
+							cardType: 'NORMAL',
+						};
+					});
+				},
+				null,
+				0,
+			),
+		);
+		this.cards$ = combineLatest(
+			combineLatest(
+				this.cardIds$$.asObservable(),
+				this.localized$$.asObservable(),
+				this.isBgs$$.asObservable(),
+				this.cardType$$.asObservable(),
+				this.additionalClass$$.asObservable(),
+			),
+			combineLatest(this.buffs$$.asObservable(), this.createdBy$$.asObservable()),
+			this.store.listenPrefs$(
+				(prefs) => prefs.locale,
+				(prefs) => prefs.collectionUseHighResImages,
+			),
+		).pipe(
+			tap((info) => console.debug('card tooltip info', info)),
+			this.mapData(
+				([[cardIds, localized, isBgs, cardType, additionalClass], [buffs, createdBy], [locale, highRes]]) => {
+					return (
+						([...cardIds] ?? [])
+							// Empty card IDs are necessary when showing buff only
+							// .filter((cardId) => cardId)
+							.reverse()
+							.map((cardId) => {
+								const card = this.allCards.getCard(cardId);
+								const isPremium =
+									cardId?.endsWith('_golden') ||
+									cardType === 'GOLDEN' ||
+									!!card.battlegroundsNormalDbfId;
+								const realCardId = cardId?.split('_golden')[0];
+								const image = !!realCardId
+									? localized
+										? this.i18n.getCardImage(realCardId, {
+												isBgs: isBgs,
+												isPremium: isPremium,
+												isHighRes: highRes,
+										  })
+										: this.i18n.getNonLocalizedCardImage(realCardId)
+									: null;
+								const result = {
+									cardId: realCardId,
+									image: image,
+									// For now there are no cases where we have multiple card IDs, and different buffs for
+									// each one. If the case arises, we'll have to handle this differently
+									buffs: buffs,
+									cardType: cardType,
+									createdBy: createdBy,
+									additionalClass: additionalClass,
+								};
+								return result;
+							})
+					);
+				},
+				null,
+				0,
+			),
+			tap((info) => console.debug('card tooltip info 2', info)),
+		);
+		this.cards$.subscribe((info) => console.debug('card tooltip info 3', info));
+		console.debug('ngAfterContentInit end');
 	}
 }
 

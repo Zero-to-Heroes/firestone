@@ -18,7 +18,6 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerIcon"
-					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
 				></bgs-hero-portrait>
 			</div>

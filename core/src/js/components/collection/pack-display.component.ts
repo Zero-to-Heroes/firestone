@@ -18,7 +18,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 				[style.left.%]="getLeft(i)"
 				[cardTooltip]="card.cardId"
 				[cardTooltipType]="card.cardType"
-				[cardTooltipText]="''"
 			>
 				<img *ngIf="card.cardType === 'NORMAL'" [src]="getCardImage(card.cardId, false)" />
 				<img *ngIf="card.cardType === 'GOLDEN'" [src]="getCardImage(card.cardId, true)" />

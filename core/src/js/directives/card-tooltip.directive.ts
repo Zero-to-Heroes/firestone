@@ -13,7 +13,7 @@ import {
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
-import { sleep } from '../services/utils';
+import { arraysEqual, sleep } from '../services/utils';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Directive({
@@ -23,13 +23,26 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 export class CardTooltipDirective implements OnDestroy {
 	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 	@Input() cardTooltipCard: DeckCard = undefined;
-	@Input() cardTooltipText = undefined;
 	@Input() cardTooltipClass = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
 	@Input() cardTooltipBgs: boolean;
 	@Input() cardTooltipLocalized = true;
 	@Input() cardTooltipShowRelatedCards: boolean;
-	@Input() cardTooltipRelatedCardIds: readonly string[] = [];
+
+	// So that the related card ids can be refreshed while the tooltip is displayed
+	// (otherwise it only refreshes on mouseenter)
+	@Input() set cardTooltipRelatedCardIds(value: readonly string[]) {
+		if (!!this.tooltipRef && !arraysEqual(value, this._cardTooltipRelatedCardIds)) {
+			this._cardTooltipRelatedCardIds = value;
+			const shouldShowRelatedCards =
+				this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
+			this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
+				? []
+				: this._cardTooltipRelatedCardIds?.length
+				? this._cardTooltipRelatedCardIds
+				: this.relatedCardIds;
+		}
+	}
 
 	@Input() set cardTooltip(value: string) {
 		this.cardId = value;
@@ -56,10 +69,12 @@ export class CardTooltipDirective implements OnDestroy {
 	cardId: string;
 
 	private relatedCardIds: readonly string[];
+	private _cardTooltipRelatedCardIds: readonly string[] = [];
 
 	private _position: CardTooltipPositionType = 'auto';
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
+	private tooltipRef: ComponentRef<CardTooltipComponent>;
 	private positionStrategy: PositionStrategy;
 
 	private positionStrategyDirty = true;
@@ -105,11 +120,9 @@ export class CardTooltipDirective implements OnDestroy {
 	}
 
 	@HostListener('mouseenter')
-	onMouseEnter() {
-		// if (this.hideTimeout) {
-		// 	clearTimeout(this.hideTimeout);
-		// }
-		if (!this.cardId && !this.cardTooltipCard && !this.cardTooltipRelatedCardIds?.length) {
+	async onMouseEnter() {
+		console.debug('mouseenter');
+		if (!this.cardId && !this.cardTooltipCard && !this._cardTooltipRelatedCardIds?.length) {
 			return;
 		}
 		if (this._position === 'none') {
@@ -126,34 +139,35 @@ export class CardTooltipDirective implements OnDestroy {
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this.cardTooltipRelatedCardIds?.length;
-		const tooltipRef: ComponentRef<CardTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
-
+		const shouldShowRelatedCards = this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
+		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 		// Pass content to tooltip component instance
-		tooltipRef.instance.additionalClass = this.cardTooltipClass;
-		tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
+		this.tooltipRef.instance.additionalClass = this.cardTooltipClass;
+		this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
 			? []
-			: this.cardTooltipRelatedCardIds?.length
-			? this.cardTooltipRelatedCardIds
+			: this._cardTooltipRelatedCardIds?.length
+			? this._cardTooltipRelatedCardIds
 			: this.relatedCardIds;
-		tooltipRef.instance.viewRef = tooltipRef;
+		// console.debug('mouseenter relatedcardIds', this.tooltipRef.instance.relatedCardIds);
+		this.tooltipRef.instance.viewRef = this.tooltipRef;
 
 		if (this.cardTooltipCard) {
-			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
-			tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
+			this.tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
+			console.debug('tooltip', 'cardTooltipCard', this.cardTooltipCard);
+			this.tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
 		} else {
-			tooltipRef.instance.cardTooltipCard = undefined;
-			tooltipRef.instance.displayBuffs = undefined;
-			tooltipRef.instance.cardType = this.cardTooltipType;
-			tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
-			tooltipRef.instance.localized = this.cardTooltipLocalized;
-			tooltipRef.instance.text = this.cardTooltipText;
-			// Keep last so that we only call the updateInfos() method once
-			tooltipRef.instance.cardId = this.cardId;
+			console.debug('tooltip', 'cardTooltipCard 2');
+			this.tooltipRef.instance.cardId = this.cardId;
+			this.tooltipRef.instance.displayBuffs = false;
+			this.tooltipRef.instance.cardType = this.cardTooltipType;
+			this.tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
+			this.tooltipRef.instance.localized = this.cardTooltipLocalized;
 		}
 
 		this.positionStrategy.apply();
-		this.reposition(tooltipRef);
+
+		await sleep(10);
+		this.reposition(this.tooltipRef);
 		// FIXME: I haven't been able to reproduce the issue, but for some users it happens that the card gets stuck
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
@@ -166,6 +180,7 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
+		// return;
 		this.positionStrategyDirty = true;
 
 		// if (this.hideTimeout) {
@@ -182,13 +197,15 @@ export class CardTooltipDirective implements OnDestroy {
 				}
 			}
 		}
+		this.tooltipRef = null;
 	}
 
 	private async reposition(tooltipRef) {
+		await sleep(10);
 		let positionUpdated = true;
 		let previousTooltipLeft = 0;
 		let previousTooltipTop = 0;
-		while (positionUpdated) {
+		while (positionUpdated && !!tooltipRef) {
 			const tooltipRect = tooltipRef.location.nativeElement.getBoundingClientRect();
 			const targetRect = this.elementRef.nativeElement.getBoundingClientRect();
 			const relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';

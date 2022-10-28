@@ -24,7 +24,6 @@ import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerCardId"
-					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
 					[rating]="rating"
 					[questRewardCardId]="questRewardCardId"
