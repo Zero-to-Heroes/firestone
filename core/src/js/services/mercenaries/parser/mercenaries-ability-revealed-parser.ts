@@ -41,7 +41,7 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 			entityId: entityId,
 			cardId: cardId,
 			cooldown: event.additionalData.abilityCooldownConfig ?? refAbilityCard.mercenaryAbilityCooldown,
-			cooldownLeft: event.additionalData.abilityCurrentCooldown ?? refAbilityCard.mercenaryAbilityCooldown,
+			cooldownLeft: 0,
 			level: getMercCardLevel(cardId),
 			speed: isPassiveMercsTreasure(cardId, this.allCards)
 				? null
