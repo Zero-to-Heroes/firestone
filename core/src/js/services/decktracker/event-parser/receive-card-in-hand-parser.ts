@@ -199,7 +199,7 @@ export const addAdditionalAttribues = (
 				.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
 			console.debug('[receive-card-in-hand] knownCurses', knownCurses);
 			const highestAttribute = !!knownCurses.length
-				? Math.max(...knownCurses.map((c) => c.mainAttributeChange ?? 0))
+				? Math.max(...knownCurses.map((c) => (c as DeckCard).mainAttributeChange ?? 0))
 				: -1;
 			console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
 			return card.update({

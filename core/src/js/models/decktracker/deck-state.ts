@@ -142,12 +142,13 @@ export class DeckState {
 		);
 	}
 
-	public getAllCardsInDeck(): readonly DeckCard[] {
+	public getAllCardsInDeck(): readonly { entityId: number; cardId: string }[] {
 		return [
 			...this.deckList,
 			...this.hand,
 			...this.deck,
 			...this.board,
+			...this.currentOptions,
 			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
 		];
 	}
@@ -299,23 +300,31 @@ export class DeckState {
 	}
 
 	public hasBolner() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BolnerHammerbeak);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.BolnerHammerbeak);
 	}
 
 	public hasBrilliantMacaw() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.BrilliantMacaw);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.BrilliantMacaw);
 	}
 
 	public hasMonstrousParrot() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.MonstrousParrot);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.MonstrousParrot);
 	}
 
 	public hasVanessaVanCleef() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.VanessaVancleefCore);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.VanessaVancleefCore);
 	}
 
 	public hasMurozondTheInfinite() {
-		return this.hand
+		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
@@ -323,12 +332,26 @@ export class DeckState {
 			);
 	}
 
+	public hasQueensguard() {
+		const cards = [...this.hand, ...this.currentOptions];
+		console.debug(
+			'queensguards?',
+			cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard),
+			cards,
+		);
+		return cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard);
+	}
+
 	public hasLadyDarkvein() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.LadyDarkvein);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.LadyDarkvein);
 	}
 
 	public hasGreySageParrot() {
-		return this.hand.filter((card) => card.cardId).some((card) => card.cardId === CardIds.GreySageParrot);
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.GreySageParrot);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

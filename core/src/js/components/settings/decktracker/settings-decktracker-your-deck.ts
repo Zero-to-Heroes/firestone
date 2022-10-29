@@ -188,6 +188,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.murozond-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerQueensguardCounter"
+					[label]="'settings.decktracker.your-deck.counters.queensguard-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.queensguard-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerLadyDarkveinCounter"
 					[label]="'settings.decktracker.your-deck.counters.lady-darkvein-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.lady-darkvein-tooltip' | owTranslate"

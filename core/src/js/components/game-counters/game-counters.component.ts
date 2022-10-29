@@ -30,6 +30,7 @@ import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
 import { RelicCounterDefinition } from './definitions/relic-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
@@ -149,6 +150,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'queensguard':
+				return QueensguardCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'ladyDarkvein':
 				return LadyDarkveinCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'greySageParrot':

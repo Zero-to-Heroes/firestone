@@ -27,6 +27,7 @@ export type CounterType =
 	| 'monstrousParrot'
 	| 'vanessaVanCleef'
 	| 'murozondTheInfinite'
+	| 'queensguard'
 	| 'ladyDarkvein'
 	| 'greySageParrot'
 	| 'heroPowerDamage'

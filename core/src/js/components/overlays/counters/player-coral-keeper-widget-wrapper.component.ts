@@ -7,7 +7,6 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -44,7 +43,7 @@ export class PlayerCoralKeeperWidgetWrapperComponent
 		super.ngAfterContentInit();
 	}
 
-	private containsCards(zone: readonly DeckCard[], cardIds: string[]): boolean {
+	private containsCards(zone: readonly { entityId: number; cardId: string }[], cardIds: string[]): boolean {
 		return (zone || []).some((card) => cardIds.includes(card.cardId));
 	}
 }

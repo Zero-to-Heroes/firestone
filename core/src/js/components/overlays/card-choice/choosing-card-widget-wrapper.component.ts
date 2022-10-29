@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CardIds, ReferenceCard, SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
@@ -121,10 +122,11 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 						const isInStartingHand = state.opponentDeck
 							.getAllCardsInDeck()
 							.filter((c) => c.cardId === option.cardId)
+							.filter((c) => !!(c as DeckCard).metaInfo)
 							.some(
 								(c) =>
-									c.metaInfo?.turnAtWhichCardEnteredHand === 'mulligan' ||
-									c.metaInfo?.turnAtWhichCardEnteredHand === 0,
+									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
+									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
 							);
 						console.debug('matching cards', isInStartingHand);
 						return isInStartingHand ? 'flag' : null;

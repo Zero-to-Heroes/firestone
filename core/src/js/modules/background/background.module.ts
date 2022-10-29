@@ -367,6 +367,7 @@ import { PlayerMonstrousParrotWidgetWrapperComponent } from '../../components/ov
 import { PlayerMulticasterWidgetWrapperComponent } from '../../components/overlays/counters/player-multicaster-widget-wrapper.component';
 import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../components/overlays/counters/player-murozond-widget-wrapper.component';
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
+import { PlayerQueensguardWidgetWrapperComponent } from '../../components/overlays/counters/player-queensguard-widget-wrapper.component';
 import { PlayerRelicWidgetWrapperComponent } from '../../components/overlays/counters/player-relic-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
@@ -595,6 +596,7 @@ overwolf.settings.getExtensionSettings((settings) => {
 		release: process.env.APP_VERSION,
 		attachStacktrace: true,
 		sampleRate: sampleRate,
+		normalizeDepth: 5,
 		integrations: [
 			new Integrations.GlobalHandlers({
 				onerror: true,
@@ -1048,6 +1050,7 @@ const components = [
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
+		PlayerQueensguardWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,
