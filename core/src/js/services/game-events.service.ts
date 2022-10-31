@@ -491,14 +491,11 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
-				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
-					? {
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
-					  }
-					: null;
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2),
+					GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
+				  }),
 				);
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
