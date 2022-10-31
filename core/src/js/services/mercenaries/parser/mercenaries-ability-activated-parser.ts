@@ -38,10 +38,13 @@ export class MercenariesAbilityActivatedParser implements MercenariesParser {
 			console.warn('[merc-ability-activated-parser] missing ability', entityId, cardId);
 			return battleState;
 		}
+		const newAbility = this.allCards.getCard(cardId);
 		const newMerc = abilityOwner.updateAbility(
 			entityId,
-			cardId,
+			newAbility.id,
 			BattleAbility.create({
+				cardId: newAbility.id,
+				speed: newAbility.cost,
 				totalUsed: (existingAbility?.totalUsed ?? 0) + 1,
 			}),
 		);
