@@ -1374,6 +1374,9 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'MERCENARIES_SELECTED_TARGET':
+			case 'MERCENARIES_UNSELECTED_TARGET':
+				break;
 			default:
 				console.warn('unsupported game event', gameEvent);
 		}
