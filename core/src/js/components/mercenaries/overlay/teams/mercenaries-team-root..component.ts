@@ -239,7 +239,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.showRolesChart$ = this.showRolesChart$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.showMapTurnCounter$ = this.store
-			.listenMercenaries$(([state]) => state.gameMode)
+			.listenMercenaries$(([state]) => state?.gameMode)
 			.pipe(
 				tap((info) => console.debug('[merc] info', info)),
 				this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)),
@@ -443,7 +443,7 @@ export const buildTeamForTasks = (
 			),
 		)
 		.filter((m) => !!m);
-	const backupMercs = [...new Array(6 - (taskMercs?.length ?? 0)).keys()]
+	const backupMercs = [...new Array(Math.max(0, 6 - (taskMercs?.length ?? 0))).keys()]
 		.map((_, i) => backupMercIds[i])
 		.filter((id) => !!id)
 		.map((backupId) =>
