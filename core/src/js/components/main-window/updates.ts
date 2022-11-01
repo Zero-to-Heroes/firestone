@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.14.0',
+		version: '9.14.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -82,6 +82,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Show the cards replayed by Tess / Contraband Stash in the tooltip when mousing over Tess / Stash.`,
+							},
+							{
+								type: 'feature',
+								text: `Add counter for Queensguard.`,
+							},
+							{
+								type: 'feature',
+								text: `Specific card widgets should now appear when you are offered these cards in Discovers to help you make the best decision.`,
 							},
 							{
 								type: 'bug',
