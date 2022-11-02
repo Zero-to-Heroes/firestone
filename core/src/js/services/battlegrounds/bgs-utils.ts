@@ -303,6 +303,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.SireDenathrius_Whodunitquestion;
 		case CardIds.SylvanasWindrunner_BG23_HERO_306:
 			return CardIds.SylvanasWindrunner_ReclaimedSouls;
+		case CardIds.TheJailerBattlegrounds:
+			return CardIds.RunicEmpowermentBattlegrounds;
 
 		case '':
 			return null; // new heroes
@@ -671,6 +673,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 427;
 		case CardIds.SylvanasWindrunner_BG23_HERO_306:
 			return 431;
+		case CardIds.TheJailerBattlegrounds:
+			return 459;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

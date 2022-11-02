@@ -12,9 +12,16 @@ export const standardSets: readonly string[] = [
 	'throne_of_tides',
 	'revendreth',
 	'maw_and_disorder',
+	'march_of_the_lich_king',
+	'icecrown',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'march_of_the_lich_king',
+		name: `March of the Lich King`,
+		launchDate: new Date('2022-11-01'),
+	},
 	{
 		id: 'maw_and_disorder',
 		name: `Maw and Disorder`,
