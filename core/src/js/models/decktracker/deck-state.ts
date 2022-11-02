@@ -334,11 +334,6 @@ export class DeckState {
 
 	public hasQueensguard() {
 		const cards = [...this.hand, ...this.currentOptions];
-		console.debug(
-			'queensguards?',
-			cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard),
-			cards,
-		);
 		return cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard);
 	}
 
