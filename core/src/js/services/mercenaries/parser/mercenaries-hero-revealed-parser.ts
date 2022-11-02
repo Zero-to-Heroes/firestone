@@ -69,6 +69,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);
 		// console.debug('turnsElapsed', turnsElapsed, battleState.currentTurn, battleState);
 		const mercenary: BattleMercenary = BattleMercenary.create({
+			mercenaryId: refMerc?.id,
 			entityId: entityId,
 			cardId: refMercCard?.id,
 			creatorCardId: event.additionalData.creatorCardId,

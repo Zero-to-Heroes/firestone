@@ -52,17 +52,6 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 	}
 
 	ngAfterContentInit() {
-		this.tasks$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
-				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
-			)
-			.pipe(
-				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				this.mapData(([referenceData, visitors]) =>
-					buildMercenariesTasksList(referenceData, visitors, this.allCards, this.i18n),
-				),
-			);
 		this.team$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.currentScene,
@@ -83,6 +72,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 							}
 							const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 							return BattleMercenary.create({
+								mercenaryId: refMerc?.id,
 								cardId: mercCard.id,
 								role: getHeroRole(mercCard.mercenaryRole),
 								level: playerTeamInfo.Level,
@@ -116,6 +106,24 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 						}) ?? [],
 				});
 			}),
+		);
+		this.tasks$ = combineLatest(
+			this.store.listen$(
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
+				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
+			),
+			this.team$,
+		).pipe(
+			filter(([[referenceData, visitors], team]) => !!referenceData && !!visitors?.length),
+			this.mapData(([[referenceData, visitors], team]) =>
+				buildMercenariesTasksList(
+					referenceData,
+					visitors,
+					this.allCards,
+					this.i18n,
+					team?.mercenaries?.map((m) => m.mercenaryId),
+				),
+			),
 		);
 	}
 }

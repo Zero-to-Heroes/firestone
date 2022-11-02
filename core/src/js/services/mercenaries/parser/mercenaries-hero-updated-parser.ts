@@ -63,6 +63,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		const newTeam = team.updateMercenary(
 			entityId,
 			BattleMercenary.create({
+				mercenaryId: refMerc?.id,
 				cardId: refMercCard.id,
 				zone: event.additionalData.zone,
 				zonePosition: event.additionalData.zonePosition,

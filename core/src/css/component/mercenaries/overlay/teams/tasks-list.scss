@@ -10,6 +10,9 @@
 	font-weight: normal;
 	line-height: normal;
 	font-size: 13px;
+	min-height: 0;
+	overflow: scroll;
+	max-height: 80vh;
 
 	.task {
 		display: flex;

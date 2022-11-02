@@ -58,6 +58,7 @@ export class MercenariesBattleTeam {
 }
 
 export class BattleMercenary {
+	readonly mercenaryId: number;
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly creatorCardId: string;

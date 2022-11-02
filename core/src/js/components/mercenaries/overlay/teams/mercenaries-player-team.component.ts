@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -48,17 +48,6 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 	}
 
 	ngAfterContentInit(): void {
-		this.tasks$ = this.store
-			.listen$(
-				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
-				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
-			)
-			.pipe(
-				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				this.mapData(([referenceData, visitors]) =>
-					buildMercenariesTasksList(referenceData, visitors, this.allCards, this.i18n),
-				),
-			);
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
@@ -73,6 +62,24 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 					}),
 				),
 			);
+		this.tasks$ = combineLatest(
+			this.store.listen$(
+				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
+				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
+			),
+			this.team$,
+		).pipe(
+			filter(([[referenceData, visitors], team]) => !!referenceData && !!visitors?.length),
+			this.mapData(([[referenceData, visitors], team]) =>
+				buildMercenariesTasksList(
+					referenceData,
+					visitors,
+					this.allCards,
+					this.i18n,
+					team?.mercenaries?.map((m) => m.mercenaryId),
+				),
+			),
+		);
 		this.showTurnCounter$ = this.listenForBasicPref$((prefs) => prefs.mercenariesShowTurnCounterInBattle);
 	}
 }

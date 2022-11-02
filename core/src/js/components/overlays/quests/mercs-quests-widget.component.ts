@@ -1,8 +1,16 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
+import {
+	BattleAbility,
+	BattleEquipment,
+	BattleMercenary,
+	MercenariesBattleTeam,
+} from '../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -66,17 +74,96 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 	}
 
 	ngAfterContentInit(): void {
-		this.tasks$ = this.store
-			.listen$(
+		const team$ = this.store
+			.listenMercenaries$(([battleState, prefs]) => battleState)
+			.pipe(
+				filter(([battleState]) => !!battleState),
+				this.mapData(([battleState]) =>
+					battleState.playerTeam.update({
+						...battleState.playerTeam,
+						mercenaries:
+							battleState.playerTeam.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ??
+							[],
+					}),
+				),
+				startWith(null),
+			);
+		const oocTeam$ = combineLatest(
+			this.store.listen$(
+				([main, nav, prefs]) => main.currentScene,
+				([main, nav, prefs]) => main.mercenaries?.getReferenceData(),
+				([main, nav, prefs]) => main.mercenaries?.mapInfo,
+			),
+		).pipe(
+			filter(([[currentScene, referenceData, mapInfo]]) => !!referenceData),
+			this.mapData(([[currentScene, referenceData, refMapInfo]]) => {
+				const mapInfo = currentScene === SceneMode.LETTUCE_MAP ? refMapInfo?.Map : null;
+				return MercenariesBattleTeam.create({
+					mercenaries:
+						mapInfo?.PlayerTeam?.map((playerTeamInfo) => {
+							const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
+							if (!refMerc) {
+								console.warn('could not find reference merc', playerTeamInfo.Id);
+								return null;
+							}
+							const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
+							return BattleMercenary.create({
+								mercenaryId: refMerc?.id,
+								cardId: mercCard.id,
+								role: getHeroRole(mercCard.mercenaryRole),
+								level: playerTeamInfo.Level,
+								isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
+								abilities: [
+									...playerTeamInfo.Abilities.map((ability) => {
+										return BattleAbility.create({
+											cardId: ability.CardId,
+										});
+									}),
+									...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
+										return BattleAbility.create({
+											cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
+											isTreasure: true,
+										});
+									}),
+								],
+								equipment: (playerTeamInfo.Equipments ?? [])
+									.filter((equip) => equip.Equipped)
+									.map((equip) => {
+										const refEquipment = refMerc.equipments?.find(
+											(e) => e.equipmentId === equip.Id,
+										);
+										return BattleEquipment.create({
+											cardId: this.allCards.getCardFromDbfId(refEquipment?.cardDbfId)?.id,
+											level: equip.Tier,
+										});
+									})
+									.pop(),
+							});
+						}) ?? [],
+				});
+			}),
+			startWith(null),
+		);
+		this.tasks$ = combineLatest(
+			this.store.listen$(
 				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
-			)
-			.pipe(
-				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
-				this.mapData(([referenceData, visitors]) =>
-					buildMercenariesTasksList(referenceData, visitors, this.allCards, this.i18n),
-				),
-			);
+			),
+			team$,
+			oocTeam$,
+		).pipe(
+			filter(([[referenceData, visitors], team, oocTeam]) => !!referenceData && !!visitors?.length),
+			this.mapData(([[referenceData, visitors], team, oocTeam]) => {
+				const allActiveMercs = [...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])];
+				return buildMercenariesTasksList(
+					referenceData,
+					visitors,
+					this.allCards,
+					this.i18n,
+					allActiveMercs.map((m) => m.mercenaryId),
+				);
+			}),
+		);
 		this.taskTeamDeckstring$ = combineLatest(
 			this.store.listen$(
 				([main, nav]) => main.mercenaries.getReferenceData(),

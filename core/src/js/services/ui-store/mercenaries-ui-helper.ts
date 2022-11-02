@@ -137,7 +137,9 @@ export const buildMercenariesTasksList = (
 	visitors: readonly MemoryVisitor[],
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
+	restrictToMercsIds: readonly number[] = [],
 ): readonly Task[] => {
+	console.debug('building tasks list', restrictToMercsIds);
 	return (
 		visitors
 			// Just remove CLAIMED and INVALID
@@ -178,6 +180,10 @@ export const buildMercenariesTasksList = (
 				// 0 is not a valid id
 				const mercIdForImage = task.mercenaryOverrideId || taskChain.mercenaryId;
 				const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercIdForImage);
+				if (!!restrictToMercsIds?.length && !restrictToMercsIds.includes(refMerc.id)) {
+					return null;
+				}
+
 				const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
 				const mercenaryCardId = mercenaryCard.id;
 				const role = getHeroRole(mercenaryCard.mercenaryRole);

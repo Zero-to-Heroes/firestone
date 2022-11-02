@@ -353,7 +353,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						</div>
 					</div>
 				</div>
-				<div class="create-team-button" *ngIf="taskTeamDeckstring">
+				<!-- <div class="create-team-button" *ngIf="taskTeamDeckstring">
 					<button
 						[helpTooltip]="buttonTooltip"
 						(click)="createTeamFromTasks()"
@@ -361,7 +361,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 					>
 						{{ buttonLabel }}
 					</button>
-				</div>
+				</div> -->
 			</ng-container>
 			<ng-template #emptyState
 				><div class="empty-state" [owTranslate]="'mercenaries.team-widget.tasks-completed'"></div>
