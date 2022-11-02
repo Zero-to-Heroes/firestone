@@ -49,6 +49,14 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt4,
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt5,
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt6,
+	// 26.0, same
+	CardIds.EmperorCobraLegacy_BG_EX1_170,
+	CardIds.EmperorCobraLegacy_BG_EX1_170_G,
+	CardIds.EmperorCobraLegacy_EX1_170,
+	CardIds.SnakeLegacyToken,
+	CardIds.SnakeLegacy,
+	CardIds.StoneElemental,
+	CardIds.BolvarFirebloodCore,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
