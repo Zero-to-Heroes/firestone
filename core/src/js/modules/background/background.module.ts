@@ -596,7 +596,7 @@ overwolf.settings.getExtensionSettings((settings) => {
 		release: process.env.APP_VERSION,
 		attachStacktrace: true,
 		sampleRate: sampleRate,
-		normalizeDepth: 5,
+		normalizeDepth: 6,
 		integrations: [
 			new Integrations.GlobalHandlers({
 				onerror: true,
