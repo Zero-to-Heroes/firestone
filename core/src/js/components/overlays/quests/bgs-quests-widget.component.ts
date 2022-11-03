@@ -15,7 +15,7 @@ import { Preferences } from '../../../models/preferences';
 			[theme]="'battlegrounds-theme'"
 			[widgetIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/quest_log_bg.png'"
 			[xpIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_bg.png'"
-			[rewardsTrack]="rewardsTrack"
+			[rewardsTrackMatcher]="rewardsTrackMatcher"
 			[showPrefsExtractor]="showPrefsExtractor"
 		>
 		</quests-widget-view>
@@ -23,6 +23,7 @@ import { Preferences } from '../../../models/preferences';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsQuestsWidgetComponent {
-	rewardsTrack = RewardTrackType.BATTLEGROUNDS;
+	rewardsTrackMatcher: (type: RewardTrackType) => boolean = (type: RewardTrackType) =>
+		type === RewardTrackType.BATTLEGROUNDS;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.bgsShowQuestsWidget;
 }

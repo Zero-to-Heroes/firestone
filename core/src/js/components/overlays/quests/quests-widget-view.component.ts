@@ -56,7 +56,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	@Input() xpIcon: string;
 	@Input() xpBonusIcon: string;
 
-	@Input() rewardsTrack: RewardTrackType;
+	@Input() rewardsTrackMatcher: (type: RewardTrackType) => boolean;
 	@Input() showPrefsExtractor: (prefs: Preferences) => boolean;
 	@Input() xpBonusExtractor: (state: MainWindowState) => number;
 
@@ -95,7 +95,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 							console.warn('missing ref quest', quest.Id, referenceQuests?.quests?.length, quest);
 							return null;
 						}
-						if (refQuest.rewardTrackType !== this.rewardsTrack) {
+						if (!this.rewardsTrackMatcher(refQuest.rewardTrackType)) {
 							return null;
 						}
 						const result: Quest = {

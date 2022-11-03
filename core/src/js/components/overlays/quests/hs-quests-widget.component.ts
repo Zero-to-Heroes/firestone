@@ -18,7 +18,7 @@ import { Preferences } from '../../../models/preferences';
 			[xpBonusIcon]="
 				'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_boost.webp'
 			"
-			[rewardsTrack]="rewardsTrack"
+			[rewardsTrackMatcher]="rewardsTrackMatcher"
 			[showPrefsExtractor]="showPrefsExtractor"
 			[xpBonusExtractor]="xpBonusExtractor"
 		>
@@ -27,7 +27,8 @@ import { Preferences } from '../../../models/preferences';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HsQuestsWidgetComponent {
-	rewardsTrack = RewardTrackType.GLOBAL;
+	rewardsTrackMatcher: (type: RewardTrackType) => boolean = (type: RewardTrackType) =>
+		type === RewardTrackType.GLOBAL || type === RewardTrackType.EVENT_HALLOWS_END;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.hsShowQuestsWidget;
 	xpBonusExtractor: (state: MainWindowState) => number = (state) => state.quests.xpBonus;
 }

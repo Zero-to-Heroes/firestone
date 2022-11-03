@@ -71,7 +71,7 @@ export class QuestsService {
 	public async loadReferenceQuests(locale?: string) {
 		const localInfo = this.localStorage.getItem<QuestsInfo>('reference-quests');
 		if (!!localInfo?.quests?.length) {
-			console.log('loaded local reference quests');
+			console.log('[quests] loaded local reference quests');
 			this.store.send(new ReferenceQuestsLoadedEvent(localInfo));
 		}
 
