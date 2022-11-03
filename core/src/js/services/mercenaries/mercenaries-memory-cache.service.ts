@@ -81,6 +81,12 @@ export class MercenariesMemoryCacheService {
 			}
 
 			const mapInfo = await this.memoryService.getMercenariesInfo();
+			console.debug(
+				'[merc-memory] got mapInfo',
+				mapInfo,
+				this.previousMapInfo,
+				deepEqual(mapInfo, this.previousMapInfo),
+			);
 			if (!deepEqual(mapInfo, this.previousMapInfo)) {
 				this.previousMapInfo = mapInfo;
 				this.memoryMapInfo$.next(mapInfo);
