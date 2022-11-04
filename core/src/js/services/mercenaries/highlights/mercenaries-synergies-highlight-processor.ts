@@ -18,7 +18,7 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.ArcaneBlast3Lettuce:
 		case CardIds.ArcaneBlast4Lettuce:
 		case CardIds.ArcaneBlast5Lettuce:
-			return arcane;
+			return arcaneSpellPower;
 		case CardIds.ArcaneBolt1Lettuce:
 		case CardIds.ArcaneBolt2Lettuce:
 		case CardIds.ArcaneBolt3Lettuce:
@@ -403,6 +403,10 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.LightningBolt4Lettuce:
 		case CardIds.LightningBolt5Lettuce:
 			return and(nature, dealsDamage);
+		case CardIds.MagicalMayhem1Lettuce:
+		case CardIds.MagicalMayhem2Lettuce:
+		case CardIds.MagicalMayhem3Lettuce:
+			return anySpellPower;
 		case CardIds.Manastorm1Lettuce:
 		case CardIds.Manastorm2Lettuce:
 		case CardIds.Manastorm3Lettuce:
@@ -584,6 +588,15 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.StrengthOfTheElements4Lettuce:
 		case CardIds.StrengthOfTheElements5Lettuce:
 			return elemental;
+		case CardIds.StrengthOfTheOxLettuce:
+			return (card: ReferenceCard) =>
+			[
+				CardIds.BullishFortitude1Lettuce,
+				CardIds.BullishFortitude2Lettuce,
+				CardIds.BullishFortitude3Lettuce,
+				CardIds.BullishFortitude4Lettuce,
+				CardIds.BullishFortitude5Lettuce,
+			].includes(normalizeMercenariesCardId(card.id) as CardIds);
 		case CardIds.StrengthOfWrynn1Lettuce:
 		case CardIds.StrengthOfWrynn2Lettuce:
 		case CardIds.StrengthOfWrynn3Lettuce:
@@ -660,6 +673,10 @@ const not = (selector: HighlightSelector): HighlightSelector => {
 	return (card: ReferenceCard) => !selector(card);
 };
 
+const hasMechanic = (card: ReferenceCard, mechanic: GameTag) => (card?.mechanics ?? []).includes(GameTag[mechanic]);
+const hasReferencedTag = (card: ReferenceCard, tag: GameTag) => (card?.referencedTags ?? []).includes(GameTag[tag]);
+const hasTag = (card: ReferenceCard, tag: GameTag) => (card?.tags ?? []).includes(GameTag[tag]);
+
 const merc = (card: ReferenceCard) => card.mercenary;
 const minion = (card: ReferenceCard) => !!card.race && !card.mercenary;
 const race = (card: ReferenceCard, race: Race) => Race[race] === card.race?.toUpperCase();
@@ -688,7 +705,7 @@ const worgen = (card: ReferenceCard) => race(card, Race.WORGEN);
 
 const alliance = or(draenei, dwarf, gnome, highelf, human, nightelf, worgen);
 const horde = or(bloodelf, goblin, halforc, orc, tauren, troll, undead);
-const explorer = (card: ReferenceCard) => hasMechanic(card, GameTag.MERCS_EXPLORER);
+const explorer = (card: ReferenceCard) => hasTag(card, GameTag.MERCS_EXPLORER);
 
 const spellSchool = (card: ReferenceCard, spellSchool: SpellSchool) =>
 	SpellSchool[spellSchool] === card.spellSchool?.toUpperCase();
@@ -700,7 +717,16 @@ const frost = (card: ReferenceCard) => spellSchool(card, SpellSchool.FROST);
 const fel = (card: ReferenceCard) => spellSchool(card, SpellSchool.FEL);
 const shadow = (card: ReferenceCard) => spellSchool(card, SpellSchool.SHADOW);
 
-const hasMechanic = (card: ReferenceCard, mechanic: GameTag) => (card?.mechanics ?? []).includes(GameTag[mechanic]);
+const arcaneSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_ARCANE);
+const felSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_FEL);
+const fireSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_FIRE);
+const frostSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_FROST);
+const holySpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_HOLY);
+const natureSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_NATURE);
+const shadowSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_SHADOW);
+const spellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER);
+const anySpellPower = or(arcaneSpellPower, felSpellPower, fireSpellPower, frostSpellPower, holySpellPower, natureSpellPower, shadowSpellPower, spellPower);
+
 const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.BLEED);
 const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_SHIELD);
 const freeze = (card: ReferenceCard) => hasMechanic(card, GameTag.FREEZE);
