@@ -228,7 +228,7 @@ export class TwitchPresenceService {
 		opponentClass: string,
 	) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken);
+			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
 		console.debug('[twitch-presence] will send new game event', metadata, playerCardId, opponentCardId);
@@ -253,7 +253,7 @@ export class TwitchPresenceService {
 
 	private async sendNewBgsGameEvent(metadata: Metadata, mmrAtStart: number, playerCardId: string) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] bgs no twitch token', this.twitchAccessToken);
+			console.debug('[twitch-presence] bgs no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
 		console.debug('[twitch-presence] will send new bgs game event', mmrAtStart, playerCardId);
@@ -279,7 +279,7 @@ export class TwitchPresenceService {
 		mmrAtStart: number,
 	) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken);
+			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
 		console.debug('[twitch-presence] will send new mercs game event', gameMode, mercenaries);
@@ -305,7 +305,7 @@ export class TwitchPresenceService {
 
 	private async sendEndGameEvent() {
 		if (!this.twitchAccessToken) {
-			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken);
+			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
 		console.debug('[twitch-presence] will send end game event');

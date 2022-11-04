@@ -189,7 +189,7 @@ export class PreferencesService {
 
 	public async disconnectTwitch() {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, twitchAccessToken: undefined };
+		const newPrefs: Preferences = { ...prefs, twitchAccessToken: undefined, twitchLoginName: undefined };
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 

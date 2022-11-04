@@ -131,11 +131,14 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	async ngAfterContentInit() {
 		this.twitchUserName$ = this.listenForBasicPref$((prefs) => prefs.twitchUserName);
 		this.store
-			.listenPrefs$((prefs) => prefs.twitchAccessToken)
-			.pipe(this.mapData(([pref]) => pref))
+			.listenPrefs$(
+				(prefs) => prefs.twitchAccessToken,
+				(prefs) => prefs.twitchLoginName,
+			)
+			.pipe(this.mapData(([twitchAccessToken, twitchLoginName]) => (!twitchLoginName ? null : twitchAccessToken)))
 			.subscribe(async (token) => {
-				this.twitchedLoggedIn = await this.twitch.isLoggedIn();
-				this.twitchLoginUrl = this.twitch.buildLoginUrl();
+				this.twitchedLoggedIn = !!token ? await this.twitch.isLoggedIn() : null;
+				this.twitchLoginUrl = !!token ? this.twitch.buildLoginUrl() : null;
 				this.cdr?.detectChanges();
 			});
 	}
