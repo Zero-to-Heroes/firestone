@@ -711,8 +711,5 @@ const isAbility = (card: ReferenceCard) => !card.mercenary && !card.mercenaryEqu
 const speedIsOdd = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 1;
 const speedIsEven = (card: ReferenceCard) => isAbility(card) && card.cost % 2 === 0;
 
-// TODO translate
-const hasText = (card: ReferenceCard, text: RegExp) => !!card.text?.toLowerCase()?.match(text);
-const dealsDamage = (card: ReferenceCard) =>
-	isAbility(card) || hasText(card, /deal (\$\{\d+\} )?damage/) || hasText(card, /наносит (\$\{\d+\} )?урон/);
-const restoresHealth = (card: ReferenceCard) => hasText(card, /restore (\$\{\d+\} )?health/);
+const dealsDamage = (card: ReferenceCard) => card.mechanics?.includes('DEAL_DAMAGE');
+const restoresHealth = (card: ReferenceCard) => card.mechanics?.includes('RESTORE_HEALTH');
