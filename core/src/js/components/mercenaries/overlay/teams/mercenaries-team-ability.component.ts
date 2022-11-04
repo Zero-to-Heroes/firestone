@@ -14,6 +14,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 		<div
 			class="item"
 			[cardTooltip]="cardId"
+			[cardTooltipShowRelatedCards]="true"
 			[cardTooltipPosition]="tooltipPosition"
 			[ngClass]="{ 'inactive': cooldownLeft > 0 && !uncapacitated }"
 			[mercenariesHighlight]="enableHighlight ? cardId : null"
