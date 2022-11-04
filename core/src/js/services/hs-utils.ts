@@ -116,7 +116,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.WyrmrestPurifier,
 ];
 
-export const startOfGameGlobalEffectCards = [CardIds.PrinceRenathal];
+export const startOfGameGlobalEffectCards = [CardIds.GennGreymane_GIL_692, CardIds.BakuTheMooneater, CardIds.PrinceRenathal];
 
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
