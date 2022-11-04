@@ -836,6 +836,8 @@ export const dustToCraftForPremium = (rarity: string): number => {
 
 export const boosterIdToSetId = (boosterId: BoosterType): string => {
 	switch (boosterId) {
+		case BoosterType.LETTUCE:
+			return 'lettuce';
 		case BoosterType.CLASSIC:
 		case BoosterType.GOLDEN_CLASSIC_PACK:
 			return 'expert1';
@@ -880,9 +882,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.STORMWIND:
 		case BoosterType.GOLDEN_STORMWIND:
 			return 'stormwind';
-		case BoosterType.LETTUCE:
-			return 'lettuce';
 		case BoosterType.ALTERAC_VALLEY:
+		case BoosterType.GOLDEN_ALTERAC_VALLEY:
 			return 'alterac_valley';
 		case BoosterType.THE_SUNKEN_CITY:
 		case BoosterType.GOLDEN_THE_SUNKEN_CITY:
