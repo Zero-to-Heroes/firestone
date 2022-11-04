@@ -96,8 +96,9 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 										const refEquipment = refMerc.equipments?.find(
 											(e) => e.equipmentId === equip.Id,
 										);
+										const refTier = refEquipment.tiers.find((t) => t.tier === equip.Tier);
 										return BattleEquipment.create({
-											cardId: this.allCards.getCardFromDbfId(refEquipment?.cardDbfId)?.id,
+											cardId: this.allCards.getCard(refTier?.cardDbfId)?.id,
 											level: equip.Tier,
 										});
 									})
