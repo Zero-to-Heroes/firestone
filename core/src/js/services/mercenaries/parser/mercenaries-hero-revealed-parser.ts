@@ -48,6 +48,11 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 
+		if(team.getMercenary(entityId)){
+			console.warn('[merc-hero-revealed-parser] merc already revealed ', entityId);
+			return battleState;
+		}
+
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
 		const refData = mainWindowState?.mercenaries?.referenceData;
 		const refMerc = normalizedCardId
