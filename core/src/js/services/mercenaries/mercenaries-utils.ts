@@ -117,6 +117,51 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_02:
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_03:
 		case CardIds.TyrandeWhisperwindLettuce_BARL_016H_04:
+		case CardIds.NemsyNecrofizzleLettuce_LT24_010H_01:
+		case CardIds.NemsyNecrofizzleLettuce_LT24_010H_02:
+		case CardIds.NemsyNecrofizzleLettuce_LT24_010H_03:
+		case CardIds.TessGreymaneLettuce_LT24_011H_01:
+		case CardIds.TessGreymaneLettuce_LT24_011H_02:
+		case CardIds.TessGreymaneLettuce_LT24_011H_03:
+		case CardIds.GennGreymaneLettuce_LT24_008H_01:
+		case CardIds.GennGreymaneLettuce_LT24_008H_02:
+		case CardIds.GennGreymaneLettuce_LT24_008H_03:
+		case CardIds.GennGreymaneLettuce_LT24_008H_04:
+		case CardIds.ScabbsCutterbutterLettuce_LETL_010H_01:
+		case CardIds.ScabbsCutterbutterLettuce_LETL_010H_02:
+		case CardIds.ScabbsCutterbutterLettuce_LETL_010H_03:
+		case CardIds.ScabbsCutterbutterLettuce_LETL_010H_04:
+		case CardIds.NeeruFirebladeLettuce_LT24_016H_01:
+		case CardIds.NeeruFirebladeLettuce_LT24_016H_02:
+		case CardIds.NeeruFirebladeLettuce_LT24_016H_03:
+		case CardIds.GaronaHalforcenLettuce_BARL_018H_01:
+		case CardIds.GaronaHalforcenLettuce_BARL_018H_02:
+		case CardIds.GaronaHalforcenLettuce_BARL_018H_03:
+		case CardIds.TirionFordringLettuce_LETL_002H_01:
+		case CardIds.TirionFordringLettuce_LETL_002H_02:
+		case CardIds.TirionFordringLettuce_LETL_002H_03:
+		case CardIds.ArannaStarseekerLettuce_BARL_021H_01:
+		case CardIds.ArannaStarseekerLettuce_BARL_021H_02:
+		case CardIds.ArannaStarseekerLettuce_BARL_021H_03:
+		case CardIds.CorneliusRoameLettuce_SWL_06H_01:
+		case CardIds.CorneliusRoameLettuce_SWL_06H_02:
+		case CardIds.CorneliusRoameLettuce_SWL_06H_03:
+		case CardIds.IllidanStormrageLettuce_LETL_003H_01:
+		case CardIds.IllidanStormrageLettuce_LETL_003H_02:
+		case CardIds.IllidanStormrageLettuce_LETL_003H_03:
+		case CardIds.UtherLightbringerLettuce_SWL_13H_01:
+		case CardIds.UtherLightbringerLettuce_SWL_13H_02:
+		case CardIds.UtherLightbringerLettuce_SWL_13H_03:
+		case CardIds.MalfurionStormrageLettuce_BARL_017H_01:
+		case CardIds.MalfurionStormrageLettuce_BARL_017H_02:
+		case CardIds.MalfurionStormrageLettuce_BARL_017H_03:
+		case CardIds.TamsinRoameLettuce_LETL_040H_01:
+		case CardIds.TamsinRoameLettuce_LETL_040H_02:
+		case CardIds.TamsinRoameLettuce_LETL_040H_03:
+		case CardIds.TamsinRoameLettuce_LETL_040H_04:
+		case CardIds.GarroshHellscreamLettuce_BARL_013H_01:
+		case CardIds.GarroshHellscreamLettuce_BARL_013H_02:
+		case CardIds.GarroshHellscreamLettuce_BARL_013H_03:
 			return fullName.split(' ').shift();
 		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_01:
 		case CardIds.EdwinDefiasKingpinLettuce_LT21_01H_02:
@@ -152,6 +197,18 @@ export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeServic
 		case CardIds.KingKrushLettuce_LETL_037H_01:
 		case CardIds.KingKrushLettuce_LETL_037H_02:
 		case CardIds.KingKrushLettuce_LETL_037H_03:
+		case CardIds.PrinceMalchezaarLettuce_LT24_021H_01:
+		case CardIds.PrinceMalchezaarLettuce_LT24_021H_02:
+		case CardIds.PrinceMalchezaarLettuce_LT24_021H_03:
+		case CardIds.CaptainHooktuskLettuce_LT23_011H_01:
+		case CardIds.CaptainHooktuskLettuce_LT23_011H_02:
+		case CardIds.CaptainHooktuskLettuce_LT23_011H_03:
+		case CardIds.CaptainGalvangarLettuce_LT22_004H_01:
+		case CardIds.CaptainGalvangarLettuce_LT22_004H_02:
+		case CardIds.CaptainGalvangarLettuce_LT22_004H_03:
+		case CardIds.ProphetVelenLettuce_LETL_014H_01:
+		case CardIds.ProphetVelenLettuce_LETL_014H_02:
+		case CardIds.ProphetVelenLettuce_LETL_014H_03:
 			return fullName.split(' ').pop();
 		case CardIds.TheLichKingLettuce_LETL_041H_01:
 		case CardIds.TheLichKingLettuce_LETL_041H_02:
