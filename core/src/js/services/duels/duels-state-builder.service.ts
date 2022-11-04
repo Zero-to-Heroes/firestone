@@ -124,7 +124,11 @@ export class DuelsStateBuilderService {
 		});
 	}
 
-	public async triggerDuelsMatchInfoRetrieve(waitForRating = true) {
+	public async triggerDuelsMatchInfoRetrieve(spectating: boolean) {
+		if (spectating) {
+			return;
+		}
+
 		await runLoop(async () => {
 			const duelsInfo = await this.memory.getDuelsInfo();
 			if (!!duelsInfo?.Rating) {

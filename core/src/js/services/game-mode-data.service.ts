@@ -24,11 +24,11 @@ export class GameModeDataService {
 			.asObservable()
 			.pipe(
 				filter((event) => event.type === GameEvent.MATCH_METADATA),
-				filter((event) => !event.additionalData?.spectating),
+				// filter((event) => !event.additionalData?.spectating),
 			)
 			.subscribe((event) => {
 				console.debug('[match-info] got metadata event', event);
-				this.triggerMatchInfoRetrieve(event.additionalData.metaData);
+				this.triggerMatchInfoRetrieve(event.additionalData.metaData, event.additionalData?.spectating);
 			});
 	}
 
@@ -37,38 +37,43 @@ export class GameModeDataService {
 	// This info is not needed by the tracker, but it is needed by some achievements
 	// that rely on the rank
 	// Also needed by the Twitch Presence service
-	private async triggerMatchInfoRetrieve(metadata: HsGameMetaData) {
+	private async triggerMatchInfoRetrieve(metadata: HsGameMetaData, spectating: boolean) {
 		console.debug('[match-info] considering', metadata);
 		switch (metadata.GameType) {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
-				this.duelsState.triggerDuelsMatchInfoRetrieve(true);
-				this.triggerPlayerDeckInfoRetrieve();
+				this.triggerRankMatchInfoRetrieve();
+				this.duelsState.triggerDuelsMatchInfoRetrieve(spectating);
+				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_ARENA:
-				this.triggerArenaInfoRetrieve();
-				this.triggerPlayerDeckInfoRetrieve();
+				this.triggerRankMatchInfoRetrieve();
+				this.triggerArenaInfoRetrieve(spectating);
+				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_MERCENARIES_PVP:
-				this.triggerMercsPvPInfoRetrieve();
+				this.triggerMercsPvPInfoRetrieve(spectating);
 				return;
 			case GameType.GT_BATTLEGROUNDS:
 			case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
-				this.triggerBattlegroundsInfoRetrieve();
+				this.triggerBattlegroundsInfoRetrieve(spectating);
 				return;
 			case GameType.GT_RANKED:
 				this.triggerRankMatchInfoRetrieve();
-				this.triggerPlayerDeckInfoRetrieve();
+				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			default:
-				this.triggerPlayerDeckInfoRetrieve();
+				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 		}
 	}
 
-	private async triggerBattlegroundsInfoRetrieve() {
+	private async triggerBattlegroundsInfoRetrieve(spectating: boolean) {
+		if (spectating) {
+			return;
+		}
 		await runLoop(async () => {
 			const bgInfo = await this.memoryService.getBattlegroundsInfo();
 			if (bgInfo?.Rating != null && !!bgInfo.Game?.AvailableRaces?.length) {
@@ -86,7 +91,10 @@ export class GameModeDataService {
 		}, 'bgInfo');
 	}
 
-	private async triggerMercsPvPInfoRetrieve() {
+	private async triggerMercsPvPInfoRetrieve(spectating: boolean) {
+		if (spectating) {
+			return;
+		}
 		await runLoop(async () => {
 			const mercsInfo = await this.memoryService.getMercenariesInfo();
 			if (mercsInfo?.PvpRating != null) {
@@ -104,7 +112,10 @@ export class GameModeDataService {
 		}, 'mercsInfo');
 	}
 
-	private async triggerArenaInfoRetrieve() {
+	private async triggerArenaInfoRetrieve(spectating: boolean) {
+		if (spectating) {
+			return;
+		}
 		await runLoop(async () => {
 			const arenaInfo = await this.memoryService.getArenaInfo();
 			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
@@ -148,7 +159,10 @@ export class GameModeDataService {
 		}, 'matchInfo');
 	}
 
-	private async triggerPlayerDeckInfoRetrieve() {
+	private async triggerPlayerDeckInfoRetrieve(spectating: boolean) {
+		if (spectating) {
+			return;
+		}
 		await runLoop(async () => {
 			const playerDeck = await this.deckParser.getCurrentDeck(10000);
 			if (!!playerDeck?.deckstring) {
