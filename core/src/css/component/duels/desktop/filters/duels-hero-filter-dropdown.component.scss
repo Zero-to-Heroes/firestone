@@ -1,7 +1,6 @@
 .duels-hero-filter-dropdown {
 	::ng-deep {
 		.filter-dropdown-multiselect.showing .options {
-			width: calc(100% + 80px);
 			position: relative;
 			top: 1px;
 		}

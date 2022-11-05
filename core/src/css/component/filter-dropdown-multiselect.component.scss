@@ -56,7 +56,9 @@
 		position: relative;
 		left: -1px;
 		top: -1px;
+		width: fit-content;
 		min-width: 220px;
+		max-width: 300px;
 
 		.choices {
 			display: flex;
@@ -77,6 +79,8 @@
 			height: 30px;
 
 			checkbox ::ng-deep {
+				width: 100%;
+				
 				label {
 					margin-bottom: 0;
 					i {
@@ -87,6 +91,9 @@
 					p {
 						font-size: 13px;
 						color: var(--color-1);
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
 					}
 
 					&:hover {
