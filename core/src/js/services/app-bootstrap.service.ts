@@ -295,6 +295,9 @@ export class AppBootstrapService {
 		if (this.loadingWindowShown) {
 			return;
 		}
+		if (process.env.NODE_ENV !== 'production') {
+			return;
+		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
 
