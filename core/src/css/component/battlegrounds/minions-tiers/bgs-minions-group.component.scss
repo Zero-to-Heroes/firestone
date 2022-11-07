@@ -111,6 +111,7 @@
 					justify-content: center;
 					border-radius: 50%;
 					border: 2px solid var(--icon-color);
+					margin-left: 5px;
 
 					.label {
 						font-family: Sumana;
@@ -121,6 +122,14 @@
 						color: var(--icon-color);
 						padding-bottom: 3px;
 					}
+				}
+
+				&.battlecry {
+					--icon-color: #4376d8;
+				}
+
+				&.deathrattle {
+					--icon-color: #ff8a48;
 				}
 			}
 
