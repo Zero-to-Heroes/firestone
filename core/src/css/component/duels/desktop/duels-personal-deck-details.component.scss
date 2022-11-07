@@ -1,6 +1,7 @@
 :host() {
 	display: flex;
 	min-height: 0;
+	height: 100%;
 }
 
 .duels-personal-deck-details {
@@ -8,6 +9,7 @@
 	flex-grow: 1;
 	margin-top: 10px;
 	max-width: 100%;
+	padding-bottom: 25px;
 
 	.deck-list-container {
 		margin-right: 20px;
