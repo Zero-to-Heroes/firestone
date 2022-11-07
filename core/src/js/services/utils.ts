@@ -163,7 +163,7 @@ export const updateFirstElementWithoutProp = <T>(
 	}
 	const withoutPropertyElements = array.filter((e) => !propSelector(e));
 	if (!withoutPropertyElements.length) {
-		console.warn('could not find any element without property', propSelector, array);
+		// console.warn('could not find any element without property', propSelector, array);
 		return array;
 	}
 	const indexWithoutProperty = array.indexOf(withoutPropertyElements[0]);
