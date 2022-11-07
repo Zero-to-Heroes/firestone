@@ -345,7 +345,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 					</div>
 					<div class="task-content">
 						<div class="header">{{ task.header }}</div>
-						<div class="description">{{ task.description }}</div>
+						<div class="description" [innerHTML]="task.description"></div>
 						<div class="progress">
 							<div class="background"></div>
 							<div class="current-progress" [style.width.%]="task.progressPercentage"></div>
@@ -353,15 +353,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						</div>
 					</div>
 				</div>
-				<!-- <div class="create-team-button" *ngIf="taskTeamDeckstring">
-					<button
-						[helpTooltip]="buttonTooltip"
-						(click)="createTeamFromTasks()"
-						[ngClass]="{ 'disabled': isCopied }"
-					>
-						{{ buttonLabel }}
-					</button>
-				</div> -->
 			</ng-container>
 			<ng-template #emptyState
 				><div class="empty-state" [owTranslate]="'mercenaries.team-widget.tasks-completed'"></div>

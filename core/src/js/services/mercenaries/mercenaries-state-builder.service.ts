@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { MercenarySelector, VillageVisitorType } from '@firestone-hs/reference-data';
+import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@services/preferences.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -167,19 +167,22 @@ export interface MercenariesReferenceData {
 		// There is a 1-1 mapping between visitors and mercs
 		readonly mercenaryVisitorId: number;
 		readonly taskChainType: VillageVisitorType;
-		readonly tasks: readonly {
-			readonly id: number;
-			readonly mercenaryOverrideId: number;
-			readonly title: string;
-			readonly quota: number;
-			readonly description: string;
-			readonly rewards: readonly {
-				readonly type: number;
-				readonly quantity: number;
-				readonly mercenarySelector: MercenarySelector;
-				readonly equipmentDbfId: number;
-			}[];
-		}[];
+		readonly tasks: readonly InternalTask[];
+	}[];
+	readonly repeatableTasks: readonly InternalTask[];
+}
+
+export interface InternalTask {
+	readonly id: number;
+	readonly mercenaryOverrideId: number;
+	readonly title: string;
+	readonly quota: number;
+	readonly description: string;
+	readonly rewards: readonly {
+		type: number;
+		quantity: number;
+		mercenarySelector: number;
+		equipmentDbfId: number;
 	}[];
 }
 

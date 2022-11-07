@@ -19,4 +19,7 @@ export interface MemoryVisitor {
 	readonly TaskChainProgress: number;
 	readonly TaskProgress: number;
 	readonly Status: TaskStatus;
+	readonly ProceduralMercenaryId: number;
+	readonly ProceduralBountyId: number;
+	readonly AdditionalMercenaryIds: readonly number[];
 }

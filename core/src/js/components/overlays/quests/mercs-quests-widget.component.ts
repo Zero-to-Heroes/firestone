@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, startWith, tap } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
 import {
 	BattleAbility,
 	BattleEquipment,
@@ -152,7 +152,6 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 			team$,
 			oocTeam$,
 		).pipe(
-			tap((info) => console.debug('tasks info', info)),
 			filter(([[referenceData, visitors], team, oocTeam]) => !!referenceData && !!visitors?.length),
 			this.mapData(([[referenceData, visitors], team, oocTeam]) => {
 				const allActiveMercs = [...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])];

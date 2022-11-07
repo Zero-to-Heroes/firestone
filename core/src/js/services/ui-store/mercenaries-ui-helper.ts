@@ -20,6 +20,7 @@ import {
 } from '../mercenaries/mercenaries-state-builder.service';
 import {
 	getHeroRole,
+	getShortMercHeroName,
 	isMercenariesPvE,
 	isMercenariesPvP,
 	normalizeMercenariesCardId,
@@ -139,106 +140,168 @@ export const buildMercenariesTasksList = (
 	i18n: LocalizationFacadeService,
 	restrictToMercsIds: readonly number[] = [],
 ): readonly Task[] => {
-	console.debug('building tasks list', restrictToMercsIds);
-	return (
-		visitors
-			// Just remove CLAIMED and INVALID
-			.filter(
-				(visitor) =>
-					visitor.Status === TaskStatus.NEW ||
-					visitor.Status === TaskStatus.ACTIVE ||
-					visitor.Status === TaskStatus.COMPLETE,
-			)
-			.flatMap((visitor) => {
-				const taskChains = referenceData.taskChains
-					.filter((chain) => chain.mercenaryVisitorId === visitor.VisitorId)
-					// So that we don't return events for which there is no visitor
-					.filter((chain) => chain.tasks.some((t) => t.id === visitor.TaskId));
-				// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
-				if (!taskChains?.length) {
-					console.debug(
-						'[tasks] no chain',
-						visitor,
-						referenceData.taskChains.find((chain) => chain.mercenaryVisitorId === visitor.VisitorId),
-					);
-					return null;
-				}
+	const potentialVisitors = visitors
+		// Just remove CLAIMED and INVALID
+		.filter(
+			(visitor) =>
+				visitor.Status === TaskStatus.NEW ||
+				visitor.Status === TaskStatus.ACTIVE ||
+				visitor.Status === TaskStatus.COMPLETE,
+		);
+	// No use showing a big list of 20+ tasks in that widget, so if there are too many
+	// ongoing tasks, we will only show the "special" ones
+	const shouldUseMercsRestrition = !!restrictToMercsIds?.length || potentialVisitors.length > 6;
+	console.debug('potentialVisitors', potentialVisitors, shouldUseMercsRestrition);
+	return potentialVisitors
+		.flatMap((visitor) => {
+			const taskChains = referenceData.taskChains
+				.filter((chain) => chain.mercenaryVisitorId === visitor.VisitorId)
+				// So that we don't return events for which there is no visitor
+				.filter((chain) => chain.tasks.some((t) => t.id === visitor.TaskId));
 
-				return taskChains.map((chain) => ({ chain: chain, visitor: visitor }));
-			})
-			.filter((info) => !!info)
-			.map((info) => {
-				const taskChain = info.chain;
-				const visitor = info.visitor;
+			return !!taskChains?.length
+				? taskChains.map((chain) => ({ chain: chain, visitor: visitor }))
+				: { chain: null, visitor: visitor };
+		})
+		.map((info) => {
+			const taskChain: MercenariesReferenceData['taskChains'][0] = info.chain;
+			const visitor = info.visitor;
 
-				const task = taskChain.tasks[visitor.TaskChainProgress];
-				if (!task) {
-					console.warn('empty task', visitor, taskChain);
-					return null;
-				}
+			// Procedural tasks don't belong to a task chain
+			const task = !!taskChain
+				? taskChain.tasks[visitor.TaskChainProgress]
+				: referenceData.repeatableTasks.find((t) => t.id === visitor.TaskId);
+			if (!task) {
+				console.warn('empty task', visitor, taskChain);
+				return null;
+			}
 
-				// 0 is not a valid id
-				const mercIdForImage = task.mercenaryOverrideId || taskChain.mercenaryId;
-				const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercIdForImage);
-				if (!!restrictToMercsIds?.length && !restrictToMercsIds.includes(refMerc.id)) {
-					return null;
-				}
+			// 0 is not a valid id
+			const mercIdForImage = task.mercenaryOverrideId || taskChain?.mercenaryId || visitor.ProceduralMercenaryId;
+			const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercIdForImage);
+			const isProceduralTask = !!visitor.ProceduralMercenaryId || visitor.ProceduralBountyId;
+			// Always keep the special tasks
+			if (
+				shouldUseMercsRestrition &&
+				taskChain?.taskChainType === VillageVisitorType.STANDARD &&
+				!isProceduralTask &&
+				!restrictToMercsIds.includes(refMerc.id)
+			) {
+				return null;
+			}
 
-				const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
-				const mercenaryCardId = mercenaryCard.id;
-				const role = getHeroRole(mercenaryCard.mercenaryRole);
-				const result = {
-					...visitor, // For debugging purpose
-					mercenaryCardId: mercenaryCardId,
-					mercenaryRole: mercenaryCard.mercenaryRole,
-					mercenaryName: mercenaryCard.name,
-					title: task.title,
-					header: isTaskChainStory(taskChain)
-						? task.title
-						: i18n.translateString('mercenaries.team-widget.task-title', {
-								taskNumber: visitor.TaskChainProgress + 1,
-								taskTitle: task.title,
-						  }),
-					description: task.description,
-					progress: visitor.TaskProgress,
-					quota: task.quota,
-					progressPercentage: !!task.quota ? (100 * (visitor.TaskProgress ?? 0)) / task.quota : 0,
-					taskChainProgress: visitor.TaskChainProgress,
-					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
-					frameUrl: role
-						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`
-						: null,
-					type: taskChain.taskChainType,
-				} as Task;
-				return result;
-			})
-			.filter((task) => !!task)
-			.sort((a, b) => {
-				if (a.mercenaryRole === 'TANK' && b.mercenaryRole !== 'TANK') {
-					return -1;
-				}
-				if (a.mercenaryRole !== 'TANK' && b.mercenaryRole === 'TANK') {
-					return 1;
-				}
-				if (a.mercenaryRole === 'FIGHTER' && b.mercenaryRole !== 'FIGHTER') {
-					return -1;
-				}
-				if (a.mercenaryRole !== 'FIGHTER' && b.mercenaryRole === 'FIGHTER') {
-					return 1;
-				}
-				if (a.mercenaryRole === 'CASTER' && b.mercenaryRole !== 'CASTER') {
-					return -1;
-				}
-				if (a.mercenaryRole !== 'CASTER' && b.mercenaryRole === 'CASTER') {
-					return 1;
-				}
-				return a.mercenaryName < b.mercenaryName ? -1 : 1;
-			})
-	);
+			const title = replacePlaceholders(task.title, task, visitor, referenceData, allCards);
+			const description = replacePlaceholders(task.description, task, visitor, referenceData, allCards);
+
+			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
+			const mercenaryCardId = mercenaryCard.id;
+			const role = getHeroRole(mercenaryCard.mercenaryRole);
+			const result = {
+				...visitor, // For debugging purpose
+				mercenaryCardId: mercenaryCardId,
+				mercenaryRole: mercenaryCard.mercenaryRole,
+				mercenaryName: mercenaryCard.name,
+				title: title,
+				header: isTaskChainStory(taskChain)
+					? title
+					: i18n.translateString('mercenaries.team-widget.task-title', {
+							taskNumber: visitor.TaskChainProgress + 1,
+							taskTitle: title,
+					  }),
+				description: description,
+				progress: visitor.TaskProgress,
+				quota: task.quota,
+				progressPercentage: !!task.quota ? (100 * (visitor.TaskProgress ?? 0)) / task.quota : 0,
+				taskChainProgress: visitor.TaskChainProgress,
+				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
+				frameUrl: role
+					? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`
+					: null,
+				type: taskChain?.taskChainType ?? VillageVisitorType.PROCEDURAL,
+			} as Task;
+			return result;
+		})
+		.filter((task) => !!task)
+		.sort((a, b) => {
+			// Keep the interesting tasks at the top (so they are focused when showing the widget)
+			if (a.type === VillageVisitorType.PROCEDURAL && b.type != VillageVisitorType.PROCEDURAL) {
+				return 1;
+			}
+			if (a.type !== VillageVisitorType.PROCEDURAL && b.type !== VillageVisitorType.PROCEDURAL) {
+				return -1;
+			}
+			if (a.type === VillageVisitorType.EVENT && b.type != VillageVisitorType.EVENT) {
+				return 1;
+			}
+			if (a.type !== VillageVisitorType.EVENT && b.type !== VillageVisitorType.EVENT) {
+				return -1;
+			}
+			if (a.type === VillageVisitorType.SPECIAL && b.type != VillageVisitorType.SPECIAL) {
+				return 1;
+			}
+			if (a.type !== VillageVisitorType.SPECIAL && b.type !== VillageVisitorType.SPECIAL) {
+				return -1;
+			}
+			if (a.mercenaryRole === 'TANK' && b.mercenaryRole !== 'TANK') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'TANK' && b.mercenaryRole === 'TANK') {
+				return 1;
+			}
+			if (a.mercenaryRole === 'FIGHTER' && b.mercenaryRole !== 'FIGHTER') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'FIGHTER' && b.mercenaryRole === 'FIGHTER') {
+				return 1;
+			}
+			if (a.mercenaryRole === 'CASTER' && b.mercenaryRole !== 'CASTER') {
+				return -1;
+			}
+			if (a.mercenaryRole !== 'CASTER' && b.mercenaryRole === 'CASTER') {
+				return 1;
+			}
+			return a.mercenaryName < b.mercenaryName ? -1 : 1;
+		});
 };
 
-const isTaskChainStory = (task: MercenariesReferenceData['taskChains'][0]): boolean => {
-	return task.taskChainType === VillageVisitorType.SPECIAL && task.mercenaryVisitorId === 1938;
+const replacePlaceholders = (
+	rawText: string,
+	task: MercenariesReferenceData['taskChains'][0]['tasks'][0],
+	visitor: MemoryVisitor,
+	referenceData: MercenariesReferenceData,
+	allCards: CardsFacadeService,
+): string => {
+	return rawText
+		.replace(
+			'$owner_merc',
+			getShortMercHeroName(
+				referenceData.mercenaries.find((m) => m.id === visitor.ProceduralMercenaryId)?.cardDbfId,
+				allCards,
+			),
+		)
+		.replace(
+			'$bounty_set',
+			referenceData.bountySets.find((set) => set.bounties.some((b) => b.id === visitor.ProceduralBountyId))?.name,
+		)
+		.replace(
+			'$bounty_nd',
+			referenceData.bountySets.flatMap((set) => set.bounties).find((b) => b.id === visitor.ProceduralBountyId)
+				?.name,
+		)
+		.replace(
+			'$additional_mercs',
+
+			visitor.AdditionalMercenaryIds?.map((mercId) =>
+				getShortMercHeroName(referenceData.mercenaries.find((m) => m.id === mercId)?.cardDbfId, allCards),
+			).join(', '),
+		);
+};
+
+const isTaskChainStory = (taskChain: MercenariesReferenceData['taskChains'][0]): boolean => {
+	return (
+		taskChain == null ||
+		(taskChain.taskChainType === VillageVisitorType.SPECIAL && taskChain.mercenaryVisitorId === 1938)
+	);
 };
 
 export const buildBounties = (

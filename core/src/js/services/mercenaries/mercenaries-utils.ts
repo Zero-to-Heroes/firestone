@@ -55,9 +55,10 @@ export const getMercLevelFromExperience = (totalXp: number, referenceData: Merce
 };
 
 // TODO translate
-export const getShortMercHeroName = (cardId: string, allCards: CardsFacadeService): string => {
-	const fullName = allCards.getCard(cardId).name;
-	switch (cardId) {
+export const getShortMercHeroName = (cardId: string | number, allCards: CardsFacadeService): string => {
+	const card = allCards.getCard(cardId);
+	const fullName = card.name;
+	switch (card.id) {
 		case CardIds.CairneBloodhoofLettuce_LETL_034H_01:
 		case CardIds.CairneBloodhoofLettuce_LETL_034H_02:
 		case CardIds.CairneBloodhoofLettuce_LETL_034H_03:
