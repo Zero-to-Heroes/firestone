@@ -1,10 +1,10 @@
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
-import { sortByProperties } from '../../utils';
-import { MercenariesParser } from './_mercenaries-parser';
 import { CardsFacadeService } from '../../cards-facade.service';
+import { sortByProperties } from '../../utils';
 import { isPassiveMercsTreasure } from '../mercenaries-utils';
+import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesAbilityQueuedParser implements MercenariesParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
@@ -31,36 +31,27 @@ export class MercenariesAbilityQueuedParser implements MercenariesParser {
 			return battleState;
 		}
 
-		var actionQueue: readonly MercenariesAction[];
-
-		if (!isPassiveMercsTreasure(abilityCardId, this.allCards)) {
-			const isPlayer = controllerId === localPlayer.PlayerId;
-			const action: MercenariesAction = {
-				side: isPlayer ? 'player' : 'opponent',
-				abilityCardId: abilityCardId,
-				ownerCardId: ownerCardId,
-				ownerEntityId: entityId,
-				speed: abilitySpeed,
-			};
-			actionQueue =
-				// No "unqueue" event is emitted when we simply change the chosen action
-				[...battleState.actionQueue.filter((a) => a.ownerEntityId !== entityId), action ].sort(
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const action: MercenariesAction = isPassiveMercsTreasure(abilityCardId, this.allCards)
+			? null
+			: {
+					side: isPlayer ? 'player' : 'opponent',
+					abilityCardId: abilityCardId,
+					ownerCardId: ownerCardId,
+					ownerEntityId: entityId,
+					speed: abilitySpeed,
+			  };
+		const actionQueue: readonly MercenariesAction[] =
+			// No "unqueue" event is emitted when we simply change the chosen action
+			[...battleState.actionQueue.filter((a) => a.ownerEntityId !== entityId), action]
+				.filter((action) => !!action)
+				.sort(
 					sortByProperties((action: MercenariesAction) => [
 						// First sort by speed, and in case of speed ties the player actions first
 						action.speed,
 						action.side === 'player' ? 1 : 2,
 					]),
 				);
-		}
-		else{
-			actionQueue =
-				[...battleState.actionQueue.filter((a) => a.ownerEntityId !== entityId)].sort(
-					sortByProperties((action: MercenariesAction) => [
-						action.speed,
-						action.side === 'player' ? 1 : 2,
-					]),
-				);
-		}
 		return battleState.update({
 			actionQueue: actionQueue,
 		} as MercenariesBattleState);
