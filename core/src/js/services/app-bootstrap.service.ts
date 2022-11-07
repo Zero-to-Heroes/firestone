@@ -295,9 +295,6 @@ export class AppBootstrapService {
 		if (this.loadingWindowShown) {
 			return;
 		}
-		if (process.env.NODE_ENV !== 'production') {
-			return;
-		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
 
@@ -305,7 +302,8 @@ export class AppBootstrapService {
 		const prefs = await this.prefs.getPreferences();
 		const collectionWindow = await this.ow.getCollectionWindow(prefs);
 		const shouldShowAds = await this.ads.shouldDisplayAds();
-		if (shouldShowAds && !collectionWindow.isVisible) {
+		const isDev = !!process.env.NODE_ENV && process.env.NODE_ENV !== 'production';
+		if (shouldShowAds && !collectionWindow.isVisible && !isDev) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
 			console.log('[bootstrap] final restore for loadingwindow done', result);
