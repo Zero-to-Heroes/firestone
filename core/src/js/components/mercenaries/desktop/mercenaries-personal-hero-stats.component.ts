@@ -211,15 +211,20 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				tasks: chain?.tasks.slice(0, 18) ?? [],
 			}))[0];
 
-		// Can have only one task per mercenary at the same time
 		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
-		const currentStep = !visitorInfo
-			? null
-			: visitorInfo.Status === TaskStatus.CLAIMED || visitorInfo.Status === TaskStatus.COMPLETE
-			? Math.min(taskChain?.tasks?.length ?? 0, currentTaskStep + 1)
+		const currentStep = !memMerc.Owned
+			? 0
+			: !visitorInfo
+			? // Visitor is missing from the full list, which means that all tasks have been completed
+			  // (or that we don't own that merc)
+			  // We have to be careful with the case where all mercs are maxxed out, in which case we have no visitors
+			  visitors != null
+				? taskChain?.tasks?.length
+				: // We haven't been able to get the list of visitors
+				  null
 			: Math.max(0, currentTaskStep);
-		// debug && console.debug('currentTaskStep', refMerc.name, currentTaskStep, currentStep, visitorInfo, taskChain);
+		console.debug('currentStep', refMerc.name, currentStep, visitors, visitorInfo);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();

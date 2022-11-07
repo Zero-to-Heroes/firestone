@@ -10,6 +10,7 @@ export class MercenariesCollectionInformationFromMemoryProcessor implements Proc
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.debug('[merc-memory] updating mercs collection info', event);
 		return [
 			currentState.update({
 				mercenaries: currentState.mercenaries.update({

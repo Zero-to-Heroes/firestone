@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { CardRarity } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { FeatureFlags } from '../../../services/feature-flags';
-import { MercenariesTaskUpdateCurrentStepEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesViewMercDetailsEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-view-merc-details-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
@@ -85,12 +84,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				</div>
 			</div>
 
-			<div
-				class="current-task"
-				[helpTooltip]="currentTaskTooltip"
-				helpTooltipClasses="mercenaries-personal-hero-stat-task-tooltip"
-				(click)="onTaskClick($event)"
-			>
+			<div class="current-task">
 				{{ currentTaskLabel }}
 			</div>
 
@@ -259,14 +253,6 @@ export class MercenariesPersonalHeroStatComponent {
 
 	buildValue(value: number, decimal = 2): string {
 		return value == null ? '-' : value === 0 ? '0' : value.toFixed(decimal);
-	}
-
-	onTaskClick(event: MouseEvent) {
-		const operation = event.ctrlKey ? 'add' : event.altKey ? 'remove' : null;
-		if (operation) {
-			this.store.send(new MercenariesTaskUpdateCurrentStepEvent(this.mercenaryId, operation));
-			event.stopPropagation();
-		}
 	}
 
 	select() {

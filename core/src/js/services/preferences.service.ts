@@ -442,12 +442,6 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateMercenariesVisitorsProgress(info: readonly MemoryVisitor[]) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, mercenariesVisitorsProgress: info };
-		await this.savePreferences(newPrefs);
-	}
-
 	public async updateMercenariesPersonalHeroesSortCriteria(info: readonly MercenariesPersonalHeroesSortCriteria[]) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, mercenariesPersonalHeroesSortCriteria: info };

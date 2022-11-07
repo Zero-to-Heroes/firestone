@@ -186,7 +186,6 @@ import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercena
 import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
 import { MercenariesSelectCompositionEvent } from './events/mercenaries/mercenaries-select-composition-event';
 import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
-import { MercenariesTaskUpdateCurrentStepEvent } from './events/mercenaries/mercenaries-task-update-current-step-event';
 import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
 import { MercenariesViewMercDetailsEvent } from './events/mercenaries/mercenaries-view-merc-details-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
@@ -337,7 +336,6 @@ import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries
 import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
 import { MercenariesSelectCompositionProcessor } from './processors/mercenaries/mercenaries-select-composition-processor';
 import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
-import { MercenariesTaskUpdateCurrentStepProcessor } from './processors/mercenaries/mercenaries-task-update-current-step-processor';
 import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
 import { MercenariesViewMercDetailsProcessor } from './processors/mercenaries/mercenaries-view-merc-details-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
@@ -923,9 +921,6 @@ export class MainWindowStoreService {
 
 			MercenariesToggleShowHiddenTeamsEvent.eventName(),
 			new MercenariesToggleShowHiddenTeamsProcessor(this.prefs),
-
-			MercenariesTaskUpdateCurrentStepEvent.eventName(),
-			new MercenariesTaskUpdateCurrentStepProcessor(this.mercenariesMemoryCache, this.prefs),
 
 			MercenariesViewMercDetailsEvent.eventName(),
 			new MercenariesViewMercDetailsProcessor(),

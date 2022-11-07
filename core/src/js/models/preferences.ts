@@ -543,11 +543,6 @@ export class Preferences {
 	readonly mercenariesShowMercNamesInTeams: boolean = true;
 	readonly mercenariesBackupTeam: readonly number[] = [];
 
-	// Not the best place to store it, but the preferences are for now stored on the
-	// server and backed up when another device is used.
-	// Ideally this will be returned by the game itself, so we won't need it at all
-	readonly mercenariesVisitorsProgress: readonly MemoryVisitor[];
-
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesPlayerTeamOverlayScale: number = 100;

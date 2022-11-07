@@ -156,6 +156,7 @@ export class StoreBootstrapService {
 			]),
 		]);
 		console.log('loaded info');
+		console.debug('[merc-memory] loaded info from store-bootstrap', mercenariesCollection);
 
 		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
 			mergedPrefs.bgsActiveTribesFilter,
