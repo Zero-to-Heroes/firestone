@@ -388,6 +388,7 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.HoundmasterLegacy:
 		case CardIds.HoundmasterVanilla:
 		case CardIds.HoundmasterBattlegrounds:
+		case CardIds.Houndmaster:
 			return Race.BEAST;
 		case CardIds.ImpatientDoomsayer:
 		case CardIds.ImpatientDoomsayerBattlegrounds:
