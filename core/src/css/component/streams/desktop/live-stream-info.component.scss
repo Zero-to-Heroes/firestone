@@ -19,6 +19,9 @@
 	}
 
 	.left-info {
+		max-width: calc(100% - 40px);
+		justify-content: flex-start;
+
 		& > * {
 			display: flex;
 			justify-content: center;
@@ -32,6 +35,7 @@
 			height: 130%;
 			margin-right: 20px;
 			justify-content: flex-start;
+			flex-shrink: 0;
 
 			::ng-deep {
 				.rank-image {
@@ -117,11 +121,18 @@
 				text-overflow: ellipsis;
 			}
 		}
+
+		.title {
+			flex-grow: 1;
+			flex-shrink: 1;
+			min-width: 0;
+		}
 	}
 
 	.watch-button {
 		margin-left: auto;
 		opacity: 0.5;
+		flex-shrink: 0;
 
 		::ng-deep svg {
 			width: auto;

@@ -29,7 +29,7 @@ declare let amplitude;
 						class="language fi fi-{{ streamLanguage }}"
 						*ngIf="streamLanguage"
 						[helpTooltip]="'app.streams.language-tooltip' | owTranslate"
-					></span>	
+					></span>
 					<span class="value" [helpTooltip]="streamerName">{{ streamerName }}</span>
 				</div>
 				<div class="group viewers" *ngIf="currentViewers != null">
