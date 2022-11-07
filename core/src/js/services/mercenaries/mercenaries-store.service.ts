@@ -160,7 +160,7 @@ export class MercenariesStoreService {
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),
 
-			new MercenariesAbilityQueuedParser(),
+			new MercenariesAbilityQueuedParser(this.allCards),
 			new MercenariesAbilityUnqueuedParser(),
 		];
 		this.parsers = {};
