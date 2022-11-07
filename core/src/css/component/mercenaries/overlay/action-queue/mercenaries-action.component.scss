@@ -29,6 +29,9 @@
 	.name {
 		// For mouse over
 		pointer-events: none;
+		span{
+			overflow: hidden;
+		}
 	}
 
 	.portrait {
