@@ -82,6 +82,7 @@ export class GameStatsUpdaterService {
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,
+			region: replay.region,
 			coinPlay: replay.playCoin,
 			creationTimestamp: Date.now(),
 			gameFormat: game.gameFormat,
