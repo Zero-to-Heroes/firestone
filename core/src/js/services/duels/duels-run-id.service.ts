@@ -71,20 +71,20 @@ export class DuelsRunIdService {
 				filter(([duelsInfo, currentRun, latestDuelsMatch]) => !!duelsInfo),
 				map(([duelsInfo, currentRun, latestDuelsMatch]) => {
 					if (!latestDuelsMatch) {
-						const newRunId = uuid();
-						console.log('[duels-run] no last duels match, assigning new run ID', newRunId);
-						return newRunId;
-					}
-					if (isMatchInRun(latestDuelsMatch.additionalResult, latestDuelsMatch.result)) {
-						return latestDuelsMatch.runId;
+						console.log('[duels-run] no last duels match, assigning new run ID');
+						return uuid();
 					}
 					if (isNewRun(duelsInfo, currentRun, latestDuelsMatch, this.allCards)) {
 						console.log('[duels-run] new run', duelsInfo, currentRun, latestDuelsMatch);
 						return uuid();
 					}
+					if (!isMatchInRun(latestDuelsMatch.additionalResult, latestDuelsMatch.result)) {
+						console.debug('[duels-run] last match in run', latestDuelsMatch);
+						return uuid();
+					}
 
-					console.log('[duels-run] default new run', duelsInfo, currentRun, latestDuelsMatch);
-					return uuid();
+					console.log('[duels-run] default keeping the old run', duelsInfo, currentRun, latestDuelsMatch);
+					return latestDuelsMatch.runId;
 				}),
 				startWith(uuid()),
 				distinctUntilChanged(),
