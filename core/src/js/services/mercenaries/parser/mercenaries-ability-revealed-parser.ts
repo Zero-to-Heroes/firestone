@@ -27,7 +27,7 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 		const abilityOwner = team.getMercenary(ownerEntityId);
-		if (!cardId) {
+		if (!cardId || battleState.currentTurn!=0) {
 			return battleState;
 		}
 		if (!abilityOwner) {
