@@ -116,7 +116,11 @@ export const battlecryGlobalEffectCards = [
 	CardIds.WyrmrestPurifier,
 ];
 
-export const startOfGameGlobalEffectCards = [CardIds.GennGreymane_GIL_692, CardIds.BakuTheMooneater, CardIds.PrinceRenathal];
+export const startOfGameGlobalEffectCards = [
+	CardIds.GennGreymane_GIL_692,
+	CardIds.BakuTheMooneater,
+	CardIds.PrinceRenathal,
+];
 
 export const globalEffectCards = [
 	...battlecryGlobalEffectCards,
@@ -308,6 +312,7 @@ export const publicCardGiftCreators = [
 	CardIds.BronzeSignetTavernBrawl,
 	CardIds.BubbleBlower,
 	CardIds.BubbleBlowerTavernBrawl,
+	CardIds.DeathstalkerRexxar_BuildABeast,
 	CardIds.BuildASnowman,
 	CardIds.BuildASnowman_BuildASnowbruteToken,
 	CardIds.BuildASnowman_BuildASnowgreToken,
