@@ -25,7 +25,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	],
 	template: `
 		<div *ngIf="stats$ | async as stats; else emptyState" class="duels-treasure-stats" scrollable>
-			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
+			<ng-container *ngIf="stats?.length; else emptyState">
+				<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
+			</ng-container>
 		</div>
 		<ng-template #emptyState>
 			<duels-empty-state></duels-empty-state>
