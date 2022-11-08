@@ -159,7 +159,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			return null;
 		}
 
-		console.debug('rebuilding grouped listd');
 		const base = this.buildBaseCards(deckState, darkenUsedCards);
 
 		const sortingFunction = cardsGoToBottom

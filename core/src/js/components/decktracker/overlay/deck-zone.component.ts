@@ -1,5 +1,5 @@
 import {
-	AfterViewInit,
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -7,14 +7,16 @@ import {
 	Input,
 	Optional,
 	Output,
-	ViewRef,
 } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'deck-zone',
@@ -24,11 +26,11 @@ import { groupByFunction } from '../../../services/utils';
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-zone {{ className }}" [ngClass]="{ 'darken-used-cards': _darkenUsedCards }">
-			<div class="zone-name-container" *ngIf="zoneName" (mousedown)="toggleZone()">
+		<div class="deck-zone {{ className$ | async }}" [ngClass]="{ 'darken-used-cards': darkenUsedCards }">
+			<div class="zone-name-container" *ngIf="zoneName$ | async as zoneName" (mousedown)="toggleZone()">
 				<div class="zone-name">
-					<span>{{ zoneName }} ({{ cardsInZone }})</span>
-					<div *ngIf="showWarning" class="warning">
+					<span>{{ zoneName }} ({{ cardsInZone$ | async }})</span>
+					<div *ngIf="showWarning$ | async" class="warning">
 						<svg
 							helpTooltip="The actual cards in this deck are randomly chosen from all the cards in the list below"
 							[bindTooltipToGameWindow]="true"
@@ -37,26 +39,26 @@ import { groupByFunction } from '../../../services/utils';
 						</svg>
 					</div>
 				</div>
-				<i class="collapse-caret {{ open ? 'open' : 'close' }}">
+				<i class="collapse-caret {{ (open$ | async) ? 'open' : 'close' }}">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 					</svg>
 				</i>
 			</div>
-			<ul class="card-list" *ngIf="open">
-				<div *ngFor="let section of cardSections; trackBy: trackBySection" class="section">
+			<ul class="card-list" *ngIf="open$ | async">
+				<div *ngFor="let section of cardSections$ | async; trackBy: trackBySection" class="section">
 					<div class="header" *ngIf="section.header">{{ section.header }}</div>
 					<li *ngFor="let card of section.cards; trackBy: trackCard">
 						<deck-card
 							[card]="card"
-							[tooltipPosition]="_tooltipPosition"
+							[tooltipPosition]="tooltipPosition"
 							[colorManaCost]="colorManaCost"
 							[showRelatedCards]="showRelatedCards"
-							[showUnknownCards]="showUnknownCards && _showTotalCardsInZone"
-							[showUpdatedCost]="_showUpdatedCost"
-							[showStatsChange]="_showStatsChange"
-							[zone]="_zone"
-							[side]="side"
+							[showUnknownCards]="showUnknownCards && (showTotalCardsInZone$ | async)"
+							[showUpdatedCost]="showUpdatedCost$ | async"
+							[showStatsChange]="showStatsChange$ | async"
+							[zone]="zone$ | async"
+							[side]="side$ | async"
 							(cardClicked)="onCardClicked($event)"
 						></deck-card>
 					</li>
@@ -66,104 +68,132 @@ import { groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckZoneComponent implements AfterViewInit {
+export class DeckZoneComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
+	cardSections$: Observable<readonly DeckZoneSection[]>;
+	open$: Observable<boolean>;
+	zone$: Observable<DeckZone>;
+	side$: Observable<'player' | 'opponent'>;
+	showUpdatedCost$: Observable<boolean>;
+	showStatsChange$: Observable<boolean>;
+	showTotalCardsInZone$: Observable<boolean>;
+	className$: Observable<string>;
+	zoneName$: Observable<string>;
+	showWarning$: Observable<boolean>;
+	cardsInZone$: Observable<string>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
 	@Input() showUnknownCards: boolean;
-
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		this._tooltipPosition = value;
-	}
-
-	@Input() set showUpdatedCost(value: boolean) {
-		this._showUpdatedCost = value;
-		this.refreshZone();
-	}
-
-	@Input() set showGiftsSeparately(value: boolean) {
-		this._showGiftsSeparately = value;
-		this.refreshZone();
-	}
-
-	@Input() set showStatsChange(value: boolean) {
-		this._showStatsChange = value;
-		this.refreshZone();
-	}
-
-	@Input() set showBottomCardsSeparately(value: boolean) {
-		this._showBottomCardsSeparately = value;
-		this.refreshZone();
-	}
-
-	@Input() set showTopCardsSeparately(value: boolean) {
-		this._showTopCardsSeparately = value;
-		this.refreshZone();
-	}
-
-	@Input() set showTotalCardsInZone(value: boolean) {
-		this._showTotalCardsInZone = value;
-		this.refreshZone();
-	}
+	@Input() darkenUsedCards: boolean;
+	@Input() tooltipPosition: CardTooltipPositionType;
 
 	@Input() set zone(zone: DeckZone) {
-		this._zone = zone;
-		this.refreshZone();
+		this.zone$$.next(zone);
 	}
-
 	@Input() set collection(value: readonly SetCard[]) {
-		this._collection = value;
-		this.refreshZone();
+		this.collection$$.next(value);
+	}
+	@Input() set side(value: 'player' | 'opponent') {
+		this.side$$.next(value);
+	}
+	@Input() set showUpdatedCost(value: boolean) {
+		this.showUpdatedCost$$.next(value);
+	}
+	@Input() set showGiftsSeparately(value: boolean) {
+		this.showGiftsSeparately$$.next(value);
+	}
+	@Input() set showStatsChange(value: boolean) {
+		this.showStatsChange$$.next(value);
+	}
+	@Input() set showBottomCardsSeparately(value: boolean) {
+		this.showBottomCardsSeparately$$.next(value);
+	}
+	@Input() set showTopCardsSeparately(value: boolean) {
+		this.showTopCardsSeparately$$.next(value);
+	}
+	@Input() set showTotalCardsInZone(value: boolean) {
+		this.showTotalCardsInZone$$.next(value);
 	}
 
-	@Input() set darkenUsedCards(value: boolean) {
-		this._darkenUsedCards = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+	private zone$$ = new BehaviorSubject<DeckZone>(null);
+	private collection$$ = new BehaviorSubject<readonly SetCard[]>(null);
+	private side$$ = new BehaviorSubject<'player' | 'opponent'>(null);
+	private open$$ = new BehaviorSubject<boolean>(true);
+	private showUpdatedCost$$ = new BehaviorSubject<boolean>(true);
+	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showStatsChange$$ = new BehaviorSubject<boolean>(true);
+	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showTotalCardsInZone$$ = new BehaviorSubject<boolean>(true);
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		@Optional() private readonly prefs: PreferencesService,
+	) {
+		super(store, cdr);
 	}
 
-	@Input() side: 'player' | 'opponent';
+	ngAfterContentInit(): void {
+		this.zone$ = this.zone$$.asObservable().pipe(this.mapData((info) => info));
+		this.side$ = this.side$$.asObservable().pipe(this.mapData((info) => info));
+		this.open$ = this.open$$.asObservable().pipe(this.mapData((info) => info, null, 0));
+		this.showUpdatedCost$ = this.showUpdatedCost$$.asObservable().pipe(this.mapData((info) => info));
+		this.showStatsChange$ = this.showStatsChange$$.asObservable().pipe(this.mapData((info) => info));
+		this.showTotalCardsInZone$ = this.showTotalCardsInZone$$.asObservable().pipe(this.mapData((info) => info));
+		this.className$ = this.zone$.pipe(this.mapData((zone) => zone?.id));
+		this.zoneName$ = this.zone$.pipe(this.mapData((zone) => zone?.name));
+		this.showWarning$ = this.zone$.pipe(this.mapData((zone) => zone?.showWarning));
+		this.cardsInZone$ = combineLatest(this.showTotalCardsInZone$, this.zone$).pipe(
+			this.mapData(([showTotalCardsInZone, zone]) => (showTotalCardsInZone ? `${zone.numberOfCards}` : '-')),
+		);
 
-	_tooltipPosition: CardTooltipPositionType;
-	_collection: readonly SetCard[];
-	_showUpdatedCost = true;
-	_darkenUsedCards = true;
-	_showTotalCardsInZone = true;
-	className: string;
-	zoneName: string;
-	showWarning: boolean;
-	cardsInZone = '0';
-	cardSections: readonly DeckZoneSection[] = [];
-	// cards: readonly VisualDeckCard[];
-	open = true;
+		this.cardSections$ = combineLatest(
+			this.zone$,
+			this.collection$$.asObservable(),
+			this.showUpdatedCost$,
+			this.showStatsChange$,
+			this.showGiftsSeparately$$.asObservable(),
+			this.showBottomCardsSeparately$$.asObservable(),
+			this.showTopCardsSeparately$$.asObservable(),
+		).pipe(
+			this.mapData(
+				([
+					zone,
+					collection,
+					showUpdatedCost,
+					showStatsChange,
+					showGiftsSeparately,
+					showBottomCardsSeparately,
+					showTopCardsSeparately,
+				]) =>
+					this.refreshZone(
+						zone,
+						collection,
+						showUpdatedCost,
+						showStatsChange,
+						showGiftsSeparately,
+						showBottomCardsSeparately,
+						showTopCardsSeparately,
+					),
+			),
+		);
 
-	private _showGiftsSeparately = true;
-	private _showStatsChange = true;
-	private _showBottomCardsSeparately = true;
-	private _showTopCardsSeparately = true;
-	private _zone: DeckZone;
-
-	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
-
-	async ngAfterViewInit() {
-		if (this.prefs) {
-			this.open = !(await this.prefs.getZoneToggleDefaultClose(this._zone.name, this.side));
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		combineLatest(this.side$, this.zoneName$)
+			.pipe(this.mapData((info) => info))
+			.subscribe(async ([side, zoneName]) => {
+				const newOpen = !(await this.prefs?.getZoneToggleDefaultClose(zoneName, side));
+				this.open$$.next(newOpen);
+			});
+		combineLatest(this.side$, this.zoneName$, this.open$)
+			.pipe(this.mapData((info) => info))
+			.subscribe(([side, zoneName, open]) => this.prefs?.setZoneToggleDefaultClose(zoneName, side, !open));
 	}
 
 	toggleZone() {
-		this.open = !this.open;
-		if (this.prefs) {
-			this.prefs.setZoneToggleDefaultClose(this._zone.name, this.side, !this.open);
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.open$$.next(!this.open$$.value);
 	}
 
 	onCardClicked(card: VisualDeckCard) {
@@ -178,19 +208,31 @@ export class DeckZoneComponent implements AfterViewInit {
 		return item.header;
 	}
 
-	private refreshZone() {
-		if (!this._zone) {
-			return;
+	private refreshZone(
+		zone: DeckZone,
+		collection: readonly SetCard[],
+		showUpdatedCost: boolean,
+		showStatsChange: boolean,
+		showGiftsSeparately: boolean,
+		showBottomCardsSeparately: boolean,
+		showTopCardsSeparately: boolean,
+	): readonly DeckZoneSection[] {
+		if (!zone) {
+			return null;
 		}
-		this.className = this._zone.id;
-		this.zoneName = this._zone.name;
-		this.showWarning = this._zone.showWarning;
-		this.cardsInZone = this._showTotalCardsInZone ? `${this._zone.numberOfCards}` : '-';
 
-		this.cardSections = this._zone.sections.map((section) => {
-			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards);
+		return zone.sections.map((section) => {
+			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards, collection);
 			const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
-				this.buildGroupingKey(card, quantitiesLeftForCard),
+				this.buildGroupingKey(
+					card,
+					quantitiesLeftForCard,
+					showStatsChange,
+					showGiftsSeparately,
+					showBottomCardsSeparately,
+					showTopCardsSeparately,
+					collection,
+				),
 			)(section.cards);
 			let cards = Object.keys(grouped)
 				.map((groupingKey) => {
@@ -211,7 +253,7 @@ export class DeckZoneComponent implements AfterViewInit {
 					} as VisualDeckCard);
 					return result;
 				})
-				.sort((a, b) => this.compare(a, b))
+				.sort((a, b) => this.compare(a, b, showUpdatedCost))
 				.sort((a, b) => this.sortByIcon(a, b));
 			if (section.sortingFunction) {
 				cards = [...cards].sort(section.sortingFunction);
@@ -222,41 +264,45 @@ export class DeckZoneComponent implements AfterViewInit {
 				sortingFunction: section.sortingFunction,
 			} as DeckZoneSection;
 		});
-		// console.debug('final sections', this.cardSections);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	private buildQuantitiesLeftForCard(cards: readonly VisualDeckCard[]) {
-		if (!this._collection?.length) {
+	private buildQuantitiesLeftForCard(cards: readonly VisualDeckCard[], collection: readonly SetCard[]) {
+		if (!collection?.length) {
 			return {};
 		}
 
 		const result = {};
 		for (const card of cards) {
-			const cardInCollection = this._collection.find((c) => c.id === card.cardId);
+			const cardInCollection = collection.find((c) => c.id === card.cardId);
 			result[card.cardId] = cardInCollection?.getTotalOwned() ?? 0;
 		}
 		return result;
 	}
 
-	private buildGroupingKey(card: VisualDeckCard, quantitiesLeftForCard: { [cardId: string]: number }): string {
-		const keyWithBonus = this._showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
-		const keyWithGift = this._showGiftsSeparately
+	private buildGroupingKey(
+		card: VisualDeckCard,
+		quantitiesLeftForCard: { [cardId: string]: number },
+		showStatsChange: boolean,
+		showGiftsSeparately: boolean,
+		showBottomCardsSeparately: boolean,
+		showTopCardsSeparately: boolean,
+		collection: readonly SetCard[],
+	): string {
+		const keyWithBonus = showStatsChange ? card.cardId + '_' + (card.mainAttributeChange || 0) : card.cardId;
+		const keyWithGift = showGiftsSeparately
 			? keyWithBonus + 'creators-' + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 			: keyWithBonus;
-		const keyWithBottom = this._showBottomCardsSeparately
+		const keyWithBottom = showBottomCardsSeparately
 			? keyWithGift + 'bottom-' + (card.positionFromBottom ?? '')
 			: keyWithGift;
-		const keyWithTop = this._showTopCardsSeparately
+		const keyWithTop = showTopCardsSeparately
 			? keyWithBottom + 'top-' + (card.positionFromTop ?? '')
 			: keyWithBottom;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
 		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
 		const keyWithRelatedCards = keyWithCost + '-' + relatedCardIds;
-		if (!this._collection?.length) {
+		if (!collection?.length) {
 			return keyWithRelatedCards;
 		}
 
@@ -269,11 +315,11 @@ export class DeckZoneComponent implements AfterViewInit {
 		return keyWithRelatedCards + '-missing';
 	}
 
-	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
-		if (this.getCost(a) < this.getCost(b)) {
+	private compare(a: VisualDeckCard, b: VisualDeckCard, showUpdatedCost: boolean): number {
+		if (this.getCost(a, showUpdatedCost) < this.getCost(b, showUpdatedCost)) {
 			return -1;
 		}
-		if (this.getCost(a) > this.getCost(b)) {
+		if (this.getCost(a, showUpdatedCost) > this.getCost(b, showUpdatedCost)) {
 			return 1;
 		}
 		if (a.cardName?.toLowerCase() < b.cardName?.toLowerCase()) {
@@ -291,8 +337,8 @@ export class DeckZoneComponent implements AfterViewInit {
 		return 0;
 	}
 
-	private getCost(card: VisualDeckCard): number {
-		return this._showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
+	private getCost(card: VisualDeckCard, showUpdatedCost: boolean): number {
+		return showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
 	}
 
 	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {
