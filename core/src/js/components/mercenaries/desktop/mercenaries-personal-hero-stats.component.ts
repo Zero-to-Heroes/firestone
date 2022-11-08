@@ -16,7 +16,7 @@ import {
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -376,7 +376,9 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 					tier: currentUnlockedTier,
 					coinsToCraft: coinsToCraft,
 					owned: !!memAbility,
-					speed: abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost,
+					speed: !isPassiveMercsTreasure(abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id, this.allCards) 
+							? abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost ?? 0
+							: null,
 					cooldown:
 						abilityCard.mercenaryAbilityCooldown ??
 						memAbilityCard.mercenaryAbilityCooldown ??
