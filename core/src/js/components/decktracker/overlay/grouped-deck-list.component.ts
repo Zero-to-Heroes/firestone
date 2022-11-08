@@ -1,22 +1,24 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	HostListener,
 	Input,
-	OnDestroy,
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -27,7 +29,7 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 	template: `
 		<ul class="deck-list">
 			<deck-zone
-				*ngIf="zone"
+				*ngIf="zone$ | async as zone"
 				[zone]="zone"
 				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
@@ -36,8 +38,8 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately"
 				[showStatsChange]="showStatsChange"
-				[showTopCardsSeparately]="_showTopCardsSeparately"
-				[showBottomCardsSeparately]="_showBottomCardsSeparately"
+				[showTopCardsSeparately]="showTopCardsSeparately$ | async"
+				[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 				[side]="side"
 				[showTotalCardsInZone]="showTotalCardsInZone"
 				[collection]="collection"
@@ -47,8 +49,12 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupedDeckListComponent implements OnDestroy {
+export class GroupedDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+
+	zone$: Observable<DeckZone>;
+	showTopCardsSeparately$: Observable<boolean>;
+	showBottomCardsSeparately$: Observable<boolean>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
@@ -60,82 +66,109 @@ export class GroupedDeckListComponent implements OnDestroy {
 	@Input() side: 'player' | 'opponent';
 	@Input() collection: readonly SetCard[];
 
-	_tooltipPosition: CardTooltipPositionType;
-	zone: DeckZone;
-
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
 	}
 
-	// private deckList: readonly DeckCard[];
-	// private hand: readonly DeckCard[];
-	private _deckState: DeckState;
-	private _cardsGoToBottom: boolean;
-	private _darkenUsedCards: boolean;
-	private _showCardsInHand = false;
-	private _showBottomCardsSeparately = true;
-	private _showTopCardsSeparately = true;
-	private showWarning: boolean;
-
-	@Input('deckState') set deckState(deckState: DeckState) {
-		this._deckState = deckState;
-		this.showWarning = deckState?.showDecklistWarning;
-
-		this.buildGroupedList();
+	@Input() set deckState(deckState: DeckState) {
+		this.deckState$$.next(deckState);
+		this.showWarning$$.next(deckState?.showDecklistWarning);
 	}
 
 	@Input() set cardsGoToBottom(value: boolean) {
-		this._cardsGoToBottom = value;
-		this.buildGroupedList();
+		this.cardsGoToBottom$$.next(value);
 	}
 
 	@Input() set darkenUsedCards(value: boolean) {
-		this._darkenUsedCards = value;
-		this.buildGroupedList();
+		this.darkenUsedCards$$.next(value);
 	}
 
 	@Input() set showBottomCardsSeparately(value: boolean) {
-		if (value === this._showBottomCardsSeparately) {
-			return;
-		}
-		this._showBottomCardsSeparately = value;
-		this.buildGroupedList();
+		this.showBottomCardsSeparately$$.next(value);
 	}
 
 	@Input() set showTopCardsSeparately(value: boolean) {
-		if (value === this._showTopCardsSeparately) {
-			return;
-		}
-		this._showTopCardsSeparately = value;
-		this.buildGroupedList();
+		this.showTopCardsSeparately$$.next(value);
 	}
 
-	constructor(private readonly i18n: LocalizationFacadeService, private readonly allCards: CardsFacadeService) {}
+	_tooltipPosition: CardTooltipPositionType;
 
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.zone = null;
-		this._deckState = null;
+	private deckState$$ = new BehaviorSubject<DeckState>(null);
+	private showWarning$$ = new BehaviorSubject<boolean>(null);
+	private cardsGoToBottom$$ = new BehaviorSubject<boolean>(false);
+	private darkenUsedCards$$ = new BehaviorSubject<boolean>(false);
+	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.showTopCardsSeparately$ = this.showTopCardsSeparately$$.asObservable().pipe(this.mapData((info) => info));
+		this.showBottomCardsSeparately$ = this.showBottomCardsSeparately$$
+			.asObservable()
+			.pipe(this.mapData((info) => info));
+		this.zone$ = combineLatest(
+			this.deckState$$.asObservable(),
+			this.showWarning$$.asObservable(),
+			this.cardsGoToBottom$$.asObservable(),
+			this.darkenUsedCards$$.asObservable(),
+			this.showTopCardsSeparately$,
+			this.showBottomCardsSeparately$,
+		).pipe(
+			this.mapData(
+				([
+					deckState,
+					showWarning,
+					cardsGoToBottom,
+					darkenUsedCards,
+					showTopCardsSeparately,
+					showBottomCardsSeparately,
+				]) =>
+					this.buildGroupedList(
+						deckState,
+						showWarning,
+						cardsGoToBottom,
+						darkenUsedCards,
+						showTopCardsSeparately,
+						showBottomCardsSeparately,
+					),
+			),
+		);
 	}
 
 	onCardClicked(card: VisualDeckCard) {
 		this.cardClicked.next(card);
 	}
 
-	private buildGroupedList() {
-		if (!this._deckState) {
-			return;
+	private buildGroupedList(
+		deckState: DeckState,
+		showWarning: boolean,
+		cardsGoToBottom: boolean,
+		darkenUsedCards: boolean,
+		showTopCardsSeparately: boolean,
+		showBottomCardsSeparately: boolean,
+	) {
+		if (!deckState) {
+			return null;
 		}
 
-		const base = this.buildBaseCards();
+		console.debug('rebuilding grouped listd');
+		const base = this.buildBaseCards(deckState, darkenUsedCards);
 
-		const sortingFunction = this._cardsGoToBottom
+		const sortingFunction = cardsGoToBottom
 			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
 			: null;
 
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = base;
-		if (this._showTopCardsSeparately && base.filter((c) => c.positionFromTop != undefined).length) {
+		if (showTopCardsSeparately && base.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
 				sortingFunction: (a, b) => a.positionFromTop - b.positionFromTop,
@@ -144,7 +177,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
 		}
-		if (this._showBottomCardsSeparately && base.filter((c) => c.positionFromBottom != undefined).length) {
+		if (showBottomCardsSeparately && base.filter((c) => c.positionFromBottom != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.bottom-of-deck'),
 				sortingFunction: (a, b) => a.positionFromBottom - b.positionFromBottom,
@@ -169,22 +202,22 @@ export class GroupedDeckListComponent implements OnDestroy {
 						sortingFunction: zone.sortingFunction,
 					} as DeckZoneSection),
 			);
-		this.zone = {
+		return {
 			id: 'single-zone',
 			name: undefined,
 			numberOfCards: base.length,
-			showWarning: this.showWarning,
+			showWarning: showWarning,
 			sections: sections,
 		};
 	}
 
-	private buildBaseCards(): readonly VisualDeckCard[] {
+	private buildBaseCards(deckState: DeckState, darkenUsedCards: boolean): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
 		const allCards = [
-			...this._deckState.deck,
-			...this._deckState.hand.filter((c) => !c.creatorCardId),
-			...this._deckState.board.filter((c) => !c.creatorCardId),
-			...this._deckState.otherZone
+			...deckState.deck,
+			...deckState.hand.filter((c) => !c.creatorCardId),
+			...deckState.board.filter((c) => !c.creatorCardId),
+			...deckState.otherZone
 				.filter((c) => c.zone !== 'SETASIDE')
 				.filter((c) => !c.creatorCardId)
 				.filter((c) => !c.temporaryCard),
@@ -198,103 +231,23 @@ export class GroupedDeckListComponent implements OnDestroy {
 			// This should probably be fixed on the initial Coin instead, but for now here's a temporary patch
 			.filter((cardId) => !COIN_IDS.includes(cardId as CardIds))
 			.flatMap((cardId) => {
-				if (!this._deckState.deck.filter((c) => c.cardId === cardId).length) {
+				if (!deckState.deck.filter((c) => c.cardId === cardId).length) {
 					const refCard = allCards.find((c) => c.cardId === cardId);
 					return [
 						VisualDeckCard.create({
 							// Just take the first one as placeholder
 							...refCard,
 							manaCost: this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost, // Show the base cost, not the reduction
-							highlight: this._darkenUsedCards ? 'dim' : 'normal',
+							highlight: darkenUsedCards ? 'dim' : 'normal',
 						}),
 					];
 				} else {
-					return this._deckState.deck
+					return deckState.deck
 						.filter((c) => c.cardId === cardId)
 						.map((c) => VisualDeckCard.create({ ...c }));
 				}
 			});
 		return finalCards;
-
-		// When we don't have the decklist, we just show all the cards in hand + deck
-		// const knownDeck = this._deckState.deck;
-		// const hand = this._deckState.hand;
-		// const board = this._deckState.board;
-		// const other = this._deckState.otherZone.filter((card) => card.zone !== 'SETASIDE');
-		// const deckList = this._deckState.deckList || [];
-		// const deck =
-		// 	deckList.length > 0
-		// 		? knownDeck
-		// 		: [...knownDeck, ...hand, ...board, ...other].sort((a, b) => a.manaCost - b.manaCost);
-		// console.debug(
-		// 	'setting deckstate',
-		// 	this._deckState.hand.find((c) => c.cardId === CardIds.CommanderSivara_TSC_087),
-		// 	deck.find((c) => c.cardId === CardIds.CommanderSivara_TSC_087),
-		// 	this._deckState,
-		// );
-		// // The zone in this view is the decklist + cards in the deck that didn't
-		// // start in the decklist
-		// const groupedFromDecklist: Map<string, DeckCard[]> = this.groupBy(deckList, (card: DeckCard) => card.cardId);
-		// const groupedFromDeck: Map<string, DeckCard[]> = this.groupBy(deck, (card: DeckCard) => card.cardId);
-		// const groupedFromNotInBaseDeck: Map<string, DeckCard[]> = this.groupBy(
-		// 	deck.filter((card) => !deckList.find((c) => c.cardId === card.cardId)),
-		// 	(card: DeckCard) => card.cardId,
-		// );
-		// const base: VisualDeckCard[] = [];
-		// for (const cardId of Array.from(groupedFromDecklist.keys())) {
-		// 	const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
-		// 	const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
-		// 		.map((card) => card.creatorCardId)
-		// 		.filter((creator) => creator);
-		// 	if (!groupedFromDecklist.get(cardId)?.length) {
-		// 		console.warn('no entries in grouped deck list', cardId, groupedFromDecklist.get(cardId));
-		// 		continue;
-		// 	}
-		// 	for (let i = 0; i < cardsInDeck; i++) {
-		// 		base.push(
-		// 			// Not sure why initially the card is created from the decklist instead of the deck, since the
-		// 			// card in deck has more information (like the base attribute update field)
-		// 			VisualDeckCard.create({
-		// 				...(groupedFromDeck.get(cardId)[i] ??
-		// 					groupedFromDeck.get(cardId)[0] ??
-		// 					groupedFromDecklist.get(cardId)[0]),
-		// 				highlight: 'normal',
-		// 				creatorCardIds: creatorCardIds,
-		// 			} as VisualDeckCard),
-		// 		);
-		// 	}
-		// 	if (cardsInDeck === 0) {
-		// 		base.push(
-		// 			VisualDeckCard.create({
-		// 				...groupedFromDecklist.get(cardId)[0],
-		// 				highlight: this._darkenUsedCards ? 'dim' : 'normal',
-		// 			} as VisualDeckCard),
-		// 		);
-		// 	}
-		// }
-		// for (const cardId of Array.from(groupedFromNotInBaseDeck.keys())) {
-		// 	const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
-		// 	const isInOtherZone =
-		// 		[...(board || []), ...(other || [])].filter((card) => card.cardId === cardId).length > 0;
-		// 	const isInBaseDeck = (knownDeck || []).filter((card) => card.cardId === cardId).length > 0;
-		// 	const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
-		// 		.map((card) => card.creatorCardId)
-		// 		.filter((creator) => creator);
-		// 	if (!groupedFromDeck.get(cardId)?.length) {
-		// 		console.warn('no entries in grouped deck list 2', cardId, groupedFromDeck.get(cardId));
-		// 		continue;
-		// 	}
-		// 	for (let i = 0; i < cardsInDeck; i++) {
-		// 		base.push(
-		// 			VisualDeckCard.create({
-		// 				...groupedFromDeck.get(cardId)[i],
-		// 				highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
-		// 				creatorCardIds: creatorCardIds,
-		// 			} as VisualDeckCard),
-		// 		);
-		// 	}
-		// }
-		// return base;
 	}
 
 	private sortOrder(card: VisualDeckCard): number {
@@ -308,19 +261,5 @@ export class GroupedDeckListComponent implements OnDestroy {
 			default:
 				return 3;
 		}
-	}
-
-	private groupBy(list, keyGetter): Map<string, DeckCard[]> {
-		const map = new Map();
-		list.forEach((item) => {
-			const key = keyGetter(item);
-			const collection = map.get(key);
-			if (!collection) {
-				map.set(key, [item]);
-			} else {
-				collection.push(item);
-			}
-		});
-		return map;
 	}
 }
