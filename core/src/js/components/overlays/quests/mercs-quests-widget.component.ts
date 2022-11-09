@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, startWith } from 'rxjs/operators';
+import { filter, startWith } from 'rxjs/operators';
+import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import {
 	BattleAbility,
 	BattleEquipment,
@@ -10,6 +11,7 @@ import {
 } from '../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -142,33 +144,37 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 			}),
 			startWith(null),
 		);
-		this.tasks$ = combineLatest(
-			this.store.listen$(
+		// We use separate observables to reduce the quantity of equality checking we have to do
+		const referenceData$: Observable<[MercenariesReferenceData, readonly MemoryVisitor[]]> = this.store
+			.listen$(
 				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
 				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
+			)
+			.pipe(
+				filter(([referenceData, visitors]) => !!referenceData && !!visitors?.length),
+				this.mapData(([referenceData, visitors]) => [referenceData, visitors]),
+			);
+		const activeMercIds$ = combineLatest(team$, oocTeam$).pipe(
+			this.mapData(([team, oocTeam]) =>
+				[...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])].map((m) => m.mercenaryId),
 			),
-			team$,
-			oocTeam$,
-		).pipe(
-			filter(([[referenceData, visitors], team, oocTeam]) => !!referenceData && !!visitors?.length),
-			map(([[referenceData, visitors], team, oocTeam]) => ({
-				referenceData: referenceData,
-				visitors: visitors,
-				allActiveMercs: [...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])].map(
-					(m) => m.mercenaryId,
-				),
-			})),
-			this.mapData(({ referenceData, visitors, allActiveMercs }) => {
-				const result = buildMercenariesTasksList(
-					referenceData,
-					visitors,
-					this.allCards,
-					this.i18n,
-					allActiveMercs,
-				);
-				console.debug('final tasks', result);
-				return result;
-			}),
+		);
+		this.tasks$ = combineLatest(referenceData$, activeMercIds$).pipe(
+			filter(([[referenceData, visitors], activeMercIds]) => !!referenceData && !!visitors?.length),
+			this.mapData(
+				([[referenceData, visitors], activeMercIds]) => {
+					const result = buildMercenariesTasksList(
+						referenceData,
+						visitors,
+						this.allCards,
+						this.i18n,
+						activeMercIds,
+					);
+					return result;
+				},
+				// Every time we run here, we should have new data, so don't recheck equality
+				(a, b) => false,
+			),
 		);
 		this.showQuests$ = combineLatest(
 			this.store.listenPrefs$(

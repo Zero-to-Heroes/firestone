@@ -76,16 +76,37 @@ export const arraysEqual = (a: readonly any[] | any[] | any, b: readonly any[] |
 	if (!Array.isArray(a) || !Array.isArray(b)) {
 		return false;
 	}
-	return a.length === b.length && a.every((el, ix) => (Array.isArray(el) ? arraysEqual(el, b[ix]) : el === b[ix]));
+	return (
+		a.length === b.length &&
+		// deepEqual is pretty fast, so we can check for full equality here, especially since a non-equality usually means
+		// rerendering something, which is much more costly
+		a.every((el, ix) => (Array.isArray(el) ? arraysEqual(el, b[ix]) : deepEqual(el, b[ix])))
+	);
 };
 
 export const deepEqual = (x: any, y: any): boolean => {
-	const ok = Object.keys,
-		tx = typeof x,
-		ty = typeof y;
-	return x && y && tx === 'object' && tx === ty
-		? ok(x).length === ok(y).length && ok(x).every((key) => deepEqual(x[key], y[key]))
-		: x === y;
+	if (x === y) {
+		return true;
+	}
+	// Take care of the null vs undefined
+	if (x == null && y == null) {
+		return true;
+	}
+
+	if (Array.isArray(x)) {
+		return arraysEqual(x, y);
+	}
+
+	if (!x || !y) {
+		return false;
+	}
+
+	return (
+		typeof x === 'object' &&
+		typeof x === typeof y &&
+		Object.keys(x).length === Object.keys(y).length &&
+		Object.keys(x).every((key) => deepEqual(x[key], y[key]))
+	);
 };
 
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
