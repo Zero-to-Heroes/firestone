@@ -9,7 +9,7 @@ export class GetMercenariesCollectionInfoOperation extends MindVisionOperationFa
 			ow,
 			'getMercenariesCollectionInfo',
 			(forceReset?: boolean) => mindVision.getMercenariesCollectionInfo(forceReset),
-			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length,
+			(info: MemoryMercenariesCollectionInfo) => !info?.Mercenaries?.length || info?.Visitors == null,
 			(info: MemoryMercenariesCollectionInfo) => info,
 			5,
 			2000,

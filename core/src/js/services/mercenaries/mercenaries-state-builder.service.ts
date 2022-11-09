@@ -89,6 +89,7 @@ export class MercenariesStateBuilderService {
 			// 'mercenaries-hero-stats',
 			// 'mercenaries-compositions-stats',
 		];
+		console.debug('[merc] setting collection info', mercenariesCollection);
 		return currentState.update({
 			// globalStats: globalStats,
 			// referenceData: referenceData,

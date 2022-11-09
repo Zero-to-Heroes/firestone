@@ -197,7 +197,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				tasks: chain?.tasks.slice(0, 18) ?? [],
 			}))[0];
 
-		const visitorInfo = visitors.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
+		const visitorInfo = visitors?.find((v) => v.VisitorId === taskChain?.mercenaryVisitorId);
 		const currentTaskStep = visitorInfo?.TaskChainProgress;
 		const currentStep = !memMerc.Owned
 			? 0

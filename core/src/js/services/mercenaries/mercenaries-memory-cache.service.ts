@@ -112,30 +112,25 @@ export class MercenariesMemoryCacheService {
 	public async getMercenariesMergedCollectionInfo(
 		forceMemoryResetIfCollectionInfoEmpty = false,
 	): Promise<MemoryMercenariesCollectionInfo> {
-		let newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(
-			5,
+		const newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(
+			2,
 			forceMemoryResetIfCollectionInfoEmpty,
 		);
 		console.debug('[merc-memory] retrieved merc info from memory', newMercenariesInfo);
 
-		if (!newMercenariesInfo?.Mercenaries?.length) {
-			newMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
-		}
+		const localMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
+		console.debug('[merc-memory] retrieved merc info from localStorage', localMercenariesInfo);
 
-		if (!newMercenariesInfo) {
-			console.debug(
-				'[merc-memory] no new info',
-				newMercenariesInfo,
-				this.previousCollectionInfo,
-				this.previousVisitorsInfo,
-			);
-			return null;
-		}
+		const mergedInfo: MemoryMercenariesCollectionInfo = {
+			Mercenaries: newMercenariesInfo?.Mercenaries ?? localMercenariesInfo?.Mercenaries,
+			Teams: newMercenariesInfo?.Teams ?? localMercenariesInfo?.Teams,
+			Visitors: newMercenariesInfo?.Visitors ?? localMercenariesInfo?.Visitors,
+		};
 
-		console.debug('[merc-memory] will save mercs info locally', newMercenariesInfo);
-		await this.saveLocalMercenariesCollectionInfo(newMercenariesInfo);
-		console.debug('[merc-memory] saved mercs info locally', newMercenariesInfo);
-		return newMercenariesInfo;
+		console.debug('[merc-memory] will save mercs info locally', mergedInfo);
+		await this.saveLocalMercenariesCollectionInfo(mergedInfo);
+		console.debug('[merc-memory] saved mercs info locally', mergedInfo);
+		return mergedInfo;
 	}
 
 	// Only save the contents of the memory, the prefs (with the override) are saved separately
