@@ -4,9 +4,11 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
+	Output,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -91,7 +93,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									[style.bottom]="taskListBottom"
 									[style.top]="taskListTop"
 									[tasks]="_tasks"
-									[taskTeamDeckstring]="taskTeamDeckstring$ | async"
+									(tasksListUpdated)="onTasksListUpdated()"
 								></mercs-tasks-list>
 							</div>
 
@@ -129,7 +131,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		this._team = value;
-		this.updateTaskListBottom();
+		this.onTasksListUpdated();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -161,7 +163,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	currentBattleTurn$: Observable<number>;
 	totalMapTurns$: Observable<string>;
 	mapTurnsTooltip$: Observable<string>;
-	taskTeamDeckstring$: Observable<string>;
 
 	_team: MercenariesBattleTeam;
 	_tasks: readonly Task[];
@@ -188,19 +189,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	}
 
 	ngAfterContentInit(): void {
-		this.taskTeamDeckstring$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.mercenaries.collectionInfo,
-			),
-			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
-			this.tasks$$.asObservable(),
-		).pipe(
-			this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
-				buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
-			),
-		);
-		this.taskTeamDeckstring$.pipe(this.mapData((info) => info)).subscribe((info) => this.updateTaskListBottom());
 		this.showColorChart$ = this.store
 			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
 			.pipe(this.mapData(([pref]) => pref));
@@ -271,7 +259,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		return task.description;
 	}
 
-	private updateTaskListBottom() {
+	onTasksListUpdated() {
 		setTimeout(() => {
 			const taskListEl = this.el.nativeElement.querySelector('.task-list');
 			if (!taskListEl) {
@@ -280,7 +268,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 
 			const taskEls = this.el.nativeElement.querySelectorAll('.task');
 			if (taskEls?.length != this._tasks?.length) {
-				setTimeout(() => this.updateTaskListBottom(), 100);
+				setTimeout(() => this.onTasksListUpdated(), 100);
 				return;
 			}
 
@@ -336,9 +324,9 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		'../../../../../css/component/mercenaries/overlay/teams/tasks-list.scss',
 	],
 	template: `
-		<div class="tasks-container">
-			<ng-container *ngIf="tasks?.length; else emptyState">
-				<div class="task" *ngFor="let task of tasks; trackBy: trackByTaskFn">
+		<div class="tasks-container" *ngIf="{ tasks: tasks$ | async } as value">
+			<ng-container *ngIf="value.tasks?.length; else emptyState">
+				<div class="task" *ngFor="let task of value.tasks; trackBy: trackByTaskFn">
 					<div class="portrait" *ngIf="task.mercenaryCardId" [cardTooltip]="task.mercenaryCardId">
 						<img class="art" [src]="task.portraitUrl" />
 						<img class="frame" *ngIf="task.frameUrl" [src]="task.frameUrl" />
@@ -353,6 +341,15 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						</div>
 					</div>
 				</div>
+				<div class="create-team-button" *ngIf="taskTeamDeckstring">
+					<button
+						[helpTooltip]="buttonTooltip"
+						(click)="createTeamFromTasks()"
+						[ngClass]="{ 'disabled': isCopied }"
+					>
+						{{ buttonLabel }}
+					</button>
+				</div>
 			</ng-container>
 			<ng-template #emptyState
 				><div class="empty-state" [owTranslate]="'mercenaries.team-widget.tasks-completed'"></div>
@@ -361,19 +358,57 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercsTasksListComponent {
-	@Input() tasks: readonly Task[];
-	@Input() taskTeamDeckstring: string;
+export class MercsTasksListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@Output() tasksListUpdated = new EventEmitter<void>();
+
+	tasks$: Observable<readonly Task[]>;
+
+	@Input() set tasks(value: readonly Task[]) {
+		this.tasks$$.next(value);
+	}
+
+	taskTeamDeckstring: string;
 
 	isCopied: boolean;
 	buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-label');
 	buttonTooltip = this.i18n.translateString('mercenaries.team-widget.create-team-button-tooltip');
 
+	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
+
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+		private readonly allCards: CardsFacadeService,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
+		this.tasks$ = this.tasks$$.asObservable().pipe(this.mapData((info) => info));
+		this.tasks$.pipe(this.mapData((info) => info)).subscribe((info) => this.tasksListUpdated.next());
+		combineLatest(
+			this.store.listen$(
+				([main, nav]) => main.mercenaries.getReferenceData(),
+				([main, nav]) => main.mercenaries.collectionInfo,
+			),
+			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
+			this.tasks$,
+		)
+			.pipe(
+				this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
+					buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
+				),
+			)
+			.subscribe((deckstring) => {
+				this.taskTeamDeckstring = deckstring;
+				this.tasksListUpdated.next();
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+	}
 
 	createTeamFromTasks() {
 		if (this.isCopied) {
@@ -408,6 +443,7 @@ export interface Task {
 	readonly portraitUrl?: string;
 	readonly frameUrl?: string;
 	readonly type: VillageVisitorType;
+	readonly additionalMercDbfIds: readonly number[];
 }
 
 export const buildTeamForTasks = (
@@ -425,8 +461,8 @@ export const buildTeamForTasks = (
 	}
 
 	const taskMercs = tasks
-		.filter((task) => task.type === VillageVisitorType.STANDARD)
-		.map((task) => allCards.getCard(task.mercenaryCardId)?.dbfId)
+		.filter((task) => task.type === VillageVisitorType.PROCEDURAL)
+		.flatMap((task) => task.additionalMercDbfIds)
 		.map((mercDbfId) =>
 			buildMerc(
 				mercReferenceData.mercenaries.find((merc) => merc.cardDbfId === mercDbfId),

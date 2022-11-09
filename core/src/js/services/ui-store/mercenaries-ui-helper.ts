@@ -218,6 +218,9 @@ export const buildMercenariesTasksList = (
 					? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png`
 					: null,
 				type: taskChain?.taskChainType ?? VillageVisitorType.PROCEDURAL,
+				additionalMercDbfIds: visitor.AdditionalMercenaryIds?.map(
+					(mercId) => referenceData.mercenaries.find((m) => m.id === mercId)?.cardDbfId,
+				),
 			} as Task;
 			return result;
 		})

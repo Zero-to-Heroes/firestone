@@ -14,7 +14,7 @@ import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
-import { buildTeamForTasks, Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..component';
+import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..component';
 
 @Component({
 	selector: 'mercs-quests-widget',
@@ -45,7 +45,6 @@ import { buildTeamForTasks, Task } from '../../mercenaries/overlay/teams/mercena
 					'bottom': showBottom$ | async
 				}"
 				[tasks]="tasks$ | async"
-				[taskTeamDeckstring]="taskTeamDeckstring$ | async"
 			></mercs-tasks-list>
 		</div>
 	`,
@@ -57,7 +56,6 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 	showRight$: Observable<boolean>;
 	showBottom$: Observable<boolean>;
 	showTaskList$: Observable<boolean>;
-	taskTeamDeckstring$: Observable<string>;
 
 	private showWidget$$ = new BehaviorSubject<boolean>(false);
 	private showRight$$ = new BehaviorSubject<boolean>(false);
@@ -165,18 +163,6 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 				console.debug('final tasks', result);
 				return result;
 			}),
-		);
-		this.taskTeamDeckstring$ = combineLatest(
-			this.store.listen$(
-				([main, nav]) => main.mercenaries.getReferenceData(),
-				([main, nav]) => main.mercenaries.collectionInfo,
-			),
-			this.store.listenPrefs$((prefs) => prefs.mercenariesBackupTeam),
-			this.tasks$,
-		).pipe(
-			this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
-				buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
-			),
 		);
 		this.showQuests$ = combineLatest(
 			this.store.listenPrefs$(
