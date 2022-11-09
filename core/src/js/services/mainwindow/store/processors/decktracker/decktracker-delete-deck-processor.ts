@@ -15,12 +15,40 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
+		const existingPersonalDeck = currentPrefs.constructedPersonalAdditionalDecks.find(
+			(d) => d.deckstring === event.deckstring,
+		);
+
+		if (existingPersonalDeck) {
+			const newPersonalDecks = currentPrefs.constructedPersonalAdditionalDecks.filter(
+				(d) => d.deckstring !== event.deckstring,
+			);
+			const newPrefs = { ...currentPrefs, constructedPersonalAdditionalDecks: newPersonalDecks };
+			await this.prefs.savePreferences(newPrefs);
+		}
+
+		// If the deck has only been created via the deckbuilder and has not been played yet,
+		// we simply remove it
+		// That way, we can easily add it again
+		const gamesWithDeck = currentState.stats.gameStats.stats.filter(
+			(s) => s.playerDecklist === existingPersonalDeck.deckstring,
+		);
+		if (!gamesWithDeck.length) {
+			return [
+				null,
+				navigationState.update({
+					navigationDecktracker: navigationState.navigationDecktracker.update({
+						currentView: 'decks',
+					} as NavigationDecktracker),
+				} as NavigationState),
+			];
+		}
+
 		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
 		console.log('[deck-delete] deletedDeckDates', event.deckstring, deletedDeckDates);
 		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
 		console.log('[deck-delete] newDeleteDates', newDeleteDates);
-		const newPrefs = await this.prefs.setDeckDeleteDates(event.deckstring, newDeleteDates);
-		console.log('[deck-delete] newPrefs', newPrefs.desktopDeckDeletes[event.deckstring]);
+		await this.prefs.setDeckDeleteDates(event.deckstring, newDeleteDates);
 		return [
 			null,
 			navigationState.update({
