@@ -87,6 +87,7 @@ export class MindVisionStateMachineService {
 		private readonly i18n: LocalizationFacadeService,
 	) {
 		this.setup();
+		window['resetMemory'] = () => this.performAction(Action.RESET);
 	}
 
 	public async callMindVision<T>(apiCall: () => Promise<T>): Promise<T> {

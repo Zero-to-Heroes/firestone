@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { MercenariesSynergiesHighlightService } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -50,8 +49,9 @@ export class MercenariesOutOfCombatTreasureSelectionComponent
 
 	ngAfterContentInit() {
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
-			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),
-			this.mapData(([[state]]) => state.treasureSelection.treasures),
+			this.mapData(([[state]]) =>
+				!!state.treasureSelection?.treasures?.length ? state.treasureSelection.treasures : null,
+			),
 		);
 	}
 
