@@ -162,6 +162,26 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				}),
 				type: 'mechanics',
 			},
+			{
+				tavernTier: 'DS',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
+				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(
+						`global.mechanics.${GameTag[GameTag.DIVINE_SHIELD].toLowerCase()}`,
+					),
+				}),
+				type: 'mechanics',
+			},
+			{
+				tavernTier: 'T',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.TAUNT])),
+				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.TAUNT].toLowerCase()}`),
+				}),
+				type: 'mechanics',
+			},
 		];
 	}
 }

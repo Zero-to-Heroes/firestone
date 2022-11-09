@@ -155,6 +155,18 @@
 					--color-7: #ff8a48;
 				}
 			}
+
+			&.DS {
+				.number {
+					--color-7: #ffb948;
+				}
+			}
+
+			&.T {
+				.number {
+					--color-7: #42d8a2;
+				}
+			}
 		}
 	}
 }
