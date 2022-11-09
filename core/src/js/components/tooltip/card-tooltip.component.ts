@@ -76,11 +76,9 @@ export class CardTooltipComponent
 	displayBuffs$: Observable<boolean>;
 
 	@Input() set cardId(value: string) {
-		console.debug('setting card ids', value);
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
 	@Input() set relatedCardIds(value: readonly string[]) {
-		console.debug('setting related card ids', value);
 		this.relatedCardIds$$.next(value ?? []);
 	}
 	@Input() set localized(value: boolean) {

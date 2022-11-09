@@ -121,7 +121,6 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseenter')
 	async onMouseEnter() {
-		console.debug('mouseenter');
 		if (!this.cardId && !this.cardTooltipCard && !this._cardTooltipRelatedCardIds?.length) {
 			return;
 		}
@@ -152,10 +151,8 @@ export class CardTooltipDirective implements OnDestroy {
 
 		if (this.cardTooltipCard) {
 			this.tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
-			console.debug('tooltip', 'cardTooltipCard', this.cardTooltipCard);
 			this.tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
 		} else {
-			console.debug('tooltip', 'cardTooltipCard 2');
 			this.tooltipRef.instance.cardId = this.cardId;
 			this.tooltipRef.instance.displayBuffs = false;
 			this.tooltipRef.instance.cardType = this.cardTooltipType;
@@ -179,7 +176,6 @@ export class CardTooltipDirective implements OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave(willBeDestroyed = false) {
-		// return;
 		this.positionStrategyDirty = true;
 
 		// if (this.hideTimeout) {
