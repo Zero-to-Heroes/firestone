@@ -31,11 +31,12 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 					<ng-container *ngIf="showMinionsList">
 						<ul class="tiers">
 							<div
-								class="tier"
+								class="tier {{ currentTier.tavernTier }}"
 								*ngFor="let currentTier of tiers; trackBy: trackByFn"
 								[ngClass]="{
 									'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-									'locked': isLocked(currentTier)
+									'locked': isLocked(currentTier),
+									'mechanics': currentTier.type === 'mechanics'
 								}"
 								[helpTooltip]="currentTier.tooltip"
 								(mouseover)="onTavernMouseOver(currentTier)"
@@ -155,4 +156,5 @@ export interface Tier {
 	cards: readonly ReferenceCard[];
 	groupingFunction: (card: ReferenceCard) => string;
 	tooltip?: string;
+	type: 'standard' | 'mechanics';
 }

@@ -136,6 +136,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
 			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, groupMinionsIntoTheirTribeGroup),
+			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers ? this.buildMechanicsTiers(cardsInGame) : [];
 		return [...standardTiers, ...mechanicsTiers];
@@ -150,6 +151,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
 				}),
+				type: 'mechanics',
 			},
 			{
 				tavernTier: 'D',
@@ -158,6 +160,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
 				}),
+				type: 'mechanics',
 			},
 		];
 	}

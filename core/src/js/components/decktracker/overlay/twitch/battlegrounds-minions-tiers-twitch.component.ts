@@ -112,6 +112,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
 			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, false),
+			type: 'standard',
 		}));
 	}
 }
