@@ -63,6 +63,9 @@
 			.action {
 				position: relative;
 				margin-bottom: 3px;
+				&:first-child{
+					margin-top: 3px;
+				}
 
 				&.opponent {
 					left: -10px;
