@@ -94,9 +94,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 		this.notifications$
 			.pipe(
-				tap((info) => console.log('inital notification', info)),
 				filter((message) => !!message),
-				tap((info) => console.log('before delay', info)),
 				map((message) => {
 					// Don't await them because we don't want to block the main thread
 					console.log('after window restore');
@@ -105,13 +103,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					toast.theClass = message.theClass;
 					return { message, toast };
 				}),
-				tap((info) => console.log('after toast', info)),
 				concatMap(({ message, toast }) =>
 					toast.click.pipe(
 						tap((clickEvent: MouseEvent) => this.handleToastClick(clickEvent, message, toast.id)),
 					),
 				),
-				tap((info) => console.log('end', info)),
 			)
 			.subscribe();
 	}

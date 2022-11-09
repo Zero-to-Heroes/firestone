@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
@@ -112,13 +112,10 @@ export class MercenariesDesktopComponent
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
-				map(([selectedCategoryId]) => selectedCategoryId),
-				filter((selectedCategoryId) => !!selectedCategoryId),
-				distinctUntilChanged(),
-				tap((info) => {
+				tap(([info]) => {
 					amplitude.getInstance().logEvent('mercs-navigation', { 'page': info });
 				}),
-				takeUntil(this.destroyed$),
+				this.mapData(([selectedCategoryId]) => selectedCategoryId),
 			);
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.categoryIds)

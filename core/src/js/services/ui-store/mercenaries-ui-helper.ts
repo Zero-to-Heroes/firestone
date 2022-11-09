@@ -151,7 +151,7 @@ export const buildMercenariesTasksList = (
 	// No use showing a big list of 20+ tasks in that widget, so if there are too many
 	// ongoing tasks, we will only show the "special" ones
 	const shouldUseMercsRestrition = !!restrictToMercsIds?.length || potentialVisitors.length > 6;
-	console.debug('potentialVisitors', potentialVisitors, shouldUseMercsRestrition);
+	// console.debug('potentialVisitors', potentialVisitors, shouldUseMercsRestrition);
 	return potentialVisitors
 		.flatMap((visitor) => {
 			const taskChains = referenceData.taskChains

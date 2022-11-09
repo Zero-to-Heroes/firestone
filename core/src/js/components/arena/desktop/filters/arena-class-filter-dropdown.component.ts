@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -63,7 +63,7 @@ export class ArenaClassFilterDropdownComponent
 			.listen$(([main, nav]) => main.arena.activeHeroFilter)
 			.pipe(
 				filter(([filter]) => !!filter),
-				map(([filter]) => {
+				this.mapData(([filter]) => {
 					const options = ['all', ...(classes as ArenaClassFilterType[])].map(
 						(option) =>
 							({
@@ -80,8 +80,6 @@ export class ArenaClassFilterDropdownComponent
 						visible: true,
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

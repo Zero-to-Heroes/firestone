@@ -1,14 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getStandardDeviation } from '@services/utils';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import {
 	buildDuelsHeroTreasurePlayerStats,
 	filterDuelsTreasureStats,
@@ -87,7 +86,7 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 							hideThreshold,
 						] as readonly [readonly DuelsTreasureStat[], boolean],
 				),
-				map(([treasures, hideThreshold]) => {
+				this.mapData(([treasures, hideThreshold]) => {
 					const stats = [...buildDuelsHeroTreasurePlayerStats(treasures)]
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.filter((stat) =>
@@ -128,16 +127,6 @@ export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponen
 						},
 					].filter((tier) => tier.items?.length);
 				}),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

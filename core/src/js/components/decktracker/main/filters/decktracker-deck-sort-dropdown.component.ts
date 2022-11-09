@@ -10,7 +10,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckSortEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
@@ -61,7 +61,7 @@ export class DecktrackerDeckSortDropdownComponent
 			)
 			.pipe(
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
-				map(([filter, patch, currentView]) => {
+				this.mapData(([filter, patch, currentView]) => {
 					const options = [
 						{
 							value: 'last-played',
@@ -89,8 +89,6 @@ export class DecktrackerDeckSortDropdownComponent
 						].includes(currentView),
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

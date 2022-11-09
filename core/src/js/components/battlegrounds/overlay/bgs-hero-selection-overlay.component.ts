@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -10,8 +10,6 @@ import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/b
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -96,11 +94,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 						showAchievements,
 					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			filter(
 				([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => !!selectionOptions?.length,
 			),
-			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
+			this.mapData(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
 				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
 				const heroOverviews = selectionOptions.map((cardId, index) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
@@ -128,10 +125,6 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 					return heroOverviews;
 				}
 			}),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((info) => cdLog('update hero selection overlay', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

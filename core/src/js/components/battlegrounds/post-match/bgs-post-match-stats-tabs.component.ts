@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -19,7 +19,6 @@ import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/e
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -138,9 +137,7 @@ export class BgsPostMatchStatsTabsComponent
 	ngAfterContentInit() {
 		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
-			map(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
-			tap((filter) => cdLog('emitting heroStat in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
+			this.mapData(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
 		);
 	}
 

@@ -6,12 +6,11 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsFilterLiveMmrEvent } from '../../../../services/battlegrounds/store/events/bgs-filter-live-mmr-event';
@@ -20,7 +19,6 @@ import { BattlegroundsStoreEvent } from '../../../../services/battlegrounds/stor
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
@@ -123,7 +121,7 @@ export class BattlegroundsTierListComponent
 				rankFilter: rankFilter,
 				tribesFilter: tribesFilter,
 			})),
-			map((info) => {
+			this.mapData((info) => {
 				const stats = info.stats;
 				const totalMatches = sumOnArray(stats, (stat) => stat.totalMatches);
 				const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
@@ -196,16 +194,6 @@ export class BattlegroundsTierListComponent
 					`,
 				};
 			}),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

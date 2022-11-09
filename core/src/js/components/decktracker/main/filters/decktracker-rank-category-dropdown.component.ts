@@ -10,7 +10,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DeckRankingCategoryType } from '../../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankCategoryFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-category-filter-event';
@@ -60,7 +60,7 @@ export class DecktrackerRankCategoryDropdownComponent
 			)
 			.pipe(
 				filter(([filter, currentView]) => !!filter && !!currentView),
-				map(([filter, currentView]) => {
+				this.mapData(([filter, currentView]) => {
 					const options = [
 						{
 							value: 'leagues',
@@ -78,8 +78,6 @@ export class DecktrackerRankCategoryDropdownComponent
 						visible: currentView === 'ladder-ranking',
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

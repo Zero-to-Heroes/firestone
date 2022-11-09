@@ -9,7 +9,6 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
@@ -140,18 +139,15 @@ export class CardTooltipComponent
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
-		console.debug('constructor start');
 		// FIXME: For some reason, lifecycle methods are not called systematically
 		setTimeout(() => this.ngAfterContentInit(), 0);
 	}
 
 	ngAfterViewInit(): void {
-		console.debug('ngAfterContentInit start');
 		this.timeout = setTimeout(() => this.viewRef?.destroy(), 15_000);
 	}
 
 	ngOnDestroy(): void {
-		console.debug('ngOnDestroy start');
 		super.ngOnDestroy();
 		if (this.timeout) {
 			clearTimeout(this.timeout);
@@ -160,7 +156,6 @@ export class CardTooltipComponent
 
 	ngAfterContentInit(): void {
 		setTimeout(() => this.ngAfterViewInit(), 10);
-		console.debug('ngAfterContentInit start');
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
 		this.relatedCards$ = combineLatest(
@@ -172,7 +167,6 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
-			tap((info) => console.debug('related cards info', info)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
 					return relatedCardIds.map((cardId) => {
@@ -209,7 +203,6 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
-			tap((info) => console.debug('card tooltip info', info)),
 			this.mapData(
 				([[cardIds, localized, isBgs, cardType, additionalClass], [buffs, createdBy], [locale, highRes]]) => {
 					return (
@@ -250,10 +243,7 @@ export class CardTooltipComponent
 				null,
 				0,
 			),
-			tap((info) => console.debug('card tooltip info 2', info)),
 		);
-		this.cards$.subscribe((info) => console.debug('card tooltip info 3', info));
-		console.debug('ngAfterContentInit end');
 	}
 }
 

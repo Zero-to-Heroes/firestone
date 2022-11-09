@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { DuelsDeckSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -55,7 +55,6 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			),
 		).pipe(
-			tap((info) => console.debug('preparing info', info)),
 			map(
 				([
 					decks,
@@ -104,7 +103,6 @@ export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent i
 						})
 						.sort(this.getSort(deckSort)),
 			),
-			tap((info) => console.debug('decks info', info)),
 			this.mapData((decks) => (!!decks?.length ? decks : null)),
 		);
 	}

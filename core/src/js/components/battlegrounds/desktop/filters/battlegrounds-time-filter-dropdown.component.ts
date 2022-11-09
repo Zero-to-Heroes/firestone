@@ -5,11 +5,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -17,7 +16,7 @@ import { BgsTimeFilterSelectedEvent } from '../../../../services/mainwindow/stor
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual, formatPatch } from '../../../../services/utils';
+import { formatPatch } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -69,8 +68,7 @@ export class BattlegroundsTimeFilterDropdownComponent
 					([filter, patch, selectedCategoryId, currentView]) =>
 						!!filter && !!patch && !!selectedCategoryId && !!currentView,
 				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([filter, patch, selectedCategoryId, currentView]) => {
+				this.mapData(([filter, patch, selectedCategoryId, currentView]) => {
 					const options: readonly TimeFilterOption[] = [
 						{
 							value: 'all-time',
@@ -103,16 +101,6 @@ export class BattlegroundsTimeFilterDropdownComponent
 							].includes(selectedCategoryId),
 					};
 				}),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

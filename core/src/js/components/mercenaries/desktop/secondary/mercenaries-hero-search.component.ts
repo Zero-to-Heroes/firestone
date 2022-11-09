@@ -8,10 +8,9 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { MercenariesHeroSearchEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-search-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -52,10 +51,7 @@ export class MercenariesHeroSearchComponent
 	ngAfterContentInit(): void {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.heroSearchString)
-			.pipe(
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData((info) => info))
 			.subscribe(([heroSearchString]) => {
 				this.searchString = heroSearchString;
 			});

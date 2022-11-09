@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DuelsTopDecksDustFilterType } from '../../../../models/duels/duels-types';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTopDecksDustFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-dust-filter-selected-event';
@@ -93,15 +93,11 @@ export class DuelsDustFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
+				this.mapData(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: ['duels-top-decks'].includes(selectedCategoryId),
 				})),
-				// Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

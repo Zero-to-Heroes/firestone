@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual, sumOnArray } from '../../../services/utils';
+import { sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
@@ -130,8 +129,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 						),
 					] as [readonly PlacementDistribution[], readonly PlacementDistribution[], number],
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([global, player, maxGlobalValue]) => {
+			this.mapData(([global, player, maxGlobalValue]) => {
 				const totalGlobalMatches = sumOnArray(global, (info) => info.totalMatches);
 				const globalChartData: SimpleBarChartData = {
 					data: global.map((info) => ({
@@ -150,8 +148,6 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionComponent impleme
 				};
 				return [globalChartData, playerChartData];
 			}),
-			tap((info) => cdLog('emitting placementChartData in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

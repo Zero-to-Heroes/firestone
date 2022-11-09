@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { StatsXpGraphSeasonFilterType } from '../../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
@@ -55,7 +55,7 @@ export class StatsXpSeasonFilterDropdownComponent
 			.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter)
 			.pipe(
 				filter(([filter]) => !!filter),
-				map(([filter]) => {
+				this.mapData(([filter]) => {
 					const options = [
 						{
 							value: 'all-seasons',
@@ -99,8 +99,6 @@ export class StatsXpSeasonFilterDropdownComponent
 						visible: true,
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

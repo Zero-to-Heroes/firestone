@@ -1,14 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import {
 	buildDuelsHeroTreasurePlayerStats,
 	filterDuelsRuns,
@@ -108,24 +107,13 @@ export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent i
 					] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
 			),
 			distinctUntilChanged((a, b) => this.areEqual(a, b)),
-			map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
+			this.mapData(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
 				[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
 					.sort(this.sortBy(treasureSorting))
 					.filter((stat) =>
 						hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
 					),
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

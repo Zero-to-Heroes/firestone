@@ -1,7 +1,5 @@
-import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2, ViewRef } from '@angular/core';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Directive({
@@ -20,19 +18,7 @@ export class AdvancedSettingDirective extends AbstractSubscriptionComponent impl
 	ngAfterContentInit() {
 		this.store
 			.listenPrefs$((prefs) => prefs.advancedModeToggledOn)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting pref in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((value) => this.updateVisibility(value));
 	}
 

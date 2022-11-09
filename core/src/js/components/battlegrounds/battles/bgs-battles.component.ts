@@ -12,7 +12,7 @@ import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-s
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '@services/overwolf.service';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battles-panel';
@@ -67,12 +67,11 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 			.pipe(
 				debounceTime(1000),
 				filter(([faceOffs]) => !!faceOffs?.length),
-				map(([faceOffs]) => faceOffs.slice().reverse()),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
-				takeUntil(this.destroyed$),
+				this.mapData(
+					([faceOffs]) => faceOffs.slice().reverse(),
+					(a, b) => deepEqual(a, b),
+					0,
+				),
 			);
 		this.selectedFaceOff$ = combineLatest(
 			this.faceOffs$,
@@ -86,7 +85,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 					],
 			),
 			filter(([faceOffs, panel]) => !!panel),
-			map(([faceOffs, panel]) => {
+			this.mapData(([faceOffs, panel]) => {
 				// If the user closed it at least once, we don't force-show it anymore
 				if (!panel.selectedFaceOffId) {
 					return null;
@@ -101,11 +100,6 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				const currentSimulation = currentSimulations[currentSimulationIndex];
 				return currentSimulation;
 			}),
-			distinctUntilChanged(),
-			// FIXME
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((faceOff) => console.debug('[cd] emitting face off in ', this.constructor.name, faceOff)),
-			takeUntil(this.destroyed$),
 		);
 		this.actualBattle$ = this.store
 			.listenBattlegrounds$(
@@ -121,12 +115,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 						] as readonly [readonly BgsFaceOffWithSimulation[], BgsBattlesPanel],
 				),
 				filter(([faceOffs, panel]) => !!panel),
-				map(([faceOffs, panel]) => faceOffs.find((f) => f.id === panel.selectedFaceOffId)),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((faceOff) => console.debug('[cd] emitting actual battle in ', this.constructor.name, faceOff)),
-				takeUntil(this.destroyed$),
+				this.mapData(([faceOffs, panel]) => faceOffs.find((f) => f.id === panel.selectedFaceOffId)),
 			);
 		this.battleResultHistory$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
@@ -134,7 +123,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 				map(([faceOffs]) => faceOffs),
 				filter((faceOffs) => !!faceOffs?.length),
 				distinctUntilChanged(),
-				map((faceOffs) =>
+				this.mapData((faceOffs) =>
 					faceOffs.map(
 						(faceOff) =>
 							({
@@ -146,10 +135,6 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 							} as BattleResultHistory),
 					),
 				),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((faceOff) => console.debug('[cd] emitting stats in ', this.constructor.name, faceOff)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

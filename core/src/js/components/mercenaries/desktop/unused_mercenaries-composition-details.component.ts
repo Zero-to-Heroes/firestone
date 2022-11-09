@@ -1,6 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import {
 	MercenariesHeroLevelFilterType,
@@ -17,7 +17,6 @@ import {
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -114,7 +113,6 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 					([globalStats, gameStats, heroId, modeFilter, difficultyFilter, mmrFilter, levelFilter]) =>
 						!!globalStats && !!heroId,
 				),
-				// tap((info) => console.debug('ga', info)),
 				map(
 					([globalStats, gameStats, selectedHeroId, modeFilter, difficultyFilter, mmrFilter, levelFilter]) =>
 						[
@@ -147,9 +145,7 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 						),
 					] as [readonly MercenariesComposition[]];
 				}),
-				// tap((info) => console.debug('ga 3', info)),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([compositionStats]) => {
+				this.mapData(([compositionStats]) => {
 					const refHeroStat = compositionStats[0];
 					const globalTotalMatches = sumOnArray(compositionStats, (stat) => stat.totalMatches);
 					const allBenches = compositionStats.map((comp) => comp.benches).reduce((a, b) => [...a, ...b], []);
@@ -190,15 +186,6 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 						benches: benches,
 					} as CompositionStat;
 				}),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

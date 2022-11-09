@@ -5,10 +5,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
@@ -18,8 +17,7 @@ import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../servic
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../../services/utils';
+import { currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -82,10 +80,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 			.pipe(
 				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
 				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
-				map((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
+				this.mapData((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 			);
 		this.selectedTab$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedPersonalHeroStatsTab)
@@ -107,23 +102,13 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent
 			filter(([heroStats, heroId]) => !!heroStats && !!heroId),
 			map(([heroStats, heroId]) => heroStats?.find((stat) => stat.id === heroId)),
 			distinctUntilChanged(),
-			map((heroStat) =>
+			this.mapData((heroStat) =>
 				BgsPlayer.create({
 					cardId: heroStat.id,
 					displayedCardId: heroStat.id,
 					heroPowerCardId: heroStat.heroPowerCardId,
 				} as BgsPlayer),
 			),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((stat) => cdLog('emitting player in ', this.constructor.name, stat)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

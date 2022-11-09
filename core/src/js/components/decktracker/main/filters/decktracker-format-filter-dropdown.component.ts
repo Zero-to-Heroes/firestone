@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
@@ -60,7 +60,7 @@ export class DecktrackerFormatFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, currentView]) => !!filter && !!currentView),
-				map(([filter, currentView]) => {
+				this.mapData(([filter, currentView]) => {
 					const options = [
 						{
 							value: 'all',
@@ -88,8 +88,6 @@ export class DecktrackerFormatFilterDropdownComponent
 						),
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

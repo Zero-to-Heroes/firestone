@@ -1,12 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -57,18 +55,7 @@ export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent imp
 			)
 			.pipe(
 				filter(([stats, filter]) => !!stats && !!filter),
-				map(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((stat) => cdLog('emitting leaderboard in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
+				this.mapData(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
 			);
 	}
 

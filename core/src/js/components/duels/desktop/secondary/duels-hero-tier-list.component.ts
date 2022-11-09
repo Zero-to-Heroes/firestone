@@ -1,15 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardIds } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
@@ -100,7 +99,7 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType, boolean],
 				),
 				// distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([duelsStats, statType, hideThreshold]) => {
+				this.mapData(([duelsStats, statType, hideThreshold]) => {
 					const stats = buildDuelsHeroPlayerStats(duelsStats, statType)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.filter((stat) =>
@@ -139,16 +138,6 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 						},
 					].filter((tier) => tier.items?.length);
 				}),
-				// FIXME: see filters
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

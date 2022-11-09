@@ -9,7 +9,7 @@ import {
 import { CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
@@ -18,7 +18,6 @@ import { DuelsSignatureTreasureFilterSelectedEvent } from '../../../../services/
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -94,7 +93,7 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 									.includes(loadout as CardIds),
 					);
 			}),
-			map((signatureTreasureCardIds) => [
+			this.mapData((signatureTreasureCardIds) => [
 				{
 					value: 'all',
 					label: this.i18n.translateString('app.duels.filters.signature-treasure.all'),
@@ -145,10 +144,6 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 						};
 					}),
 			]),
-			// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting signature treasure options in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -159,17 +154,13 @@ export class DuelsSignatureTreasureFilterDropdownComponent
 			),
 		).pipe(
 			filter(([options, [filter, statTypeFilter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
-			map(([options, [filter, statTypeFilter, selectedCategoryId]]) => {
+			this.mapData(([options, [filter, statTypeFilter, selectedCategoryId]]) => {
 				return {
 					filter: '' + filter,
 					placeholder: options.find((option) => option.value === filter)?.label ?? options[0].label,
 					visible: isSignatureTreasureVisible(selectedCategoryId, statTypeFilter),
 				};
 			}),
-			// Don't know why this is necessary, but without it, the filter doesn't update
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting signature treasure filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

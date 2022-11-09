@@ -9,14 +9,12 @@ import {
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { isBattlegrounds } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { deepEqual } from '../../services/utils';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -101,49 +99,27 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			.pipe(
 				debounceTime(1000),
 				filter(([state]) => !!state.currentGame),
-				map(([state]) =>
+				this.mapData(([state]) =>
 					[...state.currentGame.players].sort(
 						(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 					),
 				),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting bgsPlayers in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 		this.lastOpponentCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				filter(([currentGame]) => !!currentGame),
-				map(([currentGame]) => currentGame.lastOpponentCardId),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting lastOpponentCardId 2 in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([currentGame]) => currentGame.lastOpponentCardId),
 			);
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
 				filter(([currentGame]) => !!currentGame),
-				map(([currentGame]) => currentGame.currentTurn),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting currentTurn in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([currentGame]) => currentGame.currentTurn),
 			);
 		this.showLastOpponentIcon$ = this.store
 			.listen$(([state, nav, prefs]) => prefs.bgsShowLastOpponentIconInOverlay)
-			.pipe(
-				map(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting showLastOpponentIcon in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([bgsShowLastOpponentIconInOverlay]) => bgsShowLastOpponentIconInOverlay));
 	}
 
 	trackByFunction(index: number, player: BgsPlayer) {

@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -13,8 +14,8 @@ import {
 import { ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { fromEvent, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'graph-with-single-value',
@@ -47,7 +48,9 @@ import { cdLog } from '../../services/ui-store/app-ui-store.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
+export class GraphWithSingleValueComponent
+	extends AbstractSubscriptionComponent
+	implements AfterViewInit, AfterContentInit, OnDestroy {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	@Input() data: readonly ChartDataSets[];
@@ -72,14 +75,17 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 	private _labelFormattingFn: (label: string, index: number, labels: string[]) => string;
 	private _reverse = true;
 
-	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit(): void {
 		this.colors$$ = fromEvent(window, 'resize')
-			.pipe(
-				debounceTime(100),
-				distinctUntilChanged(),
-				map(() => this.getColors()),
-				tap((colors: Color[]) => cdLog('emitting colors in ', this.constructor.name, colors)),
-			)
+			.pipe(this.mapData(() => this.getColors()))
 			// Do this because using the observable directly makes it difficult to have an
 			// initial value (I tried several approaches but didn't manage to have one)
 			.subscribe((colors) => {
@@ -92,6 +98,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
+		super.ngOnDestroy();
 		this.colors$$?.unsubscribe();
 	}
 

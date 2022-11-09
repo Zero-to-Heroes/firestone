@@ -5,18 +5,16 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -84,22 +82,11 @@ export class BattlegroundsHeroFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([filter, selectedCategoryId]) => ({
+				this.mapData(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: selectedCategoryId === 'bgs-category-perfect-games',
 				})),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

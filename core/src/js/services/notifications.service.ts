@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sleep } from '@services/utils';
 import { BehaviorSubject } from 'rxjs';
-import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
@@ -26,7 +26,6 @@ export class OwNotificationsService {
 			withLatestFrom(this.prefs.getPreferences()),
 			filter(([message, preferences]) => preferences.setAllNotifications),
 			map(([message]) => message),
-			tap((message) => console.log('notification service', message)),
 		);
 
 		this.init();

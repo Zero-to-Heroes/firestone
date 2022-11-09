@@ -1,9 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MercenariesToggleShowHiddenTeamsEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -62,34 +61,16 @@ export class MercenariesFiltersComponent extends AbstractSubscriptionComponent i
 			)
 			.pipe(
 				filter(([currentView, hiddenTeamIds]) => !!currentView && !!hiddenTeamIds),
-				map(
+				this.mapData(
 					([currentView, hiddenTeamIds]) =>
 						currentView === 'mercenaries-my-teams' && hiddenTeamIds.length > 0,
 				),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
 		this.showMercNamesInTeamsLink$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
 				filter(([currentView]) => !!currentView),
-				map(([currentView]) => currentView === 'mercenaries-compositions-stats'),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((info) => cdLog('emitting hidden team ids in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([currentView]) => currentView === 'mercenaries-compositions-stats'),
 			);
 		this.showRegionFilter$ = this.store
 			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)

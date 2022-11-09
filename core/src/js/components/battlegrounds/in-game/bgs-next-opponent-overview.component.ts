@@ -1,14 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { deepEqual } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -120,24 +119,13 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 			)
 			.pipe(
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
-				map(
+				this.mapData(
 					([panels, currentPanelId]) =>
 						panels.find((panel) => panel.id === currentPanelId) as BgsNextOpponentOverviewPanel,
+					(a, b) => deepEqual(a, b),
 				),
-				filter((panel) => !!panel?.opponentOverview),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
 			);
-		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel.opponentOverview.cardId));
+		this.nextOpponentCardId$ = currentPanel$.pipe(this.mapData((panel) => panel?.opponentOverview?.cardId));
 		this.lastOpponentCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.lastOpponentCardId)
 			.pipe(this.mapData(([lastOpponentCardId]) => lastOpponentCardId));

@@ -10,7 +10,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankGroupEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-group-event';
@@ -60,7 +60,7 @@ export class DecktrackerRankGroupDropdownComponent
 			)
 			.pipe(
 				filter(([filter, currentView]) => !!filter && !!currentView),
-				map(([filter, currentView]) => {
+				this.mapData(([filter, currentView]) => {
 					const options = [
 						{
 							value: 'per-match',
@@ -79,8 +79,6 @@ export class DecktrackerRankGroupDropdownComponent
 						visible: currentView === 'ladder-ranking',
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

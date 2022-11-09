@@ -10,12 +10,11 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DuelsTreasureSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -61,10 +60,7 @@ export class DuelsTreasureSearchComponent
 	ngAfterContentInit() {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.treasureSearchString)
-			.pipe(
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData((info) => info))
 			.subscribe(([searchString]) => {
 				this.searchString = searchString;
 			});

@@ -59,7 +59,6 @@ export class BgsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 				([main, nav, prefs]) => prefs.showQuestsInGame,
 			),
 		).pipe(
-			// tap((info) => console.debug('quests widget', info)),
 			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
 				if (!displayFromPrefs) {
 					return false;

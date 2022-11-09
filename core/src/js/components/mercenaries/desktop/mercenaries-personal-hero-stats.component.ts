@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { MemoryVisitor } from '../../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenary } from '../../../models/memory/memory-mercenaries-info';
 import {
@@ -18,7 +18,6 @@ import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { deepEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -144,20 +143,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 	ngAfterContentInit() {
 		this.sortCriteria$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
-			.pipe(
-				map(([sortCriteria]) => sortCriteria[0]),
-				filter((sortCriteria) => !!sortCriteria),
-				distinctUntilChanged((a, b) => a?.criteria == b?.criteria && a?.direction == b?.direction),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([sortCriteria]) => sortCriteria[0]));
 		this.unsortedStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.getReferenceData(),

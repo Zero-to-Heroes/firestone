@@ -288,7 +288,7 @@ export class BgsSimulatorMinionSelectionComponent
 				debounceTime(200),
 				map(([searchString, [tribeFilter, tierFilter]]) => [searchString, tribeFilter, tierFilter]),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([searchString, tribeFilter, tierFilter]) => {
+				this.mapData(([searchString, tribeFilter, tierFilter]) => {
 					const result = this.allCards
 						.getCards()
 						.filter(
@@ -320,12 +320,6 @@ export class BgsSimulatorMinionSelectionComponent
 						.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name]));
 					return result;
 				}),
-				// startWith([]),
-				// FIXME
-				// tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((filter) => this.cdr.detectChanges()),
-				// tap((heroes) => console.debug('minions', heroes)),
-				takeUntil(this.destroyed$),
 			)
 			.subscribe((minions) => {
 				this.allMinions = [];

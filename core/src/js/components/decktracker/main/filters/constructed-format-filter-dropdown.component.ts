@@ -11,7 +11,7 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -75,8 +75,6 @@ export class ConstructedFormatFilterDropdownComponent
 					visible: ['constructed-meta-decks'].includes(currentView),
 				};
 			}),
-			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

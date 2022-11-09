@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DuelsTreasureStatTypeFilterType } from '../../../../models/duels/duels-treasure-stat-type-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
@@ -89,15 +89,11 @@ export class DuelsTreasurePassiveTypeFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
+				this.mapData(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: ['duels-treasures'].includes(selectedCategoryId),
 				})),
-				// Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -9,13 +9,12 @@ import {
 import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-mmr-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -60,7 +59,7 @@ export class DuelsMmrFilterDropdownComponent
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
-				map(([mmrPercentiles]) =>
+				this.mapData(([mmrPercentiles]) =>
 					mmrPercentiles.map(
 						(percentile) =>
 							({
@@ -69,10 +68,6 @@ export class DuelsMmrFilterDropdownComponent
 							} as RankFilterOption),
 					),
 				),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -82,17 +77,13 @@ export class DuelsMmrFilterDropdownComponent
 			),
 		).pipe(
 			filter(([options, [filter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
-			map(([options, [filter, selectedCategoryId]]) => {
+			this.mapData(([options, [filter, selectedCategoryId]]) => {
 				return {
 					filter: '' + filter,
 					placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 					visible: ['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(selectedCategoryId),
 				};
 			}),
-			// Don't know why this is necessary, but without it, the filter doesn't update
-			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting mmr filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

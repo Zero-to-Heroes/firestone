@@ -13,7 +13,7 @@ import { OverwolfService } from '@services/overwolf.service';
 import { formatPatch } from '@services/utils';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -62,7 +62,7 @@ export class DecktrackerTimeFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, patch, currentView]) => !!filter && !!patch && !!currentView),
-				map(([filter, patch, currentView]) => {
+				this.mapData(([filter, patch, currentView]) => {
 					const options = [
 						{
 							value: 'all-time',
@@ -97,8 +97,6 @@ export class DecktrackerTimeFilterDropdownComponent
 						visible: !['constructed-deckbuilder', 'constructed-meta-decks'].includes(currentView),
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

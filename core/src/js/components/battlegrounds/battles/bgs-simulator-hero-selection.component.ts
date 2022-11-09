@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -142,7 +142,7 @@ export class BgsSimulatorHeroSelectionComponent
 			.pipe(
 				debounceTime(200),
 				distinctUntilChanged(),
-				map((searchString) =>
+				this.mapData((searchString) =>
 					this.allCards
 						.getCards()
 						.filter((card) => card.battlegroundsHero)
@@ -163,11 +163,6 @@ export class BgsSimulatorHeroSelectionComponent
 						}))
 						.sort(sortByProperties((hero: Hero) => [hero.name])),
 				),
-				// startWith([]),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((heroes) => console.debug('heroes', heroes)),
-				takeUntil(this.destroyed$),
 			)
 			.subscribe((heroes) => {
 				this.allHeroes = [];

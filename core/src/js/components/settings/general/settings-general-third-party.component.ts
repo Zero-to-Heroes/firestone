@@ -1,18 +1,9 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -179,20 +170,7 @@ export class SettingsGeneralThirdPartyComponent
 	ngAfterContentInit() {
 		this.oocLoggedIn$ = this.store
 			.listenPrefs$((prefs) => prefs.outOfCardsToken)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				map((token) => token?.access_token && token?.expires_timestamp > Date.now()),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting oocLoggedIn in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([token]) => token?.access_token && token?.expires_timestamp > Date.now()));
 	}
 
 	async oocConnect() {

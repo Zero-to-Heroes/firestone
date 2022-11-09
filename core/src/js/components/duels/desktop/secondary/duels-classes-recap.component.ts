@@ -1,13 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -110,7 +109,7 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 			map(([runs, [timeFilter, classFilter, gameMode, patch]]) =>
 				filterDuelsRuns(runs, timeFilter, classFilter, gameMode, null, patch, 0),
 			),
-			map((runs) => {
+			this.mapData((runs) => {
 				return {
 					totalRuns: runs.length,
 					averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
@@ -126,16 +125,6 @@ export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent im
 					),
 				};
 			}),
-			// FIXME (same as all filters)
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

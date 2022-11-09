@@ -70,7 +70,7 @@ export class MercenariesTeamMercenaryComponent {
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => {
 			const abilityCard = this.allCards.getCard(ability.cardId);
-			console.debug('[ability] ability', ability, abilityCard);
+			// console.debug('[ability] ability', ability, abilityCard);
 			return {
 				type: 'ability',
 				cardId: ability.cardId,

@@ -9,12 +9,11 @@ import {
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { deepEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
@@ -113,12 +112,7 @@ export class BattlegroundsContentComponent
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
 			.pipe(
 				filter(([currentPanelId]) => !!currentPanelId),
-				map(([currentPanelId]) => currentPanelId),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting currentPanelId in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([currentPanelId]) => currentPanelId),
 			);
 		this.currentPanel$ = this.store
 			.listenBattlegrounds$(
@@ -128,12 +122,7 @@ export class BattlegroundsContentComponent
 			.pipe(
 				debounceTime(200),
 				filter(([panels, currentPanelId]) => !!panels?.length && !!currentPanelId),
-				map(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting currentPanel in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([panels, currentPanelId]) => panels.find((panel) => panel.id === currentPanelId)),
 			);
 		this.showTitle$ = combineLatest(
 			this.listenForBasicPref$((prefs) => prefs.bgsShowNextOpponentRecapSeparately),
@@ -146,14 +135,7 @@ export class BattlegroundsContentComponent
 		);
 		this.reviewId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				map(([currentGame]) => currentGame?.reviewId),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting reviewId in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentGame]) => currentGame?.reviewId));
 		this.mainPlayerCardId$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
 			.pipe(
@@ -161,35 +143,20 @@ export class BattlegroundsContentComponent
 			);
 		this.mmr$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				map(([currentGame]) => currentGame?.mmrAtStart),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting mmr in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentGame]) => currentGame?.mmrAtStart));
 		this.gameEnded$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame)
-			.pipe(
-				map(([currentGame]) => currentGame?.gameEnded),
-				distinctUntilChanged(),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((info) => cdLog('emitting gameEnded in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([currentGame]) => currentGame?.gameEnded));
 		this.faceOffs$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
 			.pipe(
 				debounceTime(1000),
 				filter(([faceOffs]) => !!faceOffs?.length),
-				map(([faceOffs]) => faceOffs),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((faceOff) => console.debug('[cd] emitting face offs in ', this.constructor.name, faceOff)),
-				takeUntil(this.destroyed$),
+				this.mapData(
+					([faceOffs]) => faceOffs,
+					(a, b) => deepEqual(a, b),
+					0,
+				),
 			);
 	}
 

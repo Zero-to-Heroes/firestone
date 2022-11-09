@@ -59,7 +59,6 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 				([main, nav, prefs]) => prefs.showQuestsInGame,
 			),
 		).pipe(
-			// tap((info) => console.debug('quests widget', info)),
 			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
 				if (!displayFromPrefs) {
 					return false;

@@ -1,12 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
+import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 
@@ -62,18 +62,7 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionCompone
 			),
 			filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
-			distinctUntilChanged((v1, v2) => this.areValuesEqual(v1, v2)),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-			takeUntil(this.destroyed$),
+			this.mapData(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
 		);
 	}
 

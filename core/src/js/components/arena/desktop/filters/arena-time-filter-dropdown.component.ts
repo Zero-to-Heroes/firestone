@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
@@ -67,7 +67,7 @@ export class ArenaTimeFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, patch, selectedCategoryId]) => !!filter && !!patch && !!selectedCategoryId),
-				map(([filter, patch, selectedCategoryId]) => {
+				this.mapData(([filter, patch, selectedCategoryId]) => {
 					const options: readonly TimeFilterOption[] = [
 						{
 							value: 'all-time',
@@ -96,8 +96,6 @@ export class ArenaTimeFilterDropdownComponent
 						visible: true,
 					};
 				}),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
@@ -63,7 +63,7 @@ export class DuelsTimeFilterDropdownComponent
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId, patch]) => !!filter && !!selectedCategoryId && !!patch),
-				map(([filter, selectedCategoryId, patch]) => {
+				this.mapData(([filter, selectedCategoryId, patch]) => {
 					const options = [
 						{
 							value: 'all-time',
@@ -97,10 +97,6 @@ export class DuelsTimeFilterDropdownComponent
 						options: options,
 					};
 				}),
-				// Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

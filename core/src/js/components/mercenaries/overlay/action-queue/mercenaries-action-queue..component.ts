@@ -10,11 +10,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -71,17 +70,13 @@ export class MercenariesActionsQueueComponent
 				filter(([actionQueue]) => !!actionQueue?.length),
 				map(([actionQueue]) => actionQueue),
 				distinctUntilChanged(),
-				map((actionQueue) => {
+				this.mapData((actionQueue) => {
 					// const speeds = actionQueue.map((action) => action.speed);
 					return actionQueue.map((action, index) => ({
 						...action,
 						actionOrder: index + 1,
 					}));
 				}),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting actionQueue in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 		this.scale = this.store
 			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))

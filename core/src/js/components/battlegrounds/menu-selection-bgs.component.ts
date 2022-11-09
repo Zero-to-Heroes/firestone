@@ -7,13 +7,11 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
 import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -72,20 +70,10 @@ export class MenuSelectionBgsComponent
 	ngAfterContentInit() {
 		this.selectedPanel$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentPanelId)
-			.pipe(
-				map(([panelId]) => panelId as BgsPanelId),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting selectedPanel in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([panelId]) => panelId as BgsPanelId));
 		this.matchOver$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.gameEnded)
-			.pipe(
-				map(([gameEnded]) => gameEnded),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting matchOver in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([gameEnded]) => gameEnded));
 	}
 
 	async ngAfterViewInit() {

@@ -1,9 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
+import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
 
 @Component({
@@ -140,18 +140,7 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 					[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, readonly BgsHeroStat[]],
 			),
 			filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
-			map(([heroId, bgsStats]) => bgsStats.find((stat) => stat.id === heroId)),
-			distinctUntilChanged(),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-			takeUntil(this.destroyed$),
+			this.mapData(([heroId, bgsStats]) => bgsStats.find((stat) => stat.id === heroId)),
 		);
 	}
 

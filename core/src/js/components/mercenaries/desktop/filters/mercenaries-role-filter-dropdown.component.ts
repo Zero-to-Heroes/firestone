@@ -1,8 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MercenariesRoleFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
 import { MercenariesRoleFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-role-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -56,22 +56,12 @@ export class MercenariesRoleFilterDropdownComponent extends AbstractSubscription
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
+				this.mapData(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: selectedCategoryId === 'mercenaries-hero-stats',
 					// || selectedCategoryId === 'mercenaries-personal-hero-stats',
 				})),
-				// FIXME
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 	}
 

@@ -7,13 +7,12 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -64,40 +63,20 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 			.listen$(([main, nav]) => nav.text)
 			.pipe(
 				filter(([text]) => !!text),
-				map(([text]) => text),
-				distinctUntilChanged(),
-				tap((text) => cdLog('emitting text in ', this.constructor.name, text)),
-				takeUntil(this.destroyed$),
+				this.mapData(([text]) => text),
 			);
 		this.image$ = this.store
 			.listen$(([main, nav]) => nav.image)
 			.pipe(
 				filter(([image]) => !!image),
-				map(([image]) => image),
-				distinctUntilChanged(),
-				tap((image) => cdLog('emitting image in ', this.constructor.name, image)),
-				takeUntil(this.destroyed$),
+				this.mapData(([image]) => image),
 			);
 		this.backArrow$ = this.store
 			.listen$(([main, nav]) => nav.backArrowEnabled)
-			.pipe(
-				map(([backArrowEnabled]) => backArrowEnabled),
-				distinctUntilChanged(),
-				tap((backArrowEnabled) =>
-					cdLog('emitting backArrowEnabled in ', this.constructor.name, backArrowEnabled),
-				),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([backArrowEnabled]) => backArrowEnabled));
 		this.nextArrow$ = this.store
 			.listen$(([main, nav]) => nav.nextArrowEnabled)
-			.pipe(
-				map(([nextArrowEnabled]) => nextArrowEnabled),
-				distinctUntilChanged(),
-				tap((nextArrowEnabled) =>
-					cdLog('emitting nextArrowEnabled in ', this.constructor.name, nextArrowEnabled),
-				),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([nextArrowEnabled]) => nextArrowEnabled));
 	}
 
 	ngAfterViewInit() {

@@ -11,7 +11,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { CardIds } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -180,7 +180,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			.pipe(
 				debounceTime(200),
 				distinctUntilChanged(),
-				map((searchString) => {
+				this.mapData((searchString) => {
 					const allCardIds = allHeroesAndHeroPowers
 						.filter(
 							(card) =>
@@ -209,11 +209,6 @@ export class BgsSimulatorHeroPowerSelectionComponent
 					console.debug('result', result);
 					return result;
 				}),
-				// startWith([]),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((heroes) => console.debug('hero powers', heroes)),
-				takeUntil(this.destroyed$),
 			)
 			.subscribe((heroes) => {
 				this.allHeroes = [];

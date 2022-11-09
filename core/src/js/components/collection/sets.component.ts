@@ -1,7 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
@@ -9,8 +9,6 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -65,38 +63,16 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 	ngAfterContentInit(): void {
 		this.activeFilter$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.collectionSelectedFormat)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting activeFilter in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 		this.allSets$ = this.store
 			// TOOD: the allSets are fully recomputed whenever a new card is received, so this might cause a bit too many refreshes
 			.listen$(([main, nav, prefs]) => main.binder.allSets)
 			.pipe(
 				debounceTime(1000),
-				map(([pref]) => pref),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((info) => cdLog('emitting allSets in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
+				this.mapData(([pref]) => pref),
 			);
 		this.sets$ = combineLatest(this.activeFilter$, this.allSets$).pipe(
-			map(([activeFilter, allSets]) => {
+			this.mapData(([activeFilter, allSets]) => {
 				const sets =
 					activeFilter === 'all'
 						? allSets
@@ -105,15 +81,6 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 						: allSets.filter((set) => !set.standard);
 				return [...sets].sort(this.sortSets());
 			}),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((info) => cdLog('emitting sets in ', this.constructor.name, info)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

@@ -7,14 +7,12 @@ import {
 	EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
 import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -103,12 +101,7 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 			.pipe(this.mapData(([loading]) => loading));
 		this.menuDisplayType$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.menuDisplayType)
-			.pipe(
-				map(([menuDisplayType]) => menuDisplayType),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
 		this.categories$ = this.store
 			.listen$(([main, nav]) => main.duels.categories)
 			.pipe(this.mapData(([categories]) => (categories ?? []).filter((cat) => !!cat.name)));
@@ -117,13 +110,7 @@ export class DuelsDesktopComponent extends AbstractSubscriptionComponent impleme
 				([main, nav]) => main.duels,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
-			.pipe(
-				map(([duels, selectedCategoryId]) => duels.findCategory(selectedCategoryId)),
-				filter((category) => !!category),
-				distinctUntilChanged(),
-				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([duels, selectedCategoryId]) => duels.findCategory(selectedCategoryId)));
 	}
 
 	ngAfterViewInit() {

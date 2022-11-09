@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
-import { cdLog } from '@services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -105,11 +104,9 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 				([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) => !!stats && !!patch?.number,
 			),
 			distinctUntilChanged((a, b) => this.compare(a, b)),
-			map(([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
+			this.mapData(([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
 				this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
 			),
-			tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

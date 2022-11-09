@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 import {
 	BattleAbility,
 	BattleEquipment,
@@ -151,14 +151,20 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent im
 			oocTeam$,
 		).pipe(
 			filter(([[referenceData, visitors], team, oocTeam]) => !!referenceData && !!visitors?.length),
-			this.mapData(([[referenceData, visitors], team, oocTeam]) => {
-				const allActiveMercs = [...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])];
+			map(([[referenceData, visitors], team, oocTeam]) => ({
+				referenceData: referenceData,
+				visitors: visitors,
+				allActiveMercs: [...(team?.mercenaries ?? []), ...(oocTeam?.mercenaries ?? [])].map(
+					(m) => m.mercenaryId,
+				),
+			})),
+			this.mapData(({ referenceData, visitors, allActiveMercs }) => {
 				const result = buildMercenariesTasksList(
 					referenceData,
 					visitors,
 					this.allCards,
 					this.i18n,
-					allActiveMercs.map((m) => m.mercenaryId),
+					allActiveMercs,
 				);
 				console.debug('final tasks', result);
 				return result;

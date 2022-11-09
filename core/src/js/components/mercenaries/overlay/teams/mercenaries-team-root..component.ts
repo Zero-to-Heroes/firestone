@@ -16,7 +16,7 @@ import { encodeMercs, MercenariesTeamDefinition, MercenaryDefinition } from '@fi
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { debounceTime, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MemoryMercenariesCollectionInfo } from '../../../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -228,10 +228,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.showMapTurnCounter$ = this.store
 			.listenMercenaries$(([state]) => state?.gameMode)
-			.pipe(
-				tap((info) => console.debug('[merc] info', info)),
-				this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)),
-			);
+			.pipe(this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)));
 		this.currentBattleTurn$ = this.store
 			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
 			.pipe(

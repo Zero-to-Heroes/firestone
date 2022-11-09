@@ -5,20 +5,17 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
-	ViewRef,
 } from '@angular/core';
 import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { getTribeIcon, getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
 
 @Component({
@@ -66,9 +63,8 @@ export class BattlegroundsTribesFilterDropdownComponent
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				filter(([allTribes]) => !!allTribes?.length),
-				map(([allTribes]) =>
+				this.mapData(([allTribes]) =>
 					allTribes
 						.map(
 							(tribe) =>
@@ -80,10 +76,6 @@ export class BattlegroundsTribesFilterDropdownComponent
 						)
 						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				),
-				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting tribe options in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
@@ -98,8 +90,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
 					!!tribesFilter && !!allTribes?.length && !!categoryId && !!currentView,
 			),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
+			this.mapData(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
 				selected: !!tribesFilter?.length
 					? tribesFilter.map((tribe) => '' + tribe)
 					: allTribes.map((tribe) => '' + tribe),
@@ -110,16 +101,6 @@ export class BattlegroundsTribesFilterDropdownComponent
 						categoryId,
 					),
 			})),
-			// FIXME
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 0),
-			),
-			tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			takeUntil(this.destroyed$),
 		);
 	}
 

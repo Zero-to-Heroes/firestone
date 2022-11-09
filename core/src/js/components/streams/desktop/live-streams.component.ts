@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LiveStreamsForceReloadEvent } from '../../../services/mainwindow/store/events/streams/live-streams-force-reload-event';
@@ -63,10 +62,7 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 	ngAfterContentInit() {
 		this.streams$ = this.store
 			.listen$(([main, nav]) => main.streams.getLiveStreamsData())
-			.pipe(
-				tap((info) => console.debug('streams info', info)),
-				this.mapData(([data]) => data?.streams ?? []),
-			);
+			.pipe(this.mapData(([data]) => data?.streams ?? []));
 		this.loading$ = this.streams$.pipe(this.mapData((data) => data == null));
 		// Refresh the stream data every minute while the user is on the page
 		this.interval = setInterval(() => this.refreshStreamsData(), 60 * 1000);

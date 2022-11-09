@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
 @Component({
@@ -56,12 +55,7 @@ export class BattlegroundsCategoryDetailsComponent extends AbstractSubscriptionC
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
 			.pipe(
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
-				map(([selectedCategoryId]) => selectedCategoryId),
-				distinctUntilChanged(),
-				tap((selectedCategoryId) =>
-					cdLog('emitting selectedCategoryId in ', this.constructor.name, selectedCategoryId),
-				),
-				takeUntil(this.destroyed$),
+				this.mapData(([selectedCategoryId]) => selectedCategoryId),
 			);
 	}
 }

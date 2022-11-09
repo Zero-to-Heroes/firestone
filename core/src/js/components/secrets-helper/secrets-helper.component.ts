@@ -6,15 +6,12 @@ import {
 	ElementRef,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DebugService } from '../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../services/ui-store/app-ui-store.service';
-import { arraysEqual } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
@@ -76,90 +73,23 @@ export class SecretsHelperComponent extends AbstractSubscriptionComponent implem
 	ngAfterContentInit(): void {
 		this.active$ = this.store
 			.listenDeckState$((state) => state?.opponentDeck?.secretHelperActive)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting active in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 		this.secrets$ = this.store
 			.listenDeckState$((state) => state?.opponentDeck?.secrets)
-			.pipe(
-				map(([secrets]) => secrets),
-				distinctUntilChanged(arraysEqual),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting secrets in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([secrets]) => secrets));
 		this.opacity$ = this.store
 			.listenPrefs$((prefs) => prefs.secretsHelperOpacity)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				map((opacity) => opacity / 100),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting opacity in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(map(([opacity]) => opacity / 100));
 		this.colorManaCost$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.overlayShowRarityColors)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting colorManaCost in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 		this.cardsGoToBottom$ = this.store
 			.listen$(([main, nav, prefs]) => prefs.secretsHelperCardsGoToBottom)
-			.pipe(
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				tap((filter) =>
-					setTimeout(() => {
-						if (!(this.cdr as ViewRef)?.destroyed) {
-							this.cdr.detectChanges();
-						}
-					}, 0),
-				),
-				tap((filter) => cdLog('emitting cardsGoToBottom in ', this.constructor.name, filter)),
-				takeUntil(this.destroyed$),
-			);
+			.pipe(this.mapData(([pref]) => pref));
 
 		this.store
 			.listenPrefs$((prefs) => prefs.secretsHelperScale)
-			.pipe(
-				debounceTime(100),
-				map(([pref]) => pref),
-				distinctUntilChanged(),
-				filter((scale) => !!scale),
-				takeUntil(this.destroyed$),
-			)
+			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => {
 				this.el.nativeElement.style.setProperty('--secrets-helper-scale', scale / 100);
 				this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
