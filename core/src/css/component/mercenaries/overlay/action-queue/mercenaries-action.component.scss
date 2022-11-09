@@ -16,6 +16,7 @@
 		background-size: contain;
 		background-position-x: 3px;
 		background-repeat: repeat-x;
+		border-radius: 8px;
 	}
 
 	.gradiant {
@@ -24,6 +25,7 @@
 		// background: linear-gradient(89.48deg, black 0%, #090a0d 36.89%, rgba(9, 10, 13, 0.2) 99.92%);
 		// For mouse over
 		pointer-events: none;
+		border-radius: 8px;
 	}
 
 	.name {
@@ -48,23 +50,14 @@
 		margin-right: 7px;
 
 		.icon {
-			/* position: absolute; */
-			/* top: 11%; */
-			/* left: 13%; */
-			/* width: 76%; */
-			clip-path: ellipse(40% 44% at 50% 50%);
+			clip-path: ellipse(34% 44% at 50% 50%);
 			/* height: 100%; */
 			width: 140%;
 			/* zoom: 1.2; */
-			left: -5px;
+			left: -7px;
 			position: relative;
 			top: -5px;
 		}
-
-		// .frame {
-		// 	width: 100%;
-		// 	z-index: 1;
-		// }
 	}
 
 	&.player {
@@ -91,6 +84,9 @@
 		.portrait {
 			margin-left: 7px;
 			margin-right: 0;
+			.icon{
+				left: -3px;
+			}
 		}
 		.speed {
 			margin-left: 5px;
