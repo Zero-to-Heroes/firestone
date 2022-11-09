@@ -590,13 +590,13 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 			return elemental;
 		case CardIds.StrengthOfTheOxLettuce:
 			return (card: ReferenceCard) =>
-			[
-				CardIds.BullishFortitude1Lettuce,
-				CardIds.BullishFortitude2Lettuce,
-				CardIds.BullishFortitude3Lettuce,
-				CardIds.BullishFortitude4Lettuce,
-				CardIds.BullishFortitude5Lettuce,
-			].includes(normalizeMercenariesCardId(card.id) as CardIds);
+				[
+					CardIds.BullishFortitude1Lettuce,
+					CardIds.BullishFortitude2Lettuce,
+					CardIds.BullishFortitude3Lettuce,
+					CardIds.BullishFortitude4Lettuce,
+					CardIds.BullishFortitude5Lettuce,
+				].includes(normalizeMercenariesCardId(card.id) as CardIds);
 		case CardIds.StrengthOfWrynn1Lettuce:
 		case CardIds.StrengthOfWrynn2Lettuce:
 		case CardIds.StrengthOfWrynn3Lettuce:
@@ -725,7 +725,16 @@ const holySpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.S
 const natureSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_NATURE);
 const shadowSpellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER_SHADOW);
 const spellPower = (card: ReferenceCard) => hasReferencedTag(card, GameTag.SPELLPOWER);
-const anySpellPower = or(arcaneSpellPower, felSpellPower, fireSpellPower, frostSpellPower, holySpellPower, natureSpellPower, shadowSpellPower, spellPower);
+const anySpellPower = or(
+	arcaneSpellPower,
+	felSpellPower,
+	fireSpellPower,
+	frostSpellPower,
+	holySpellPower,
+	natureSpellPower,
+	shadowSpellPower,
+	spellPower,
+);
 
 const bleed = (card: ReferenceCard) => hasMechanic(card, GameTag.BLEED);
 const divineShield = (card: ReferenceCard) => hasMechanic(card, GameTag.DIVINE_SHIELD);

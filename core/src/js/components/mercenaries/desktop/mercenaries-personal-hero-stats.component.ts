@@ -376,9 +376,12 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 					tier: currentUnlockedTier,
 					coinsToCraft: coinsToCraft,
 					owned: !!memAbility,
-					speed: !isPassiveMercsTreasure(abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id, this.allCards) 
-							? abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost ?? 0
-							: null,
+					speed: !isPassiveMercsTreasure(
+						abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
+						this.allCards,
+					)
+						? abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost ?? 0
+						: null,
 					cooldown:
 						abilityCard.mercenaryAbilityCooldown ??
 						memAbilityCard.mercenaryAbilityCooldown ??
