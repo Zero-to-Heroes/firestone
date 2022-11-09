@@ -10,7 +10,7 @@ export class MercenariesBattleState {
 
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
-	readonly actionQueue: readonly MercenariesAction[] = [];
+	readonly actionQueue: MercenariesAction[] = [];
 
 	// A cache that is populated on game start
 	readonly mercenariesFromMemory: MemoryMercenariesInfo;
@@ -53,6 +53,27 @@ export class MercenariesBattleTeam {
 					(merc: BattleMercenary) => merc.entityId,
 					base,
 			  );
+		return this.update({ mercenaries: newMercenaries });
+	}
+
+	public updateAbility(
+		entityId: number,
+		base: Partial<NonFunctionProperties<BattleAbility>>,
+	): MercenariesBattleTeam {
+		const newMercenaries: readonly BattleMercenary[] = 
+			(this.mercenaries ?? []).map((merc) => (
+				merc.update(
+					BattleMercenary.create(
+						{
+							abilities: (merc.abilities ?? []).map((ability) => (
+								ability.entityId === entityId
+								? ability.update(BattleAbility.create(base))
+								: ability
+							))
+						}
+					)
+				)
+			))
 		return this.update({ mercenaries: newMercenaries });
 	}
 }
