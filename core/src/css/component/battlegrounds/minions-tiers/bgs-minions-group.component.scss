@@ -100,7 +100,9 @@
 				}
 
 				&.battlecry,
-				&.deathrattle {
+				&.deathrattle,
+				&.taunt,
+				&.divine-shield {
 					display: flex;
 					background: var(--icon-secondary-color);
 					padding: 5px;
@@ -130,6 +132,14 @@
 
 				&.deathrattle {
 					--icon-color: #ff8a48;
+				}
+
+				&.taunt {
+					--icon-color: #42d8a2;
+				}
+
+				&.divine-shield {
+					--icon-color: #ffb948;
 				}
 			}
 

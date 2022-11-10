@@ -113,6 +113,42 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						>
 							<span class="label">D</span>
 						</div>
+						<div
+							class="highlight-minion-button taunt"
+							*ngIf="minion.hasTaunt"
+							[ngClass]="{
+								'highlighted': _showBattlecryHighlight && minion.tauntHighlight,
+								'no-highlight': !_showBattlecryHighlight
+							}"
+							(click)="highlightTaunt()"
+							[helpTooltip]="
+								_showBattlecryHighlight
+									? !minion.tauntHighlight
+										? highlightTauntOnTooltip
+										: highlightTauntOffTooltip
+									: null
+							"
+						>
+							<span class="label">T</span>
+						</div>
+						<div
+							class="highlight-minion-button divine-shield"
+							*ngIf="minion.hasDivineShield"
+							[ngClass]="{
+								'highlighted': _showBattlecryHighlight && minion.divineShieldHighlight,
+								'no-highlight': !_showBattlecryHighlight
+							}"
+							(click)="highlightDivineShield()"
+							[helpTooltip]="
+								_showBattlecryHighlight
+									? !minion.divineShieldHighlight
+										? highlightDivineShieldOnTooltip
+										: highlightDivineShieldOffTooltip
+									: null
+							"
+						>
+							<span class="label">DS</span>
+						</div>
 					</div>
 				</li>
 			</ul>
@@ -180,6 +216,24 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			value: this.i18n.translateString('global.mechanics.deathrattle'),
 		},
 	);
+	highlightTauntOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.taunt'),
+	});
+	highlightTauntOffTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.taunt'),
+	});
+	highlightDivineShieldOnTooltip = this.i18n.translateString(
+		'battlegrounds.in-game.minions-list.highlight-mechanics',
+		{
+			value: this.i18n.translateString('global.mechanics.divine_shield'),
+		},
+	);
+	highlightDivineShieldOffTooltip = this.i18n.translateString(
+		'battlegrounds.in-game.minions-list.unhighlight-mechanics',
+		{
+			value: this.i18n.translateString('global.mechanics.divine_shield'),
+		},
+	);
 
 	private _showGoldenCards = true;
 
@@ -228,6 +282,20 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DEATHRATTLE));
 	}
 
+	highlightTaunt() {
+		if (!this._showBattlecryHighlight) {
+			return;
+		}
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.TAUNT));
+	}
+
+	highlightDivineShield() {
+		if (!this._showBattlecryHighlight) {
+			return;
+		}
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DIVINE_SHIELD));
+	}
+
 	trackByFn(index: number, minion: Minion) {
 		return minion.cardId;
 	}
@@ -267,6 +335,8 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const card = this.allCards.getCard(minion.id);
 				const hasBattlecry = card.mechanics?.includes(GameTag[GameTag.BATTLECRY]);
 				const hasDeathrattle = card.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]);
+				const hasTaunt = card.mechanics?.includes(GameTag[GameTag.TAUNT]);
+				const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 				const result = {
 					cardId: minion.id,
 					displayedCardIds: this.buildAllCardIds(minion.id, this._showGoldenCards),
@@ -276,9 +346,14 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					battlecryHighlight: hasBattlecry && this._group.highlightedMechanics.includes(GameTag.BATTLECRY),
 					deathrattleHighlight:
 						hasDeathrattle && this._group.highlightedMechanics.includes(GameTag.DEATHRATTLE),
+					tauntHighlight: hasTaunt && this._group.highlightedMechanics.includes(GameTag.TAUNT),
+					divineShieldHighlight:
+						hasDivineShield && this._group.highlightedMechanics.includes(GameTag.DIVINE_SHIELD),
 					techLevel: card.techLevel,
 					hasBattlecry: hasBattlecry,
 					hasDeathrattle: hasDeathrattle,
+					hasTaunt: hasTaunt,
+					hasDivineShield: hasDivineShield,
 				};
 				return result;
 			})
