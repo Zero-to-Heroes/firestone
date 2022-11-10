@@ -80,7 +80,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 
 	@Input() placeholder: string;
 	@Input() set options(value: readonly MultiselectOption[]) {
-		this.options$.next(value.filter((option) => !!option));
+		this.options$.next(value?.filter((option) => !!option) ?? []);
 	}
 
 	@Input() set selected(value: readonly string[]) {
