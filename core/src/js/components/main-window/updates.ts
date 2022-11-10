@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.15.0',
+		version: '9.15.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -52,6 +52,19 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'content',
+								text: `The PvP tabs (hero stats and compositions) have been deactivated. The reason is that the sample size was too small to provide accurate data, and they were barely used at all. I will probably revisit the idea in the future to provide once again PvP players with ideas of what is working and what isn't.`,
+							},
+							{
+								type: 'feature',
+								text: `The Tasks widget now lets you create a team code based on the active Procedural quests, and your preferences set in the Settings > Mercenaries > Quests.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -61,6 +74,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `Add new "tiers" in the minions list for Divine Shield and Taunt minions. These "mechanical tiers" now appear on a second line to make them more separate from the usual tiers 1-6, and each has a different color. You can of course deactivate them from the Settings if you don't like them :)`,
+							},
 							{
 								type: 'bug',
 								text: `Fix sim issues with Volatile Venom.`,
@@ -118,6 +135,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue with some abilities having incorrect starting cooldowns (Community Contribution!).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where sometimes the "treasure highlight" would still persist after choosing a treasure.`,
 							},
 							{
 								type: 'ui',
