@@ -8,6 +8,7 @@
 	flex-direction: column;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
 	position: relative;
 	padding: 10px;
 	padding-bottom: 12px;
@@ -26,6 +27,7 @@
 		top: 0;
 		right: 0;
 		background: transparent;
+		border-radius: 10px;
 		display: none;
 
 		&.rename-button {
