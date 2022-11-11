@@ -6,6 +6,7 @@ import { formatClass } from './hs-utils';
 import { LocalizationFacadeService } from './localization-facade.service';
 import { OverwolfService } from './overwolf.service';
 import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
+import { sleep } from './utils';
 
 @Injectable()
 export class LocalizationService {
@@ -14,11 +15,29 @@ export class LocalizationService {
 
 	private translate: TranslateService;
 
+	private ready = false;
+
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 	) {}
+
+	// FIXME: should handle all the init logic here (or create a facade?), instead of having it be in app-bootstrap
+	public async initReady() {
+		return new Promise<void>(async (resolve) => {
+			while (!this.ready || !this.translate || !this.translate.store?.langs?.length) {
+				console.debug('[translate] missing translations', this.translate);
+				await sleep(100);
+			}
+
+			resolve();
+		});
+	}
+
+	public setReady(value: boolean) {
+		this.ready = value;
+	}
 
 	public async start() {
 		await this.store.initComplete();

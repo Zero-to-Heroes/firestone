@@ -572,6 +572,7 @@ import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loa
 import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
+import { SystemTrayService } from '../../services/system-tray.service';
 import { TipService } from '../../services/tip.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from '../../services/ui-store/app-ui-store.service';
@@ -1157,6 +1158,7 @@ const components = [
 		GameStatusService,
 		QuestsService,
 		LiveStreamsService,
+		SystemTrayService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

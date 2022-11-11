@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+// import '@overwolf/types';
 import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
@@ -1021,6 +1022,19 @@ export class OverwolfService {
 		}
 		// Only detect new game launched events when it goes from not running to running
 		return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
+	}
+
+	public async setTrayMenu(menu: overwolf.os.tray.ExtensionTrayMenu): Promise<void> {
+		return new Promise<void>((resolve) => {
+			overwolf.os.tray.setMenu(menu, (result) => {
+				console.debug('[ow] setTrayMenu', result);
+				resolve();
+			});
+		});
+	}
+
+	public onTrayMenuClicked(callback: (event: overwolf.os.tray.onMenuItemClickedEvent) => void): void {
+		overwolf.os.tray.onMenuItemClicked.addListener(callback);
 	}
 
 	public static getAppFolder(): string {

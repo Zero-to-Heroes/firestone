@@ -11,7 +11,8 @@
 		"icon": "IconMouseOver.png",
 		"icon_gray": "IconMouseNormal.png",
 		"launcher_icon": "launcher_icon.ico",
-		"splash_image": "Splash_icon.png"
+		"splash_image": "Splash_icon.png",
+		"tray_icon": "tray_icon.ico"
 	},
 	"permissions": [
 		"Logging",
@@ -23,7 +24,8 @@
 		"VideoCaptureSettings",
 		"DesktopStreaming",
 		"Streaming",
-		"Clipboard"
+		"Clipboard",
+		"Tray"
 	],
 	"disable_dockbutton": false,
 	"hide_from_store": false,

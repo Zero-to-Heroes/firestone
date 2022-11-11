@@ -17,8 +17,8 @@
 		"lib": ["dom", "ES2019"],
 		"sourceRoot": "/",
 		"baseUrl": ".",
-		"typeRoots": ["node_modules/@types", "@overwolf/types"],
-		"types": ["node", "jest"],
+		"typeRoots": ["node_modules/@types", "node_modules/@overwolf/types"],
+		"types": ["node", "jest", "@overwolf/types"],
 		"paths": {
 			"@models/*": ["src/js/models/*"],
 			"@components/*": ["src/js/components/*"],

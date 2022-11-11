@@ -91,7 +91,7 @@
 		"@angular/compiler-cli": "11.2.11",
 		"@calebmer/extract-text-webpack-plugin": "4.0.2",
 		"@ngtools/webpack": "^11.2.10",
-		"@overwolf/types": "^2.48.0",
+		"@overwolf/types": "^3.22.0",
 		"@sentry/cli": "^1.64.0",
 		"@sentry/webpack-plugin": "^1.15.0",
 		"@types/core-js": "2.5.0",

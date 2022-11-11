@@ -60,6 +60,7 @@ import { ReviewIdService } from './review-id.service';
 import { RewardMonitorService } from './rewards/rewards-monitor';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 import { GameStatsProviderService } from './stats/game/game-stats-provider.service';
+import { SystemTrayService } from './system-tray.service';
 import { AppUiStoreService } from './ui-store/app-ui-store.service';
 import { sleep } from './utils';
 
@@ -134,6 +135,7 @@ export class AppBootstrapService {
 		private init_GameModeDataService: GameModeDataService,
 		private init_GameStatsProviderService: GameStatsProviderService,
 		private init_DuelsDecksProviderService: DuelsDecksProviderService,
+		private init_SystemTrayService: SystemTrayService,
 	) {}
 
 	public async init() {
@@ -151,6 +153,7 @@ export class AppBootstrapService {
 		// Load the locales first, otherwise some windows will be displayed with missing text
 		const prefs = await this.prefs.getPreferences();
 		await this.translate.use(prefs.locale).toPromise();
+		this.init_LocalizationService.setReady(true);
 
 		// Do it after the localization has been initialized
 		this.store.populateStore();
@@ -358,10 +361,6 @@ export class AppBootstrapService {
 		if (isRunning) {
 			this.showFullScreenOverlaysWindow();
 		}
-	}
-
-	private closeApp() {
-		this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
 	}
 
 	private async closeLoadingScreen() {
