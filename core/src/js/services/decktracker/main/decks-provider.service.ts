@@ -62,7 +62,6 @@ export class DecksProviderService {
 					]) => !!stats?.length && !!patch,
 				),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				tap((info) => console.debug('[decks-provider] preparing', info)),
 				map(
 					([
 						stats,

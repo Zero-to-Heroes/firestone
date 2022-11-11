@@ -96,7 +96,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			),
 		).pipe(
 			this.mapData(([decks, [sort, search]]) => {
-				// console.debug('[deck] updating decks', decks);
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
 						(deck) =>
@@ -106,7 +105,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
 					)
 					.sort(this.getSortFunction(sort));
-				// console.debug('[deck] after update', result);
 				return result;
 			}),
 		);
