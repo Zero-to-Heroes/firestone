@@ -3,8 +3,6 @@ import { NavigationState } from '../../../../../models/mainwindow/navigation/nav
 import { TriggerSocialNetworkLoginToggleEvent } from '../../events/social/trigger-social-network-login-toggle-event';
 import { Processor } from '../processor';
 
-declare let overwolf;
-
 export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
 	public async process(
 		event: TriggerSocialNetworkLoginToggleEvent,

@@ -581,8 +581,6 @@ import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
-declare let overwolf: any;
-
 console.log('version is ' + process.env.APP_VERSION);
 console.log('environment is ' + process.env.NODE_ENV);
 console.log('is local test? ' + process.env.LOCAL_TEST);

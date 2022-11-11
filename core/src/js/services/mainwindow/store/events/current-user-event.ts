@@ -1,8 +1,7 @@
-import { CurrentUser } from '../../../../models/overwolf/profile/current-user';
 import { MainWindowStoreEvent } from './main-window-store-event';
 
 export class CurrentUserEvent implements MainWindowStoreEvent {
-	constructor(public readonly currentUser: CurrentUser) {}
+	constructor(public readonly currentUser: overwolf.profile.GetCurrentUserResult) {}
 
 	public static eventName(): string {
 		return 'CurrentUserEvent';

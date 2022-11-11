@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-// import '@overwolf/types';
 import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
-import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
-import { CurrentUser } from '../models/overwolf/profile/current-user';
 import { Preferences } from '../models/preferences';
-
-declare let overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
 const NO_AD_PLAN = 13;
@@ -27,7 +22,7 @@ export class OverwolfService {
 
 	public isOwEnabled(): boolean {
 		try {
-			return typeof overwolf !== 'undefined' && overwolf && overwolf.windows;
+			return typeof overwolf !== 'undefined' && !!overwolf?.windows;
 		} catch (e) {
 			return false;
 		}
@@ -201,14 +196,6 @@ export class OverwolfService {
 		overwolf.utils.openUrlInDefaultBrowser(url);
 	}
 
-	public addSessionInfoChangedLisetner(callback) {
-		overwolf.egs.onSessionInfoChanged.addListener(callback);
-	}
-
-	public addMatchSelectionInfoChangedListener(callback) {
-		overwolf.egs.onMatchSelectionChanged.addListener(callback);
-	}
-
 	public async getOpenWindows() {
 		return new Promise<any>((resolve) => {
 			overwolf.windows.getOpenWindows((res: any) => {
@@ -233,8 +220,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async getManifest(): Promise<Manifest> {
-		return new Promise<Manifest>((resolve) => {
+	public async getManifest(): Promise<overwolf.extensions.GetManifestResult> {
+		return new Promise<overwolf.extensions.GetManifestResult>((resolve) => {
 			overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
 				resolve(result);
 			});
@@ -256,16 +243,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async getSelectedMatch(): Promise<{ gameId: number; matchId: string; sessionId: string }> {
-		return new Promise<{ gameId: number; matchId: string; sessionId: string }>((resolve) => {
-			overwolf.egs.getSelectedMatch((selectedMatchInfo) => {
-				resolve(selectedMatchInfo);
-			});
-		});
-	}
-
-	public async getCurrentUser(): Promise<CurrentUser> {
-		return new Promise<CurrentUser>((resolve) => {
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
+		return new Promise<overwolf.profile.GetCurrentUserResult>((resolve) => {
 			overwolf.profile.getCurrentUser((user) => {
 				resolve(user);
 			});
@@ -343,9 +322,7 @@ export class OverwolfService {
 	public async sendToBack(windowId: string) {
 		return new Promise<any>((resolve) => {
 			try {
-				overwolf.windows.sendToBack(windowId, false, (result) => {
-					resolve(result);
-				});
+				overwolf.windows.sendToBack(windowId, (result) => resolve(result));
 			} catch (e) {
 				console.warn('exception when sending to back', windowId, e);
 				resolve(null);
@@ -400,8 +377,8 @@ export class OverwolfService {
 		});
 	}
 
-	public async dragResize(windowId: string, edge: string) {
-		return new Promise<void>((resolve) => {
+	public async dragResize(windowId: string, edge: overwolf.windows.enums.WindowDragEdge) {
+		return new Promise<overwolf.windows.DragResizeResult>((resolve) => {
 			overwolf.windows.dragResize(windowId, edge, null, (result) => {
 				resolve(result);
 			});
@@ -451,14 +428,6 @@ export class OverwolfService {
 		});
 	}
 
-	public async getSessionInfo() {
-		return new Promise<any>((resolve) => {
-			overwolf.egs.getSessionInfo((res: any) => {
-				resolve(res);
-			});
-		});
-	}
-
 	public async getGameEventsInfo() {
 		return new Promise<any>((resolve) => {
 			overwolf.games.events.getInfo((info: any) => {
@@ -485,7 +454,10 @@ export class OverwolfService {
 		});
 	}
 
-	public async setVideoCaptureSettings(resolution: string, fps: number): Promise<any> {
+	public async setVideoCaptureSettings(
+		resolution: overwolf.settings.enums.ResolutionSettings,
+		fps: number,
+	): Promise<any> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.settings.setVideoCaptureSettings(resolution, fps, (res: any) => {
 				resolve(res);
@@ -612,119 +584,21 @@ export class OverwolfService {
 		});
 	}
 
-	public async turnOnReplays(settings): Promise<void> {
-		return new Promise<any>((resolve) => {
-			overwolf.media.replays.turnOn(settings, (result) => {
-				resolve(result);
-			});
-		});
-	}
-
-	public async turnOffReplays(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			overwolf.media.replays.turnOff((res: any) => {
-				resolve();
-			});
-		});
-	}
-
-	public async startReplayCapture(captureDuration: number): Promise<any> {
-		return new Promise<any>((resolve, reject) => {
-			overwolf.media.replays.startCapture(captureDuration, (status) => {
-				if (status === 'error') {
-					console.warn('[overwolf-service] could not start capture', status);
-					reject(status);
-				} else {
-					resolve(status);
-				}
-			});
-		});
-	}
-
-	public async stopReplayCapture(replayId: string): Promise<any> {
-		return new Promise<any>((resolve) => {
-			overwolf.media.replays.stopCapture(replayId, (result) => {
-				resolve(result);
-			});
-		});
-	}
-
-	public async getReplayMediaState(): Promise<boolean> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.media.replays.getState((res: any) => {
-				resolve(res.isOn);
-			});
-		});
-	}
-
-	public async isGSEnabled(): Promise<any> {
-		return new Promise<any>((resolve) => {
-			overwolf.egs.isEnabled((egsEnabledResult: any) => {
-				resolve(egsEnabledResult);
-			});
-		});
-	}
-
-	public async requestGSDisplay(): Promise<any> {
-		return new Promise<any>((resolve) => {
-			overwolf.egs.requestToDisplay((displayRequestResult: any) => {
-				resolve(displayRequestResult);
-			});
-		});
-	}
-
-	public async getExtensionInfo(extensionId: string): Promise<any> {
-		return new Promise<any>((resolve) => {
-			overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', (callbackInfo) => {
-				resolve(callbackInfo);
-			});
-		});
-	}
-
-	public async setExtensionInfo(info): Promise<void> {
-		return new Promise<void>((resolve) => {
-			overwolf.extensions.setInfo(info);
-			resolve();
-		});
-	}
-
-	public async registerInfo(id: string, eventsCallback): Promise<void> {
-		return new Promise<void>((resolve) => {
-			overwolf.extensions.registerInfo(id, eventsCallback, () => {
-				resolve();
-			});
-		});
-	}
-
-	public async setShelfStatusReady(): Promise<void> {
-		return new Promise<void>((resolve) => {
-			if (!overwolf || !overwolf.egs || !overwolf.egs.setStatus) {
-				setTimeout(() => {
-					this.setShelfStatusReady();
-				}, 100);
-				return;
-			}
-
-			// Start loading the shelf page
-			overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
-				resolve();
-			});
-		});
-	}
-
 	public setZoom(zoomFactor: number) {
-		overwolf.windows.setZoom(zoomFactor);
+		overwolf.windows.setZoom(zoomFactor, null);
 	}
 
-	public async getActiveSubscriptionPlans(): Promise<ActiveSubscriptionPlan> {
-		return new Promise<ActiveSubscriptionPlan>((resolve) => {
+	public async getActiveSubscriptionPlans(): Promise<overwolf.profile.subscriptions.GetActivePlansResult> {
+		return new Promise<overwolf.profile.subscriptions.GetActivePlansResult>((resolve) => {
 			if (!overwolf.profile.subscriptions) {
-				resolve({} as ActiveSubscriptionPlan);
+				resolve({} as overwolf.profile.subscriptions.GetActivePlansResult);
 				return;
 			}
-			overwolf.profile.subscriptions.getActivePlans((res: ActiveSubscriptionPlan) => {
-				resolve(res);
-			});
+			overwolf.profile.subscriptions.getActivePlans(
+				(res: overwolf.profile.subscriptions.GetActivePlansResult) => {
+					resolve(res);
+				},
+			);
 		});
 	}
 
@@ -734,10 +608,12 @@ export class OverwolfService {
 				resolve(true);
 				return;
 			}
-			overwolf.profile.subscriptions.getActivePlans((activePlans: ActiveSubscriptionPlan) => {
-				const hideAds = activePlans && activePlans.plans && activePlans.plans.includes(NO_AD_PLAN);
-				resolve(!hideAds);
-			});
+			overwolf.profile.subscriptions.getActivePlans(
+				(activePlans: overwolf.profile.subscriptions.GetActivePlansResult) => {
+					const hideAds = activePlans && activePlans.plans && activePlans.plans.includes(NO_AD_PLAN);
+					resolve(!hideAds);
+				},
+			);
 		});
 	}
 
@@ -756,7 +632,7 @@ export class OverwolfService {
 		}
 		return new Promise<TwitterUserInfo>((resolve) => {
 			overwolf.social.twitter.getUserInfo((res) => {
-				if (res.status !== 'success' || !res.userInfo) {
+				if (!res?.success || !res.userInfo) {
 					const result: TwitterUserInfo = {
 						network: 'twitter',
 						avatarUrl: undefined,
@@ -781,14 +657,15 @@ export class OverwolfService {
 		});
 	}
 
-	public async twitterShare(filePathOnDisk: string, message: string): Promise<boolean> {
-		return new Promise<boolean>((resolve) => {
-			const shareParam = {
+	public async twitterShare(filePathOnDisk: string, message: string): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const shareParam: overwolf.social.twitter.ShareParameters = {
 				file: filePathOnDisk,
 				message: message,
+				useOverwolfNotifications: false,
 			};
-			overwolf.social.twitter.share(shareParam, (res, error) => {
-				resolve(res);
+			overwolf.social.twitter.share(shareParam, (res) => {
+				resolve();
 			});
 		});
 	}
@@ -801,7 +678,7 @@ export class OverwolfService {
 		return new Promise<void>((resolve) => {
 			overwolf.social.twitter.performLogout((info) => {
 				this.twitterUserInfo = null;
-				resolve(info);
+				resolve();
 			});
 		});
 	}
@@ -821,7 +698,7 @@ export class OverwolfService {
 		}
 		return new Promise<RedditUserInfo>((resolve) => {
 			overwolf.social.reddit.getUserInfo((res) => {
-				if (res.status !== 'success' || !res.userInfo) {
+				if (!res.success || !res.userInfo) {
 					const result: RedditUserInfo = {
 						network: 'reddit',
 						avatarUrl: undefined,
@@ -848,8 +725,8 @@ export class OverwolfService {
 
 	public async getSubredditFlairs(subreddit: string): Promise<readonly Flair[]> {
 		return new Promise<readonly Flair[]>((resolve) => {
-			overwolf.social.reddit.getSubredditFlairs(subreddit, (res, error) => {
-				resolve(res?.flairs);
+			overwolf.social.reddit.getSubredditFlairs(subreddit, (res) => {
+				resolve((res as any)?.flairs);
 			});
 		});
 	}
@@ -861,14 +738,18 @@ export class OverwolfService {
 		flair?: string,
 	): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			const shareParam = {
+			const shareParam: overwolf.social.reddit.ShareParameters = {
 				file: filePathOnDisk,
 				title: message,
 				subreddit: subreddit,
-				flair_id: flair,
+				flair_id: {
+					id: flair,
+				} as Flair,
+				useOverwolfNotifications: false,
+				description: null,
 			};
-			overwolf.social.reddit.share(shareParam, (res, error) => {
-				resolve(res);
+			overwolf.social.reddit.share(shareParam, (res) => {
+				resolve(res?.success);
 			});
 		});
 	}
@@ -881,7 +762,7 @@ export class OverwolfService {
 		return new Promise<void>((resolve) => {
 			overwolf.social.reddit.performLogout((info) => {
 				this.redditUserInfo = null;
-				resolve(info);
+				resolve();
 			});
 		});
 	}
@@ -896,32 +777,36 @@ export class OverwolfService {
 
 	public async fileExists(filePathOnDisk: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			overwolf.io.fileExists(filePathOnDisk, (res, error) => {
+			overwolf.io.fileExists(filePathOnDisk, (res) => {
 				resolve(res.found);
 			});
 		});
 	}
 
-	public async writeFileContents(filePathOnDisk: string, content: string): Promise<string> {
-		return new Promise<string>((resolve) => {
-			overwolf.io.writeFileContents(filePathOnDisk, content, 'UTF8', false, (res, error) => {
-				resolve(res.success ? res.content : null);
+	public async writeFileContents(filePathOnDisk: string, content: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.io.writeFileContents(filePathOnDisk, content, overwolf.io.enums.eEncoding.UTF8, false, (res) => {
+				resolve(res?.success);
 			});
 		});
 	}
 
 	public async readTextFile(filePathOnDisk: string): Promise<string> {
 		return new Promise<string>((resolve) => {
-			overwolf.io.readTextFile(filePathOnDisk, { encoding: 'UTF8' }, (res, error) => {
-				resolve(res.success ? res.content : null);
-			});
+			overwolf.io.readTextFile(
+				filePathOnDisk,
+				{ encoding: overwolf.io.enums.eEncoding.UTF8, maxBytesToRead: null, offset: null },
+				(res) => {
+					resolve(res.success ? res.content : null);
+				},
+			);
 		});
 	}
 
 	public async deleteFile(filePathOnDisk: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-			overwolf.io.writeFileContents(filePathOnDisk, '', 'UTF8', false, (res, error) => {
-				resolve(res.status === 'success');
+			overwolf.io.writeFileContents(filePathOnDisk, '', overwolf.io.enums.eEncoding.UTF8, false, (res) => {
+				resolve(res.success);
 			});
 		});
 	}
@@ -934,7 +819,7 @@ export class OverwolfService {
 
 	public async getFromClipboard(): Promise<string> {
 		return new Promise<string>((resolve) => {
-			overwolf.utils.getFromClipboard((res, error) => {
+			overwolf.utils.getFromClipboard((res) => {
 				resolve(res);
 			});
 		});

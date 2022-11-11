@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CurrentUser } from '../models/overwolf/profile/current-user';
 import { ApiRunner } from './api-runner';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
@@ -10,12 +9,12 @@ const USER_MAPPING_UPDATE_URL = 'https://api.firestoneapp.com/usermapping/save/u
 
 @Injectable()
 export class UserService {
-	private currentUser: CurrentUser;
+	private currentUser: overwolf.profile.GetCurrentUserResult;
 	private store: MainWindowStoreService;
 
 	constructor(private readonly ow: OverwolfService, private readonly api: ApiRunner) {}
 
-	public async getCurrentUser(): Promise<CurrentUser> {
+	public async getCurrentUser(): Promise<overwolf.profile.GetCurrentUserResult> {
 		await this.waitForInit();
 		return this.currentUser;
 	}

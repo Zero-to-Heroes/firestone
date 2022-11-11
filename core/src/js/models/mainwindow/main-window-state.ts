@@ -6,7 +6,6 @@ import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
 import { MercenariesState } from '../mercenaries/mercenaries-state';
-import { CurrentUser } from '../overwolf/profile/current-user';
 import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
@@ -21,7 +20,7 @@ import { StreamsState } from './streams/streams-state';
 export class MainWindowState {
 	readonly currentScene: SceneMode = null;
 	readonly lastNonGamePlayScene: SceneMode = null;
-	readonly currentUser: CurrentUser = null;
+	readonly currentUser: overwolf.profile.GetCurrentUserResult = null;
 	readonly showFtue: boolean = false;
 	readonly replays: ReplaysState = new ReplaysState();
 	readonly binder: BinderState = new BinderState();
