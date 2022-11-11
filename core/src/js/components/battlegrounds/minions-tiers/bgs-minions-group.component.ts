@@ -79,75 +79,72 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						></div>
 						<div
 							class="highlight-minion-button battlecry"
-							*ngIf="minion.hasBattlecry"
+							*ngIf="minion.hasBattlecry && _showBattlecryHighlight"
 							[ngClass]="{
-								'highlighted': _showBattlecryHighlight && minion.battlecryHighlight,
-								'no-highlight': !_showBattlecryHighlight
+								'highlighted': minion.battlecryHighlight
 							}"
 							(click)="highlightBattlecry()"
 							[helpTooltip]="
-								_showBattlecryHighlight
-									? !minion.battlecryHighlight
-										? highlightBattlecryOnTooltip
-										: highlightBattlecryOffTooltip
-									: null
+								!minion.battlecryHighlight ? highlightBattlecryOnTooltip : highlightBattlecryOffTooltip
 							"
 						>
 							<span class="label">B</span>
 						</div>
 						<div
 							class="highlight-minion-button deathrattle"
-							*ngIf="minion.hasDeathrattle"
+							*ngIf="minion.hasDeathrattle && _showBattlecryHighlight"
 							[ngClass]="{
-								'highlighted': _showBattlecryHighlight && minion.deathrattleHighlight,
-								'no-highlight': !_showBattlecryHighlight
+								'highlighted': minion.deathrattleHighlight
 							}"
 							(click)="highlightDeathrattle()"
 							[helpTooltip]="
-								_showBattlecryHighlight
-									? !minion.deathrattleHighlight
-										? highlightDeathrattleOnTooltip
-										: highlightDeathrattleOffTooltip
-									: null
+								!minion.deathrattleHighlight
+									? highlightDeathrattleOnTooltip
+									: highlightDeathrattleOffTooltip
 							"
 						>
 							<span class="label">D</span>
 						</div>
 						<div
 							class="highlight-minion-button taunt"
-							*ngIf="minion.hasTaunt"
+							*ngIf="minion.hasTaunt && _showBattlecryHighlight"
 							[ngClass]="{
-								'highlighted': _showBattlecryHighlight && minion.tauntHighlight,
-								'no-highlight': !_showBattlecryHighlight
+								'highlighted': minion.tauntHighlight
 							}"
 							(click)="highlightTaunt()"
-							[helpTooltip]="
-								_showBattlecryHighlight
-									? !minion.tauntHighlight
-										? highlightTauntOnTooltip
-										: highlightTauntOffTooltip
-									: null
-							"
+							[helpTooltip]="!minion.tauntHighlight ? highlightTauntOnTooltip : highlightTauntOffTooltip"
 						>
 							<span class="label">T</span>
 						</div>
 						<div
 							class="highlight-minion-button divine-shield"
-							*ngIf="minion.hasDivineShield"
+							*ngIf="minion.hasDivineShield && _showBattlecryHighlight"
 							[ngClass]="{
-								'highlighted': _showBattlecryHighlight && minion.divineShieldHighlight,
-								'no-highlight': !_showBattlecryHighlight
+								'highlighted': minion.divineShieldHighlight
 							}"
 							(click)="highlightDivineShield()"
 							[helpTooltip]="
-								_showBattlecryHighlight
-									? !minion.divineShieldHighlight
-										? highlightDivineShieldOnTooltip
-										: highlightDivineShieldOffTooltip
-									: null
+								!minion.divineShieldHighlight
+									? highlightDivineShieldOnTooltip
+									: highlightDivineShieldOffTooltip
 							"
 						>
 							<span class="label">DS</span>
+						</div>
+						<div
+							class="highlight-minion-button end-of-turn"
+							*ngIf="minion.hasEndOfTurn && _showBattlecryHighlight"
+							[ngClass]="{
+								'highlighted': minion.endOfTurn4Highlight
+							}"
+							(click)="highlightEndOfTurn()"
+							[helpTooltip]="
+								!minion.divineShieldHighlight
+									? highlightDivineShieldOnTooltip
+									: highlightDivineShieldOffTooltip
+							"
+						>
+							<span class="label">E</span>
 						</div>
 					</div>
 				</li>
@@ -234,6 +231,15 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			value: this.i18n.translateString('global.mechanics.divine_shield'),
 		},
 	);
+	highlightEndOfTurnOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.end_of_turn'),
+	});
+	highlightEndOfTurnOffTooltip = this.i18n.translateString(
+		'battlegrounds.in-game.minions-list.unhighlight-mechanics',
+		{
+			value: this.i18n.translateString('global.mechanics.end_of_turn'),
+		},
+	);
 
 	private _showGoldenCards = true;
 
@@ -280,6 +286,13 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			return;
 		}
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DEATHRATTLE));
+	}
+
+	highlightEndOfTurn() {
+		if (!this._showBattlecryHighlight) {
+			return;
+		}
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.END_OF_TURN));
 	}
 
 	highlightTaunt() {
@@ -337,6 +350,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const hasDeathrattle = card.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]);
 				const hasTaunt = card.mechanics?.includes(GameTag[GameTag.TAUNT]);
 				const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
+				const hasEndOfTurn = card.mechanics?.includes(GameTag[GameTag.END_OF_TURN]);
 				const result = {
 					cardId: minion.id,
 					displayedCardIds: this.buildAllCardIds(minion.id, this._showGoldenCards),
@@ -349,11 +363,13 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					tauntHighlight: hasTaunt && this._group.highlightedMechanics.includes(GameTag.TAUNT),
 					divineShieldHighlight:
 						hasDivineShield && this._group.highlightedMechanics.includes(GameTag.DIVINE_SHIELD),
+					endOfTurnHighlight: hasEndOfTurn && this._group.highlightedMechanics.includes(GameTag.END_OF_TURN),
 					techLevel: card.techLevel,
 					hasBattlecry: hasBattlecry,
 					hasDeathrattle: hasDeathrattle,
 					hasTaunt: hasTaunt,
 					hasDivineShield: hasDivineShield,
+					hasEndOfTurn: hasEndOfTurn,
 				};
 				return result;
 			})

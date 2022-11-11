@@ -182,6 +182,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				}),
 				type: 'mechanics',
 			},
+			{
+				tavernTier: 'E',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.END_OF_TURN])),
+				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.END_OF_TURN].toLowerCase()}`),
+				}),
+				type: 'mechanics',
+			},
 		];
 	}
 }

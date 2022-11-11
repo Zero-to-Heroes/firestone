@@ -152,7 +152,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent {
 }
 
 export interface Tier {
-	tavernTier: number | 'B' | 'D' | 'DS' | 'T';
+	tavernTier: number | 'B' | 'D' | 'DS' | 'T' | 'E';
 	cards: readonly ReferenceCard[];
 	groupingFunction: (card: ReferenceCard) => string;
 	tooltip?: string;
