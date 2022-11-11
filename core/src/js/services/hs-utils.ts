@@ -897,6 +897,9 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.REVENDRETH:
 		case BoosterType.GOLDEN_REVENDRETH:
 			return 'revendreth';
+		case BoosterType.RETURN_OF_THE_LICH_KING:
+		//case BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING:
+			return 'return_of_the_lich_king';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
