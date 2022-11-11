@@ -631,6 +631,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion, taunt);
 			case CardIds.RedscaleDragontamer:
 				return and(inDeck, dragon);
+			case CardIds.Resurrect_BRM_017:
+				return and(inGraveyard, minion);
 			case CardIds.RevivePet:
 				return and(inGraveyard, minion, beast);
 			case CardIds.RhoninsScryingOrbTavernBrawl:
