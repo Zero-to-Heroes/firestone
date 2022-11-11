@@ -355,6 +355,7 @@ export const publicCardGiftCreators = [
 	CardIds.EerieStoneTavernBrawl,
 	CardIds.EliteTaurenChieftainLegacy,
 	CardIds.EliteTaurenChieftainVanilla,
+	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
 	CardIds.EtherealConjurer,
 	CardIds.EtherealConjurerCore,
