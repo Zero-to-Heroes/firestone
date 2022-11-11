@@ -7,6 +7,7 @@ import {
 	ComponentRef,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -76,30 +77,39 @@ export class CardTooltipComponent
 	displayBuffs$: Observable<boolean>;
 
 	@Input() set cardId(value: string) {
+		// console.debug('setting card ids', value);
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
 	@Input() set relatedCardIds(value: readonly string[]) {
+		// console.debug('setting related card ids', value);
 		this.relatedCardIds$$.next(value ?? []);
 	}
 	@Input() set localized(value: boolean) {
+		// console.debug('localized', value);
 		this.localized$$.next(value);
 	}
 	@Input() set cardTooltipBgs(value: boolean) {
+		// console.debug('cardTooltipBgs', value);
 		this.isBgs$$.next(value);
 	}
 	@Input() set relativePosition(value: 'left' | 'right') {
+		// console.debug('relativePosition', value);
 		this.relativePosition$$.next(value);
 	}
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
+		// console.debug('cardType', value);
 		this.cardType$$.next(value);
 	}
 	@Input() set additionalClass(value: string) {
+		// console.debug('additionalClass', value);
 		this.additionalClass$$.next(value);
 	}
 	@Input() set displayBuffs(value: boolean) {
+		// console.debug('displayBuffs', value);
 		this.displayBuffs$$.next(value);
 	}
 	@Input() set cardTooltipCard(value: DeckCard) {
+		// console.debug('cardTooltipCard', value);
 		this.buffs$$.next(
 			!value?.buffCardIds?.length
 				? null
@@ -137,8 +147,9 @@ export class CardTooltipComponent
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
+		// console.debug('card-tooltip constructor');
 		// FIXME: For some reason, lifecycle methods are not called systematically
-		setTimeout(() => this.ngAfterContentInit(), 0);
+		setTimeout(() => this.ngAfterContentInit(), 50);
 	}
 
 	ngAfterViewInit(): void {
@@ -165,6 +176,7 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
+			// tap((info) => console.debug('card-tooltip relatedCards', info)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
 					return relatedCardIds.map((cardId) => {
@@ -201,6 +213,7 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
+			// tap((info) => console.debug('card-tooltip card', info)),
 			this.mapData(
 				([[cardIds, localized, isBgs, cardType, additionalClass], [buffs, createdBy], [locale, highRes]]) => {
 					return (
@@ -242,6 +255,11 @@ export class CardTooltipComponent
 				0,
 			),
 		);
+		// console.debug('init card-tooltip', this.cards$);
+		// Because we can't rely on the lifecycle methods
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 
