@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.15.1',
+		version: '9.15.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -44,11 +44,29 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a system tray icon to exit / restart the app more easily.`,
+							},
+						],
+					},
+					{
 						category: 'duels',
 						details: [
 							{
 								type: 'bug',
 								text: `Fix an issue where retiring a run would mess up the next run inside the app (it would get grouped with the retired run).`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add new "tiers" in the minions list for Divine Shield, Taunt and End of Turn minions. These "mechanical tiers" now appear on a second line to make them more separate from the usual tiers 1-6, and each has a different color. You can of course deactivate them from the Settings if you don't like them :)`,
 							},
 						],
 					},
@@ -74,10 +92,6 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
-							{
-								type: 'feature',
-								text: `Add new "tiers" in the minions list for Divine Shield and Taunt minions. These "mechanical tiers" now appear on a second line to make them more separate from the usual tiers 1-6, and each has a different color. You can of course deactivate them from the Settings if you don't like them :)`,
-							},
 							{
 								type: 'bug',
 								text: `Fix sim issues with Volatile Venom.`,
