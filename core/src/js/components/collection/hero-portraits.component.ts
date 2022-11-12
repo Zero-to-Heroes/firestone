@@ -126,6 +126,8 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 							);
 						case 'book-of-mercs':
 							return this.buildBookOfMercenariesHeroPortraits(this.allCards.getCards());
+						case 'book-of-heroes':
+							return this.buildBookOfHeroesHeroPortraits(this.allCards.getCards());
 					}
 				},
 			),
@@ -180,6 +182,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		return Object.keys(groupedByClass)
 			.map((groupingKey) => ({
 				title: this.buildGroupTitle(category, groupedByClass[groupingKey][0]),
+				index: this.buildGroupIndex(category, groupedByClass[groupingKey][0]),
 				portraits: groupedByClass[groupingKey],
 			}))
 			.sort(sortingFunction);
@@ -198,6 +201,11 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 					const match = /BOM_(\d+)_.*/g.exec(portrait.id);
 					return match ? match[1] : '';
 				};
+			case 'book-of-heroes':
+				return (portrait: ReferenceCard) => {
+					const match = /Story_(\d+)_.*/g.exec(portrait.id);
+					return match ? match[1] : '';
+				};
 		}
 	}
 
@@ -205,6 +213,9 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		category: CollectionPortraitCategoryFilter,
 	): (a: PortraitGroup, b: PortraitGroup) => number {
 		switch (category) {
+			case 'book-of-mercs':
+			case 'book-of-heroes':
+				return (a, b) => (a.index < b.index ? -1 : 1);
 			default:
 				return (a, b) => (a.title < b.title ? -1 : 1);
 		}
@@ -218,54 +229,36 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 			case 'mercenaries':
 				return refPortrait.name;
 			case 'book-of-mercs':
-				const match = /BOM_(\d+)_.*/g.exec(refPortrait.id);
-				const storyIndex = match ? match[1] : '';
-				switch (+storyIndex) {
-					case 1:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.rokara',
-						)}`;
-					case 2:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.xyrella',
-						)}`;
-					case 3:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.guff',
-						)}`;
-					case 4:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.kurtrus',
-						)}`;
-					case 5:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.tamsin',
-						)}`;
-					case 6:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.cariel',
-						)}`;
-					case 7:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.scabbs',
-						)}`;
-					case 8:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.tavish',
-						)}`;
-					case 9:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.brukan',
-						)}`;
-					case 10:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.dawngrasp',
-						)}`;
-					default:
-						return `${storyIndex.padStart(2, '0')} - ${this.i18n.translateString(
-							'app.collection.filters.hero-portrait.book-of-mercs-chapters.other',
-						)}`;
+				const BoMmatch = /BOM_(\d+)_.*/g.exec(refPortrait.id);
+				const BoMIndex = BoMmatch ? BoMmatch[1] : '';
+				if(+BoMIndex>=1 && +BoMIndex<=10){
+					return this.i18n.translateString(`app.collection.hero-portraits.book-of-mercs.${BoMIndex}`);
 				}
+				else{
+					return this.i18n.translateString(`app.collection.hero-portraits.book-of-mercs.other`);
+				}
+			case 'book-of-heroes':
+				const BoHmatch = /Story_(\d+)_.*/g.exec(refPortrait.id);
+				const BoHIndex = BoHmatch ? BoHmatch[1] : '';
+				if(+BoHIndex>=1 && +BoHIndex<=11){
+					return this.i18n.translateString(`app.collection.hero-portraits.book-of-heroes.${BoHIndex}`);
+				}
+				else{
+					return this.i18n.translateString(`app.collection.hero-portraits.book-of-heroes.other`);
+				}
+		}
+	}
+
+	private buildGroupIndex(category: CollectionPortraitCategoryFilter, refPortrait: ReferenceCard): number {
+		switch (category) {
+			case 'book-of-mercs':
+				const BoMmatch = /BOM_(\d+)_.*/g.exec(refPortrait.id);
+				return BoMmatch ? +BoMmatch[1] : 0;
+			case 'book-of-heroes':
+				const BoHmatch = /Story_(\d+)_.*/g.exec(refPortrait.id);
+				return BoHmatch ? +BoHmatch[1] : 0;
+			default:
+				return 0;
 		}
 	}
 
@@ -370,7 +363,22 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 					numberOwned: 1,
 				} as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
-		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id]));
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id.slice(-1), card.dbfId]));
+		return sortedHeroes;
+	}
+
+	private buildBookOfHeroesHeroPortraits(cards: readonly ReferenceCard[]): readonly CollectionReferenceCard[] {
+		const relevantPortraits: readonly ReferenceCard[] = cards
+			.filter((card) => card.id.startsWith('Story_'))
+			.filter((card) => card.type === 'Hero');
+		const heroPortraits = relevantPortraits.map(
+			(card) =>
+				({
+					...card,
+					numberOwned: 1,
+				} as CollectionReferenceCard),
+		) as CollectionReferenceCard[];
+		const sortedHeroes = heroPortraits.sort(sortByProperties((card) => [card.id.slice(-1), card.dbfId]));
 		return sortedHeroes;
 	}
 
@@ -391,5 +399,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 
 interface PortraitGroup {
 	readonly title: string;
+	readonly index: number;
 	readonly portraits: readonly (ReferenceCard | CollectionReferenceCard)[];
 }

@@ -1,4 +1,4 @@
-export type CollectionPortraitCategoryFilter = 'collectible' | 'battlegrounds' | 'mercenaries' | 'book-of-mercs';
+export type CollectionPortraitCategoryFilter = 'collectible' | 'battlegrounds' | 'mercenaries' | 'book-of-mercs' | 'book-of-heroes';
 export type CollectionPortraitOwnedFilter = 'all' | 'own' | 'dontown';
 export type CollectionCardRarityFilterType = 'all' | 'common' | 'rare' | 'epic' | 'legendary';
 export type CollectionCardOwnedFilterType =
