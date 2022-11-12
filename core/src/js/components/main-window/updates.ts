@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.15.2',
+		version: '9.15.4',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -95,10 +95,6 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix sim issues with Volatile Venom.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix sim a issue with Evil Twin + Khadgar.`,
 							},
 							{
 								type: 'bug',
