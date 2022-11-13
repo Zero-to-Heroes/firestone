@@ -17,7 +17,7 @@
 	max-width: 100%;
 
 	.title {
-		color: var(--secondary-text-color);
+		color: var(--color-1);
 		margin-bottom: 30px;
 	}
 
@@ -29,7 +29,7 @@
 		width: 75px;
 		position: relative;
 		flex-grow: 0;
-		margin-right: 20px;
+		margin-right: 15px;
 		flex-shrink: 0;
 
 		.skin {
@@ -48,13 +48,14 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+		width: 150%;
+		padding-right: 2%;
 
 		.deck-name {
 			color: var(--default-title-color);
 			margin-bottom: 15px;
 			display: flex;
 			flex-direction: column;
-			align-items: center;
 
 			.archetype {
 				display: flex;
@@ -72,8 +73,6 @@
 			--icon-color: var(--default-text-color);
 			align-items: center;
 			flex-grow: 0;
-			justify-content: flex-end;
-			margin-left: auto;
 
 			.watch {
 				margin-left: 10px;
@@ -103,11 +102,12 @@
 	}
 
 	.best-against {
-		margin-left: 40px;
 		border-left: 1px solid var(--default-text-color);
-		padding-left: 40px;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+		padding-left: 3%;		
 
 		.header {
 			color: var(--default-title-color);
@@ -118,8 +118,6 @@
 
 		.classes {
 			display: flex;
-			position: relative;
-			left: -8px;
 
 			.class-icon {
 				width: 30px;
