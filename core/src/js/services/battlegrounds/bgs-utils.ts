@@ -60,7 +60,7 @@ export const NON_BUYABLE_MINION_IDS = [
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
-	i18n.translateString(`global.tribe.${Race[tribe]?.toLowerCase()}`);
+	i18n.translateString(`app.battlegrounds.tribes.${Race[tribe]?.toLowerCase()}`);
 
 export const getTribeIcon = (tribe: string | Race): string => {
 	const referenceCardId = getReferenceTribeCardId(tribe);
