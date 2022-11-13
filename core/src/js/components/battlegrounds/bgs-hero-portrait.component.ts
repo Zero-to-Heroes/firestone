@@ -25,7 +25,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 				<div class="value">{{ _health }}</div>
 			</div>
 			<div class="rating" *ngIf="rating != null">
-				<div class="value">{{ rating?.toLocaleString('en-US') }}</div>
+				<div class="title" [owTranslate]="'app.battlegrounds.personal-stats.hero.rating'"></div>
+				<div class="value">{{ rating }}</div>
 			</div>
 		</div>
 	`,
