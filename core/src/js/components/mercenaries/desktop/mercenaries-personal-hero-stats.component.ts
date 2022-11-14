@@ -152,7 +152,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.pipe(
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				this.mapData(([referenceData, collectionInfo]) =>
-					collectionInfo.Mercenaries.map((memMerc) =>
+					collectionInfo.Mercenaries?.map((memMerc) =>
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
 					).filter((stat) => stat),
 				),

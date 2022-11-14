@@ -180,6 +180,21 @@ export const buildMercenariesTasksList = (
 			const mercIdForImage = task.mercenaryOverrideId || taskChain?.mercenaryId || visitor.ProceduralMercenaryId;
 			const refMerc = referenceData.mercenaries.find((merc) => merc.id === mercIdForImage);
 			const isProceduralTask = !!visitor.ProceduralMercenaryId || visitor.ProceduralBountyId;
+			if (!refMerc) {
+				console.warn(
+					'missing ref merc',
+					refMerc,
+					mercIdForImage,
+					task.mercenaryOverrideId,
+					taskChain?.mercenaryId,
+					visitor?.ProceduralMercenaryId,
+					taskChain,
+					visitor,
+					referenceData?.mercenaries?.length,
+				);
+				// I've seen this for the Toki repeatable task (task id 28017)
+				return null;
+			}
 			// Always keep the special tasks
 			if (
 				shouldUseMercsRestrition &&
