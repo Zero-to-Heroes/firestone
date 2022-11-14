@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { MailsService } from '@mails/services/mails.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
@@ -136,6 +137,7 @@ export class AppBootstrapService {
 		private init_GameStatsProviderService: GameStatsProviderService,
 		private init_DuelsDecksProviderService: DuelsDecksProviderService,
 		private init_SystemTrayService: SystemTrayService,
+		private init_MailsService: MailsService,
 	) {}
 
 	public async init() {

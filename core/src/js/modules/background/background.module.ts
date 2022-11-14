@@ -151,6 +151,9 @@ import { BattlegroundsTierListComponent } from '../../components/battlegrounds/d
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 // import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
+import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
+import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
+import { MailsService } from '@mails/services/mails.service';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
@@ -580,6 +583,7 @@ import { UserService } from '../../services/user.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
+import { MailboxMessageComponent } from '../../../libs/mails/components/mailbox-message/mailbox-message.component';
 
 console.log('version is ' + process.env.APP_VERSION);
 console.log('environment is ' + process.env.NODE_ENV);
@@ -970,6 +974,10 @@ const components = [
 		LiveStreamInfoComponent,
 		StreamHeroInfosComponent,
 
+		MailboxDesktopComponent,
+		MailboxComponent,
+		MailboxMessageComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -1157,6 +1165,7 @@ const components = [
 		QuestsService,
 		LiveStreamsService,
 		SystemTrayService,
+		MailsService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

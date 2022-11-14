@@ -10,4 +10,5 @@ export type CurrentAppType =
 	| 'arena'
 	| 'stats'
 	| 'streams'
+	| 'mailbox'
 	| 'live';

@@ -33,6 +33,8 @@ import { DuelsIsOnMainScreenProcessor } from '@services/mainwindow/store/process
 import { DuelsStateUpdatedProcessor } from '@services/mainwindow/store/processors/duels/duels-state-updated-processor';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
+import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
+import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
@@ -708,6 +710,10 @@ export class MainWindowStoreService {
 				this.events,
 				this.prefs,
 			),
+
+			// Mailbox
+			MailboxMarkMessageReadEvent.eventName(),
+			new MailboxMarkMessageReadProcessor(this.prefs),
 
 			// Replays
 			ShowReplayEvent.eventName(),

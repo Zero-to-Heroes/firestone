@@ -9,11 +9,12 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
 import { FeatureFlags } from '../services/feature-flags';
+import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -148,7 +149,28 @@ declare let amplitude;
 			</button>
 			<li class="main-menu-separator"></li>
 			<button
-				*ngIf="enableStreamsTab"
+				*ngIf="enableMailboxTab"
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item mailbox"
+				[attr.aria-label]="'app.menu.mailbox-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'mailbox' }"
+				(click)="selectModule('mailbox')"
+			>
+				<div class="icon" inlineSVG="assets/svg/mailbox.svg"></div>
+				<div class="unread-mails" *ngIf="hasNewMail$ | async"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.mailbox-header'"></div>
+					<div
+						class="menu-text-details"
+						*ngIf="hasNewMail$ | async"
+						[innerHTML]="mailboxTextDetails$ | async"
+					></div>
+				</div>
+			</button>
+			<li class="main-menu-separator"></li>
+			<button
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item"
@@ -221,11 +243,13 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
-	enableStreamsTab = FeatureFlags.ENABLE_STREAMS_TAB;
+	enableMailboxTab = FeatureFlags.ENABLE_MAILBOX_TAB;
 
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
 	tabIndex$: Observable<number>;
+	hasNewMail$: Observable<boolean>;
+	mailboxTextDetails$: Observable<string>;
 
 	@Input() selectedModule: string;
 
@@ -234,11 +258,11 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private ow: OverwolfService,
-		private adService: AdService,
-		private readonly translate: TranslateService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private ow: OverwolfService,
+		private adService: AdService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -253,6 +277,18 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
+		this.hasNewMail$ = this.store.mails$().pipe(
+			tap((info) => console.debug('mailbox', info)),
+			this.mapData((mailState) => mailState.mails.some((mail) => !mail.read)),
+		);
+		this.mailboxTextDetails$ = this.store.mails$().pipe(
+			tap((info) => console.debug('mailbox', info)),
+			this.mapData((mailState) =>
+				this.i18n.translateString('app.menu.mailbox-text-details', {
+					value: mailState.mails.filter((mail) => !mail.read).length,
+				}),
+			),
+		);
 	}
 
 	async ngAfterViewInit() {

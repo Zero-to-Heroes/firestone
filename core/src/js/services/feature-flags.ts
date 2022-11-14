@@ -4,7 +4,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DUELS_DECK_BUILDER = true;
 	public static readonly ENABLE_DUELS_DECK_BUILDER_BUCKETS = true;
 	public static readonly ENABLE_DECK_VERSIONS = true;
-	public static readonly ENABLE_STREAMS_TAB = true;
+	public static readonly ENABLE_MAILBOX_TAB = true;
 
 	// Shelved for now
 	public static readonly ENABLE_CONSTRUCTED_META_DECKS = false;

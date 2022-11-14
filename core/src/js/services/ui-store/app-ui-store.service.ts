@@ -1,5 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { MailState } from '@mails/mail-state';
+import { MailsService } from '@mails/services/mails.service';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
@@ -76,6 +78,7 @@ export class AppUiStoreService {
 	private decks = new BehaviorSubject<readonly DeckSummary[]>(null);
 	private duelsRuns = new BehaviorSubject<readonly DuelsRun[]>(null);
 	private duelsDecks = new BehaviorSubject<readonly DuelsDeckSummary[]>(null);
+	private mails = new BehaviorSubject<MailState>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -100,6 +103,7 @@ export class AppUiStoreService {
 				decks: this.decks.observers,
 				duelsRuns: this.duelsRuns.observers,
 				duelsDecks: this.duelsDecks.observers,
+				mails: this.mails.observers,
 			});
 	}
 
@@ -257,6 +261,10 @@ export class AppUiStoreService {
 		return this.duelsDecks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public mails$(): Observable<MailState> {
+		return this.mails.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
@@ -275,7 +283,13 @@ export class AppUiStoreService {
 		this.initDecks();
 		this.initDuelsRuns();
 		this.initDuelsDecks();
+		this.initMails();
 		this.initialized = true;
+	}
+
+	private initMails() {
+		const mails: BehaviorSubject<MailState> = (this.ow.getMainWindow().mailsProvider as MailsService).mails$;
+		mails.subscribe(this.mails);
 	}
 
 	private initDuelsDecks() {

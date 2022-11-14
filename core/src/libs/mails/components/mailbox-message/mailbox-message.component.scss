@@ -1,0 +1,57 @@
+.mailbox-message {
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+	display: flex;
+	font-size: 14px;
+	position: relative;
+
+	&.unread {
+		&:hover {
+			background: rgba(255, 255, 255, 0.12);
+		}
+	}
+
+	&.read {
+		opacity: 0.5;
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.unread-mails {
+		background: #ff4747;
+		padding: 5px;
+		width: 10px;
+		height: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 2px solid #ff4747;
+		position: absolute;
+		top: -5px;
+		left: -5px;
+	}
+
+	.info {
+		display: flex;
+		flex-direction: column;
+
+		.date {
+			font-size: 12px;
+		}
+
+		.links {
+			display: flex;
+			flex-direction: column;
+
+			a {
+				color: var(--color-2);
+
+				&:hover {
+					color: var(--color-1);
+				}
+			}
+		}
+	}
+}

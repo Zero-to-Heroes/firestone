@@ -217,7 +217,7 @@ module.exports = function (env, argv) {
 				{
 					test: /\.ts$/,
 					exclude: [/node_modules/, /test/, /\.worker.ts$/],
-					include: path.resolve(__dirname, 'src', 'js'),
+					include: path.resolve(__dirname, 'src'),
 					use: [
 						'@ngtools/webpack',
 						{
@@ -231,7 +231,7 @@ module.exports = function (env, argv) {
 				{
 					test: /\.scss$/,
 					exclude: /node_modules/,
-					include: path.resolve(__dirname, 'src', 'css'),
+					include: path.resolve(__dirname, 'src'),
 					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
 				},
 				{

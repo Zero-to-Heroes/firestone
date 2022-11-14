@@ -92,6 +92,8 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
 							<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
 							<stats-desktop class="main-section" *ngIf="value.currentApp === 'stats'"> </stats-desktop>
+							<mailbox-desktop class="main-section" *ngIf="value.currentApp === 'mailbox'">
+							</mailbox-desktop>
 							<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'">
 							</streams-desktop>
 						</section>
@@ -300,7 +302,7 @@ export class MainWindowComponent
 		}
 		return showFtue
 			? 'general'
-			: ['decktracker', 'arena', 'stats', 'mercenaries', 'streams'].includes(currentApp)
+			: ['decktracker', 'arena', 'stats', 'mercenaries', 'streams', 'mailbox'].includes(currentApp)
 			? 'decktracker-desktop'
 			: currentApp;
 	}
