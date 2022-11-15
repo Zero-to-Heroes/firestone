@@ -901,24 +901,6 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.REVENDRETH:
 		case BoosterType.GOLDEN_REVENDRETH:
 			return 'revendreth';
-		case BoosterType.STANDARD_HUNTER:
-		case BoosterType.STANDARD_DRUID:
-		case BoosterType.STANDARD_MAGE:
-		case BoosterType.STANDARD_PALADIN:
-		case BoosterType.STANDARD_WARRIOR:
-		case BoosterType.STANDARD_PRIEST:
-		case BoosterType.STANDARD_ROGUE:
-		case BoosterType.STANDARD_SHAMAN:
-		case BoosterType.STANDARD_WARLOCK:
-		case BoosterType.STANDARD_DEMONHUNTER:
-		case BoosterType.STANDARD_BUNDLE:
-		case BoosterType.GOLDEN_STANDARD_BUNDLE:
-		case BoosterType.MAMMOTH_BUNDLE:
-		case BoosterType.YEAR_OF_DRAGON:
-		case BoosterType.YEAR_OF_PHOENIX:
-		case BoosterType.WILD_PACK:
-		case BoosterType.SIGNUP_INCENTIVE:
-		case BoosterType.FIRST_PURCHASE:
 		default:
 			// console.warn('unsupported booster type', boosterId);
 			return null;
