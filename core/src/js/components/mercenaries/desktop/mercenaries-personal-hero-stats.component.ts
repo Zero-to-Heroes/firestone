@@ -88,7 +88,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[name]="'mercenaries.hero-stats.completed-tasks-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'task-progress'"
-					[helpTooltip]="'mercenaries.hero-stats.completed-tasks-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
 				<sortable-label
