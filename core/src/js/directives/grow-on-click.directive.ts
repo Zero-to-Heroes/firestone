@@ -7,6 +7,7 @@ import { PreferencesService } from '../services/preferences.service';
 })
 export class GrowOnClickDirective {
 	@Input() growOnClickScale = 1.3;
+	@Input() growOnClick: boolean;
 
 	private animationPlayer: AnimationPlayer;
 
@@ -18,6 +19,11 @@ export class GrowOnClickDirective {
 
 	@HostListener('click')
 	async onClick() {
+		// Only skip if we specify it to false. "null" / "undefined" still works as truthy
+		if (this.growOnClick === false) {
+			return;
+		}
+
 		const metadata: AnimationMetadata[] = [
 			style({
 				transform: 'scale(1)',

@@ -1,0 +1,27 @@
+.tavern-brawl-stat {
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
+
+	&.clickable:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+}
+
+.hero-portrait {
+	margin-bottom: 15px;
+}
+
+.player-class {
+	width: 7vw;
+	clip-path: circle(43% at 50% 50%);
+}
+
+.stats {
+	font-size: 14px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}

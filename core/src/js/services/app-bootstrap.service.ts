@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { MailsService } from '@mails/services/mails.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
+import { TavernBrawlService } from '../../libs/tavern-brawl/services/tavern-brawl.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
@@ -138,6 +139,7 @@ export class AppBootstrapService {
 		private init_DuelsDecksProviderService: DuelsDecksProviderService,
 		private init_SystemTrayService: SystemTrayService,
 		private init_MailsService: MailsService,
+		private init_TavernBrawlService: TavernBrawlService,
 	) {}
 
 	public async init() {

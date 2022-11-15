@@ -50,8 +50,8 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
-				"size": { "width": 1400, "height": 750 },
-				"min_size": { "width": 1400, "height": 750 },
+				"size": { "width": 1400, "height": 780 },
+				"min_size": { "width": 1400, "height": 780 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
@@ -66,8 +66,8 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 1400, "height": 750 },
-				"min_size": { "width": 1400, "height": 750 },
+				"size": { "width": 1400, "height": 780 },
+				"min_size": { "width": 1400, "height": 780 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true

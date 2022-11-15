@@ -154,6 +154,11 @@ import { BgsHeroSelectionOverviewComponent } from '../../components/battleground
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
 import { MailsService } from '@mails/services/mails.service';
+import { MailboxMessageComponent } from '../../../libs/mails/components/mailbox-message/mailbox-message.component';
+import { TavernBrawlMetaComponent } from '../../../libs/tavern-brawl/components/meta/tavern-brawl-meta.component';
+import { TavernBrawlStatComponent } from '../../../libs/tavern-brawl/components/stat/tavern-brawl-stat.component';
+import { TavernBrawlDesktopComponent } from '../../../libs/tavern-brawl/components/tavern-brawl-desktop.component';
+import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
@@ -583,7 +588,6 @@ import { UserService } from '../../services/user.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
-import { MailboxMessageComponent } from '../../../libs/mails/components/mailbox-message/mailbox-message.component';
 
 console.log('version is ' + process.env.APP_VERSION);
 console.log('environment is ' + process.env.NODE_ENV);
@@ -978,6 +982,10 @@ const components = [
 		MailboxComponent,
 		MailboxMessageComponent,
 
+		TavernBrawlDesktopComponent,
+		TavernBrawlMetaComponent,
+		TavernBrawlStatComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -1166,6 +1174,7 @@ const components = [
 		LiveStreamsService,
 		SystemTrayService,
 		MailsService,
+		TavernBrawlService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

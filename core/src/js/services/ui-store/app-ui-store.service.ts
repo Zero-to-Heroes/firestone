@@ -15,6 +15,8 @@ import {
 } from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
+import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
@@ -79,6 +81,7 @@ export class AppUiStoreService {
 	private duelsRuns = new BehaviorSubject<readonly DuelsRun[]>(null);
 	private duelsDecks = new BehaviorSubject<readonly DuelsDeckSummary[]>(null);
 	private mails = new BehaviorSubject<MailState>(null);
+	private tavernBrawl = new BehaviorSubject<TavernBrawlState>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -104,6 +107,7 @@ export class AppUiStoreService {
 				duelsRuns: this.duelsRuns.observers,
 				duelsDecks: this.duelsDecks.observers,
 				mails: this.mails.observers,
+				tavernBrawl: this.tavernBrawl.observers,
 			});
 	}
 
@@ -265,6 +269,10 @@ export class AppUiStoreService {
 		return this.mails.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public tavernBrawl$(): Observable<TavernBrawlState> {
+		return this.tavernBrawl.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
@@ -284,7 +292,14 @@ export class AppUiStoreService {
 		this.initDuelsRuns();
 		this.initDuelsDecks();
 		this.initMails();
+		this.initTavernBrawl();
 		this.initialized = true;
+	}
+
+	private initTavernBrawl() {
+		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (this.ow.getMainWindow()
+			.tavernBrawlProvider as TavernBrawlService).tavernBrawl$;
+		tavernBrawl.subscribe(this.tavernBrawl);
 	}
 
 	private initMails() {

@@ -104,6 +104,20 @@ declare let amplitude;
 					<div class="menu-header" [owTranslate]="'app.menu.arena-header'"></div>
 				</div>
 			</button>
+			<button
+				[attr.tabindex]="tabIndex$ | async"
+				type="button"
+				class="menu-item tavern-brawl"
+				[attr.aria-label]="'app.menu.tavern-brawl-header' | owTranslate"
+				[ngClass]="{ 'selected': selectedModule === 'tavern-brawl' }"
+				(click)="selectModule('tavern-brawl')"
+			>
+				<div class="icon" inlineSVG="assets/svg/tavern_brawl.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header" [owTranslate]="'app.menu.tavern-brawl-header'"></div>
+				</div>
+			</button>
 			<li class="main-menu-separator"></li>
 			<button
 				[attr.tabindex]="tabIndex$ | async"
