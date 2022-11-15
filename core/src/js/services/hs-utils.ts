@@ -337,6 +337,7 @@ export const publicCardGiftCreators = [
 	CardIds.ConnectionsTavernBrawl,
 	CardIds.CorsairCache,
 	CardIds.CrystallineOracle,
+	CardIds.DarkPeddler,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
@@ -416,6 +417,7 @@ export const publicCardGiftCreators = [
 	CardIds.Jackpot,
 	CardIds.JarDealer,
 	CardIds.JerryRigCarpenter,
+	CardIds.JeweledScarab,
 	CardIds.JourneyBelow_OG_072,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
@@ -518,6 +520,7 @@ export const publicCardGiftCreators = [
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
 	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
+	CardIds.Spellslinger_AT_007,
 	CardIds.Springpaw,
 	CardIds.SpringpawCore,
 	CardIds.SketchyStranger,
