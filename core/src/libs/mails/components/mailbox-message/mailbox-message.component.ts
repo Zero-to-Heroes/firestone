@@ -12,7 +12,7 @@ import { Mail } from '../../mail-state';
 			<div class="category" *ngIf="icon" [inlineSVG]="icon" [helpTooltip]="iconTooltip"></div>
 			<div class="info">
 				<div class="date">{{ date }}</div>
-				<div class="text">{{ text }}</div>
+				<div class="text" [innerHTML]="text"></div>
 				<div class="links" *ngIf="links?.length">
 					<a
 						*ngFor="let link of links"
