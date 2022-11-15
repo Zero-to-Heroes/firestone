@@ -545,6 +545,7 @@ export const publicCardGiftCreators = [
 	CardIds.TheForestsAid_DAL_256,
 	CardIds.TheLichKing_ICC_314,
 	CardIds.TheLobotomizer,
+	CardIds.TheSunwell,
 	CardIds.ThistleTea,
 	CardIds.ThoughtstealLegacy,
 	CardIds.ThoughtstealVanilla,
