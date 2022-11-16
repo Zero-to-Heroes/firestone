@@ -53,6 +53,8 @@ export const modifyDecksForSpecialCards = (
 				handleSteamcleaner(deckState, allCards, i18n),
 				handleSteamcleaner(opponentDeckState, allCards, i18n),
 			];
+		case CardIds.UpgradedPackMule:
+			return [handleUpgradedPackMule(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.WyrmrestPurifier:
 			return [handleWyrmrestPurifier(deckState, allCards, i18n), opponentDeckState];
 		default:
@@ -179,8 +181,22 @@ const handleScepterOfSummoning = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => (refCard?.type === 'Minion' || card?.cardType === 'Minion') && card?.actualManaCost >= 5,
+		(card, refCard) =>
+			(refCard?.type === 'Minion' || card?.cardType === 'Minion') && card?.getEffectiveManaCost() >= 5,
 		(card) => 5,
+		deckState,
+		allCards,
+	);
+};
+
+const handleUpgradedPackMule = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCostInDeck(
+		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
+		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
 		deckState,
 		allCards,
 	);

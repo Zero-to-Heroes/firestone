@@ -244,6 +244,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						handler.deckCardProvider()?.getEffectiveManaCost() <= secondCheapestMinionCost
 					);
 				};
+			case CardIds.AdvancedTargetingMonocle:
+				return and(inDeck, spell);
 			case CardIds.AllianceBannerman:
 				return and(inDeck, minion);
 			case CardIds.AmuletOfUndying:
@@ -524,6 +526,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, mech);
 			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 				return and(demon, inGraveyard, minion);
+			case CardIds.KathrenaWinterwisp:
+				return and(inDeck, minion, beast);
 			case CardIds.Kazakusan_ONY_005:
 				return and(or(inDeck, cardsPlayedThisMatch), minion, dragon);
 			case CardIds.KhadgarsScryingOrb:
