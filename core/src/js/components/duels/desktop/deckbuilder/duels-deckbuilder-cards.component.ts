@@ -24,8 +24,33 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	styleUrls: [`../../../../../css/component/duels/desktop/deckbuilder/duels-deckbuilder-cards.component.scss`],
 	template: `
 		<div class="duels-deckbuilder-cards">
-			<div class="deck-rename-container">
-				<input class="name-input" [(ngModel)]="deckName" (mousedown)="preventDrag($event)" />
+		<div class="deck-controls-container">
+				<div class="deck-rename-container">
+					<input class="name-input" [(ngModel)]="deckName" (mousedown)="preventDrag($event)" />
+				</div>
+				<div 
+					class="export-deck" 
+					*ngIf="{ valid: deckValid$ | async } as exportValue"
+					[ngClass]="{ 'visible':  exportValue }" 
+				>
+					<ng-container *ngIf="deckstring$ | async as deckstring">
+						<button
+							class="save-deckcode"
+							*ngIf="exportValue.valid"
+							[helpTooltip]="'app.duels.deckbuilder.save-deckcode-button-tooltip' | owTranslate"
+							(click)="saveDeck(deckstring)"
+						>
+							{{ saveDeckcodeButtonLabel }}
+						</button>
+						<copy-deckstring
+							class="copy-deckcode"
+							*ngIf="exportValue.valid"
+							[deckstring]="deckstring"
+							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
+						>
+						</copy-deckstring>
+					</ng-container>
+				</div>
 			</div>
 			<ng-container
 				*ngIf="{
@@ -61,24 +86,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 					>
 					</deck-list>
 					<div class="export-deck" *ngIf="{ valid: deckValid$ | async } as exportValue">
-						<copy-deckstring
-							class="copy-deckcode"
-							*ngIf="exportValue.valid"
-							[deckstring]="deckstring$ | async"
-							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
-						>
-						</copy-deckstring>
-						<ng-container *ngIf="deckstring$ | async as deckstring">
-							<button
-								class="save-deckcode"
-								*ngIf="exportValue.valid"
-								[helpTooltip]="'app.duels.deckbuilder.save-deckcode-button-tooltip' | owTranslate"
-								(click)="saveDeck(deckstring)"
-							>
-								{{ saveDeckcodeButtonLabel }}
-							</button></ng-container
-						>
-						<div class="invalid-text" *ngIf="!exportValue.valid">{{ ongoingText$ | async }}</div>
+						<div class="invalid-text">{{ ongoingText$ | async }}</div>
 					</div>
 					<div class="missing-dust" *ngIf="missingDust$ | async as missingDust">
 						<div
