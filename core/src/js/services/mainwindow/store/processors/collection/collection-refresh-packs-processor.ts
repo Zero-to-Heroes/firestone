@@ -1,6 +1,6 @@
+import { PackStatsService } from '../../../../../../libs/packs/services/pack-stats.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PackStatsService } from '../../../../collection/pack-stats.service';
 import { CollectionRefreshPacksEvent } from '../../events/collection/colection-refresh-packs-event';
 import { Processor } from '../processor';
 

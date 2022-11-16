@@ -161,6 +161,8 @@ import { PackHistoryComponent } from '../../../libs/packs/components/pack-histor
 import { PackStatTooltipComponent } from '../../../libs/packs/components/pack-stat-tooltip.component';
 import { PackStatComponent } from '../../../libs/packs/components/pack-stat.component';
 import { CollectionPackStatsComponent } from '../../../libs/packs/components/pack-stats.component';
+import { PackMonitor } from '../../../libs/packs/services/pack-monitor.service';
+import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { TavernBrawlMetaComponent } from '../../../libs/tavern-brawl/components/meta/tavern-brawl-meta.component';
 import { TavernBrawlStatComponent } from '../../../libs/tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '../../../libs/tavern-brawl/components/tavern-brawl-desktop.component';
@@ -510,8 +512,6 @@ import { CardsFacadeService } from '../../services/cards-facade.service';
 import { CardsInitService } from '../../services/cards-init.service';
 import { CardNotificationsService } from '../../services/collection/card-notifications.service';
 import { CardsMonitorService } from '../../services/collection/cards-monitor.service';
-import { PackMonitor } from '../../services/collection/pack-monitor.service';
-import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
 import { ArenaRunParserService } from '../../services/decktracker/arena-run-parser.service';
 import { ConstructedMetaDecksStateBuilderService } from '../../services/decktracker/constructed-meta-decks-state-builder.service';

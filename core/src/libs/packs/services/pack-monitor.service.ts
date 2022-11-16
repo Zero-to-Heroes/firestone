@@ -2,12 +2,12 @@ import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { InternalCardInfo } from '../../models/collection/internal-card-info';
-import { Events } from '../../services/events.service';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { dustFor, dustForPremium } from '../hs-utils';
-import { OverwolfService } from '../overwolf.service';
-import { CardNotificationsService } from './card-notifications.service';
+import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
+import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
+import { Events } from '../../../js/services/events.service';
+import { GameEventsEmitterService } from '../../../js/services/game-events-emitter.service';
+import { dustFor, dustForPremium } from '../../../js/services/hs-utils';
+import { OverwolfService } from '../../../js/services/overwolf.service';
 
 @Injectable()
 export class PackMonitor {

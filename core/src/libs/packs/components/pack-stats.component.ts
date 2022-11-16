@@ -2,7 +2,6 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
 import { sets } from '../../../js/services/collection/sets.ref';
 import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
@@ -101,14 +100,13 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							unopened: 0,
 							name: boosterIdToBoosterName(boosterId, this.i18n),
 							setId: boosterIdToSetId(boosterId),
-							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary'),
-							nextEpic: buildPityTimer(packsForBoosterId, 'epic'),
+							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary', boosterId),
+							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId),
 						} as InternalPackInfo;
 					})
 					.filter((info) => info)
 					.reverse(),
 			),
-			tap((info) => console.debug('pack stat info', info)),
 		);
 		this.packGroups$ = combineLatest(this.showOnlyBuyablePacks$, packs$).pipe(
 			this.mapData(([showOnlyBuyablePacks, packs]) => {
@@ -243,13 +241,22 @@ interface InternalPackGroup {
 
 export const EPIC_PITY_TIMER = 10;
 export const LEGENDARY_PITY_TIMER = 40;
+const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
+	BoosterType.YEAR_OF_DRAGON,
+	BoosterType.YEAR_OF_PHOENIX,
+	// BoosterType.
+];
 
-const buildPityTimer = (packsForSet: readonly PackResult[], type: 'legendary' | 'epic'): number => {
+const buildPityTimer = (
+	packsForSet: readonly PackResult[],
+	type: 'legendary' | 'epic',
+	boosterId: BoosterType,
+): number => {
 	let result =
 		type === 'epic'
 			? EPIC_PITY_TIMER
 			: // Guaranteed legendary in the first 10 packs
-			packsForSet.length < 10
+			packsForSet.length < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
 			? 10
 			: LEGENDARY_PITY_TIMER;
 	for (let i = 0; i < packsForSet.length; i++) {

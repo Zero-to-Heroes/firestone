@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
@@ -15,7 +16,6 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { CollectionStorageService } from './collection-storage.service';
-import { PackStatsService } from './pack-stats.service';
 import { SetsService } from './sets-service.service';
 
 const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json';

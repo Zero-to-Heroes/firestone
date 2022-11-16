@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds } from '@firestone-hs/reference-data';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
-import { InternalCardInfo } from '../../models/collection/internal-card-info';
-import { ApiRunner } from '../api-runner';
-import { Events } from '../events.service';
-import { LocalStorageService } from '../local-storage';
-import { CollectionPacksUpdatedEvent } from '../mainwindow/store/events/collection/colection-packs-updated-event';
-import { OverwolfService } from '../overwolf.service';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { SetsService } from './sets-service.service';
+import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
+import { ApiRunner } from '../../../js/services/api-runner';
+import { SetsService } from '../../../js/services/collection/sets-service.service';
+import { Events } from '../../../js/services/events.service';
+import { LocalStorageService } from '../../../js/services/local-storage';
+import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
+import { OverwolfService } from '../../../js/services/overwolf.service';
+import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 const PACKS_UPDATE_URL = 'https://api.firestoneapp.com/packs/save/packs/{proxy+}';
 const PACKS_RETRIEVE_URL = 'https://api.firestoneapp.com/packs/get/packs/{proxy+}';

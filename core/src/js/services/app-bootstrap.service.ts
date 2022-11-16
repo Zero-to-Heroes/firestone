@@ -2,6 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { MailsService } from '@mails/services/mails.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsHighlightService } from '@services/decktracker/card-highlight/cards-highlight.service';
+import { PackMonitor } from '../../libs/packs/services/pack-monitor.service';
+import { PackStatsService } from '../../libs/packs/services/pack-stats.service';
 import { TavernBrawlService } from '../../libs/tavern-brawl/services/tavern-brawl.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
@@ -17,8 +19,6 @@ import { RealTimeStatsService } from './battlegrounds/store/real-time-stats/real
 import { CardsMonitorService } from './collection/cards-monitor.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { CollectionStorageService } from './collection/collection-storage.service';
-import { PackMonitor } from './collection/pack-monitor.service';
-import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
 import { ArenaRunParserService } from './decktracker/arena-run-parser.service';
 import { ConstructedMetaDecksStateBuilderService } from './decktracker/constructed-meta-decks-state-builder.service';
