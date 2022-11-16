@@ -53,7 +53,7 @@ export const formatClass = (playerClass: string, i18n: { translateString: (strin
 export const colorForClass = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'deathknight':
-			return '#6aaeb9'
+			return '#6aaeb9';
 		case 'demonhunter':
 			return '#123B17';
 		case 'druid':
