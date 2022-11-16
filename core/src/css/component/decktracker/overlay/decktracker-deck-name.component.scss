@@ -10,6 +10,13 @@
 	padding-right: 10px;
 	z-index: 1;
 
+	.class-image {
+		width: 25px;
+		height: 25px;
+		clip-path: circle(15px at 50% 50%);
+		margin-right: 2px;
+	}
+
 	span {
 		font-family: Sumana;
 		font-style: normal;
