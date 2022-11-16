@@ -23,7 +23,8 @@
 			"@models/*": ["src/js/models/*"],
 			"@components/*": ["src/js/components/*"],
 			"@directives/*": ["src/js/directives/*"],
-			"@services/*": ["src/js/services/*"]
+			"@services/*": ["src/js/services/*"],
+			"@mails/*": ["src/libs/mails/*"]
 		}
 	},
 	"angularCompilerOptions": {

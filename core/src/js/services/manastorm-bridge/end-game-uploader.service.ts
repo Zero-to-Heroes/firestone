@@ -41,7 +41,7 @@ export class EndGameUploaderService {
 		'ranked',
 		'casual',
 		'arena',
-		'tavernbrawl',
+		'tavern-brawl',
 		'duels',
 		'paid-duels',
 	];

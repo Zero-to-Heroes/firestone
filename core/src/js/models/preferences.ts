@@ -32,7 +32,6 @@ import { ConstructedDeckVersions } from './mainwindow/decktracker/decktracker-st
 import { ConstructedStatsTab } from './mainwindow/decktracker/decktracker-view.type';
 import { StatGameFormatType } from './mainwindow/stats/stat-game-format.type';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
-import { MemoryVisitor } from './memory/memory-mercenaries-collection-info';
 import {
 	MercenariesFullyUpgradedFilterType,
 	MercenariesHeroLevelFilterType,
@@ -77,6 +76,8 @@ export class Preferences {
 	readonly showQuestsInGame: boolean = true;
 	readonly useStreamerMode: boolean = false;
 	readonly regionFilter: BnetRegion | 'all' = 'all';
+
+	readonly mailboxLastVisitDate: Date;
 
 	readonly advancedModeToggledOn: boolean;
 

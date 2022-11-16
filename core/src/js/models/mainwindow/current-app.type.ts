@@ -8,6 +8,8 @@ export type CurrentAppType =
 	| 'general'
 	| 'duels'
 	| 'arena'
+	| 'tavern-brawl'
 	| 'stats'
 	| 'streams'
+	| 'mailbox'
 	| 'live';

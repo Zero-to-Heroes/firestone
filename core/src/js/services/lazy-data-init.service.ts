@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TavernBrawlService } from '../../libs/tavern-brawl/services/tavern-brawl.service';
 import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BattlegroundsQuestsService } from './battlegrounds/bgs-quests.service';
@@ -19,6 +20,7 @@ export class LazyDataInitService {
 		private readonly bgsQuestsService: BattlegroundsQuestsService,
 		private readonly questsService: QuestsService,
 		private readonly streamsService: LiveStreamsService,
+		private readonly tavernBrawlService: TavernBrawlService,
 	) {}
 
 	public requestLoad(dataType: StateDataType) {
@@ -42,6 +44,8 @@ export class LazyDataInitService {
 				return this.questsService.loadReferenceQuests();
 			case 'live-streams':
 				return this.streamsService.loadLiveStreams();
+			case 'tavern-brawl-stats':
+				return this.tavernBrawlService.loadStats();
 		}
 	}
 }
@@ -55,4 +59,5 @@ export type StateDataType =
 	| 'reference-quests'
 	| 'bgs-quest-stats'
 	| 'live-streams'
+	| 'tavern-brawl-stats'
 	| 'battlegrounds-perfect-games';

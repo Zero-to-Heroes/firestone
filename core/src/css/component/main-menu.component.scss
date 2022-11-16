@@ -54,11 +54,17 @@
 				height: 100%;
 			}
 
+			.menu-header {
+				text-align: left;
+				min-width: 100px;
+			}
+
 			.menu-text-details {
 				color: var(--default-text-color);
 				text-align: left;
 				font-size: 11px;
 				margin-top: 7px;
+				max-width: 250px;
 			}
 		}
 
@@ -80,6 +86,12 @@
 			.icon {
 				width: 40px;
 				height: 40px;
+			}
+		}
+
+		&.tavern-brawl {
+			.icon {
+				opacity: 0.6;
 			}
 		}
 	}
@@ -111,6 +123,23 @@
 			width: 130px;
 			bottom: 0;
 			top: auto;
+		}
+	}
+
+	.mailbox {
+		.unread-mails {
+			background: #ff4747;
+			padding: 5px;
+			width: 5px;
+			height: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			border: 2px solid #ff4747;
+			position: absolute;
+			top: 10px;
+			right: 10px;
 		}
 	}
 }

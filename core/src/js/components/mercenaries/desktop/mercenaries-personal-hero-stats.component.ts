@@ -88,7 +88,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[name]="'mercenaries.hero-stats.completed-tasks-header' | owTranslate"
 					[sort]="sort"
 					[criteria]="'task-progress'"
-					[helpTooltip]="'mercenaries.hero-stats.completed-tasks-header-tooltip' | owTranslate"
 				>
 				</sortable-label>
 				<sortable-label
@@ -152,7 +151,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			.pipe(
 				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
 				this.mapData(([referenceData, collectionInfo]) =>
-					collectionInfo.Mercenaries.map((memMerc) =>
+					collectionInfo.Mercenaries?.map((memMerc) =>
 						this.buildMercenaryStat(memMerc, referenceData, collectionInfo.Visitors),
 					).filter((stat) => stat),
 				),

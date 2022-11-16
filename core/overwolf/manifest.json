@@ -45,6 +45,33 @@
 				"grab_focus_on_desktop": false,
 				"block_top_window_navigation": true
 			},
+			"CollectionOverlayWindow": {
+				"file": "Files/collection.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": true,
+				"size": { "width": 1400, "height": 780 },
+				"min_size": { "width": 1400, "height": 780 },
+				"block_top_window_navigation": true,
+				"popup_blocker": true,
+				"mute": true
+			},
+			"CollectionWindow": {
+				"file": "Files/collection.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": true,
+				"native_window": true,
+				"use_os_windowing": true,
+				"desktop_only": true,
+				"topmost": false,
+				"disable_hardware_acceleration": true,
+				"size": { "width": 1400, "height": 780 },
+				"min_size": { "width": 1400, "height": 780 },
+				"block_top_window_navigation": true,
+				"popup_blocker": true,
+				"mute": true
+			},
 			"FullScreenOverlaysWindow": {
 				"file": "Files/full_screen_overlays.html",
 				"transparent": true,
@@ -117,33 +144,6 @@
 				"start_position": { "top": 200, "left": 200 },
 				"min_size": { "width": 780, "height": 620 },
 				"max_size": { "width": 780, "height": 620 }
-			},
-			"CollectionOverlayWindow": {
-				"file": "Files/collection.html",
-				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": true,
-				"size": { "width": 1400, "height": 700 },
-				"min_size": { "width": 1400, "height": 700 },
-				"block_top_window_navigation": true,
-				"popup_blocker": true,
-				"mute": true
-			},
-			"CollectionWindow": {
-				"file": "Files/collection.html",
-				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": true,
-				"native_window": true,
-				"use_os_windowing": true,
-				"desktop_only": true,
-				"topmost": false,
-				"disable_hardware_acceleration": true,
-				"size": { "width": 1400, "height": 700 },
-				"min_size": { "width": 1400, "height": 700 },
-				"block_top_window_navigation": true,
-				"popup_blocker": true,
-				"mute": true
 			},
 			"BattlegroundsOverlayWindow": {
 				"file": "Files/battlegrounds.html",

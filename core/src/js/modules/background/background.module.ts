@@ -151,6 +151,14 @@ import { BattlegroundsTierListComponent } from '../../components/battlegrounds/d
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 // import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
+import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
+import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
+import { MailsService } from '@mails/services/mails.service';
+import { MailboxMessageComponent } from '../../../libs/mails/components/mailbox-message/mailbox-message.component';
+import { TavernBrawlMetaComponent } from '../../../libs/tavern-brawl/components/meta/tavern-brawl-meta.component';
+import { TavernBrawlStatComponent } from '../../../libs/tavern-brawl/components/stat/tavern-brawl-stat.component';
+import { TavernBrawlDesktopComponent } from '../../../libs/tavern-brawl/components/tavern-brawl-desktop.component';
+import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
@@ -970,6 +978,14 @@ const components = [
 		LiveStreamInfoComponent,
 		StreamHeroInfosComponent,
 
+		MailboxDesktopComponent,
+		MailboxComponent,
+		MailboxMessageComponent,
+
+		TavernBrawlDesktopComponent,
+		TavernBrawlMetaComponent,
+		TavernBrawlStatComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -1157,6 +1173,8 @@ const components = [
 		QuestsService,
 		LiveStreamsService,
 		SystemTrayService,
+		MailsService,
+		TavernBrawlService,
 
 		AppUiStoreService,
 		AppUiStoreFacadeService,

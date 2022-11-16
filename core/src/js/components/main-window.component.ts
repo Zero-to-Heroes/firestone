@@ -91,7 +91,11 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 							</mercenaries-desktop>
 							<duels-desktop class="main-section" *ngIf="value.currentApp === 'duels'"> </duels-desktop>
 							<arena-desktop class="main-section" *ngIf="value.currentApp === 'arena'"> </arena-desktop>
+							<tavern-brawl-desktop class="main-section" *ngIf="value.currentApp === 'tavern-brawl'">
+							</tavern-brawl-desktop>
 							<stats-desktop class="main-section" *ngIf="value.currentApp === 'stats'"> </stats-desktop>
+							<mailbox-desktop class="main-section" *ngIf="value.currentApp === 'mailbox'">
+							</mailbox-desktop>
 							<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'">
 							</streams-desktop>
 						</section>
@@ -298,10 +302,16 @@ export class MainWindowComponent
 		if (displayingNewVersionNotification) {
 			return 'general';
 		}
-		return showFtue
-			? 'general'
-			: ['decktracker', 'arena', 'stats', 'mercenaries', 'streams'].includes(currentApp)
-			? 'decktracker-desktop'
-			: currentApp;
+		if (showFtue) {
+			return 'general';
+		}
+		switch (currentApp) {
+			case 'achievements':
+			case 'replays':
+			case 'collection':
+				return currentApp;
+			default:
+				return 'decktracker-desktop';
+		}
 	}
 }

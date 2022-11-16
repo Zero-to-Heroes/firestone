@@ -3,169 +3,169 @@
 
 :host {
 	display: block;
-}
 
-.help-tooltip {
-	text-align: center;
-	cursor: default;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
-	@extend %achievements-tooltip;
-	color: var(--tooltip-color);
-	margin: 10px;
-	position: relative;
-
-	.text {
-		max-width: 200px;
-		background-color: var(--tooltip-background-color);
-		padding-left: 15px;
-		padding-right: 15px;
-		padding-top: 5px;
-		padding-bottom: 5px;
+	.help-tooltip {
+		text-align: center;
+		cursor: default;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-}
+		box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
+		@extend %achievements-tooltip;
+		color: var(--tooltip-color);
+		margin: 10px;
+		position: relative;
 
-.tooltip-arrow {
-	width: 16px;
-	height: 9px;
-	position: absolute;
-	--icon-color: var(--tooltip-background-color);
-	fill: var(--tooltip-background-color);
-}
-
-.help-tooltip.bgs-heroes-tier-list-tooltip {
-	.text {
-		max-width: 350px;
-
-		::ng-deep .content {
-			text-align: left;
-
-			li {
-				margin-left: 30px;
-			}
-		}
-	}
-}
-
-.help-tooltip.bgs-heroes-tier-list-tooltip {
-	.text {
-		max-width: 350px;
-
-		::ng-deep .content {
-			text-align: left;
-
-			li {
-				margin-left: 30px;
-			}
-		}
-	}
-}
-
-.help-tooltip.mercenaries-personal-hero-stat-task-tooltip {
-	::ng-deep .text {
-		max-width: 350px;
-
-		.container {
+		.text {
+			max-width: 200px;
+			background-color: var(--tooltip-background-color);
+			padding-left: 15px;
+			padding-right: 15px;
+			padding-top: 5px;
+			padding-bottom: 5px;
 			display: flex;
-			flex-direction: column;
+			align-items: center;
+			justify-content: center;
 		}
+	}
 
-		.current-task,
-		.next-task {
-			display: flex;
-			flex-direction: column;
+	.tooltip-arrow {
+		width: 16px;
+		height: 9px;
+		position: absolute;
+		--icon-color: var(--tooltip-background-color);
+		fill: var(--tooltip-background-color);
+	}
 
-			.title {
-				font-size: 14px;
-				font-weight: bold;
+	.help-tooltip.bgs-heroes-tier-list-tooltip {
+		.text {
+			max-width: 350px;
+
+			::ng-deep .content {
 				text-align: left;
-			}
-			.description {
-				font-size: 12px;
-				text-align: left;
-			}
-		}
 
-		.next-task {
-			margin-top: 15px;
+				li {
+					margin-left: 30px;
+				}
+			}
 		}
 	}
-}
-.help-tooltip.mercenaries-personal-hero-stat-coins-needed-tooltip {
-	::ng-deep .text {
-		max-width: 350px;
-		width: 350px;
 
-		& > div {
-			max-width: 100%;
-			width: 100%;
-		}
+	.help-tooltip.bgs-heroes-tier-list-tooltip {
+		.text {
+			max-width: 350px;
 
-		.container {
-			display: flex;
-			flex-direction: column;
-			max-width: 100%;
-			width: 100%;
+			::ng-deep .content {
+				text-align: left;
 
-			.header {
-				margin-bottom: 15px;
+				li {
+					margin-left: 30px;
+				}
 			}
+		}
+	}
 
-			.bounty {
+	.help-tooltip.mercenaries-personal-hero-stat-task-tooltip {
+		::ng-deep .text {
+			max-width: 350px;
+
+			.container {
 				display: flex;
-				margin-bottom: 5px;
+				flex-direction: column;
+			}
 
-				.bounty-zone {
-					&:after {
-						content: ':';
-						margin-right: 5px;
+			.current-task,
+			.next-task {
+				display: flex;
+				flex-direction: column;
+
+				.title {
+					font-size: 14px;
+					font-weight: bold;
+					text-align: left;
+				}
+				.description {
+					font-size: 12px;
+					text-align: left;
+				}
+			}
+
+			.next-task {
+				margin-top: 15px;
+			}
+		}
+	}
+	.help-tooltip.mercenaries-personal-hero-stat-coins-needed-tooltip {
+		::ng-deep .text {
+			max-width: 350px;
+			width: 350px;
+
+			& > div {
+				max-width: 100%;
+				width: 100%;
+			}
+
+			.container {
+				display: flex;
+				flex-direction: column;
+				max-width: 100%;
+				width: 100%;
+
+				.header {
+					margin-bottom: 15px;
+				}
+
+				.bounty {
+					display: flex;
+					margin-bottom: 5px;
+
+					.bounty-zone {
+						&:after {
+							content: ':';
+							margin-right: 5px;
+						}
 					}
 				}
 			}
 		}
 	}
-}
 
-.help-tooltip.duels-deckbuilder-cards-search-tooltip {
-	text-align: left;
+	.help-tooltip.duels-deckbuilder-cards-search-tooltip {
+		text-align: left;
 
-	::ng-deep .text {
-		max-width: 350px;
-		width: 350px;
+		::ng-deep .text {
+			max-width: 350px;
+			width: 350px;
 
-		& > div {
-			max-width: 100%;
-			width: 100%;
-		}
+			& > div {
+				max-width: 100%;
+				width: 100%;
+			}
 
-		.tooltip-container {
-			display: flex;
-			flex-direction: column;
-			max-width: 100%;
-			width: 100%;
-			padding-left: 10px;
+			.tooltip-container {
+				display: flex;
+				flex-direction: column;
+				max-width: 100%;
+				width: 100%;
+				padding-left: 10px;
 
-			.shortcuts {
-				margin-top: 5px;
+				.shortcuts {
+					margin-top: 5px;
+				}
 			}
 		}
 	}
-}
 
-.help-tooltip.bgs-simulator-help-tooltip {
-	.text {
-		max-width: 350px;
+	.help-tooltip.bgs-simulator-help-tooltip {
+		.text {
+			max-width: 350px;
 
-		::ng-deep .content {
-			text-align: left;
+			::ng-deep .content {
+				text-align: left;
 
-			li {
-				margin-left: 30px;
+				li {
+					margin-left: 30px;
+				}
 			}
 		}
 	}

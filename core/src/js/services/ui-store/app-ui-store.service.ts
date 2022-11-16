@@ -1,5 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { MailState } from '@mails/mail-state';
+import { MailsService } from '@mails/services/mails.service';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { DuelsRun } from '@models/duels/duels-run';
@@ -13,6 +15,8 @@ import {
 } from '@services/ui-store/duels-ui-helper';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
+import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
@@ -76,6 +80,8 @@ export class AppUiStoreService {
 	private decks = new BehaviorSubject<readonly DeckSummary[]>(null);
 	private duelsRuns = new BehaviorSubject<readonly DuelsRun[]>(null);
 	private duelsDecks = new BehaviorSubject<readonly DuelsDeckSummary[]>(null);
+	private mails = new BehaviorSubject<MailState>(null);
+	private tavernBrawl = new BehaviorSubject<TavernBrawlState>(null);
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -100,6 +106,8 @@ export class AppUiStoreService {
 				decks: this.decks.observers,
 				duelsRuns: this.duelsRuns.observers,
 				duelsDecks: this.duelsDecks.observers,
+				mails: this.mails.observers,
+				tavernBrawl: this.tavernBrawl.observers,
 			});
 	}
 
@@ -257,6 +265,14 @@ export class AppUiStoreService {
 		return this.duelsDecks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
 
+	public mails$(): Observable<MailState> {
+		return this.mails.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
+	public tavernBrawl$(): Observable<TavernBrawlState> {
+		return this.tavernBrawl.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
+	}
+
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks.asObservable().pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)));
 	}
@@ -275,7 +291,20 @@ export class AppUiStoreService {
 		this.initDecks();
 		this.initDuelsRuns();
 		this.initDuelsDecks();
+		this.initMails();
+		this.initTavernBrawl();
 		this.initialized = true;
+	}
+
+	private initTavernBrawl() {
+		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (this.ow.getMainWindow()
+			.tavernBrawlProvider as TavernBrawlService).tavernBrawl$;
+		tavernBrawl.subscribe(this.tavernBrawl);
+	}
+
+	private initMails() {
+		const mails: BehaviorSubject<MailState> = (this.ow.getMainWindow().mailsProvider as MailsService).mails$;
+		mails.subscribe(this.mails);
 	}
 
 	private initDuelsDecks() {

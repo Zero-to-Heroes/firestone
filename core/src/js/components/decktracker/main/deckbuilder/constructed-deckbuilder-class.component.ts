@@ -35,17 +35,17 @@ export class ConstructedDeckbuilderClassComponent extends AbstractSubscriptionCo
 	rows = [
 		{
 			id: 'top',
-			items: 3,
+			items: 4,
 			startIndex: 0,
 		},
 		{
 			id: 'middle',
-			items: 4,
-			startIndex: 3,
+			items: 3,
+			startIndex: 4,
 		},
 		{
 			id: 'bottom',
-			items: 3,
+			items: 4,
 			startIndex: 7,
 		},
 	];

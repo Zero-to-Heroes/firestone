@@ -1,0 +1,1 @@
+Tentative for a new way to structure the code: group things by features, instead of having a purely monolithic approach

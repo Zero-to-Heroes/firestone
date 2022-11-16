@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MailState } from '@mails/mail-state';
 import { DuelsGroupedDecks } from '@models/duels/duels-grouped-decks';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { Observable } from 'rxjs';
+import { TavernBrawlState } from '../../../libs/tavern-brawl/tavern-brawl-state';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { DuelsDeckSummary } from '../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../models/duels/duels-run';
@@ -117,6 +119,14 @@ export class AppUiStoreFacadeService {
 
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.debugObservable(this.store.decks$());
+	}
+
+	public mails$(): Observable<MailState> {
+		return this.debugObservable(this.store.mails$());
+	}
+
+	public tavernBrawl$(): Observable<TavernBrawlState> {
+		return this.debugObservable(this.store.tavernBrawl$());
 	}
 
 	public send(event: MainWindowStoreEvent) {

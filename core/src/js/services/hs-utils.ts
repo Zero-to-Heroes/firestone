@@ -20,6 +20,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 export const CARDS_VERSION = '';
 
 export const classes = [
+	'deathknight',
 	'demonhunter',
 	'druid',
 	'hunter',
@@ -32,6 +33,7 @@ export const classes = [
 	'warrior',
 ];
 export const classesForPieChart = [
+	'deathknight',
 	'rogue',
 	'druid',
 	'hunter',
@@ -50,6 +52,8 @@ export const formatClass = (playerClass: string, i18n: { translateString: (strin
 
 export const colorForClass = (playerClass: string): string => {
 	switch (playerClass) {
+		case 'deathknight':
+			return '#6aaeb9';
 		case 'demonhunter':
 			return '#123B17';
 		case 'druid':
@@ -337,6 +341,7 @@ export const publicCardGiftCreators = [
 	CardIds.ConnectionsTavernBrawl,
 	CardIds.CorsairCache,
 	CardIds.CrystallineOracle,
+	CardIds.DarkPeddler,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
@@ -416,6 +421,7 @@ export const publicCardGiftCreators = [
 	CardIds.Jackpot,
 	CardIds.JarDealer,
 	CardIds.JerryRigCarpenter,
+	CardIds.JeweledScarab,
 	CardIds.JourneyBelow_OG_072,
 	CardIds.Kazakus_CFM_621,
 	CardIds.KazakusGolemShaper,
@@ -518,6 +524,7 @@ export const publicCardGiftCreators = [
 	CardIds.SorcerersGambit_ReachThePortalRoomToken, // Arcanist Dawngrasp
 	CardIds.SparkDrill_BOT_102,
 	CardIds.Spellcoiler,
+	CardIds.Spellslinger_AT_007,
 	CardIds.Springpaw,
 	CardIds.SpringpawCore,
 	CardIds.SketchyStranger,
@@ -542,6 +549,7 @@ export const publicCardGiftCreators = [
 	CardIds.TheForestsAid_DAL_256,
 	CardIds.TheLichKing_ICC_314,
 	CardIds.TheLobotomizer,
+	CardIds.TheSunwell,
 	CardIds.ThistleTea,
 	CardIds.ThoughtstealLegacy,
 	CardIds.ThoughtstealVanilla,
@@ -900,24 +908,6 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.RETURN_OF_THE_LICH_KING:
 		//case BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING:
 			return 'return_of_the_lich_king';
-		case BoosterType.STANDARD_HUNTER:
-		case BoosterType.STANDARD_DRUID:
-		case BoosterType.STANDARD_MAGE:
-		case BoosterType.STANDARD_PALADIN:
-		case BoosterType.STANDARD_WARRIOR:
-		case BoosterType.STANDARD_PRIEST:
-		case BoosterType.STANDARD_ROGUE:
-		case BoosterType.STANDARD_SHAMAN:
-		case BoosterType.STANDARD_WARLOCK:
-		case BoosterType.STANDARD_DEMONHUNTER:
-		case BoosterType.STANDARD_BUNDLE:
-		case BoosterType.GOLDEN_STANDARD_BUNDLE:
-		case BoosterType.MAMMOTH_BUNDLE:
-		case BoosterType.YEAR_OF_DRAGON:
-		case BoosterType.YEAR_OF_PHOENIX:
-		case BoosterType.WILD_PACK:
-		case BoosterType.SIGNUP_INCENTIVE:
-		case BoosterType.FIRST_PURCHASE:
 		default:
 			// console.warn('unsupported booster type', boosterId);
 			return null;
@@ -1015,6 +1005,8 @@ export const COUNTERSPELLS = [
 
 export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	switch (playerClass?.toLowerCase()) {
+		case 'deathknight':
+			return 93448;
 		case 'demonhunter':
 			return 56550;
 		case 'druid':
