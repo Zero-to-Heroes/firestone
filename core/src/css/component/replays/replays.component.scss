@@ -17,13 +17,14 @@
 		min-height: 0;
 		opacity: 1;
 	}
+}
 
+:host .content {
 	& > ::ng-deep * {
 		display: flex;
 		min-height: 0;
 		opacity: 1;
 	}
-
 	::ng-deep & > * {
 		display: flex;
 		min-height: 0;
