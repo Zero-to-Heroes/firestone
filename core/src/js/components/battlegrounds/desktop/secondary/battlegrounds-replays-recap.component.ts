@@ -26,6 +26,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						[replay]="replay"
 						[showStatsLabel]="null"
 						[showReplayLabel]="null"
+						[displayPerfect]="false"
 						[displayTime]="false"
 					></replay-info>
 				</li>
