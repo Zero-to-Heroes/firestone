@@ -51,14 +51,13 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 })
 export class PackStatTooltipComponent {
 	@Input() set config(value: InternalPackInfo) {
-		console.debug('setting tooltip', value);
 		this.packsRecapText = this.i18n.translateString('app.collection.pack-stats.pack-stat-tooltip', {
 			totalPacks: value.totalObtained,
 			packName: value.name,
 		});
 		this.epicTimer = value.nextEpic || EPIC_PITY_TIMER;
 		this.epicFill = ((EPIC_PITY_TIMER - this.epicTimer) / 10) * 100;
-		const legendaryPityTimer = value.totalObtained < 10 ? 10 : LEGENDARY_PITY_TIMER;
+		const legendaryPityTimer = value.totalObtained - value.unopened < 10 ? 10 : LEGENDARY_PITY_TIMER;
 		this.legendaryTimer = value.nextLegendary || legendaryPityTimer;
 		this.legendaryFill = ((legendaryPityTimer - this.legendaryTimer) / legendaryPityTimer) * 100;
 		if (!(this.cdr as ViewRef)?.destroyed) {

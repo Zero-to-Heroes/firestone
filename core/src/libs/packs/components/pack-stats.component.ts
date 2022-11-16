@@ -93,11 +93,12 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
 					.map((boosterId: BoosterType) => {
 						const packsForBoosterId = packStats?.filter((p) => p.boosterId === boosterId);
-						const totalPacksOpened = packsFromMemory?.find((p) => p.packType === boosterId)?.totalObtained;
+						const packFromMemory = packsFromMemory?.find((p) => p.packType === boosterId);
+						const totalPacksReceived = packFromMemory?.totalObtained;
 						return {
 							packType: boosterId,
-							totalObtained: totalPacksOpened ?? 0,
-							unopened: 0,
+							totalObtained: totalPacksReceived ?? 0,
+							unopened: packFromMemory?.unopened ?? 0,
 							name: boosterIdToBoosterName(boosterId, this.i18n),
 							setId: boosterIdToSetId(boosterId),
 							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary', boosterId),
@@ -248,22 +249,22 @@ const PACKS_WHITHOUT_GUARANTEED_LEGENDARY = [
 ];
 
 const buildPityTimer = (
-	packsForSet: readonly PackResult[],
+	openedPacks: readonly PackResult[],
 	type: 'legendary' | 'epic',
 	boosterId: BoosterType,
 ): number => {
-	let result =
+	let valueIfNoPacksOpened =
 		type === 'epic'
 			? EPIC_PITY_TIMER
 			: // Guaranteed legendary in the first 10 packs
-			packsForSet.length < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
+			openedPacks.length < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
 			? 10
 			: LEGENDARY_PITY_TIMER;
-	for (let i = 0; i < packsForSet.length; i++) {
-		if (packsForSet[i].cards.some((card) => card.cardRarity === type)) {
+	for (let i = 0; i < openedPacks.length; i++) {
+		if (openedPacks[i].cards.some((card) => card.cardRarity === type)) {
 			break;
 		}
-		result--;
+		valueIfNoPacksOpened--;
 	}
-	return result;
+	return valueIfNoPacksOpened;
 };
