@@ -15,6 +15,11 @@
 		margin-right: 9vh;
 	}
 
+	&.items-2 {
+		margin-left: 38vh;
+		margin-right: 30vh;
+	}
+
 	&.items-3 {
 		margin-left: 20vh;
 		margin-right: 15vh;
@@ -44,6 +49,16 @@
 				width: 7vh;
 				filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
 			}
+		}
+	}
+
+	.value-container {
+		bottom: -4vh;
+		.value {
+			background: var(--color-5);
+			color: var(--color-1);
+			border-radius: 10px;
+			padding: 5px 20px;
 		}
 	}
 }

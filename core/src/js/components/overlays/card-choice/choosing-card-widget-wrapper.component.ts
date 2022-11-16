@@ -16,11 +16,13 @@ import { CardOption } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { uuid } from '../../../services/utils';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
+import { buildCardChoiceValue } from './card-choice-values';
 
 @Component({
 	selector: 'choosing-card-widget-wrapper',
@@ -61,6 +63,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		protected readonly renderer: Renderer2,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(ow, el, prefs, renderer, store, cdr);
 	}
@@ -106,6 +110,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 							cardId: o.cardId,
 							entityId: o.entityId,
 							flag: this.buildFlag(o, state),
+							value: buildCardChoiceValue(o, state, this.allCards, this.i18n),
 						};
 					}) ?? []
 				);
@@ -115,6 +120,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 	private buildFlag(option: CardOption, state: GameState): CardOptionFlag {
 		switch (option.source) {
+			case CardIds.GuessTheWeight:
+				return 'value';
 			case CardIds.MurlocHolmes_REV_022:
 			case CardIds.MurlocHolmes_REV_770:
 				switch (option.context?.DataNum1) {
@@ -167,6 +174,11 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			<div class="flag-container" *ngIf="showFlag">
 				<div class="flag" [inlineSVG]="'assets/svg/new_record.svg'"></div>
 			</div>
+			<div class="flag-container value-container" *ngIf="showValue">
+				<div class="value">
+					{{ value }}
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -176,12 +188,17 @@ export class ChoosingCardOptionComponent {
 		this._option = value;
 		this._referenceCard = this.allCards.getCard(value?.cardId);
 		this.shouldHighlight = !NO_HIGHLIGHT_CARD_IDS.includes(value?.cardId as CardIds);
+
 		this.showFlag = value?.flag === 'flag';
+		this.showValue = value?.flag === 'value';
+		this.value = value.value;
 		this.registerHighlight();
 	}
 
 	_option: CardChoiceOption;
 	showFlag: boolean;
+	showValue: boolean;
+	value: string;
 
 	private _referenceCard: ReferenceCard;
 	private side: 'player' | 'opponent' = 'player';
@@ -234,6 +251,7 @@ export interface CardChoiceOption {
 	readonly cardId: string;
 	readonly entityId: number;
 	readonly flag?: CardOptionFlag;
+	readonly value?: string;
 }
 
-export type CardOptionFlag = 'flag' | null;
+export type CardOptionFlag = 'flag' | 'value' | null;

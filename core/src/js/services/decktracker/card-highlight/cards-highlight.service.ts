@@ -186,7 +186,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			options?: SelectorOptions,
 			gameState?: GameState,
 		) => boolean = this.buildSelector(cardId, card);
-		console.debug('selector', selector);
+		// console.debug('selector', selector);
 		const result = !!selector
 			? Object.keys(this.handlers)
 					.filter((key) => key.startsWith(side))
@@ -201,7 +201,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 					})
 					.map((handler) => handler)
 			: [];
-		console.debug('result', result);
+		// console.debug('result', result);
 		return result;
 	}
 
@@ -452,6 +452,22 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.GuardianLightTavernBrawl:
 				return and(or(inDeck, inHand), spell, holy);
+			case CardIds.GuessTheWeight_Less:
+				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
+					if (!deckState.hand.length) {
+						return null;
+					}
+					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
+					return inDeck(handler) && effectiveCostLess(lastDrawnCard.getEffectiveManaCost())(handler);
+				};
+			case CardIds.GuessTheWeight_More:
+				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
+					if (!deckState.hand.length) {
+						return null;
+					}
+					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
+					return inDeck(handler) && effectiveCostMore(lastDrawnCard.getEffectiveManaCost())(handler);
+				};
 			case CardIds.GuffRunetotem_BAR_720:
 				return and(spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HabeasCorpses:
