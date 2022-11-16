@@ -253,10 +253,10 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		switch (category) {
 			case 'book-of-mercs':
 				const BoMmatch = /BOM_(\d+)_.*/g.exec(refPortrait.id);
-				return BoMmatch ? +BoMmatch[1] : 0;
+				return BoMmatch ? +BoMmatch[1] : null;
 			case 'book-of-heroes':
 				const BoHmatch = /Story_(\d+)_.*/g.exec(refPortrait.id);
-				return BoHmatch ? +BoHmatch[1] : 0;
+				return BoHmatch ? +BoHmatch[1] : null;
 			default:
 				return 0;
 		}
