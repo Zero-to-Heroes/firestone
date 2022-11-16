@@ -922,6 +922,10 @@ export class GameEvents {
 							// Legacy, to avoid regenerating all the tests
 							turnNumber: gameEvent.Value.Turn || gameEvent.Value,
 							timestamp: gameEvent.Value.Timestamp,
+							playerBoard: gameEvent.Value?.GameState?.Player?.Board,
+							playerLettuceAbilities: gameEvent.Value?.GameState?.Player?.LettuceAbilities,
+							opponentBoard: gameEvent.Value?.GameState?.Opponent?.Board,
+							opponentLettuceAbilities: gameEvent.Value?.GameState?.Opponent?.LettuceAbilities,
 						},
 					} as GameEvent),
 				);
