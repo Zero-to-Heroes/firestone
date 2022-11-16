@@ -15,6 +15,9 @@
 
 	::ng-deep card-stats {
 		.card-stats {
+			-webkit-text-stroke-color: black;
+			-webkit-text-stroke-width: thick;
+			
 			top: 81%;
 
 			.stat {
@@ -27,13 +30,13 @@
 			}
 
 			.health {
-				left: 40%;
+				left: 39%;
 				width: 32%;
 				top: -27%;
 			}
 
 			.stat-value {
-				font-size: 52px;
+				font-size: 45px;
 			}
 		}
 	}
