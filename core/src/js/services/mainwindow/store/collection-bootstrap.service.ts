@@ -45,7 +45,7 @@ export class CollectionBootstrapService {
 		const newState = Object.assign(new BinderState(), {
 			collection: collection as readonly Card[],
 			ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
-			packs: packs as readonly PackInfo[],
+			packsFromMemory: packs as readonly PackInfo[],
 			packStats: packStats,
 			allSets: sets,
 			cardBacks: cardBacks,

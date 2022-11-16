@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CardHistory } from '../../models/card-history';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
+import { CardHistory } from '../../../js/models/card-history';
+import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'pack-history',
@@ -11,7 +11,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
-		`../../../css/component/collection/pack-history.component.scss`,
+		`./pack-history.component.scss`,
 	],
 	template: `
 		<div class="pack-history">

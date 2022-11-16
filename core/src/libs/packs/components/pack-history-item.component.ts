@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
-import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../services/hs-utils';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../../js/services/hs-utils';
+import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 
 @Component({
 	selector: 'pack-history-item',
-	styleUrls: [`../../../css/component/collection/pack-history-item.component.scss`],
+	styleUrls: [`./pack-history-item.component.scss`],
 	template: `
 		<div class="pack-history-item">
 			<img class="set-icon" src="{{ setIcon }}" />

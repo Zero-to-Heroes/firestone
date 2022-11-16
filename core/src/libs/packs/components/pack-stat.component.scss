@@ -1,0 +1,22 @@
+.pack-stat {
+	.icon-container {
+		position: relative;
+	}
+
+	.icon {
+		width: 100%;
+		height: 100%;
+	}
+
+	.value {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		top: -5px;
+	}
+
+	&.missing {
+		opacity: 0.4;
+	}
+}

@@ -1,5 +1,5 @@
-@import '../../global/variables';
-@import '../../global/fonts';
+@import '../../../css/global/variables';
+@import '../../../css/global/fonts';
 
 .pack-stats {
 	position: relative;
@@ -85,7 +85,7 @@
 		overflow: auto;
 		flex-shrink: 0;
 		opacity: 1;
-		transition: opacity 0.2s ease-in-out;
+		overflow: hidden;
 
 		&.empty {
 			opacity: 0;
@@ -94,31 +94,6 @@
 		.pack-stat {
 			margin-right: 0;
 			margin-bottom: 10px;
-
-			.icon-container {
-				position: relative;
-			}
-
-			.icon {
-				width: 100%;
-				height: 100%;
-			}
-
-			.value {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				position: relative;
-				top: -5px;
-			}
-
-			&.missing {
-				opacity: 0.4;
-			}
-
-			// &:hover {
-			// 	opacity: 1;
-			// }
 		}
 	}
 

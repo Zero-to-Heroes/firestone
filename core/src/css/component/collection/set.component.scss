@@ -3,24 +3,14 @@
 
 .set {
 	display: flex;
-	align-items: stretch;
+	align-items: center;
 	flex-direction: column;
 	height: 100%;
 	position: relative;
-	perspective: 800px;
+	background: rgba(255, 255, 255, 0.08);
 
-	.set-view {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		height: 100%;
-		position: relative;
-		transform: rotateY(0deg);
-		background: rgba(255, 255, 255, 0.08);
-
-		&:hover {
-			background: rgba(255, 255, 255, 0.12);
-		}
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
 	}
 
 	&.coming-soon {
@@ -165,94 +155,5 @@
 				justify-content: center;
 			}
 		}
-	}
-
-	.extra-info {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		background: rgba(255, 255, 255, 0.08);
-		transform: rotateY(-180deg);
-
-		.title {
-			@extend %pity-timer-title;
-			display: flex;
-			align-items: center;
-			margin-top: 15px;
-
-			i {
-				margin-right: 10px;
-			}
-		}
-
-		.progression {
-			display: flex;
-			flex-direction: column;
-			margin-top: 18px;
-
-			.progress-title {
-				@extend %pity-timer-text;
-				display: flex;
-
-				img {
-					margin-right: 12px;
-				}
-			}
-
-			.progress-bar {
-				width: 125px;
-				height: 4px;
-				margin-top: 10px;
-				background-color: rgba(217, 195, 171, 0.3);
-				display: flex;
-				align-items: flex-start;
-				justify-content: flex-start;
-			}
-
-			.progress-bar-filled {
-				height: 100%;
-			}
-		}
-
-		.epic {
-			.progress-bar-filled {
-				background-color: #ca4aff;
-			}
-		}
-
-		.legendary {
-			.progress-bar-filled {
-				background-color: #ff8f3b;
-			}
-		}
-
-		button {
-			@extend %button-text;
-			width: 125px;
-			height: 30px;
-			margin-top: 30px;
-			background-color: $green01;
-
-			&:hover {
-				background-color: $yellow03;
-			}
-		}
-	}
-
-	.wrapper-for-flip {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		height: 100%;
-		position: relative;
-		transform-style: preserve-3d;
-		transform: transform 1s;
-	}
-
-	.box-side {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		backface-visibility: hidden;
 	}
 }

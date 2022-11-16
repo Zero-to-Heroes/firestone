@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
 	selector: 'pack-display',
@@ -8,7 +8,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
-		`../../../css/component/collection/pack-display.component.scss`,
+		`./pack-display.component.scss`,
 	],
 	template: `
 		<div class="pack-display" *ngIf="cards?.length">

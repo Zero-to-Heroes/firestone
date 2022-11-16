@@ -99,11 +99,10 @@ export class SetStatsComponent extends AbstractSubscriptionComponent implements 
 		);
 		this.packsReceived$ = combineLatest(
 			this.set$$.asObservable(),
-			this.store.listen$(([main, nav, prefs]) => main.binder.packs),
+			this.store.listen$(([main, nav, prefs]) => main.binder.packStats),
 		).pipe(
 			this.mapData(
-				([set, [packs]]) =>
-					packs.find((pack) => boosterIdToSetId(pack.packType) === set.id)?.totalObtained ?? 0,
+				([set, [packs]]) => packs.filter((pack) => boosterIdToSetId(pack.boosterId) === set.id)?.length ?? 0,
 			),
 		);
 		this.bestKnownPack$ = combineLatest(

@@ -155,6 +155,12 @@ import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.compo
 import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
 import { MailsService } from '@mails/services/mails.service';
 import { MailboxMessageComponent } from '../../../libs/mails/components/mailbox-message/mailbox-message.component';
+import { PackDisplayComponent } from '../../../libs/packs/components/pack-display.component';
+import { PackHistoryItemComponent } from '../../../libs/packs/components/pack-history-item.component';
+import { PackHistoryComponent } from '../../../libs/packs/components/pack-history.component';
+import { PackStatTooltipComponent } from '../../../libs/packs/components/pack-stat-tooltip.component';
+import { PackStatComponent } from '../../../libs/packs/components/pack-stat.component';
+import { CollectionPackStatsComponent } from '../../../libs/packs/components/pack-stats.component';
 import { TavernBrawlMetaComponent } from '../../../libs/tavern-brawl/components/meta/tavern-brawl-meta.component';
 import { TavernBrawlStatComponent } from '../../../libs/tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '../../../libs/tavern-brawl/components/tavern-brawl-desktop.component';
@@ -182,10 +188,6 @@ import { FullCardBackComponent } from '../../components/collection/full-card-bac
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { HeroPortraitComponent } from '../../components/collection/hero-portrait.component';
 import { HeroPortraitsComponent } from '../../components/collection/hero-portraits.component';
-import { PackDisplayComponent } from '../../components/collection/pack-display.component';
-import { PackHistoryItemComponent } from '../../components/collection/pack-history-item.component';
-import { PackHistoryComponent } from '../../components/collection/pack-history.component';
-import { CollectionPackStatsComponent } from '../../components/collection/pack-stats.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetStatCellComponent } from '../../components/collection/set-stat-cell.component';
 import { SetStatsComponent } from '../../components/collection/set-stats.component';
@@ -760,6 +762,8 @@ const components = [
 		PackHistoryComponent,
 		PackHistoryItemComponent,
 		PackDisplayComponent,
+		PackStatTooltipComponent,
+		PackStatComponent,
 
 		CollectionHeroPortraitOwnedFilterDropdownComponent,
 		CollectionHeroPortraitCategoriesFilterDropdownComponent,
@@ -1154,6 +1158,7 @@ const components = [
 		BgsSimulatorHeroPowerSelectionComponent,
 		BgsSimulatorQuestRewardSelectionComponent,
 		CurrentSessionBgsBoardTooltipComponent,
+		PackStatTooltipComponent,
 		...components,
 	],
 	providers: [

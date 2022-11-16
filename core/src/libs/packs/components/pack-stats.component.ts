@@ -2,17 +2,18 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
-import { PackInfo } from '../../models/collection/pack-info';
-import { sets } from '../../services/collection/sets.ref';
-import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../services/hs-utils';
-import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { sortByProperties, sumOnArray } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { tap } from 'rxjs/operators';
+import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
+import { sets } from '../../../js/services/collection/sets.ref';
+import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
+import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
+import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
+import { sortByProperties, sumOnArray } from '../../../js/services/utils';
+import { InternalPackInfo } from './pack-stat.component';
 
 @Component({
 	selector: 'pack-stats',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/pack-stats.component.scss`],
+	styleUrls: [`../../../css/global/scrollbar.scss`, `./pack-stats.component.scss`],
 	template: `
 		<div class="pack-stats" scrollable>
 			<div class="header">
@@ -29,27 +30,14 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<div class="pack-group" *ngFor="let group of packGroups$ | async">
 					<div class="group-name" *ngIf="!(showOnlyBuyablePacks$ | async)">{{ group.name }}</div>
 					<div class="packs-container">
-						<div
+						<pack-stat
 							class="pack-stat"
 							*ngFor="let pack of group.packs; trackBy: trackByPackFn"
-							[ngClass]="{ 'missing': !pack.totalObtained }"
+							[pack]="pack"
+							[style.width.px]="cardWidth"
+							[style.height.px]="cardHeight"
 						>
-							<div
-								class="icon-container"
-								[style.width.px]="cardWidth"
-								[style.height.px]="cardHeight"
-								[helpTooltip]="
-									'app.collection.pack-stats.pack-stat-tooltip'
-										| owTranslate: { totalPacks: pack.totalObtained, packName: pack.name }
-								"
-							>
-								<img
-									class="icon"
-									[src]="'https://static.firestoneapp.com/cardPacks/256/' + pack.packType + '.png'"
-								/>
-							</div>
-							<div class="value">{{ pack.totalObtained }}</div>
-						</div>
+						</pack-stat>
 					</div>
 				</div>
 			</div>
@@ -95,22 +83,32 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 	async ngAfterContentInit() {
 		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
 		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => main.binder.packs),
+			this.store.listen$(
+				([main, nav]) => main.binder.packsFromMemory,
+				([main, nav]) => main.binder.packStats,
+			),
 		).pipe(
-			this.mapData(([[inputPacks]]) =>
+			this.mapData(([[packsFromMemory, packStats]]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
-					.map((boosterId: BoosterType) => ({
-						packType: boosterId,
-						totalObtained: inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
-						unopened: 0,
-						name: boosterIdToBoosterName(boosterId, this.i18n),
-						setId: boosterIdToSetId(boosterId),
-					}))
+					.map((boosterId: BoosterType) => {
+						const packsForBoosterId = packStats?.filter((p) => p.boosterId === boosterId);
+						const totalPacksOpened = packsFromMemory?.find((p) => p.packType === boosterId)?.totalObtained;
+						return {
+							packType: boosterId,
+							totalObtained: totalPacksOpened ?? 0,
+							unopened: 0,
+							name: boosterIdToBoosterName(boosterId, this.i18n),
+							setId: boosterIdToSetId(boosterId),
+							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary'),
+							nextEpic: buildPityTimer(packsForBoosterId, 'epic'),
+						} as InternalPackInfo;
+					})
 					.filter((info) => info)
 					.reverse(),
 			),
+			tap((info) => console.debug('pack stat info', info)),
 		);
 		this.packGroups$ = combineLatest(this.showOnlyBuyablePacks$, packs$).pipe(
 			this.mapData(([showOnlyBuyablePacks, packs]) => {
@@ -243,7 +241,22 @@ interface InternalPackGroup {
 	readonly packs: readonly InternalPackInfo[];
 }
 
-interface InternalPackInfo extends PackInfo {
-	readonly name: string;
-	readonly setId: string;
-}
+export const EPIC_PITY_TIMER = 10;
+export const LEGENDARY_PITY_TIMER = 40;
+
+const buildPityTimer = (packsForSet: readonly PackResult[], type: 'legendary' | 'epic'): number => {
+	let result =
+		type === 'epic'
+			? EPIC_PITY_TIMER
+			: // Guaranteed legendary in the first 10 packs
+			packsForSet.length < 10
+			? 10
+			: LEGENDARY_PITY_TIMER;
+	for (let i = 0; i < packsForSet.length; i++) {
+		if (packsForSet[i].cards.some((card) => card.cardRarity === type)) {
+			break;
+		}
+		result--;
+	}
+	return result;
+};
