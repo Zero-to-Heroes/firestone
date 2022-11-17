@@ -728,7 +728,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				console.log(gameEvent.Type + ' event', gameEvent.cardId);
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':

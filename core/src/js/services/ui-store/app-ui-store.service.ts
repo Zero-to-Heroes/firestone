@@ -174,7 +174,6 @@ export class AppUiStoreService {
 	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }> {
 		return this.prefs.asObservable().pipe(
 			filter((prefs) => !!prefs?.preferences),
-			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
 			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }>;
