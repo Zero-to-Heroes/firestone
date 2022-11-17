@@ -38,8 +38,7 @@ export class MailboxComponent extends AbstractSubscriptionComponent implements A
 	}
 
 	markMessageRead(message: Mail) {
-		console.debug('markign message read', message);
-		this.store.send(new MailboxMarkMessageReadEvent(message.id));
+		this.store.send(new MailboxMarkMessageReadEvent(message));
 	}
 
 	trackByFn(index: number, item: Mail): string {

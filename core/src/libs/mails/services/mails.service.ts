@@ -32,7 +32,6 @@ export class MailsService {
 			this.store.listenPrefs$((prefs) => prefs.mailboxLastVisitDate),
 		)
 			.pipe(
-				tap((info) => console.debug('[mails] before map', info)),
 				distinctUntilChanged(),
 				map(([mailsInfo, [mailboxLastVisitDate]]) => {
 					const currentState = this.mails$.value ?? MailState.create({});
@@ -45,7 +44,9 @@ export class MailsService {
 					});
 				}),
 			)
-			.subscribe(this.mails$);
+			.subscribe((info) => {
+				this.mails$.next(info);
+			});
 	}
 
 	private buildMails(mailsInfo: MailboxMessagesInfo, mailboxLastVisitDate: Date): readonly Mail[] {
@@ -53,7 +54,7 @@ export class MailsService {
 			.map((message) => ({ ...message, date: new Date(message.date) }))
 			.map((message) => ({
 				...message,
-				read: mailboxLastVisitDate && mailboxLastVisitDate > message.date,
+				read: mailboxLastVisitDate && mailboxLastVisitDate >= message.date,
 			}));
 	}
 
