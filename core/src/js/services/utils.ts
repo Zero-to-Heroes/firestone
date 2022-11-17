@@ -1,4 +1,5 @@
-import equal from 'fast-deep-equal';
+// import equal from 'fast-deep-equal/es6';
+import equal from 'deep-equal';
 import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 import { LocalizationFacadeService } from './localization-facade.service';
@@ -64,30 +65,11 @@ const buildAppValue = (appVersion: string): number => {
 	return 1000 * major + 100 * minor + patch;
 };
 
-export const arraysEqual = (a: readonly any[] | any[] | any, b: readonly any[] | any[] | any): boolean => {
-	if (a == null && b == null) {
-		return true;
-	}
-	if ((a == null && b != null) || (a != null && b == null)) {
-		return false;
-	}
-	if (a === b) {
-		return true;
-	}
-	if (!Array.isArray(a) || !Array.isArray(b)) {
-		return false;
-	}
-	return (
-		a.length === b.length &&
-		// deepEqual is pretty fast, so we can check for full equality here, especially since a non-equality usually means
-		// rerendering something, which is much more costly
-		a.every((el, ix) => {
-			return Array.isArray(el) ? arraysEqual(el, b[ix]) : deepEqual(el, b[ix]);
-		})
-	);
-};
-
-export const deepEqual = equal;
+export const deepEqual = (a, b) =>
+	equal(a, b, {
+		strict: false,
+	});
+export const arraysEqual = deepEqual;
 
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;

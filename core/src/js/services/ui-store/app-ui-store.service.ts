@@ -165,7 +165,9 @@ export class AppUiStoreService {
 			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
 			// tap(([[main, nav], prefs]) => console.debug('emitting', [main, nav, prefs?.preferences], this)),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
+			// tap((info) => console.debug('before equal')),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// tap((info) => console.debug('after equal')),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
 	}
 
