@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div class="decktracker-decks" *ngIf="decks$ | async as decks">
 			<ul class="deck-list" scrollable [attr.aria-label]="'Constructed deck stats'" role="list">
 				<li
-					*ngFor="let deck of decks; trackBy: trackByDeckId"
+					*ngFor="let deck of decks"
 					cdkDropList
 					cdkDrop
 					(cdkDropListDropped)="drop($event)"

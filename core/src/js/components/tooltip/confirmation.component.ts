@@ -1,4 +1,5 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -8,19 +9,22 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
 
 @Component({
 	selector: 'confirmation',
 	styleUrls: [`../../../css/component/tooltip/confirmation.component.scss`],
 	template: `
 		<div class="confirmation">
-			<div class="title">{{ _confirmationTitle }}</div>
+			<div class="title">{{ confirmationTitle$ | async }}</div>
 			<div class="text">
-				{{ _confirmationText }}
+				{{ confirmationText$ | async }}
 			</div>
 			<div class="buttons">
-				<button class="ok" (click)="ok()" *ngIf="_showOk">{{ _validButtonText }}</button>
-				<button class="cancel" (click)="cancel()">{{ _cancelButtonText }}</button>
+				<button class="ok" (click)="ok()" *ngIf="showOk$ | async">{{ validButtonText$ | async }}</button>
+				<button class="cancel" (click)="cancel()">{{ cancelButtonText$ | async }}</button>
 			</div>
 			<button class="close-button" (click)="cancel()">
 				<svg class="svg-icon-fill">
@@ -34,52 +38,70 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmationComponent {
+export class ConfirmationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() onCancel: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+	confirmationTitle$: Observable<string>;
+	confirmationText$: Observable<string>;
+	validButtonText$: Observable<string>;
+	cancelButtonText$: Observable<string>;
+	showOk$: Observable<boolean>;
+
+	private confirmationTitle$$ = new BehaviorSubject<string>(
+		this.i18n.translateString('app.global.controls.default-confirmation-title'),
+	);
+	private confirmationText$$ = new BehaviorSubject<string>(
+		this.i18n.translateString('app.global.controls.default-confirmation-text'),
+	);
+	private validButtonText$$ = new BehaviorSubject<string>(
+		this.i18n.translateString('app.global.controls.default-validation-button'),
+	);
+	private cancelButtonText$$ = new BehaviorSubject<string>(
+		this.i18n.translateString('app.global.controls.default-cancel-button'),
+	);
+	private showOk$$ = new BehaviorSubject<boolean>(true);
+
 	@Input() set confirmationTitle(value: string) {
-		this._confirmationTitle = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.confirmationTitle$$.next(value);
 	}
 
 	@Input() set confirmationText(value: string) {
-		this._confirmationText = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.confirmationText$$.next(value);
 	}
 
 	@Input() set validButtonText(value: string) {
-		this._validButtonText = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.validButtonText$$.next(value);
 	}
 
 	@Input() set cancelButtonText(value: string) {
-		this._cancelButtonText = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.cancelButtonText$$.next(value);
 	}
 
 	@Input() set showOk(value: boolean) {
-		this._showOk = value;
+		this.showOk$$.next(value);
+	}
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		protected readonly store: AppUiStoreFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {
+		super(store, cdr);
+		// FIXME: For some reason, lifecycle methods are not called systematically when using overlayref
+		setTimeout(() => this.ngAfterContentInit(), 50);
+	}
+
+	ngAfterContentInit(): void {
+		this.cancelButtonText$ = this.cancelButtonText$$.asObservable().pipe(this.mapData((info) => info));
+		this.confirmationText$ = this.confirmationText$$.asObservable().pipe(this.mapData((info) => info));
+		this.validButtonText$ = this.validButtonText$$.asObservable().pipe(this.mapData((info) => info));
+		this.cancelButtonText$ = this.cancelButtonText$$.asObservable().pipe(this.mapData((info) => info));
+		this.showOk$ = this.showOk$$.asObservable().pipe(this.mapData((info) => info));
+		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
-
-	_confirmationTitle = this.i18n.translateString('app.global.controls.default-confirmation-title');
-	_confirmationText = this.i18n.translateString('app.global.controls.default-confirmation-text');
-	_validButtonText = this.i18n.translateString('app.global.controls.default-validation-button');
-	_cancelButtonText = this.i18n.translateString('app.global.controls.default-cancel-button');
-	_showOk = true;
-
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	ok() {
 		this.onConfirm.next(true);

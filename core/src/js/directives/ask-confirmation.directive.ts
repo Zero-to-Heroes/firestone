@@ -52,7 +52,8 @@ export class AskConfirmationDirective implements OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+	}
 
 	// eslint-disable-next-line @angular-eslint/use-lifecycle-interface
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
@@ -111,7 +112,9 @@ export class AskConfirmationDirective implements OnDestroy {
 			panelClass: ['modal'],
 			backdropClass: 'confirmation-backdrop',
 		});
-		this.overlayRef.backdropClick().subscribe(() => this.cancel());
+		this.overlayRef.backdropClick().subscribe(() => {
+			this.cancel();
+		});
 		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();
 		// }
@@ -148,11 +151,11 @@ export class AskConfirmationDirective implements OnDestroy {
 
 		this.events.broadcast(Events.SHOW_MODAL);
 		this.positionStrategy.apply();
-		setTimeout(() => {
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// setTimeout(() => {
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
 	}
 
 	private confirm() {

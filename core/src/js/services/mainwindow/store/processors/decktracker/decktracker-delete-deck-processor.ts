@@ -15,10 +15,14 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
-		const existingPersonalDeck = currentPrefs.constructedPersonalAdditionalDecks.find(
-			(d) => d.deckstring === event.deckstring,
-		);
+		console.debug('personal decks', currentPrefs.constructedPersonalAdditionalDecks);
+		const existingPersonalDeck = currentPrefs.constructedPersonalAdditionalDecks
+			.filter((d) => d.deckstring)
+			.find((d) => d.deckstring === event.deckstring);
 
+		// If the deck has only been created via the deckbuilder and has not been played yet,
+		// we simply remove it
+		// That way, we can easily add it again
 		if (existingPersonalDeck) {
 			const newPersonalDecks = currentPrefs.constructedPersonalAdditionalDecks.filter(
 				(d) => d.deckstring !== event.deckstring,
@@ -27,12 +31,8 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 			await this.prefs.savePreferences(newPrefs);
 		}
 
-		// If the deck has only been created via the deckbuilder and has not been played yet,
-		// we simply remove it
-		// That way, we can easily add it again
-		const gamesWithDeck = currentState.stats.gameStats.stats.filter(
-			(s) => s.playerDecklist === existingPersonalDeck.deckstring,
-		);
+		// If no games were played with the deck, no need to change anything
+		const gamesWithDeck = currentState.stats.gameStats.stats.filter((s) => s.playerDecklist === event.deckstring);
 		if (!gamesWithDeck.length) {
 			return [
 				null,

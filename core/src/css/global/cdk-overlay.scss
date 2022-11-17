@@ -72,7 +72,10 @@
 .cdk-overlay-container {
 	pointer-events: none;
 
-	& > * {
+	// I don't remember exactly why the "pointer-events: none" rule was introduced. Looking
+	// at the commit, I suspect this was done to prevent the mouse interacting with the
+	// tooltips that were built for the BG minions
+	& > *:not(.cdk-overlay-backdrop) {
 		pointer-events: none !important;
 		& > * {
 			pointer-events: none !important;
