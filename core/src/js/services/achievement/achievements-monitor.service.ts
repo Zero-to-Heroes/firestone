@@ -371,13 +371,13 @@ export class AchievementsMonitor {
 	private async startGlobalAchievementsProgressDetection() {
 		// TODO: addd pref
 		setInterval(async () => {
-			const inGame = await this.ow.inGame();
-			if (!inGame) {
+			const prefs = await this.prefs.getPreferences();
+			if (!prefs.achievementsEnabled2 || !prefs.achievementsLiveTracking2) {
 				return;
 			}
 
-			const prefs = await this.prefs.getPreferences();
-			if (!prefs.achievementsEnabled2 || !prefs.achievementsLiveTracking2) {
+			const inGame = await this.ow.inGame();
+			if (!inGame) {
 				return;
 			}
 
