@@ -15,7 +15,7 @@ import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { deepEqual, removeFromReadonlyArray } from '../services/utils';
+import { arraysEqual, removeFromReadonlyArray } from '../services/utils';
 import { AbstractSubscriptionComponent } from './abstract-subscription.component';
 
 @Component({
@@ -143,14 +143,16 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 		this.sub$$ = this.options$
 			.pipe(
 				filter((options) => !!options),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
+				// distinctUntilChanged((a, b) => deepEqual(a, b)),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			)
 			.subscribe((options) => {
 				this.tempSelected$.next(options.map((option) => option.value));
 			});
 		this.workingOptions$ = combineLatest(this.options$.asObservable(), this.tempSelected$.asObservable()).pipe(
 			filter(([options, tempSelected]) => !!options),
-			distinctUntilChanged((a, b) => deepEqual(a, b)),
+			// distinctUntilChanged((a, b) => deepEqual(a, b)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([options, tempSelected]) => {
 				const result = options.map((option) => ({
 					...option,

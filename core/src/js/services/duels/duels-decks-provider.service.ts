@@ -6,7 +6,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { getDuelsModeName, isDuels } from '@services/duels/duels-utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { sanitizeDeckstring } from '../../components/decktracker/copy-deckstring.component';
 import {
 	DuelsDeckStatInfo,
@@ -22,7 +22,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../hs-utils';
 import { LocalizationFacadeService } from '../localization-facade.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
-import { deepEqual, groupByFunction } from '../utils';
+import { arraysEqual, deepEqual, groupByFunction } from '../utils';
 
 @Injectable()
 export class DuelsDecksProviderService {
@@ -49,8 +49,8 @@ export class DuelsDecksProviderService {
 			this.store.gameStats$(),
 		)
 			.pipe(
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				tap((info) => console.debug('[duels-decks] rebuilding duels runs', info)),
 				map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
 					const duelMatches =
 						gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
@@ -68,7 +68,6 @@ export class DuelsDecksProviderService {
 						.filter((run) => run);
 					return runs;
 				}),
-				tap((info) => console.debug('[duels-decks] new duels runs', info)),
 			)
 			.subscribe(this.duelsRuns$);
 
@@ -80,12 +79,11 @@ export class DuelsDecksProviderService {
 			),
 		)
 			.pipe(
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				distinctUntilChanged((a, b) => deepEqual(a, b)),
-				tap((info) => console.debug('[duels-decks] rebuilding duels decks', info)),
 				map(([runs, [duelsPersonalAdditionalDecks, duelsPersonalDeckNames]]) =>
 					this.buildPersonalDeckStats(runs, duelsPersonalAdditionalDecks, duelsPersonalDeckNames),
 				),
-				tap((info) => console.debug('[duels-decks] new duels decks', info)),
 			)
 			.subscribe(this.duelsDecks$);
 	}
