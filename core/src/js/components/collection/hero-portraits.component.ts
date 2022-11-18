@@ -9,7 +9,6 @@ import {
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
@@ -20,6 +19,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MercenariesReferenceData } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
+import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
@@ -49,26 +49,32 @@ import { CollectionReferenceCard } from './collection-reference-card';
 			</div>
 			<ng-container *ngIf="{ shownHeroPortraits: shownHeroPortraits$ | async } as value">
 				<ul class="cards-list" *ngIf="value.shownHeroPortraits?.length" scrollable>
-					<div
+					<virtual-scroller
+						#scroll
 						class="portraits-for-class"
-						*ngFor="let portraitGroup of value.shownHeroPortraits; let i = index; trackBy: trackByTitle"
+						[items]="value.shownHeroPortraits"
+						[scrollDebounceTime]="scrollDebounceTime"
+						scrollable
+						(scrolling)="onScrolling($event)"
 					>
-						<div class="header">{{ portraitGroup.title }}</div>
-						<div class="portraits-container">
-							<hero-portrait
-								class="hero-portrait"
-								*ngFor="
-									let heroPortrait of portraitGroup.portraits;
-									let i = index;
-									trackBy: trackByCardId
-								"
-								[heroPortrait]="heroPortrait"
-								[style.width.px]="cardWidth"
-								(click)="showFullHeroPortrait(heroPortrait)"
-							>
-							</hero-portrait>
-						</div>
-					</div>
+						<ng-container *ngFor="let portraitGroup of scroll.viewPortItems; trackBy: trackByTitle">
+							<div class="header">{{ portraitGroup.title }}</div>
+							<div class="portraits-container">
+								<hero-portrait
+									class="hero-portrait"
+									*ngFor="
+										let heroPortrait of portraitGroup.portraits;
+										let i = index;
+										trackBy: trackByCardId
+									"
+									[heroPortrait]="heroPortrait"
+									[style.width.px]="cardWidth"
+									(click)="showFullHeroPortrait(heroPortrait)"
+								>
+								</hero-portrait>
+							</div>
+						</ng-container>
+					</virtual-scroller>
 				</ul>
 				<collection-empty-state *ngIf="!value.shownHeroPortraits?.length"> </collection-empty-state>
 			</ng-container>
@@ -84,12 +90,14 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 	shownHeroPortraits$: Observable<readonly PortraitGroup[]>;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
+	scrollDebounceTime = 0;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
-		private readonly allCards: CardsFacadeService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
@@ -97,10 +105,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 	async ngAfterContentInit() {
 		const mercenariesReferenceData$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.getReferenceData())
-			.pipe(
-				filter(([mercs]) => !!mercs),
-				this.mapData(([mercs]) => mercs.mercenaries),
-			);
+			.pipe(this.mapData(([mercs]) => mercs?.mercenaries));
 		const relevantHeroes$ = combineLatest(
 			this.store.listen$(
 				([main, nav, prefs]) => main.binder.collection,
@@ -112,7 +117,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		).pipe(
 			this.mapData(
 				([[collection, ownedBgsHeroSkins, mercenariesCollection], mercenariesReferenceData, category]) => {
-					console.debug('collection', collection);
 					switch (category) {
 						case 'collectible':
 							return this.buildCollectibleHeroPortraits(collection, this.allCards.getCards());
@@ -134,7 +138,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		this.unlocked$ = relevantHeroes$.pipe(
 			this.mapData((heroes) => heroes.filter((item) => item.numberOwned > 0).length),
 		);
-
 		const filteredHeroPortraits$ = combineLatest(
 			relevantHeroes$,
 			this.listenForBasicPref$((prefs) => prefs.collectionActivePortraitCategoryFilter),
@@ -149,7 +152,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 				this.groupPortraits(portraitCards, category),
 			),
 		);
-
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
 			.pipe(this.mapData(([pref]) => pref))
@@ -166,6 +168,13 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
 
+	onScrolling(scrolling: boolean) {
+		this.scrollDebounceTime = scrolling ? 1000 : 0;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	trackByCardId(index: number, card: CardBack) {
 		return card.id;
 	}
@@ -177,12 +186,13 @@ export class HeroPortraitsComponent extends AbstractSubscriptionComponent implem
 		const groupingFunction = this.buildGroupingFunction(category);
 		const sortingFunction = this.buildSortingFunction(category);
 		const groupedByClass = groupByFunction(groupingFunction)(portraitCards);
-		return Object.keys(groupedByClass)
+		const result = Object.keys(groupedByClass)
 			.map((groupingKey) => ({
 				title: this.buildGroupTitle(category, groupedByClass[groupingKey][0]),
 				portraits: groupedByClass[groupingKey],
 			}))
 			.sort(sortingFunction);
+		return result;
 	}
 
 	private buildGroupingFunction(category: CollectionPortraitCategoryFilter): (portrait: ReferenceCard) => string {
