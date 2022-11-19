@@ -56,6 +56,10 @@ export class CollectionHeroPortraitCategoriesFilterDropdownComponent
 				value: 'book-of-mercs',
 				label: this.i18n.translateString('app.collection.filters.hero-portrait.book-of-mercs'),
 			} as IOption,
+			{
+				value: 'book-of-heroes',
+				label: this.i18n.translateString('app.collection.filters.hero-portrait.book-of-heroes'),
+			} as IOption,
 		] as readonly IOption[];
 	}
 
