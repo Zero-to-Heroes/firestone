@@ -16,6 +16,7 @@ ng-select.disabled {
 	color: var(--color-1);
 	height: 30px;
 	background: rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
 	width: 155px;
 	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
 
@@ -26,6 +27,7 @@ ng-select.disabled {
 
 	& > div {
 		border: 1px solid var(--color-3) !important;
+		border-radius: 10px;
 		outline: none;
 
 		div.single > div.toggle:hover {
@@ -74,6 +76,7 @@ ng-select.disabled {
 		& > div {
 			background: var(--color-7);
 			border: 1px solid var(--secondary-text-color);
+			border-radius: 10px;
 			border-top: none;
 			outline: none;
 		}
@@ -90,6 +93,13 @@ ng-select.disabled {
 			max-height: 350px;
 
 			ul li {
+
+				&:first-child{
+					border-radius: 10px 10px 0px 0px;
+				}
+				&:last-child{
+					border-radius: 0px 0px 10px 10px;
+				}
 				color: var(--color-1);
 				border-bottom: 1px solid var(--color-3);
 				padding: 0;
