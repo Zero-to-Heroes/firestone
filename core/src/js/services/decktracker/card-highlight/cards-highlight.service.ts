@@ -413,6 +413,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(minion);
 			case CardIds.EnduranceTrainingTavernBrawl:
 				return and(minion, taunt);
+			case CardIds.EternalServitude:
+			case CardIds.EternalServitudeCore:
+				return and(inGraveyard, minion);
 			case CardIds.ExpeditedBurialTavernBrawl:
 				return and(minion, deathrattle);
 			case CardIds.FelfireInTheHole:
@@ -701,6 +704,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
 				return and(or(inDeck, inHand), minion);
+			case CardIds.ShipsCannon:
+				return and(or(inDeck, inHand), minion, pirate);
 			case CardIds.ShroudOfConcealment:
 				return and(inDeck, minion);
 			case CardIds.Shudderwock:

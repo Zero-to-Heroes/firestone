@@ -534,6 +534,7 @@ export const publicCardGiftCreators = [
 	CardIds.StarseekersTools,
 	CardIds.StarseekersToolsTavernBrawl,
 	CardIds.StewardOfScrolls_SCH_245,
+	CardIds.SubmergedSpacerock,
 	CardIds.SunkenSweeper,
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment, // The one that really counts
 	CardIds.SuspiciousAlchemist,
