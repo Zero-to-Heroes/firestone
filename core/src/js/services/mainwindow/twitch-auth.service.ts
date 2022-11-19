@@ -25,13 +25,14 @@ import { PreferencesService } from '../preferences.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 
-const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
-// const EBS_URL = 'https://localhost:8081/deck/event';
-
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
 const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
 const SCOPES = 'channel_read';
-const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
+export const TWITCH_LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
+
+const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
+// const EBS_URL = 'https://localhost:8081/deck/event';
+
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
 const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
@@ -364,7 +365,7 @@ export class TwitchAuthService {
 	}
 
 	public buildLoginUrl(): string {
-		return LOGIN_URL;
+		return TWITCH_LOGIN_URL;
 	}
 
 	public async sendExpiredTwitchTokenNotification() {

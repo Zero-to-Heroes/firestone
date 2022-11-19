@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
+import { TwitchAuthService, TWITCH_LOGIN_URL } from '../../../services/mainwindow/twitch-auth.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -116,7 +116,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	twitchUserName$: Observable<string>;
 
 	twitchedLoggedIn: boolean;
-	twitchLoginUrl: string;
+	twitchLoginUrl: string = TWITCH_LOGIN_URL;
 
 	constructor(
 		private readonly prefs: PreferencesService,
@@ -138,7 +138,6 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 			.pipe(this.mapData(([twitchAccessToken, twitchLoginName]) => (!twitchLoginName ? null : twitchAccessToken)))
 			.subscribe(async (token) => {
 				this.twitchedLoggedIn = !!token ? await this.twitch.isLoggedIn() : null;
-				this.twitchLoginUrl = !!token ? this.twitch.buildLoginUrl() : null;
 				this.cdr?.detectChanges();
 			});
 	}
