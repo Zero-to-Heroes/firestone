@@ -101,7 +101,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-left: 90px;
+		padding-left: 20px;
+		height: fit-content;
 
 		button {
 			background: var(--color-2);
@@ -112,6 +113,8 @@
 			justify-content: center;
 			font-family: 'Open Sans', sans-serif;
 			padding: 10px;
+			flex-basis: 50%;
+			height: 100%;
 
 			&.disabled {
 				opacity: 0.4;
@@ -119,6 +122,10 @@
 
 			&:hover:not(.disabled) {
 				background: var(--color-1);
+			}
+
+			&:not(:last-child) {
+				margin-right: 15px;
 			}
 		}
 	}

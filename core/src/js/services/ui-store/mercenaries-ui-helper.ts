@@ -213,6 +213,7 @@ export const buildMercenariesTasksList = (
 			const role = getHeroRole(mercenaryCard.mercenaryRole);
 			const result = {
 				...visitor, // For debugging purpose
+				ownerMercenaryDbfId: refMerc.cardDbfId,
 				mercenaryCardId: mercenaryCardId,
 				mercenaryRole: mercenaryCard.mercenaryRole,
 				mercenaryName: mercenaryCard.name,

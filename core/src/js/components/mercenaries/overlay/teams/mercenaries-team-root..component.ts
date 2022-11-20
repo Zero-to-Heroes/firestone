@@ -23,7 +23,7 @@ import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenarie
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
+import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
@@ -338,13 +338,14 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 						</div>
 					</div>
 				</div>
-				<div class="create-team-button" *ngIf="taskTeamDeckstring">
+				<div class="create-team-button" *ngIf="taskTeamDeckstrings?.length">
 					<button
-						[helpTooltip]="buttonTooltip"
-						(click)="createTeamFromTasks()"
+						*ngFor="let info of taskTeamDeckstrings; let i = index"
+						[helpTooltip]="info.tooltip"
+						(click)="createTeamFromTasks(info)"
 						[ngClass]="{ 'disabled': isCopied }"
 					>
-						{{ buttonLabel }}
+						{{ buttonLabel || info.label }}
 					</button>
 				</div>
 			</ng-container>
@@ -364,11 +365,10 @@ export class MercsTasksListComponent extends AbstractSubscriptionComponent imple
 		this.tasks$$.next(value);
 	}
 
-	taskTeamDeckstring: string;
+	taskTeamDeckstrings: readonly TeamDeckstringInfo[];
 
 	isCopied: boolean;
-	buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-label');
-	buttonTooltip = this.i18n.translateString('mercenaries.team-widget.create-team-button-tooltip');
+	buttonLabel: string;
 
 	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
@@ -395,11 +395,11 @@ export class MercsTasksListComponent extends AbstractSubscriptionComponent imple
 		)
 			.pipe(
 				this.mapData(([[refData, collectionInfo], [mercBackupIds], tasks]) =>
-					buildTeamForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
+					buildTeamsForTasks(tasks, refData, collectionInfo, mercBackupIds, this.allCards, this.i18n),
 				),
 			)
-			.subscribe((deckstring) => {
-				this.taskTeamDeckstring = deckstring;
+			.subscribe((infos) => {
+				this.taskTeamDeckstrings = infos;
 				this.tasksListUpdated.next();
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -407,19 +407,19 @@ export class MercsTasksListComponent extends AbstractSubscriptionComponent imple
 			});
 	}
 
-	createTeamFromTasks() {
+	createTeamFromTasks(info: TeamDeckstringInfo) {
 		if (this.isCopied) {
 			return;
 		}
 
 		this.isCopied = true;
-		this.ow.placeOnClipboard(this.taskTeamDeckstring);
+		this.ow.placeOnClipboard(info.deckstring);
 		this.buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-ok-label');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
-			this.buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-label');
+			this.buttonLabel = null;
 			this.isCopied = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -429,6 +429,7 @@ export class MercsTasksListComponent extends AbstractSubscriptionComponent imple
 }
 
 export interface Task {
+	readonly ownerMercenaryDbfId: number;
 	readonly mercenaryCardId: string;
 	readonly mercenaryRole: 'TANK' | 'CASTER' | 'FIGHTER';
 	readonly mercenaryName: string;
@@ -443,56 +444,66 @@ export interface Task {
 	readonly additionalMercDbfIds: readonly number[];
 }
 
-export const buildTeamForTasks = (
+export const buildTeamsForTasks = (
 	tasks: readonly Task[],
 	mercReferenceData: MercenariesReferenceData,
 	mercCollectionInfo: MemoryMercenariesCollectionInfo,
 	backupMercIds: readonly number[],
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
-): string => {
+): readonly TeamDeckstringInfo[] => {
 	// console.debug('building team for tasks', tasks, mercReferenceData);
 	if (!mercReferenceData?.mercenaries?.length || !tasks?.length) {
 		console.warn('missing reference data');
 		return null;
 	}
 
-	const taskMercs = tasks
-		.filter((task) => task.type === VillageVisitorType.PROCEDURAL)
-		.flatMap((task) => task.additionalMercDbfIds)
-		.map((mercDbfId) =>
-			buildMerc(
-				mercReferenceData.mercenaries.find((merc) => merc.cardDbfId === mercDbfId),
-				mercCollectionInfo,
-			),
-		)
-		.filter((m) => !!m);
-	const backupMercs = [...new Array(Math.max(0, 6 - (taskMercs?.length ?? 0))).keys()]
-		.map((_, i) => backupMercIds[i])
-		.filter((id) => !!id)
-		.map((backupId) =>
-			buildMerc(
-				mercReferenceData.mercenaries.find((merc) => merc.id === backupId),
-				mercCollectionInfo,
-			),
-		)
-		.filter((m) => !!m);
-	const finalMercs = [...taskMercs, ...backupMercs];
-	// console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
+	const proceduralTasks = tasks.filter((task) => task.type === VillageVisitorType.PROCEDURAL);
+	return proceduralTasks.map((proceduralTask) => {
+		const taskMercs = [proceduralTask.ownerMercenaryDbfId, ...(proceduralTask.additionalMercDbfIds ?? [])]
+			.map((mercDbfId) =>
+				buildMerc(
+					mercReferenceData.mercenaries.find((merc) => merc.cardDbfId === mercDbfId),
+					mercCollectionInfo,
+				),
+			)
+			.filter((m) => !!m);
+		const backupMercs = [...new Array(Math.max(0, 6 - (taskMercs?.length ?? 0))).keys()]
+			.map((_, i) => backupMercIds[i])
+			.filter((id) => !!id)
+			.map((backupId) =>
+				buildMerc(
+					mercReferenceData.mercenaries.find((merc) => merc.id === backupId),
+					mercCollectionInfo,
+				),
+			)
+			.filter((m) => !!m);
+		const finalMercs = [...taskMercs, ...backupMercs];
+		// console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
 
-	const definition: MercenariesTeamDefinition = {
-		teamId: 1,
-		type: 1,
-		name: i18n.translateString('mercenaries.team-widget.task-team-default-name'),
-		mercenaries: finalMercs,
-	};
-	if (!definition?.mercenaries?.length) {
-		return null;
-	}
+		const ownerName = getShortMercHeroName(allCards.getCard(proceduralTask.ownerMercenaryDbfId).id, allCards);
+		const definition: MercenariesTeamDefinition = {
+			teamId: 1,
+			type: 1,
+			name: i18n.translateString('mercenaries.team-widget.task-team-default-name', { mercName: ownerName }),
+			mercenaries: finalMercs,
+		};
+		if (!definition?.mercenaries?.length) {
+			return null;
+		}
 
-	const deckstring = encodeMercs(definition);
-	// console.debug('mercs definition', deckstring, definition);
-	return deckstring;
+		const deckstring = encodeMercs(definition);
+		console.debug('mercs definition', deckstring, definition);
+		return {
+			deckstring: deckstring,
+			label: i18n.translateString('mercenaries.team-widget.create-team-button-label', {
+				mercName: ownerName,
+			}),
+			tooltip: i18n.translateString('mercenaries.team-widget.create-team-button-tooltip', {
+				mercName: ownerName,
+			}),
+		};
+	});
 };
 
 export const buildMerc = (
@@ -522,3 +533,9 @@ export const buildMerc = (
 	// console.debug('merc for tasks', result);
 	return result;
 };
+
+interface TeamDeckstringInfo {
+	readonly deckstring: string;
+	readonly label: string;
+	readonly tooltip: string;
+}
