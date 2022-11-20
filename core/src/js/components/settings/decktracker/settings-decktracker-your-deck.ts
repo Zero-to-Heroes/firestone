@@ -2,8 +2,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
+import { CounterSetting } from './model';
 
 @Component({
 	selector: 'settings-decktracker-your-deck',
@@ -88,134 +90,10 @@ import { Knob } from '../preference-slider.component';
 			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.counters.title'"></div>
 			<div class="settings-group">
 				<preference-toggle
-					field="playerGalakrondCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.galakrond-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.galakrond-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerPogoCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.pogo-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.pogo-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerJadeGolemCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.jade-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.jade-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerCthunCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.cthun-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.cthun-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerFatigueCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.fatigue-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.fatigue-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerAbyssalCurseCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.abyssal-curse-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.abyssal-curse-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerAttackCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.attack-on-board-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.attack-on-board-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerSpellCounter"
-					[label]="'settings.decktracker.your-deck.counters.number-of-spells-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.number-of-spells-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerElementalCounter"
-					[label]="'settings.decktracker.your-deck.counters.elementals-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.elementals-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerWatchpostCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.watch-post-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.watch-post-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerLibramCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.libram-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.libram-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerElwynnBoarCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.elwynn-boar-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.elwynn-boar-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerVolatileSkeletonCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.volatile-skeleton-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.volatile-skeleton-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerRelicCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.relic-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.relic-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerHeroPowerDamageCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.hero-power-damage-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerBolnerCounter"
-					[label]="'settings.decktracker.your-deck.counters.bolner-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.bolner-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerBrilliantMacawCounter"
-					[label]="'settings.decktracker.your-deck.counters.brilliant-macaw-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.brilliant-macaw-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerMonstrousParrotCounter"
-					[label]="'settings.decktracker.your-deck.counters.monstrous-parrot-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.monstrous-parrot-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerVanessaVanCleefCounter"
-					[label]="'settings.decktracker.your-deck.counters.vanessa-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.vanessa-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerMurozondTheInfiniteCounter"
-					[label]="'settings.decktracker.your-deck.counters.murozond-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.murozond-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerQueensguardCounter"
-					[label]="'settings.decktracker.your-deck.counters.queensguard-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.queensguard-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerSpectralPillagerCounter"
-					[label]="'settings.decktracker.your-deck.counters.spectral-pillager-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.spectral-pillager-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerLadyDarkveinCounter"
-					[label]="'settings.decktracker.your-deck.counters.lady-darkvein-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.lady-darkvein-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerGreySageParrotCounter"
-					[label]="'settings.decktracker.your-deck.counters.grey-sage-parrot-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerMulticasterCounter"
-					[label]="'settings.decktracker.your-deck.counters.multicaster-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.multicaster-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="playerCoralKeeperCounter"
-					[label]="'settings.decktracker.your-deck.counters.coral-keeper-label' | owTranslate"
-					[tooltip]="'settings.decktracker.your-deck.counters.coral-keeper-tooltip' | owTranslate"
+					*ngFor="let counter of counters"
+					[field]="counter.field"
+					[label]="counter.label"
+					[tooltip]="counter.tooltip"
 				></preference-toggle>
 			</div>
 
@@ -276,6 +154,165 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 			label: this.i18n.translateString('settings.global.knob-sizes.large'),
 		},
 	];
+
+	counters: readonly CounterSetting[] = [
+		{
+			id: 'galakrond',
+			field: 'playerGalakrondCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.galakrond-tooltip'),
+		},
+		{
+			id: 'pogo',
+			field: 'playerPogoCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.pogo-tooltip'),
+		},
+		{
+			id: 'jade',
+			field: 'playerJadeGolemCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.jade-tooltip'),
+		},
+		{
+			id: 'cthun',
+			field: 'playerCthunCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.cthun-tooltip'),
+		},
+		{
+			id: 'fatigue',
+			field: 'playerFatigueCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.fatigue-tooltip'),
+		},
+		{
+			id: 'abyssal-curse',
+			field: 'playerAbyssalCurseCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.abyssal-curse-tooltip'),
+		},
+		{
+			id: 'attack-on-board',
+			field: 'playerAttackCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.attack-on-board-tooltip'),
+		},
+		{
+			id: 'number-of-spells',
+			field: 'playerSpellCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.number-of-spells-tooltip'),
+		},
+		{
+			id: 'elementals',
+			field: 'playerElementalCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.elementals-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.elementals-tooltip'),
+		},
+		{
+			id: 'watch-post',
+			field: 'playerWatchpostCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.watch-post-tooltip'),
+		},
+		{
+			id: 'libram',
+			field: 'playerLibramCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.libram-tooltip'),
+		},
+		{
+			id: 'elwynn-boar',
+			field: 'playerElwynnBoarCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.elwynn-boar-tooltip'),
+		},
+		{
+			id: 'volatile-skeleton',
+			field: 'playerVolatileSkeletonCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.volatile-skeleton-tooltip'),
+		},
+		{
+			id: 'relic',
+			field: 'playerRelicCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.relic-tooltip'),
+		},
+		{
+			id: 'hero-power-damage',
+			field: 'playerHeroPowerDamageCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.hero-power-damage-tooltip'),
+		},
+		{
+			id: 'bolner',
+			field: 'playerBolnerCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bolner-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bolner-tooltip'),
+		},
+		{
+			id: 'brilliant-macaw',
+			field: 'playerBrilliantMacawCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.brilliant-macaw-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.brilliant-macaw-tooltip'),
+		},
+		{
+			id: 'monstrous-parrot',
+			field: 'playerMonstrousParrotCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.monstrous-parrot-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.monstrous-parrot-tooltip'),
+		},
+		{
+			id: 'vanessa',
+			field: 'playerVanessaVanCleefCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
+		},
+		{
+			id: 'murozond',
+			field: 'playerMurozondTheInfiniteCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-tooltip'),
+		},
+		{
+			id: 'queensguard',
+			field: 'playerQueensguardCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.queensguard-tooltip'),
+		},
+		{
+			id: 'spectral-pillager',
+			field: 'playerSpectralPillagerCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.spectral-pillager-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.spectral-pillager-tooltip'),
+		},
+		{
+			id: 'lady-darkvein',
+			field: 'playerLadyDarkveinCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.lady-darkvein-tooltip'),
+		},
+		{
+			id: 'grey-sage-parrot',
+			field: 'playerGreySageParrotCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.grey-sage-parrot-tooltip'),
+		},
+		{
+			id: 'multicaster',
+			field: 'playerMulticasterCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.multicaster-tooltip'),
+		},
+		{
+			id: 'coral-keeper',
+			field: 'playerCoralKeeperCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-tooltip'),
+		},
+	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
