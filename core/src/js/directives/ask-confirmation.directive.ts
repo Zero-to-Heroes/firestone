@@ -52,8 +52,7 @@ export class AskConfirmationDirective implements OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly events: Events,
 		private readonly i18n: LocalizationFacadeService,
-	) {
-	}
+	) {}
 
 	// eslint-disable-next-line @angular-eslint/use-lifecycle-interface
 	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
