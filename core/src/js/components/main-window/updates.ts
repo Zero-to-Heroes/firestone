@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.16.1',
+		version: '9.16.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -63,6 +63,19 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `When playing "Guess the Weight", the tracker now shows you the odds for each option. While this particular card is not super popular (being a Wild-only card), it opens the door to showing more contextual information when being offered a discover. Let me know what you'd like to use this for on Discord!`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where you couldn't log in to Twitch anymore.`,
+							},
+						],
+					},
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'feature',
+								text: `The Quest widget now has two buttons to let you build different teams for each of the Procedural quests.`,
+							},
 						],
 					},
 					{
@@ -87,6 +100,23 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the Simulator tooltip would get messed up after going once to the Replays tab (Community Contribution!).`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the MMR / tribes filters weren't working properly anymore.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a counter for Spectral Pillager.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where deck deletion wasn't working anymore.`,
+							},
 						],
 					},
 					{
@@ -95,6 +125,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add highlight for abilities with combo effect (Community Contribution!).`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Counters (in the Decktracker Settings) are now sorted alphabetically.`,
+							},
+							{
+								type: 'feature',
+								text: `Clicking on a message in the mailbox marks more recent messages as unread.`,
 							},
 						],
 					},
