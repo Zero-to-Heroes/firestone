@@ -2,8 +2,10 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { sortByProperties } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
+import { CounterSetting } from './model';
 
 @Component({
 	selector: 'settings-decktracker-opponent-deck',
@@ -137,69 +139,10 @@ import { Knob } from '../preference-slider.component';
 			<div class="subtitle" [owTranslate]="'settings.decktracker.opponent-deck.counters.title'"></div>
 			<div class="settings-group">
 				<preference-toggle
-					field="opponentGalakrondCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.galakrond-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.galakrond-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentPogoCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.pogo-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.pogo-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentJadeGolemCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.jade-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.jade-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentCthunCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.cthun-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.cthun-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentFatigueCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.fatigue-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.fatigue-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentAbyssalCurseCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.abyssal-curse-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.abyssal-curse-tooltip-2' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentAttackCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.attack-on-board-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.attack-on-board-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentWatchpostCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.watch-post-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.watch-post-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentLibramCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.libram-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.libram-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentElwynnBoarCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.elwynn-boar-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentVolatileSkeletonCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.volatile-skeleton-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.volatile-skeleton-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentRelicCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.relic-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.relic-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					field="opponentHeroPowerDamageCounter"
-					[label]="'settings.decktracker.opponent-deck.counters.hero-power-damage-label' | owTranslate"
-					[tooltip]="'settings.decktracker.opponent-deck.counters.hero-power-damage-tooltip' | owTranslate"
+					*ngFor="let counter of counters"
+					[field]="counter.field"
+					[label]="counter.label"
+					[tooltip]="counter.tooltip"
 				></preference-toggle>
 			</div>
 
@@ -305,6 +248,87 @@ export class SettingsDecktrackerOpponentDeckComponent
 			label: this.i18n.translateString('settings.global.knob-sizes.default'),
 		},
 	];
+
+	counters: readonly CounterSetting[] = [
+		{
+			id: 'galakrond',
+			field: 'opponentGalakrondCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.galakrond-tooltip'),
+		},
+		{
+			id: 'pogo',
+			field: 'opponentPogoCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.pogo-tooltip'),
+		},
+		{
+			id: 'jade',
+			field: 'opponentJadeGolemCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.jade-tooltip'),
+		},
+		{
+			id: 'cthun',
+			field: 'opponentCthunCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.cthun-tooltip'),
+		},
+		{
+			id: 'fatigue',
+			field: 'opponentFatigueCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.fatigue-tooltip'),
+		},
+		{
+			id: 'abyssal-curse',
+			field: 'opponentAbyssalCurseCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.abyssal-curse-tooltip'),
+		},
+		{
+			id: 'attack-on-board',
+			field: 'opponentAttackCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.attack-on-board-tooltip'),
+		},
+		{
+			id: 'watch-post',
+			field: 'opponentWatchpostCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.watch-post-tooltip'),
+		},
+		{
+			id: 'libram',
+			field: 'opponentLibramCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.libram-tooltip'),
+		},
+		{
+			id: 'elwynn-boar',
+			field: 'opponentElwynnBoarCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.elwynn-boar-tooltip'),
+		},
+		{
+			id: 'volatile-skeleton',
+			field: 'opponentVolatileSkeletonCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.volatile-skeleton-tooltip'),
+		},
+		{
+			id: 'relic',
+			field: 'opponentRelicCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.relic-tooltip'),
+		},
+		{
+			id: 'hero-power-damage',
+			field: 'opponentHeroPowerDamageCounter',
+			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-tooltip'),
+		},
+	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
