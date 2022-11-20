@@ -337,6 +337,13 @@ export class DeckState {
 		return cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard);
 	}
 
+	public hasSpectralPillager() {
+		const cards = [...this.hand, ...this.currentOptions];
+		return cards
+			.filter((card) => card.cardId)
+			.some((card) => [CardIds.SpectralPillager, CardIds.SpectralPillagerCore].includes(card.cardId as CardIds));
+	}
+
 	public hasLadyDarkvein() {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)

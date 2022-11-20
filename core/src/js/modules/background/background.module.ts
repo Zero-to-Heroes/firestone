@@ -381,6 +381,7 @@ import { PlayerMurozondTheInfiniteWidgetWrapperComponent } from '../../component
 import { PlayerPogoWidgetWrapperComponent } from '../../components/overlays/counters/player-pogo-widget-wrapper.component';
 import { PlayerQueensguardWidgetWrapperComponent } from '../../components/overlays/counters/player-queensguard-widget-wrapper.component';
 import { PlayerRelicWidgetWrapperComponent } from '../../components/overlays/counters/player-relic-widget-wrapper.component';
+import { PlayerSpectralPillagerWidgetWrapperComponent } from '../../components/overlays/counters/player-spectral-pillager-widget-wrapper.component';
 import { PlayerSpellWidgetWrapperComponent } from '../../components/overlays/counters/player-spell-widget-wrapper.component';
 import { PlayerVanessaVanCleefWidgetWrapperComponent } from '../../components/overlays/counters/player-vanessa-widget-wrapper.component';
 import { PlayerVolatileSkeletonWidgetWrapperComponent } from '../../components/overlays/counters/player-volatile-skeleton-widget-wrapper.component';
@@ -1070,6 +1071,7 @@ const components = [
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
 		PlayerQueensguardWidgetWrapperComponent,
+		PlayerSpectralPillagerWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,
 		PlayerGreySageParrotWidgetWrapperComponent,
 		PlayerMulticasterWidgetWrapperComponent,

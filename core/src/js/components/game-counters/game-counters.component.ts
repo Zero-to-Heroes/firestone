@@ -33,6 +33,7 @@ import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
 import { RelicCounterDefinition } from './definitions/relic-counter';
 import { Si7CounterDefinition } from './definitions/si7-counter';
+import { SpectralPillagerCounterDefinition } from './definitions/spectral-pillager-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
 import { VanessaVanCleefCounterDefinition } from './definitions/vanessa-vancleef-counter';
 import { VolatileSkeletonCounterDefinition } from './definitions/volatile-skeleton-counter';
@@ -152,6 +153,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'queensguard':
 				return QueensguardCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'spectralPillager':
+				return SpectralPillagerCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'ladyDarkvein':
 				return LadyDarkveinCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'greySageParrot':

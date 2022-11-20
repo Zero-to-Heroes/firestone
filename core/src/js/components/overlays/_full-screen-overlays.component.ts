@@ -92,6 +92,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
 			<player-queensguard-widget-wrapper></player-queensguard-widget-wrapper>
+			<player-spectral-pillager-widget-wrapper></player-spectral-pillager-widget-wrapper>
 			<player-lady-darkvein-widget-wrapper></player-lady-darkvein-widget-wrapper>
 			<player-grey-sage-parrot-widget-wrapper></player-grey-sage-parrot-widget-wrapper>
 			<player-hero-power-damage-widget-wrapper></player-hero-power-damage-widget-wrapper>

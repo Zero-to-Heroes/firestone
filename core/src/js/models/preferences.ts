@@ -385,6 +385,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerQueensguardCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerSpectralPillagerCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerSpectralPillagerCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerLadyDarkveinCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerLadyDarkveinCounterWidgetPosition: { left: number; top: number };

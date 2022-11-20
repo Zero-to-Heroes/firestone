@@ -193,6 +193,11 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.decktracker.your-deck.counters.queensguard-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="playerSpectralPillagerCounter"
+					[label]="'settings.decktracker.your-deck.counters.spectral-pillager-label' | owTranslate"
+					[tooltip]="'settings.decktracker.your-deck.counters.spectral-pillager-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					field="playerLadyDarkveinCounter"
 					[label]="'settings.decktracker.your-deck.counters.lady-darkvein-label' | owTranslate"
 					[tooltip]="'settings.decktracker.your-deck.counters.lady-darkvein-tooltip' | owTranslate"
