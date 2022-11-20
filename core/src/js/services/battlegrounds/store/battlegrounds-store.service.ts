@@ -371,14 +371,23 @@ export class BattlegroundsStoreService {
 		});
 
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
-			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
-			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
+			console.log(
+				'[bgs-store] Replay created, received info',
+				info.type,
+				this.state?.inGame,
+				!!this.state?.currentGame,
+			);
+			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
+			// could be already reset when it arrives
+			if (info && info.type === 'new-review' && this.state?.inGame && !!this.state.currentGame) {
+				const currentGame = this.state.currentGame;
+				console.log('[bgs-store] will trigger START_BGS_RUN_STATS');
 				const bestBgsUserStats = await this.bgsUserStatsService.loadBgsBestUserStats();
 				this.events.broadcast(
 					Events.START_BGS_RUN_STATS,
 					info.reviewId,
-					this.state.currentGame,
+					currentGame,
 					bestBgsUserStats,
 					info.game,
 				);
