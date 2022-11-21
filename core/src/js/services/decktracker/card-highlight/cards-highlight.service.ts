@@ -299,6 +299,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), pirate);
 			case CardIds.BitterColdTavernBrawl:
 				return and(frost, dealsDamage);
+			case CardIds.BlackwingCorruptor:
+				return and(or(inDeck, inHand), dragon);
 			case CardIds.BladeOfQuickeningTavernBrawlToken:
 				return and(inDeck, outcast);
 			case CardIds.BladeOfTheBurningSun:

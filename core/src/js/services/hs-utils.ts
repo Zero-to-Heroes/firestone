@@ -329,6 +329,7 @@ export const publicCardGiftCreators = [
 	CardIds.CleverDisguise_ULD_328,
 	CardIds.CloakOfEmeraldDreamsTavernBrawl,
 	CardIds.CloakOfEmeraldDreams_CloakOfEmeraldDreamsTavernBrawlEnchantment,
+	CardIds.ClockworkGnome,
 	CardIds.CloningDevice,
 	CardIds.CommanderSivara_TSC_087,
 	CardIds.CommanderSivara_Story_11_Sivara,
