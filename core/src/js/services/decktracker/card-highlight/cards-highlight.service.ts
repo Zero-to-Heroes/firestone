@@ -398,7 +398,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.DragonboneRitualTavernBrawl:
 				return and(dragon);
 			case CardIds.Drekthar_AV_100:
-				return !!card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+				return !card ? null : and(inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
 			case CardIds.DrocomurchanicasTavernBrawlToken:
 				return and(inDeck, minion, or(dragon, murloc, mech));
 			case CardIds.DunBaldarBunker:
@@ -465,7 +465,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						return null;
 					}
 					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
-					return inDeck(handler) && effectiveCostLess(lastDrawnCard.getEffectiveManaCost())(handler);
+					return inDeck(handler) && effectiveCostLess(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
 				};
 			case CardIds.GuessTheWeight_More:
 				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
@@ -473,7 +473,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 						return null;
 					}
 					const lastDrawnCard = deckState.hand[deckState.hand.length - 1];
-					return inDeck(handler) && effectiveCostMore(lastDrawnCard.getEffectiveManaCost())(handler);
+					return inDeck(handler) && effectiveCostMore(lastDrawnCard?.getEffectiveManaCost() ?? 0)(handler);
 				};
 			case CardIds.GuffRunetotem_BAR_720:
 				return and(spell, spellSchool(SpellSchool.NATURE));

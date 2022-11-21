@@ -45,7 +45,11 @@ export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent impl
 		this.brawlInfo$ = this.store.tavernBrawl$().pipe(
 			map((state) => state.getCurrentStats()),
 			this.mapData((stats) => {
-				const nameLabel = this.i18n.translateString(
+				if (!stats?.info) {
+					return null;
+				}
+
+				const nameLabel: string = this.i18n.translateString(
 					!!stats.info?.name ? 'app.tavern-brawl.with-name' : 'app.tavern-brawl.no-name',
 					{
 						name: stats.info?.name,
@@ -69,20 +73,22 @@ export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent impl
 		).pipe(
 			map(([state, [collection]]) => ({ stats: state.getCurrentStats(), collection: collection })),
 			this.mapData((info) => {
-				return info.stats?.stats
-					.filter((stat) => !!stat.playerClass)
-					.map((stat) => {
-						const buildableDecks = stat.bestDecks.filter((decklist) =>
-							this.canBuild(decklist, info.collection),
-						);
-						console.debug('buildableDecks', buildableDecks);
-						const buildableDeck: string = buildableDecks[0]?.decklist;
-						return {
-							...stat,
-							buildableDecklist: buildableDeck,
-						} as TavernStatWithCollection;
-					})
-					.sort((a, b) => b.winrate - a.winrate);
+				return (
+					info.stats?.stats
+						.filter((stat) => !!stat.playerClass)
+						.map((stat) => {
+							const buildableDecks = stat.bestDecks.filter((decklist) =>
+								this.canBuild(decklist, info.collection),
+							);
+							console.debug('buildableDecks', buildableDecks);
+							const buildableDeck: string = buildableDecks[0]?.decklist;
+							return {
+								...stat,
+								buildableDecklist: buildableDeck,
+							} as TavernStatWithCollection;
+						})
+						.sort((a, b) => b.winrate - a.winrate) ?? []
+				);
 			}),
 		);
 	}
