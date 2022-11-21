@@ -45,6 +45,7 @@ export const modifyDecksForSpecialCards = (
 		case CardIds.OopsAllSpellsTavernBrawl:
 			return [handleOoopsAllSpells(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.ScepterOfSummoning:
+			console.log('[passive] will apply scepter of summoning for', deckState.deck.length, deckState.hero?.cardId);
 			return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.SkulkingGeist:
 			return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];

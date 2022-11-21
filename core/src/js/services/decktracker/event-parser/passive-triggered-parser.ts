@@ -21,8 +21,9 @@ export class PassiveTriggeredParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		console.log('[passive] will apply event', cardId, controllerId, localPlayer, entityId);
 		if (!cardId) {
-			console.log('no cardId for passive');
+			console.log('[passive] no cardId for passive');
 			return currentState;
 		}
 
@@ -51,6 +52,14 @@ export class PassiveTriggeredParser implements EventParser {
 			this.allCards,
 			this.i18n,
 		);
+		if (playerDeckAfterSpecialCaseUpdate !== newPlayerDeck || opponentDeckAfterSpecialCaseUpdate !== opponentDeck) {
+			console.log(
+				'[passive] updated deck for passive',
+				cardId,
+				playerDeckAfterSpecialCaseUpdate !== newPlayerDeck,
+				opponentDeckAfterSpecialCaseUpdate !== opponentDeck,
+			);
+		}
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
