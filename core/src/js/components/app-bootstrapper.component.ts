@@ -1,4 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { from, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { OverwolfService } from '../services/overwolf.service';
@@ -32,16 +33,19 @@ export class AppBoostrapperComponent extends AbstractSubscriptionComponent imple
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
+		private readonly titleService: Title,
 	) {
 		super(store, cdr);
 	}
 
 	ngAfterContentInit(): void {
-		console.debug('after content init');
 		this.currentWindowName$ = from(this.ow.getCurrentWindow()).pipe(
 			tap((info) => console.debug('window info', info)),
 			this.mapData((currentWindow) => this.mapWindowName(currentWindow.name)),
 		);
+		this.currentWindowName$.subscribe((name) => {
+			this.titleService.setTitle(`Firestone - ${name}`);
+		});
 	}
 
 	private mapWindowName(name: string): string {
