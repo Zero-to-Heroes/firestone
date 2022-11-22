@@ -21,21 +21,18 @@ const entry = {
 	// Keep polyfills at the top so that it's imported first in the HTML
 	polyfills: './src/polyfills.ts',
 	background: './src/js/modules/background/main.ts',
-	collection: './src/js/modules/background/main.ts',
-	loading: './src/js/modules/background/main.ts',
-	notifications: './src/js/modules/background/main.ts',
-	settings: './src/js/modules/background/main.ts',
-	battlegrounds: './src/js/modules/background/main.ts',
-	overlays: './src/js/modules/background/main.ts',
-	overlaysclickthrough: './src/js/modules/background/main.ts',
+	// collection: './src/js/modules/background/main.ts',
+	// loading: './src/js/modules/background/main.ts',
+	// notifications: './src/js/modules/background/main.ts',
+	// settings: './src/js/modules/background/main.ts',
+	// battlegrounds: './src/js/modules/background/main.ts',
+	// overlays: './src/js/modules/background/main.ts',
+	// overlaysclickthrough: './src/js/modules/background/main.ts',
 
-	mercenariesactionqueue: './src/js/modules/background/main.ts',
-	mercenariesoutofcombatplayerteam: './src/js/modules/background/main.ts',
-	mercenariesoutofcombattreasureselection: './src/js/modules/background/main.ts',
-	outofcardscallback: './src/js/modules/background/main.ts',
+	// outofcardscallback: './src/js/modules/background/main.ts',
+
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
 	'bgsmultisimulation.worker': './src/js/workers/bgs-multi-sim.worker.ts',
-	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
 
 module.exports = function (env, argv) {
@@ -269,7 +266,7 @@ const buildHtmlWebpackPluginConf = (filename, chunkName) => {
 	return new HtmlWebpackPlugin({
 		filename: filename,
 		template: `src/html/${filename}`,
-		excludeChunks: excludedChunks,
+		// excludeChunks: excludedChunks,
 		chunksSortMode: 'manual',
 	});
 };
