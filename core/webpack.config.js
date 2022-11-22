@@ -108,16 +108,7 @@ module.exports = function (env, argv) {
 			},
 		]),
 
-		buildHtmlWebpackPluginConf('background.html', 'background'),
-		buildHtmlWebpackPluginConf('collection.html', 'collection'),
-		buildHtmlWebpackPluginConf('loading.html', 'loading'),
-		buildHtmlWebpackPluginConf('notifications.html', 'notifications'),
-		buildHtmlWebpackPluginConf('settings.html', 'settings'),
-		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
-		buildHtmlWebpackPluginConf('full_screen_overlays.html', 'overlays'),
-		buildHtmlWebpackPluginConf('full_screen_overlays_clickthrough.html', 'overlaysclickthrough'),
-
-		buildHtmlWebpackPluginConf('outofcards-callback.html', 'outofcardscallback'),
+		buildHtmlWebpackPluginConf('index.html', 'background'),
 	];
 
 	return {
@@ -260,13 +251,15 @@ const buildHtmlWebpackPluginConf = (filename, chunkName) => {
 	// thus probably importing some unrelated stuff, but they should be
 	// small enough that it should not matter (and we're serving them from
 	// the local filesystem, so in the end it doesn't really matter)
+	// Exclude the worker chunks when not needed, because they interfere with other events
+	//
 	const excludedChunks = Object.keys(entry)
 		.filter((chunk) => chunk !== chunkName)
 		.filter((chunk) => chunk !== 'polyfills');
 	return new HtmlWebpackPlugin({
 		filename: filename,
 		template: `src/html/${filename}`,
-		// excludeChunks: excludedChunks,
+		excludeChunks: excludedChunks,
 		chunksSortMode: 'manual',
 	});
 };

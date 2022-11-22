@@ -9,7 +9,11 @@ const ctx: Worker = self as any;
 
 // Respond to message from parent thread
 ctx.onmessage = async (ev) => {
-	const battleMessages: readonly BgsBattleInfo[] = ev.data.battleMessages;
+	const battleMessages: readonly BgsBattleInfo[] = ev?.data?.battleMessages;
+	if (!battleMessages?.length) {
+		return;
+	}
+
 	const cards: AllCardsService = Object.assign(new AllCardsService(), ev.data.cards);
 
 	const cardsData = new CardsData(cards, false);

@@ -2,16 +2,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import {
-	ApplicationRef,
-	ComponentFactoryResolver,
-	DoBootstrap,
-	ErrorHandler,
-	Injectable,
-	Injector,
-	NgModule,
-	Type,
-} from '@angular/core';
+import { ComponentFactoryResolver, ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -167,6 +158,7 @@ import { TavernBrawlMetaComponent } from '../../../libs/tavern-brawl/components/
 import { TavernBrawlStatComponent } from '../../../libs/tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '../../../libs/tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '../../../libs/tavern-brawl/services/tavern-brawl.service';
+import { AppBoostrapperComponent } from '../../components/app-bootstrapper.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsOverlayButtonComponent } from '../../components/battlegrounds/overlay/battlegrounds-overlay-button.component';
@@ -634,37 +626,8 @@ export class SentryErrorHandler implements ErrorHandler {
 	}
 }
 
-const components = [
-	AppComponent,
-	MainWindowComponent,
-	LoadingComponent,
-	NotificationsComponent,
-	BattlegroundsComponent,
-	FullScreenOverlaysComponent,
-	FullScreenOverlaysClickthroughComponent,
-	BattlegroundsMinionsTiersOverlayComponent,
-	BattlegroundsOverlayButtonComponent,
-	BgsBannedTribesComponent,
-	BgsSimulationOverlayComponent,
-	BgsHeroSelectionOverlayComponent,
-	// ConstructedComponent,
-	DeckTrackerOverlayPlayerComponent,
-	DeckTrackerOverlayOpponentComponent,
-	GameCountersComponent,
-	OpponentHandOverlayComponent,
-	OutOfCardsCallbackComponent,
-	SecretsHelperComponent,
-
-	MercenariesOpponentTeamComponent,
-	MercenariesPlayerTeamComponent,
-	MercenariesActionsQueueComponent,
-	MercenariesOutOfCombatPlayerTeamComponent,
-	MercenariesOutOfCombatTreasureSelectionComponent,
-
-	SettingsComponent,
-];
-
 @NgModule({
+	bootstrap: [AppBoostrapperComponent],
 	imports: [
 		AngularResizedEventModule,
 		A11yModule,
@@ -689,7 +652,35 @@ const components = [
 		VirtualScrollerModule,
 	],
 	declarations: [
-		...components,
+		AppBoostrapperComponent,
+
+		AppComponent,
+		MainWindowComponent,
+		LoadingComponent,
+		NotificationsComponent,
+		BattlegroundsComponent,
+		FullScreenOverlaysComponent,
+		FullScreenOverlaysClickthroughComponent,
+		BattlegroundsMinionsTiersOverlayComponent,
+		BattlegroundsOverlayButtonComponent,
+		BgsBannedTribesComponent,
+		BgsSimulationOverlayComponent,
+		BgsHeroSelectionOverlayComponent,
+		// ConstructedComponent,
+		DeckTrackerOverlayPlayerComponent,
+		DeckTrackerOverlayOpponentComponent,
+		GameCountersComponent,
+		OpponentHandOverlayComponent,
+		OutOfCardsCallbackComponent,
+		SecretsHelperComponent,
+
+		MercenariesOpponentTeamComponent,
+		MercenariesPlayerTeamComponent,
+		MercenariesActionsQueueComponent,
+		MercenariesOutOfCombatPlayerTeamComponent,
+		MercenariesOutOfCombatTreasureSelectionComponent,
+
+		SettingsComponent,
 
 		GlobalHeaderComponent,
 
@@ -1153,6 +1144,7 @@ const components = [
 		AutofocusDirective,
 	],
 	entryComponents: [
+		AppBoostrapperComponent,
 		BgsCardTooltipComponent,
 		TwitchBgsHeroOverviewComponent,
 		BgsSimulatorHeroSelectionComponent,
@@ -1161,7 +1153,6 @@ const components = [
 		BgsSimulatorQuestRewardSelectionComponent,
 		CurrentSessionBgsBoardTooltipComponent,
 		PackStatTooltipComponent,
-		...components,
 	],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
@@ -1295,17 +1286,8 @@ const components = [
 	],
 	// bootstrap: [],
 })
-export class AppModule implements DoBootstrap {
+export class AppModule {
 	constructor(private resolver: ComponentFactoryResolver, private injector: Injector) {
 		setAppInjector(injector);
-	}
-
-	ngDoBootstrap(appRef: ApplicationRef) {
-		components.forEach((componentDef: Type<any>) => {
-			const factory = this.resolver.resolveComponentFactory(componentDef);
-			if (document.querySelector(factory.selector)) {
-				appRef.bootstrap(factory);
-			}
-		});
 	}
 }

@@ -33,7 +33,7 @@
 		"start_window": "MainWindow",
 		"windows": {
 			"MainWindow": {
-				"file": "Files/background.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"clickthrough": true,
 				"resizable": false,
@@ -46,7 +46,7 @@
 				"block_top_window_navigation": true
 			},
 			"CollectionOverlayWindow": {
-				"file": "Files/collection.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
@@ -57,7 +57,7 @@
 				"mute": true
 			},
 			"CollectionWindow": {
-				"file": "Files/collection.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
@@ -73,7 +73,7 @@
 				"mute": true
 			},
 			"FullScreenOverlaysWindow": {
-				"file": "Files/full_screen_overlays.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
@@ -85,7 +85,7 @@
 				"in_game_only": true
 			},
 			"FullScreenOverlaysClickthroughWindow": {
-				"file": "Files/full_screen_overlays_clickthrough.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
@@ -97,7 +97,7 @@
 				"in_game_only": true
 			},
 			"LoadingWindow": {
-				"file": "Files/loading.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -109,7 +109,7 @@
 				"mute": true
 			},
 			"NotificationsWindow": {
-				"file": "Files/notifications.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
@@ -121,7 +121,7 @@
 				"in_game_only": true
 			},
 			"SettingsOverlayWindow": {
-				"file": "Files/settings.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -131,7 +131,7 @@
 				"max_size": { "width": 780, "height": 620 }
 			},
 			"SettingsWindow": {
-				"file": "Files/settings.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -146,7 +146,7 @@
 				"max_size": { "width": 780, "height": 620 }
 			},
 			"BattlegroundsOverlayWindow": {
-				"file": "Files/battlegrounds.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
@@ -157,7 +157,7 @@
 				"mute": true
 			},
 			"BattlegroundsWindow": {
-				"file": "Files/battlegrounds.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
@@ -175,7 +175,7 @@
 			},
 
 			"OutOfCardsAuthWindow": {
-				"file": "Files/outofcards-callback.html",
+				"file": "Files/index.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,

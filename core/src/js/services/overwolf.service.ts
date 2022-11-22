@@ -518,10 +518,10 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentWindow(): Promise<any> {
-		return new Promise<any>((resolve) => {
+	public async getCurrentWindow(): Promise<overwolf.windows.WindowInfo> {
+		return new Promise<overwolf.windows.WindowInfo>((resolve) => {
 			try {
-				overwolf.windows.getCurrentWindow((res: any) => {
+				overwolf.windows.getCurrentWindow((res: overwolf.windows.WindowResult) => {
 					resolve(res.window);
 				});
 			} catch (e) {
