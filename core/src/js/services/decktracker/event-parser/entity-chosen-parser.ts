@@ -72,7 +72,10 @@ export class EntityChosenParser implements EventParser {
 
 	private handleCardOnTop(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer =
+			gameEvent.additionalData?.context?.creatorCardId === CardIds.FindTheImposter_SpyOMaticToken
+				? controllerId !== localPlayer.PlayerId
+				: controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardInDeck = this.helper.findCardInZone(deck.deck, cardId, gameEvent.additionalData?.originalEntityId);

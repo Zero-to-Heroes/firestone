@@ -105,6 +105,7 @@ export class CardDredgedParser implements EventParser {
 export const reverseIfNeeded = (isPlayer: boolean, lastInfluencedByCardId: string): boolean => {
 	switch (lastInfluencedByCardId) {
 		case CardIds.DisarmingElemental:
+		case CardIds.FindTheImposter_SpyOMaticToken:
 			return !isPlayer;
 		default:
 			return isPlayer;

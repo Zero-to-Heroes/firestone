@@ -28,7 +28,7 @@ export class LinkedEntityParser implements EventParser {
 		// let revert = false;
 		// console.debug('[linked-entity-parser] newCard', newCard, entityId, isPlayerForFind, deckInWhichToFindTheCard);
 		if (!newCard) {
-			// Can happen because of Disarming Elemetal where we dredge in the other player's deck
+			// Can happen because of Disarming Elemetal where we dredge in the other player's deck or Spy-O-Matic
 			isPlayerForFind = !isPlayerForFind;
 			deckInWhichToFindTheCard = isPlayerForFind ? currentState.playerDeck : currentState.opponentDeck;
 			newCard = deckInWhichToFindTheCard.findCard(entityId)?.card;
