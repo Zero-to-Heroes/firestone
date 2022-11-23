@@ -10,20 +10,20 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType,
+	MercenariesStarterFilterType
 } from '../../models/mercenaries/mercenaries-filter-types';
 import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,
-	MercenariesReferenceData,
+	MercenariesReferenceData
 } from '../mercenaries/mercenaries-state-builder.service';
 import {
 	getHeroRole,
 	getShortMercHeroName,
 	isMercenariesPvE,
 	isMercenariesPvP,
-	normalizeMercenariesCardId,
+	normalizeMercenariesCardId
 } from '../mercenaries/mercenaries-utils';
 
 export const filterMercenariesHeroStats = (
@@ -140,6 +140,7 @@ export const buildMercenariesTasksList = (
 	i18n: LocalizationFacadeService,
 	restrictToMercsIds: readonly number[] = [],
 ): readonly Task[] => {
+	restrictToMercsIds = [...new Set(restrictToMercsIds)];
 	const potentialVisitors = visitors
 		// Just remove CLAIMED and INVALID
 		.filter(
