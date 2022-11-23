@@ -37,6 +37,7 @@ export class QuestCreatedInGameParser implements EventParser {
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
 			zone: 'SECRET',
+			putIntoPlay: true
 		} as DeckCard);
 		console.debug('[quest] created quest card', card);
 		const previousOtherZone = deck.otherZone;

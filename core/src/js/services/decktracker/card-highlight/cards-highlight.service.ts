@@ -74,7 +74,7 @@ import {
 	spellSchool,
 	taunt,
 	weapon,
-	whelp,
+	whelp
 } from './selectors';
 
 @Injectable()
@@ -734,7 +734,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.JrTombDiver:
 			case CardIds.JrTombDiverTavernBrawl:
 			case CardIds.SrTombDiverTavernBrawl:
-				return and(or(inDeck, inHand, inOther), spell, secret);
+				return or(and(or(inDeck, inHand), spell, secret), and(inOther, cardsPlayedThisMatch, spell, secret));
 			case CardIds.StaffOfPainTavernBrawl:
 				return and(or(inDeck, inHand), spell, shadow);
 			case CardIds.StaffOfRenewalTavernBrawl:

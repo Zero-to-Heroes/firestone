@@ -33,6 +33,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 		const cardWithZone = card.update({
 			zone: 'SECRET',
 			creatorCardId: creatorCardId ?? card.creatorCardId,
+			putIntoPlay: true
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);

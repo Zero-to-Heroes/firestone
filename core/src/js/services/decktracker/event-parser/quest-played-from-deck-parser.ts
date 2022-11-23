@@ -28,6 +28,7 @@ export class QuestPlayedFromDeckParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SECRET',
+			putIntoPlay: true
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);

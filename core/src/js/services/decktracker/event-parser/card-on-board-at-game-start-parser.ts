@@ -41,6 +41,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 			creatorCardId: creatorCardId,
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
+			putIntoPlay: true
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);

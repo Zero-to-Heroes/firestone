@@ -38,6 +38,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
 			zone: 'SECRET',
+			putIntoPlay: true
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, card);
