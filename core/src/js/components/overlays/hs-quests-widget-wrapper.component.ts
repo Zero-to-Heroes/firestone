@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { BG_HEARTHSTONE_SCENES_FOR_QUESTS } from './bgs-quests-widget-wrapper.component';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -20,6 +21,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	template: `
 		<hs-quests-widget
 			class="widget"
+			[activeTheme]="'decktracker'" 
 			*ngIf="showWidget$ | async"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
@@ -57,27 +59,60 @@ export class HsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				// Show from prefs
 				([main, nav, prefs]) => prefs.hsShowQuestsWidget && prefs.enableQuestsWidget,
 				([main, nav, prefs]) => prefs.showQuestsInGame,
+				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnHub,
+				([main, nav, prefs]) => prefs.hsShowQuestsWidgetOnBg,
 			),
 		).pipe(
-			this.mapData(([[currentScene, lastNonGamePlayScene, displayFromPrefs, showQuestsInGame]]) => {
-				if (!displayFromPrefs) {
-					return false;
-				}
-				const hearthstoneScenes = [
-					SceneMode.PVP_DUNGEON_RUN,
-					SceneMode.FRIENDLY,
-					SceneMode.TOURNAMENT,
-					SceneMode.TAVERN_BRAWL,
-					SceneMode.COLLECTIONMANAGER,
-				];
-				const isInHearthstoneMatch =
-					currentScene === SceneMode.GAMEPLAY && hearthstoneScenes.includes(lastNonGamePlayScene);
-				return (
+			this.mapData(
+				([
+					[
+						currentScene,
+						lastNonGamePlayScene,
+						displayFromPrefs,
+						showQuestsInGame,
+						hsShowQuestsWidgetOnHub,
+						hsShowQuestsWidgetOnBg,
+					],
+				]) => {
+					if (!displayFromPrefs) {
+						return false;
+					}
+					const hearthstoneScenes = [
+						SceneMode.PVP_DUNGEON_RUN,
+						SceneMode.FRIENDLY,
+						SceneMode.TOURNAMENT,
+						SceneMode.TAVERN_BRAWL,
+						SceneMode.COLLECTIONMANAGER,
+					];
+					if (hearthstoneScenes.includes(currentScene)) {
+						return true;
+					}
+
 					// Otherwise the quest widget flickers briefly while going into a game
 					// because the states are all empty
-					(showQuestsInGame && isInHearthstoneMatch) || hearthstoneScenes.includes(currentScene)
-				);
-			}),
+					const isInHearthstoneMatch =
+						currentScene === SceneMode.GAMEPLAY && hearthstoneScenes.includes(lastNonGamePlayScene);
+					if (showQuestsInGame && isInHearthstoneMatch) {
+						return true;
+					}
+
+					if (hsShowQuestsWidgetOnHub && currentScene === SceneMode.HUB) {
+						return true;
+					}
+
+					if (hsShowQuestsWidgetOnBg && BG_HEARTHSTONE_SCENES_FOR_QUESTS.includes(currentScene)) {
+						return true;
+					}
+					const isInBgMatch =
+						currentScene === SceneMode.GAMEPLAY &&
+						BG_HEARTHSTONE_SCENES_FOR_QUESTS.includes(lastNonGamePlayScene);
+					if (showQuestsInGame && hsShowQuestsWidgetOnBg&& isInBgMatch) {
+						return true;
+					}
+
+					return false;
+				},
+			),
 			this.handleReposition(),
 		);
 	}

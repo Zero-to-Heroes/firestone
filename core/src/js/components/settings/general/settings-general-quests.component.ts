@@ -17,7 +17,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		<div
 			class="general-quests"
 			*ngIf="{
-				enableQuests: enableQuests$ | async
+				enableQuests: enableQuests$ | async,
+				hsShowQuestsWidget: hsShowQuestsWidget$ | async
 			} as value"
 		>
 			<div class="title" [owTranslate]="'settings.general.quests.title'"></div>
@@ -40,10 +41,22 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltip]="'settings.general.quests.show-in-game-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					field="hsShowQuestsWidget"
+					field="hsShowQuestsWidget" 
 					[ngClass]="{ 'disabled': !value.enableQuests }"
 					[label]="'settings.general.quests.constructed-label' | owTranslate"
 					[tooltip]="'settings.general.quests.constructed-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="hsShowQuestsWidgetOnHub"
+					[ngClass]="{ 'disabled': !value.enableQuests || !value.hsShowQuestsWidget }"
+					[label]="'settings.general.quests.constructed-on-hub-label' | owTranslate"
+					[tooltip]="'settings.general.quests.constructed-on-hub-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					field="hsShowQuestsWidgetOnBg"
+					[ngClass]="{ 'disabled': !value.enableQuests || !value.hsShowQuestsWidget }"
+					[label]="'settings.general.quests.constructed-on-bg-label' | owTranslate"
+					[tooltip]="'settings.general.quests.constructed-on-bg-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowQuestsWidget"
@@ -64,6 +77,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class SettingsGeneralQuestsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableQuests$: Observable<boolean>;
+	hsShowQuestsWidget$: Observable<boolean>;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -75,5 +89,6 @@ export class SettingsGeneralQuestsComponent extends AbstractSubscriptionComponen
 
 	ngAfterContentInit() {
 		this.enableQuests$ = this.listenForBasicPref$((prefs) => prefs.enableQuestsWidget);
+		this.hsShowQuestsWidget$ = this.listenForBasicPref$((prefs) => prefs.hsShowQuestsWidget);
 	}
 }

@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
@@ -63,7 +63,7 @@ export class BgsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 				if (!displayFromPrefs) {
 					return false;
 				}
-				const hearthstoneScenes = [SceneMode.BACON, SceneMode.BACON_COLLECTION];
+				const hearthstoneScenes = BG_HEARTHSTONE_SCENES_FOR_QUESTS;
 				const isInHearthstoneMatch =
 					currentScene === SceneMode.GAMEPLAY && hearthstoneScenes.includes(lastNonGamePlayScene);
 				return (
@@ -76,3 +76,5 @@ export class BgsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 		);
 	}
 }
+
+export const BG_HEARTHSTONE_SCENES_FOR_QUESTS = [SceneMode.BACON, SceneMode.BACON_COLLECTION];
