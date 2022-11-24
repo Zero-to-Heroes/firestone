@@ -737,8 +737,27 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return or(and(or(inDeck, inHand), spell, secret), and(inOther, cardsPlayedThisMatch, spell, secret));
 			case CardIds.StaffOfPainTavernBrawl:
 				return and(or(inDeck, inHand), spell, shadow);
+			case CardIds.StaffOfRenewal:
 			case CardIds.StaffOfRenewalTavernBrawl:
-				return and(inGraveyard, minion);
+				return (handler: Handler, deckState?: DeckState, options?: SelectorOptions): boolean => {
+					const deadMinions = [...deckState.otherZone]
+						.filter((c) => this.allCards.getCard(c.cardId).type === 'Minion')
+						.filter((c) => c.zone === 'GRAVEYARD');
+					if (!deadMinions.length) {
+						return false;
+					}
+					const numberToResurrect = cardId === CardIds.StaffOfRenewal ? 7 : 5;
+					const mostExpensiveMinions = deadMinions
+						.sort((a, b) => a.manaCost - b.manaCost)
+						.reverse()
+						.slice(0, numberToResurrect);
+					const lastMinion = mostExpensiveMinions[mostExpensiveMinions.length - 1];
+					return (
+						minion(handler) &&
+						inGraveyard(handler) &&
+						handler.deckCardProvider()?.getEffectiveManaCost() >= lastMinion.getEffectiveManaCost()
+					);
+				};
 			case CardIds.StageDive:
 			case CardIds.StageDive_StageDive:
 				return and(inDeck, minion, rush);
