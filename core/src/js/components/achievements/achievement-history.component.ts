@@ -17,11 +17,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 					<span class="title" [owTranslate]="'app.achievements.history.title'"></span>
 				</div>
 				<ul *ngIf="{ achievementsHistory: achievementHistory$ | async } as value">
-					<li *ngFor="let historyItem of value.achievementHistory; trackBy: trackById">
+					<li *ngFor="let historyItem of value.achievementsHistory; trackBy: trackById">
 						<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
 					</li>
 					<section
-						*ngIf="!value.achievementHistory || value.achievementHistory.length === 0"
+						*ngIf="!value.achievementsHistory || value.achievementsHistory.length === 0"
 						class="empty-state"
 					>
 						<i class="i-60x78 pale-theme">
