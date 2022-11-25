@@ -11,7 +11,6 @@ import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { init } from '@sentry/browser';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { AngularResizedEventModule } from 'angular-resize-event';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsSimulationOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
 import { CardsFacadeStandaloneService } from '../../components/decktracker/overlay/twitch/cards-facade-standalone.service';
@@ -50,7 +49,6 @@ console.log('version is', process.env.APP_VERSION);
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,
 		DragDropModule,
-		AngularResizedEventModule,
 	],
 	declarations: [
 		DeckTrackerOverlayStandaloneComponent,

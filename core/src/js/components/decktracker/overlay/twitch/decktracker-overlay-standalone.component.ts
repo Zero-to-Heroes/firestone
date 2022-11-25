@@ -35,7 +35,6 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-			(resized)="onResized($event)"
 		>
 			<div class="scalable">
 				<div class="decktracker-container">

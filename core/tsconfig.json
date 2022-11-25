@@ -24,7 +24,10 @@
 			"@components/*": ["src/js/components/*"],
 			"@directives/*": ["src/js/directives/*"],
 			"@services/*": ["src/js/services/*"],
-			"@mails/*": ["src/libs/mails/*"]
+			"@pipes/*": ["src/js/pipes/*"],
+			"@mails/*": ["src/libs/mails/*"],
+			"@tavern-brawl/*": ["src/libs/tavern-brawl/*"],
+			"@packs/*": ["src/libs/packs/*"]
 		}
 	},
 	"angularCompilerOptions": {
