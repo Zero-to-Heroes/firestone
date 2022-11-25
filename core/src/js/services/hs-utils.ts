@@ -424,6 +424,7 @@ export const publicCardGiftCreators = [
 	CardIds.Jackpot,
 	CardIds.JarDealer,
 	CardIds.JerryRigCarpenter,
+	CardIds.JeweledMacaw,
 	CardIds.JeweledScarab,
 	CardIds.JourneyBelow_OG_072,
 	CardIds.Kazakus_CFM_621,
