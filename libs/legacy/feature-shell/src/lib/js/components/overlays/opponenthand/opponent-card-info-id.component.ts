@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { publicCardGiftCreators } from '../../../services/hs-utils';
+import { publicCardCreators } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
 			[cardTooltipDisplayBuffs]="displayBuff"
-			[ngClass]="{ 'buffed': hasBuffs }"
+			[ngClass]="{ buffed: hasBuffs }"
 		>
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" />
 			<div *ngIf="drawnBy" class="drawn">
@@ -48,9 +48,9 @@ export class OpponentCardInfoIdComponent {
 	@Input() displayBuff: boolean;
 
 	@Input() set card(value: DeckCard) {
-		const lastAffectedByCardId = value.creatorCardId ?? value.lastAffectedByCardId;
+		// const lastAffectedByCardId = value.creatorCardId ?? value.lastAffectedByCardId;
 		// Keep the || to handle empty card id
-		this.cardId = this.normalizeEnchantment(value.cardId || lastAffectedByCardId);
+		this.cardId = this.normalizeEnchantment(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
 		this._card = value.update({
 			cardId: this.cardId,
 			// We probably don't need to update the other fields, as they are not displayed
@@ -59,9 +59,14 @@ export class OpponentCardInfoIdComponent {
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
-		const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
-		this.createdBy = hasCreatorInfo && publicCardGiftCreators.includes(lastAffectedByCardId as CardIds);
-		this.drawnBy = hasCreatorInfo && !publicCardGiftCreators.includes(lastAffectedByCardId as CardIds);
+		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
+		this.createdBy =
+			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
+		this.drawnBy =
+			!value.cardId &&
+			!!value.lastAffectedByCardId &&
+			!value.creatorCardId &&
+			publicCardCreators.includes(value.lastAffectedByCardId as CardIds);
 		this.hasBuffs = value.buffCardIds?.length > 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

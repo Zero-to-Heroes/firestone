@@ -278,7 +278,8 @@ export const forceHideInfoWhenDrawnInfluencers = [
 
 export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
 
-export const publicCardGiftCreators = [
+// Shouldn't be used anymore
+const publicCardGiftCreators = [
 	// For some reason the coin is flagged as created by the coin...
 	...COIN_IDS,
 	CardIds.AbyssalWave,
