@@ -170,7 +170,7 @@ export class TwitchAuthService {
 					gameEnded: bgsState.currentGame?.gameEnded,
 					availableRaces: bgsState.currentGame?.availableRaces,
 					phase: bgsState.currentGame?.phase,
-			}
+			  }
 			: null;
 
 		const result: TwitchEvent = {
@@ -196,19 +196,21 @@ export class TwitchAuthService {
 			} as DeckState;
 		}
 		const result = {
-			...deckState,
+			// ...deckState,
+			secrets: deckState.secrets,
+			deckstring: deckState.deckstring,
+			name: deckState.name,
+			hero: deckState.hero,
+			cardsLeftInDeck: deckState.cardsLeftInDeck,
+			totalAttackOnBoard: deckState.totalAttackOnBoard,
+			heroPower: this.cleanCard(deckState.heroPower, isBattlegrounds),
+			weapon: this.cleanCard(deckState.weapon, isBattlegrounds),
 			hand: this.cleanZone(deckState.hand, isBattlegrounds),
 			board: this.cleanZone(deckState.board, isBattlegrounds),
 			deck: this.cleanZone(deckState.deck, isBattlegrounds),
 			otherZone: this.cleanZone(deckState.otherZone, isBattlegrounds),
 			deckList: this.cleanZone(deckState.deckList, isBattlegrounds),
 		};
-		// delete result.secrets;
-		delete result.spellsPlayedThisMatch;
-		delete result.dynamicZones;
-		delete result.cardsPlayedThisTurn;
-		delete result.cardsPlayedFromInitialDeck;
-		delete result.cardsPlayedThisMatch;
 		return result as DeckState;
 	}
 
@@ -222,15 +224,31 @@ export class TwitchAuthService {
 		}
 
 		const newCard = { ...card };
-		delete newCard.cardName;
-		delete newCard.metaInfo;
-		delete newCard.temporaryCard;
-		delete newCard.dormant;
 		if (isBattlegrounds) {
 			delete newCard.creatorCardId;
 			// delete newCard.zone;
 			delete newCard.playTiming;
 		}
+
+		delete newCard.cardName;
+		delete newCard.metaInfo;
+		delete newCard.temporaryCard;
+		delete newCard.dormant;
+		delete newCard.rarity;
+		delete newCard.playTiming;
+		if (!newCard.relatedCardIds?.length) {
+			delete newCard.relatedCardIds;
+		}
+		if (!newCard.linkedEntityIds?.length) {
+			delete newCard.linkedEntityIds;
+		}
+		if (!newCard.creatorCardId?.length) {
+			delete newCard.creatorCardId;
+		}
+		if (!newCard.lastAffectedByCardId?.length) {
+			delete newCard.lastAffectedByCardId;
+		}
+
 		return newCard as DeckCard;
 	}
 
