@@ -6,8 +6,10 @@
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc",
 		"dev": "nx build --watch",
-		"build": "nx build",
-		"postbuild": "npx ts-node ./build-tools/replace-version.ts",
+		"build": "nx build --configuration=production",
+		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
+		"create-opk": "ow opk pack -o ./[name].[version].opk  ./dist/apps/legacy/",
+		"postbuild": "npm run replace-version && npm run create-opk",
 		"test": "nx test"
 	},
 	"private": true,
