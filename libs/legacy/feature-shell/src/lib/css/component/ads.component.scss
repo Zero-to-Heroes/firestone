@@ -1,0 +1,84 @@
+:host {
+	position: absolute;
+	width: 400px;
+	height: 300px;
+	z-index: 999999999999999;
+}
+
+.ads-container {
+	width: 100%;
+	height: 100%;
+	z-index: 9999999999;
+
+	.no-ads-placeholder {
+		width: 100%;
+		height: 100%;
+		position: relative;
+		top: -20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--ads-background-color);
+		flex-direction: column;
+		padding: 30px;
+		color: var(--color-3);
+		font-family: Open Sans;
+
+		.logo {
+			width: 109px;
+			height: 154px;
+			color: var(--ads-color);
+			--icon-color: var(--ads-color);
+		}
+
+		.tip {
+			margin-top: 20px;
+			font-size: 12px;
+			text-align: center;
+			opacity: 0.8;
+			margin-left: 40px;
+			margin-right: 40px;
+		}
+	}
+
+	.ads {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		position: absolute;
+		z-index: 999999999999999;
+	}
+}
+
+.subscription-link {
+	position: relative;
+	top: -28px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--ad-link-color);
+	text-align: center;
+	text-decoration: underline;
+
+	&:hover {
+		color: var(--on-ad-link-color-hover);
+	}
+}
+
+.thank-you-link {
+	position: relative;
+	top: -20px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--default-text-color);
+	color: var(--color-3);
+	text-align: center;
+
+	&:hover {
+		color: var(--color-1);
+	}
+}

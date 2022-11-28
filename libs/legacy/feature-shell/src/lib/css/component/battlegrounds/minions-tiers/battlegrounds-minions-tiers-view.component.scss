@@ -1,0 +1,186 @@
+:host {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+}
+
+.battlegrounds-minions-tiers {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.tiers-container {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	background: rgba(
+		255,
+		255,
+		255,
+		0.01
+	); // So that it's not transparent and mouse doesn't leave the element when navigating
+}
+
+.logo-container {
+	width: 145px;
+	height: 33px;
+	display: flex;
+	align-items: center;
+	position: relative;
+
+	.background-main-part,
+	.background-second-part {
+		height: 100%;
+		background: var(--color-7);
+	}
+
+	.background-main-part {
+		width: 75px;
+	}
+	.background-second-part {
+		width: 40px;
+		border-top-right-radius: 33px 33px;
+		z-index: -1;
+	}
+
+	.turn-number {
+		width: 100px;
+		height: 25px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		font-family: Sumana;
+		font-weight: 700;
+		font-size: 15px;
+		color: white;
+		text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+			-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+		display: flex;
+		align-items: center;
+	}
+}
+
+.tiers {
+	display: flex;
+	// width: 250px;
+	// width: fit-content;
+	// height: 50px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png');
+	border-width: 2px;
+	border-style: solid;
+	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	border-image-slice: 1;
+	position: relative;
+	// Handle special tiers on a second line
+	width: 100%;
+	flex-wrap: wrap;
+	height: fit-content;
+	padding-bottom: 5px;
+
+	.tier {
+		position: relative;
+		margin-right: 3px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			background: rgba(0, 0, 0, 0)
+				url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/star_highlight.png') no-repeat
+				scroll center center / contain;
+			opacity: 0;
+			// transition: opacity 0.5s ease 0s;
+			width: 140%;
+			height: 140%;
+			top: -7px;
+			left: -7px;
+			z-index: 1;
+		}
+
+		&.selected,
+		&.locked,
+		&:hover {
+			&::before {
+				opacity: 1;
+			}
+		}
+
+		.number {
+			position: absolute;
+			top: 3px;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: Sumana;
+			font-weight: 700;
+			font-size: 20px;
+			color: white;
+			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			z-index: 2;
+		}
+
+		.icon {
+			position: relative;
+			top: 10%;
+		}
+
+		&.mechanics {
+			.number {
+				color: var(--color-5);
+			}
+			&.B {
+				.number {
+					--color-7: #4376d8;
+				}
+			}
+
+			&.D {
+				.number {
+					--color-7: #ff8a48;
+				}
+			}
+
+			&.DS {
+				.number {
+					--color-7: #ffb948;
+				}
+			}
+
+			&.T {
+				.number {
+					--color-7: #42d8a2;
+				}
+			}
+
+			&.E {
+				.number {
+					--color-7: #b346e7;
+				}
+			}
+		}
+	}
+}
+
+.minions-list {
+	display: none;
+
+	&.active {
+		display: flex;
+	}
+}

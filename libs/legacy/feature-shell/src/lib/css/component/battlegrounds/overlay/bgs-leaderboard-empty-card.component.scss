@@ -1,0 +1,52 @@
+:host {
+	height: 11.8%;
+	width: 100%;
+	position: relative;
+}
+
+.card,
+.mouse-leave-container {
+	pointer-events: all;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	// background: rgba(0, 0, 0, 0.5); // dev
+
+	img {
+		height: 100%;
+		width: 100%;
+	}
+}
+
+.card {
+	// background: rgba(0, 255, 0, 0.5); // dev
+
+	.short-recap {
+		display: none;
+		position: absolute;
+		height: 100%;
+		left: 14vh;
+
+		&.active {
+			display: flex;
+		}
+	}
+}
+
+.mouse-leave-container {
+	background: rgba(255, 255, 255, 0.01);
+	width: calc(100% - 45px);
+	height: calc(100% - 15px);
+	// background: rgba(255, 0, 0, 0.5); // dev
+}
+
+.last-opponent-icon {
+	width: 28px;
+	height: 28px; // 15% works with higher DPI, test this on normal DPI
+	position: absolute;
+	top: 30px;
+	left: -20px;
+}

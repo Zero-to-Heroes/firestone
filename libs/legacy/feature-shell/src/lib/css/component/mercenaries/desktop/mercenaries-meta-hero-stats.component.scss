@@ -1,0 +1,21 @@
+:host {
+	display: flex;
+	min-height: 1px;
+	height: 100%;
+}
+
+.mercenaries-stats {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	align-items: flex-start;
+	min-height: 1px;
+	overflow: auto;
+
+	mercenaries-meta-hero-stat {
+		width: 170px;
+		height: 225px;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+}

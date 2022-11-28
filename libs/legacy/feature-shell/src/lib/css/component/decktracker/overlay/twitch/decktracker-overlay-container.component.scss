@@ -1,0 +1,79 @@
+:host {
+	height: 100%;
+	width: 100%;
+	position: relative;
+	--card-tooltip-min-width: 250px;
+}
+
+.container {
+	position: relative;
+	display: flex;
+	justify-content: flex-end;
+	height: 100%;
+
+	state-mouse-over {
+		z-index: 2;
+	}
+
+	decktracker-overlay-standalone {
+		z-index: 3;
+		max-height: 98%;
+	}
+
+	bgs-simulation-overlay-standalone {
+		z-index: 3;
+	}
+
+	battlegrounds-minions-tiers-twitch {
+		z-index: 3;
+		width: 250px;
+	}
+
+	twitch-config-widget {
+		z-index: 4;
+	}
+
+	::ng-deep {
+		numeric-input {
+			.numeric-input.numeric-input.numeric-input {
+				// Because double clicking on the arrow will always toggle the full screen mode
+				.buttons {
+					display: none;
+				}
+				input {
+					width: 45px;
+				}
+			}
+		}
+	}
+
+	::ng-deep .cdk-overlay-container {
+		card-tooltip {
+			min-width: var(--card-tooltip-min-width);
+			min-height: calc(400 / 256 * var(--card-tooltip-min-width));
+
+			.tooltip-image {
+				width: 100%;
+			}
+
+			.card-tooltip {
+				min-width: var(--card-tooltip-min-width);
+				width: var(--card-tooltip-min-width);
+				min-height: calc(400 / 256 * var(--card-tooltip-min-width));
+			}
+
+			.related-cards-container .related-cards {
+				max-width: calc(435 / 256 * var(--card-tooltip-min-width));
+				max-height: calc(800 / 256 * var(--card-tooltip-min-width));
+				padding-right: calc(25 / 256 * var(--card-tooltip-min-width));
+				padding-bottom: calc(25 / 256 * var(--card-tooltip-min-width));
+
+				.related-card .tooltip-image {
+					width: calc(150 / 256 * var(--card-tooltip-min-width));
+					margin-right: calc(-15 / 256 * var(--card-tooltip-min-width));
+					margin-bottom: calc(-15 / 256 * var(--card-tooltip-min-width));
+				}
+			}
+		}
+	}
+}

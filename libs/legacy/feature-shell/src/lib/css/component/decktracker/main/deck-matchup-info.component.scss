@@ -1,0 +1,39 @@
+:host {
+	display: flex;
+}
+
+.deck-matchup-info {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	background: rgba(255, 255, 255, 0.08);
+	flex-grow: 1;
+
+	.icon {
+		width: 30px;
+	}
+
+	.number {
+		display: flex;
+
+		.wins {
+			margin-right: 5px;
+			color: #61ff47;
+		}
+		.losses {
+			margin-left: 5px;
+			color: #ff4747;
+		}
+	}
+
+	.cell {
+		&.positive {
+			color: #61ff47;
+		}
+
+		&.negative {
+			color: #ff4747;
+		}
+	}
+}

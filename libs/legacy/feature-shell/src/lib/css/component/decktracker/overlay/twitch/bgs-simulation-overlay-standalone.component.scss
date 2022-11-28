@@ -1,0 +1,13 @@
+:host {
+	z-index: 2;
+	margin-left: auto;
+	margin-right: auto;
+	height: 100px;
+	font-size: 13px;
+}
+
+.root {
+	&.hidden {
+		display: none;
+	}
+}

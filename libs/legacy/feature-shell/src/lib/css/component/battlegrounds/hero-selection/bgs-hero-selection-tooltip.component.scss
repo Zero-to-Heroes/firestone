@@ -1,0 +1,123 @@
+:host {
+	pointer-events: none;
+}
+
+.hero-selection-tooltip {
+	display: flex;
+	background: var(--color-4);
+
+	background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/decktracker_bg.png');
+	background-size: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+
+	border-color: #ffb948;
+	border-radius: 25px;
+	border-width: 1px;
+	border-style: solid;
+	border-image-slice: 1;
+	margin-top: 3px;
+
+	// height: 460px;
+	// width: 750px;
+	align-items: center;
+	padding: 10px 30px;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+	line-height: 22px;
+	pointer-events: none;
+
+	&.hidden {
+		display: none;
+	}
+
+	.hero-power,
+	.buddy {
+		width: 210px;
+		margin-right: 20px;
+	}
+
+	.infos {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		width: 250px; // So that the display isn't weird while all images are not loaded
+	}
+
+	.name {
+		color: var(--default-title-color);
+		font-size: 16px;
+		margin-bottom: 10px;
+		text-align: center;
+		height: 30px;
+	}
+
+	::ng-deep bgs-hero-stats {
+		.stats {
+			margin-top: 0;
+		}
+	}
+
+	::ng-deep bgs-hero-tribes {
+		.tribes.tribes {
+			.composition {
+				.tribe {
+					width: 20%;
+					min-width: auto;
+				}
+				.tribe-name {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+.hero-selection-tooltip.hero-selection-overlay {
+	// width: 300px;
+	// top: -50px;
+
+	// .hero-power,
+	.buddy {
+		display: none;
+	}
+
+	.infos {
+		width: 100%;
+	}
+
+	::ng-deep bgs-hero-stats {
+		.stats {
+			flex-direction: row;
+			.placement {
+				width: 200px;
+				flex-shrink: 0;
+
+				.placement-distribution {
+					height: 111px;
+					margin-top: 0;
+				}
+			}
+			.winrate {
+				width: 200px;
+				flex-shrink: 0;
+				margin-top: 0;
+				margin-left: 25px;
+			}
+		}
+	}
+
+	// Position it to the other side of the hero
+	// Doesn't work because there isn't enough room to the right/left
+	// &.left {
+	// 	left: 375px;
+	// }
+	// &.right {
+	// 	right: 375px;
+	// }
+}

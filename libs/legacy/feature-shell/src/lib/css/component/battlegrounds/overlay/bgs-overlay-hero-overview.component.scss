@@ -1,0 +1,218 @@
+:host {
+	width: auto;
+	height: 105px;
+	position: relative;
+	left: 55px;
+	top: 10px;
+
+	transform: scale(1);
+	transform-origin: left top;
+	opacity: 1;
+	transition-property: transform, opacity;
+	transition-duration: 0.15s;
+	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+
+	&.bottom {
+		bottom: 10px;
+		top: auto;
+	}
+}
+
+.bgs-hero-overview-tooltip {
+	position: relative;
+	top: -1px;
+	left: -1px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 12px;
+	--variable-title-font-size: 12px !important;
+	padding: 0;
+	padding-left: 15px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png');
+	border-width: 1px;
+	border-style: solid;
+	// border-image-slice: 1;
+	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	height: 100%;
+	transform-origin: top left;
+
+	&.bottom {
+		top: -3vh;
+	}
+
+	bgs-opponent-overview-big {
+		height: 100%;
+
+		::ng-deep bgs-player-capsule {
+			height: 100%;
+			margin: 0;
+
+			.background-additions {
+				display: none;
+			}
+
+			.portrait {
+				position: relative;
+				top: 10px;
+				width: 70px;
+				margin-right: 20px;
+
+				.health {
+					width: 40px;
+					height: 23px;
+					bottom: 0px;
+					right: -10px;
+
+					.value {
+						font-size: 22px;
+						margin: 0;
+						position: relative;
+						top: 3px;
+					}
+				}
+			}
+
+			.player-info {
+				background: transparent;
+				border: none;
+				padding: 0;
+
+				.main-info {
+					flex-direction: row;
+					border: none;
+					width: auto;
+					height: 100%;
+				}
+
+				bgs-board {
+					min-width: 220px;
+					height: 100%;
+					min-height: auto;
+				}
+
+				.board-turn {
+					margin: 0;
+					margin-right: 15px;
+				}
+
+				.board {
+					width: auto;
+					top: -3px;
+					margin-right: 15px;
+
+					.minion-container {
+						margin-right: 10px;
+						li {
+							width: 50px;
+							height: 75px;
+						}
+					}
+				}
+
+				.bottom-info {
+					border-left: 1px solid var(--color-3);
+					top: 0;
+					margin-top: 0;
+					padding-left: 20px;
+					height: 100%;
+
+					& > *:last-child {
+						border-right: none;
+					}
+				}
+
+				.triples-section {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: flex-start;
+					width: 100%;
+					height: 100%;
+					padding-left: 10px;
+					padding-right: 10px;
+					position: relative;
+
+					.title {
+						width: 70px;
+						width: 100%;
+						text-align: center;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						margin-right: 0;
+						margin-bottom: 10px;
+					}
+
+					.triple {
+						height: 46px;
+						width: 39px;
+					}
+				}
+
+				.tavern-upgrades {
+					justify-content: space-between;
+					width: 120px;
+					border-left: 1px solid var(--color-3);
+
+					.tavern-upgrade:not(:last-child) {
+						display: none;
+					}
+				}
+
+				bgs-buddies {
+					justify-content: space-between;
+					width: 120px;
+
+					.buddies-container .title {
+						display: flex;
+					}
+				}
+
+				bgs-quest-rewards {
+					justify-content: space-between;
+					width: auto;
+					border-right: 1px solid var(--color-3);
+
+					.rewards-container .title {
+						display: flex;
+					}
+				}
+			}
+		}
+	}
+
+	::ng-deep .opponent-info.opponent-info.opponent-info.opponent-info {
+		.bottom-info {
+			max-height: 25%;
+		}
+
+		.tavern-upgrades {
+			.tavern-upgrade .label {
+				font-size: 10px;
+			}
+		}
+
+		.triples-section {
+			.title {
+				margin-right: 15px;
+			}
+
+			.triple {
+				width: 1.8vw;
+				height: 2vw;
+				margin-right: 15px;
+
+				.number {
+					border-width: 2px;
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}

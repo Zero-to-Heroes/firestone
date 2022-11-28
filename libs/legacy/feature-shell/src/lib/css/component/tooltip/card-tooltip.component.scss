@@ -1,0 +1,163 @@
+:host {
+	display: flex;
+	min-width: 250px;
+	min-height: 400px;
+	pointer-events: none;
+}
+
+// Because automatic tooltip positioning doesn't always work very well and sometimes
+// results in the tooltip container being squeeze very thin
+.related-cards-wrapper {
+	min-width: 450px;
+	display: flex;
+
+	&.left {
+		order: -1;
+		justify-content: flex-end;
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
+}
+
+.related-cards-container {
+	background: var(--confirmation-backdrop-color);
+	opacity: 1;
+	filter: drop-shadow(0px 0px 5px var(--confirmation-backdrop-color))
+		drop-shadow(0px 0px 5px var(--confirmation-backdrop-color));
+	margin-left: -10px;
+	margin-right: -10px;
+	display: flex;
+	height: fit-content;
+	pointer-events: none;
+
+	.related-cards {
+		display: flex;
+		flex-wrap: wrap;
+		max-width: 435px;
+		max-height: 800px;
+		overflow: hidden;
+		// overflow: auto;
+		// pointer-events: all;
+		height: auto;
+		padding-right: 25px;
+		padding-bottom: 25px;
+
+		img {
+			width: 150px;
+			height: auto;
+			margin-right: -15px;
+			margin-bottom: -15px;
+			filter: drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5)) drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5));
+		}
+	}
+
+	&.wide .related-cards {
+		max-width: 570px;
+	}
+}
+
+.card-tooltip {
+	display: flex;
+	flex-direction: column;
+	width: 256px;
+	height: 388px;
+	height: auto; // forcing height will wreak havoc if the card is not exactly at the right dimensions
+	min-height: 400px;
+	pointer-events: none;
+
+	&:not(:first-child) {
+		margin-left: -35px;
+		margin-right: -35px;
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
+
+	.created-by {
+		color: #9fb6d7;
+		text-align: center;
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+		line-height: normal;
+		font-size: 13px;
+		width: 80px;
+		height: 32px;
+		background: #101530;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: -0.8vw;
+		margin-bottom: -2vw;
+		margin-left: 2vw;
+		z-index: 1;
+	}
+
+	img {
+		width: 256px;
+		height: 388px;
+		height: auto;
+		// filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+		filter: drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7)) drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7));
+	}
+
+	.text {
+		margin-top: -14vh;
+		text-align: center;
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+		line-height: normal;
+		font-size: 18px;
+		color: white;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+	}
+
+	.buffs {
+		position: relative;
+		margin-top: -0.5vw;
+		width: 75%;
+		margin-left: auto;
+		margin-right: auto;
+		padding-top: 1vw;
+
+		&.only-buffs {
+			margin-top: 0;
+		}
+
+		.background {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			z-index: -1;
+			top: 0;
+
+			.body {
+				background-image: url(https://static.zerotoheroes.com/hearthstone/asset/firestone/images/enchantment-banner-body.png);
+				flex-grow: 1;
+				flex-shrink: 1;
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+			}
+			.bottom {
+				background-image: url(https://static.zerotoheroes.com/hearthstone/asset/firestone/images/enchantment-banner-bottom.png);
+				flex-grow: 0;
+				flex-shrink: 0;
+				height: 10vw;
+				background-repeat: no-repeat;
+				background-size: 100%;
+			}
+		}
+
+		.content {
+			padding-left: 10%;
+			padding-right: 10%;
+			padding-bottom: 4vw;
+		}
+	}
+}

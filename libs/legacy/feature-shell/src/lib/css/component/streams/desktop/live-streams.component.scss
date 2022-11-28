@@ -1,0 +1,46 @@
+:host {
+	flex-grow: 1;
+}
+
+.streams {
+	width: 100%;
+	height: 100%;
+
+	.info {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 20px;
+		height: 20px;
+	}
+
+	.streams-list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		overflow: scroll;
+		height: 100%;
+
+		live-stream-info {
+			height: 60px;
+			margin-right: 10px;
+			margin-bottom: 10px;
+		}
+	}
+
+	.empty-state {
+		height: 100%;
+
+		::ng-deep {
+			.empty-state {
+				color: var(--default-text-color);
+
+				.loading-icon {
+					width: 200px;
+					margin-bottom: 15px;
+					opacity: 0.6;
+				}
+			}
+		}
+	}
+}

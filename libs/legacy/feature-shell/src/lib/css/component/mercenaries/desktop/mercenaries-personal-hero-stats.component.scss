@@ -1,0 +1,113 @@
+:host {
+	display: flex;
+	min-height: 1px;
+	flex-grow: 1;
+}
+
+.mercenaries-personal-hero-stats {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	align-content: flex-start;
+	align-items: flex-start;
+	width: 100%;
+
+	.header {
+		margin-bottom: 10px;
+		display: flex;
+		font-size: 12px;
+		color: var(--color-8);
+		padding-left: 10px;
+		padding-right: 10px;
+		width: 100%;
+
+		& > * {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.level {
+			width: 25px;
+		}
+
+		.role {
+			width: 55px;
+		}
+
+		.name {
+			width: 70px;
+			margin-right: 15px;
+			flex-grow: 1;
+			max-width: 200px;
+		}
+
+		.xp {
+			width: 60px;
+			margin-right: 20px;
+		}
+
+		.coins {
+			width: 55px;
+
+			&.left {
+				display: none;
+			}
+
+			&.to-farm {
+				display: none;
+			}
+
+			::ng-deep .sortable-label .label .caret {
+				right: -5px;
+			}
+		}
+
+		.tasks {
+			width: 80px;
+		}
+
+		.abilities {
+			width: 150px;
+			flex-grow: 1;
+			max-width: 180px;
+			margin-right: 10px;
+		}
+
+		.equipments {
+			width: 150px;
+			flex-grow: 1;
+			max-width: 180px;
+		}
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		align-content: flex-start;
+		align-items: flex-start;
+		min-height: 1px;
+		overflow: auto;
+		width: 100%;
+	}
+
+	mercenaries-personal-hero-stat {
+		width: 100%;
+		height: 60px;
+		margin-bottom: 10px;
+	}
+}
+
+@media (min-width: 1420px) {
+	.mercenaries-personal-hero-stats .header .coins.left {
+		display: flex;
+	}
+}
+
+@media (min-width: 1470px) {
+	.mercenaries-personal-hero-stats .header .coins.to-farm {
+		display: flex;
+	}
+}

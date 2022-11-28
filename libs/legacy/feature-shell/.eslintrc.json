@@ -1,0 +1,52 @@
+{
+	"extends": ["../../../.eslintrc.json"],
+	"ignorePatterns": ["!**/*"],
+	"overrides": [
+		{
+			"files": ["*.ts"],
+			"extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
+			"rules": {
+				"@angular-eslint/directive-selector": [
+					"error",
+					{
+						"type": "attribute",
+						"style": "camelCase"
+					}
+				],
+				"@angular-eslint/component-selector": [
+					"error",
+					{
+						"type": "element",
+						"style": "kebab-case"
+					}
+				],
+				"no-extra-boolean-cast": ["off"],
+				"@typescript-eslint/member-ordering": ["off"],
+				"@angular-eslint/no-output-on-prefix": ["off"],
+				"no-restricted-syntax": ["off"],
+				"@angular-eslint/no-input-rename": ["off"],
+				"prefer-rest-params": ["off"],
+				"no-async-promise-executor": ["off"],
+				"no-prototype-builtins": ["off"],
+				"no-empty": ["off"],
+				"no-duplicate-case": ["off"],
+				"no-cond-assign": ["off"],
+				"no-unsafe-optional-chaining": ["off"],
+				"no-useless-escape": ["off"],
+				"@angular-eslint/no-empty-lifecycle-method": ["off"],
+				"no-constant-condition": ["off"],
+				"@typescript-eslint/ban-ts-comment": ["off"],
+				"no-case-declarations": ["off"],
+				"no-mixed-spaces-and-tabs": ["off"]
+			}
+		},
+		{
+			"files": ["*.html"],
+			"extends": ["plugin:@nrwl/nx/angular-template"],
+			"rules": {
+				"@angular-eslint/template/eqeqeq": ["off"],
+				"@angular-eslint/template/no-negated-async": ["off"]
+			}
+		}
+	]
+}

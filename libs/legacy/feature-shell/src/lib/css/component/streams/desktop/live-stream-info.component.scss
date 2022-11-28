@@ -1,0 +1,198 @@
+:host {
+	display: flex;
+	font-size: 14px;
+}
+
+.stream-info {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 10px 20px 10px 10px;
+	background: rgba(255, 255, 255, 0.08);
+
+	& > * {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		position: relative;
+	}
+
+	.left-info {
+		max-width: calc(100% - 40px);
+		justify-content: flex-start;
+
+		& > * {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			position: relative;
+		}
+
+		.rank-image {
+			// Counterbalance the padding top/bottom
+			height: 130%;
+			margin-right: 20px;
+			justify-content: flex-start;
+			flex-shrink: 0;
+
+			::ng-deep {
+				.rank-image {
+					&.battlegrounds {
+						.frame {
+							height: inherit;
+							left: auto;
+						}
+						.rank-text {
+							font-size: 20px;
+							padding: 0;
+						}
+					}
+					&.ranked {
+						left: 3px;
+						&.legend {
+							.rank-text {
+								font-size: 24px;
+								left: auto;
+								padding: 0;
+								bottom: 13px;
+							}
+						}
+					}
+					&.duels,
+					&.paid-duels {
+						left: -2px;
+						.frame {
+							left: auto;
+						}
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 80%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+					}
+					&.arena {
+						left: -6px;
+						top: -9px;
+						.frame {
+							height: 135%;
+						}
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 65%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+					}
+					&.mercenaries-pvp {
+						left: 10px;
+						.rank-text {
+							font-size: 20px;
+							bottom: 0;
+							padding: 0;
+							margin: 0;
+							height: 65%;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+						}
+					}
+				}
+			}
+		}
+
+		.name,
+		.title {
+			justify-content: flex-start;
+
+			span {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+
+		.title {
+			flex-grow: 1;
+			flex-shrink: 1;
+			min-width: 0;
+		}
+	}
+
+	.watch-button {
+		margin-left: auto;
+		opacity: 0.5;
+		flex-shrink: 0;
+
+		::ng-deep svg {
+			width: auto;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+.group {
+	display: flex;
+	padding-right: 20px;
+	margin-right: 20px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+
+	&:not(:last-child) {
+		border-right: 1px solid var(--default-text-color);
+	}
+
+	&.name {
+		.language {
+			margin-right: 15px;
+		}
+	}
+
+	&.player-images {
+		padding-left: 0px;
+		padding-right: 10px;
+		border-right: 1px solid var(--default-text-color);
+	}
+
+	&.viewers {
+		flex-direction: column;
+
+		.viewers-value {
+		}
+
+		.viewers-text {
+			font-size: 12px;
+		}
+	}
+}
+
+.stream-hero-infos {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+
+	img {
+		height: 100%;
+		clip-path: ellipse(48% 48% at 50% 50%);
+	}
+
+	.vs {
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+}

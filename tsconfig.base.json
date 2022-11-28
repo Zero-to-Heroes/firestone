@@ -1,0 +1,38 @@
+{
+	"compileOnSave": false,
+	"compilerOptions": {
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "es2015",
+		"module": "esnext",
+		"lib": ["es2017", "dom"],
+		"typeRoots": ["node_modules/@types", "node_modules/@overwolf/types"],
+		"types": ["@overwolf/types"],
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
+			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
+			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
+			"@legacy-import/*": ["libs/legacy/feature-shell/*"],
+			"@mails/*": ["libs/legacy/feature-shell/src/lib/libs/mails/*"],
+			"@models/*": ["libs/legacy/feature-shell/src/lib/js/models/*"],
+			"@packs/*": ["libs/legacy/feature-shell/src/lib/libs/packs/*"],
+			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
+			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
+			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"]
+		},
+		"strict": false,
+		"noImplicitAny": false,
+		"noImplicitOverride": false,
+		"strictPropertyInitialization": false,
+		"noPropertyAccessFromIndexSignature": false
+	},
+	"exclude": ["node_modules", "tmp"]
+}

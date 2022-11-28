@@ -1,0 +1,43 @@
+:host {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+}
+
+.constructed-deckbuilder-format {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+	flex-wrap: wrap;
+	overflow: auto;
+	padding: 15vh 30px;
+	align-items: flex-start;
+	justify-content: space-around;
+
+	.format {
+		width: 15vw;
+		display: flex;
+		flex-direction: column;
+		position: relative;
+		max-width: 200px;
+		opacity: 0.8;
+
+		.portrait {
+			width: 100%;
+		}
+
+		.format-name {
+			font-size: 20px;
+			width: 100%;
+			text-align: center;
+			position: relative;
+			top: -5%;
+			color: var(--color-2);
+			font-family: Open Sans;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}

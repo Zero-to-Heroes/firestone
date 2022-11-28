@@ -1,0 +1,23 @@
+:host {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 19px;
+	display: flex;
+	min-height: 1px;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.secondary-default {
+	display: flex;
+	width: 100%;
+}
+
+.logo {
+	width: 100px;
+	margin: auto;
+}

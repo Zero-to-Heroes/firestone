@@ -1,0 +1,59 @@
+@import '../../../../global/variables';
+@import '../../../../global/fonts';
+
+:host {
+	width: 100%;
+	height: auto;
+	margin-bottom: 5px;
+	background: transparent;
+	flex-grow: 0 !important;
+}
+
+.mercenaries-hero-search {
+	position: relative;
+	width: 100%;
+	top: 1px; // Align with the ng-select
+
+	label {
+		@extend %search-bar-inactive;
+		width: 100%;
+		border: 1px solid rgba(203, 159, 215, 0.5);
+		display: flex;
+
+		&:focus-within,
+		&:hover {
+			// outline: none;
+			background: rgba(255, 255, 255, 0.08);
+		}
+	}
+
+	input {
+		@extend %search-bar-inactive;
+		width: 100%;
+		background: transparent;
+		border: none;
+		cursor: text;
+
+		&:focus {
+			outline: none;
+			@extend %search-active;
+		}
+	}
+
+	label.search-active {
+		// background: rgba(255, 255, 255, 0.08);
+
+		input {
+			outline: none;
+			@extend %search-active;
+		}
+	}
+}
+
+::selection {
+	background-color: $grey04;
+}
+
+::-webkit-input-placeholder {
+	@extend %search-bar-inactive;
+}

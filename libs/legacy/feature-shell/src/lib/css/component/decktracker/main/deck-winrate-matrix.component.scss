@@ -1,0 +1,172 @@
+:host {
+	display: flex;
+	justify-content: space-around;
+	--winrate-matrix-min-width: 430px;
+}
+
+.opponents-popularity {
+	width: calc(100% - var(--winrate-matrix-min-width));
+	max-width: 350px;
+	margin-right: 5%;
+	margin-left: 5%;
+	display: flex;
+	flex-direction: column;
+	font-family: Open Sans;
+
+	.title {
+		color: var(--default-title-color);
+		font-size: 20px;
+		text-align: center;
+		position: relative;
+		margin-top: 30px;
+	}
+
+	.opponents-popularity-chart {
+		width: 100%;
+	}
+}
+
+.deck-winrate-matrix {
+	color: var(--default-text-color);
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	max-width: 500px;
+	min-width: var(--winrate-matrix-min-width);
+
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+	}
+
+	.cell {
+		min-width: 80px;
+		width: 80px;
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+
+		&.class {
+		}
+
+		&.total-games {
+			min-width: 90px;
+			width: 90px;
+		}
+	}
+}
+
+::ng-deep {
+	.cell {
+		min-width: 80px;
+		width: 80px;
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&.class {
+			display: flex;
+			justify-content: flex-end;
+			padding-right: 30px;
+		}
+
+		&.total-games {
+			min-width: 90px;
+			width: 90px;
+		}
+	}
+}
+
+deck-matchup-info {
+	margin-bottom: 5px;
+
+	&.no-data {
+		opacity: 0.5;
+	}
+}
+
+.controls {
+	display: flex;
+	margin-top: 15px;
+	align-items: center;
+
+	.percentage-toggle ::ng-deep .settings-p.settings-p.settings-p {
+		width: 100px;
+	}
+
+	.reset-container,
+	.delete-container {
+		color: #d9c3ab;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		// Position it at the bottom right of the winrate chart
+		// margin-top: -60px;
+		// padding-right: 20px;
+		margin-left: auto;
+		// margin-right: 240px;
+
+		button {
+			border: 1px solid #d9c3ab;
+			padding: 5px 10px 5px 10px;
+			width: 120px;
+			min-height: 50px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			span {
+				color: #d9c3ab;
+			}
+
+			div {
+				display: flex;
+			}
+
+			&:hover {
+				background: #ffb948;
+				border: 1px solid #ffb948;
+
+				span {
+					color: #2f0d0d;
+				}
+			}
+		}
+
+		.confirmation {
+			margin-top: 5px;
+			font-size: 12px;
+		}
+	}
+
+	.delete-container {
+		color: #d73524;
+
+		button {
+			border-color: #d73524;
+
+			span {
+				color: #d73524;
+			}
+		}
+
+		button {
+			&:hover {
+				background: #d73524;
+				border-color: #d73524;
+
+				span {
+					color: white;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,242 @@
+@import '../../../global/variables';
+@import '../../../global/fonts';
+
+:host {
+	top: 0;
+}
+
+.container {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-grow: 1;
+
+	&.no-ads {
+		.left {
+			height: calc(100% + 25px);
+		}
+	}
+}
+
+.left {
+	width: 410px;
+	height: fit-content;
+	flex-shrink: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	order: 2;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: 100%;
+	max-width: calc(100% - 410px);
+	min-height: 0;
+	// overflow: hidden;
+	// So that the divine shields are the top are not truncated
+	padding-top: 20px;
+	position: relative;
+	z-index: 1;
+
+	.social-shares {
+		position: absolute;
+		right: 0;
+		top: -30px;
+	}
+}
+
+.opponent-overview {
+	height: 190px;
+	flex-grow: 0;
+	flex-shrink: 0;
+
+	.main-info {
+		border: none;
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: row;
+
+		::ng-deep bgs-board .board {
+			width: 100%;
+			justify-content: flex-start;
+			margin: auto;
+			max-height: 80%;
+			height: auto;
+
+			.minion-container {
+				li {
+					height: 88px;
+					width: 60px;
+				}
+			}
+		}
+	}
+}
+
+.tabs-container {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+	min-height: 0;
+	margin-top: 30px;
+	position: relative;
+
+	&.multi-2,
+	&.multi-4 {
+		display: grid;
+		grid-gap: 20px;
+		grid-template-columns: repeat(2, calc(50% - 10px));
+
+		::ng-deep bgs-chart-hp .legend .item .portrait {
+			max-width: 40px;
+		}
+	}
+
+	&.multi-4 {
+		grid-template-rows: repeat(2, calc(50% - 10px));
+	}
+
+	.tabs-layout-selection {
+		position: absolute;
+		top: -5px;
+		right: 0;
+		display: flex;
+
+		.layout {
+			color: var(--color-2);
+			border: 1px solid var(--color-2);
+			width: 25px;
+			height: 25px;
+			margin-left: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&:hover {
+				color: var(--color-7);
+				background: var(--color-1);
+				border-color: 1px solid var(--color-1);
+			}
+		}
+	}
+}
+
+@media (max-width: 1650px) {
+	.tabs-container {
+		&.multi-2,
+		&.multi-4 {
+			display: flex;
+		}
+
+		&.multi-4 {
+			grid-template-rows: repeat(2, calc(50% - 10px));
+		}
+
+		.tabs-layout-selection {
+			.two,
+			.four {
+				display: none;
+			}
+		}
+		.tab-2,
+		.tab-3,
+		.tab-4 {
+			display: none;
+		}
+	}
+}
+
+@media (max-height: 950px) {
+	.tabs-container {
+		&.multi-2,
+		&.multi-4 {
+			grid-template-columns: repeat(2, calc(50% - 10px));
+			grid-template-rows: none;
+		}
+
+		.tabs-layout-selection {
+			.four {
+				display: none;
+			}
+		}
+		.tab-3,
+		.tab-4 {
+			display: none;
+		}
+	}
+}
+
+.left {
+	width: 400px;
+	height: calc(100% - 300px);
+	flex-shrink: 0;
+	order: 2;
+	font-size: 20px;
+	margin-left: 10px;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	top: -30px;
+	align-items: start;
+	flex-wrap: inherit;
+
+	.title {
+		font-size: var(--variable-title-font-size-big);
+		color: var(--color-8);
+		display: flex;
+		margin-bottom: 20px;
+	}
+
+	bgs-post-match-stats-recap {
+		min-height: 0;
+		flex-grow: 1;
+		width: 100%;
+	}
+}
+
+::ng-deep bgs-board minion-container {
+	margin-right: 3%;
+}
+
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 10vh;
+
+	i {
+		width: 30vw;
+		height: 20vw;
+		margin-bottom: 30px;
+		--icon-color: var(--color-1);
+	}
+
+	.title {
+		margin-bottom: 15px;
+		color: var(--color-1);
+	}
+
+	.subtitle {
+		color: var(--color-1);
+	}
+
+	svg {
+		fill: transparent;
+	}
+}
+
+with-loading {
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	position: relative;
+	z-index: 1;
+	width: calc(100% - 410px);
+}

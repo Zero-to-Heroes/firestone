@@ -1,0 +1,167 @@
+@import '../global/variables';
+@import '../global/fonts';
+
+:host {
+	display: flex;
+	flex-shrink: 0;
+}
+
+ng-select.disabled {
+	opacity: 0;
+	position: absolute;
+}
+
+:host ::ng-deep ng-select {
+	@extend %search-active;
+	color: var(--color-1);
+	height: 30px;
+	background: rgba(255, 255, 255, 0.08);
+	width: 155px;
+	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
+
+	&:focus,
+	&:active {
+		outline: none;
+	}
+
+	& > div {
+		border: 1px solid var(--color-3) !important;
+		outline: none;
+
+		div.single > div.toggle:hover {
+			background: transparent;
+		}
+	}
+
+	.placeholder {
+		position: relative;
+		color: var(--color-1) !important;
+	}
+
+	.toggle {
+		display: none;
+	}
+
+	.caret {
+		color: var(--color-1);
+		width: 30px;
+		height: 30px;
+		position: relative;
+
+		svg {
+			width: 100%;
+			height: 100%;
+			fill: currentColor;
+		}
+	}
+
+	.selected-icon {
+		color: var(--color-1);
+		position: relative;
+		left: 8px;
+
+		& > svg {
+			width: 30px;
+			height: 30px;
+		}
+	}
+
+	.open .caret {
+		transform: scale(1, -1);
+	}
+
+	select-dropdown {
+		& > div {
+			background: var(--color-7);
+			border: 1px solid var(--secondary-text-color);
+			border-top: none;
+			outline: none;
+		}
+
+		.below {
+			z-index: 99;
+		}
+
+		.filter {
+			display: none;
+		}
+
+		& > div .options {
+			max-height: 350px;
+
+			ul li {
+				color: var(--color-1);
+				border-bottom: 1px solid var(--color-3);
+				padding: 0;
+				padding-left: 9px;
+				padding-right: 10px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 30px;
+
+				&.unselectable {
+					pointer-events: none;
+				}
+
+				&.selected {
+					background-color: inherit;
+					color: inherit;
+
+					&:hover {
+						color: inherit;
+					}
+				}
+
+				&.highlighted,
+				&:hover {
+					background-color: var(--color-4);
+				}
+
+				span {
+					max-width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+
+			&::-webkit-scrollbar {
+				width: 5px;
+				height: 0; // Always hide horizontal scrollbars
+			}
+
+			&::-webkit-scrollbar-track {
+				display: none;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: var(--scrollbar-thumb-color);
+			}
+
+			&::-webkit-scrollbar-thumb:hover {
+				background: var(--on-scrollbar-thumb-color);
+			}
+
+			&::-webkit-scrollbar-button {
+				display: none;
+			}
+
+			&::-webkit-scrollbar-track-piece {
+				display: none;
+			}
+		}
+	}
+}
+
+.tooltip {
+	width: 15px;
+	height: 15px;
+	--icon-color: var(--color-1);
+	margin-left: 5px;
+}
+
+.info {
+	margin-left: 5px;
+	margin-top: 2px;
+}

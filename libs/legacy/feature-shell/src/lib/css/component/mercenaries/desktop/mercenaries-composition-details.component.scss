@@ -1,0 +1,189 @@
+:host {
+	min-height: 1px;
+	height: 100%;
+}
+
+.mercenaries-composition-details {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+	padding-right: 10px;
+	min-height: 1px;
+	overflow: scroll;
+
+	.overview {
+		display: flex;
+		flex-grow: 0;
+		flex-shrink: 0;
+		position: relative;
+		max-width: 100%;
+		margin-bottom: 40px;
+
+		.info {
+			background: rgba(255, 255, 255, 0.08);
+			border-width: 1px;
+			border-style: solid;
+			border-image: linear-gradient(to right, var(--color-common-2), rgba(255, 185, 72, 0.2)) 1 100%;
+			border-image-slice: 1 1 1 1;
+			width: 100%;
+			display: flex;
+			padding: 10px;
+			position: relative;
+			min-width: 0;
+
+			.heroes-container {
+				display: flex;
+				margin-right: 30px;
+
+				.portrait {
+					flex-grow: 0;
+					flex-shrink: 0;
+					display: flex;
+					flex-direction: column;
+					width: 100px;
+					position: relative;
+					top: 0;
+					left: 0;
+					z-index: 9;
+					margin-right: -10px;
+
+					.icon {
+						position: absolute;
+						top: 11%;
+						left: 13%;
+						width: 76%;
+						clip-path: ellipse(40% 44% at 50% 50%);
+					}
+
+					.frame {
+						width: 100%;
+						z-index: 1;
+					}
+				}
+			}
+
+			.stats {
+				display: flex;
+				align-items: center;
+
+				.stat {
+					display: flex;
+					flex-direction: column;
+					width: 115px;
+					margin-right: 15px;
+					align-items: flex-start;
+					margin-bottom: 15px;
+
+					.header {
+						font-size: 12px;
+						display: flex;
+						align-items: flex-start;
+						justify-content: flex-start;
+						margin-bottom: 0;
+						width: 100%;
+					}
+
+					.values {
+						display: flex;
+
+						.my-value {
+							font-size: 20px;
+							color: var(--default-title-color);
+						}
+
+						.global-value {
+							font-size: 12px;
+							display: flex;
+							align-items: flex-end;
+							margin-left: 5px;
+							position: relative;
+							bottom: 2px;
+
+							&:before {
+								content: '/';
+								margin-right: 5px;
+							}
+
+							.global-icon {
+								width: 12px;
+								height: 12px;
+								position: relative;
+								bottom: 3px;
+								margin-right: 3px;
+							}
+
+							&.positive::before {
+								content: '/ +';
+							}
+						}
+
+						.positive:not(.percent) {
+							color: #61ff47;
+
+							&::before {
+								content: '+';
+							}
+						}
+
+						.negative {
+							color: #ff4747;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.benches-overview {
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			color: var(--default-title-color);
+			margin-bottom: 15px;
+		}
+
+		.header {
+			display: flex;
+			font-size: 13px;
+			padding-left: 10px;
+			margin-bottom: 5px;
+
+			.starter {
+				width: 165px;
+				margin-right: 15px;
+			}
+
+			.bench {
+				width: 165px;
+				margin-right: 30px;
+			}
+
+			.stat {
+				margin-right: 15px;
+				width: 100px;
+			}
+
+			.starter,
+			.bench,
+			.stat {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+		}
+
+		.content {
+			display: flex;
+			flex-direction: column;
+
+			.item {
+				margin-bottom: 5px;
+			}
+		}
+	}
+}

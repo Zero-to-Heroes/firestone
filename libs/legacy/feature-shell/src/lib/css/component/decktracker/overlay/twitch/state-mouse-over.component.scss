@@ -1,0 +1,178 @@
+:host {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.state-mouse-over {
+	height: 100%;
+	aspect-ratio: 16/9;
+	position: relative;
+}
+
+empty-card {
+	pointer-events: none;
+}
+
+.players-recap-icon {
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	margin-top: 1vh;
+
+	.icon {
+		width: 45px;
+		height: 45px;
+		pointer-events: all;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-2);
+		background-color: var(--color-5);
+		clip-path: circle(20px at 50% 50%);
+	}
+
+	&.inversed {
+		order: -1;
+		margin-top: -6vh;
+		position: relative;
+		top: -2vh;
+	}
+}
+
+.board {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	empty-card {
+		margin-left: 0.5%;
+		width: 6.2%;
+	}
+}
+
+.hero {
+	position: absolute;
+	width: 100%;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.weapon {
+		position: absolute;
+		width: 15vh;
+		height: 69%;
+		left: 35%;
+	}
+
+	.hero-power {
+		position: absolute;
+		width: 15vh;
+		height: 69%;
+		left: 54%;
+	}
+
+	.secrets {
+		position: absolute;
+		width: 17vh;
+		height: 100%;
+		left: 45.5%;
+		bottom: 5%;
+		top: auto;
+
+		::ng-deep .secret {
+			.card {
+				width: 25%;
+				height: 25%;
+				position: relative;
+				display: flex;
+			}
+		}
+	}
+}
+
+.top-hero {
+	height: 19%;
+	top: 8%;
+
+	.weapon {
+		top: auto;
+		bottom: 0%;
+		left: 37%;
+	}
+
+	.hero-power {
+		top: auto;
+		bottom: 0%;
+	}
+}
+
+.top-board {
+	height: 19%;
+	top: 27%;
+}
+
+.bottom-board {
+	height: 19%;
+	top: 47%;
+}
+
+.bottom-hero {
+	height: 21%;
+	top: 65%;
+
+	.hero-power {
+		top: 14%;
+	}
+
+	.weapon {
+		left: 36.5%;
+		bottom: 16%;
+		top: auto;
+	}
+}
+
+.bottom-hand {
+	position: absolute;
+	width: 40%;
+	left: 25%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
+	top: 80%;
+	height: 20%;
+
+	// So that it's easier to mouse over the card
+	empty-card {
+		position: absolute;
+		left: 50%;
+		top: 0;
+		// height: 150%;
+	}
+
+	::ng-deep empty-card .card.card.card img {
+		height: 64%;
+	}
+}
+
+.bgs-leaderboard {
+	position: absolute;
+	height: 73%;
+	width: 7%;
+	left: 15%;
+	top: 14%;
+	display: flex;
+	flex-direction: column;
+	z-index: 1;
+}

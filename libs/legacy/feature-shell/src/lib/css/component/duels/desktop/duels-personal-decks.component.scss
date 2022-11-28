@@ -1,0 +1,29 @@
+@import '../../../global/variables';
+@import '../../../global/fonts';
+
+:host {
+	height: 100%;
+	display: flex;
+	min-height: 0;
+}
+
+.duels-decks {
+	display: flex;
+	flex-grow: 1;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: self-start;
+	align-content: flex-start;
+	flex-wrap: wrap;
+	overflow-y: scroll;
+
+	.item {
+		width: 155px;
+		// height: 200px;
+		margin-right: 13px;
+		margin-bottom: 13px;
+	}
+}

@@ -1,0 +1,93 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	// height: auto;
+	// We force the height so that we avoid flickering
+	height: 400px;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	transform-origin: top left;
+}
+
+.bgs-hero-overview-tooltip {
+	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg-opponent-mouse-over.png');
+	border-image-slice: 1;
+	min-height: 110px;
+	height: 110px;
+	flex-shrink: 0;
+
+	&.position-8 {
+		margin-top: -140px;
+	}
+	&.position-7 {
+		margin-top: -110px;
+	}
+	&.position-6 {
+		margin-top: -80px;
+	}
+	&.position-5 {
+		margin-top: -50px;
+	}
+
+	::ng-deep .opponent-overview {
+		bgs-board {
+			.card-on-board .main-card .card-art {
+				clip-path: ellipse(46% 39% at 50% 50%);
+				top: 0;
+				left: 0;
+				object-fit: cover;
+			}
+		}
+
+		.player-overview .player-info {
+			.bottom-info {
+				height: 100%;
+			}
+
+			.triple-tiers {
+				flex-grow: 1;
+				align-items: center;
+			}
+
+			.tavern-upgrades {
+				.title {
+					margin-bottom: 0;
+				}
+				.upgrades {
+					flex-grow: 1;
+					align-items: center;
+					display: flex;
+
+					.tavern-upgrade {
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+.cards {
+	display: flex;
+	margin-top: -5px;
+	align-items: center;
+	justify-content: center;
+	// So that the tooltip positioning manages to properly center it
+	height: 290px;
+	z-index: 9;
+	min-height: 290px;
+	flex-shrink: 0;
+
+	.card {
+		width: 220px;
+
+		&:not(:last-child) {
+			margin-right: -30px;
+		}
+	}
+}

@@ -1,0 +1,88 @@
+:host {
+	position: relative;
+}
+
+.duels-deck-stats {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	padding: 15px;
+
+	.title {
+		color: var(--color-1);
+		font-size: 14px;
+		margin-bottom: 30px;
+	}
+
+	.info {
+		display: flex;
+
+		.deck-image {
+			width: 80px;
+			position: relative;
+			flex-grow: 0;
+			margin-right: 20px;
+			flex-shrink: 0;
+
+			.skin {
+				width: 100%;
+				clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
+			}
+			.frame {
+				position: absolute;
+				top: -16%;
+				left: -17%;
+				width: 134%;
+			}
+		}
+
+		.metadata {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-evenly;
+
+			.deck-name {
+				color: var(--default-title-color);
+				font-size: 14px;
+			}
+
+			copy-deckstring ::ng-deep .copy-deckstring:not(:hover) {
+				--icon-color: var(--color-5);
+			}
+		}
+	}
+
+	.stats {
+		display: flex;
+		width: 100%;
+		margin-top: 25px;
+
+		.item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-right: 45px;
+
+			.icon {
+				width: 30px;
+				height: 30px;
+			}
+
+			.value {
+				font-size: 22.5px;
+			}
+
+			.label {
+				font-size: 13px;
+				text-align: center;
+			}
+		}
+
+		deck-mana-curve {
+			font-size: 12px;
+		}
+	}
+}

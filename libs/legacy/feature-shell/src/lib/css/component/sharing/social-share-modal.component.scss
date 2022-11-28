@@ -1,0 +1,94 @@
+:host {
+	pointer-events: all !important;
+}
+
+.social-share-modal {
+	width: 520px;
+	display: flex;
+	flex-direction: column;
+	padding: 10px 0;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: var(--window-background-image);
+	outline: 1px solid var(--window-outline-color);
+	border: 1px solid #472406;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.modal-title {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	padding: 0 10px;
+
+	.network-icon {
+		width: 30px;
+		height: 30px;
+		--icon-color: var(--default-title-color);
+		--icon-secondary-color: #1b071f;
+		margin-right: 15px;
+	}
+
+	.text {
+		color: var(--default-title-color);
+		font-size: 14px;
+	}
+}
+
+::ng-deep .share-preview {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.close-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.sharing-body {
+	display: flex;
+	padding: 0 10px;
+
+	share-info {
+		margin-left: 35px;
+		flex-grow: 1;
+	}
+
+	::ng-deep .share-main-body {
+		margin-left: 10px;
+		flex-grow: 1;
+	}
+}
+
+.disabled {
+	pointer-events: none;
+	opacity: 0.7;
+}
+
+.share-button {
+	width: 80px;
+	height: 30px;
+	background: #ffb948;
+	align-self: flex-end;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: normal;
+	text-align: center;
+	color: #2f0d0d;
+	margin-top: 10px;
+	margin-right: 10px;
+
+	&:hover(:not(.invalid)) {
+		background: #d9c3ab;
+	}
+
+	&.invalid {
+		opacity: 0.5;
+	}
+}

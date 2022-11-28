@@ -1,0 +1,75 @@
+:host {
+	display: flex;
+	flex-shrink: 0;
+	padding-right: 15px;
+}
+
+.decktracker-filters {
+	position: relative;
+	display: flex;
+	align-items: center;
+	min-height: 30px;
+	color: var(--secondary-text-color);
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	flex-grow: 1;
+	margin-bottom: 10px;
+	flex-shrink: 0;
+	z-index: 2;
+	flex-wrap: wrap;
+	max-width: 100%;
+
+	.filter,
+	.filter-info {
+		// margin-bottom: 5px;
+		// To handle wrapping
+		margin-bottom: 15px;
+	}
+	.filter-dropdown {
+		margin-right: 15px;
+	}
+	.filter-info {
+		width: 20px;
+		height: 20px;
+		--icon-color: var(--secondary-text-color);
+	}
+
+	.show-hidden-decks-link {
+		align-self: flex-end;
+		flex-grow: 1;
+		opacity: 0.8;
+		height: 30px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		position: absolute;
+		top: -45px;
+		right: -15px;
+
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle .settings-p {
+			color: var(--secondary-text-color);
+			width: auto;
+			margin-right: 10px;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.filter.search {
+		::ng-deep .decks-search {
+			width: 155px;
+			height: 30px;
+			margin-right: 15px;
+		}
+	}
+}
+
+@media (min-width: 1305px) {
+	.show-hidden-decks-link {
+		top: -7px;
+	}
+}

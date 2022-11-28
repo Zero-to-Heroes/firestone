@@ -1,0 +1,133 @@
+:host {
+	display: flex;
+}
+
+.hero-portrait {
+	position: relative;
+	width: 100%;
+}
+
+.portrait {
+	width: 100%;
+}
+
+.hero-portrait-frame {
+	position: relative;
+	width: 100%;
+
+	.icon {
+		position: absolute;
+		top: 2%;
+		left: 0;
+		width: 100%;
+		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 30% 7%, 50% 0%, 70% 7%, 85% 20%, 100% 56%, 100% 100%);
+	}
+
+	.frame {
+		z-index: 1;
+		position: absolute;
+		top: -3%;
+		left: -1;
+		width: 103%;
+	}
+
+	.aspect-ratio {
+		padding-bottom: 115%;
+	}
+}
+
+.rating {
+	background: url(https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rating_banner.png);
+	position: absolute;
+	width: 89%;
+	height: 50%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	bottom: -40%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.value {
+		font-family: Passion One;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 20px;
+		text-align: center;
+		color: var(--color-1);
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	}
+}
+
+.quest-reward {
+	position: absolute;
+	bottom: 20px;
+	z-index: 1;
+	width: 10%;
+	height: 10%;
+
+	.image {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		clip-path: ellipse(40% 30% at 50% 55%);
+
+		&.empty-icon {
+			background: var(--color-5);
+		}
+	}
+
+	.frame {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+}
+
+.health {
+	font-family: Passion One;
+	font-style: normal;
+	font-weight: normal;
+	// font-size: 18px;
+	text-align: center;
+	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	color: white;
+	position: absolute;
+	bottom: 13%;
+	width: 45%;
+	height: 20%;
+	right: -10%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.icon {
+		position: absolute;
+		width: 100%;
+		z-index: 1;
+	}
+
+	.value {
+		z-index: 2;
+		font-size: 10px;
+		margin-top: 19%;
+	}
+
+	&.damaged {
+		color: #ff4747;
+	}
+
+	&.new {
+		bottom: 6%;
+	}
+}
+
+// @media (min-width: 1450px) {
+// 	.rating .value {
+// 		font-size: 30px;
+// 	}
+// }

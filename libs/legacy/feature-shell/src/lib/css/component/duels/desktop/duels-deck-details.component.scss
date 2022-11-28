@@ -1,0 +1,67 @@
+:host {
+	height: 100%;
+	display: flex;
+	min-height: 0;
+}
+
+.duels-deck-details {
+	display: flex;
+	flex-grow: 1;
+	padding-right: 10px;
+	margin-top: 10px;
+	flex-direction: column;
+	min-height: 0;
+	overflow: auto;
+
+	.deck-lists {
+		display: flex;
+		max-height: 460px;
+		min-height: 0;
+		flex-shrink: 0;
+		justify-content: space-around;
+	}
+
+	.deck-list-container {
+		margin-right: 20px;
+		display: flex;
+		flex-direction: column;
+		width: 190px;
+		min-height: 1px;
+		flex-shrink: 0;
+
+		.copy-deckcode {
+			margin-bottom: 10px;
+			justify-content: flex-start;
+		}
+
+		&.final {
+			margin-right: 30px;
+		}
+	}
+
+	.treasures {
+		flex-grow: 1;
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			font-size: 13px;
+			color: var(--color-1);
+			text-align: center;
+			margin-bottom: 10px;
+		}
+
+		.details {
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+			overflow: hidden;
+
+			li {
+				margin-bottom: 2px;
+			}
+		}
+	}
+}

@@ -1,0 +1,25 @@
+:host {
+	height: 100%;
+	display: flex;
+	min-height: 0;
+}
+
+.duels-hero-stats {
+	flex-grow: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	align-items: flex-start;
+	min-height: 1px;
+	overflow: auto;
+
+	duels-hero-stat-vignette {
+		width: 155px;
+		margin-right: 15px;
+		margin-bottom: 15px;
+
+		&.hidden {
+			display: none;
+		}
+	}
+}

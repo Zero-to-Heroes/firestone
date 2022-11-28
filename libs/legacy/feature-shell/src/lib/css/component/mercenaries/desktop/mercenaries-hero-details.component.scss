@@ -1,0 +1,354 @@
+:host {
+	overflow: hidden;
+}
+
+.mercenaries-hero-details {
+	display: flex;
+	width: 100%;
+	height: 100%;
+
+	.controls {
+		display: flex;
+		font-size: 14px;
+
+		.control {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&:not(:last-child) {
+				margin-right: 15px;
+			}
+		}
+
+		.arrow {
+			--icon-color: var(--color-3);
+			background: transparent;
+			width: 13px;
+			height: 8px;
+
+			&.left {
+				transform: rotate(-90deg);
+				margin-right: 2px;
+			}
+
+			&.right {
+				transform: rotate(90deg);
+				margin-left: 2px;
+			}
+
+			&:hover {
+				background: transparent;
+				--icon-color: var(--color-2);
+			}
+		}
+	}
+
+	.layout-main {
+		display: flex;
+		margin: 0;
+		flex-direction: row;
+		flex-shrink: 0;
+		// order: 2;
+
+		.first {
+			display: flex;
+			flex-direction: column;
+			width: 400px;
+			flex-shrink: 0;
+			order: 2;
+
+			.portrait-container {
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				margin-top: 0;
+				margin-bottom: 20px;
+				margin-left: 35px;
+
+				.portrait {
+					flex-grow: 0;
+					flex-shrink: 0;
+					display: flex;
+					flex-direction: column;
+					width: 400px;
+					position: relative;
+					top: 0;
+					left: 0;
+					z-index: 9;
+					margin-top: 0;
+					margin-bottom: 0;
+
+					.icon {
+						position: absolute;
+						top: 11%;
+						left: 9%;
+						width: 76%;
+						clip-path: ellipse(34% 44% at 50% 50%);
+					}
+
+					.frame {
+						width: 100%;
+						z-index: 1;
+					}
+
+					.stats {
+						font-family: Passion one;
+						font-weight: 700;
+						font-size: 60px;
+						color: white;
+						text-shadow: -2px -2px 0 var(--color-7), 0px -2px 0 var(--color-7), 2px -2px 0 var(--color-7),
+							-2px 2px 0 var(--color-7), 0px 2px 0 var(--color-7), 2px 2px 0 var(--color-7);
+						position: absolute;
+						bottom: 19%;
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						width: 100%;
+						padding-left: 20%;
+						z-index: 1;
+						padding-right: 23%;
+
+						.attack {
+						}
+
+						.health {
+						}
+					}
+				}
+			}
+
+			.equipments {
+				display: flex;
+
+				.equipment-card {
+					width: 175px;
+					position: relative;
+					margin-right: -20px;
+
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+			}
+		}
+
+		.second {
+			display: flex;
+			flex-direction: column;
+			order: 1;
+
+			.abilities {
+				display: flex;
+				flex-direction: column;
+
+				.ability-card {
+					width: 175px;
+					position: relative;
+					margin-bottom: -26px;
+
+					img {
+						width: 100%;
+						height: auto;
+					}
+				}
+			}
+		}
+	}
+
+	.equipments,
+	.abilities {
+		.controls {
+			position: absolute;
+			bottom: 45%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding-left: 11%;
+			padding-right: 8%;
+
+			.arrow {
+				width: 18px;
+				height: 12px;
+			}
+		}
+	}
+
+	.secondary {
+		// order: 1;
+		width: 460px;
+		color: var(--color-1);
+		font-size: 14px;
+		margin-left: 40px;
+		display: flex;
+		flex-direction: column;
+
+		.section {
+			display: flex;
+			flex-direction: column;
+
+			&.all-tasks {
+				overflow: hidden;
+			}
+
+			&:not(:last-child) {
+				margin-bottom: 15px;
+			}
+
+			.header {
+				color: var(--default-title-color);
+				margin-bottom: 5px;
+			}
+
+			.block {
+				background: rgba(255, 255, 255, 0.08);
+				padding: 10px;
+			}
+
+			.bounty-zone {
+				font-weight: bold;
+			}
+
+			.bounty-name {
+				font-size: 13px;
+				text-indent: 15px;
+			}
+
+			.tasks {
+				overflow: scroll;
+				display: flex;
+				flex-direction: column;
+				min-height: 0;
+				margin-bottom: 10px;
+
+				.task {
+					display: flex;
+					position: relative;
+					margin-bottom: 15px;
+
+					.index {
+						width: 25px;
+						flex-shrink: 0;
+					}
+
+					.text {
+						display: flex;
+						flex-direction: column;
+						flex-grow: 1;
+
+						.title {
+							font-weight: bold;
+						}
+
+						.description {
+							font-size: 13px;
+						}
+					}
+
+					.rewards {
+						width: 50px;
+						flex-shrink: 0;
+						display: flex;
+						flex-direction: column;
+						align-items: center;
+						justify-content: center;
+
+						.reward {
+							&:not(:last-child) {
+								margin-bottom: 5px;
+							}
+						}
+					}
+
+					.coin-container {
+						display: flex;
+						position: relative;
+						align-items: center;
+						justify-content: center;
+
+						.icon {
+							width: 30px;
+							clip-path: ellipse(40% 44% at 50% 50%);
+							filter: grayscale(1);
+						}
+
+						.frame {
+							width: 30px;
+							z-index: 1;
+							position: absolute;
+							left: 0;
+							top: 0;
+
+							&.relative {
+								position: relative;
+							}
+						}
+
+						.amount {
+							margin-left: 5px;
+						}
+					}
+
+					.equip-container {
+						flex-grow: 0;
+						flex-shrink: 0;
+						display: flex;
+						flex-direction: column;
+						width: 100%;
+						position: relative;
+						top: 0;
+						left: 0;
+						z-index: 9;
+						// margin-right: 20px;
+
+						.icon {
+							position: absolute;
+							top: 11%;
+							left: 13%;
+							width: 76%;
+							// clip-path: ellipse(40% 44% at 50% 50%);
+						}
+
+						.frame {
+							width: 100%;
+							z-index: 1;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Rotations and effects
+	// & {
+	// 	.portrait {
+	// 		transform: rotate(-5deg);
+	// 	}
+	// 	.equipment-card {
+	// 		&:nth-child(1) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 		&:nth-child(2) {
+	// 			transform: rotate(-5deg);
+	// 		}
+	// 		&:nth-child(3) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 	}
+	// 	.ability-card {
+	// 		&:nth-child(1) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 		&:nth-child(2) {
+	// 			transform: rotate(-5deg);
+	// 		}
+	// 		&:nth-child(3) {
+	// 			transform: rotate(5deg);
+	// 		}
+	// 	}
+	// }
+}

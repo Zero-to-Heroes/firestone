@@ -1,0 +1,85 @@
+:host {
+	display: flex;
+}
+
+.rewards-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-evenly;
+	border-right: 1px solid var(--color-3);
+	width: 100%;
+	height: 100%;
+	padding-left: 10px;
+	padding-right: 10px;
+
+	.title {
+		width: 100%;
+		text-align: center;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.subtitle {
+		width: 100%;
+		text-align: center;
+		align-self: center;
+		justify-self: center;
+	}
+
+	.rewards {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		overflow: hidden;
+		position: relative;
+
+		.reward {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			flex-shrink: 0;
+			width: 56px;
+			height: 65px;
+			position: relative;
+			margin-bottom: 5px; // To avoid seeing part of the reward when wrapping
+
+			.icon {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				clip-path: ellipse(40% 30% at 50% 55%);
+			}
+
+			.frame {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+			}
+
+			.turn {
+				font-family: Sumana;
+				font-weight: 700;
+				font-size: 14px;
+				color: white;
+				text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+					-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			}
+
+			&:not(:last-child) {
+				margin-right: 10px;
+			}
+
+			&:not(.completed) {
+				opacity: 0.5;
+				filter: grayscale(0.5);
+			}
+		}
+	}
+}

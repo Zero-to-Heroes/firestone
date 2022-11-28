@@ -1,0 +1,93 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+:host {
+	height: 100%;
+	display: flex;
+}
+
+.replays-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-top: 10px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	overflow-x: hidden;
+	overflow-y: auto;
+	-webkit-transition: all 2s;
+	transition: all 2s;
+	flex-grow: 1;
+	padding-right: 10px;
+	min-height: 0;
+
+	.header {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 19px;
+		color: var(--default-title-color);
+		margin-bottom: 5px;
+
+		&:not(:first-child) {
+			margin-top: 15px;
+		}
+	}
+
+	.replay {
+		display: block;
+		margin-bottom: 5px;
+	}
+
+	::ng-deep replay-info {
+		.replay-info {
+			&.battlegrounds {
+				.tribes {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+.empty-state {
+	@extend %empty-state;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+	color: var(--color-1);
+
+	.state-container {
+		margin: auto;
+		margin-bottom: 25vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: var(--color-1);
+
+		i {
+			margin-bottom: 30px;
+			--icon-color: var(--color-1);
+			--icon-secondary-color: var(--color-3);
+		}
+
+		.title {
+			@extend %empty-state-title;
+			margin-bottom: 15px;
+			color: var(--color-1);
+		}
+
+		.subtitle {
+			color: var(--color-1);
+		}
+
+		svg {
+			fill: transparent;
+		}
+	}
+}

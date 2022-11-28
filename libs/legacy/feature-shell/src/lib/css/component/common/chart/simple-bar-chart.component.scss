@@ -1,0 +1,90 @@
+:host {
+	position: relative;
+	display: flex;
+}
+
+.container {
+	// width: 100%;
+	width: 120%;
+	transform: translateX(-10%);
+}
+
+.chart-container {
+	flex-grow: 1;
+	position: relative;
+	width: 100%;
+	min-height: 0;
+	display: flex;
+}
+
+::ng-deep {
+	.tooltip-container {
+		position: absolute;
+		height: auto;
+		pointer-events: none;
+
+		.stats-tooltip {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			font-family: Open Sans;
+			font-style: normal;
+			font-size: 13px;
+			color: #40032e;
+			background: #ce73b4;
+			width: auto;
+			padding-left: 10px;
+			padding-right: 10px;
+
+			.content {
+				padding: 5px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+
+				.title {
+					font-weight: bold;
+				}
+
+				.body {
+					display: flex;
+					flex-direction: column;
+
+					.section {
+						// width: 110px;
+					}
+
+					.player {
+						border-right: 1px solid rgba(#841063, 0.2);
+						padding-right: 7px;
+						margin-right: 7px;
+					}
+
+					.subtitle {
+						font-weight: bold;
+					}
+				}
+			}
+
+			.tooltip-arrow {
+				position: absolute;
+				left: calc(50% - 14px);
+				width: 16px;
+				height: 9px;
+				fill: #ce73b4;
+				overflow: visible;
+			}
+		}
+
+		&.top {
+			.tooltip-arrow {
+				position: absolute;
+				transform: rotate(180deg);
+				top: auto;
+				bottom: 5px;
+			}
+		}
+	}
+}

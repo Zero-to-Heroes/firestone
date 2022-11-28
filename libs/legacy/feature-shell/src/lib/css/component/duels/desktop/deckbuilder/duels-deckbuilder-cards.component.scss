@@ -1,0 +1,326 @@
+:host {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+}
+
+.duels-deckbuilder-cards {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+	position: relative;
+
+	.deck-rename-container {
+		position: absolute;
+		top: -45px;
+		width: 250px;
+		left: calc(50% - 125px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 25px;
+
+		.name-input {
+			display: block;
+			background: transparent;
+			border: 1px solid var(--color-3);
+			padding: 5px 10px;
+			outline: none;
+			cursor: text;
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: 400;
+			line-height: normal;
+			font-size: 13px;
+			color: var(--color-1);
+			width: 100%;
+		}
+	}
+
+	.show-buckets-link {
+		opacity: 0.8;
+		height: 30px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		position: absolute;
+		top: -45px;
+		right: 20px;
+
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+			.settings-p {
+				color: var(--color-2);
+				width: auto;
+				margin-right: 10px;
+
+				label i {
+					--icon-color: currentColor;
+				}
+			}
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.decklist-container {
+		width: 200px;
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+
+		.deck-list {
+			margin-top: 15px;
+			padding-right: 20px;
+			margin-bottom: 10px;
+
+			::ng-deep decktracker-deck-list {
+				min-height: 418px;
+				background: rgba(255, 255, 255, 0.08);
+
+				.ps-content {
+					padding-bottom: 0;
+				}
+			}
+		}
+
+		.export-deck {
+			color: var(--color-1);
+			font-size: 14px;
+			display: flex;
+			flex-direction: row-reverse;
+			align-items: center;
+			justify-content: space-between;
+
+			.copy-deckcode,
+			.save-deckcode {
+				max-width: 50%;
+				overflow: hidden;
+				font-size: 14px;
+			}
+
+			.save-deckcode {
+				border: 1px solid var(--color-1);
+				padding: 5px 10px;
+
+				&:hover {
+					background: var(--color-1);
+					color: var(--color-5);
+				}
+			}
+		}
+
+		.missing-dust {
+			display: flex;
+			margin-top: 10px;
+			color: var(--default-text-color);
+			align-items: center;
+			justify-content: center;
+			--icon-color: currentColor;
+		}
+	}
+
+	.card-search {
+		position: relative;
+		width: 100%;
+
+		label {
+			width: 100%;
+			outline: 1px solid var(--color-3);
+			display: flex;
+
+			&:focus-within,
+			&:hover {
+				// outline: none;
+				background: rgba(255, 255, 255, 0.08);
+			}
+		}
+
+		input {
+			background: transparent;
+			border: none;
+			cursor: text;
+			flex-grow: 1;
+			color: var(--default-text-color);
+			font-family: 'Open Sans';
+			font-size: 12px;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		label.search-active {
+			input {
+				outline: none;
+			}
+		}
+	}
+
+	.results-container {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		margin-left: 15px;
+		position: relative;
+
+		.results {
+			flex-grow: 1;
+			display: flex;
+			height: 100%;
+		}
+
+		.buckets-container {
+			display: flex;
+			flex-wrap: wrap;
+			margin-left: 20px;
+			min-height: 1px;
+			overflow: scroll;
+			flex-shrink: 0;
+			width: 260px;
+			align-items: flex-start;
+			height: fit-content;
+			max-height: 100%;
+
+			.bucket {
+				position: relative;
+				background: rgba(255, 255, 255, 0.08);
+				padding: 10px;
+				width: 240px;
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				flex-shrink: 0;
+				margin-right: 10px;
+				margin-bottom: 15px;
+
+				.class-images {
+					position: absolute;
+					top: 5px;
+					left: 5px;
+					display: flex;
+					flex-direction: column;
+
+					.bucket-class {
+						width: 30px;
+						height: 30px;
+					}
+				}
+
+				.filter-button {
+					--icon-color: var(--color-2);
+					--icon-secondary-color: var(--color-7);
+					position: absolute;
+					right: 10px;
+					top: 7px;
+					padding: 5px;
+					width: 26px;
+					max-width: 26px;
+					background: none;
+					opacity: 0.8;
+
+					&:hover {
+						--icon-color: var(--color-1);
+						opacity: 1;
+					}
+
+					&.highlighted {
+						--icon-color: var(--default-title-color);
+						opacity: 1;
+
+						&:hover {
+							--icon-secondary-color: var(--color-4);
+						}
+					}
+				}
+
+				.bucket-cards {
+					margin-top: 10px;
+					width: 100%;
+
+					deck-list,
+					duels-bucket-cards-list {
+						width: 90%;
+						max-height: 210px;
+						height: 210px;
+					}
+				}
+			}
+		}
+
+		.card-container {
+			display: flex;
+			position: relative;
+			margin-right: -20px;
+
+			.card {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+
+				.real-card {
+					width: 100%;
+					height: 100%;
+				}
+
+				.buckets-info {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					position: relative;
+					top: -6%;
+
+					& > * {
+						border: 1px solid;
+						width: 40px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						border-top: 0;
+					}
+				}
+			}
+		}
+
+		// ::ng-deep cdk-virtual-scroll-viewport {
+		// 	width: 100%;
+		// 	display: flex;
+		// 	flex-grow: 1;
+		// 	height: 100%;
+
+		// 	.cdk-virtual-scroll-content-wrapper {
+		// 		width: 100%;
+		// 		height: 100%;
+		// 		display: flex;
+		// 		flex-wrap: wrap;
+		// 	}
+		// }
+
+		::ng-deep virtual-scroller {
+			width: 100%;
+			display: flex;
+			flex-grow: 1;
+			height: 100%;
+			height: calc(100% - 20px);
+
+			.scrollable-content {
+				width: 100%;
+				height: auto;
+				display: flex;
+				flex-wrap: wrap;
+			}
+		}
+		collection-empty-state {
+			flex-grow: 1;
+			display: flex;
+		}
+	}
+}
+
+@media (min-width: 1720px) {
+	.duels-deckbuilder-cards .results-container .buckets-container {
+		width: 515px;
+	}
+}

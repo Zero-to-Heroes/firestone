@@ -1,0 +1,143 @@
+:host {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 0 !important;
+	max-width: 100%;
+}
+
+.container {
+	// width: 100%;
+	width: 120%;
+	transform: translateX(-10%);
+}
+
+.legend {
+	height: 20px;
+	display: flex;
+	margin-bottom: 15px;
+	flex-shrink: 0;
+	flex-grow: 0;
+
+	.item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 25px;
+		font-size: 11px;
+
+		.node {
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			margin-right: 5px;
+		}
+
+		&.average {
+			.node {
+				background: #ce73b4;
+			}
+		}
+		&.current {
+			.node {
+				background: #ffb948;
+			}
+		}
+	}
+}
+
+.container-1 {
+	flex-grow: 1;
+	transform: none;
+	position: relative;
+	min-height: 0;
+
+	.container-div {
+		display: flex;
+		min-height: 0;
+		flex-grow: 1;
+	}
+}
+
+::ng-deep {
+	.tooltip-container {
+		position: absolute;
+		height: auto;
+		pointer-events: none;
+
+		.stats-tooltip {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			font-family: Open Sans;
+			font-style: normal;
+			font-size: 13px;
+			color: #40032e;
+			background: #ce73b4;
+			width: auto;
+			padding-left: 10px;
+			padding-right: 10px;
+
+			.content {
+				padding: 5px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+
+				.title {
+					font-weight: bold;
+				}
+
+				.body {
+					display: flex;
+
+					.section {
+						display: flex;
+						flex-direction: column;
+						justify-content: end;
+						min-width: 110px;
+						max-width: 150px;
+					}
+
+					.player + .average {
+						border-left: 1px solid rgba(#841063, 0.2);
+						padding-left: 7px;
+						margin-left: 7px;
+					}
+
+					.subtitle {
+						flex-grow: 2;
+						display: flex;
+						font-weight: bold;
+						text-align: center;
+						align-items: center;
+						justify-content: center;
+					}
+					.value{
+						white-space: nowrap;
+					}
+				}
+			}
+
+			.tooltip-arrow {
+				position: absolute;
+				left: calc(50% - 14px);
+				width: 16px;
+				height: 9px;
+				fill: #ce73b4;
+				overflow: visible;
+			}
+		}
+
+		&.top {
+			.tooltip-arrow {
+				position: absolute;
+				transform: rotate(180deg);
+				top: auto;
+				bottom: 5px;
+			}
+		}
+	}
+}

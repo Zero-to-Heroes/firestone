@@ -1,0 +1,64 @@
+:host {
+	height: 40vh;
+	width: 140vh;
+	pointer-events: none;
+}
+
+.choosing-card-container {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: flex-start;
+
+	.option-container {
+		width: 27vh;
+		margin-right: 9vh;
+	}
+
+	&.items-2 {
+		margin-left: 38vh;
+		margin-right: 30vh;
+	}
+
+	&.items-3 {
+		margin-left: 20vh;
+		margin-right: 15vh;
+	}
+}
+
+.option {
+	pointer-events: all;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background: rgba(255, 255, 255, 0.01);
+	// background: rgba(255, 255, 255, 0.5);
+
+	.flag-container {
+		position: absolute;
+		bottom: -1vh;
+		height: 7vh;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.flag {
+			::ng-deep svg {
+				height: 7vh;
+				width: 7vh;
+				filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+			}
+		}
+	}
+
+	.value-container {
+		bottom: -4vh;
+		.value {
+			background: var(--color-5);
+			color: var(--color-1);
+			border-radius: 10px;
+			padding: 5px 20px;
+		}
+	}
+}
