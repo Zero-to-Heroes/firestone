@@ -37,68 +37,68 @@ import { CounterSetting } from './model';
 					[tooltip]="'settings.decktracker.opponent-deck.show-tracker-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					field="opponentLoadAiDecklist"
 					[label]="'settings.decktracker.opponent-deck.ai-decklist-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.ai-decklist-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					field="opponentOverlayGroupByZone"
 					[label]="'settings.decktracker.opponent-deck.group-cards-by-zone-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker || value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="opponentOverlayCardsGoToBottom"
 					[label]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="opponentOverlayDarkenUsedCards"
 					[label]="'settings.decktracker.opponent-deck.darken-used-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.darken-used-cards-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || !value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="overlayShowGlobalEffects"
 					[label]="'settings.decktracker.opponent-deck.global-effects-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.global-effects-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || !value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="opponentOverlaySortByManaInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.sort-by-mana-cost-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || !value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="opponentOverlayShowTopCardsSeparately"
 					[label]="'settings.decktracker.opponent-deck.show-top-cards-separately-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.show-top-cards-separately-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || !value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker || !value.opponentOverlayGroupByZone }"
 					class="indented"
 					field="opponentOverlayShowBottomCardsSeparately"
 					[label]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker || !value.opponentOverlayGroupByZone }"
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					class="indented"
 					field="opponentOverlayHideGeneratedCardsInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.hide-generated-cards-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					class="indented"
 					field="hideOpponentDecktrackerWhenFriendsListIsOpen"
 					[label]="'settings.battlegrounds.session-widget.hide-when-friends-list-open' | owTranslate"
@@ -161,7 +161,7 @@ import { CounterSetting } from './model';
 				</preference-slider>
 				<div
 					class="text"
-					[ngClass]="{ 'disabled': !value.opponentTracker }"
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					[owTranslate]="'settings.decktracker.opponent-deck.opacity-title'"
 				></div>
 				<preference-slider
@@ -220,7 +220,8 @@ import { CounterSetting } from './model';
 })
 export class SettingsDecktrackerOpponentDeckComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	opponentOverlayGroupByZone$: Observable<boolean>;
 	opponentTracker$: Observable<boolean>;
 	dectrackerShowOpponentTurnDraw$: Observable<boolean>;

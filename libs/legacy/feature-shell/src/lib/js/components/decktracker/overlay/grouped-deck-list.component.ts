@@ -87,6 +87,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.showTopCardsSeparately$$.next(value);
 	}
 
+	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
+		this.hideGeneratedCardsInOtherZone$$.next(value);
+	}
+
 	_tooltipPosition: CardTooltipPositionType;
 
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
@@ -94,6 +98,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private cardsGoToBottom$$ = new BehaviorSubject<boolean>(false);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -113,15 +118,24 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
 			this.cardsGoToBottom$$.asObservable(),
+			this.hideGeneratedCardsInOtherZone$$.asObservable(),
 			this.showTopCardsSeparately$,
 			this.showBottomCardsSeparately$,
 		).pipe(
 			this.mapData(
-				([deckState, showWarning, cardsGoToBottom, showTopCardsSeparately, showBottomCardsSeparately]) =>
+				([
+					deckState,
+					showWarning,
+					cardsGoToBottom,
+					hideGeneratedCardsInOtherZone,
+					showTopCardsSeparately,
+					showBottomCardsSeparately,
+				]) =>
 					this.buildGroupedList(
 						deckState,
 						showWarning,
 						cardsGoToBottom,
+						hideGeneratedCardsInOtherZone,
 						showTopCardsSeparately,
 						showBottomCardsSeparately,
 					),
@@ -137,6 +151,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deckState: DeckState,
 		showWarning: boolean,
 		cardsGoToBottom: boolean,
+		hideGeneratedCardsInOtherZone: boolean,
 		showTopCardsSeparately: boolean,
 		showBottomCardsSeparately: boolean,
 	) {
@@ -144,11 +159,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			return null;
 		}
 
-		const base = this.buildBaseCards(deckState);
+		const base = this.buildBaseCards(deckState, hideGeneratedCardsInOtherZone);
 
-		const sortingFunction = cardsGoToBottom
-			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
-			: null;
+		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
+			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom) || a.manaCost - b.manaCost;
 
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = base;
@@ -195,60 +209,47 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		};
 	}
 
-	private buildBaseCards(deckState: DeckState): readonly VisualDeckCard[] {
+	private buildBaseCards(deckState: DeckState, hideGeneratedCardsInOtherZone: boolean): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
-		const allCards = [
+		const cardsToShow = [
 			...deckState.deck,
 			...deckState.hand.filter((c) => !c.creatorCardId),
 			...deckState.board.filter((c) => !c.creatorCardId),
 			...deckState.otherZone
 				.filter((c) => c.zone !== 'SETASIDE')
-				.filter((c) => !c.creatorCardId)
+				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId)
 				.filter((c) => !c.temporaryCard),
-		].sort((a, b) => a.manaCost - b.manaCost);
+		]
+			.filter((card) => !COIN_IDS.includes(card.cardId as CardIds))
+			.sort((a, b) => a.manaCost - b.manaCost);
 
-		// One line for each card id
-		const cardIdsToShow = [...new Set(allCards.map((c) => c.cardId))];
-
-		const finalCards = cardIdsToShow
-			// TODO: Because the initial coin doesn't have a "created by" (because it's created by the game)
-			// This should probably be fixed on the initial Coin instead, but for now here's a temporary patch
-			.filter((cardId) => !COIN_IDS.includes(cardId as CardIds))
-			.flatMap((cardId) => {
-				if (!deckState.deck.filter((c) => c.cardId === cardId).length) {
-					const refCard = allCards.find((c) => c.cardId === cardId);
-					return [
-						VisualDeckCard.create({
-							// Just take the first one as placeholder
-							...refCard,
-							manaCost: this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost, // Show the base cost, not the reduction
-							highlight: 'dim',
-						}),
-					];
-				} else {
-					return deckState.deck
-						.filter((c) => c.cardId === cardId)
-						.map((c) =>
-							VisualDeckCard.create({
-								...c,
-								creatorCardIds: (c.creatorCardId ? [c.creatorCardId] : []) as readonly string[],
-							}),
-						);
-				}
+		return cardsToShow.flatMap((card) => {
+			return VisualDeckCard.create({
+				...card,
+				creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+				highlight: !deckState.deck.filter((c) => c.cardId === card.cardId).length ? 'dim' : null,
 			});
-		return finalCards;
+		});
 	}
 
-	private sortOrder(card: VisualDeckCard): number {
-		switch (card.highlight) {
-			case 'normal':
-				return 0;
-			case 'in-hand':
-				return 1;
-			case 'dim':
-				return 2;
-			default:
-				return 0;
+	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean): number {
+		// Generated cards always go to the bottom
+		if (!!card.creatorCardId?.length || !!card.creatorCardIds?.length) {
+			return 3;
 		}
+
+		if (cardsGoToBottom) {
+			switch (card.highlight) {
+				case 'normal':
+					return 0;
+				case 'in-hand':
+					return 1;
+				case 'dim':
+					return 2;
+				default:
+					return 0;
+			}
+		}
+		return 0;
 	}
 }

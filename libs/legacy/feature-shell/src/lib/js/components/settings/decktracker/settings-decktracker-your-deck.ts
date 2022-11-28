@@ -30,27 +30,28 @@ import { CounterSetting } from './model';
 					[tooltip]="'settings.decktracker.opponent-deck.group-cards-by-zone-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': value.overlayGroupByZone }"
+					[ngClass]="{ disabled: value.overlayGroupByZone }"
 					class="indented"
 					field="overlayCardsGoToBottom"
 					[label]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.used-cards-go-to-bottom-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					[ngClass]="{ disabled: !value.overlayGroupByZone }"
 					class="indented"
 					field="overlayDarkenUsedCards"
 					[label]="'settings.decktracker.opponent-deck.darken-used-cards-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.darken-used-cards-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					[ngClass]="{ disabled: !value.overlayGroupByZone }"
 					class="indented"
 					field="overlayShowGlobalEffects"
 					[label]="'settings.decktracker.opponent-deck.global-effects-label' | owTranslate"
 					[tooltip]="'settings.decktracker.opponent-deck.global-effects-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
+					[ngClass]="{ disabled: !value.overlayGroupByZone }"
 					class="indented"
 					field="overlaySortByManaInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.sort-by-mana-cost-label' | owTranslate"
@@ -69,7 +70,6 @@ import { CounterSetting } from './model';
 					[tooltip]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[ngClass]="{ 'disabled': !value.overlayGroupByZone }"
 					class="indented"
 					field="overlayHideGeneratedCardsInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"

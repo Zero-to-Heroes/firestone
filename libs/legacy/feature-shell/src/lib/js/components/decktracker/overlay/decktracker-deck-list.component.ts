@@ -66,6 +66,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[tooltipPosition]="_tooltipPosition"
 					[showTopCardsSeparately]="showTopCardsSeparately"
 					[showBottomCardsSeparately]="showBottomCardsSeparately"
+					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[side]="side"
 					[showTotalCardsInZone]="showTotalCardsInZone"
 					[collection]="collection"
