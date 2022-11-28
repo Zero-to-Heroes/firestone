@@ -30,7 +30,7 @@ export class SpectralPillagerCounterDefinition implements CounterDefinition {
 			value: cardsPlayedThisTurn,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SpectralPillager}.jpg`,
 			cssClass: 'spectral-pillager-counter',
-			tooltip: null,
+			tooltip: i18n.translateString('counters.spectral-pillager.player', { value: cardsPlayedThisTurn }),
 			cardTooltips: null,
 			standardCounter: true,
 		};
