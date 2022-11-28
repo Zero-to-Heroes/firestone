@@ -79,10 +79,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.cardsGoToBottom$$.next(value);
 	}
 
-	@Input() set darkenUsedCards(value: boolean) {
-		this.darkenUsedCards$$.next(value);
-	}
-
 	@Input() set showBottomCardsSeparately(value: boolean) {
 		this.showBottomCardsSeparately$$.next(value);
 	}
@@ -96,7 +92,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 	private showWarning$$ = new BehaviorSubject<boolean>(null);
 	private cardsGoToBottom$$ = new BehaviorSubject<boolean>(false);
-	private darkenUsedCards$$ = new BehaviorSubject<boolean>(false);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 
@@ -118,24 +113,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
 			this.cardsGoToBottom$$.asObservable(),
-			this.darkenUsedCards$$.asObservable(),
 			this.showTopCardsSeparately$,
 			this.showBottomCardsSeparately$,
 		).pipe(
 			this.mapData(
-				([
-					deckState,
-					showWarning,
-					cardsGoToBottom,
-					darkenUsedCards,
-					showTopCardsSeparately,
-					showBottomCardsSeparately,
-				]) =>
+				([deckState, showWarning, cardsGoToBottom, showTopCardsSeparately, showBottomCardsSeparately]) =>
 					this.buildGroupedList(
 						deckState,
 						showWarning,
 						cardsGoToBottom,
-						darkenUsedCards,
 						showTopCardsSeparately,
 						showBottomCardsSeparately,
 					),
@@ -151,7 +137,6 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deckState: DeckState,
 		showWarning: boolean,
 		cardsGoToBottom: boolean,
-		darkenUsedCards: boolean,
 		showTopCardsSeparately: boolean,
 		showBottomCardsSeparately: boolean,
 	) {
@@ -159,7 +144,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			return null;
 		}
 
-		const base = this.buildBaseCards(deckState, darkenUsedCards);
+		const base = this.buildBaseCards(deckState);
 
 		const sortingFunction = cardsGoToBottom
 			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
@@ -210,7 +195,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		};
 	}
 
-	private buildBaseCards(deckState: DeckState, darkenUsedCards: boolean): readonly VisualDeckCard[] {
+	private buildBaseCards(deckState: DeckState): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
 		const allCards = [
 			...deckState.deck,
@@ -237,13 +222,18 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 							// Just take the first one as placeholder
 							...refCard,
 							manaCost: this.allCards.getCard(refCard.cardId).cost ?? refCard.manaCost, // Show the base cost, not the reduction
-							highlight: darkenUsedCards ? 'dim' : 'normal',
+							highlight: 'dim',
 						}),
 					];
 				} else {
 					return deckState.deck
 						.filter((c) => c.cardId === cardId)
-						.map((c) => VisualDeckCard.create({ ...c }));
+						.map((c) =>
+							VisualDeckCard.create({
+								...c,
+								creatorCardIds: (c.creatorCardId ? [c.creatorCardId] : []) as readonly string[],
+							}),
+						);
 				}
 			});
 		return finalCards;
@@ -258,7 +248,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			case 'dim':
 				return 2;
 			default:
-				return 3;
+				return 0;
 		}
 	}
 }
