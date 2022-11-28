@@ -11,6 +11,7 @@ export class VanessaVanCleefCounterDefinition implements CounterDefinition {
 	readonly image: string;
 	readonly cssClass: string;
 	readonly tooltip: string;
+	readonly cardTooltips?: readonly string[];
 	readonly standardCounter = true;
 
 	static create(
@@ -42,6 +43,7 @@ export class VanessaVanCleefCounterDefinition implements CounterDefinition {
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastPlayedCard}.jpg`,
 			cssClass: 'vanessa-counter',
 			tooltip: tooltip,
+			cardTooltips: [lastPlayedCard],
 			standardCounter: true,
 		};
 	}

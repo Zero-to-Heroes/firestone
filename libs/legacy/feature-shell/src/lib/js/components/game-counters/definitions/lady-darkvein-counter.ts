@@ -12,6 +12,7 @@ export class LadyDarkveinCounterDefinition implements CounterDefinition {
 	readonly cssClass: string;
 	readonly tooltip: string;
 	readonly standardCounter = true;
+	readonly cardTooltips?: readonly string[];
 
 	static create(
 		gameState: GameState,
@@ -39,6 +40,7 @@ export class LadyDarkveinCounterDefinition implements CounterDefinition {
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${lastShadowSpellCardId}.jpg`,
 			cssClass: 'lady-darkvein-counter',
 			tooltip: tooltip,
+			cardTooltips: [lastShadowSpellCardId],
 			standardCounter: true,
 		};
 	}

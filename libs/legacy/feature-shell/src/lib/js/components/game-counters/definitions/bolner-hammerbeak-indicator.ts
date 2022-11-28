@@ -13,6 +13,7 @@ export class BolnerHammerbeakIndicator implements CounterDefinition {
 	readonly cssClass: string;
 	readonly tooltip: string;
 	readonly standardCounter = true;
+	readonly cardTooltips?: readonly string[];
 
 	static create(
 		gameState: GameState,
@@ -37,6 +38,7 @@ export class BolnerHammerbeakIndicator implements CounterDefinition {
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${firstBattlecry.cardId}.jpg`,
 			cssClass: 'bolner-counter',
 			tooltip: i18n.translateString(`counters.bolner`, { value: i18n.getCardName(firstBattlecry.cardId) }),
+			cardTooltips: [firstBattlecry.cardId],
 			standardCounter: true,
 		};
 	}

@@ -12,6 +12,7 @@ export class GreySageParrotCounterDefinition implements CounterDefinition {
 	readonly cssClass: string;
 	readonly tooltip: string;
 	readonly standardCounter = true;
+	readonly cardTooltips?: readonly string[];
 
 	static create(
 		gameState: GameState,
@@ -44,6 +45,7 @@ export class GreySageParrotCounterDefinition implements CounterDefinition {
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${candidate.id}.jpg`,
 			cssClass: 'grey-sage-parrot-counter',
 			tooltip: tooltip,
+			cardTooltips: [candidate.id],
 			standardCounter: true,
 		};
 	}
