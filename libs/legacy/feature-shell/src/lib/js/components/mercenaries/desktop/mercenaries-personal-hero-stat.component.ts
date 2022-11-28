@@ -17,7 +17,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 	template: `
 		<div
 			class="mercenaries-personal-hero-stat"
-			[ngClass]="{ 'missing': !owned, 'fully-upgraded': fullyUpgraded }"
+			[ngClass]="{ missing: !owned, 'fully-upgraded': fullyUpgraded }"
 			(click)="select()"
 		>
 			<div class="rarity-level">
@@ -84,12 +84,16 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				</div>
 			</div>
 
-			<div class="current-task">
+			<div
+				class="current-task"
+				[helpTooltip]="currentTaskTooltip"
+				helpTooltipClasses="mercenaries-personal-hero-stat-task-tooltip"
+			>
 				{{ currentTaskLabel }}
 			</div>
 
 			<div class="abilities">
-				<div class="item" *ngFor="let ability of abilities" [ngClass]="{ 'missing': !ability.owned }">
+				<div class="item" *ngFor="let ability of abilities" [ngClass]="{ missing: !ability.owned }">
 					<div class="item-icon" [cardTooltip]="ability.cardId" [cardTooltipShowRelatedCards]="true">
 						<img class="ability-icon" [src]="ability.artUrl" />
 						<img
@@ -117,7 +121,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				<div
 					class="item"
 					*ngFor="let equipment of equipments"
-					[ngClass]="{ 'equipped': equipment.equipped, 'missing': !equipment.owned }"
+					[ngClass]="{ equipped: equipment.equipped, missing: !equipment.owned }"
 				>
 					<div class="item-icon" [cardTooltip]="equipment.cardId" [cardTooltipShowRelatedCards]="true">
 						<img class="equipment-icon" [src]="equipment.artUrl" />
