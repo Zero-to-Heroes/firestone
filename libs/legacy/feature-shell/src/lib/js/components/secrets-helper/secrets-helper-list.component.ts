@@ -40,11 +40,11 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() set secrets(value: readonly BoardSecret[]) {
-		this._secrets = value;
+		this._secrets = value ?? [];
 		this.updateCards();
 	}
 
-	_secrets: readonly BoardSecret[];
+	_secrets: readonly BoardSecret[] = [];
 	cards: readonly VisualDeckCard[];
 	isScroll: boolean;
 
