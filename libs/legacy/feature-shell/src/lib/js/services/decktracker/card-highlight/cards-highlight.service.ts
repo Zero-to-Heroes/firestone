@@ -74,7 +74,7 @@ import {
 	spellSchool,
 	taunt,
 	weapon,
-	whelp
+	whelp,
 } from './selectors';
 
 @Injectable()
@@ -441,6 +441,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.FrontLines_TID_949:
 			case CardIds.FrontLines_Story_11_FrontLines:
 				return and(inDeck, minion);
+			case CardIds.FrostweaveDungeoneer:
+				return and(inDeck, spell);
 			case CardIds.FungalFortunes:
 				return and(inDeck, minion);
 			case CardIds.GatherYourParty:
