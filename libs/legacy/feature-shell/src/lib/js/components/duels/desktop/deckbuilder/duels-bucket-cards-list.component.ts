@@ -18,15 +18,15 @@ import { sortByProperties } from '../../../../services/utils';
 		'../../../../../css/component/duels/desktop/deckbuilder/duels-bucket-cards-list.component.scss',
 	],
 	template: `
-		<perfect-scrollbar class="cards-list active" scrollable>
+		<ng-scrollbar class="cards-list active" scrollable>
 			<duels-bucket-card
 				class="card"
 				*ngFor="let card of _cards; trackBy: trackByCard"
-				[ngClass]="{ 'dimmed': card.dimmed }"
+				[ngClass]="{ dimmed: card.dimmed }"
 				[card]="card"
 				(click)="onBucketCardClick(card)"
 			></duels-bucket-card>
-		</perfect-scrollbar>
+		</ng-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

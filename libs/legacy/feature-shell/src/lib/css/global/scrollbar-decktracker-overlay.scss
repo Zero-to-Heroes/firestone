@@ -27,3 +27,13 @@
 ::-webkit-scrollbar-track-piece {
 	display: none;
 }
+
+:host ::ng-deep ng-scrollbar {
+	--scrollbar-thumb-color: var(--fs-scrollbar-thumb-color);
+	--scrollbar-thumb-hover-color: var(--on-fs-scrollbar-thumb-color);
+	--scrollbar-viewport-margin-right: 5px;
+
+	.ng-scroll-viewport-wrapper {
+		margin-right: var(--scrollbar-viewport-margin-right);
+	}
+}

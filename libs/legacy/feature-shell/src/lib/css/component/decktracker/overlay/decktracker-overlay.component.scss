@@ -10,10 +10,10 @@
 .root {
 	position: relative;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
-	// height: 100%;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+	height: 95vh;
 
 	&.active {
 		.icon {
@@ -53,6 +53,7 @@
 		transition-property: transform, opacity;
 		transition-duration: 0.3s;
 		transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+		height: calc(100% / var(--decktracker-scale));
 	}
 
 	&.player {
@@ -73,14 +74,11 @@
 
 	.decktracker-container {
 		position: relative;
-		// background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
-		// 	url('/Files/assets/images/backgrounds/decktracker_bg.png');
-		// background-size: 100%;
-		// margin: 10px;
 		width: 100%;
 		max-width: 100%;
 		display: flex;
 		flex-direction: column;
+		height: 100%;
 	}
 
 	.decktracker {
@@ -89,21 +87,22 @@
 		display: flex;
 		flex-direction: column;
 		// Avoid issues on small screens
-		max-height: 90vh;
+		max-height: calc(95vh / var(--decktracker-scale));
+		height: 100%;
 
 		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
 		// appearing on mouse over) while not showing a background
-		.background {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 10px;
-			// background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
-			// 	url('/Files/assets/images/backgrounds/decktracker_bg.png');
-			// background-size: 100%;
-			background: #07081f;
-		}
+		// .background {
+		// 	position: absolute;
+		// 	top: 0;
+		// 	left: 0;
+		// 	right: 0;
+		// 	bottom: 10px;
+		// 	// background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+		// 	// 	url('/Files/assets/images/backgrounds/decktracker_bg.png');
+		// 	// background-size: 100%;
+		// 	background: #07081f;
+		// }
 
 		.backdrop {
 			position: absolute;

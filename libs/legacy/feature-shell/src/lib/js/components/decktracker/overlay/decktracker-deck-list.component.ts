@@ -24,14 +24,15 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'decktracker-deck-list',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
-		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
+		'../../../../css/global/scrollbar-cards-list.scss',
+		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
 	],
 	template: `
-		<perfect-scrollbar class="deck-list" [ngClass]="{ 'active': isScroll }" scrollable>
+		<ng-scrollbar class="deck-list" [ngClass]="{ active: isScroll }" scrollable>
 			<ng-container [ngSwitch]="displayMode">
-				<div class="list-background"></div>
+				<!-- <div class="list-background"></div> -->
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"
@@ -73,7 +74,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				>
 				</grouped-deck-list>
 			</ng-container>
-		</perfect-scrollbar>
+		</ng-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

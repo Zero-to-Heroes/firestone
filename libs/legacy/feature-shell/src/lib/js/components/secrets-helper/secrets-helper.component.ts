@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity$ | async"
 			*ngIf="{ active: active$ | async } as value"
-			[ngClass]="{ 'active': value.active }"
+			[ngClass]="{ active: value.active }"
 		>
 			<div class="main-container">
 				<secrets-helper-widget-icon class="icon" [active]="value.active"></secrets-helper-widget-icon>
@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<div class="scalable">
 					<div class="secrets-helper-container">
 						<div class="secrets-helper" [style.width.px]="widthInPx">
-							<div class="background"></div>
+							<!-- <div class="background"></div> -->
 							<secrets-helper-control-bar [windowId]="windowId"></secrets-helper-control-bar>
 							<secrets-helper-list
 								[secrets]="secrets$ | async"

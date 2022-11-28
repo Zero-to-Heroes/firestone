@@ -13,69 +13,10 @@
 .cards-list {
 	display: flex;
 	flex-direction: column;
+	height: 100%;
+	width: 100%;
 
 	.card.dimmed {
 		opacity: 0.3;
-	}
-
-	// perfect-scrollbar
-	::ng-deep {
-		.ps-content {
-			padding-left: 10px;
-			padding-right: 10px;
-			padding-bottom: 10px;
-			pointer-events: none;
-			position: relative;
-
-			& > * {
-				pointer-events: all;
-			}
-		}
-		.ps__rail-x {
-			display: none;
-		}
-		.ps__rail-y.ps__rail-y {
-			display: none;
-			top: 0 !important;
-			margin-bottom: 10px;
-		}
-	}
-
-	&.active {
-		::ng-deep {
-			// IMPORTANT! Remove the !important from top: 0 !important
-			// node_modules/ngx-perfect-scrollbar (do a Ctrl+F)
-			// for perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
-			.ps__rail-y.ps__rail-y {
-				display: block;
-				opacity: 1;
-				right: -2px !important;
-				width: 15px !important;
-				background-color: rgba(255, 255, 255, 0.01);
-				z-index: 2;
-				transition: width 100ms linear, opacity 100ms linear, background-color 100ms linear;
-				// height: 100% !important;
-
-				&:hover {
-					opacity: 1 !important;
-					.ps__thumb-y {
-						width: 10px;
-					}
-				}
-				.ps__thumb-y {
-					width: 10px;
-					background-color: var(--color-3);
-					border-radius: 0;
-
-					&:hover {
-						background-color: var(--color-2);
-					}
-				}
-			}
-			.ps:hover > .ps__rail-y,
-			.ps--focus > .ps__rail-y {
-				opacity: 0.01;
-			}
-		}
 	}
 }

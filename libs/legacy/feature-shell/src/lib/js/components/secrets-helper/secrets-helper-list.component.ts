@@ -21,18 +21,19 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'secrets-helper-list',
 	styleUrls: [
 		'../../../css/global/components-global.scss',
-		'../../../css/component/secrets-helper/secrets-helper-list.component.scss',
-		'../../../css/component/decktracker/overlay/dim-overlay.scss',
 		`../../../css/global/scrollbar-decktracker-overlay.scss`,
+		'../../../css/global/scrollbar-cards-list.scss',
+		'../../../css/component/decktracker/overlay/dim-overlay.scss',
+		'../../../css/component/secrets-helper/secrets-helper-list.component.scss',
 	],
 	template: `
-		<perfect-scrollbar class="secrets-helper-list" [ngClass]="{ active: isScroll }">
+		<ng-scrollbar class="secrets-helper-list" [ngClass]="{ active: isScroll }">
 			<ul class="card-list" scrollable>
 				<li *ngFor="let card of cards; trackBy: trackCard">
 					<deck-card [card]="card" [colorManaCost]="colorManaCost" [colorClassCards]="true"></deck-card>
 				</li>
 			</ul>
-		</perfect-scrollbar>
+		</ng-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

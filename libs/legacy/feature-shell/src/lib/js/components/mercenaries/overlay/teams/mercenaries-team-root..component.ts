@@ -42,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<div class="scalable">
 				<div class="team-container">
 					<div class="team" *ngIf="_team" [style.width.px]="overlayWidthInPx">
-						<div class="background"></div>
+						<!-- <div class="background"></div> -->
 						<mercenaries-team-control-bar [side]="side"></mercenaries-team-control-bar>
 						<div class="header" *ngIf="showTurnCounter$ | async">
 							<div class="label" [owTranslate]="'mercenaries.team-widget.turn-counter.turns'"></div>
@@ -76,7 +76,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 							[enableHighlight]="side !== 'opponent'"
 						>
 						</mercenaries-team-list>
-						<div class="footer">
+						<!-- <div class="footer">
 							<div
 								class="mouseover-button show-tasks"
 								[ngClass]="{ visible: showTasks$ | async }"
@@ -116,7 +116,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 									<img class="chart" src="assets/images/mercenaries-weakness-triangle.png" />
 								</div>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</div>

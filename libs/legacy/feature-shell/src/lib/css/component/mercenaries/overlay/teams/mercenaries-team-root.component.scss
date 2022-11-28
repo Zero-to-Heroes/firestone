@@ -6,19 +6,20 @@
 .root {
 	position: relative;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
-	// height: 100%;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+	height: 95vh;
 
 	.scalable {
 		transform: scale(1);
-		top: 30px;
+		// top: 30px;
 		position: relative;
 		opacity: 1;
 		transition-property: transform, opacity;
 		transition-duration: 0.3s;
 		transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+		height: calc(100% / var(--decktracker-scale));
 	}
 
 	&.player,
@@ -44,6 +45,7 @@
 		max-width: 100%;
 		display: flex;
 		flex-direction: column;
+		height: 100%;
 	}
 
 	.header {
@@ -94,23 +96,29 @@
 		}
 	}
 
+	.team-container {
+		height: 100%;
+	}
+
 	.team {
 		position: relative;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		max-height: calc(95vh / var(--decktracker-scale));
+		height: 100%;
 
 		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
 		// appearing on mouse over) while not showing a background
-		.background {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 28px;
-			background: #07081f;
-			border-radius: 10px 10px 0px 0px;
-		}
+		// .background {
+		// 	position: absolute;
+		// 	top: 0;
+		// 	left: 0;
+		// 	right: 0;
+		// 	bottom: 28px;
+		// 	background: #07081f;
+		// 	border-radius: 10px 10px 0px 0px;
+		// }
 
 		mercenaries-team-control-bar {
 			flex-grow: 0;

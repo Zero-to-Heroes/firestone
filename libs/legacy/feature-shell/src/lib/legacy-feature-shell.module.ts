@@ -17,11 +17,6 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SelectModule } from 'ng-select';
 import { NgChartsModule } from 'ng2-charts';
-import {
-	PerfectScrollbarConfigInterface,
-	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG,
-} from 'ngx-perfect-scrollbar';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AchievementCategoryComponent } from './js/components/achievements/achievement-category.component';
 import { AchievementCompletionStepComponent } from './js/components/achievements/achievement-completion-step.component';
@@ -480,6 +475,7 @@ import { TavernBrawlMetaComponent } from '@tavern-brawl/components/meta/tavern-b
 import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AdsComponent } from './js/components/ads.component';
 import { BgsBattleRecapComponent } from './js/components/battlegrounds/battles/bgs-battle-recap.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
@@ -614,6 +610,7 @@ import { RemoteAchievementsService } from './js/services/achievement/remote-achi
 import { TemporaryResolutionOverrideService } from './js/services/achievement/temporary-resolution-override-service';
 import { AdService } from './js/services/ad.service';
 import { ApiRunner } from './js/services/api-runner';
+import { setAppInjector } from './js/services/app-injector';
 import { ArenaStateBuilderService } from './js/services/arena/arena-state-builder.service';
 import { BgsBattlePositioningExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-executor.service';
 import { BgsBattlePositioningMockExecutorService } from './js/services/battlegrounds/bgs-battle-positioning-mock-executor.service';
@@ -733,14 +730,8 @@ import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-ess
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { translationFileVersion } from './translation-file-version';
-import { setAppInjector } from './js/services/app-injector';
 
 console.log('environment is ' + process.env['NODE_ENV']);
-
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-	suppressScrollX: true,
-	maxScrollbarLength: 100,
-};
 
 overwolf.extensions.current.getManifest((result) => {
 	process.env['APP_VERSION'] = result.meta.version;
@@ -799,7 +790,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SelectModule,
 		FormsModule,
 		ReactiveFormsModule,
-		PerfectScrollbarModule,
+		NgScrollbarModule,
 		InlineSVGModule.forRoot(),
 
 		CommonModule,
@@ -1588,10 +1579,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		AutofocusDirective,
 	],
 	providers: [
-		{
-			provide: PERFECT_SCROLLBAR_CONFIG,
-			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-		},
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationMockExecutorService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningMockExecutorService },

@@ -11,7 +11,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service'; 
+import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -53,7 +53,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[style.width.px]="overlayWidthInPx"
 							[ngClass]="{ 'hide-control-bar': !(showControlBar$ | async) }"
 						>
-							<div class="background"></div>
+							<!-- <div class="background"></div> -->
 							<decktracker-control-bar
 								[settingsCategory]="player"
 								[closeEvent]="closeEvent"

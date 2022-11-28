@@ -22,12 +22,13 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
+		'../../../../../css/global/scrollbar-cards-list.scss',
 		'../../../../../css/component/decktracker/overlay/dim-overlay.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-list.component.scss',
 	],
 	template: `
-		<perfect-scrollbar class="team-list" [ngClass]="{ 'active': isScroll }">
-			<div class="list-background"></div>
+		<ng-scrollbar class="team-list" [ngClass]="{ active: isScroll }">
+			<!-- <div class="list-background"></div> -->
 			<ng-container *ngIf="!!mercenaries?.length; else emptyState">
 				<mercenaries-team-mercenary
 					*ngFor="let mercenary of mercenaries; trackBy: trackByFn"
@@ -39,13 +40,14 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<ng-template #emptyState>
 				<div class="empty-team" [owTranslate]="'mercenaries.team-widget.empty-state' | owTranslate"></div>
 			</ng-template>
-		</perfect-scrollbar>
+		</ng-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamListComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	@Input() tooltipPosition: CardTooltipPositionType;
 	@Input() enableHighlight: boolean;
 
