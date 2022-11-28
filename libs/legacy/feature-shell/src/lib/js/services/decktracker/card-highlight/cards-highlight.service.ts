@@ -779,6 +779,21 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), minion, beast);
 			case CardIds.SunstridersCrownTavernBrawl:
 				return and(or(inDeck, inHand), spell);
+			case CardIds.SwinetuskShank:
+				return and(
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.DeadlyPoisonCore,
+						CardIds.DeadlyPoisonLegacy,
+						CardIds.DeadlyPoisonVanilla,
+						CardIds.LeechingPoison,
+						CardIds.LeechingPoisonCore,
+						CardIds.NitroboostPoison,
+						CardIds.NitroboostPoison_NitroboostPoisonToken,
+						CardIds.ParalyticPoison,
+						CardIds.SilverleafPoison,
+					),
+				);
 			case CardIds.Switcheroo:
 				return and(inDeck, minion);
 			case CardIds.Swordfish:
