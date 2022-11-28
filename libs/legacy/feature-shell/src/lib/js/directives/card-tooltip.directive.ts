@@ -13,7 +13,7 @@ import {
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { DeckCard } from '../models/decktracker/deck-card';
-import { arraysEqual, sleep } from '../services/utils';
+import { sleep } from '../services/utils';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Directive({
@@ -33,7 +33,7 @@ export class CardTooltipDirective implements OnDestroy {
 	// (otherwise it only refreshes on mouseenter)
 	@Input() set cardTooltipRelatedCardIds(value: readonly string[]) {
 		this._cardTooltipRelatedCardIds = value;
-		if (!!this.tooltipRef && !arraysEqual(value, this._cardTooltipRelatedCardIds)) {
+		if (!!this.tooltipRef) {
 			const shouldShowRelatedCards =
 				this.cardTooltipShowRelatedCards || !!this._cardTooltipRelatedCardIds?.length;
 			this.tooltipRef.instance.relatedCardIds = !shouldShowRelatedCards
