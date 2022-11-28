@@ -39,7 +39,7 @@ export class NewCardProcessor implements Processor {
 		this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
 		console.debug('[new-card] building sets', currentState.binder.packStats);
-		const sets = await this.collectionManager.buildSets(collection, currentState.binder.packStats);
+		const sets = await this.collectionManager.buildSets(collection);
 		console.debug('[new-card] sets', sets);
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: sets,

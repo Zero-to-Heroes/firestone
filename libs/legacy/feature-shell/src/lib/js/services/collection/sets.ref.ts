@@ -36,7 +36,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'throne_of_tides',
 		name: `Throne of the Tides`,
 		launchDate: new Date('2022-06-01'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'the_sunken_city',
@@ -47,7 +46,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'onyxias_lair',
 		name: `Onyxia's Lair`,
 		launchDate: new Date('2022-02-15'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'alterac_valley',
@@ -58,7 +56,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'deadmines',
 		name: 'Deadmines',
 		launchDate: new Date('2021-11-02'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'stormwind',
@@ -69,7 +66,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'wailing_caverns',
 		name: 'Wailing Caverns',
 		launchDate: new Date('2021-06-03'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'the_barrens',
@@ -80,7 +76,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'darkmoon_races',
 		name: 'Darkmoon Races',
 		launchDate: new Date('2021-01-21'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'darkmoon_faire',
@@ -101,13 +96,11 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'demon_hunter_initiate',
 		name: 'Demon Hunter Initiate',
 		launchDate: new Date('2020-04-02'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'yod',
 		name: "Galakrond's Awakening",
 		launchDate: new Date('2020-01-21'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'dragons',
@@ -168,7 +161,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'kara',
 		name: 'One Night in Karazhan',
 		launchDate: new Date('2016-08-11'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'og',
@@ -179,7 +171,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'loe',
 		name: 'League of Explorers',
 		launchDate: new Date('2015-11-12'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'tgt',
@@ -190,7 +181,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'brm',
 		name: 'Blackrock Mountain',
 		launchDate: new Date('2015-04-02'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'gvg',
@@ -201,7 +191,6 @@ export const sets: readonly ReferenceSet[] = [
 		id: 'naxx',
 		name: 'Naxxramas',
 		launchDate: new Date('2014-07-22'),
-		hidePityTimers: true,
 	},
 	{
 		id: 'core',

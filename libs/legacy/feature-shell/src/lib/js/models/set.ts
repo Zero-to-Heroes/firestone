@@ -1,9 +1,7 @@
 import { NonFunctionProperties } from '../services/utils';
-import { PityTimer } from './pity-timer';
 
 export class Set {
 	readonly allCards: readonly SetCard[] = [];
-	readonly pityTimer: PityTimer;
 
 	readonly ownedLimitCollectibleCards: number = 0;
 	readonly ownedLimitCollectiblePremiumCards: number = 0;
@@ -14,12 +12,10 @@ export class Set {
 		public readonly launchDate: Date,
 		public readonly standard?: boolean,
 		allCards?: readonly SetCard[],
-		pityTimer?: PityTimer,
 		ownedLimitCollectibleCards?: number,
 		ownedLimitCollectiblePremiumCards?: number,
 	) {
 		this.allCards = allCards ? [...allCards] : [];
-		this.pityTimer = pityTimer;
 		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
 		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
 	}
@@ -32,7 +28,6 @@ export class Set {
 				this.launchDate,
 				this.standard,
 				this.allCards,
-				this.pityTimer,
 				this.ownedLimitCollectibleCards,
 				this.ownedLimitCollectiblePremiumCards,
 			),

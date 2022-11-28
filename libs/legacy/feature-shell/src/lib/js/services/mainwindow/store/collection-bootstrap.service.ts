@@ -41,7 +41,7 @@ export class CollectionBootstrapService {
 			this.collectionManager.getCoins(),
 			this.collectionManager.getPackStats(),
 		]);
-		const sets = await this.collectionManager.buildSets(collection, packStats);
+		const sets = await this.collectionManager.buildSets(collection);
 		const newState = Object.assign(new BinderState(), {
 			collection: collection as readonly Card[],
 			ownedBgsHeroSkins: ownedBgsHeroSkins as readonly number[],
