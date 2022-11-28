@@ -586,6 +586,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.MaskedReveler:
 				return and(inDeck, minion);
+			case CardIds.MasterJouster:
+				return and(inDeck, minion);
 			case CardIds.MeekMasteryTavernBrawl:
 				return and(or(inDeck, inHand), minion, neutral, effectiveCostMore(2));
 			case CardIds.MendingPoolsTavernBrawl:
