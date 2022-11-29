@@ -8,7 +8,8 @@
 		"dev": "nx build --watch",
 		"build": "nx build --configuration=production",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
-		"create-opk": "npx ts-node ./build-tools/replace-version.ts",
+		"create-opk": "npx ts-node ./build-tools/create-opk.ts",
+		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
 		"postbuild": "npm run replace-version && npm run create-opk",
 		"test": "nx test"
 	},
@@ -91,6 +92,7 @@
 		"@nrwl/linter": "15.2.1",
 		"@nrwl/nx-cloud": "latest",
 		"@nrwl/workspace": "15.2.1",
+		"@overwolf/ow-cli": "^0.0.4-5",
 		"@overwolf/types": "^3.22.0",
 		"@swc-node/register": "^1.4.2",
 		"@swc/cli": "~0.1.55",
