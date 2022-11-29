@@ -157,6 +157,8 @@ export class DeckHandlerService {
 				return 'SCH_199t30';
 			case Board.REVENDRETH:
 				return 'SCH_199t31';
+			case Board.MARCH_OF_THE_LICH_KING:
+				return 'SCH_199t32';
 			default:
 				return cardId;
 		}

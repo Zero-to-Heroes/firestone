@@ -12,14 +12,14 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
 		CardIds.HiddenCache,
 		CardIds.Kidnap_REV_828,
-		CardIds.SnipeLegacy,
+		CardIds.SnipeLegacy_EX1_609,
 		CardIds.SnipeVanilla,
 		CardIds.PotionOfPolymorph,
 		CardIds.MirrorEntityLegacy,
 		CardIds.MirrorEntity,
 		CardIds.MirrorEntityVanilla,
-		CardIds.FrozenClone,
-		CardIds.FrozenCloneCore,
+		CardIds.FrozenClone_CORE_ICC_082,
+		CardIds.FrozenClone_ICC_082,
 		CardIds.ExplosiveRunes,
 		CardIds.ExplosiveRunesCore,
 		CardIds.RepentanceLegacy,
@@ -112,7 +112,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		if (isDormant) {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
-			secretsWeCantRuleOut.push(CardIds.SnipeLegacy);
+			secretsWeCantRuleOut.push(CardIds.SnipeLegacy_EX1_609);
 			secretsWeCantRuleOut.push(CardIds.SnipeVanilla);
 			secretsWeCantRuleOut.push(CardIds.PotionOfPolymorph);
 			secretsWeCantRuleOut.push(CardIds.RepentanceLegacy);

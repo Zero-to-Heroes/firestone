@@ -24,7 +24,8 @@ import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-
 })
 export class PlayerBgsMajordomoWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,
@@ -57,7 +58,7 @@ export class PlayerBgsMajordomoWidgetWrapperComponent
 
 			const deck = this.side === 'player' ? state.playerDeck : state.opponentDeck;
 			const elementalsPlayed = deck.cardsPlayedThisTurn
-				.map((card) => this.allCards.getCard(card.cardId).race)
+				.flatMap((card) => this.allCards.getCard(card.cardId).races ?? [])
 				.filter((race) =>
 					[Race.ELEMENTAL, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
 				).length;

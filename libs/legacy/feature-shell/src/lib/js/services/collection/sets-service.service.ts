@@ -101,13 +101,13 @@ export class SetsService {
 				const textToFind = fragment.split('tribe:')[1].trim().toLowerCase();
 				filterFunctions.push(
 					(card) =>
-						card.race?.toLowerCase().includes(textToFind) ||
+						card.races?.some((race) => race.toLowerCase().includes(textToFind)) ||
 						(Object.values(Race)
 							.filter((race) => isNaN(Number(race)))
 							.map((r) => r as string)
 							.map((r) => r.toLowerCase())
 							.includes(textToFind) &&
-							card.race === Race[Race.ALL]),
+							card.races?.includes(Race[Race.ALL])),
 				);
 			}
 

@@ -342,11 +342,11 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.HeatingUp4Lettuce:
 		case CardIds.HeatingUp5Lettuce:
 			return fire;
-		case CardIds.HolyJudgement1Lettuce:
-		case CardIds.HolyJudgement2Lettuce:
-		case CardIds.HolyJudgement3Lettuce:
-		case CardIds.HolyJudgement4Lettuce:
-		case CardIds.HolyJudgement5Lettuce:
+		case CardIds.HolyJudgment1Lettuce:
+		case CardIds.HolyJudgment2Lettuce:
+		case CardIds.HolyJudgment3Lettuce:
+		case CardIds.HolyJudgment4Lettuce:
+		case CardIds.HolyJudgment5Lettuce:
 			return and(holy, combo(refCard));
 		case CardIds.HolyShock1Lettuce:
 		case CardIds.HolyShock2Lettuce:
@@ -717,8 +717,8 @@ const hasReferencedTag = (card: ReferenceCard, tag: GameTag) => (card?.reference
 const hasTag = (card: ReferenceCard, tag: GameTag) => (card?.tags ?? []).includes(GameTag[tag]);
 
 const merc = (card: ReferenceCard) => card.mercenary;
-const minion = (card: ReferenceCard) => !!card.race && !card.mercenary;
-const race = (card: ReferenceCard, race: Race) => Race[race] === card.race?.toUpperCase();
+const minion = (card: ReferenceCard) => !!card.races?.length && !card.mercenary;
+const race = (card: ReferenceCard, race: Race) => card.races?.includes(Race[race]);
 const beast = (card: ReferenceCard) => race(card, Race.BEAST);
 const bloodelf = (card: ReferenceCard) => race(card, Race.BLOODELF);
 const demon = (card: ReferenceCard) => race(card, Race.DEMON);

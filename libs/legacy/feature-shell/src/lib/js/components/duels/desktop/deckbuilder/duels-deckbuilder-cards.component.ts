@@ -669,13 +669,13 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 			card.name.toLowerCase().includes(searchFilters.text) ||
 			card.text?.toLowerCase().includes(searchFilters.text) ||
 			card.spellSchool?.toLowerCase().includes(searchFilters.text) ||
-			card.race?.toLowerCase().includes(searchFilters.text) ||
+			card.races?.some((race) => race.toLowerCase().includes(searchFilters.text)) ||
 			(Object.values(Race)
 				.filter((race) => isNaN(Number(race)))
 				.map((r) => r as string)
 				.map((r) => r.toLowerCase())
 				.includes(searchFilters.text) &&
-				card.race === Race[Race.ALL]) ||
+				card.races?.includes(Race[Race.ALL])) ||
 			card.rarity?.toLowerCase().includes(searchFilters.text) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchFilters.text))
 		);

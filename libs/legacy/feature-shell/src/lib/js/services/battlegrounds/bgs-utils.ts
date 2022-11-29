@@ -56,7 +56,8 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.SnakeLegacyToken,
 	CardIds.SnakeLegacy,
 	CardIds.StoneElemental,
-	CardIds.BolvarFirebloodCore,
+	CardIds.BolvarFireblood_CORE_ICC_858,
+	CardIds.BolvarFireblood_ICC_858,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
@@ -313,6 +314,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.SylvanasWindrunner_ReclaimedSouls;
 		case CardIds.TheJailerBattlegrounds:
 			return CardIds.RunicEmpowermentBattlegrounds;
+		case CardIds.EnhanceOMechano_BG24_HERO_204:
+			return CardIds.EnhanceOMechano_Enhancification;
 
 		case '':
 			return null; // new heroes
@@ -441,7 +444,7 @@ export const getEffectiveTribe = (card: ReferenceCard, groupMinionsIntoTheirTrib
 };
 
 export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
-	return card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
+	return !!card.races?.length ? Race[card.races[0].toUpperCase()] : Race.BLANK;
 };
 
 export const tribeValueForSort = (tribe: string): number => {
@@ -677,6 +680,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 431;
 		case CardIds.TheJailerBattlegrounds:
 			return 459;
+		case CardIds.EnhanceOMechano_BG24_HERO_204:
+			return 462;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

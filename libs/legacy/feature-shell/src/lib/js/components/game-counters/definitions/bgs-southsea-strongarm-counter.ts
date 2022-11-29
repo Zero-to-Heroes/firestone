@@ -24,7 +24,7 @@ export class BgsSouthseaStrongarmCounterDefinition implements CounterDefinition 
 			(info) => info.turn === gameState.currentGame.currentTurn,
 		);
 		const numberOfStrongarms = (boughtInfo?.cardIds ?? [])
-			.map((cardId) => allCards.getCard(cardId).race)
+			.flatMap((cardId) => allCards.getCard(cardId).races ?? [])
 			.filter((race) =>
 				[Race.PIRATE, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
 			).length;

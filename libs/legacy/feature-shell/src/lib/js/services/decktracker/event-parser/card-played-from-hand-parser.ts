@@ -138,8 +138,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			? newHand
 			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
 
-		const isElemental =
-			refCard?.type === 'Minion' && refCard?.race?.toLowerCase() === Race[Race.ELEMENTAL].toLowerCase();
+		const isElemental = refCard?.type === 'Minion' && refCard?.races?.includes(Race[Race.ELEMENTAL]);
 
 		const newPlayerDeck = deck.update({
 			hand: handAfterCardsRemembered,

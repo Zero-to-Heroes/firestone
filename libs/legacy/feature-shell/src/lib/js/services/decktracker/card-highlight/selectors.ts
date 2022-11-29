@@ -154,8 +154,8 @@ export const race =
 	(race: Race) =>
 	(handler: Handler): boolean => {
 		return (
-			handler.referenceCardProvider()?.race === Race[race] ||
-			handler.referenceCardProvider()?.race === Race[Race.ALL]
+			handler.referenceCardProvider()?.races?.includes(Race[race]) ||
+			handler.referenceCardProvider()?.races?.includes(Race[Race.ALL])
 		);
 	};
 export const beast = race(Race.BEAST);
@@ -165,6 +165,7 @@ export const mech = race(Race.MECH);
 export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
+export const undead = race(Race.UNDEAD);
 export const imp = hasMechanic(GameTag.IMP);
 export const whelp = hasMechanic(GameTag.WHELP);
 

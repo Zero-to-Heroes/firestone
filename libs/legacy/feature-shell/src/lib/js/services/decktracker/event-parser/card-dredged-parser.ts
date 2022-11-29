@@ -82,7 +82,7 @@ export class CardDredgedParser implements EventParser {
 					actualManaCost: card.manaCost - 1,
 				});
 			case CardIds.HarpoonGun:
-				return this.allCards.getCard(card.cardId).race === Race[Race.BEAST]
+				return this.allCards.getCard(card.cardId).races?.includes(Race[Race.BEAST])
 					? card.update({
 							actualManaCost: Math.max(0, card.manaCost - 3),
 					  })

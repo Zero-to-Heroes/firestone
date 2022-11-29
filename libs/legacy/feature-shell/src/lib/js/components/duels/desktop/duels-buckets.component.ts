@@ -33,7 +33,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 				<div class="bucket-class-filters">
 					<button
 						class="bucket-class-filter"
-						[ngClass]="{ 'active': isActive(playerClass) }"
+						[ngClass]="{ active: isActive(playerClass) }"
 						*ngFor="let playerClass of classOptions"
 						role="listitem"
 						tabindex="0"
@@ -219,7 +219,7 @@ export class DuelsBucketsComponent extends AbstractSubscriptionComponent impleme
 			card.name.toLowerCase().includes(searchString) ||
 			card.text?.toLowerCase().includes(searchString) ||
 			card.spellSchool?.toLowerCase().includes(searchString) ||
-			card.race?.toLowerCase().includes(searchString) ||
+			card.races?.some((race) => race.toLowerCase().includes(searchString)) ||
 			card.referencedTags?.some((tag) => tag.toLowerCase().includes(searchString))
 		);
 	}

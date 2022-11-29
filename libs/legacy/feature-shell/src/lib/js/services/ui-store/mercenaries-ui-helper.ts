@@ -91,7 +91,7 @@ export const isValidMercSearchItem = (card: ReferenceCard, searchString: string)
 	if (card.text && card.text.toLowerCase().includes(lowSearchString)) {
 		return true;
 	}
-	if (card.race && card.race.toLowerCase().includes(lowSearchString)) {
+	if (card.races?.includes(lowSearchString.toUpperCase())) {
 		return true;
 	}
 	if (card.spellSchool && card.spellSchool.toLowerCase().includes(lowSearchString)) {

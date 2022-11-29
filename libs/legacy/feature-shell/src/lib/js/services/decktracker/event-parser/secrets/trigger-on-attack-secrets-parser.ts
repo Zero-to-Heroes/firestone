@@ -20,7 +20,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
 		CardIds.PackTactics,
 		CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
-		CardIds.ExplosiveTrapLegacy,
+		CardIds.ExplosiveTrapLegacy_EX1_610,
 		CardIds.ExplosiveTrapCore,
 		CardIds.ExplosiveTrapVanilla,
 		CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
@@ -173,7 +173,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.MisdirectionLegacy);
 			secretsWeCantRuleOut.push(CardIds.MisdirectionVanilla);
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken);
-			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy);
+			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy_EX1_610);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.WanderingMonster);

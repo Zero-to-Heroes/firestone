@@ -24,7 +24,8 @@ import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-
 })
 export class PlayerBgsSouthseaWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,
@@ -56,7 +57,7 @@ export class PlayerBgsSouthseaWidgetWrapperComponent
 				(info) => info.turn === bgState.currentGame.currentTurn,
 			);
 			const piratesBought = (boughtInfo?.cardIds ?? [])
-				.map((cardId) => this.allCards.getCard(cardId).race)
+				.flatMap((cardId) => this.allCards.getCard(cardId).races ?? [])
 				.filter((race) =>
 					[Race.PIRATE, Race.ALL].map((race) => Race[race].toLowerCase()).includes(race?.toLowerCase()),
 				).length;

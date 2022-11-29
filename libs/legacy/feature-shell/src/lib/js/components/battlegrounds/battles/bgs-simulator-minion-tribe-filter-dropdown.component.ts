@@ -39,7 +39,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options: IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -56,9 +57,9 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent
 	) {
 		super(store, cdr);
 		const battlegroundsCards = this.allCards.getCards().filter((card) => !!card.techLevel);
-		const uniqueTribes = [...new Set(battlegroundsCards.map((card) => card.race?.toLowerCase()))].filter(
-			(race) => !!race && race !== 'all',
-		);
+		const uniqueTribes = [
+			...new Set(battlegroundsCards.flatMap((card) => card.races ?? []).map((race) => race?.toLowerCase())),
+		].filter((race) => !!race && race !== 'all');
 		this.options = [
 			{
 				value: 'all',

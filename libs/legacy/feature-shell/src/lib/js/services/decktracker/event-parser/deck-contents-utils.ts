@@ -47,7 +47,8 @@ export const modifyDecksForSpecialCards = (
 		case CardIds.ScepterOfSummoning:
 			console.log('[passive] will apply scepter of summoning for', deckState.deck.length, deckState.hero?.cardId);
 			return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.SkulkingGeist:
+		case CardIds.SkulkingGeist_CORE_ICC_701:
+		case CardIds.SkulkingGeist_ICC_701:
 			return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.Steamcleaner:
 			return [
@@ -156,7 +157,7 @@ const handleFrizzKindleroost = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.race === Race[Race.DRAGON] || refCard?.race === Race[Race.ALL],
+		(card, refCard) => refCard?.races?.includes(Race[Race.DRAGON]) || refCard?.races?.includes(Race[Race.ALL]),
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,

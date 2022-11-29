@@ -347,7 +347,11 @@ export class DeckState {
 		const cards = [...this.hand, ...this.currentOptions];
 		return cards
 			.filter((card) => card.cardId)
-			.some((card) => [CardIds.SpectralPillager, CardIds.SpectralPillagerCore].includes(card.cardId as CardIds));
+			.some((card) =>
+				[CardIds.SpectralPillager_CORE_ICC_910, CardIds.SpectralPillager_ICC_910].includes(
+					card.cardId as CardIds,
+				),
+			);
 	}
 
 	public hasLadyDarkvein() {

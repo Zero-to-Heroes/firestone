@@ -28,7 +28,7 @@ export class SpectralPillagerCounterDefinition implements CounterDefinition {
 		return {
 			type: 'spectralPillager',
 			value: cardsPlayedThisTurn,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SpectralPillager}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.SpectralPillager_ICC_910}.jpg`,
 			cssClass: 'spectral-pillager-counter',
 			tooltip: i18n.translateString('counters.spectral-pillager.player', { value: cardsPlayedThisTurn }),
 			cardTooltips: null,
