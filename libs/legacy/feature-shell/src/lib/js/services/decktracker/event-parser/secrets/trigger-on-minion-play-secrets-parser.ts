@@ -19,6 +19,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.MirrorEntity,
 		CardIds.MirrorEntityVanilla,
 		CardIds.FrozenClone,
+		CardIds.FrozenCloneCore,
 		CardIds.ExplosiveRunes,
 		CardIds.ExplosiveRunesCore,
 		CardIds.RepentanceLegacy,
