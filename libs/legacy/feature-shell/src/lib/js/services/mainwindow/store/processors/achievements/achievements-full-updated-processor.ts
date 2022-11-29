@@ -13,7 +13,6 @@ export class AchievementsFullUpdatedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('triggering reloadAllAchievements');
 		this.achievementsRepository.reloadAllAchievements();
 		return [null, null];
 	}

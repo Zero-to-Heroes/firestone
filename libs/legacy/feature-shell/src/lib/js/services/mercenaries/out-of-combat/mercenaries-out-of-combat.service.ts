@@ -47,7 +47,6 @@ export class MercenariesOutOfCombatService {
 	private async processEvent(event: BroadcastEvent, currentScene: SceneMode): Promise<void> {
 		try {
 			const parsers = this.getParsersFor(event.key, this.internalStore$.value);
-			// console.debug('parsers for', event.key, parsers, event);
 			if (!parsers?.length) {
 				return;
 			}
@@ -55,7 +54,6 @@ export class MercenariesOutOfCombatService {
 			let state = this.internalStore$.value;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, currentScene);
-				// console.debug('[merc-ooc-store] updated state', state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {
@@ -85,9 +83,9 @@ export class MercenariesOutOfCombatService {
 		this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
 			.asObservable()
 			.pipe(map((theEvent) => theEvent.preferences as Preferences));
-		this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
-			[MainWindowState, NavigationState]
-		>).asObservable();
+		this.mainWindowState$ = (
+			this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
+		).asObservable();
 		this.events$ = this.events.on(Events.MEMORY_UPDATE);
 
 		combineLatest(

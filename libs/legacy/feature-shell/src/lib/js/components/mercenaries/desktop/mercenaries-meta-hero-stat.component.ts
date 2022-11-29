@@ -58,7 +58,6 @@ import { MercenaryInfo } from './mercenary-info';
 })
 export class MercenariesMetaHeroStatComponent {
 	@Input() set stat(value: MercenaryInfo) {
-		// console.debug('set value', value.name, value);
 		this.cardId = value.id;
 		this.role = this.i18n.translateString(`global.role.${value.role}`);
 		this.name = value.name;

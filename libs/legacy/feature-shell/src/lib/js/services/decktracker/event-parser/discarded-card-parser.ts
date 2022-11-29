@@ -32,7 +32,6 @@ export class DiscardedCardParser implements EventParser {
 				entityId,
 				deck.deckList.length === 0,
 			);
-			console.debug('[card-discard] newDeckAfterReveal', newDeckAfterReveal, removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;

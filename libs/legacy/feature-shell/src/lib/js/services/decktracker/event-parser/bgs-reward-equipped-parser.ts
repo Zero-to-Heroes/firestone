@@ -28,7 +28,6 @@ export class BgsRewardEquippedParser implements EventParser {
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 		} as DeckCard);
-		console.debug('[bgs-reward-gained] reward card', rewardCard, gameEvent, deck);
 		if (!rewardCard) {
 			console.warn('[bgs-reward-gained] missing reward', gameEvent);
 			return currentState;

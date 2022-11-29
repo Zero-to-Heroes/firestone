@@ -31,12 +31,9 @@ export class MinionDiedParser implements EventParser {
 				// Why do we want to add it twice to the other zone again?
 				entityId: -card.entityId,
 			} as DeckCard);
-			//console.debug('cardWithZone', cardWithZone);
 
 			const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
-			//console.debug('newBoard', newBoard);
 			const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
-			//console.debug('newOther', newOther);
 			const newPlayerDeck = Object.assign(new DeckState(), deck, {
 				board: newBoard,
 				otherZone: newOther,

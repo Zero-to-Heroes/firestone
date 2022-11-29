@@ -10,20 +10,20 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType
+	MercenariesStarterFilterType,
 } from '../../models/mercenaries/mercenaries-filter-types';
 import { CardsFacadeService } from '../cards-facade.service';
 import {
 	MercenariesComposition,
 	MercenariesHeroStat,
-	MercenariesReferenceData
+	MercenariesReferenceData,
 } from '../mercenaries/mercenaries-state-builder.service';
 import {
 	getHeroRole,
 	getShortMercHeroName,
 	isMercenariesPvE,
 	isMercenariesPvP,
-	normalizeMercenariesCardId
+	normalizeMercenariesCardId,
 } from '../mercenaries/mercenaries-utils';
 
 export const filterMercenariesHeroStats = (
@@ -152,7 +152,6 @@ export const buildMercenariesTasksList = (
 	// No use showing a big list of 20+ tasks in that widget, so if there are too many
 	// ongoing tasks, we will only show the "special" ones
 	const shouldUseMercsRestrition = !!restrictToMercsIds?.length || potentialVisitors.length > 6;
-	// console.debug('potentialVisitors', potentialVisitors, shouldUseMercsRestrition);
 	return potentialVisitors
 		.flatMap((visitor) => {
 			const taskChains = referenceData.taskChains

@@ -19,7 +19,6 @@ export class ApiRunner {
 			});
 			if (options?.bearerToken) {
 				headers = headers.set('Authorization', `Bearer ${options.bearerToken}`);
-				console.debug('set authorization', headers, options.bearerToken);
 			}
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
@@ -40,7 +39,6 @@ export class ApiRunner {
 
 	// For JSON output
 	public async callGetApi<T>(url: string): Promise<T> {
-		console.debug('calling GET call', url);
 		return new Promise<T>((resolve, reject) => {
 			this.http.get(url).subscribe(
 				(result: any) => {
@@ -59,7 +57,6 @@ export class ApiRunner {
 	}
 
 	public async get(url: string): Promise<string> {
-		console.debug('calling GET', url);
 		return this.http
 			.get(url, {
 				responseType: 'text',

@@ -316,16 +316,6 @@ const handleLadyPrestor = (
 						cardInfos?.cost != null
 							? cardInfos.cost === card.getEffectiveManaCost()
 							: other.cost === card.getEffectiveManaCost();
-					console.debug(
-						'does match?',
-						result,
-						card.getEffectiveManaCost(),
-						cardInfos?.cost,
-						other.cost,
-						card,
-						other,
-						cardInfos,
-					);
 					return result;
 				},
 			} as DeckCard),

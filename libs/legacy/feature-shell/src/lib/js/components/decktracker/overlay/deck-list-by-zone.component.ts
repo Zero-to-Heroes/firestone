@@ -170,7 +170,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 			sortingFunction: null,
 			order: 0,
 		});
-		// console.debug('sections', deckSections);
 
 		zones.push(
 			Object.assign(

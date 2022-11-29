@@ -144,7 +144,6 @@ export class MercenariesPersonalHeroStatComponent {
 		if (deepEqual(this._stat, value)) {
 			return;
 		}
-		console.debug('setting stat', value.name, value);
 		this._stat = value;
 		this.cardId = value.cardId;
 		this.mercenaryId = value.mercenaryId;

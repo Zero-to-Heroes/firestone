@@ -240,7 +240,6 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				//console.debug('ready to handle next opponent event', gameEvent);
 				this.handleEventOnlyAfterTrigger(
 					// cardID is null when repeating the same opponent
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
@@ -255,7 +254,6 @@ export class BattlegroundsStoreService {
 				);
 			} else if (gameEvent.type === GameEvent.TURN_START) {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
-				//console.debug('TURN_START sending event', gameEvent);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
 				if (this.state.currentGame && !this.state.currentGame.gameEnded) {
 					const info = await this.memory.getBattlegroundsMatchWithPlayers(1);
@@ -409,10 +407,6 @@ export class BattlegroundsStoreService {
 		}
 		this.memoryInterval = setInterval(async () => {
 			if (this.state?.currentGame?.players?.length < 8) {
-				console.debug(
-					'[bgs-store] not triggering memory reading info for players yet',
-					this.state?.currentGame?.players?.map((p) => p.cardId),
-				);
 				return;
 			}
 			// Here we want to get the players info, mostly
@@ -473,9 +467,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
-		//console.debug('will process event', gameEvent);
 		await Promise.all(this.overlayHandlers.map((handler) => handler.processEvent(gameEvent)));
-		//console.debug('handler done', gameEvent);
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.state = this.state.update({
 				forceOpen: false,
@@ -497,9 +489,7 @@ export class BattlegroundsStoreService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, newState)) {
-					//console.debug('will apply parser', gameEvent, parser);
 					newState = (await parser.parse(newState, gameEvent, this.deckState)) ?? newState;
-					//console.debug('has applied parser', gameEvent, parser);
 				}
 			} catch (e) {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, gameEvent, e.message, e);
@@ -507,7 +497,6 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			// console.debug('emitting new BGS state', gameEvent.type, this.state, gameEvent);
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			this.updateOverlay();
 		}

@@ -42,7 +42,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsHeroPowerFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -168,7 +169,6 @@ export class DuelsHeroPowerFilterDropdownComponent
 	}
 
 	onSelected(option: IOption) {
-		console.debug('selected', option);
 		this.stateUpdater.next(new DuelsHeroPowerFilterSelectedEvent(option.value));
 	}
 }

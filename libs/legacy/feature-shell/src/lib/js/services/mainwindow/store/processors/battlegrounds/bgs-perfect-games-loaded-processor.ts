@@ -15,7 +15,6 @@ export class BattlegroundsPerfectGamesLoadedProcessor implements Processor {
 				perfectGames: event.games,
 			}),
 		});
-		console.debug('newState', newState, currentState, event.games);
 		return [newState, null];
 	}
 }

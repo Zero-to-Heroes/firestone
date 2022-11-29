@@ -148,7 +148,6 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 			.subscribe((info) => {
 				const selectedCard = info.selectedCard;
 				const locale = info.locale;
-				console.debug('set card', selectedCard);
 				this.previousClips = this.audioClips || [];
 				this.audioCategories = this.buildAudio(selectedCard, locale);
 				this.audioClips = this.audioCategories
@@ -197,7 +196,6 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 				this.flavor = flavorSource?.length
 					? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
 					: null;
-				console.debug('updated flavor', this.flavor, flavorSource, card);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -221,7 +219,6 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 				.map((effect) => pickRandom(effect.randomSounds).sound)
 				.filter((sound) => sound) ?? [];
 		const allSoundsToPlay = [...mainFiles, ...randomSounds];
-		console.debug('will play', allSoundsToPlay, audioGroup);
 		audioClip.audios
 			.filter((audio) => allSoundsToPlay.includes((audio as any).key))
 			.forEach((audio) => {

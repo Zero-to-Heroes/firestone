@@ -82,7 +82,6 @@ export class AchievementsLoaderService {
 		);
 		const result = achievementsFromRemote.reduce((a, b) => a.concat(b), []);
 		console.log('[achievements-loader] returning full achievements', result && result.length);
-		console.debug('[achievements-loader] returning full achievements', result);
 		return result;
 	}
 

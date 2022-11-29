@@ -10,7 +10,6 @@ export class BgsGameSettingsParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameSettingsEvent): Promise<BattlegroundsState> {
-		console.debug('bgs game settings', event);
 		return currentState.update({
 			currentGame: currentState.currentGame?.update({
 				hasPrizes: event.event.additionalData.battlegroundsPrizes,

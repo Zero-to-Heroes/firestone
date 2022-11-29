@@ -60,7 +60,6 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			}[];
 		},
 	): Promise<GameState> {
-		//console.debug('[trigger-on-spell-play] parsing event', gameEvent.type, gameEvent);
 		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 		if (!cardId) {
 			console.warn('[trigger-on-spell-play] no card Id', gameEvent.parse());
@@ -68,7 +67,6 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		}
 
 		this.secretWillTrigger = additionalInfo?.secretWillTrigger;
-		//console.debug('[trigger-on-spell-play] secretWillTrigger', this.secretWillTrigger);
 
 		const isSpellPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const spellCard = this.allCards.getCard(cardId);
@@ -133,11 +131,9 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
-		//console.debug('[trigger-on-spell-play] secrets', secrets);
 		for (const secret of optionsToFlagAsInvalid) {
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 		}
-		//console.debug('[trigger-on-spell-play] secrets after removing invalid', secrets);
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],
 		} as DeckState);

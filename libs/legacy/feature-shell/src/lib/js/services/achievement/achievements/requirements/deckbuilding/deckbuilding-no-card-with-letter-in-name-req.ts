@@ -38,16 +38,6 @@ export class DeckbuildingNoCardWithLetterInNameReq implements Requirement {
 			this.doesDeckMeetSpec =
 				cards.length > 0 &&
 				cards.every((card) => card.name.toLowerCase().indexOf(this.letterToAvoid.toLowerCase()) === -1);
-			if (this.doesDeckMeetSpec) {
-				console.debug(
-					'[deckbuilding-no-card-req',
-					'deck matches condition',
-					this.doesDeckMeetSpec,
-					this.letterToAvoid,
-					deck,
-					cards,
-				);
-			}
 		} else {
 			this.doesDeckMeetSpec = false;
 		}

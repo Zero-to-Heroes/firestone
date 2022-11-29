@@ -15,7 +15,6 @@ export class CardsInitService {
 	) {}
 
 	public async init() {
-		console.debug('starting init');
 		if (this.inInit) {
 			console.warn('already in init');
 			return;

@@ -285,7 +285,7 @@ export class ArenaRunParserService {
 	}
 
 	private debug(...args) {
-		console.debug('[arena-run-parser]', this.currentReviewId, this.currentArenaRunId, ...args);
+		// console.debug('[arena-run-parser]', this.currentReviewId, this.currentArenaRunId, ...args);
 	}
 
 	private log(...args) {

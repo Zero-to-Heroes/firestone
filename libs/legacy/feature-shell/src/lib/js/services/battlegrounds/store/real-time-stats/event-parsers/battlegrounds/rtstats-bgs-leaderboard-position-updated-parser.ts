@@ -28,7 +28,6 @@ export class RTStatsBgsLeaderboardPositionUpdatedParser implements EventParser {
 				value: turn === 0 || existingData.length === 0 ? newPlace : existingData[existingData.length - 1].value,
 			},
 		];
-		// console.debug('bgs damage armor opponentRevealed', heroCardId, newData, hpOverTurn[heroCardId]);
 		leaderboardPositionOverTurn[heroCardId] = newData;
 		return currentState.update({
 			leaderboardPositionOverTurn: leaderboardPositionOverTurn,

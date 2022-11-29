@@ -26,7 +26,6 @@ export class BgsGlobalStatsService {
 		);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
 		const globalStats = BgsStats.create(result as BgsStats);
-		console.debug('retrieved global stats', globalStats);
 		if (!globalStats?.heroStats?.length) {
 			console.error('could not load bgs global stats', url, tribes, result);
 		}

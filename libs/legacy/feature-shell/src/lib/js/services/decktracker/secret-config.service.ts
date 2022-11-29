@@ -17,12 +17,6 @@ export class SecretConfigService {
 	public getValidSecrets(metadata: Metadata, playerClass: string, creatorCardId?: string): readonly string[] {
 		const mode: string = this.getMode(metadata);
 		const config = this.secretConfigs.find((conf) => conf.mode === mode);
-		console.debug(
-			'[secret] found config',
-			config,
-			this.secretConfigs,
-			creatorCardId === CardIds.BeaststalkerTavish,
-		);
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
 			return null;
@@ -53,7 +47,6 @@ export class SecretConfigService {
 	private async init() {
 		this.secretConfigs = await this.getSecretsConfig();
 		console.log('[secrets-config] loaded secrets config');
-		console.debug('[secret] loaded config', this.secretConfigs);
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {

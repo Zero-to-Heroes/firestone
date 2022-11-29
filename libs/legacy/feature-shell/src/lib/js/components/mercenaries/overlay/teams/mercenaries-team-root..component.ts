@@ -458,7 +458,6 @@ export const buildTeamsForTasks = (
 	allCards: CardsFacadeService,
 	i18n: LocalizationFacadeService,
 ): readonly TeamDeckstringInfo[] => {
-	// console.debug('building team for tasks', tasks, mercReferenceData);
 	if (!mercReferenceData?.mercenaries?.length || !tasks?.length) {
 		console.warn('missing reference data');
 		return null;
@@ -485,7 +484,6 @@ export const buildTeamsForTasks = (
 			)
 			.filter((m) => !!m);
 		const finalMercs = [...taskMercs, ...backupMercs];
-		// console.debug('final mercs', finalMercs, taskMercs, backupMercs, backupMercIds);
 
 		const ownerName = getShortMercHeroName(allCards.getCard(proceduralTask.ownerMercenaryDbfId).id, allCards);
 		const definition: MercenariesTeamDefinition = {
@@ -499,7 +497,6 @@ export const buildTeamsForTasks = (
 		}
 
 		const deckstring = encodeMercs(definition);
-		console.debug('mercs definition', deckstring, definition);
 		return {
 			deckstring: deckstring,
 			label: i18n.translateString('mercenaries.team-widget.create-team-button-label', {
@@ -536,7 +533,6 @@ export const buildMerc = (
 		sharedTeamMercenaryIsFullyUpgraded: 0,
 		sharedTeamMercenaryXp: 0,
 	};
-	// console.debug('merc for tasks', result);
 	return result;
 };
 

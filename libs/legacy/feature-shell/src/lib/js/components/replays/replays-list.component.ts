@@ -27,7 +27,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				<replays-player-class-filter-dropdown class="filter"></replays-player-class-filter-dropdown>
 				<replays-icon-toggle
 					class="icon-toggle"
-					[ngClass]="{ 'absolute': !(replaysIconToggleAbsolutePosition$ | async) }"
+					[ngClass]="{ absolute: !(replaysIconToggleAbsolutePosition$ | async) }"
 					*ngIf="showUseClassIconsToggle$ | async"
 				></replays-icon-toggle>
 				<replays-merc-details-toggle
@@ -114,7 +114,6 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 
 	onScrolling(scrolling: boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 0;
-		console.debug('handling scrolling in parent', scrolling, this.scrollDebounceTime);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

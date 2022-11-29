@@ -67,7 +67,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						*ngFor="let hero of allHeroes"
 						class="hero-portrait-frame"
-						[ngClass]="{ 'selected': hero.id === currentHeroId }"
+						[ngClass]="{ selected: hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
 						[cardTooltip]="hero.id"
 					>
@@ -84,7 +84,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsSimulatorQuestRewardSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
@@ -139,9 +140,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 					const allCardIds = allQuestRewards
 						.filter((card) => !searchString?.length || card.name.toLowerCase().includes(searchString))
 						.map((card) => card.id);
-					console.debug('allcardids', allCardIds);
 					const uniqueCardIds = Array.from(new Set(allCardIds));
-					console.debug('uniqueCardIds', uniqueCardIds);
 					const result = uniqueCardIds
 						.map((card) => this.allCards.getCard(card))
 						.map((card) => ({
@@ -151,7 +150,6 @@ export class BgsSimulatorQuestRewardSelectionComponent
 							text: this.sanitizeText(card.text),
 						}))
 						.sort(sortByProperties((hero: QuestReward) => [hero.name]));
-					console.debug('result', result);
 					return result;
 				}),
 			)

@@ -90,7 +90,6 @@ export class DuelsLootParserService {
 			appVersion: process.env.APP_VERSION,
 		};
 		console.log('[run-info] sending loot into', input);
-		console.debug('[run-info] duels info', duelsInfo);
 		this.api.callPostApi(DUNGEON_LOOT_INFO_URL, input);
 		this.store.send(new DungeonLootInfoUpdatedEvent(input));
 	}

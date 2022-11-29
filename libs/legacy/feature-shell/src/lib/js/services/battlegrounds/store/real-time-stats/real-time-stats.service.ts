@@ -142,8 +142,4 @@ export class RealTimeStatsService {
 			new RTStatsBgsLeaderboardPositionUpdatedParser(this.allCards),
 		];
 	}
-
-	private debug(...args) {
-		console.debug('[bgs-real-time-stats]', ...args);
-	}
 }

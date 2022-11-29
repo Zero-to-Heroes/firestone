@@ -47,7 +47,8 @@ import { filter } from 'rxjs/operators';
 })
 export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	signatureTreasures$: Observable<readonly ReferenceCard[]>;
 	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 
@@ -252,14 +253,12 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent
 
 	async onMouseEnter(cardId: string) {
 		!!this.safeguardTimeout && clearTimeout(this.safeguardTimeout);
-		console.debug('[duels-ooc-hero-selection] mouseenter', cardId);
 		this.selectedSignatureTreasureCardId.next(cardId);
 		this.safeguardTimeout = setTimeout(() => this.onMouseLeave(null, null), 5000);
 	}
 
 	onMouseLeave(cardId: string, event: MouseEvent) {
 		if (!event?.shiftKey) {
-			console.debug('[duels-ooc-hero-selection] mouseleave', cardId);
 			this.selectedSignatureTreasureCardId.next(null);
 		}
 		!!this.safeguardTimeout && clearTimeout(this.safeguardTimeout);

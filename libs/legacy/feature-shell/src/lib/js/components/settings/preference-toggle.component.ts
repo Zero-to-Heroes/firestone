@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				id="a-01-{{ uniqueId }}-{{ field }}"
 				(change)="toggleValue()"
 			/>
-			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ 'enabled': value }">
+			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ enabled: value }">
 				<p class="settings-p">
 					{{ label }}
 					<i class="info" *ngIf="tooltip" [helpTooltip]="tooltip">
@@ -101,7 +101,6 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 		this.toggled = true;
 		const oldPrefs = await this.prefs.getPreferences();
 		const newPrefs = await this.prefs.setValue(this.field, !this.value);
-		console.debug('toggled', oldPrefs[this.field], newPrefs[this.field]);
 		if (this.toggleFunction) {
 			this.toggleFunction(!this.value);
 		}

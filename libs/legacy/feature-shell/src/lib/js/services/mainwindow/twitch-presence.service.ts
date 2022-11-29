@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import { combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { ArenaInfo } from '../../models/arena-info';
 import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
@@ -38,30 +38,23 @@ export class TwitchPresenceService {
 	}
 
 	private async init() {
-		console.debug('[twitch-presence] store init starting');
 		await this.store.initComplete();
-		console.debug('[twitch-presence] store init complete');
 
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_INFO),
 			map((event) => event.additionalData.matchInfo as MatchInfo),
 			startWith(null),
-			tap((info) => console.debug('[twitch-presence] matchInfo', info)),
 		);
-		const duelsInfo$ = this.duelsState.duelsInfo$$
-			.asObservable()
-			.pipe(tap((info) => console.debug('[twitch-presence] duelsInfo', info)));
+		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable();
 		const arenaInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.ARENA_INFO),
 			map((event) => event.additionalData.arenaInfo as ArenaInfo),
 			startWith(null),
-			tap((info) => console.debug('[twitch-presence] arenaInfo', info)),
 		);
 		const mercsInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MERCENARIES_INFO),
 			map((event) => event.additionalData.mercsInfo as MemoryMercenariesInfo),
 			startWith(null),
-			tap((info) => console.debug('[twitch-presence] mercsInfo', info)),
 		);
 
 		// "Normal" Hearthstone mode infos
@@ -106,12 +99,10 @@ export class TwitchPresenceService {
 					appearOnLiveStreams: appearOnLiveStreams,
 				}),
 			),
-			tap((info) => console.debug('[twitch-presence] HS info', info)),
 		);
 
 		combineLatest(hearthstoneInfo$, duelsInfo$, arenaInfo$, matchInfo$)
 			.pipe(
-				tap((info) => console.debug('[twitch-presence] considering', info)),
 				filter(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
 					if (!hearthstoneInfo.gameStarted) {
 						return false;
@@ -127,11 +118,9 @@ export class TwitchPresenceService {
 					}
 					return true;
 				}),
-				tap((info) => console.debug('[twitch-presence] considering 2', info)),
 			)
 			.subscribe(([hearthstoneInfo, duelsInfo, arenaInfo, matchInfo]) => {
 				const playerRank = buildRankInfo(hearthstoneInfo.metadata, duelsInfo, arenaInfo, matchInfo);
-				console.debug('[twitch-presence] playerRank', playerRank);
 				this.sendNewGameEvent(
 					playerRank,
 					hearthstoneInfo.metadata,
@@ -151,7 +140,6 @@ export class TwitchPresenceService {
 			),
 		)
 			.pipe(
-				tap((info) => console.debug('[twitch-presence] bgs game started?', info)),
 				debounceTime(200),
 				filter(
 					([[metadata], [mmrAtStart, gameEnded, playerCardId]]) =>
@@ -161,13 +149,10 @@ export class TwitchPresenceService {
 						!!playerCardId &&
 						!gameEnded,
 				),
-				tap((info) => console.debug('[twitch-presence] bgs game started 2', info)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('[twitch-presence] bgs game started 3', info)),
 				debounceTime(200),
 			)
 			.subscribe(([[metadata], [mmrAtStart, gameEnded, playerCardId]]) => {
-				console.debug('[twitch-presence] bgs considering data to send', playerCardId, mmrAtStart);
 				this.sendNewBgsGameEvent(metadata, mmrAtStart, playerCardId);
 			});
 
@@ -180,19 +165,15 @@ export class TwitchPresenceService {
 		)
 			.pipe(
 				debounceTime(500),
-				tap((info) => console.debug('[twitch-presence] mercs game started?', info)),
 				filter(
 					([[gameMode, mercenaries], mercsInfo]) =>
 						!!gameMode &&
 						!!mercenaries?.length &&
 						(gameMode !== GameType.GT_MERCENARIES_PVP || !!mercsInfo?.PvpRating),
 				),
-				tap((info) => console.debug('[twitch-presence] mercs game started 2', info)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('[twitch-presence] mercs game started 3', info)),
 			)
 			.subscribe(([[gameMode, mercenaries], mercsInfo]) => {
-				console.debug('[twitch-presence] mercs considering data to send', mercenaries, gameMode, mercsInfo);
 				this.sendNewMercsGameEvent(gameMode, mercenaries, mercsInfo?.PvpRating);
 			});
 		this.store
@@ -201,12 +182,10 @@ export class TwitchPresenceService {
 				(state) => state?.gameStarted,
 			)
 			.pipe(
-				tap((info) => console.debug('[twitch-presence] game ended?', info)),
 				debounceTime(200),
 				// distinctUntilChanged(),
 			)
 			.subscribe(([gameEnded, gameStarted]) => {
-				console.debug('[twitch-presence] considering game end to send', gameEnded);
 				// Because a clean state is created on game end
 				if (gameEnded || !gameStarted) {
 					this.sendEndGameEvent();
@@ -228,10 +207,8 @@ export class TwitchPresenceService {
 		opponentClass: string,
 	) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
-		console.debug('[twitch-presence] will send new game event', metadata, playerCardId, opponentCardId);
 		const currentUser = await this.ow.getCurrentUser();
 		this.api.callPostApi(UPDATE_URL, {
 			type: 'game-start',
@@ -253,10 +230,8 @@ export class TwitchPresenceService {
 
 	private async sendNewBgsGameEvent(metadata: Metadata, mmrAtStart: number, playerCardId: string) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] bgs no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
-		console.debug('[twitch-presence] will send new bgs game event', mmrAtStart, playerCardId);
 		const currentUser = await this.ow.getCurrentUser();
 		this.api.callPostApi(UPDATE_URL, {
 			type: 'game-start-bgs',
@@ -279,10 +254,8 @@ export class TwitchPresenceService {
 		mmrAtStart: number,
 	) {
 		if (!this.twitchAccessToken || !this.twitchLoginName) {
-			console.debug('[twitch-presence] mercs no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
-		console.debug('[twitch-presence] will send new mercs game event', gameMode, mercenaries);
 		const currentUser = await this.ow.getCurrentUser();
 		this.api.callPostApi(UPDATE_URL, {
 			type: 'game-start-mercs',
@@ -305,10 +278,8 @@ export class TwitchPresenceService {
 
 	private async sendEndGameEvent() {
 		if (!this.twitchAccessToken) {
-			console.debug('[twitch-presence] no twitch token', this.twitchAccessToken, this.twitchLoginName);
 			return;
 		}
-		console.debug('[twitch-presence] will send end game event');
 		const currentUser = await this.ow.getCurrentUser();
 		this.api.callPostApi(UPDATE_URL, {
 			type: 'game-end',

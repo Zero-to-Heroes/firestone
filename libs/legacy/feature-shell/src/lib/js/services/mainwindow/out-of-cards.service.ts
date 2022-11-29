@@ -103,9 +103,7 @@ export class OutOfCardsService {
 
 	private async uploadCollection() {
 		const token: OutOfCardsToken = await this.getToken();
-		console.debug('[ooc-auth] retrieved token', token);
 		if (!token) {
-			console.debug('[ooc-auth] no token, not synchronizing collection');
 			return;
 		}
 
@@ -117,7 +115,6 @@ export class OutOfCardsService {
 			return;
 		}
 		const oocCollection: OocCollection = this.transformCollection(collection);
-		console.debug('[ooc-auth] transformed collection for upload', oocCollection);
 		const result = await this.api.callPostApi(COLLECTION_UPLOAD, oocCollection, {
 			bearerToken: token.access_token,
 		});
@@ -156,19 +153,9 @@ export class OutOfCardsService {
 	private async getToken(): Promise<OutOfCardsToken> {
 		let token: OutOfCardsToken = (await this.prefs.getPreferences()).outOfCardsToken;
 		if (token && Date.now() - token.expires_timestamp > 0) {
-			console.debug('[ooc-auth] token expired', Date.now(), token.expires_timestamp);
 			if (token.refresh_token) {
-				console.debug('[ooc-auth] refreshing token');
 				token = await this.refreshToken(token.refresh_token);
-				console.debug('[ooc-auth] refreshed token', token);
 			}
-		} else {
-			console.debug(
-				'[ooc-auth] token not expired',
-				Date.now(),
-				token?.expires_timestamp,
-				Date.now() - token?.expires_timestamp,
-			);
 		}
 		await this.prefs.udpateOutOfCardsToken(token);
 		return token;

@@ -15,7 +15,6 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
-		console.debug('personal decks', currentPrefs.constructedPersonalAdditionalDecks);
 		const existingPersonalDeck = currentPrefs.constructedPersonalAdditionalDecks
 			.filter((d) => d.deckstring)
 			.find((d) => d.deckstring === event.deckstring);

@@ -15,7 +15,6 @@ export class BgsBestStatsLoadedProcessor implements Processor {
 				bestBgsUserStats: event.stats,
 			}),
 		});
-		console.debug('newState', newState, currentState, event);
 		return [newState, null];
 	}
 }

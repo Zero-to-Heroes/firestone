@@ -11,7 +11,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { Preferences } from '../../../../models/preferences';
 import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscription-twitch-resizable.component';
@@ -33,7 +32,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
-			[ngClass]="{ 'hidden': hidden$ | async }"
+			[ngClass]="{ hidden: hidden$ | async }"
 		>
 			<div class="simulation-overlay scalable">
 				<bgs-battle-status [nextBattle]="nextBattle$ | async" [showReplayLink]="false"></bgs-battle-status>
@@ -44,7 +43,8 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 })
 export class BgsSimulationOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	hidden$: Observable<boolean>;
 
@@ -100,13 +100,6 @@ export class BgsSimulationOverlayStandaloneComponent
 					prefs.hideBattleOddsInTavern == null
 						? streamerPrefs.bgsHideSimResultsOnRecruit
 						: prefs.hideBattleOddsInTavern === 'true';
-				console.debug(
-					'hide info',
-					hideBattleOddsInCombat,
-					hideBattleOddsInTavern,
-					prefs.hideBattleOddsInCombat,
-					prefs.hideBattleOddsInTavern,
-				);
 				if (hideBattleOddsInCombat && phase === 'combat') {
 					return null;
 				}

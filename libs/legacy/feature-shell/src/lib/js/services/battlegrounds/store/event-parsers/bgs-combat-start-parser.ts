@@ -10,7 +10,6 @@ export class BgsCombatStartParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsCombatStartEvent): Promise<BattlegroundsState> {
-		console.debug('changing phase to combat');
 		const newGame = currentState.currentGame.update({
 			phase: 'combat',
 		} as BgsGame);

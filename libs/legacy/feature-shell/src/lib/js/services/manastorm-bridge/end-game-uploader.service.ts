@@ -135,7 +135,6 @@ export class EndGameUploaderService {
 				referenceData,
 				this.allCards.getService(),
 			);
-			// console.debug('mercs stats in uploader', mercHeroTimings, other);
 
 			// These don't work in PvP
 			if (!!mercHeroTimings?.length) {
@@ -316,7 +315,6 @@ export class EndGameUploaderService {
 		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
-		console.debug('[manastorm-bridge]', currentReviewId, 'game ready', game);
 		return game;
 	}
 
@@ -352,13 +350,11 @@ export class EndGameUploaderService {
 		}
 
 		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
-		console.debug('referenceData ', referenceData, bountyId);
 		if (!referenceData) {
 			return null;
 		}
 
 		const allBounties = referenceData.bountySets.map((set) => set.bounties).reduce((a, b) => a.concat(b), []);
-		console.debug('allBounties', allBounties);
 		const bounty = allBounties.find((b) => b.id === bountyId);
 		if (!bounty) {
 			return `${bountyId}`;
@@ -369,14 +365,11 @@ export class EndGameUploaderService {
 
 	private getMercenariesBountyDifficulty(mercsBountyId: number): 'normal' | 'heroic' | 'legendary' {
 		const referenceData = this.mainWindowStore?.state?.mercenaries?.getReferenceData();
-		console.debug('referenceData', referenceData, mercsBountyId);
 		if (!referenceData) {
 			return null;
 		}
 		const allBounties = referenceData.bountySets.map((set) => set.bounties).reduce((a, b) => a.concat(b), []);
-		console.debug('allBounties', allBounties);
 		const bounty = allBounties.find((b) => b.id === mercsBountyId);
-		console.debug('bounty', bounty);
 		if (!bounty) {
 			return null;
 		}

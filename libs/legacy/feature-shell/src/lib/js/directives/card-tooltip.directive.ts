@@ -133,7 +133,6 @@ export class CardTooltipDirective implements OnDestroy {
 			this.positionStrategyDirty = false;
 		}
 
-		//console.debug('after updating position', this.positionStrategy, this._position);
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 

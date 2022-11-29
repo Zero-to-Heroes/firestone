@@ -98,7 +98,6 @@ export class StoreBootstrapService {
 		// First update the prefs, for local installs
 		const prefsFromRemote = await this.prefs.loadRemotePrefs();
 
-		console.debug('remote prefs', prefsFromRemote, prefs);
 		const mergedPrefs = await this.mergePrefs(prefs, prefsFromRemote);
 
 		// Load all the initial data
@@ -159,7 +158,6 @@ export class StoreBootstrapService {
 			]),
 		]);
 		console.log('loaded info');
-		console.debug('[merc-memory] loaded info from store-bootstrap', mercenariesCollection);
 
 		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(
 			mergedPrefs.bgsActiveTribesFilter,
@@ -254,7 +252,6 @@ export class StoreBootstrapService {
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 		} as MainWindowState);
-		console.debug('initialWindowState', initialWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}
 
@@ -296,7 +293,6 @@ export class StoreBootstrapService {
 			}
 		}
 		await this.prefs.savePreferences(merged);
-		console.debug('merged prefs', merged);
 		// if (!merged?.opponentOverlayPosition) {
 		// 	console.warn('no-format', 'pref missing overlay position', merged, new Error().stack);
 		// }

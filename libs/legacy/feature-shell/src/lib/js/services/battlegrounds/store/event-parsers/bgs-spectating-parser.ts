@@ -9,7 +9,6 @@ export class BgsSpectatingParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsSpectatingEvent): Promise<BattlegroundsState> {
-		console.debug('spectating', event, currentState.inGame && event.isSpectating, currentState);
 		return currentState.update({
 			spectating: event.isSpectating,
 			inGame: currentState.inGame && event.isSpectating,

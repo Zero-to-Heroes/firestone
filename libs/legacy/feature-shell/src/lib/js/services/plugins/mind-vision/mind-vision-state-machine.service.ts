@@ -93,7 +93,6 @@ export class MindVisionStateMachineService {
 	public async callMindVision<T>(apiCall: () => Promise<T>): Promise<T> {
 		// We are on desktop
 		if (this.currentState.stateId() === CurrentState.IDLE) {
-			console.debug('[mind-vision] [api] calling mind vision while on desktop', apiCall);
 			return null;
 		}
 
@@ -112,12 +111,6 @@ export class MindVisionStateMachineService {
 			await this.waitForActiveState();
 			return this.callMindVision(apiCall);
 		} else {
-			console.debug(
-				'[mind-vision] [api] callMindVision requests success',
-				CurrentState[this.currentState?.stateId()],
-				result,
-				apiCall,
-			);
 			return result;
 		}
 	}
@@ -146,7 +139,6 @@ export class MindVisionStateMachineService {
 			.subscribe();
 
 		this.mindVisionFacade.globalEventListener = async (first: string, second: string) => {
-			console.debug('[mind-vision] enqueueing', first, second);
 			this.globalEventQueue.next({ first, second });
 		};
 		this.mindVisionFacade.memoryUpdateListener = this.memoryUpdateListener;
@@ -155,15 +147,12 @@ export class MindVisionStateMachineService {
 		await this.performAction(Action.STARTUP);
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.debug('[mind-vision] state changed', CurrentState[this.currentState?.stateId()], res);
 			if (this.ow.exitGame(res)) {
 				console.log('[mind-vision] game left', res);
 				this.performTransition(Action.GAME_LEFT);
 			} else if (res.gameChanged) {
 				const inGame = this.ow.gameRunning(res.gameInfo) || (await this.ow.inGame());
-				console.debug('[mind-vision] game changed', res, inGame);
 				if (inGame) {
-					console.debug('[mind-vision] performing GAME_START', res);
 					this.performAction(Action.GAME_START);
 				}
 			}
@@ -173,41 +162,19 @@ export class MindVisionStateMachineService {
 	private async performAction(action: Action, payload: any = null) {
 		// The state has a direct transition to another state
 		const newState = this.getNextState(this.currentState, action);
-		console.debug(
-			'[mind-vision] performing action',
-			CurrentState[this.currentState?.stateId()],
-			'->',
-			Action[action],
-			'->',
-			CurrentState[newState?.stateId()],
-		);
 		if (newState) {
-			console.debug(
-				'[mind-vision] got direct next state',
-				CurrentState[this.currentState?.stateId()],
-				'->',
-				Action[action],
-				'->',
-				CurrentState[newState.stateId()],
-			);
 			await this.setState(newState);
 			return;
 		}
 
 		// No direct transition, we perform the action
 		const transition: Action = await this.currentState.performAction(action, payload);
-		console.debug('[mind-vision] got transition', Action[action], Action[transition]);
 		if (transition) {
 			this.performTransition(transition);
 		}
 	}
 
 	private async performTransition(transition: Action) {
-		console.debug(
-			'[mind-vision] performing transition',
-			Action[transition],
-			CurrentState[this.currentState?.stateId()],
-		);
 		const newState = this.getNextState(this.currentState, transition);
 		if (newState) {
 			await this.setState(newState);
@@ -216,12 +183,6 @@ export class MindVisionStateMachineService {
 
 	private getNextState(currentState: MindVisionState, transition: Action): MindVisionState {
 		const newState = this.fsm[currentState.stateId()].transitions.find((t) => t.transition === transition)?.to;
-		console.debug(
-			'[mind-vision] next state',
-			Action[transition],
-			CurrentState[this.currentState?.stateId()],
-			CurrentState[newState],
-		);
 		return this.states.get(newState);
 	}
 
@@ -234,15 +195,7 @@ export class MindVisionStateMachineService {
 	}
 
 	private async handleGlobalEvent(first: string, second: string) {
-		// console.debug('[mind-vision] processing', first, second);
 		if (this.currentState?.stateId() === CurrentState.RESET) {
-			console.debug(
-				'no-format',
-				'[mind-vision] received global event',
-				CurrentState[this.currentState?.stateId()],
-				first,
-				second,
-			);
 			return;
 		}
 		console.log(

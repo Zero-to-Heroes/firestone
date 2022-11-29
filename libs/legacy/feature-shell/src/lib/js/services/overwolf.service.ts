@@ -143,7 +143,6 @@ export class OverwolfService {
 	public addHotKeyHoldListener(hotkey: string, onDown, onUp): (message: any) => void {
 		// overwolf.settings.registerHotKey(hotkey, callback);
 		const callback = (hotkeyHold) => {
-			console.debug('hold', hotkeyHold);
 			if (hotkeyHold?.name === hotkey) {
 				if (hotkeyHold.state === 'down') {
 					onDown();
@@ -309,7 +308,6 @@ export class OverwolfService {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
 				overwolf.windows.bringToFront(windowId, grabFocus, (result) => {
-					console.debug('brought to front', result);
 					resolve(result);
 				});
 			} catch (e) {
@@ -558,9 +556,7 @@ export class OverwolfService {
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
 		return new Promise<void>((resolve) => {
 			try {
-				console.debug('changing', Math.round(newX), Math.round(newY));
 				overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY), (res) => {
-					console.debug('change res', res);
 					resolve();
 				});
 			} catch (e) {
@@ -574,7 +570,6 @@ export class OverwolfService {
 		return new Promise<void>((resolve) => {
 			try {
 				overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height), (res) => {
-					console.debug('resize res', res);
 					resolve();
 				});
 			} catch (e) {
@@ -912,7 +907,6 @@ export class OverwolfService {
 	public async setTrayMenu(menu: overwolf.os.tray.ExtensionTrayMenu): Promise<void> {
 		return new Promise<void>((resolve) => {
 			overwolf.os.tray.setMenu(menu, (result) => {
-				console.debug('[ow] setTrayMenu', result);
 				resolve();
 			});
 		});

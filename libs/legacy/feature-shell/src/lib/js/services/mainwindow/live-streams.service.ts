@@ -29,7 +29,6 @@ export class LiveStreamsService {
 
 	public async loadLiveStreams(locale?: string) {
 		const result = await this.api.callGetApi<PresenceResult>(LIVE_STREAMS_URL);
-		console.debug('[live-streams] loaded live stream data', result);
 		this.store.send(new LiveStreamsDataLoadedEvent(result));
 	}
 }

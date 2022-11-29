@@ -122,14 +122,12 @@ export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionComp
 							level: merc.Level,
 						};
 					});
-				console.debug('returning', result);
 				return !!result?.length ? result : null;
 			}),
 		);
 	}
 
 	addMerc(merc: Merc) {
-		console.debug('adding merc', merc);
 		this.store.send(new MercenariesAddMercToBackupTeamEvent(merc.id));
 	}
 

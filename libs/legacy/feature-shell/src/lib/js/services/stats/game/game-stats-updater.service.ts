@@ -56,9 +56,7 @@ export class GameStatsUpdaterService {
 	}
 
 	private buildGameStat(reviewId: string, game: GameForUpload): GameStat {
-		// console.debug('uncompressedXmlReplay', game.uncompressedXmlReplay, game);
 		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
-		// console.debug('[debug] parsed replay', replay, game);
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 
@@ -78,7 +76,6 @@ export class GameStatsUpdaterService {
 		}
 
 		const quests = isBattlegrounds(replay.gameType) ? replay.bgsHeroQuests ?? [] : [];
-		console.debug('[game] quests', quests, isBattlegrounds(replay.gameType));
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,
@@ -114,7 +111,6 @@ export class GameStatsUpdaterService {
 			bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],
 			// xpGained: game.xpGained,
 		} as GameStat);
-		console.debug('[game] built firstGame', firstGame);
 
 		const mainStore = this.stateEmitter?.value;
 		if (!isMercenaries(game.gameMode)) {
@@ -139,7 +135,6 @@ export class GameStatsUpdaterService {
 			mercEquipments: mercEquipments,
 			mercOpponentEquipments: mercOpponentEquipments,
 		});
-		console.debug('[game] built game with merc stas', gameWithMercStats);
 		return gameWithMercStats;
 	}
 }
@@ -156,7 +151,6 @@ export const extractHeroTimings = (
 	readonly mercOpponentEquipments: readonly { mercCardId: string; equipmentCardId: string }[];
 } => {
 	const mercStats = extractStats(game as ReviewMessage, replay, null, referenceData, allCards);
-	// console.debug('mercStats', mercStats, game, replay, referenceData, allCards);
 
 	if (!mercStats?.filter((stat) => stat.statName === 'mercs-hero-timing').length) {
 		console.log('no hero timings, returning', mercStats);

@@ -98,7 +98,6 @@ export class PieChartComponent {
 							color: data.color,
 						};
 					});
-				console.debug('build legends', this.legends, this._inputData);
 			} else {
 				this.legends = [];
 			}

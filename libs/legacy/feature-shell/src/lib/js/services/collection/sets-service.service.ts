@@ -80,7 +80,6 @@ export class SetsService {
 		let nameSearch = searchString;
 		let collectibleOnly = true;
 		for (const fragment of fragments) {
-			console.debug('processing fragment', fragment);
 			if (fragment.includes('text:') && fragment.split('text:')[1]) {
 				const textToFind = fragment.split('text:')[1].trim().toLowerCase();
 				filterFunctions.push((card) => card.text && card.text.toLowerCase().includes(textToFind));
@@ -136,7 +135,6 @@ export class SetsService {
 			if (fragment.includes('-rarity:') && fragment.split('-rarity:')[1]) {
 				const rarity = fragment.split('-rarity:')[1].toLowerCase();
 				filterFunctions.push((card: ReferenceCard) => !card.rarity || card.rarity.toLowerCase() !== rarity);
-				console.debug('added -rarity function', filterFunctions, rarity);
 			} else if (fragment.includes('rarity:') && fragment.split('rarity:')[1]) {
 				const rarity = fragment.split('rarity:')[1].toLowerCase();
 				filterFunctions.push((card: ReferenceCard) => card.rarity && card.rarity.toLowerCase() === rarity);

@@ -15,7 +15,7 @@ import { Ability } from './mercenaries-team-ability.component';
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],
 	template: `
-		<div class="mercenary" [ngClass]="{ 'dead': isDead, 'bench': isBench }">
+		<div class="mercenary" [ngClass]="{ dead: isDead, bench: isBench }">
 			<div
 				class="item header"
 				[cardTooltip]="mercCardId"
@@ -71,7 +71,6 @@ export class MercenariesTeamMercenaryComponent {
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => {
 			const abilityCard = this.allCards.getCard(ability.cardId);
-			// console.debug('[ability] ability', ability, abilityCard);
 			return {
 				type: 'ability',
 				cardId: ability.cardId,

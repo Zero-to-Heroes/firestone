@@ -36,7 +36,7 @@ import { uuid } from '../../../services/utils';
 			[ngClass]="{
 				'color-mana-cost': _colorManaCost,
 				'color-class-cards': _colorClassCards,
-				'missing': _isMissing,
+				missing: _isMissing,
 				'linked-card': isLinkedCardHighlight
 			}"
 			[cardTooltip]="cardId"
@@ -189,7 +189,7 @@ export class DeckCardComponent implements OnDestroy {
 		this.updateInfos();
 	}
 
-	@Input() set card(card: VisualDeckCard ) {
+	@Input() set card(card: VisualDeckCard) {
 		this._card = card;
 		this.updateInfos();
 	}
@@ -330,11 +330,6 @@ export class DeckCardComponent implements OnDestroy {
 				)
 				.sort((a, b) => a.timing - b.timing)
 				.map((info) => info.cardId);
-			console.debug(
-				'relatedcardids',
-				this.relatedCardIds,
-				this.cardsHighlightService?.getHighlightedCards(this.cardId, this._side, this._card),
-			);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

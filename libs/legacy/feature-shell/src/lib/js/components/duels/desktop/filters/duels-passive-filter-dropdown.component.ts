@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MultiselectOption } from '@components/filter-dropdown-multiselect.component';
 import { allDuelsPassiveTreasures } from '@firestone-hs/reference-data';
-import { DuelsHeroFilterType } from '@models/duels/duels-hero-filter.type';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
@@ -95,7 +94,6 @@ export class DuelsPassiveFilterDropdownComponent
 	}
 
 	onSelected(option: readonly string[]) {
-		console.debug('selecting', option);
 		this.stateUpdater.next(new DuelsPassivesFilterSelectedEvent(option.filter((o) => !!o)));
 	}
 }

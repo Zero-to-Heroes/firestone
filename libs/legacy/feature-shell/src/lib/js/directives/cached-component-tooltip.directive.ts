@@ -127,7 +127,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			// Pass content to tooltip component instance
 			this.tooltipRef.instance.config = this._componentInput;
 			this.tooltipRef.instance.cssClass = this.cssClass;
-			console.debug('setting css class', this.cssClass, this.tooltipRef.instance);
 		}
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();

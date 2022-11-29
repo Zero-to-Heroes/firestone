@@ -18,15 +18,6 @@ export class SecretWillTriggerParser implements EventParser {
 
 		// Only use the entity Id to avoid creating an empty card (with the card id) as a result
 		const secretCard = deck.otherZone.find((e) => e.entityId === entityId);
-		console.debug('[secret-will-trigger] secretCard', secretCard, currentState, deck);
-		console.debug(
-			'[secret-will-trigger] will show?',
-			cardId && secretCard && !secretCard.cardId && !secretCard.creatorCardId,
-			cardId,
-			secretCard,
-			!secretCard?.cardId,
-			!secretCard?.creatorCardId,
-		);
 
 		// Remove it from the deck if we have an initial decklist?
 		// How to avoid removing it twice (eg a secret is drawn from deck and known in hand, then played)?
@@ -40,16 +31,13 @@ export class SecretWillTriggerParser implements EventParser {
 				deck.deckList.length === 0,
 				true,
 				null,
-				true,
 			);
-			console.debug('[secret-will-trigger] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
 			}
 		}
 
-		console.debug('[secret-will-trigger] returning', newDeck, gameEvent, currentState);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});

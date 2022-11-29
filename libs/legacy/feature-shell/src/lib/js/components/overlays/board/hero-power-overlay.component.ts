@@ -65,7 +65,6 @@ export class HeroPowerOverlayComponent implements AfterViewInit {
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		console.debug('mouse encter', this);
 		this.cardsHighlightService?.onMouseEnter(this._referenceCard?.id, this.side, this._card);
 	}
 

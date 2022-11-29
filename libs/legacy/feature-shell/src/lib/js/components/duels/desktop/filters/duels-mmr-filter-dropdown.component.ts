@@ -39,7 +39,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DuelsMmrFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -92,7 +93,6 @@ export class DuelsMmrFilterDropdownComponent
 	}
 
 	onSelected(option: IOption) {
-		console.debug('selected', option);
 		this.stateUpdater.next(new DuelsMmrFilterSelectedEvent(+option.value as 100 | 50 | 25 | 10 | 1));
 	}
 

@@ -15,20 +15,16 @@ export class ActiveQuestsUpdatedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('[quests] loading rewards track infos');
 		const rewardTrackInfos = await this.memory.getRewardsTrackInfo();
-		console.debug('[quests] loaded rewards track infos', rewardTrackInfos);
 		const rewardTrackInfo: RewardsTrackInfo = rewardTrackInfos?.TrackEntries?.find(
 			(track) => track.TrackType === RewardTrackType.GLOBAL,
 		);
-		console.debug('[quests] loaded rewards track info', rewardTrackInfo, event.data);
 		const newState = currentState.update({
 			quests: currentState.quests.update({
 				activeQuests: event.data,
 				xpBonus: rewardTrackInfo?.XpBonusPercent,
 			}),
 		});
-		console.debug('[quests] newState', newState);
 		return [newState, null];
 	}
 }

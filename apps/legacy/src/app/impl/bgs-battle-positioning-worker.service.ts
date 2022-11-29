@@ -28,7 +28,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	}
 
 	public cancel() {
-		console.debug('cancelling?', this.cancelled);
 		if (this.cancelled) {
 			return;
 		}
@@ -59,7 +58,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 
 		// Build permutations of the main board
 		const permutations: Permutation[] = permutator(initialBoard);
-		console.debug('permutations', Date.now() - start, permutations);
 		if (this.cancelled) {
 			return [ProcessingStatus.CANCELLED, null];
 		}
@@ -73,7 +71,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			100,
 			50,
 		);
-		console.debug('first step', Date.now() - start, sortedPermutations.length, sortedPermutations);
 		if (this.cancelled) {
 			return [ProcessingStatus.CANCELLED, null];
 		}
@@ -87,7 +84,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			400,
 			50,
 		);
-		console.debug('second step', Date.now() - start, sortedPermutations2.length, sortedPermutations2);
 		if (this.cancelled) {
 			return [ProcessingStatus.CANCELLED, null];
 		}
@@ -101,7 +97,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			4000,
 			1,
 		);
-		console.debug('topPermutationsResults', Date.now() - start, topPermutationsResults);
 		if (this.cancelled) {
 			return [ProcessingStatus.CANCELLED, null];
 		}
@@ -116,7 +111,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			},
 			result: topPermutationsResults[0].result,
 		};
-		console.debug('result', Date.now() - start, result);
 		return [ProcessingStatus.DONE, result];
 	}
 
@@ -129,16 +123,13 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	): Promise<InternalPermutationResult[]> {
 		// Split it in chunks to use multiple CPUs in parallel
 		const chunkSize = Math.ceil(permutations.length / this.cpuCount);
-		console.debug('chunkSize', chunkSize);
 		const chunks: Chunk[] = chunk(permutations, chunkSize);
 
 		// Work on each permutation in its own worker
 		const chunkResults: InternalPermutationResult[][] = await Promise.all(
 			chunks.map((chunk) => this.buildRoughResults(battleInfo, chunk, numberOfSims, maxDuration)),
 		);
-		// console.debug('chunk results', chunkResults);
 		const permutationResults: InternalPermutationResult[] = chunkResults.reduce((a, b) => a.concat(b), []);
-		// console.debug('permutationResults', permutationResults);
 
 		// Sort the permutations by winrate
 		const sortedPermutations = [...permutationResults].sort((a, b) => {
@@ -149,7 +140,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 				a.result.lostLethalPercent - b.result.lostLethalPercent
 			);
 		});
-		// console.debug('sortedPermutations', sortedPermutations);
 
 		// Now decide which ones to keep
 		const result = sortedPermutations.splice(0, minResultsToKeep);

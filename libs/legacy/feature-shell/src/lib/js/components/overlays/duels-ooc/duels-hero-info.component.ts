@@ -95,7 +95,6 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 })
 export class DuelsHeroInfoComponent {
 	@Input() set heroInfo(value: DuelsHeroInfo) {
-		// console.debug('setting hero info', value);
 		this.heroPortrait = this.i18n.getCardImage(value.cardId, { isHighRes: true, isHeroSkin: true });
 		this.name = value.name;
 		this.globalWinrate = value.globalWinrate;
@@ -115,7 +114,6 @@ export class DuelsHeroInfoComponent {
 		this.totalDecks = value.topDecks.length;
 		this.decks = value.topDecks.slice(0, 6);
 		this.totalRuns = value.globalTotalMatches;
-		// console.debug('globalWinDistrib', this.globalWinDistribution, value.globalWinDistribution, value);
 	}
 
 	heroPortrait: string;

@@ -42,7 +42,6 @@ export class TavernBrawlService {
 		}
 
 		const result = await this.api.callGetApi<TavernBrawlStats>(TAVERN_BRAWL_URL);
-		console.debug('[live-streams] loaded remote tavern-brawl stats', result);
 		if (result == null) {
 			return;
 		}

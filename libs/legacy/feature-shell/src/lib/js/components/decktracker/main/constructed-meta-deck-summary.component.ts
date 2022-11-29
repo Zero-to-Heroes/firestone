@@ -51,7 +51,6 @@ import { sortByProperties } from '../../../services/utils';
 })
 export class ConstructedMetaDeckSummaryComponent {
 	@Input() set deck(value: DeckStat) {
-		console.debug('setting deck stat', value);
 		const deckDefinition = decode(value.deckstring);
 		const heroCard = this.allCards.getCardFromDbfId(deckDefinition.heroes[0]);
 		this.classIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
@@ -97,7 +96,7 @@ export class ConstructedMetaDeckSummaryComponent {
 	}
 
 	showDeck() {
-		console.debug('showing deck');
+		console.log('showing deck');
 	}
 
 	private formatGamesCount(value: number): number {

@@ -13,7 +13,6 @@ export class ReconnectOverParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
-		console.debug('[reconnect-over-parser] applying reconnect over event', gameEvent, currentState);
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
 			new DeckstringOverrideEvent(currentState.playerDeck.name, currentState.playerDeck.deckstring, 'player'),
@@ -32,12 +31,6 @@ export class ReconnectOverParser implements EventParser {
 			mulliganOver: true,
 			reconnectOngoing: false,
 		} as GameState);
-		console.debug(
-			'after applying reconnect over event',
-			result,
-			stateAfterOpponentDeckUpdate,
-			stateAfterPlayerDeckUpdate,
-		);
 		return result;
 	}
 

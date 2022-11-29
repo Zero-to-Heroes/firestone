@@ -12,7 +12,6 @@ export class MercenariesSpeedParser implements MercenariesParser {
 
 	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
-		console.debug('[merc-speed-parser] changing speed', event);
 		if (!localPlayer) {
 			console.error('[merc-speed-parser] no local player present', event);
 			return battleState;
@@ -43,10 +42,8 @@ export class MercenariesSpeedParser implements MercenariesParser {
 			// from a base ability (like Archdruid's Rage/Blessing which are variations of Malfurion's
 			// Archdruid's Call)
 			// In that case, we simply ignore the speed change
-			console.debug('created empty ability for speed', abilityOwner, newMerc, event, battleState);
 			return battleState;
 		}
-		console.debug('[merc-speed-parser] newMerc', newMerc);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,

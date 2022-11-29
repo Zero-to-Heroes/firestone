@@ -9,10 +9,6 @@ export class GenericStorageService {
 	constructor(private readonly localStorageService: LocalStorageService) {}
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
-		// console.debug('saving user prefs', preferences, preferences?.opponentOverlayPosition, new Error().stack);
-		// if (!preferences?.opponentOverlayPosition) {
-		// 	console.warn('no-format', 'pref missing overlay position', preferences, new Error().stack);
-		// }
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_USER_PREFERENCES, preferences);
 		return preferences;
 	}

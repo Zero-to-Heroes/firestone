@@ -210,7 +210,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				: // We haven't been able to get the list of visitors
 				  null
 			: Math.max(0, currentTaskStep);
-		console.debug('currentStep', refMerc.name, currentStep, visitors, visitorInfo);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -297,15 +296,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				.reduce((a, b) => a + b, 0);
 			const cardDbfId = refEquip.tiers.find((tier) => tier.tier === currentUnlockedTier)?.cardDbfId;
 			const equipmentCard = this.allCards.getCardFromDbfId(cardDbfId);
-			// console.debug(
-			// 	'equipments',
-			// 	refMerc.name,
-			// 	equipmentCard.name,
-			// 	equipmentCard,
-			// 	baseEquipmentCard,
-			// 	refEquip,
-			// 	memEquip,
-			// );
 			const tierIndex =
 				currentUnlockedTier > 0
 					? [...refEquip.tiers]
@@ -313,15 +303,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 							.map((e) => e.tier)
 							.indexOf(currentUnlockedTier)
 					: null;
-			// console.debug(
-			// 	'tierIndex',
-			// 	refMerc.name,
-			// 	equipmentCard.name,
-			// 	tierIndex,
-			// 	currentUnlockedTier,
-			// 	[...refEquip.tiers].sort(sortByProperties((e) => [e.tier])).map((e) => e.tier),
-			// 	refEquip,
-			// );
 			// Some equipments that only have 1 or 2 tiers still number their tiers as 1, 2, etc. while we would expect
 			// them to be 3, 4
 			const actualTier = tierIndex != null ? tierIndex + 1 + (4 - refEquip.tiers.length) : null;
@@ -393,7 +374,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 		const sortedTasks = [...(taskChain?.tasks ?? [])].sort((a, b) => a.id - b.id);
 		const currentTask = sortedTasks[currentStep];
-		// console.debug('currentTask', taskChain.mercenaryVisitorId, taskChain.mercenaryId, currentTask);
 		if (!currentTask) {
 			return null;
 		}
@@ -401,7 +381,6 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const isTaskOngoing =
 			visitorInfo?.TaskChainProgress === currentStep &&
 			(visitorInfo?.Status === TaskStatus.ACTIVE || visitorInfo?.Status === TaskStatus.NEW);
-		// console.debug('isTaskOngoing', isTaskOngoing, visitorInfo, currentStep);
 		const taskLabel = isTaskOngoing
 			? this.i18n.translateString(`mercenaries.hero-stats.current-task-tooltip-title`, {
 					taskNumber: currentStep + 1,

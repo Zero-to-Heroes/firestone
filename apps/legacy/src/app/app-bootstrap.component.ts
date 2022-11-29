@@ -10,9 +10,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { from, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
-import { AbstractSubscriptionComponent } from '../../../../libs/legacy/feature-shell/src/lib/js/components/abstract-subscription.component';
 import { OverwolfService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/overwolf.service';
-import { AppUiStoreFacadeService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'app-bootstrap',
@@ -43,9 +41,7 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly titleService: Title,
 		private readonly cdr: ChangeDetectorRef,
-	) {
-		console.debug('[bootstrap] constructing', ow, titleService, cdr);
-	}
+	) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
@@ -55,7 +51,6 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 
 	ngAfterContentInit(): void {
 		this.currentWindowName$ = from(this.ow.getCurrentWindow()).pipe(
-			tap((info) => console.debug('window info', info)),
 			map((currentWindow) => this.mapWindowName(currentWindow.name)),
 			distinctUntilChanged(),
 			tap(() =>

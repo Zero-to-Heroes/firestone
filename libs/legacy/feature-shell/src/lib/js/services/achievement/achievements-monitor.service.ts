@@ -58,7 +58,6 @@ export class AchievementsMonitor {
 		}
 
 		await this.store.initComplete();
-		console.debug('init achievements service');
 		await this.initQuotas();
 
 		this.lastReceivedTimestamp = Date.now();
@@ -120,7 +119,6 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		console.debug('[achievement-monitor] detecting achievements from memory');
 		const [existingAchievements, achievementsProgress] = await Promise.all([
 			this.achievementsManager.getAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
@@ -128,15 +126,6 @@ export class AchievementsMonitor {
 		const computedProgress: readonly HsAchievementInfo[] = achievementsProgress?.achievements?.length
 			? achievementsProgress.achievements
 			: this.achievementsDiff(this.previousAchievements, existingAchievements);
-		if (process.env.NODE_ENV !== 'production') {
-			console.debug(
-				'[achievement-monitor] computed progress',
-				computedProgress,
-				achievementsProgress,
-				this.previousAchievements,
-				existingAchievements,
-			);
-		}
 		const unlockedAchievements = computedProgress
 			?.filter((progress) => progress.progress >= this.achievementQuotas[progress.id])
 			.map((progress) => progress.id)
@@ -163,14 +152,6 @@ export class AchievementsMonitor {
 			unlockedAchievements?.map((a) => a.id),
 		);
 		if (!unlockedAchievements.length) {
-			if (process.env.NODE_ENV !== 'production') {
-				console.debug(
-					'[achievement-monitor] nothing from memory',
-					existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
-					achievementsProgress, // This has the correct progress
-					unlockedAchievements,
-				);
-			}
 			setTimeout(() => {
 				this.detectNewAchievementFromMemory(retriesLeft - 1, true);
 				return;

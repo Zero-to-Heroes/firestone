@@ -16,12 +16,6 @@ export class CardsFacadeService {
 			let retriesLeft = 50;
 			this.service = this.ow?.getMainWindow()?.cards;
 			while (!this.service && this.ow && retriesLeft >= 0) {
-				console.debug(
-					'[cards] cards service not initialized yet, retrying',
-					retriesLeft,
-					this.ow,
-					this.ow?.getMainWindow(),
-				);
 				await sleep(500);
 				this.service = this.ow?.getMainWindow()?.cards;
 				retriesLeft--;
@@ -30,7 +24,6 @@ export class CardsFacadeService {
 				console.error('[cards] cards service should have been initialized', new Error().stack);
 				reject();
 			} else {
-				console.debug('[cards] cards service initialized');
 				resolve();
 			}
 		});

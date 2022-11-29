@@ -3,11 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesReferenceData } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import {
-	isMercenaries,
-	isMercenariesPvP,
-	normalizeMercenariesCardId,
-} from '../../../services/mercenaries/mercenaries-utils';
+import { isMercenariesPvP, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
@@ -66,18 +62,11 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent i
 					?.filter((stat) => isMercenariesPvP(stat.gameMode))
 					.filter((stat) => (mmrThreshold === 0 ? true : stat.playerRank && +stat.playerRank >= mmrThreshold))
 					.filter((stat) => !!stat.mercHeroTimings?.length);
-				console.debug(
-					'[mercs-pvp] relevantStats',
-					relevantStats,
-					gameStats?.filter((stat) => isMercenaries(stat.gameMode)),
-					gameStats?.filter((stat) => stat.reviewId === 'e25f0e9b-6c95-49b2-a765-609943e8a9bb'),
-				);
 				const groupedByTeam = groupByFunction((stat: GameStat) =>
 					this.normalizeMercDecklist(stat.mercHeroTimings, referenceData),
 				)(relevantStats);
 				const teams = Object.keys(groupedByTeam)
 					.map((mercIds) => {
-						// console.debug('building team for', mercIds, groupedByTeam);
 						const gamesForTeam = groupedByTeam[mercIds];
 						const mercenariesCardIds = mercIds.split(',');
 						return {

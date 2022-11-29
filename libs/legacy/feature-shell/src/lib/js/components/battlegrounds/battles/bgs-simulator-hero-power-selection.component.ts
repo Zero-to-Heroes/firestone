@@ -90,7 +90,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						*ngFor="let hero of allHeroes"
 						class="hero-portrait-frame"
-						[ngClass]="{ 'selected': hero.id === currentHeroId }"
+						[ngClass]="{ selected: hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
 						[cardTooltip]="hero.id"
 					>
@@ -107,7 +107,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsSimulatorHeroPowerSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string, heroPowerInfo: number) => void;
 
@@ -194,9 +195,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 								: this.allCards.getCard(getHeroPower(card.id, this.allCards)),
 						)
 						.map((card) => card.id);
-					console.debug('allcardids', allCardIds);
 					const uniqueCardIds = Array.from(new Set(allCardIds));
-					console.debug('uniqueCardIds', uniqueCardIds);
 					const result = uniqueCardIds
 						.map((card) => this.allCards.getCard(card))
 						.map((card) => ({
@@ -206,7 +205,6 @@ export class BgsSimulatorHeroPowerSelectionComponent
 							text: this.sanitizeText(card.text),
 						}))
 						.sort(sortByProperties((hero: HeroPower) => [hero.name]));
-					console.debug('result', result);
 					return result;
 				}),
 			)

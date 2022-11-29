@@ -136,13 +136,11 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	async reset() {
-		console.debug('resetting deck stats', this._deck);
 		if (!this._deck) {
 			return;
 		}
 
 		if (!this.confirmationShown) {
-			console.debug('showing confirmation', this.confirmationShown);
 			this.confirmationShown = true;
 			this.resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-are-you-sure');
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -163,7 +161,6 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		console.debug('[winrate-matrix] deck ', this._deck);
 		const totalRow: MatchupStat = buildTotalMatchupStats(this._deck?.matchupStats ?? []);
 		this.matchups = [...(this._deck?.matchupStats ?? buildDefaultMatchupStats()), totalRow];
 		this.pieChartData = this.buildPieChartData();

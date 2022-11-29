@@ -33,7 +33,6 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 			return battleState;
 		}
 		if (!cardId) {
-			console.debug('[merc-hero-revealed-parser] no card Id', event);
 			return battleState;
 		}
 
@@ -59,7 +58,6 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 			return battleState;
 		}
 
-		// console.debug('turnsElapsed', turnsElapsed, battleState.currentTurn, battleState);
 		const newTeam = team.updateMercenary(
 			entityId,
 			BattleMercenary.create({

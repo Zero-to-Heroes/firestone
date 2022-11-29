@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSummary, DeckSummaryVersion } from '../../../models/mainwindow/decktracker/deck-summary';
@@ -88,7 +88,6 @@ export class DecksProviderService {
 						);
 					},
 				),
-				tap((info) => console.debug('[decks-provider] rebuilt decks', info)),
 			)
 			.subscribe(this.decks$);
 	}
@@ -160,7 +159,6 @@ export class DecksProviderService {
 					links.versions.map((v) => v.deckstring).includes(deck.deckstring),
 				)?.versions[0].deckstring ?? deck.deckstring,
 		)(decks);
-		console.debug('[deck], groupedByVersion', groupedByVersion, constructedDeckVersions);
 		return Object.values(groupedByVersion).map((versions) =>
 			this.groupDeckVersions(versions, desktopDeckHiddenDeckCodes),
 		);
@@ -241,7 +239,6 @@ export class DecksProviderService {
 		const validDeckstrings = !!deckForDeckstring
 			? deckForDeckstring.allVersions?.map((v) => v.deckstring)
 			: [deckstring];
-		// console.debug('')
 
 		const statsWithReset = stats
 			.filter((stat) => validDeckstrings.includes(stat.playerDecklist))

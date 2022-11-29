@@ -16,12 +16,10 @@ export class MailboxMarkMessageReadProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
 		// if (prefs.mailboxLastVisitDate < new Date(event.message.date)) {
-		console.debug('[mailbox] will save last update date', prefs.mailboxLastVisitDate, event.message);
 		const newPrefs = await this.prefs.savePreferences({
 			...prefs,
 			mailboxLastVisitDate: new Date(event.message.date),
 		} as Preferences);
-		console.debug('[mailbox] after save', newPrefs.mailboxLastVisitDate);
 		// }
 		return [null, null];
 	}

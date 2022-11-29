@@ -77,7 +77,6 @@ export class QuestsService {
 
 		locale = locale ?? (await this.prefs.getPreferences()).locale;
 		const result = await this.api.callGetApi<QuestsInfo>(REFERENCE_QUESTS_URL.replace('%locale%', locale));
-		console.debug('[quests] loaded remote reference quests', result);
 		this.localStorage.setItem('reference-quests', result);
 		this.store.send(new ReferenceQuestsLoadedEvent(result));
 	}

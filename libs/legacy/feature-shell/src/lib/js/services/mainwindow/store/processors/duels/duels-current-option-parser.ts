@@ -48,7 +48,6 @@ export class DuelsCurrentOptionParser implements Processor {
 		let retriesLeft = 15;
 		let result = await this.memory.getDuelsHeroPowerOptions();
 		while (retriesLeft >= 0 && (!result?.length || result.some((option) => option.DatabaseId === 0))) {
-			console.debug('[duels-current-option-parser] hero powers not ready yet, retrying', result);
 			await sleep(500);
 			result = await this.memory.getDuelsHeroPowerOptions();
 			retriesLeft--;
@@ -60,7 +59,6 @@ export class DuelsCurrentOptionParser implements Processor {
 		let retriesLeft = 15;
 		let result = await this.memory.getDuelsSignatureTreasureOptions();
 		while (retriesLeft >= 0 && (!result?.length || result.some((option) => option.DatabaseId === 0))) {
-			console.debug('[duels-current-option-parser] signature treasures not ready yet, retrying', result);
 			await sleep(500);
 			result = await this.memory.getDuelsSignatureTreasureOptions();
 			retriesLeft--;

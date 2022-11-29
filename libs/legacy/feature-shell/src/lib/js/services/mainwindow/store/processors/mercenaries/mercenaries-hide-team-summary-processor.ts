@@ -15,7 +15,6 @@ export class MercenariesHideTeamSummaryProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const newHiddenTeams = [...currentPrefs.mercenariesHiddenTeamIds, event.teamId];
-		console.debug('newHiddenTeams', newHiddenTeams);
 		await this.prefs.updateMercenariesHiddenTeamIds(newHiddenTeams);
 		return [null, null];
 	}

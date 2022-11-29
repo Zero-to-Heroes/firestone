@@ -16,7 +16,6 @@ export class GameStatusService {
 	private async init() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res)) {
-				console.debug('leaving game');
 				this.listeners.forEach((cb) => cb());
 			}
 		});

@@ -310,9 +310,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				const cardDbfIds = Object.values(groupedCards).map(
 					(cards) => [this.allCards.getCard(cards[0]).dbfId, cards.length] as [number, number],
 				);
-				console.debug('getting default hero', currentClass);
 				const heroDbfId = getDefaultHeroDbfIdForClass(currentClass);
-				console.debug('heroDbfId', heroDbfId, currentClass);
 				const deckDefinition: DeckDefinition = {
 					format:
 						currentFormat === 'classic'
@@ -369,7 +367,6 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	}
 
 	addCard(card: DeckBuilderCard) {
-		console.debug('adding card', this.currentDeckCards.value);
 		if (this.currentDeckCards.value?.includes(card.cardId)) {
 			if (this.allCards.getCard(card.cardId).rarity === 'Legendary') {
 				return;

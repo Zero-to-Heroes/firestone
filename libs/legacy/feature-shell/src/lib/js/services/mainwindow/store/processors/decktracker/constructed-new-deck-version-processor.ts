@@ -14,10 +14,8 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('[deck] processing new version', event, currentState);
 		const prefs = await this.prefs.getPreferences();
 		const versionLinks = prefs.constructedDeckVersions;
-		console.debug('[deck] existing versionLinks', versionLinks);
 		const link: ConstructedDeckVersions = this.addVersion(
 			this.findExistingVersion(versionLinks, event.previousVersionDeckstring),
 			event.newVersionDeckstring,
@@ -28,14 +26,12 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 			) ?? {
 				versions: [{ deckstring: event.previousVersionDeckstring }, { deckstring: event.newVersionDeckstring }],
 			};
-		console.debug('[deck] newLink', link);
 		const newVersionLinks = [
 			...versionLinks.filter(
 				(link) => !link.versions.map((v) => v.deckstring).includes(event.previousVersionDeckstring),
 			),
 			link,
 		];
-		console.debug('[deck] newVersionLinks', newVersionLinks);
 
 		await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 		return [null, null];
@@ -52,7 +48,6 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 		if (!existing) {
 			return null;
 		}
-		console.debug('[deck] addVersion', existing, newVersion);
 		return {
 			...existing,
 			versions: [...existing.versions, { deckstring: newVersion }],

@@ -18,7 +18,6 @@ export class DoubleClickDirective implements AfterViewInit {
 		const dblClickEvent = fromEvent<MouseEvent>(el, 'dblclick');
 		const eventsMerged = merge(clickEvent, dblClickEvent).pipe(debounceTime(300));
 		eventsMerged.subscribe((event) => {
-			console.debug('handling event', event);
 			if (event.type === 'click') {
 				this.exClick.next(event);
 			} else {

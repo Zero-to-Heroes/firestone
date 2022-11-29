@@ -20,11 +20,6 @@ export class MinionBackOnBoardParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
 
-		// const debug = entityId === 3719;
-		// if (debug) {
-		// 	console.debug('handling minion back on board', entityId, card);
-		// }
-
 		const newOtherZone: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.otherZone,
 			cardId,
@@ -35,13 +30,10 @@ export class MinionBackOnBoardParser implements EventParser {
 			creatorCardId: creatorCardId,
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
-			putIntoPlay: true
+			putIntoPlay: true,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
-		// if (debug) {
-		// 	console.debug('added card to board', newBoard);
-		// }
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOtherZone,
 			board: newBoard,

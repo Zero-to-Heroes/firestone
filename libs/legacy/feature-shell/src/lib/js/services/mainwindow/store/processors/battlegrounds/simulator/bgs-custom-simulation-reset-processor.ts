@@ -11,9 +11,7 @@ export class BgsCustomSimulationResetProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('handling simulation reset event', event);
 		const newState = currentState.battlegrounds.customSimulationState.resetFaceOff();
-		console.debug('newState', newState);
 		return [
 			currentState.update({
 				battlegrounds: currentState.battlegrounds.update({

@@ -118,23 +118,12 @@ export class BgsGame {
 		}
 
 		const lastFaceOff = matchingFaceOffs[0];
-		console.debug(
-			'[bgs-next-opponent] found face-off',
-			lastFaceOff,
-			matchingFaceOffs,
-			this.faceOffs,
-			opponentHeroCardId,
-			faceOff,
-		);
 		const updatedFaceOff = lastFaceOff.update(faceOff);
 		updatedFaceOff.checkIntegrity(this);
-		console.debug('[bgs-next-opponent] updated face-off', updatedFaceOff, this.faceOffs);
 		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = this.faceOffs.map((f) =>
 			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);
-		console.debug('[bgs-next-opponent] updated face-offs', updatedFaceOffs, this.faceOffs);
 		const cleanedFaceOffs = this.removeOldSimulationDetails(updatedFaceOffs);
-		console.debug('[bgs-next-opponent] cleaned face-offs', cleanedFaceOffs);
 		return this.update({
 			faceOffs: cleanedFaceOffs,
 		} as BgsGame);

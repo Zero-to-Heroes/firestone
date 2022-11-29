@@ -24,7 +24,6 @@ export class LazyDataInitService {
 	) {}
 
 	public requestLoad(dataType: StateDataType) {
-		console.debug('requesting load', dataType);
 		switch (dataType) {
 			case 'constructed-meta-decks':
 				return this.constructedMetaDecksStateBuilder.loadInitialStats();

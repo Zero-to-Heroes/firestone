@@ -589,7 +589,6 @@ export class PreferencesService {
 			...prefs.desktopDeckDeletes,
 			[deckstring]: newDeleteDates,
 		};
-		console.debug('newDelete', newDelete);
 		const newPrefs: Preferences = { ...prefs, desktopDeckDeletes: newDelete };
 		await this.savePreferences(newPrefs);
 		return newPrefs;
@@ -601,7 +600,6 @@ export class PreferencesService {
 			...prefs.duelsDeckDeletes,
 			[deckstring]: newDeleteDates,
 		};
-		console.debug('newDelete', newDelete);
 		const newPrefs: Preferences = { ...prefs, duelsDeckDeletes: newDelete };
 		await this.savePreferences(newPrefs);
 		return newPrefs;
@@ -674,7 +672,6 @@ export class PreferencesService {
 		const resultWithDate: Preferences = Preferences.deserialize(result);
 		this.currentSyncDate = resultWithDate.lastUpdateDate;
 		this.lastSyncPrefs = resultWithDate;
-		console.debug('[preferences] remote prefs', result, resultWithDate);
 		return resultWithDate;
 	}
 
@@ -689,15 +686,7 @@ export class PreferencesService {
 		console.warn('prefs are not synced for now');
 		return;
 		setInterval(async () => {
-			console.debug('[preferences] checking prefs update', this.currentSyncDate);
 			const userPrefs = await this.getPreferences();
-			console.debug(
-				'[preferences] got local prefs',
-				userPrefs.lastUpdateDate,
-				this.currentSyncDate,
-				this.currentSyncDate?.getTime(),
-				userPrefs.lastUpdateDate?.getTime(),
-			);
 			if (
 				!!userPrefs.lastUpdateDate &&
 				(!this.currentSyncDate || userPrefs.lastUpdateDate.getTime() > this.currentSyncDate.getTime())

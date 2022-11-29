@@ -25,7 +25,6 @@ import { CardsByCost } from './cards-by-cost';
 })
 export class DeckManaCurveComponent implements AfterViewInit {
 	@Input() set deckstring(value: string) {
-		console.debug('setting deckstring', value);
 		if (!value) {
 			return;
 		}

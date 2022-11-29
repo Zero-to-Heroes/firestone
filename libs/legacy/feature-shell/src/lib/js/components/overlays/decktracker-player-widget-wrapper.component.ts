@@ -35,7 +35,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class DecktrackerPlayerWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
@@ -63,7 +64,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest(
@@ -90,24 +90,20 @@ export class DecktrackerPlayerWidgetWrapperComponent
 					displayFromGameMode,
 				]) => {
 					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
-						// console.debug('should show?', false);
 						return false;
 					}
 
 					if (!decktrackerCloseOnGameEnd) {
-						// console.debug('should show?', displayFromGameMode);
 						return displayFromGameMode;
 					}
 
 					// We explicitely don't check for null, so that if the memory updates are broken
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
-						// console.debug('should show?', false);
 						return false;
 					}
 
 					const result = !gameEnded && totalCardsInZones > 0;
-					// console.debug('should show?', result);
 					return result;
 				},
 			),

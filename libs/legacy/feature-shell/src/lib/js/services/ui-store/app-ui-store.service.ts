@@ -164,11 +164,8 @@ export class AppUiStoreService {
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return combineLatest(this.mainStore.asObservable(), this.prefs.asObservable()).pipe(
 			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
-			// tap(([[main, nav], prefs]) => console.debug('emitting', [main, nav, prefs?.preferences], this)),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
-			// tap((info) => console.debug('before equal')),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			// tap((info) => console.debug('after equal')),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
 	}
 
@@ -197,7 +194,6 @@ export class AppUiStoreService {
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.deckStore.asObservable().pipe(
 			filter((gameState) => !!gameState),
-			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }>;
@@ -299,8 +295,9 @@ export class AppUiStoreService {
 	}
 
 	private initTavernBrawl() {
-		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (this.ow.getMainWindow()
-			.tavernBrawlProvider as TavernBrawlService).tavernBrawl$;
+		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (
+			this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService
+		).tavernBrawl$;
 		tavernBrawl.subscribe(this.tavernBrawl);
 	}
 
@@ -310,30 +307,30 @@ export class AppUiStoreService {
 	}
 
 	private initDuelsDecks() {
-		console.debug('duels decks', this.ow.getMainWindow().duelsDecksProvider);
-		const duelsDecks: BehaviorSubject<readonly DuelsDeckSummary[]> = (this.ow.getMainWindow()
-			.duelsDecksProvider as DuelsDecksProviderService).duelsDecks$;
+		const duelsDecks: BehaviorSubject<readonly DuelsDeckSummary[]> = (
+			this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService
+		).duelsDecks$;
 		duelsDecks.subscribe(this.duelsDecks);
 	}
 
 	private initDuelsRuns() {
-		console.debug('duels runs', this.ow.getMainWindow().duelsDecksProvider);
-		const duelsRuns: BehaviorSubject<readonly DuelsRun[]> = (this.ow.getMainWindow()
-			.duelsDecksProvider as DuelsDecksProviderService).duelsRuns$;
+		const duelsRuns: BehaviorSubject<readonly DuelsRun[]> = (
+			this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService
+		).duelsRuns$;
 		duelsRuns.subscribe(this.duelsRuns);
 	}
 
 	private initDecks() {
-		console.debug('decks', this.ow.getMainWindow().decksProvider);
-		const decks$: BehaviorSubject<readonly DeckSummary[]> = (this.ow.getMainWindow()
-			.decksProvider as DecksProviderService).decks$;
+		const decks$: BehaviorSubject<readonly DeckSummary[]> = (
+			this.ow.getMainWindow().decksProvider as DecksProviderService
+		).decks$;
 		decks$.subscribe(this.decks);
 	}
 
 	private initGameStats() {
-		console.debug('gameStatsProvider', this.ow.getMainWindow().gameStatsProvider);
-		const gameStats$: BehaviorSubject<readonly GameStat[]> = (this.ow.getMainWindow()
-			.gameStatsProvider as GameStatsProviderService).gameStats$;
+		const gameStats$: BehaviorSubject<readonly GameStat[]> = (
+			this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService
+		).gameStats$;
 		gameStats$.subscribe(this.gameStats);
 	}
 
@@ -446,9 +443,7 @@ export class AppUiStoreService {
 						] as [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsStatTypeFilterType],
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				// tap((info) => console.debug('ready for duels hero stats', info)),
 				map(([duelStats, duelsRuns, statType]) => buildDuelsHeroPlayerStats(duelStats, statType, duelsRuns)),
-				// tap((info) => console.debug('after duels hero stats', info)),
 			)
 			.subscribe((stats) => this.duelsHeroStats.next(stats));
 	}
@@ -492,7 +487,6 @@ export class AppUiStoreService {
 				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
 					return buildHeroStats(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
 				}),
-				// tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
 	}

@@ -53,7 +53,6 @@ export class GlobalStatsService {
 		});
 		this.localStorage.setItem('user-global-stats', remoteData?.result);
 		console.log('loaded remote globalStats');
-		console.debug('global stats', remoteData);
 		this.store.send(new GlobalStatsLoadedEvent(remoteData?.result));
 		return remoteData;
 	}

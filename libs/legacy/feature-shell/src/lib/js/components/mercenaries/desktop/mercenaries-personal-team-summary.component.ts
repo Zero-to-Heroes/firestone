@@ -18,7 +18,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-team-summary.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-personal-team-summary" [ngClass]="{ 'hidden': hidden }">
+		<div class="mercenaries-personal-team-summary" [ngClass]="{ hidden: hidden }">
 			<div class="team-name" [helpTooltip]="teamNameTooltip">{{ teamName }}</div>
 			<div class="team-image">
 				<div class="heroes-container bench">
@@ -108,7 +108,6 @@ export class MercenariesPersonalTeamSummaryComponent {
 		const bench = value.mercenariesCardIds
 			.map((cardId) => normalizeMercenariesCardId(cardId))
 			.filter((cardId) => !mostFrequentStarterTeam.includes(cardId));
-		// console.debug('starters', mostFrequentStarterTeam, 'bench', bench, value);
 		if (bench.length > 3 && mostFrequentStarterTeam.length < 3) {
 			mostFrequentStarterTeam = [
 				...mostFrequentStarterTeam,

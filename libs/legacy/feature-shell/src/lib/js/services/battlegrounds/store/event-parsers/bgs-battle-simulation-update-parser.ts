@@ -17,7 +17,6 @@ export class BgsBattleSimulationUpdateParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsBattleSimulationUpdateEvent,
 	): Promise<BattlegroundsState> {
-		console.debug('handling simulation update event', event);
 		const merged = BgsFaceOffWithSimulation.create(
 			deepmerge(
 				event.currentFaceOff as Partial<BgsFaceOffWithSimulation>,
@@ -27,7 +26,6 @@ export class BgsBattleSimulationUpdateParser implements EventParser {
 				},
 			),
 		);
-		console.debug('merged', merged, event.currentFaceOff, event.partialUpdate);
 
 		const panel: BgsBattlesPanel = currentState.panels.find(
 			(p: BgsPanel) => p.id === 'bgs-battles',
@@ -41,7 +39,6 @@ export class BgsBattleSimulationUpdateParser implements EventParser {
 		const newPanel = panel.update({
 			currentSimulations: newSimulations,
 		} as BgsBattlesPanel);
-		console.debug('new panel', newPanel);
 		return currentState.updatePanel(newPanel);
 	}
 }

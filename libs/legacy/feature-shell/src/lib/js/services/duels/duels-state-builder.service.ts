@@ -158,7 +158,6 @@ export class DuelsStateBuilderService {
 	public async loadBuckets(): Promise<readonly DuelsBucketsData[]> {
 		const result: readonly DuelsBucketsData[] = await this.api.callGetApi(DUELS_BUCKETS_URL);
 		console.log('[duels-state-builder] loaded buckets data', result?.length);
-		console.debug('[duels-state-builder] loaded buckets data', result);
 		return (
 			result
 				?.map(
@@ -166,7 +165,7 @@ export class DuelsStateBuilderService {
 						({
 							...bucket,
 							bucketClasses: bucket.bucketClasses.map(
-								(bucketClass) => CardClass[(bucketClass as any) as string],
+								(bucketClass) => CardClass[bucketClass as any as string],
 							),
 						} as DuelsBucketsData),
 				)
@@ -203,16 +202,6 @@ export class DuelsStateBuilderService {
 			DUELS_GLOBAL_STATS_URL_SPLIT.replace('%mmr%', '' + mmr).replace('%date%', prefs.duelsActiveTimeFilter),
 		);
 		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
-		console.debug('[duels-state-builder] loaded global stats', result);
-
-		// const temp: DuelsStat = await this.api.callGetApi(DUELS_GLOBAL_STATS_URL);
-		// console.debug(
-		// 	'[duels-state-builder] old stats',
-		// 	temp,
-		// 	temp.heroes
-		// 		.filter((stat) => stat.mmrPercentile === prefs.duelsActiveMmrFilter)
-		// 		.filter((stat) => stat.date === prefs.duelsActiveTimeFilter),
-		// );
 		return result;
 	}
 
@@ -450,7 +439,6 @@ export class DuelsStateBuilderService {
 
 	private async updateDuelsInfo() {
 		const duelsInfo = await this.memory.getDuelsInfo();
-		console.debug('[duels-state-builder] duels info', duelsInfo);
 		if (duelsInfo) {
 			this.duelsInfo$$.next({
 				...duelsInfo,

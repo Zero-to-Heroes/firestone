@@ -80,7 +80,6 @@ export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent impl
 							const buildableDecks = stat.bestDecks.filter((decklist) =>
 								this.canBuild(decklist, info.collection),
 							);
-							console.debug('buildableDecks', buildableDecks);
 							const buildableDeck: string = buildableDecks[0]?.decklist;
 							return {
 								...stat,
@@ -111,18 +110,10 @@ export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent impl
 			})
 			.sort();
 		if (flatDeckCardIds.length !== cardsInCollection.length) {
-			console.debug('not matching cards length', flatDeckCardIds, cardsInCollection);
 			return false;
 		}
 		for (let i = 0; i < flatDeckCardIds.length; i++) {
 			if (flatDeckCardIds[i] !== cardsInCollection[i]) {
-				console.debug(
-					'not matching cards',
-					flatDeckCardIds[i],
-					cardsInCollection[i],
-					flatDeckCardIds,
-					cardsInCollection,
-				);
 				return false;
 			}
 		}

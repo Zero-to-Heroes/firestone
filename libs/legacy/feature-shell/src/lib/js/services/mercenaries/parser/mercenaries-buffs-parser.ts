@@ -23,7 +23,6 @@ export class MercenariesBuffsParser implements MercenariesParser {
 	public applies = (battleState: MercenariesBattleState) => !!battleState;
 
 	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
-		// console.debug('processing turn start', event, battleState);
 		const gameState = event.gameState;
 		if (!gameState) {
 			console.warn('missing game state on turn start event', event);
@@ -39,7 +38,6 @@ export class MercenariesBuffsParser implements MercenariesParser {
 		const playerTeam = this.updateTeam(battleState.playerTeam, playerBoard, playerAbilities);
 		const opponentTeam = this.updateTeam(battleState.opponentTeam, opponentBoard, opponentAbilities);
 
-		// console.debug('returning teams', playerTeam, opponentTeam);
 		return battleState.update({
 			playerTeam: playerTeam,
 			opponentTeam: opponentTeam,
@@ -81,22 +79,13 @@ export class MercenariesBuffsParser implements MercenariesParser {
 					);
 				// Typically can happen for opposing mercs unrevealed abilities
 				if (!playerAbility) {
-					console.debug('could not find player ability', ability, playerAbilities);
 					return ability;
 				}
-				// const speedDiff =
-				// 	playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ??
-				// 	ability.speed - ability.speed;
 				const speedModifier = this.buildSpeedModifier(playerAbility, playerEntity);
-				// if ((speedModifier?.value ?? 0) !== (speedDiff ?? 0)) {
-				// 	console.warn('incompatible computations', speedModifier, speedDiff, playerAbility, ability);
-				// }
 				return ability.update({
-					// speed: playerAbility.tags?.find((tag) => tag.Name === GameTag.COST)?.Value ?? ability.speed,
 					speedModifier: speedModifier,
 				});
 			});
-			// console.debug('ability buff', this.allCards.getCard(mercenary.cardId).name, mercenary, abilities);
 			playerTeam = playerTeam.updateMercenary(
 				mercenary.entityId,
 				BattleMercenary.create({
@@ -113,12 +102,6 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			return null;
 		}
 
-		// console.debug(
-		// 	'computing buffs for',
-		// 	this.allCards.getCard(boardEntity.cardId).name,
-		// 	boardEntity.cardId,
-		// 	boardEntity,
-		// );
 		const enchantments = [...(boardEntity.enchantments ?? []), ...(playerEntity?.enchantments ?? [])];
 		const debuffs = enchantments
 			.filter((e) => DEBUFF_SPEED_MODIFIER_ENCHANTMENTS.includes(e.cardId as CardIds))
@@ -134,7 +117,6 @@ export class MercenariesBuffsParser implements MercenariesParser {
 				);
 			})
 			.filter((e) => !!e.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value);
-		// console.debug('buffs', buffs, boardEntity);
 		const debuffValue = sumOnArray(
 			debuffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
@@ -143,7 +125,6 @@ export class MercenariesBuffsParser implements MercenariesParser {
 			buffs,
 			(buff) => buff.tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1).Value ?? 0,
 		);
-		// console.debug('buffValue', buffValue, debuffValue);
 		return !!buffValue || !!debuffValue
 			? {
 					value: debuffValue - buffValue,

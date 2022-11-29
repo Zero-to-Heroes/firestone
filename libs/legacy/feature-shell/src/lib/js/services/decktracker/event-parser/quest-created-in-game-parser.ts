@@ -25,7 +25,6 @@ export class QuestCreatedInGameParser implements EventParser {
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
-		console.debug('[quest] isPlayer', isPlayer, gameEvent, currentState);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const dbCard = this.cards.getCard(cardId);
@@ -37,22 +36,17 @@ export class QuestCreatedInGameParser implements EventParser {
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
 			zone: 'SECRET',
-			putIntoPlay: true
+			putIntoPlay: true,
 		} as DeckCard);
-		console.debug('[quest] created quest card', card);
 		const previousOtherZone = deck.otherZone;
-		console.debug('[quest] previousOtherZone', previousOtherZone);
 		// Because when we discover a quest (BG), the quest is already in the otherZone, but with another "zone" attribute
 		const newOtherZone: readonly DeckCard[] = this.helper.empiricReplaceCardInZone(previousOtherZone, card, true);
-		console.debug('[quest] newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		// console.debug('should consider?', cardId);
 		if (globalEffectQuestlinesTriggers.includes(cardId as CardIds)) {
 			const globalEffectCard = this.cards.getCard(
 				globalEffectQuestlines.find((q) => q.questStepCreated === cardId).stepReward,
 			);
-			console.debug('globalEffectCard', globalEffectCard);
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				DeckCard.create({
@@ -64,14 +58,12 @@ export class QuestCreatedInGameParser implements EventParser {
 					zone: 'SECRET',
 				} as DeckCard),
 			);
-			console.debug('newGlobalEffects', newGlobalEffects);
 		}
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOtherZone,
 			globalEffects: newGlobalEffects,
 		} as DeckState);
-		console.debug('[quest] newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

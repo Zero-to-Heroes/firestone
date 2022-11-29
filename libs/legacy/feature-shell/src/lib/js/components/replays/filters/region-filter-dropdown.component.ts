@@ -39,7 +39,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class RegionFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	filter$: Observable<{
 		filter: string;
 		placeholder: string;
@@ -71,7 +72,6 @@ export class RegionFilterDropdownComponent
 			this.mapData(([[currentView, stats], [filter]]) => {
 				const allOptions = ['all'];
 				const allRegions = new Set(stats.map((stat) => stat.region).filter((region) => !!region));
-				console.debug('allRegions', allRegions, stats);
 				// Don't show the filter when only one region
 				if (allRegions.size === 1) {
 					return null;
@@ -86,7 +86,6 @@ export class RegionFilterDropdownComponent
 							label: this.i18n.translateString(`global.region.${option}`) || option,
 						} as FilterOption),
 				);
-				console.debug('placeholder', options.find((option) => option.value === filter)?.label, options, filter);
 				return {
 					filter: filter == 'all' ? 'all' : BnetRegion[filter].toLowerCase(),
 					options: options,

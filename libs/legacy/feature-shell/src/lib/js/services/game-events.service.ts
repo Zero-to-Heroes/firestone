@@ -769,7 +769,6 @@ export class GameEvents {
 				);
 				break;
 			case 'ARMOR_CHANGED':
-				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
 						armorChange: gameEvent.Value.AdditionalProps.InitialData1,
@@ -778,7 +777,6 @@ export class GameEvents {
 				);
 				break;
 			case 'DATA_SCRIPT_CHANGED':
-				//console.debug(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.DATA_SCRIPT_CHANGED, gameEvent, {
 						initialData1: gameEvent.Value.AdditionalProps.InitialData1,

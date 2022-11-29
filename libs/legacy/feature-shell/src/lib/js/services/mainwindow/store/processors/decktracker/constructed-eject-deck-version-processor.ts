@@ -13,15 +13,12 @@ export class ConstructedEjectDeckVersionProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('[deck] ejecting version', event, currentState);
 		const prefs = await this.prefs.getPreferences();
 		const versionLinks = prefs.constructedDeckVersions;
-		console.debug('[deck] existing versionLinks', versionLinks);
 		const newVersionLinks = versionLinks.map((link) => ({
 			...link,
 			versions: link.versions.filter((version) => version.deckstring !== event.deckstringToEject),
 		}));
-		console.debug('[deck] newVersionLinks', newVersionLinks);
 
 		await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: newVersionLinks });
 		return [null, null];

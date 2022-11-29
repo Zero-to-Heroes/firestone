@@ -9,12 +9,6 @@ export class GameStartParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug(
-			'[debug] gameStart',
-			currentState,
-			gameEvent.additionalData.timestamp,
-			new Date(gameEvent.additionalData.timestamp),
-		);
 		return Object.assign(new GameState(), {
 			gameStarted: true,
 			matchStartTimestamp: gameEvent.additionalData.timestamp,

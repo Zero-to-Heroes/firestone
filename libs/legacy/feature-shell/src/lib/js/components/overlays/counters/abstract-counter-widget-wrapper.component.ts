@@ -68,7 +68,6 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 	}
 
 	ngAfterContentInit(): void {
-		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest(

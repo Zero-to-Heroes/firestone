@@ -45,12 +45,10 @@ export class MercenariesStateBuilderService {
 	public async loadInitialGlobalStats() {
 		const localInfo = this.localStorage.getItem<MercenariesGlobalStats>('mercenaries-global-stats');
 		if (!!localInfo) {
-			console.debug('loaded local mercenaries global stats', localInfo);
 			this.store.send(new MercenariesGlobalStatsLoadedEvent(localInfo));
 		}
 
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		console.debug('loaded remove mercenaries global stats', localInfo);
 		this.localStorage.setItem('mercenaries-global-stats', globalStats);
 		this.store.send(new MercenariesGlobalStatsLoadedEvent(globalStats));
 	}
@@ -89,7 +87,6 @@ export class MercenariesStateBuilderService {
 			// 'mercenaries-hero-stats',
 			// 'mercenaries-compositions-stats',
 		];
-		console.debug('[merc] setting collection info', mercenariesCollection);
 		return currentState.update({
 			// globalStats: globalStats,
 			// referenceData: referenceData,

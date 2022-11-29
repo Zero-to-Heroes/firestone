@@ -28,7 +28,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('drawing from deck', cardId, gameEvent);
+		// console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -50,31 +50,31 @@ export class CardDrawParser implements EventParser {
 			cardsWithMatchingCardId.length === 1 ||
 			cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null);
 		if (!shouldUseEntityId) {
-			console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
+			// console.debug('not using entity id', shouldUseEntityId, cardsWithMatchingCardId, gameEvent, currentState);
 		}
 		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
 		// If we don't have info on the entityId, we try to remove the one at the top
 		// Not sure this fix is needed, keeping it in case
 		// const useTopOfDeckToIdentifyCard = !shouldUseEntityId && deck.deck.some((c) => c.positionFromTop != null);
-		console.debug(
-			'useTopOfDeckToIdentifyCard',
-			useTopOfDeckToIdentifyCard,
-			isPlayer,
-			deck.deck.filter((c) => c.positionFromTop != null),
-			deck,
-		);
+		// console.debug(
+		// 	'useTopOfDeckToIdentifyCard',
+		// 	useTopOfDeckToIdentifyCard,
+		// 	isPlayer,
+		// 	deck.deck.filter((c) => c.positionFromTop != null),
+		// 	deck,
+		// );
 		const card = useTopOfDeckToIdentifyCard
 			? [...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0]
 			: this.helper.findCardInZone(deck.deck, cardId, shouldUseEntityId ? entityId : null, true);
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
-		console.debug(
-			'drawing card',
-			card,
-			isPlayer,
-			deck,
-			deck.deck.some((c) => c.positionFromTop),
-			[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
-		);
+		// console.debug(
+		// 	'drawing card',
+		// 	card,
+		// 	isPlayer,
+		// 	deck,
+		// 	deck.deck.some((c) => c.positionFromTop),
+		// 	[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
+		// );
 
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
@@ -82,7 +82,7 @@ export class CardDrawParser implements EventParser {
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
 		const isTradable = !!this.allCards.getCard(updatedCardId).mechanics?.includes(GameTag[GameTag.TRADEABLE]);
-		console.debug('drawing from deck', isTradable, this.allCards.getCard(updatedCardId));
+		// console.debug('drawing from deck', isTradable, this.allCards.getCard(updatedCardId));
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
@@ -105,7 +105,7 @@ export class CardDrawParser implements EventParser {
 			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 			// This field is only used to flag "created by", so we should be fine even with tradeable cards
 			publicCardCreators.includes(lastInfluencedByCardId);
-		console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
+		// console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 		const cardWithCreator = card.update({
@@ -117,7 +117,7 @@ export class CardDrawParser implements EventParser {
 			manaCost: isCardInfoPublic ? card.manaCost : null,
 			rarity: isCardInfoPublic ? card.rarity : null,
 		} as DeckCard);
-		console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
+		// console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
@@ -132,15 +132,15 @@ export class CardDrawParser implements EventParser {
 					},
 			  )[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
-		console.debug('added card to hand', newHand);
+		// console.debug('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
 		});
-		console.debug('new player deck', newPlayerDeck);
+		// console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

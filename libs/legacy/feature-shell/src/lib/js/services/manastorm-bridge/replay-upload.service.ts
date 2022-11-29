@@ -48,7 +48,7 @@ export class ReplayUploadService {
 		}
 
 		console.log('[manastorm-bridge] uploading game');
-		console.debug('[manastorm-bridge] uploading game', game);
+		// console.debug('[manastorm-bridge] uploading game', game);
 		const user = await this.ow.getCurrentUser();
 		console.log('[manastorm-bridge] retrieved current user');
 		this.postFullReview(game.reviewId, user.userId, user.username, game);
@@ -56,7 +56,6 @@ export class ReplayUploadService {
 
 	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
 		const jszip = new JSZip();
-		console.debug('[manastorm-bridge] ready to zip');
 		jszip.file('power.log', game.uncompressedXmlReplay);
 		const blob: Blob = await jszip.generateAsync({
 			type: 'blob',
@@ -82,7 +81,7 @@ export class ReplayUploadService {
 			'replay-key': replayKey,
 			'application-key': 'firestone',
 			'user-key': userId,
-			'username': userName,
+			username: userName,
 			'file-type': 'hszip',
 			'player-rank': game.playerRank != null ? '' + game.playerRank : '',
 			'new-player-rank': game.newPlayerRank != null ? '' + game.newPlayerRank : '',
@@ -90,7 +89,7 @@ export class ReplayUploadService {
 			'game-mode': game.gameMode,
 			'game-format': game.gameFormat,
 			'build-number': game.buildNumber ? '' + game.buildNumber : '',
-			'deckstring': game.deckstring,
+			deckstring: game.deckstring,
 			'deck-name': game.deckName ? encodeURIComponent(game.deckName) : null,
 			'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 			'should-zip': 'true',

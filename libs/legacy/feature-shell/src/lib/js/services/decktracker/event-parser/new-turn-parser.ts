@@ -16,12 +16,10 @@ export class NewTurnParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.debug('[timer] new turn start event', gameEvent);
 		const numericTurn = currentState.playerDeck.isFirstPlayer
 			? Math.floor(gameEvent.additionalData.turnNumber / 2)
 			: Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
 
-		// const numericTurn = Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
 		const currentTurn = currentState.mulliganOver || numericTurn >= 2 ? numericTurn : 'mulligan';
 		const isPlayerActive = currentState.playerDeck.isFirstPlayer
 			? gameEvent.additionalData.turnNumber % 2 === 1
@@ -95,12 +93,9 @@ export const buildTurnTimings = (
 	const lastPlayerTurn = currentState.playerDeck.turnTimings[currentState.playerDeck.turnTimings.length - 1];
 	const lastOpponentTurn = currentState.opponentDeck.turnTimings[currentState.opponentDeck.turnTimings.length - 1];
 	if (!isPlayerActive) {
-		// console.debug('player active', currentState, lastPlayerTurn, currentState.playerDeck.turnTimings);
 		// Close the previous turn
 		if (lastPlayerTurn) {
-			// console.debug('[timer] will update player turns', playerTurns);
 			playerTurns = [...playerTurns.slice(0, -1), { ...lastPlayerTurn, endTimestamp: turnTimestamp }];
-			// console.debug('[timer] updated player turns', playerTurns);
 		}
 		opponentTurns = [
 			...opponentTurns,
@@ -108,12 +103,9 @@ export const buildTurnTimings = (
 		];
 	} else {
 		if (lastOpponentTurn) {
-			// console.debug('[timer] will update player turns', opponentTurns);
 			opponentTurns = [...opponentTurns.slice(0, -1), { ...lastOpponentTurn, endTimestamp: turnTimestamp }];
-			// console.debug('[timer] updated player turns', opponentTurns);
 		}
 		playerTurns = [...playerTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined }];
-		// console.debug('[timer] updated layer turns inactive', playerTurns);
 	}
 	return [playerTurns, opponentTurns];
 };

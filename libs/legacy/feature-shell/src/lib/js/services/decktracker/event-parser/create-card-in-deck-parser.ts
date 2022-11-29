@@ -47,17 +47,17 @@ export class CreateCardInDeckParser implements EventParser {
 			? // Because sometimes the entityId is reversed in the Other zone
 			  deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card
 			: null;
-		console.debug(
-			'[create-card-in-deck]',
-			'creatorEntity',
-			creatorEntity,
-			gameEvent.additionalData.creatorEntityId,
-			gameEvent.additionalData.influencedByEntityId,
-			deck,
-		);
+		// console.debug(
+		// 	'[create-card-in-deck]',
+		// 	'creatorEntity',
+		// 	creatorEntity,
+		// 	gameEvent.additionalData.creatorEntityId,
+		// 	gameEvent.additionalData.influencedByEntityId,
+		// 	deck,
+		// );
 		// Because of Tome Tampering
 		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
-		console.debug('[create-card-in-deck]', 'card added', card);
+		// console.debug('[create-card-in-deck]', 'card added', card);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		card = (card ?? DeckCard.create()).update({
 			cardId: cardId ?? card?.cardId,
@@ -70,14 +70,14 @@ export class CreateCardInDeckParser implements EventParser {
 			positionFromBottom: positionFromBottom,
 			createdByJoust: createdByJoust,
 		} as DeckCard);
-		console.debug('[create-card-in-deck]', 'adding card', card);
+		// console.debug('[create-card-in-deck]', 'adding card', card);
 
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 		});
-		console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
+		// console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
 
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);

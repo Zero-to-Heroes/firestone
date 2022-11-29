@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DataForRank, DeckStat, FormatForDeckData, RankForDeckData, TimeForDeckData } from '@firestone-hs/deck-stats';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { ApiRunner } from '../api-runner';
 import { LocalStorageService } from '../local-storage';
 import { ConstructedMetaDecksLoadedEvent } from '../mainwindow/store/events/decktracker/constructed-meta-decks-loaded-event';
@@ -23,7 +23,6 @@ export class ConstructedMetaDecksStateBuilderService {
 
 	private async init() {
 		await this.store.initComplete();
-		console.debug('init meta service');
 		combineLatest(
 			this.store.listenPrefs$(
 				(prefs) => prefs.constructedMetaDecksRankFilter,
@@ -33,7 +32,6 @@ export class ConstructedMetaDecksStateBuilderService {
 			this.requestedInitialLoad.asObservable(),
 		)
 			.pipe(
-				tap((info) => console.debug('updating meta info', info)),
 				filter(([[rank, time, format], load]) => load),
 				map(([[rank, time, format], load]) => ({ rank, time, format })),
 			)
@@ -43,7 +41,6 @@ export class ConstructedMetaDecksStateBuilderService {
 	public async loadInitialStats() {
 		const localMetaDecks = this.localStorage.getItem<readonly DeckStat[]>('constructed-meta-decks');
 		if (!!localMetaDecks?.length) {
-			console.debug('loaded local meta decks', localMetaDecks);
 			this.store.send(new ConstructedMetaDecksLoadedEvent(localMetaDecks));
 		}
 
@@ -51,7 +48,6 @@ export class ConstructedMetaDecksStateBuilderService {
 	}
 
 	public async loadNewDecks(format: FormatForDeckData, time: TimeForDeckData, rank: RankForDeckData) {
-		console.debug('requesting new meta decks', format, time, rank);
 		const fileName = `ranked-decks-${format}-${time}-${rank}.gz.json`;
 		const url = `${CONSTRUCTED_META_DECKS_BASE_URL}/${fileName}`;
 		const resultStr = await this.api.get(url);
@@ -62,7 +58,6 @@ export class ConstructedMetaDecksStateBuilderService {
 		const json: DataForRank = JSON.parse(resultStr);
 		const decks: readonly DeckStat[] = json.deckStats;
 		console.log('loaded meta decks', format, time, rank, decks?.length);
-		console.debug('loaded meta decks', format, time, rank, decks);
 		this.localStorage.setItem('constructed-meta-decks', decks);
 		this.store.send(new ConstructedMetaDecksLoadedEvent(decks));
 	}

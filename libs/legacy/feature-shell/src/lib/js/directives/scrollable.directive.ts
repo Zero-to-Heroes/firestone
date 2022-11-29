@@ -16,7 +16,6 @@ export class ScrollableDirective {
 			const rect = scrollableEl.getBoundingClientRect();
 			if (event.offsetX >= rect.width - scrollbarWidth) {
 				event.stopPropagation();
-				console.debug('started scrolling');
 				this.scrolling.next(true);
 				return;
 			}
@@ -25,7 +24,6 @@ export class ScrollableDirective {
 
 	@HostListener('mouseup')
 	onHistoryMouseUp() {
-		console.debug('stopped scrolling');
 		this.scrolling.next(false);
 	}
 }

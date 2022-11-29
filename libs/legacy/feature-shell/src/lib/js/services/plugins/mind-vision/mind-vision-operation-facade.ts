@@ -139,7 +139,7 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	private debug(...args) {
-		console.debug(`[memory-service] ${this.serviceName}`, ...args);
+		// console.debug(`[memory-service] ${this.serviceName}`, ...args);
 	}
 
 	private log(...args) {

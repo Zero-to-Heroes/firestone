@@ -33,7 +33,6 @@ export class ArenaStateBuilderService {
 			userId: currentUser.userId,
 			userName: currentUser.username,
 		});
-		console.debug('loaded arena rewards', result);
 		return result;
 	}
 

@@ -49,7 +49,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		console.debug('[card-played] newHand', newHand, removedCard);
+		// console.debug('[card-played] newHand', newHand, removedCard);
 
 		let newDeck = deck.deck;
 		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
@@ -64,7 +64,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				entityId,
 				false, // Only remove known cards
 			);
-			console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
+			// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
 
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
@@ -206,7 +206,6 @@ export const rememberCardsInHand = (
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
 	const commanderSivaraCards = hand.filter((c) => c.cardId === CardIds.CommanderSivara_TSC_087);
-	console.debug('sivaraCards', commanderSivaraCards);
 	const refCard = allCards.getCard(cardId);
 	let handAfterCardsRemembered = hand;
 	if (refCard?.type === 'Spell' && !!commanderSivaraCards.length) {
@@ -215,10 +214,8 @@ export const rememberCardsInHand = (
 				relatedCardIds: [...c.relatedCardIds, cardId],
 			}),
 		);
-		console.debug('newSivaraCards', newSivaraCards);
 		for (const newCard of newSivaraCards) {
 			handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
-			console.debug('updated', handAfterCardsRemembered);
 		}
 	}
 	return handAfterCardsRemembered;

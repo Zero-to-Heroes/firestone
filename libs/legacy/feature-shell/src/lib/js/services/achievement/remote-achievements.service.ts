@@ -129,16 +129,16 @@ export class RemoteAchievementsService {
 		]);
 		// const achievement: Achievement = event.data[0];
 		const statEvent = {
-			'creationDate': new Date(),
-			'reviewId': reviewId,
-			'userId': currentUser.userId,
-			'userMachineId': currentUser.machineId,
-			'userName': currentUser.username,
-			'achievementId': achievement.id,
-			'name': achievement.name,
-			'type': achievement.type,
-			'cardId': achievement.displayCardId,
-			'numberOfCompletions': achievement.numberOfCompletions,
+			creationDate: new Date(),
+			reviewId: reviewId,
+			userId: currentUser.userId,
+			userMachineId: currentUser.machineId,
+			userName: currentUser.username,
+			achievementId: achievement.id,
+			name: achievement.name,
+			type: achievement.type,
+			cardId: achievement.displayCardId,
+			numberOfCompletions: achievement.numberOfCompletions,
 		};
 		this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
 		this.updateLocalAchievements(achievement);
@@ -173,7 +173,6 @@ export class RemoteAchievementsService {
 		loadFromLocal = true,
 		sendEvent = false,
 	): Promise<readonly CompletedAchievement[]> {
-		console.debug('loading remote achievements, loadFromLocal=', loadFromLocal);
 		if (loadFromLocal) {
 			const localResult = this.localStorage.getItem<LocalRemoteAchievements>('achievements-user-completed');
 			// Cache the local results for 7 days

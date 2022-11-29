@@ -37,7 +37,6 @@ export class NewPackProcessor implements Processor {
 		console.log('[pack-history] handling new pack', newPack);
 		// Save the new pack info
 		const newPackStats: readonly PackResult[] = [newPack, ...(currentState.binder.packStats ?? [])];
-		console.debug('[pack-history] newPackStats', newPackStats);
 
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			packStats: newPackStats,

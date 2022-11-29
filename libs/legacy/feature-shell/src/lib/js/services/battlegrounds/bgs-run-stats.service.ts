@@ -40,7 +40,6 @@ export class BgsRunStatsService {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);
 		});
 		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async (event) => {
-			console.debug('[gr] POPULATE_HERO_DETAILS_FOR_BG', event);
 			this.computeHeroDetailsForBg(event.data[0]);
 		});
 		setTimeout(() => {
@@ -62,7 +61,6 @@ export class BgsRunStatsService {
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
-		console.debug('[gr] ready to reprodcess', heroCardId);
 		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
 		this.stateUpdater.next(
 			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats, heroCardId),
@@ -84,7 +82,6 @@ export class BgsRunStatsService {
 			`${POST_MATCH_STATS_RETRIEVE_URL}`,
 			input,
 		);
-		console.debug('[bgs-run-stats] last run stats', results);
 		return results;
 	}
 
@@ -164,11 +161,11 @@ export class BgsRunStatsService {
 		const newBestStats = buildNewStats(
 			existingBestStats,
 			result,
-			({
+			{
 				mainPlayer: input.mainPlayer,
 				reviewId: input.reviewId,
 				userId: input.userName || input.userId,
-			} as any) as BgsComputeRunStatsInput,
+			} as any as BgsComputeRunStatsInput,
 			`${new Date().toISOString().slice(0, 19).replace('T', ' ')}.${new Date().getMilliseconds()}`,
 		);
 		const finalStats = this.mergeStats(existingBestStats, newBestStats);

@@ -17,12 +17,12 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			[cardTooltip]="cardId"
 			[cardTooltipShowRelatedCards]="true"
 			[cardTooltipPosition]="tooltipPosition"
-			[ngClass]="{ 'inactive': cooldownLeft > 0 && !uncapacitated }"
+			[ngClass]="{ inactive: cooldownLeft > 0 && !uncapacitated }"
 			[mercenariesHighlight]="enableHighlight ? cardId : null"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
-			<div class="ability-item-icon" [ngClass]="{ 'treasure': isTreasure }" *ngIf="type === 'ability'">
+			<div class="ability-item-icon" [ngClass]="{ treasure: isTreasure }" *ngIf="type === 'ability'">
 				<img class="icon" [src]="buildAbilityArtUrl(cardId)" />
 				<img
 					class="frame"
@@ -38,7 +38,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			</div>
 			<div
 				class="item ability-speed"
-				[ngClass]="{ 'buff': speed < baseSpeed, 'debuff': speed > baseSpeed }"
+				[ngClass]="{ buff: speed < baseSpeed, debuff: speed > baseSpeed }"
 				*ngIf="speed != null"
 				[helpTooltip]="speedModifierTooltip"
 			>
@@ -75,7 +75,6 @@ export class MercenariesTeamAbilityComponent {
 	@Input() enableHighlight: boolean;
 
 	@Input() set ability(value: Ability) {
-		// console.debug('set ability', this.allCards.getCard(value.cardId).name, value);
 		const abilityCard = this.allCards.getCard(value.cardId);
 		this.type = value.type;
 		this.cardId = value.cardId;

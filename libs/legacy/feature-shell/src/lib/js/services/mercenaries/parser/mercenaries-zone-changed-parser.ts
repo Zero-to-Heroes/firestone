@@ -16,9 +16,7 @@ export class MercenariesZoneChangedParser implements MercenariesParser {
 		const [cardId, controllerId, localPlayer, entityId] = event.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
-		// console.debug('[merc-zone] zone event', event, cardId, controllerId, entityId);
 		if (!team.mercenaries?.map((merc) => merc.entityId)?.includes(entityId)) {
-			// console.debug('[merc-zone] not about a merc, returning', event);
 			return battleState;
 		}
 
@@ -28,7 +26,6 @@ export class MercenariesZoneChangedParser implements MercenariesParser {
 				zone: event.additionalData.zone,
 			}),
 		);
-		// console.debug('[merc-zone] updated team', newTeam, team);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,
 			opponentTeam: isPlayer ? battleState.opponentTeam : newTeam,

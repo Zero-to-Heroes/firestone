@@ -15,7 +15,6 @@ export class TipService {
 		}
 		this.previousIndex = randomIndex;
 		const result = this.i18n.translateString(`app.tips.tip-${randomIndex + 1}`);
-		// console.debug('returning random tip', randomIndex, result);
 		return result;
 	}
 }

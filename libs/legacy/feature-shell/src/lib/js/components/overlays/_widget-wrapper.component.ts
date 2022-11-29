@@ -43,12 +43,9 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
 		return pipe(
 			switchMap(async (visible: boolean) => {
-				this.debug && console.debug('before making visible', visible);
 				if (visible) {
 					const repositioned = await this.reposition();
-					// console.debug('after reposition', repositioned);
 				}
-				this.debug && console.debug('return after reposition', visible);
 				return visible;
 			}),
 			this.mapData((visible) => visible),
@@ -58,7 +55,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
 		if (this.repositioning) {
-			this.debug && console.debug('already repositioning, returning');
 			return;
 		}
 		this.repositioning = true;
@@ -75,13 +71,11 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 		// First position the widget based on the prefs
 		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor(prefs, this.prefs) : null;
-		this.debug && console.debug('position from prefs', positionFromPrefs);
 		if (!positionFromPrefs) {
 			positionFromPrefs = {
 				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
-			// console.debug('built default position', positionFromPrefs);
 		}
 		this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
@@ -89,7 +83,6 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		// Then make sure it fits inside the bounds
 		// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
 		this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
-		this.debug && console.debug('bound position from prefs', positionFromPrefs);
 
 		if (cleanup) {
 			cleanup();
@@ -126,28 +119,23 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		return boundPositionFromPrefs;
 	}
 
-	startDragging() {
-		// console.debug('start dragging', this.el.nativeElement);
-	}
+	startDragging() {}
 
 	async stopDragging() {
 		// Do nothing for now
 	}
 
 	async dragEnded(event: CdkDragEnd) {
-		// console.debug('drag ended', event);
 		const newPosition = {
 			x: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().left,
 			y: this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect().top,
 		};
-		// console.debug('new position', newPosition);
 		await this.positionUpdater(newPosition.x, newPosition.y);
 		this.reposition(() => event.source._dragRef.reset());
 	}
 
 	@HostListener('window:window-resize')
 	async onResize(): Promise<void> {
-		// console.debug('resize');
 		await this.doResize();
 		await this.reposition();
 	}
@@ -155,6 +143,4 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	protected async doResize() {
 		// Do nothing, only for children
 	}
-
-	// protected
 }

@@ -199,7 +199,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	@Input() simulationReset: (faceOffId: string) => void;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
-		console.debug('setting faceOff', value);
 		// Make sure we have an instance of the class, and not just a data structure
 		this._faceOff = BgsFaceOffWithSimulation.create(value);
 		if (!this._faceOff) {
@@ -317,7 +316,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private initKeyboardControls() {
-		console.debug('keyboard controls allowed?', this.allowKeyboardControl);
 		this.simulatorKeyboardControls
 			.init(this.allowKeyboardControl)
 			.control(BgsSimulatorKeyboardControl.PlayerHero, () => this.onPortraitChangeRequested('player'))
@@ -334,12 +332,10 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('document:keyup', ['$event'])
 	handleKeyboardControl(event: KeyboardEvent) {
-		// console.debug('handling key event', event);
 		if (!this.allowKeyboardControl) {
 			return;
 		}
 
-		// console.debug('overlayRef', this.overlayRef, this.overlayRef.hasAttached());
 		// Control is back to the overlay
 		if (this.overlayRef.hasAttached()) {
 			return;
@@ -544,7 +540,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		const existingSide =
 			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
 		modalRef.instance.currentMinion = existingSide.board[event.index];
-		console.debug('onMinionUpdateRequested', this._faceOff);
 		modalRef.instance.entityId = this._faceOff.getNextEntityId();
 		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
 			this.overlayRef.detach();
@@ -612,16 +607,12 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		const fromClipboard = await this.ow.getFromClipboard();
 		try {
 			const shortCode = atob(fromClipboard);
-			console.debug('shortCode', shortCode);
 			const boardId = shortCode.split('simBoard')[1];
-			console.debug('boardId', boardId);
 			if (!boardId) {
 				return;
 			}
 			const url = `https://static-api.firestoneapp.com/retrieveBgsSimulationSample/${boardId}`;
-			console.debug('calling url', url);
 			const code = await this.api.get(url);
-			console.debug('code', code);
 			const faceOffStr = atob(code);
 			const faceOff = JSON.parse(faceOffStr) as BgsFaceOffWithSimulation;
 			this.simulationUpdater(null, faceOff);
@@ -644,9 +635,7 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 			battleInfoMesage: undefined,
 		} as BgsFaceOffWithSimulation;
 		const code = btoa(JSON.stringify(sim));
-		console.debug('code', code);
 		const shortCode = await this.simulationService.getIdForSimulationSample(code as any);
-		console.debug('shortCode', shortCode);
 		this.ow.placeOnClipboard(btoa(`simBoard${shortCode}`));
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.export-confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -764,7 +753,6 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 		const it = this.positioningService.findBestPositioning(battleInfo);
 		while (true) {
 			const value = await it.next();
-			console.debug('got next value', value);
 			const status: ProcessingStatus = value.value[0];
 			const result: PermutationResult = value.value[1];
 			if (!!result) {

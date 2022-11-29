@@ -167,7 +167,6 @@ export class DeckParserService {
 		}
 
 		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId);
-		console.debug('[deck-parser] found template deck', deckId, deck, this.deckTemplates);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
 			this.currentDeck = this.updateDeckFromMemory(deck, scenarioId, gameType);
@@ -202,7 +201,6 @@ export class DeckParserService {
 			}
 		});
 		this.duelsService.duelsInfo$$.subscribe((deck) => {
-			console.debug('[deck-parser] duels deck', deck);
 			this.duelsDeck = deck;
 		});
 
@@ -233,7 +231,6 @@ export class DeckParserService {
 			// Only reset when moving away from the scene where selecting a deck is possible
 			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
 				if (!!this.selectedDeckId || !!this.currentDeck) {
-					console.debug('[deck-parser] resetting current deck?', changes.CurrentScene, this.currentDeck);
 					// Don't reset if we're reconnecting
 					const lines: readonly string[] = await this.readAllLogLines();
 					// ignore everythine if the lines don't contain any "finding game with deck"
@@ -246,7 +243,6 @@ export class DeckParserService {
 						// we can safely reset
 						changes.CurrentScene !== SceneMode.LOGIN
 					) {
-						console.debug('[deck-parser] resetting current deck');
 						this.selectedDeckId = null;
 						// Reset the cached deck, as it should only be used when restarting the match
 						this.currentDeck = null;
@@ -271,7 +267,6 @@ export class DeckParserService {
 						DeckList: template.DeckList.map((dbfId) => +dbfId),
 					} as DeckInfoFromMemory),
 			);
-		console.debug('[deck-parser] loaded deck templates', this.deckTemplates?.length);
 
 		// Init fields that are normally populated from memory reading events
 		this.currentNonGamePlayScene =
@@ -301,7 +296,6 @@ export class DeckParserService {
 
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
-		console.debug('[deck-parser] updating deck', deckFromMemory);
 		const deckDefinition: DeckDefinition = {
 			format: deckFromMemory.FormatType || GameFormat.FT_WILD,
 			cards: this.explodeDecklist(decklist),

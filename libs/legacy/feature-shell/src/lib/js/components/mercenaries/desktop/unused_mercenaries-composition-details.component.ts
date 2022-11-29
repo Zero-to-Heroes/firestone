@@ -55,8 +55,8 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 								<div
 									class="my-value percent"
 									[ngClass]="{
-										'positive': stats.playerWinrate && stats.playerWinrate > 50,
-										'negative': stats.playerWinrate && stats.playerWinrate < 50
+										positive: stats.playerWinrate && stats.playerWinrate > 50,
+										negative: stats.playerWinrate && stats.playerWinrate < 50
 									}"
 								>
 									{{ buildValuePercent(stats.playerWinrate, 0) }}
@@ -169,7 +169,6 @@ export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionC
 						})
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.slice(0, 15);
-					console.debug('benches', benches, compositionStats);
 					return {
 						starterHeroes: refHeroStat.heroCardIds.map((cardId) => ({
 							cardId: cardId,

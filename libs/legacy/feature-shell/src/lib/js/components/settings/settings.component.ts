@@ -71,7 +71,6 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 		window['selectApp'] = this.onAppSelected;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		this.settingsSubscription = this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) => {
-			console.debug('[settings] choosing app', selectedApp, selectedMenu);
 			this.selectApp(selectedApp ?? 'general', selectedMenu);
 		});
 		// this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {

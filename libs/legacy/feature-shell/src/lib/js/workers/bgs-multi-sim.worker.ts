@@ -20,12 +20,9 @@ ctx.onmessage = async (ev) => {
 	cardsData.inititialize(battleMessages[0].options.validTribes);
 
 	const permutationResults: InternalPermutationResult[] = [];
-	// let i = 0;
 
 	for (const battleInfo of battleMessages) {
-		// console.debug('permutation', i++, battleMessages.length, battleInfo);
 		const permutationResult: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
-		// console.debug('\t permutationResult', permutationResult);
 		if (!!permutationResult) {
 			permutationResults.push({
 				permutation: battleInfo.playerBoard.board,
@@ -35,7 +32,6 @@ ctx.onmessage = async (ev) => {
 				},
 			});
 		}
-		// console.debug('\t updated results');
 	}
 
 	ctx.postMessage(JSON.stringify(permutationResults));

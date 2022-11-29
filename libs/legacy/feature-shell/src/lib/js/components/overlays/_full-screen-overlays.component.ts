@@ -179,24 +179,21 @@ export class FullScreenOverlaysComponent
 
 		this.ow.addKeyDownListener(async (info) => {
 			return;
-			console.debug('keydown', info);
 			// F11
 			if (info.key === '122') {
 				await this.ow.bringToFront(this.windowId, true);
 				const element: HTMLElement = this.renderer.selectRootElement('#container', true);
 				const focusable = this.el.nativeElement.querySelectorAll('.root');
 				const element2 = focusable[0];
-				console.debug('element', element, element2, focusable);
 				setTimeout(() => {
 					element.focus();
 					element.click();
 					element2.focus();
 					element2.click();
-					console.debug('set focus', element, document.activeElement);
 				});
 			}
 			setTimeout(() => {
-				console.debug('current focus', document.activeElement);
+				console.log('current focus', document.activeElement);
 			});
 		});
 	}

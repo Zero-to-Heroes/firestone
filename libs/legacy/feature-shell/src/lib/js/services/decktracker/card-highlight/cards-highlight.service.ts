@@ -123,7 +123,6 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	}
 
 	async onMouseEnter(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard) {
-		// console.debug('onMouseEnter', cardId, side, this.gameState, this.options);
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
 			return;
@@ -176,7 +175,6 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 	getHighlightedCards(cardId: string, side: 'player' | 'opponent' | 'duels', card?: DeckCard): readonly Handler[] {
 		// Happens when using the deck-list component outside of a game
 		if (!this.options?.skipGameState && !this.gameState) {
-			console.debug('skipping game state', this.options, this.gameState);
 			return [];
 		}
 

@@ -205,8 +205,8 @@ export class GameStateService {
 			this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
 				this.processingQueue.enqueue(event);
 			});
-			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
-				.decktrackerDisplayEventBus;
+			const decktrackerDisplayEventBus: BehaviorSubject<boolean> =
+				this.ow.getMainWindow().decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe((event) => {
 				if (this.showDecktrackerFromGameMode === event) {
 					return;
@@ -218,7 +218,6 @@ export class GameStateService {
 
 		if (process.env.NODE_ENV !== 'production') {
 			window['gameState'] = () => {
-				console.debug(this.state);
 				return this.state;
 			};
 		}
@@ -357,7 +356,6 @@ export class GameStateService {
 					cardId: minion.CardId,
 				})),
 			];
-			// console.debug('[game-state] minions will die', this.minionsWillDie);
 		}
 
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, {
@@ -407,7 +405,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
+			// console.debug('[game-state] emitting event', emittedEvent.event.name, gameEvent, emittedEvent.state);
 			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 

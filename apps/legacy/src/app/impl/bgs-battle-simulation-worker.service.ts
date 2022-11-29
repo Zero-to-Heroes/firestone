@@ -14,7 +14,6 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 
 	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
 		const numberOfWorkers = 1; // Math.max(1, (this.cpuCount ?? 1) - 1);
-		console.debug('[bgs-simulation] will run parallel simulations', numberOfWorkers);
 		const results = await Promise.all(
 			[...Array(numberOfWorkers).keys()].map((i) =>
 				this.simulateLocalBattleInstance(
@@ -23,7 +22,6 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 				),
 			),
 		);
-		console.debug('[bgs-simulation] sim results', results);
 		return this.mergeSimulationResults(results);
 	}
 

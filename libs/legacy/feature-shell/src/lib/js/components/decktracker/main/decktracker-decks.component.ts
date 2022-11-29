@@ -192,7 +192,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 	}
 
 	drop(event: CdkDragDrop<readonly InternalDeckSummary[]>) {
-		console.debug('drop event', event);
 		if (!this.currentlyMousedOverDeck.value) {
 			return;
 		}
@@ -201,15 +200,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 			(deck) => deck.deckstring === this.currentlyMousedOverDeck.value,
 		);
 		const dragged: DeckSummary = event.item.data;
-		// console.debug(
-		// 	'dropping',
-		// 	dragged.deckName,
-		// 	droppedOn.deckName,
-		// 	dragged.deckstring,
-		// 	droppedOn.deckstring,
-		// 	event,
-		// 	droppedOn,
-		// );
 		if (dragged.deckstring !== droppedOn.deckstring) {
 			this.store.send(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
 		}
@@ -220,12 +210,10 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 	}
 
 	deckDragRelease(event, deck: DeckSummary) {
-		// console.debug('released drag', deck.deckName, deck);
 		this.currentlyDraggedDeck.next(null);
 	}
 
 	mouseEnterDeck(deck: InternalDeckSummary) {
-		// console.debug('mousing over', deck.deckName, deck);
 		if (deck.isValidMergingTarget) {
 			this.currentlyMousedOverDeck.next(deck.deckstring);
 		} else {

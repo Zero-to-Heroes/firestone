@@ -64,7 +64,6 @@ export class LiveStreamInfoComponent {
 		this.streamLanguage = !!value.language?.length ? mapTwitchLanguageToIsoCode(value.language) : null;
 		this.streamTitle = value.title;
 		this.currentViewers = value.viewer_count;
-		console.debug('set stream info', value, this.rankInfoStat, this.streamerName);
 	}
 
 	_stream: PresenceInfo;
@@ -81,7 +80,7 @@ export class LiveStreamInfoComponent {
 
 	watchOnTwitch() {
 		this.ow.openUrlInDefaultBrowser(`https://www.twitch.tv/${this.streamerName}?utm_source=firestone`);
-		amplitude.getInstance().logEvent('stream-click', { 'channel': this.streamerName });
+		amplitude.getInstance().logEvent('stream-click', { channel: this.streamerName });
 	}
 }
 
@@ -117,7 +116,6 @@ export class StreamHeroInfosComponent {
 		} else {
 			[this.opponentClassImage, this.opponentClassTooltip] = [null, null];
 		}
-		console.debug('set stream info', value);
 	}
 
 	playerClassImage: string;
@@ -150,20 +148,20 @@ export class StreamHeroInfosComponent {
 
 const mapTwitchLanguageToIsoCode = (twitchLanguage: string): string => {
 	const mapping = {
-		'de': 'de',
-		'en': 'us',
+		de: 'de',
+		en: 'us',
 		'en-gb': 'gb',
-		'es': 'es',
+		es: 'es',
 		'es-mx': 'mx',
-		'fr': 'fr',
-		'it': 'it',
-		'ja': 'jp',
-		'ko': 'kr',
-		'pl': 'pl',
-		'pt': 'pt',
+		fr: 'fr',
+		it: 'it',
+		ja: 'jp',
+		ko: 'kr',
+		pl: 'pl',
+		pt: 'pt',
 		'pt-br': 'br',
-		'ru': 'ru',
-		'th': 'th',
+		ru: 'ru',
+		th: 'th',
 		'zh-cn': 'cn',
 		'zh-tw': 'tw',
 	};

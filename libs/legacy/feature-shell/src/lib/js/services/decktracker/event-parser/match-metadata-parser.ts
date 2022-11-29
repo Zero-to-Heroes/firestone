@@ -49,10 +49,8 @@ export class MatchMetadataParser implements EventParser {
 			metadata: metaData,
 		} as GameState);
 		if (stateWithMetaData.isBattlegrounds()) {
-			console.debug('[match-metadata-parser] BG game, not getting current deck');
 			return stateWithMetaData;
 		} else if (stateWithMetaData.isMercenaries()) {
-			console.debug('[match-metadata-parser] Mercs game, not getting current deck');
 			return stateWithMetaData;
 		}
 

@@ -97,6 +97,6 @@ export class MindVisionStateListening implements MindVisionState {
 	}
 
 	private debug(...args: any[]) {
-		console.debug('[mind-vision]', `[${CurrentState[this.stateId()].toLowerCase()}-state]`, ...args);
+		// console.debug('[mind-vision]', `[${CurrentState[this.stateId()].toLowerCase()}-state]`, ...args);
 	}
 }

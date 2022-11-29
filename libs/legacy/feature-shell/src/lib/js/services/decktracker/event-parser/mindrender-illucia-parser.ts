@@ -16,7 +16,6 @@ export class MindrenderIlluciaParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug('handling mindrender illucia', gameEvent, currentState);
 		const newPlayerDeck = this.swapDecks(currentState.playerDeck, currentState.opponentDeck);
 		const newOpponentDeck = this.swapDecks(currentState.opponentDeck, currentState.playerDeck);
 		return currentState.update({

@@ -17,7 +17,6 @@ export class LocalStorageService {
 	private cache = {};
 
 	public setItem(key: string, value: any): void {
-		console.debug('set item', key, value);
 		this.cache[key] = value;
 		localStorage.setItem(key, JSON.stringify(value));
 	}

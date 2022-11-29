@@ -240,7 +240,6 @@ export class DeckTrackerOverlayRootComponent
 						desktopDeckShowHiddenDecks,
 						decks,
 					);
-					// console.debug('returning gamesForDeck', result);
 					return result;
 				},
 			),

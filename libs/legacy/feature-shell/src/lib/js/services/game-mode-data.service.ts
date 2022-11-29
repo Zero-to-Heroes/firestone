@@ -27,7 +27,6 @@ export class GameModeDataService {
 				// filter((event) => !event.additionalData?.spectating),
 			)
 			.subscribe((event) => {
-				console.debug('[match-info] got metadata event', event);
 				this.triggerMatchInfoRetrieve(event.additionalData.metaData, event.additionalData?.spectating);
 			});
 	}
@@ -38,7 +37,6 @@ export class GameModeDataService {
 	// that rely on the rank
 	// Also needed by the Twitch Presence service
 	private async triggerMatchInfoRetrieve(metadata: HsGameMetaData, spectating: boolean) {
-		console.debug('[match-info] considering', metadata);
 		switch (metadata.GameType) {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
@@ -188,7 +186,6 @@ export const runLoop = async (coreLoop: () => Promise<boolean>, type: string) =>
 		if (await coreLoop()) {
 			return;
 		}
-		console.debug('[match-info] missing', type);
 		await sleep(3000);
 		retriesLeft--;
 	}

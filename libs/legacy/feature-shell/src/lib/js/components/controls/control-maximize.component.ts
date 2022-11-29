@@ -57,7 +57,6 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		const currentWindow = await this.ow.getCurrentWindow();
-		console.debug('currentWindow', currentWindow);
 		const windowName = currentWindow.name;
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
 			this.maximized = message.window_state_ex === 'maximized';
@@ -94,7 +93,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 
 	async toggleMaximizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		amplitude.getInstance().logEvent('maximize', { 'window': windowName });
+		amplitude.getInstance().logEvent('maximize', { window: windowName });
 
 		// Delegate all the logic
 		if (this.eventProvider) {

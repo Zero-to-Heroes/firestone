@@ -480,12 +480,6 @@ export const getAchievementsForHero = (
 	const heroName = formatHeroNameForAchievements(dbHero);
 	const sectionId = getAchievementSectionIdFromHeroCardId(heroCardId, heroName);
 	if (!!sectionId) {
-		console.debug(
-			'achievements',
-			sectionId,
-			heroAchievements,
-			(heroAchievements ?? []).filter((ach) => ach.hsSectionId === sectionId),
-		);
 		return (heroAchievements ?? []).filter((ach) => ach.hsSectionId === sectionId);
 	}
 
@@ -499,7 +493,6 @@ export const getAchievementsForHero = (
 	if (!result?.length) {
 		console.warn('Could not load achievements for hero', heroCardId, searchName, heroAchievements);
 	}
-	console.debug('achievements without section id', result);
 	return result;
 };
 
@@ -920,13 +913,11 @@ const isSupportedScenarioForPlayer = (
 				reason: 'piloted-whirl-o-tron',
 			};
 		} else if (boardInfo?.secrets?.length > 0) {
-			//console.debug('not supported');
 			return {
 				isSupported: false,
 				reason: 'secret',
 			};
 		} else if (hasStreetMagician(boardInfo)) {
-			//console.debug('not supported');
 			return {
 				isSupported: false,
 				reason: 'secret',

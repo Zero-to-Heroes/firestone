@@ -109,7 +109,6 @@ export class BgsBattleSideComponent {
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
-		console.debug('setting player battle side', value);
 		this.updateInfo();
 	}
 
@@ -148,7 +147,6 @@ export class BgsBattleSideComponent {
 
 	// CdkDragDrop<number>
 	drop(event: any) {
-		console.debug('drop event', event);
 		const movedElement: Entity = event.item.data;
 		const movedElementNewIndex = event.container.data;
 		const entitiesWithoutMovedElement: Entity[] = this.entities.filter((entity) => entity.id !== movedElement.id);

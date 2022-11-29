@@ -63,19 +63,6 @@ export class DevService {
 			await this.prefs.savePreferences({ ...prefs, constructedDeckVersions: [] });
 		};
 		this.addAchievementCommands();
-		// this.addCustomLogLoaderCommand();
-		// window['arena'] = async () => {
-		// 	const info = await this.memoryService.getArenaInfo();
-		// 	console.debug(info);
-		// };
-		// window['matchStart'] = async () => {
-		// 	this.gameEvents.dispatchGameEvent({
-		// 		Type: 'BATTLEGROUNDS_HERO_SELECTION',
-		// 		Value: {
-		// 			CardIds: ['TB_BaconShop_HERO_58', 'TB_BaconShop_HERO_22', 'TB_BaconShop_HERO_56'],
-		// 		},
-		// 	});
-		// };
 	}
 
 	private addAchievementCommands() {

@@ -57,7 +57,6 @@ export class MindVisionFacadeService {
 		return new Promise<any[]>(async (resolve, reject) => {
 			const plugin = await this.get();
 			plugin.getCollection(throwException, (collection) => {
-				console.debug('[mind-vision] got collection', collection);
 				if (collection === 'exception') {
 					reject();
 					return;
@@ -477,13 +476,11 @@ export class MindVisionFacadeService {
 		return new Promise<void>(async (resolve) => {
 			this.instantiatePlugin(async () => {
 				const plugin = await this.get();
-				console.debug('[mind-vision] adding listener', plugin.onGlobalEvent);
 				if (this.globalEventListener) {
 					plugin.onGlobalEvent.removeListener(this.globalEventListener);
 				}
 				plugin.onGlobalEvent.addListener(this.globalEventListener);
 
-				console.debug('[mind-vision] adding listener', plugin.onMemoryUpdate);
 				if (this.memoryUpdateListener) {
 					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 				}

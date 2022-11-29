@@ -10,11 +10,9 @@ export class GlobalStatsLoadedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('setting global stats', event.stats, event.stats === undefined);
 		const newState = currentState.update({
 			globalStats: event.stats,
 		});
-		console.debug('newState', newState, currentState, event.stats);
 		return [newState, null];
 	}
 }

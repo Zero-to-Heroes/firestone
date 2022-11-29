@@ -111,7 +111,6 @@ export class DuelsFiltersComponent extends AbstractSubscriptionComponent impleme
 			.pipe(
 				this.mapData(([hiddenCodes, selectedCategoryId]) => {
 					const result = !!hiddenCodes?.length && selectedCategoryId === 'duels-personal-decks';
-					console.debug('showing hidden decks link?', result, hiddenCodes, selectedCategoryId);
 					return result;
 				}),
 			);

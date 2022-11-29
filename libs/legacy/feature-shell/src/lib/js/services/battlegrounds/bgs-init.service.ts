@@ -47,12 +47,10 @@ export class BgsInitService {
 	public async loadInitialPerfectGames() {
 		const localPercectGames = this.localStorage.getItem<readonly GameStat[]>('battlegrounds-perfect-games');
 		if (!!localPercectGames?.length) {
-			console.debug('loaded local perfect games', localPercectGames);
 			this.store.send(new BattlegroundsPerfectGamesLoadedEvent(localPercectGames));
 		}
 
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
-		console.debug('[bgs-init] perfect games', result);
 		const remotePerfectGames: readonly GameStat[] = (result ?? [])
 			.map((res) =>
 				GameStat.create({
@@ -64,7 +62,6 @@ export class BgsInitService {
 				} as GameStat),
 			)
 			.filter((stat) => stat.playerRank);
-		console.debug('loaded remote perfect games', remotePerfectGames);
 		this.localStorage.setItem('battlegrounds-perfect-games', remotePerfectGames);
 		this.store.send(new BattlegroundsPerfectGamesLoadedEvent(remotePerfectGames));
 	}

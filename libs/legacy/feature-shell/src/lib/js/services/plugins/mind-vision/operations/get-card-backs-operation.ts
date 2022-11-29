@@ -21,7 +21,6 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 							owned: true,
 						} as CardBack),
 				);
-				console.debug('mapping card back results', result, cardBacks);
 				return result;
 			},
 			20,

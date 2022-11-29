@@ -22,15 +22,14 @@ export class FilterShownAchievementsProcessor implements Processor {
 
 		if (searchString?.length) {
 			amplitude.getInstance().logEvent('search', {
-				'page': 'achievements',
-				'searchString': searchString,
+				page: 'achievements',
+				searchString: searchString,
 			});
 		}
 
 		const selectedCategory = currentState.achievements.findCategory(
 			navigationState.navigationAchievements.selectedCategoryId,
 		);
-		//console.debug('selectedCategory', selectedCategory);
 
 		const allAchievements: readonly VisualAchievement[] = selectedCategory
 			? selectedCategory.retrieveAllAchievements()

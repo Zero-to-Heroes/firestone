@@ -48,7 +48,6 @@ export class BattlegroundsQuestsService {
 		const result = await this.api.callGetApi<BgsGlobalStats2>(
 			`${BGS_STATS_RETRIEVE_URL.replace('%timeSuffix%', fixInvalidTimeSuffix(timeFilter))}`,
 		);
-		console.debug('loaded remote quests data', result);
 		const referenceData = result?.heroStats;
 		this.localStorage.setItem('bgs-quests-data', referenceData);
 		console.log('loaded bgs-quests-data ref data');

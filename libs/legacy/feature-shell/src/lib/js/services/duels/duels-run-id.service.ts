@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { DuelsInfo } from '../../models/memory/memory-duels';
@@ -35,7 +35,6 @@ export class DuelsRunIdService {
 				filter((latestDuelsMatch) => !!latestDuelsMatch),
 				distinctUntilChanged(),
 				startWith(null),
-				tap((info) => console.debug('[duels-run] latest duels game', info)),
 			)
 			.subscribe(this.lastDuelsGame$);
 		const currentRun$ = combineLatest(this.lastDuelsGame$, this.store.duelsRuns$()).pipe(
@@ -47,7 +46,6 @@ export class DuelsRunIdService {
 			startWith(null),
 		);
 		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe(
-			tap((info) => console.debug('[duels-run] duelsInfo', info)),
 			filter((info) => !!info),
 			// Only things that are caracteristic of a new run are of interest here
 			// We ignore the decklist because it evolves during a single run
@@ -67,7 +65,6 @@ export class DuelsRunIdService {
 
 		combineLatest(duelsInfo$, currentRun$, this.lastDuelsGame$)
 			.pipe(
-				tap((info) => console.debug('[duels-run] will build new run id', info)),
 				filter(([duelsInfo, currentRun, latestDuelsMatch]) => !!duelsInfo),
 				map(([duelsInfo, currentRun, latestDuelsMatch]) => {
 					if (!latestDuelsMatch) {
@@ -79,7 +76,6 @@ export class DuelsRunIdService {
 						return uuid();
 					}
 					if (!isMatchInRun(latestDuelsMatch.additionalResult, latestDuelsMatch.result)) {
-						console.debug('[duels-run] last match in run', latestDuelsMatch);
 						return uuid();
 					}
 
@@ -88,7 +84,6 @@ export class DuelsRunIdService {
 				}),
 				startWith(uuid()),
 				distinctUntilChanged(),
-				tap((info) => console.debug('[duels-run] currentRunId', info)),
 			)
 			.subscribe(this.duelsRunId$);
 	}

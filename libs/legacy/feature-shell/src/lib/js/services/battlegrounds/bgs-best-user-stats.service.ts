@@ -39,7 +39,6 @@ export class BgsBestUserStatsService {
 		};
 		this.localStorage.setItem('user-bgs-best-stats', newInfo);
 		console.log('loaded remote bestBgsStats');
-		console.debug('bestBgsStats', remoteData);
 		this.store.send(new BgsBestStatsLoadedEvent(newInfo.stats));
 		return remoteData;
 	}

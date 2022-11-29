@@ -59,7 +59,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class FullScreenOverlaysClickthroughComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	activeTheme$: Observable<CurrentAppType>;
 
 	private windowId: string;
@@ -96,7 +97,6 @@ export class FullScreenOverlaysClickthroughComponent
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.ow.setWindowPassthrough(this.windowId);
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.debug('res changed', res);
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
@@ -120,7 +120,6 @@ export class FullScreenOverlaysClickthroughComponent
 		const gameHeight = gameInfo.height;
 		const height = gameHeight;
 		const width = gameHeight * 1.4;
-		// console.debug('changing window size', width, height);
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		window.dispatchEvent(new Event('window-resize'));
 
@@ -128,6 +127,5 @@ export class FullScreenOverlaysClickthroughComponent
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = Math.floor(dpi * 0.5 * (gameWidth - width));
 		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
-		// console.debug('changing window position', newLeft, 0, dpi, gameWidth - width);
 	}
 }

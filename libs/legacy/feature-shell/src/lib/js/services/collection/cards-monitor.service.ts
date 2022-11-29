@@ -93,7 +93,6 @@ export class CardsMonitorService {
 			return;
 		}
 
-		console.debug('[cards-monitor] received log line', data);
 		this.packNotificationQueue.next(true);
 	}
 

@@ -15,7 +15,6 @@ export class ConstructedMetaDecksLoadedProcessor implements Processor {
 				metaDecks: event.decks,
 			}),
 		});
-		console.debug('newState', newState, currentState, event.decks);
 		return [newState, null];
 	}
 }

@@ -191,20 +191,16 @@ export class MemoryInspectionService {
 		let result = await this.mindVision.callMindVision(() =>
 			this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId),
 		);
-		console.debug('[mind-vision] [getActiveDeck]', result, forceResetIfResultEmpty);
 		if (this.getActiveDeckOperation.emptyCheck(result) && forceResetIfResultEmpty) {
-			console.debug('[mind-vision] [getActiveDeck]', 'calling with force reset');
 			result = await this.mindVision.callMindVision(() =>
 				this.getActiveDeckOperation.call(numberOfRetries, true, selectedDeckId),
 			);
-			console.debug('[mind-vision] [getActiveDeck]', 'after force reset', result);
 		}
 		return result;
 	}
 
 	public async getSelectedDeckId(): Promise<number> {
 		// const result = await this.getSelectedDeckIdOperation.call());
-		// console.debug('[mind-vision] [getSelectedDeckId]', result);
 		return this.mindVision.callMindVision(() => this.getSelectedDeckIdOperation.call());
 	}
 
@@ -221,7 +217,6 @@ export class MemoryInspectionService {
 	}
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
-		console.debug('getting duels info');
 		return this.mindVision.callMindVision(() => this.getDuelsInfoOperation.call(numberOfRetries, forceReset));
 	}
 

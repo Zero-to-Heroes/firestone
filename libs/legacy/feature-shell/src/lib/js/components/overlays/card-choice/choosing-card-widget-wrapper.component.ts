@@ -135,15 +135,12 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 'mulligan' ||
 									(c as DeckCard).metaInfo.turnAtWhichCardEnteredHand === 0,
 							);
-						console.debug('matching cards', isInStartingHand);
 						return isInStartingHand ? 'flag' : null;
 					case 2:
 						const isInHand = !!state.opponentDeck.hand.filter((c) => c.cardId === option.cardId).length;
-						console.debug('matching cards', isInHand);
 						return isInHand ? 'flag' : null;
 					case 3:
 						// const isInDeck = !!state.opponentDeck.deck.filter((c) => c.cardId === option.cardId).length;
-						// console.debug('matching cards', isInDeck);
 						// return isInDeck ? 'flag' : null;
 						// Don't return a flag here, because we don't know if the card could be in their hand
 						return null;

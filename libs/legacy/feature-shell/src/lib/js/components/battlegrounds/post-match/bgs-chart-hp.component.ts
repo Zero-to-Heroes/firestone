@@ -142,7 +142,6 @@ export class BgsChartHpComponent {
 						return this.i18n.translateString('battlegrounds.battle.turn', { value: items[0].label });
 					},
 					beforeBody: (items: TooltipItem<'line'>[]): string | string[] => {
-						console.debug('beforeBody', items, self);
 						const sortWeight = (legendItem: LegendItem): number => {
 							const cardId = legendItem.cardId;
 							return +items.find((i) => i.dataset.label === cardId).raw;
@@ -163,7 +162,6 @@ export class BgsChartHpComponent {
 					},
 				},
 				external: (context) => {
-					console.debug('"context', context);
 					// Tooltip Element
 					const tooltipId = `chartjs-tooltip-hp-${this.tooltipSuffix ?? 'default'}`;
 					let tooltipEl = document.getElementById(tooltipId);
@@ -375,12 +373,10 @@ export class BgsChartHpComponent {
 			this._stats.leaderboardPositionOverTurn,
 			this._stats.hpOverTurn,
 		);
-		console.debug('[hp-chart] playerOrder', playerOrder, this._stats);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
-		console.debug('[hp-chart] hpOverTurn', hpOverTurn);
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerCardIds = [...playerOrder].sort();
@@ -396,7 +392,6 @@ export class BgsChartHpComponent {
 					?.filter((turnInfo) => turnInfo)
 					.map((turnInfo) => Math.max(0, turnInfo.value + (turnInfo.armor ?? 0))) || [],
 		}));
-		console.debug('[hp-chart] players', players);
 
 		this.legend = players.map((player) => ({
 			cardId: player.cardId,
@@ -407,7 +402,6 @@ export class BgsChartHpComponent {
 			shown: true,
 			color: player.color,
 		}));
-		console.debug('[hp-chart] legend', this.legend);
 		const newChartData: ChartData<'line'>['datasets'] = players.map((player) => ({
 			data: player.hpOverTurn,
 			cardId: player.cardId,

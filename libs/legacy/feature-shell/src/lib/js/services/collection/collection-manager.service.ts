@@ -51,7 +51,6 @@ export class CollectionManager {
 			Date.now() - this.lastCollectionRetrieveTimestamp < this.DEBOUNCE_COLLECTION_RETRIEVE_MS;
 		console.log('[collection-manager] skipMemoryReading', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
-		console.debug('[collection-manager] got collection', collection);
 		// For debug purposes, can be removed later on
 		console.log(
 			'[collection-manager] golem in collection',
@@ -74,7 +73,6 @@ export class CollectionManager {
 	public async getBattlegroundsOwnedHeroSkinDbfIds(skipMemoryReading = false): Promise<readonly number[]> {
 		console.log('[collection-manager] getBattlegroundsOwnedHeroSkinDbfIds', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds() : null;
-		console.debug('[collection-manager] got getBattlegroundsOwnedHeroSkinDbfIds', collection);
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving getBattlegroundsOwnedHeroSkinDbfIds from db');
 			const collectionFromDb = await this.db.getBattlegroundsOwnedHeroSkinDbfIds();
@@ -115,23 +113,18 @@ export class CollectionManager {
 		console.log('[collection-manager] getting reference card backs');
 		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
 		console.log('[collection-manager] getting card backs', this.referenceCardBacks?.length);
-		console.debug('[collection-manager] card backs', this.referenceCardBacks);
 		const cardBacks = await this.memoryReading.getCardBacks();
-		console.debug('[collection-manager] card backs from memory', cardBacks);
 		console.log('[collection-manager] retrieved card backs from MindVision', cardBacks?.length);
 		if (!cardBacks || cardBacks.length === 0) {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
 			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb?.length);
-			console.debug('[collection-manager] card from db', cardBacksFromDb);
 			// We do this so that if we update the reference, we still see them until the info
 			// has been refreshed from the in-game memory
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacksFromDb);
-			console.debug('[collection-manager] merged cards from db', merged);
 			return merged;
 		} else {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
-			console.debug('[collection-manager] updating card backs in db', merged);
 			const saved = await this.db.saveCardBacks(merged);
 			return saved;
 		}
@@ -235,7 +228,6 @@ export class CollectionManager {
 	private init() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				console.debug('[collection-manager] game started, re-fetching info from memory');
 				await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
 			}
 		});

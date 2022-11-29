@@ -28,22 +28,18 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: MinionsDiedEvent): Promise<GameState> {
-		//console.debug('considering event', gameEvent);
 		const [, , localPlayer] = gameEvent.parse();
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 
 		const deadEnemyMinions = gameEvent.additionalData.deadMinions.filter(
 			(deadMinion) => deadMinion.ControllerId !== activePlayerId,
 		);
-		//console.debug('deadEnemyMinions', deadEnemyMinions, gameEvent);
 		if (!deadEnemyMinions?.length) {
 			return currentState;
 		}
 
 		const isPlayerWithDeadMinion = deadEnemyMinions[0].ControllerId === localPlayer.PlayerId;
-		//console.debug('isPlayerWithDeadMinion', isPlayerWithDeadMinion);
 		const deckWithSecretToCheck = isPlayerWithDeadMinion ? currentState.playerDeck : currentState.opponentDeck;
-		//console.debug('deckWithSecretToCheck', deckWithSecretToCheck);
 		const secretsWeCantRuleOut = [];
 
 		// TODO: handle the case where the max hand size has been bumped to 12

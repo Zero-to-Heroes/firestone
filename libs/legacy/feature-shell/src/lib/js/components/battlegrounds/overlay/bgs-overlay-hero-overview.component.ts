@@ -81,7 +81,6 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 					this.renderer.setStyle(element, 'transform', `scale(${this.scale})`);
 				} catch (e) {
 					// Do nothing
-					console.debug('error', e);
 				}
 			});
 		this.store
@@ -97,13 +96,11 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 					}
 				} catch (e) {
 					// Do nothing
-					console.debug('error', e);
 				}
 			});
 	}
 
 	async ngAfterContentInit() {
 		// This method is not called, because we create teh component manually
-		console.debug('after content init');
 	}
 }

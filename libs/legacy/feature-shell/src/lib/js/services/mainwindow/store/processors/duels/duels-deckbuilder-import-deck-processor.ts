@@ -18,7 +18,6 @@ export class DuelsDeckbuilderImportDeckProcessor implements Processor {
 		let deckDefinition: DeckDefinition = null;
 		try {
 			deckDefinition = decode(event.deckstring);
-			console.debug('parsed deck from clipboard', deckDefinition);
 		} catch (e) {
 			console.warn('Could not decode deckstring', event.deckstring, event.deckName, e);
 			return [null, null];

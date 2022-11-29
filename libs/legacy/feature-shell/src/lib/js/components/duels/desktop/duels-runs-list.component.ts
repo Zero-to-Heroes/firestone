@@ -94,7 +94,6 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 		).pipe(
 			map(([runs, [timeFilter, classFilter, gameMode, duelsDeckDeletes, patch], deckstring]) => {
 				if (!runs?.length) {
-					console.debug('no runs', runs);
 					return null;
 				}
 
@@ -121,21 +120,18 @@ export class DuelsRunsListComponent extends AbstractSubscriptionComponent implem
 							...group.runs,
 						];
 					});
-				console.debug('flat info', flat);
 				return !!flat?.length ? flat : null;
 			}),
 			tap((filter) => {
 				// FIXME: it is necessary to call scroll.refresh(), but I don't know why
 				// Maybe upgrade the lib to its latest version?
 				setTimeout(() => {
-					console.debug('scroll', this.scroll);
 					this.scroll?.refresh();
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
 				}, 0);
 				setTimeout(() => {
-					console.debug('scroll 2', this.scroll);
 					this.scroll?.refresh();
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();

@@ -7,7 +7,7 @@ import { Mail } from '../../mail-state';
 	selector: 'mailbox-message',
 	styleUrls: [`../../../../css/global/components-global.scss`, `./mailbox-message.component.scss`],
 	template: `
-		<div class="mailbox-message" [ngClass]="{ 'read': read, 'unread': !read }">
+		<div class="mailbox-message" [ngClass]="{ read: read, unread: !read }">
 			<div class="unread-mails" *ngIf="!read"></div>
 			<div class="category" *ngIf="icon" [inlineSVG]="icon" [helpTooltip]="iconTooltip"></div>
 			<div class="info">
@@ -29,7 +29,6 @@ import { Mail } from '../../mail-state';
 })
 export class MailboxMessageComponent {
 	@Input() set message(value: Mail) {
-		console.debug('setting message', value);
 		this.icon = this.buildIcon(value);
 		this.iconTooltip = capitalizeFirstLetter(value.categories[0]);
 		this.date = value.date.toLocaleString(this.i18n.formatCurrentLocale());

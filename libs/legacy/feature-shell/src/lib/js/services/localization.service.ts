@@ -27,7 +27,6 @@ export class LocalizationService {
 	public async initReady() {
 		return new Promise<void>(async (resolve) => {
 			while (!this.ready || !this.translate || !this.translate.store?.langs?.length) {
-				console.debug('[translate] missing translations', this.translate);
 				await sleep(100);
 			}
 

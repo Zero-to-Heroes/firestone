@@ -14,7 +14,6 @@ export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.debug('saving deck', event);
 		const prefs = await this.prefs.getPreferences();
 		const newDeck: DeckSummary = {
 			class: currentState.decktracker.deckbuilder.currentClass,
@@ -27,10 +26,8 @@ export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
 		const existingDecks = [...prefs.constructedPersonalAdditionalDecks, newDeck].map((deck) =>
 			deck.deckstring !== event.deckstring ? deck : { ...deck, ...newDeck },
 		);
-		console.debug('existingDecks', existingDecks, newDeck);
 		const newPrefs = { ...prefs, constructedPersonalAdditionalDecks: existingDecks };
 		await this.prefs.savePreferences(newPrefs);
-		console.debug('newPrefs', newPrefs);
 		return [null, null];
 	}
 }

@@ -18,7 +18,6 @@ export class DataScriptChangedParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		console.debug('[data-script-changed] handling event', cardId, entityId, gameEvent, currentState);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -29,10 +28,8 @@ export class DataScriptChangedParser implements EventParser {
 		}
 
 		const cardWithAdditionalAttributes = addAdditionalAttribues(cardInHand, deck, gameEvent, this.allCards);
-		console.debug('[data-script-changed] cardWithAdditionalAttributes', cardWithAdditionalAttributes, cardInHand);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.replaceCardInZone(previousHand, cardWithAdditionalAttributes);
-		console.debug('[data-script-changed] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
@@ -48,7 +45,6 @@ export class DataScriptChangedParser implements EventParser {
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
-		console.debug('[data-script-changed] deckState', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

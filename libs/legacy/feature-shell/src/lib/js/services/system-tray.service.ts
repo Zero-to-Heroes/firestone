@@ -41,7 +41,6 @@ export class SystemTrayService {
 
 		await this.ow.setTrayMenu(menu);
 		this.ow.onTrayMenuClicked((event) => {
-			console.debug('[tray] clicked on menu', event);
 			switch (event?.item) {
 				case 'main-window':
 					this.showMainWindow();

@@ -23,7 +23,6 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		const deck = this.duelsDecksProvider.duelsDecks$.value.find(
 			(stat) => stat.initialDeckList === event.deckstring,
 		);
-		console.debug('deck', deck, currentState, event);
 		const firstRun = deck.runs?.length ? deck.runs[0] : null;
 		const expandedRunIds: readonly string[] = !!firstRun ? [firstRun.id] : [];
 		const prefs = await this.prefs.getPreferences();

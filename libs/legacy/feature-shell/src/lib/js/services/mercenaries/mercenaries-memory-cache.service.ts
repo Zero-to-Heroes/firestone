@@ -64,32 +64,22 @@ export class MercenariesMemoryCacheService {
 					return;
 				}
 				this.previousScene = newScene;
-				console.debug('[merc-memory] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
 				// Because when we get into a new map, the old map info is present in the memory for a short while
 				if (newScene === SceneMode.LETTUCE_MAP) {
 					await sleep(2000);
-					console.debug('[merc-memory] done waiting');
 				}
 			} else if (changes.IsMercenariesTasksUpdated) {
-				console.debug('[merc-memory] updating tasks', changes);
 			} else {
 				return;
 			}
 
 			const newMercenariesCollectionInfo = await this.getMercenariesMergedCollectionInfo(true);
-			console.debug('[merc-memory] loaded mercs collection info', newMercenariesCollectionInfo);
 			// const newMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(5, true);
 			if (newMercenariesCollectionInfo) {
 				this.memoryCollectionInfo$.next(newMercenariesCollectionInfo);
 			}
 
 			const mapInfo = await this.memoryService.getMercenariesInfo();
-			console.debug(
-				'[merc-memory] got mapInfo',
-				mapInfo,
-				this.previousMapInfo,
-				deepEqual(mapInfo, this.previousMapInfo),
-			);
 			if (!deepEqual(mapInfo, this.previousMapInfo)) {
 				this.previousMapInfo = mapInfo;
 				this.memoryMapInfo$.next(mapInfo);
@@ -99,11 +89,9 @@ export class MercenariesMemoryCacheService {
 
 	private shouldFetchMercenariesMemoryInfo(newScene: SceneMode): boolean {
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
-			// console.debug('[merc-memory] non relevant scene', newScene);
 			return false;
 		}
 		if (newScene === SceneMode.GAMEPLAY && !MERCENARIES_SCENES.includes(this.previousScene)) {
-			// console.debug('[merc-memory] not coming from lettuce scene', newScene, this.previousScene);
 			return false;
 		}
 		return true;
@@ -112,14 +100,10 @@ export class MercenariesMemoryCacheService {
 	public async getMercenariesMergedCollectionInfo(
 		forceMemoryResetIfCollectionInfoEmpty = false,
 	): Promise<MemoryMercenariesCollectionInfo> {
-		const newMercenariesInfo: MemoryMercenariesCollectionInfo = await this.memoryService.getMercenariesCollectionInfo(
-			2,
-			forceMemoryResetIfCollectionInfoEmpty,
-		);
-		console.debug('[merc-memory] retrieved merc info from memory', newMercenariesInfo);
+		const newMercenariesInfo: MemoryMercenariesCollectionInfo =
+			await this.memoryService.getMercenariesCollectionInfo(2, forceMemoryResetIfCollectionInfoEmpty);
 
 		const localMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
-		console.debug('[merc-memory] retrieved merc info from localStorage', localMercenariesInfo);
 
 		const mergedInfo: MemoryMercenariesCollectionInfo = {
 			Mercenaries: newMercenariesInfo?.Mercenaries ?? localMercenariesInfo?.Mercenaries,
@@ -127,9 +111,7 @@ export class MercenariesMemoryCacheService {
 			Visitors: newMercenariesInfo?.Visitors ?? localMercenariesInfo?.Visitors,
 		};
 
-		console.debug('[merc-memory] will save mercs info locally', mergedInfo);
 		await this.saveLocalMercenariesCollectionInfo(mergedInfo);
-		console.debug('[merc-memory] saved mercs info locally', mergedInfo);
 		return mergedInfo;
 	}
 
@@ -146,7 +128,6 @@ export class MercenariesMemoryCacheService {
 		const result = this.localStorageService.getItem<MemoryMercenariesCollectionInfo>(
 			LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION,
 		);
-		console.debug('[merc-memory] retrieved mercenariesMemoryCollectionInfo from localStoarge', result);
 		return result;
 	}
 }

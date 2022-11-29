@@ -5,7 +5,7 @@ import { ApiRunner } from '@services/api-runner';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '@services/utils';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Mail, MailState } from '../mail-state';
 
 const MAILS_URL = 'https://static.zerotoheroes.com/api/mailbox/mailbox.gz.json';
@@ -61,7 +61,6 @@ export class MailsService {
 	private async checkMails() {
 		const infoStr = await this.api.get(MAILS_URL);
 		const mailboxInfo: MailboxMessagesInfo = !!infoStr?.length ? JSON.parse(infoStr) : null;
-		console.debug('[mailbox] retrieved info', mailboxInfo);
 		if (!deepEqual(mailboxInfo, this.mailsInfo$$.value)) {
 			this.mailsInfo$$.next(mailboxInfo);
 		}

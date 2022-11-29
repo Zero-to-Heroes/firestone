@@ -24,7 +24,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 		<decktracker-overlay-opponent
 			*ngIf="showWidget$ | async"
 			class="widget"
-			[ngClass]="{ 'hidden': hidden$ | async }"
+			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
@@ -35,7 +35,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class DecktrackerOpponentWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => 0;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 50;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
@@ -63,7 +64,6 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	}
 
 	ngAfterContentInit(): void {
-		// console.debug('store', this.store);
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest(

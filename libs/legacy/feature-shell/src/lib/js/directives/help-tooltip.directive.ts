@@ -28,15 +28,12 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@Input('helpTooltip') set text(value: string | SafeHtml) {
 		if (value === this._text) {
-			console.debug('same value, returning', value);
 			return;
 		}
 		this._text = value?.toString();
-		//console.debug('updating text in tooltip', value);
 		if (!this._text && this.overlayRef) {
 			this.overlayRef?.detach();
 		} else if (this.tooltipRef) {
-			//console.debug('existing tooltip', value);
 			this.tooltipRef.instance.text = this._text;
 		}
 	}
@@ -67,7 +64,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
-		//console.debug('targeting tooltip help element', this.position, target);
 
 		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'

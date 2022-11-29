@@ -15,7 +15,6 @@ export class BgsBattleSimulationResetParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsBattleSimulationResetEvent,
 	): Promise<BattlegroundsState> {
-		console.debug('handling simulation reset event', event);
 		const panel: BgsBattlesPanel = currentState.panels.find(
 			(p: BgsPanel) => p.id === 'bgs-battles',
 		) as BgsBattlesPanel;
@@ -24,7 +23,6 @@ export class BgsBattleSimulationResetParser implements EventParser {
 				(faceOff) => faceOff.id !== event.faceOffId,
 			) as readonly BgsFaceOffWithSimulation[],
 		} as BgsBattlesPanel);
-		console.debug('new panel', newPanel);
 		return currentState.updatePanel(newPanel);
 	}
 }

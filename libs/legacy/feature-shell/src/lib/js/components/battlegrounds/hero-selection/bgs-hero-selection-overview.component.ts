@@ -71,19 +71,18 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 		).pipe(
 			this.mapData(([stats, [achievements], [panel, showAchievements]]) => {
 				const heroesAchievementCategory = achievements.findCategory('hearthstone_game_sub_13');
-				// console.debug('panel & category', panel, heroesAchievementCategory);
 				if (!panel || !heroesAchievementCategory) {
 					return [];
 				}
 
 				const selectionOptions =
 					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
-				// console.debug('selectionOptions', selectionOptions);
 				if (!selectionOptions?.length) {
 					return [];
 				}
 
-				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory.retrieveAllAchievements();
+				const heroAchievements: readonly VisualAchievement[] =
+					heroesAchievementCategory.retrieveAllAchievements();
 				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const existingStat = stats?.find((overview) => overview.id === normalized);
@@ -91,7 +90,6 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
-					console.debug('achievements for hero', achievementsForHero);
 					return {
 						...statWithDefault,
 						id: cardId,

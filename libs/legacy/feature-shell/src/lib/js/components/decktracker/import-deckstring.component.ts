@@ -86,7 +86,6 @@ export class ImportDeckstringComponent implements AfterViewInit {
 	}
 
 	confirmOverride() {
-		console.debug('confirming override', this.side, this.deckstring);
 		this.deckUpdater.next(
 			new DeckstringOverrideEvent(
 				this.deckName ?? this.i18n.translateString('decktracker.deck-name.unknown-deck'),

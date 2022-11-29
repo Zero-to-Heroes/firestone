@@ -22,9 +22,7 @@ addEventListener('message', ({ data }) => {
 	// let i = 0;
 
 	for (const battleInfo of battleMessages) {
-		// console.debug('permutation', i++, battleMessages.length, battleInfo);
 		const permutationResult: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
-		// console.debug('\t permutationResult', permutationResult);
 		if (!!permutationResult) {
 			permutationResults.push({
 				permutation: battleInfo.playerBoard.board,
@@ -34,7 +32,6 @@ addEventListener('message', ({ data }) => {
 				},
 			});
 		}
-		// console.debug('\t updated results');
 	}
 
 	postMessage(JSON.stringify(permutationResults));

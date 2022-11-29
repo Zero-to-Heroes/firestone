@@ -10,7 +10,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
 import { FeatureFlags } from '../services/feature-flags';
@@ -37,7 +36,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.constructed-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'decktracker' }"
+				[ngClass]="{ selected: selectedModule === 'decktracker' }"
 				(click)="selectModule('decktracker')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/decktracker.svg"></div>
@@ -51,7 +50,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.battlegrounds-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
+				[ngClass]="{ selected: selectedModule === 'battlegrounds' }"
 				(click)="selectModule('battlegrounds')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
@@ -66,7 +65,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.mercenaries-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'mercenaries' }"
+				[ngClass]="{ selected: selectedModule === 'mercenaries' }"
 				(click)="selectModule('mercenaries')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/mercenaries.svg"></div>
@@ -81,7 +80,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.duels-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'duels' }"
+				[ngClass]="{ selected: selectedModule === 'duels' }"
 				(click)="selectModule('duels')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
@@ -95,7 +94,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.arena-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'arena' }"
+				[ngClass]="{ selected: selectedModule === 'arena' }"
 				(click)="selectModule('arena')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/arena.svg"></div>
@@ -109,7 +108,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item tavern-brawl"
 				[attr.aria-label]="'app.menu.tavern-brawl-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'tavern-brawl' }"
+				[ngClass]="{ selected: selectedModule === 'tavern-brawl' }"
 				(click)="selectModule('tavern-brawl')"
 			>
 				<div class="icon" inlineSVG="assets/svg/tavern_brawl.svg"></div>
@@ -124,7 +123,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.replays-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'replays' }"
+				[ngClass]="{ selected: selectedModule === 'replays' }"
 				(click)="selectModule('replays')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/replays.svg"></div>
@@ -138,7 +137,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.achievements-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
+				[ngClass]="{ selected: selectedModule === 'achievements' }"
 				(click)="selectModule('achievements')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/achievements.svg"></div>
@@ -152,7 +151,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.collection-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'collection' }"
+				[ngClass]="{ selected: selectedModule === 'collection' }"
 				(click)="selectModule('collection')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/collection.svg"></div>
@@ -168,7 +167,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item mailbox"
 				[attr.aria-label]="'app.menu.mailbox-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'mailbox' }"
+				[ngClass]="{ selected: selectedModule === 'mailbox' }"
 				(click)="selectModule('mailbox')"
 			>
 				<div class="icon" inlineSVG="assets/svg/mailbox.svg"></div>
@@ -189,7 +188,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.streams-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'streams' }"
+				[ngClass]="{ selected: selectedModule === 'streams' }"
 				(click)="selectModule('streams')"
 			>
 				<div class="icon" inlineSVG="assets/svg/streams.svg"></div>
@@ -203,7 +202,7 @@ declare let amplitude;
 				type="button"
 				class="menu-item"
 				[attr.aria-label]="'app.menu.stats-header' | owTranslate"
-				[ngClass]="{ 'selected': selectedModule === 'stats' }"
+				[ngClass]="{ selected: selectedModule === 'stats' }"
 				(click)="selectModule('stats')"
 			>
 				<div class="icon" inlineSVG="assets/svg/whatsnew/stats.svg"></div>
@@ -291,12 +290,10 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
-		this.hasNewMail$ = this.store.mails$().pipe(
-			tap((info) => console.debug('mailbox', info)),
-			this.mapData((mailState) => mailState.mails.some((mail) => !mail.read)),
-		);
+		this.hasNewMail$ = this.store
+			.mails$()
+			.pipe(this.mapData((mailState) => mailState.mails.some((mail) => !mail.read)));
 		this.mailboxTextDetails$ = this.store.mails$().pipe(
-			tap((info) => console.debug('mailbox', info)),
 			this.mapData((mailState) =>
 				this.i18n.translateString('app.menu.mailbox-text-details', {
 					value: mailState.mails.filter((mail) => !mail.read).length,
@@ -314,7 +311,7 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	}
 
 	selectModule(module: CurrentAppType) {
-		amplitude.getInstance().logEvent('app-navigation', { 'section': module });
+		amplitude.getInstance().logEvent('app-navigation', { section: module });
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 
@@ -323,7 +320,7 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	}
 
 	goPremium() {
-		amplitude.getInstance().logEvent('subscription-click', { 'page': 'left-menu' });
+		amplitude.getInstance().logEvent('subscription-click', { page: 'left-menu' });
 		this.ow.openStore();
 	}
 }

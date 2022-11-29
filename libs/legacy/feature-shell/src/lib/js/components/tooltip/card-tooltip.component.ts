@@ -32,7 +32,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<div
 				*ngFor="let card of value.cards"
 				class="card-tooltip {{ card.additionalClass }}"
-				[ngClass]="{ 'hidden': !value.relativePosition }"
+				[ngClass]="{ hidden: !value.relativePosition }"
 			>
 				<div *ngIf="card.createdBy" class="created-by">Created by</div>
 				<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -50,11 +50,11 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				class="related-cards-wrapper"
 				*ngIf="value.relatedCards?.length"
 				[ngClass]="{
-					'left': value.relativePosition === 'left',
-					'hidden': !value.relativePosition
+					left: value.relativePosition === 'left',
+					hidden: !value.relativePosition
 				}"
 			>
-				<div class="related-cards-container" [ngClass]="{ 'wide': value.relatedCards.length > 6 }">
+				<div class="related-cards-container" [ngClass]="{ wide: value.relatedCards.length > 6 }">
 					<div class="related-cards">
 						<div class="related-card" *ngFor="let card of value.relatedCards">
 							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
@@ -68,7 +68,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class CardTooltipComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, OnDestroy, AfterContentInit {
+	implements AfterViewInit, OnDestroy, AfterContentInit
+{
 	public viewRef: ComponentRef<CardTooltipComponent>;
 
 	cards$: Observable<readonly InternalCard[]>;
@@ -77,39 +78,30 @@ export class CardTooltipComponent
 	displayBuffs$: Observable<boolean>;
 
 	@Input() set cardId(value: string) {
-		// console.debug('setting card ids', value);
 		this.cardIds$$.next(value?.length ? value.split(',') : []);
 	}
 	@Input() set relatedCardIds(value: readonly string[]) {
-		// console.debug('setting related card ids', value);
 		this.relatedCardIds$$.next(value ?? []);
 	}
 	@Input() set localized(value: boolean) {
-		// console.debug('localized', value);
 		this.localized$$.next(value);
 	}
 	@Input() set cardTooltipBgs(value: boolean) {
-		// console.debug('cardTooltipBgs', value);
 		this.isBgs$$.next(value);
 	}
 	@Input() set relativePosition(value: 'left' | 'right') {
-		// console.debug('relativePosition', value);
 		this.relativePosition$$.next(value);
 	}
 	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
-		// console.debug('cardType', value);
 		this.cardType$$.next(value);
 	}
 	@Input() set additionalClass(value: string) {
-		// console.debug('additionalClass', value);
 		this.additionalClass$$.next(value);
 	}
 	@Input() set displayBuffs(value: boolean) {
-		// console.debug('displayBuffs', value);
 		this.displayBuffs$$.next(value);
 	}
 	@Input() set cardTooltipCard(value: DeckCard) {
-		// console.debug('cardTooltipCard', value);
 		this.buffs$$.next(
 			!value?.buffCardIds?.length
 				? null
@@ -147,7 +139,6 @@ export class CardTooltipComponent
 		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
-		// console.debug('card-tooltip constructor');
 		// FIXME: For some reason, lifecycle methods are not called systematically
 		setTimeout(() => this.ngAfterContentInit(), 50);
 	}
@@ -176,7 +167,6 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
-			// tap((info) => console.debug('card-tooltip relatedCards', info)),
 			this.mapData(
 				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
 					return relatedCardIds.map((cardId) => {
@@ -213,7 +203,6 @@ export class CardTooltipComponent
 				(prefs) => prefs.collectionUseHighResImages,
 			),
 		).pipe(
-			// tap((info) => console.debug('card-tooltip card', info)),
 			this.mapData(
 				([[cardIds, localized, isBgs, cardType, additionalClass], [buffs, createdBy], [locale, highRes]]) => {
 					return (
@@ -255,7 +244,6 @@ export class CardTooltipComponent
 				0,
 			),
 		);
-		// console.debug('init card-tooltip', this.cards$);
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

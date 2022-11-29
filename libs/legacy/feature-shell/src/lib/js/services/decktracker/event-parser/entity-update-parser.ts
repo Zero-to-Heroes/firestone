@@ -35,7 +35,7 @@ export class EntityUpdateParser implements EventParser {
 		// This will probably cause some existing info to disappear, and will have to be removed once the logs are fixed
 		const obfsucatedCardId =
 			!isPlayer && cardInOther && !cardInOther.cardId && !gameEvent.additionalData?.revealed ? null : cardId;
-		console.debug('[entity-update] cardInOther', cardInOther);
+		// console.debug('[entity-update] cardInOther', cardInOther);
 
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
@@ -66,7 +66,7 @@ export class EntityUpdateParser implements EventParser {
 						cardName: this.i18n.getCardName(obfsucatedCardId),
 				  } as DeckCard)
 				: null;
-		console.debug('[entity-update] newCardInDeck', newCardInDeck);
+		// console.debug('[entity-update] newCardInDeck', newCardInDeck);
 		const newCardInOther =
 			cardInOther && cardInOther.cardId !== obfsucatedCardId
 				? cardInOther.update({

@@ -65,9 +65,9 @@ export class MercenariesStoreService {
 			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
 				.asObservable()
 				.pipe(map((theEvent) => theEvent.preferences as Preferences));
-			this.mainWindowState$ = (this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
-				[MainWindowState, NavigationState]
-			>).asObservable();
+			this.mainWindowState$ = (
+				this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<[MainWindowState, NavigationState]>
+			).asObservable();
 
 			combineLatest(this.internalEventSubject$.asObservable(), this.mainWindowState$)
 				.pipe(
@@ -102,7 +102,6 @@ export class MercenariesStoreService {
 			let state = battleState;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
-				// console.debug('[merc-store] updated state', event.type, event, state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {

@@ -24,13 +24,6 @@ export class MainStepReadyParser implements EventParser {
 			!currentState.playerDeck.turnTimings.length && !currentState.playerDeck.turnTimings.length
 				? buildTurnTimings(currentTurn, isPlayerActive, gameEvent.additionalData.timestamp, currentState)
 				: [currentState.playerDeck.turnTimings, currentState.opponentDeck.turnTimings];
-		// console.debug(
-		// 	'[timer] updated turn timings after main-step-ready',
-		// 	playerTurnTimings,
-		// 	opponentTurnTimings,
-		// 	isPlayerActive,
-		// 	currentState,
-		// );
 		return Object.assign(new GameState(), currentState, {
 			mulliganOver: true,
 			currentTurn: currentTurn,

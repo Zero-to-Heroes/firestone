@@ -190,7 +190,6 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 									};
 									return result;
 								});
-							// console.debug('hero decks', heroDecks, topDecks);
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
 								(deck: DuelsHeroInfoTopDeck) =>

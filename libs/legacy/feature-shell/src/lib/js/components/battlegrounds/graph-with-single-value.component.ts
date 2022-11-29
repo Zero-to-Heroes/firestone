@@ -121,7 +121,6 @@ export class GraphWithSingleValueComponent
 
 	private getBackgroundColor(): string {
 		if (!this.chart?.nativeElement) {
-			console.debug('no native element, not returning gradient', this.chart);
 			return;
 		}
 
@@ -132,7 +131,6 @@ export class GraphWithSingleValueComponent
 			?.getContext('2d')
 			?.createLinearGradient(0, 0, 0, Math.round(chartHeight));
 		if (!gradient) {
-			console.debug('no gradient, returning', chartHeight);
 			return;
 		}
 

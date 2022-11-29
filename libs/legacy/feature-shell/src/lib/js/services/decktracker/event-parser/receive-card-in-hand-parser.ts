@@ -34,7 +34,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+		// console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -65,15 +65,15 @@ export class ReceiveCardInHandParser implements EventParser {
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
 			isSpecialCasePublic;
-		console.debug(
-			'[receive-card-in-hand] isCardInfoPublic',
-			isCardInfoPublic,
-			isPlayer,
-			cardsRevealedWhenDrawn.includes(cardId as CardIds),
-			cardId,
-			publicCardCreators.includes(lastInfluencedByCardId),
-			lastInfluencedByCardId,
-		);
+		// console.debug(
+		// 	'[receive-card-in-hand] isCardInfoPublic',
+		// 	isCardInfoPublic,
+		// 	isPlayer,
+		// 	cardsRevealedWhenDrawn.includes(cardId as CardIds),
+		// 	cardId,
+		// 	publicCardCreators.includes(lastInfluencedByCardId),
+		// 	lastInfluencedByCardId,
+		// );
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
@@ -98,7 +98,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newOther = otherCardWithObfuscation
 			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)[0]
 			: deck.otherZone;
-		console.debug('[receive-card-in-hand] new board', newBoard, newOther);
+		// console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
@@ -124,14 +124,14 @@ export class ReceiveCardInHandParser implements EventParser {
 						manaCost: this.allCards.getCard(newCardId).cost,
 						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
 				  });
-		console.debug(
-			'[receive-card-in-hand] cardWithDefault',
-			cardWithKnownInfo,
-			cardWithDefault,
-			creatorCardId,
-			otherCard,
-			otherCardWithObfuscation,
-		);
+		// console.debug(
+		// 	'[receive-card-in-hand] cardWithDefault',
+		// 	cardWithKnownInfo,
+		// 	cardWithDefault,
+		// 	creatorCardId,
+		// 	otherCard,
+		// 	otherCardWithObfuscation,
+		// );
 
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
@@ -144,11 +144,11 @@ export class ReceiveCardInHandParser implements EventParser {
 				  } as DeckCard)
 				: cardWithKnownInfo;
 		const cardWithAdditionalAttributes = addAdditionalAttribues(otherCardWithBuffs, deck, gameEvent, this.allCards);
-		console.debug(
-			'[receive-card-in-hand] cardWithAdditionalAttributes',
-			cardWithAdditionalAttributes,
-			otherCardWithBuffs,
-		);
+		// console.debug(
+		// 	'[receive-card-in-hand] cardWithAdditionalAttributes',
+		// 	cardWithAdditionalAttributes,
+		// 	otherCardWithBuffs,
+		// );
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
@@ -157,7 +157,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// here
 			true,
 		);
-		console.debug('[receive-card-in-hand] new hand', newHand);
+		// console.debug('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
@@ -175,7 +175,7 @@ export class ReceiveCardInHandParser implements EventParser {
 					  )
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
-		console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
+		// console.debug('[receive-card-in-hand] deckState', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
@@ -197,11 +197,11 @@ export const addAdditionalAttribues = (
 			const knownCurses = deck
 				.getAllCardsInDeck()
 				.filter((c) => c.cardId === CardIds.SirakessCultist_AbyssalCurseToken);
-			console.debug('[receive-card-in-hand] knownCurses', knownCurses);
+			// console.debug('[receive-card-in-hand] knownCurses', knownCurses);
 			const highestAttribute = !!knownCurses.length
 				? Math.max(...knownCurses.map((c) => (c as DeckCard).mainAttributeChange ?? 0))
 				: -1;
-			console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
+			// console.debug('[receive-card-in-hand] highestAttribute', highestAttribute);
 			return card.update({
 				mainAttributeChange:
 					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1

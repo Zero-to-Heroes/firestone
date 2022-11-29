@@ -30,7 +30,7 @@ import { filter } from 'rxjs/operators';
 			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDeck: tempDuelsDeck$ | async } as value">
 				<duels-deck-widget
 					class="deck-container item-{{ i }}"
-					[ngClass]="{ 'inactive': currentActiveDeck != null && currentActiveDeck !== i }"
+					[ngClass]="{ inactive: currentActiveDeck != null && currentActiveDeck !== i }"
 					*ngFor="let deck of decks; let i = index; trackBy: trackByDeckFn"
 					[deck]="deck"
 					[collection]="value.collection"
@@ -41,7 +41,7 @@ import { filter } from 'rxjs/operators';
 				<div class="deck-container item-3 explore-decks-widget" *ngIf="value.tempDuelsDeck">
 					<div
 						class="vignette"
-						[ngClass]="{ 'inactive': currentActiveDeck != null }"
+						[ngClass]="{ inactive: currentActiveDeck != null }"
 						(click)="exploreDecks(value.tempDuelsDeck)"
 						[helpTooltip]="'duels.deck-select.explore-decks-tooltip' | owTranslate"
 					>
@@ -51,7 +51,7 @@ import { filter } from 'rxjs/operators';
 				<div class="deck-container item-4 build-decks-widget">
 					<div
 						class="vignette"
-						[ngClass]="{ 'inactive': currentActiveDeck != null }"
+						[ngClass]="{ inactive: currentActiveDeck != null }"
 						(click)="buildDeck(value.tempDuelsDeck)"
 						[helpTooltip]="'duels.deck-select.build-deck-tooltip' | owTranslate"
 					>
@@ -160,24 +160,19 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 
 	exploreDecks(referenceDeck: DuelsDeck) {
 		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
-		console.debug('explore decks', referenceDeck, heroCardId, heroPowerCardId, signatureTreasureCardId);
 		this.store.send(new DuelsExploreDecksEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 
 	buildDeck(referenceDeck: DuelsDeck) {
 		const { heroCardId, heroPowerCardId, signatureTreasureCardId } = this.extractPickInfos(referenceDeck);
-		console.debug('build deck', referenceDeck, heroCardId, heroPowerCardId, signatureTreasureCardId);
 		this.store.send(new DuelsBuildDeckEvent(heroCardId, heroPowerCardId, signatureTreasureCardId));
 	}
 
-	private extractPickInfos(
-		tempDuelsDeck: DuelsDeck,
-	): {
+	private extractPickInfos(tempDuelsDeck: DuelsDeck): {
 		heroCardId: string;
 		heroPowerCardId: string;
 		signatureTreasureCardId: string;
 	} {
-		console.debug('extracting picks', tempDuelsDeck);
 		const heroCardId = tempDuelsDeck.HeroCardId;
 		const heroPowerCardId = tempDuelsDeck.HeroPowerCardId;
 		const signatureTreasureCardId = tempDuelsDeck.Decklist.find((cardId) =>
@@ -235,7 +230,6 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 			isLastPersonalDeck: false,
 			dustCost: candidate.dustCost,
 		}));
-		// console.debug('result', result);
 		return result;
 	}
 
@@ -262,7 +256,6 @@ export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionCom
 				)
 				.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 		}
-		console.debug('replaysWithCorrectDeckAndOptions', validRuns);
 		const candidate = validRuns[0];
 		if (!candidate) {
 			return null;

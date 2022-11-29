@@ -155,7 +155,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								<button
 									class="filter-button"
 									inlineSVG="assets/svg/created_by.svg"
-									[ngClass]="{ 'highlighted': isHighlighted(bucket.bucketId) }"
+									[ngClass]="{ highlighted: isHighlighted(bucket.bucketId) }"
 									(click)="toggleFilter(bucket.bucketId)"
 									[helpTooltip]="'app.duels.deckbuilder.bucket-filter-button-tooltip' | owTranslate"
 								></button>
@@ -374,7 +374,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 							: [card, ...this.allCards.getCards().filter((c) => c.deckDuplicateDbfId === card.dbfId)],
 					)
 					.filter((card) => !!card);
-				console.debug(withDupeCards.filter((c) => c.name?.includes('Quick Shot')));
 				const withDupes = withDupeCards.map((card) => card.id).filter((cardId) => !!cardId);
 				return [...new Set(withDupes)];
 			}),
@@ -500,7 +499,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 				const duelsClass: CardClass =
 					treasureCard.classes?.length > 1 ? null : CardClass[defaultTreasureCardClass];
 				const heroDbfId = normalizeDeckHeroDbfId(this.allCards.getCard(hero).dbfId, this.allCards, duelsClass);
-				console.debug('heroDbfId', heroDbfId, duelsClass, treasureCard, hero);
 				const deckDefinition: DeckDefinition = {
 					format: GameFormat.FT_WILD,
 					cards: cardDbfIds,
@@ -586,7 +584,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		if (event.code === 'Enter') {
 			const newDeckCards = [...(this.currentDeckCards.value ?? []), activeCards[0].cardId];
 			this.currentDeckCards.next(newDeckCards);
-			console.debug('active cards after adding', activeCards);
 
 			if (event.shiftKey || activeCards.length === 1) {
 				this.searchForm.setValue(null);
@@ -661,12 +658,6 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 		}
 
 		if (searchFilters.bucket === 'none') {
-			card.id.includes('BT_480') &&
-				console.debug(
-					'filtering',
-					card,
-					allCardIdsInBuckets.filter((c) => c.includes('BT_480')),
-				);
 			const allRelatedCardIds = [card.id, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)?.id].filter(
 				(cardId) => cardId,
 			);

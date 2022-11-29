@@ -320,7 +320,6 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 		heroStats: readonly MercenariesHeroStat[],
 		referenceData: MercenariesReferenceData,
 	): readonly MercenaryAbility[] {
-		// console.debug('building abilities', heroStats, referenceData);
 		const abilities = referenceData.mercenaries.find(
 			(merc) => this.allCards.getCardFromDbfId(merc.cardDbfId).id === heroStats[0].heroCardId,
 		).abilities;
@@ -329,7 +328,6 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 			.map((abilityDbfId) => this.allCards.getCardFromDbfId(abilityDbfId).id);
 		// const abilityIds = getHeroAbilities(heroStats[0].heroCardId);
 		return abilityIds.map((abilityId) => {
-			// console.debug('handling ability', abilityId);
 			const globalTotalMatches = sumOnArray(heroStats, (stat) => this.getSkillTotalMatches(stat, abilityId));
 			const globalTotalUses = sumOnArray(heroStats, (stat) => this.getSkillUse(stat, abilityId));
 			const result = {
@@ -342,7 +340,6 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 				globalUsePerMatch: globalTotalMatches === 0 ? null : globalTotalUses / globalTotalMatches,
 				playerUsePerMatch: null,
 			} as MercenaryAbility;
-			// console.debug('ability', abilityId, result, globalTotalMatches, globalTotalUses, heroStats);
 			return result;
 		});
 	}
@@ -362,7 +359,6 @@ export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionCom
 			.map((equipmentId) => {
 				const stats = groupedByEquipment[equipmentId];
 				const globalTotalMatches = sumOnArray(stats, (stat) => stat.totalMatches);
-				// console.debug('equipm', equipmentId, stats, globalTotalMatches);
 				return {
 					cardId: equipmentId,
 					name: this.allCards.getCard(equipmentId)?.name ?? equipmentId,

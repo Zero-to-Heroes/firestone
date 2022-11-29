@@ -72,7 +72,6 @@ export class StatsXpGraphComponent extends AbstractSubscriptionComponent impleme
 		const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
 			formatDate(new Date(match.creationTimestamp)),
 		)(dataWithTime);
-		console.debug('data', dataWithTime);
 		const daysSinceStart = daysBetweenDates(
 			formatDate(new Date(dataWithTime[0].creationTimestamp)),
 			formatDate(new Date(dataWithTime[dataWithTime.length - 1].creationTimestamp)),
