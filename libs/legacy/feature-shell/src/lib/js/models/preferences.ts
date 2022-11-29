@@ -537,11 +537,10 @@ export class Preferences {
 	readonly mercenariesActiveFullyUpgradedFilter: MercenariesFullyUpgradedFilterType = 'all';
 	readonly mercenariesActiveOwnedFilter: MercenariesOwnedFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter2: MercenariesHeroLevelFilterType = 30;
-	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;
 	readonly mercenariesShowTurnCounterInBattle: boolean = true;
 	// For now only for PvE
-	readonly mercenariesShowTaskButton: boolean = true;
+	// readonly mercenariesShowTaskButton: boolean = true;
 	readonly mercenariesPersonalHeroesSortCriterion: MercenariesPersonalHeroesSortCriteria = {
 		criteria: 'name',
 		direction: 'asc',

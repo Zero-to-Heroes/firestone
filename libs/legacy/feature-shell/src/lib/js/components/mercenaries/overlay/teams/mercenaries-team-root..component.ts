@@ -42,7 +42,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 			<div class="scalable">
 				<div class="team-container">
 					<div class="team" *ngIf="_team" [style.width.px]="overlayWidthInPx">
-						<!-- <div class="background"></div> -->
 						<mercenaries-team-control-bar [side]="side"></mercenaries-team-control-bar>
 						<div class="header" *ngIf="showTurnCounter$ | async">
 							<div class="label" [owTranslate]="'mercenaries.team-widget.turn-counter.turns'"></div>
@@ -76,47 +75,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 							[enableHighlight]="side !== 'opponent'"
 						>
 						</mercenaries-team-list>
-						<!-- <div class="footer">
-							<div
-								class="mouseover-button show-tasks"
-								[ngClass]="{ visible: showTasks$ | async }"
-								(mouseenter)="showTasks()"
-								(mouseleave)="hideTasks()"
-							>
-								<div class="tasks-button">
-									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									{{ 'mercenaries.team-widget.tasks-button' | owTranslate }}
-								</div>
-								<mercs-tasks-list
-									class="task-list {{ tooltipPosition }}"
-									[ngClass]="{ visible: showTaskList$ | async }"
-									[style.bottom]="taskListBottom"
-									[style.top]="taskListTop"
-									[tasks]="_tasks"
-									(tasksListUpdated)="onTasksListUpdated()"
-								></mercs-tasks-list>
-							</div>
-
-							<div
-								class="mouseover-button show-roles-matchup-button"
-								[ngClass]="{ visible: showColorChart$ | async }"
-								(mouseenter)="showRolesChart()"
-								(mouseleave)="hideRolesChart()"
-							>
-								<div class="roles-matchup-button">
-									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									{{ 'mercenaries.team-widget.roles-chart-button' | owTranslate }}
-								</div>
-								<div
-									class="roles-chart {{ tooltipPosition }}"
-									[ngClass]="{ visible: showRolesChart$ | async }"
-									[style.bottom]="taskListBottom"
-									[style.top]="taskListTop"
-								>
-									<img class="chart" src="assets/images/mercenaries-weakness-triangle.png" />
-								</div>
-							</div>
-						</div> -->
 					</div>
 				</div>
 			</div>
@@ -126,23 +84,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
-	@Input() showTasksExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		this._team = value;
-		this.onTasksListUpdated();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	@Input() set tasks(value: readonly Task[]) {
-		if (!value) {
-			return;
-		}
-		this._tasks = value;
-		this.tasks$$.next(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -154,10 +99,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		this.showTurnCounter$$.next(value);
 	}
 
-	showColorChart$: Observable<boolean>;
-	showTasks$: Observable<boolean>;
-	showTaskList$: Observable<boolean>;
-	showRolesChart$: Observable<boolean>;
 	showTurnCounter$: Observable<boolean>;
 	showMapTurnCounter$: Observable<boolean>;
 	currentBattleTurn$: Observable<number>;
@@ -165,17 +106,11 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	mapTurnsTooltip$: Observable<string>;
 
 	_team: MercenariesBattleTeam;
-	_tasks: readonly Task[];
 
 	overlayWidthInPx = 225;
-	taskListBottom = 'auto';
-	taskListTop = 'auto';
 
 	private scale: Subscription;
-	private showTaskList$$ = new BehaviorSubject<boolean>(false);
-	private showRolesChart$$ = new BehaviorSubject<boolean>(false);
 	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
-	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -189,9 +124,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	}
 
 	ngAfterContentInit(): void {
-		this.showColorChart$ = this.store
-			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
-			.pipe(this.mapData(([pref]) => pref));
 		this.scale = this.store
 			.listenPrefs$((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null))
 			.pipe(
@@ -210,21 +142,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 					this.cdr.detectChanges();
 				}
 			});
-		this.showTasks$ = combineLatest(
-			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
-			this.store.listenPrefs$(
-				(prefs) => (this.showTasksExtractor ? this.showTasksExtractor(prefs) : null),
-				(prefs) => prefs.mercsShowQuestsWidget,
-			),
-		).pipe(
-			// Because when out of combat
-			this.mapData(
-				([[gameMode], [pref, mercsShowQuestsWidget]]) =>
-					!mercsShowQuestsWidget && pref && !isMercenariesPvP(gameMode),
-			),
-		);
-		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(this.mapData((info) => info));
-		this.showRolesChart$ = this.showRolesChart$$.asObservable().pipe(this.mapData((info) => info));
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
 		this.showMapTurnCounter$ = this.store
 			.listenMercenaries$(([state]) => state?.gameMode)
@@ -256,59 +173,10 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 		return task.description;
 	}
 
-	onTasksListUpdated() {
-		setTimeout(() => {
-			const taskListEl = this.el.nativeElement.querySelector('.task-list');
-			if (!taskListEl) {
-				return;
-			}
-
-			const taskEls = this.el.nativeElement.querySelectorAll('.task');
-			if (taskEls?.length != this._tasks?.length) {
-				setTimeout(() => this.onTasksListUpdated(), 100);
-				return;
-			}
-
-			const rect = taskListEl.getBoundingClientRect();
-			const taskListHeight = rect.height;
-			const widgetEl = this.el.nativeElement.querySelector('.team-container');
-			const widgetRect = widgetEl.getBoundingClientRect();
-			const widgetHeight = widgetRect.height;
-			// We either align the bottom of the list with the bottom of the button (when the widget is
-			// bigger than the list), or the top of the list with the top of the widget
-			if (widgetHeight > taskListHeight) {
-				this.taskListBottom = '0';
-				this.taskListTop = 'auto';
-			} else {
-				this.taskListBottom = 'auto';
-				this.taskListTop = '0';
-			}
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, 500);
-	}
-
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.scale?.unsubscribe();
-	}
-
-	showTasks() {
-		this.showTaskList$$.next(true);
-	}
-
-	hideTasks() {
-		this.showTaskList$$.next(false);
-	}
-
-	showRolesChart() {
-		this.showRolesChart$$.next(true);
-	}
-
-	hideRolesChart() {
-		this.showRolesChart$$.next(false);
 	}
 }
 

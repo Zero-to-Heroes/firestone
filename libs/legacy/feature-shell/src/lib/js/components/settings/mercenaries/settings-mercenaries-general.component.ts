@@ -45,16 +45,6 @@ import { Knob } from '../preference-slider.component';
 					[tooltip]="'settings.mercenaries.general.action-queue-pvp-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					[field]="'mercenariesShowColorChartButton'"
-					[label]="'settings.mercenaries.general.role-chart-label' | owTranslate"
-					[tooltip]="'settings.mercenaries.general.role-chart-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
-					[field]="'mercenariesShowTaskButton'"
-					[label]="'settings.mercenaries.general.tasks-label' | owTranslate"
-					[tooltip]="'settings.mercenaries.general.tasks-tooltip' | owTranslate"
-				></preference-toggle>
-				<preference-toggle
 					[field]="'mercenariesHighlightSynergies'"
 					[label]="'settings.mercenaries.general.synergies-label' | owTranslate"
 					[tooltip]="'settings.mercenaries.general.synergies-tooltip' | owTranslate"

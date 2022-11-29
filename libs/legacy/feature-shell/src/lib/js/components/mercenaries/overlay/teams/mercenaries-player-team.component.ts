@@ -1,15 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
-import { Task } from './mercenaries-team-root..component';
 
 @Component({
 	selector: 'mercenaries-player-team',
@@ -17,9 +13,7 @@ import { Task } from './mercenaries-team-root..component';
 	template: `
 		<mercenaries-team-root
 			[team]="team$ | async"
-			[tasks]="tasks$ | async"
 			[side]="'player'"
-			[showTasksExtractor]="showTasksExtractor"
 			[scaleExtractor]="scaleExtractor"
 			[tooltipPosition]="tooltipPosition"
 			[showTurnCounter]="showTurnCounter$ | async"
@@ -31,19 +25,12 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
 
 	teamExtractor = (state: MercenariesBattleState) => state.playerTeam;
-	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	scaleExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayScale;
 
 	team$: Observable<MercenariesBattleTeam>;
-	tasks$: Observable<readonly Task[]>;
 	showTurnCounter$: Observable<boolean>;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-	) {
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
 		super(store, cdr);
 	}
 
@@ -62,24 +49,6 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionComponen
 					}),
 				),
 			);
-		this.tasks$ = combineLatest(
-			this.store.listen$(
-				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
-				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
-			),
-			this.team$,
-		).pipe(
-			filter(([[referenceData, visitors], team]) => !!referenceData && !!visitors?.length),
-			this.mapData(([[referenceData, visitors], team]) =>
-				buildMercenariesTasksList(
-					referenceData,
-					visitors,
-					this.allCards,
-					this.i18n,
-					team?.mercenaries?.map((m) => m.mercenaryId),
-				),
-			),
-		);
 		this.showTurnCounter$ = this.listenForBasicPref$((prefs) => prefs.mercenariesShowTurnCounterInBattle);
 	}
 }
