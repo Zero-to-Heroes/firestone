@@ -28,7 +28,7 @@ import { Preferences } from '../../../models/preferences';
 })
 export class HsQuestsWidgetComponent {
 	rewardsTrackMatcher: (type: RewardTrackType) => boolean = (type: RewardTrackType) =>
-		type === RewardTrackType.GLOBAL || type === RewardTrackType.EVENT_HALLOWS_END;
+		type !== RewardTrackType.NONE && type !== RewardTrackType.BATTLEGROUNDS;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.hsShowQuestsWidget;
 	xpBonusExtractor: (state: MainWindowState) => number = (state) => state.quests.xpBonus;
 }
