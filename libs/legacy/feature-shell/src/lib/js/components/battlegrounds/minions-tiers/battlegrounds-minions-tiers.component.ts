@@ -8,7 +8,7 @@ import {
 	Renderer2,
 	ViewEncapsulation,
 } from '@angular/core';
-import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { getAllCardsInGame, getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
@@ -50,7 +50,8 @@ import { Tier } from './battlegrounds-minions-tiers-view.component';
 })
 export class BattlegroundsMinionsTiersOverlayComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	private static readonly WINDOW_WIDTH = 1300;
 
 	tiers$: Observable<readonly Tier[]>;
@@ -164,7 +165,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			},
 			{
 				tavernTier: 'DS',
-				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
+				cards: [
+					...cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
+					cardsInGame.find((c) => c.id === CardIds.Glowscale),
+				],
 				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(
