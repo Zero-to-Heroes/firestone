@@ -8,7 +8,7 @@
 // Because automatic tooltip positioning doesn't always work very well and sometimes
 // results in the tooltip container being squeeze very thin
 .related-cards-wrapper {
-	min-width: 450px;
+	// min-width: 450px;
 	display: flex;
 
 	&.left {
@@ -35,7 +35,7 @@
 	.related-cards {
 		display: flex;
 		flex-wrap: wrap;
-		max-width: 435px;
+		max-width: 550px;
 		max-height: 800px;
 		overflow: hidden;
 		// overflow: auto;
@@ -45,7 +45,7 @@
 		padding-bottom: 25px;
 
 		img {
-			width: 150px;
+			width: 190px;
 			height: auto;
 			margin-right: -15px;
 			margin-bottom: -15px;
@@ -54,7 +54,7 @@
 	}
 
 	&.wide .related-cards {
-		max-width: 570px;
+		max-width: 725px;
 	}
 }
 

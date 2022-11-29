@@ -158,7 +158,7 @@ export class CardTooltipComponent
 		setTimeout(() => this.ngAfterViewInit(), 10);
 		this.relativePosition$ = this.relativePosition$$.asObservable();
 		this.displayBuffs$ = this.displayBuffs$$.asObservable();
-		this.relatedCards$ = combineLatest(
+		this.relatedCards$ = combineLatest([
 			this.relatedCardIds$$.asObservable(),
 			this.localized$$.asObservable(),
 			this.isBgs$$.asObservable(),
@@ -166,7 +166,7 @@ export class CardTooltipComponent
 				(prefs) => prefs.locale, // We don't use it, but we want to rebuild images when it changes
 				(prefs) => prefs.collectionUseHighResImages,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
 				([relatedCardIds, localized, isBgs, [locale, highRes]]) => {
 					return relatedCardIds.map((cardId) => {
@@ -189,22 +189,21 @@ export class CardTooltipComponent
 				0,
 			),
 		);
-		this.cards$ = combineLatest(
-			combineLatest(
-				this.cardIds$$.asObservable(),
-				this.localized$$.asObservable(),
-				this.isBgs$$.asObservable(),
-				this.cardType$$.asObservable(),
-				this.additionalClass$$.asObservable(),
-			),
-			combineLatest(this.buffs$$.asObservable(), this.createdBy$$.asObservable()),
+		this.cards$ = combineLatest([
+			this.cardIds$$.asObservable(),
+			this.localized$$.asObservable(),
+			this.isBgs$$.asObservable(),
+			this.cardType$$.asObservable(),
+			this.additionalClass$$.asObservable(),
+			this.buffs$$.asObservable(),
+			this.createdBy$$.asObservable(),
 			this.store.listenPrefs$(
 				(prefs) => prefs.locale,
 				(prefs) => prefs.collectionUseHighResImages,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(
-				([[cardIds, localized, isBgs, cardType, additionalClass], [buffs, createdBy], [locale, highRes]]) => {
+				([cardIds, localized, isBgs, cardType, additionalClass, buffs, createdBy, [locale, highRes]]) => {
 					return (
 						([...cardIds] ?? [])
 							// Empty card IDs are necessary when showing buff only
