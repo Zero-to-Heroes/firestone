@@ -217,7 +217,8 @@ export class DeckListByZoneComponent implements OnDestroy {
 					// keep them in fact. We have added a specific flag for cards that are just here
 					// for technical reasons
 					(a: VisualDeckCard) =>
-						!a.temporaryCard &&
+						// See comment on temporary cards in grouped-deck-list.component.ts
+						(!a.temporaryCard || a.zone !== 'SETASIDE') &&
 						!a.createdByJoust &&
 						!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
 						!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
