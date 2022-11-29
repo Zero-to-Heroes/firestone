@@ -19,7 +19,6 @@ import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
 import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
-import { MemoryVisitor } from '../models/memory/memory-mercenaries-collection-info';
 import {
 	MercenariesHeroLevelFilterType,
 	MercenariesModeFilterType,
@@ -442,9 +441,9 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateMercenariesPersonalHeroesSortCriteria(info: readonly MercenariesPersonalHeroesSortCriteria[]) {
+	public async updateMercenariesPersonalHeroesSortCriteria(info: MercenariesPersonalHeroesSortCriteria) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, mercenariesPersonalHeroesSortCriteria: info };
+		const newPrefs: Preferences = { ...prefs, mercenariesPersonalHeroesSortCriterion: info };
 		await this.savePreferences(newPrefs);
 	}
 

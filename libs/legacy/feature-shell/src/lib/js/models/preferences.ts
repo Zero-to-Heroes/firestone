@@ -542,13 +542,10 @@ export class Preferences {
 	readonly mercenariesShowTurnCounterInBattle: boolean = true;
 	// For now only for PvE
 	readonly mercenariesShowTaskButton: boolean = true;
-	// Most important criteria is first in the list
-	readonly mercenariesPersonalHeroesSortCriteria: readonly MercenariesPersonalHeroesSortCriteria[] = [
-		{
-			criteria: 'name',
-			direction: 'asc',
-		},
-	];
+	readonly mercenariesPersonalHeroesSortCriterion: MercenariesPersonalHeroesSortCriteria = {
+		criteria: 'name',
+		direction: 'asc',
+	};
 	readonly mercenariesShowHiddenTeams: boolean = true;
 	readonly mercenariesHiddenTeamIds: readonly string[] = [];
 	readonly mercenariesShowMercNamesInTeams: boolean = true;

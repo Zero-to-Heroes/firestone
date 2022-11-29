@@ -141,8 +141,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 	ngAfterContentInit() {
 		this.sortCriteria$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
-			.pipe(this.mapData(([sortCriteria]) => sortCriteria[0]));
+			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion)
+			.pipe(this.mapData(([sortCriteria]) => sortCriteria));
 		this.unsortedStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.getReferenceData(),
@@ -160,7 +160,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			this.unsortedStats$,
 			this.store.listen$(
 				([main, nav, prefs]) => main.mercenaries.getReferenceData(),
-				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria,
+				([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriterion,
 				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveOwnedFilter,
 				([main, nav, prefs]) => nav.navigationMercenaries.heroSearchString,
@@ -450,7 +450,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		heroSearchString: string,
 		fullyUpgraded: MercenariesFullyUpgradedFilterType,
 		owned: MercenariesOwnedFilterType,
-		sortCriteria: readonly MercenariesPersonalHeroesSortCriteria[],
+		sortCriteria: MercenariesPersonalHeroesSortCriteria,
 		referenceData: MercenariesReferenceData,
 	): readonly PersonalHeroStat[] {
 		const currentSorted = stats
@@ -473,7 +473,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				}
 				return 0;
 			})
-			.sort(this.applySortCriteria(sortCriteria[0]));
+			.sort(this.applySortCriteria(sortCriteria));
 		return currentSorted;
 	}
 
@@ -542,7 +542,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		<div
 			class="sortable-label"
 			[ngClass]="{
-				'sortable': _isSortable,
+				sortable: _isSortable,
 				'active-asc': _sort?.criteria === _criteria && _sort?.direction === 'asc',
 				'active-desc': _sort?.criteria === _criteria && _sort?.direction === 'desc'
 			}"
