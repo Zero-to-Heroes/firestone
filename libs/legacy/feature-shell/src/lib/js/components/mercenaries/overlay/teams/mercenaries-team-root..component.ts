@@ -351,7 +351,7 @@ export const buildTeamsForTasks = (
 				),
 			)
 			.filter((m) => !!m);
-		const finalMercs = [...taskMercs, ...backupMercs];
+		const finalMercs = [...backupMercs, ...taskMercs];
 
 		const ownerName = getShortMercHeroName(allCards.getCard(proceduralTask.ownerMercenaryDbfId).id, allCards);
 		const definition: MercenariesTeamDefinition = {
