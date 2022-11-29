@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "10.0.0",
+	"version": "10.0.1",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -8,7 +8,7 @@
 		"dev": "nx build --watch",
 		"build": "nx build --configuration=production",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
-		"create-opk": "ow opk pack -o ./[name].[version].opk  ./dist/apps/legacy/",
+		"create-opk": "npx ts-node ./build-tools/replace-version.ts",
 		"postbuild": "npm run replace-version && npm run create-opk",
 		"test": "nx test"
 	},

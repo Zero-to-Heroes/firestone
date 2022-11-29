@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '9.16.2',
+		version: '10.0.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -47,43 +47,8 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Add an experimental mailbox system. Many of you have expressed concern that some important information like server-side patches or important events were not mentioned inside the game client. This mailbox aims at pushing the information to you, so that you are always up-to-date with important in-game information.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a Tavern Brawl tab. It will give you the winrate for each class for the current Tavern Brawl, as well as let you quickly copy a high-winrate deck code for any given class. I'm assuming that most people are interested in quickly finding a deck that lets them complete the brawl, so this tab is for now intentionally very minimal. Let me know your thoughts!`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `When playing "Guess the Weight", the tracker now shows you the odds for each option. While this particular card is not super popular (being a Wild-only card), it opens the door to showing more contextual information when being offered a discover. Let me know what you'd like to use this for on Discord!`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where you couldn't log in to Twitch anymore.`,
-							},
-						],
-					},
-					{
-						category: 'mercenaries',
-						details: [
-							{
-								type: 'feature',
-								text: `The Quest widget now has two buttons to let you build different teams for each of the Procedural quests.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `The Pity Timers are now on the "Packs" tab. The diversity of bundles and pack types made it confusing to show the pity timers as linked to sets, so they will now be tied to their specific pack type.`,
+								type: 'misc',
+								text: `The app underwent a major technical migration. This should have no impact for you, but please be aware that a few bugs might arise because of it. So don't hesitate to ping me whenever you find something that doesn't work as it should :)`,
 							},
 						],
 					},
@@ -97,12 +62,8 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the Simulator tooltip would get messed up after going once to the Replays tab (Community Contribution!).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the MMR / tribes filters weren't working properly anymore.`,
+								type: 'content',
+								text: `Glowscale is now part of the Divine Shield group in the minions list.`,
 							},
 						],
 					},
@@ -111,11 +72,47 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a counter for Spectral Pillager.`,
+								text: `Add a "Parrot Macot" counter (a treasure you can find in some solo adventures).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where deck deletion wasn't working anymore.`,
+								text: `Fix an issue where deck merge was laggy, and sometimes not working at all.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where dynamic related cards (like the cards Tess would replay) would not appear right away when mousing over the card in the tracker.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Frozen Clone would not be greyed out in the secrets helper.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some discovered cards would not appear in the Other zone.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some some generated cards would not appear properly in the "legacy" display view (the one where you don't have a split of cards by zone).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where related cards for Tess / Contraband Stash / Sivara were not working in the "legacy" display view.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue with the "used cards go to the bottom" settings in the "legacy" display view.`,
+							},
+							{
+								type: 'bug',
+								text: `Remove the option to NOT darken used cards in the "legacy" display view (so used cards will always be darkened). This setting was never intended to be used in this mode, and could cause some confusion.`,
+							},
+							{
+								type: 'ui',
+								text: `Related cards are now bigger and should be easier to read.`,
+							},
+							{
+								type: 'ui',
+								text: `Some counters now also show you the image of the card (e.g. the Vanessa VanCleef counter also shows you what the card is, instead of simply telling you its name).`,
 							},
 						],
 					},
@@ -124,20 +121,28 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add highlight for abilities with combo effect (Community Contribution!).`,
+								text: `When creating a Task team, team will position the mercs configured in the Settings first, then followed by the mercs linked to the task. The reason is that these task-specific mercs rarely have any synergy with the task itself, and so having your pre-configured team first is more efficient.`,
+							},
+							{
+								type: 'bug',
+								text: `Restore the task description when mousing over the task progress in the Mercenaries Progression tab.`,
+							},
+							{
+								type: 'content',
+								text: `The "tasks list" button has been removed from the team widgets. Please use the "Quests" widget from now on (acccessible from the Settings > General > Quests).`,
+							},
+							{
+								type: 'content',
+								text: `The "roles chart" button has been removed.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'achievements',
 						details: [
 							{
-								type: 'feature',
-								text: `Counters (in the Decktracker Settings) are now sorted alphabetically.`,
-							},
-							{
-								type: 'feature',
-								text: `Clicking on a message in the mailbox marks more recent messages as unread.`,
+								type: 'bug',
+								text: `Fix an issue where the achievements history would be empty.`,
 							},
 						],
 					},
