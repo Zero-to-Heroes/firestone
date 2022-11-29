@@ -212,13 +212,21 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private buildBaseCards(deckState: DeckState, hideGeneratedCardsInOtherZone: boolean): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
 		const cardsToShow = [
-			...deckState.deck,
-			...deckState.hand.filter((c) => !c.creatorCardId),
+			...deckState.deck
+				// Remove "unknown cards"
+				.filter((c) => !!c.cardId || !!c.creatorCardId),
+			...deckState.hand
+				.filter((c) => !c.creatorCardId)
+				// Remove "unknown cards"
+				.filter((c) => !!c.cardId || !!c.creatorCardId),
 			...deckState.board.filter((c) => !c.creatorCardId),
 			...deckState.otherZone
-				.filter((c) => c.zone !== 'SETASIDE')
+				.filter((c) => !!c.cardId)
 				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId)
-				.filter((c) => !c.temporaryCard),
+				// Cards that get discovered as sometimes marked as "temporary cards". Sometimes the game creates copies, sometimes
+				// not. There might be a way to make sure we know what is what (based on the linkedEntityId), but I need to investigate
+				// that
+				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
 		]
 			.filter((card) => !COIN_IDS.includes(card.cardId as CardIds))
 			.sort((a, b) => a.manaCost - b.manaCost);
