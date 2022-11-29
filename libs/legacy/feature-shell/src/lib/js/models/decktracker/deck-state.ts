@@ -332,6 +332,12 @@ export class DeckState {
 			);
 	}
 
+	public hasParrotMascot() {
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.ParrotMascot);
+	}
+
 	public hasQueensguard() {
 		const cards = [...this.hand, ...this.currentOptions];
 		return cards.filter((card) => card.cardId).some((card) => card.cardId === CardIds.Queensguard);

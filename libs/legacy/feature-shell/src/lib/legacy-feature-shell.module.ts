@@ -556,6 +556,7 @@ import { HotkeyComponent } from './js/components/hotkey.component';
 import { InfiniteScrollComponent } from './js/components/infinite-scroll.component';
 import { LoadingStateComponent } from './js/components/loading-state.component';
 import { SecondaryDefaultComponent } from './js/components/main-window/secondary-default.component';
+import { PlayerParrotMascotWidgetWrapperComponent } from './js/components/overlays/counters/player-parrot-mascot-widget-wrapper.component';
 import { ProgressBarComponent } from './js/components/progress-bar.component';
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { CheckboxComponent } from './js/components/settings/checkbox.component';
@@ -1496,6 +1497,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
+		PlayerParrotMascotWidgetWrapperComponent,
 		PlayerQueensguardWidgetWrapperComponent,
 		PlayerSpectralPillagerWidgetWrapperComponent,
 		PlayerLadyDarkveinWidgetWrapperComponent,

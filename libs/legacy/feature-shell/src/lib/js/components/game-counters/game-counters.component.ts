@@ -29,6 +29,7 @@ import { LibramCounterDefinition } from './definitions/libram-counter';
 import { MonstrousParrotCounterDefinition } from './definitions/monstrous-parrot-counter';
 import { MulticasterCounterDefinition } from './definitions/multicaster-counter';
 import { MurozondTheInfiniteCounterDefinition } from './definitions/murozond-the-infinite-counter';
+import { ParrotMascotCounterDefinition } from './definitions/parrot-mascot-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { QueensguardCounterDefinition } from './definitions/queensguard-counter';
 import { RelicCounterDefinition } from './definitions/relic-counter';
@@ -49,7 +50,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	template: `
 		<div
 			class="root"
-			[ngClass]="{ 'isBgs': activeCounter?.includes('bgs') }"
+			[ngClass]="{ isBgs: activeCounter?.includes('bgs') }"
 			[activeTheme]="'decktracker'"
 			*ngIf="definition$ | async as definition"
 		>
@@ -151,6 +152,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'parrotMascot':
+				return ParrotMascotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'queensguard':
 				return QueensguardCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'spectralPillager':

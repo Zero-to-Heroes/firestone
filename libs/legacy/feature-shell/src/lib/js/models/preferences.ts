@@ -11,7 +11,7 @@ import {
 	CollectionCardOwnedFilterType,
 	CollectionCardRarityFilterType,
 	CollectionPortraitCategoryFilter,
-	CollectionPortraitOwnedFilter
+	CollectionPortraitOwnedFilter,
 } from './collection/filter-types';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroFilterType } from './duels/duels-hero-filter.type';
@@ -40,7 +40,7 @@ import {
 	MercenariesPveDifficultyFilterType,
 	MercenariesPvpMmrFilterType,
 	MercenariesRoleFilterType,
-	MercenariesStarterFilterType
+	MercenariesStarterFilterType,
 } from './mercenaries/mercenaries-filter-types';
 import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';
@@ -382,6 +382,10 @@ export class Preferences {
 	readonly playerMurozondTheInfiniteCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerParrotMascotCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerParrotMascotCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerQueensguardCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
