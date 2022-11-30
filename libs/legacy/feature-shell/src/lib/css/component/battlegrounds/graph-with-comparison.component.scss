@@ -57,6 +57,11 @@
 		min-height: 0;
 		flex-grow: 1;
 	}
+
+	canvas {
+		height: 100% !important;
+		width: 100% !important;
+	}
 }
 
 ::ng-deep {
@@ -115,7 +120,7 @@
 						align-items: center;
 						justify-content: center;
 					}
-					.value{
+					.value {
 						white-space: nowrap;
 					}
 				}

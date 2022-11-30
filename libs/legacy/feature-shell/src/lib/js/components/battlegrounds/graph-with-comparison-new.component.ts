@@ -1,16 +1,17 @@
 import {
+	AfterContentInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	Input,
 	ViewChild,
-	ViewRef,
 } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
+import { BehaviorSubject, combineLatest, filter, Observable, share, takeUntil } from 'rxjs';
 import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-turn-info';
-import { areEqualDataSets } from './post-match/chart-utils';
 
 @Component({
 	selector: 'graph-with-comparison-new',
@@ -19,39 +20,48 @@ import { areEqualDataSets } from './post-match/chart-utils';
 		`../../../css/component/battlegrounds/graph-with-comparison.component.scss`,
 	],
 	template: `
-		<div class="legend">
-			<div class="item average" [helpTooltip]="communityTooltip">
-				<div class="node"></div>
-				{{ communityLabel }}
+		<ng-container
+			*ngIf="{ lineChartData: lineChartData$ | async, lineChartOptions: lineChartOptions$ | async } as value"
+		>
+			<div class="legend">
+				<div class="item average" [helpTooltip]="communityTooltip">
+					<div class="node"></div>
+					{{ communityLabel$ | async }}
+				</div>
+				<div
+					class="item current"
+					[helpTooltip]="yourTooltip"
+					*ngIf="value.lineChartData?.datasets[1]?.data?.length"
+				>
+					<div class="node"></div>
+					{{ yourLabel$ | async }}
+				</div>
 			</div>
-			<div class="item current" [helpTooltip]="yourTooltip" *ngIf="yourInfo">
-				<div class="node"></div>
-				{{ yourLabel }}
+			<div class="container-1">
+				<div style="display: block; position: relative; height: 100%; width: 100%;">
+					<canvas
+						*ngIf="value.lineChartData?.datasets[0]?.data?.length"
+						#chart
+						baseChart
+						[data]="value.lineChartData"
+						[options]="value.lineChartOptions"
+						[legend]="false"
+						[type]="'line'"
+					></canvas>
+				</div>
 			</div>
-		</div>
-		<div class="container-1" [style.opacity]="opacity">
-			<div style="display: block; position: relative; height: 100%; width: 100%;">
-				<canvas
-					*ngIf="lineChartData.datasets?.length && lineChartData.datasets[0].data?.length"
-					#chart
-					baseChart
-					[style.width.px]="chartWidth"
-					[style.height.px]="chartHeight"
-					[data]="lineChartData"
-					[options]="lineChartOptions"
-					[legend]="false"
-					[type]="'line'"
-				></canvas>
-			</div>
-		</div>
+		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GraphWithComparisonNewComponent {
+export class GraphWithComparisonNewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
-	@Input() communityLabel = 'Community';
-	@Input() yourLabel = 'You';
+	lineChartData$: Observable<ChartData<'line'>>;
+	lineChartOptions$: Observable<ChartOptions>;
+	communityLabel$: Observable<string>;
+	yourLabel$: Observable<string>;
+
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
 	@Input() turnLabel = 'Turn';
@@ -61,120 +71,124 @@ export class GraphWithComparisonNewComponent {
 	@Input() showDeltaWithPrevious: boolean;
 
 	@Input() set maxYValue(value: number) {
-		this._maxYValue = value;
-		this.updateChartOptions();
+		this.maxYValue$$.next(value);
 	}
-
 	@Input() set stepSize(value: number) {
-		this._stepSize = value;
-		this.updateChartOptions();
+		this.stepSize$$.next(value);
 	}
-
 	@Input() set showYAxis(value: boolean) {
-		this._showYAxis = value;
-		this.updateChartOptions();
+		this.showYAxis$$.next(value);
 	}
 
+	@Input() set communityLabel(value: string) {
+		this.communityLabel$$.next(value);
+	}
+	@Input() set yourLabel(value: string) {
+		this.yourLabel$$.next(value);
+	}
 	@Input() set communityValues(value: readonly NumericTurnInfo[]) {
-		if (value === this._communityValues) {
-			return;
-		}
-		this._communityValues = value;
-		this.updateValues();
+		this.communityValues$$.next(value);
 	}
-
 	@Input() set yourValues(value: readonly NumericTurnInfo[]) {
-		if (value === this._yourValues) {
-			return;
-		}
-		this._yourValues = value;
-		this.updateValues();
+		this.yourValues$$.next(value);
 	}
 
-	chartWidth: number;
-	chartHeight: number;
-	lineChartData: ChartData<'line'> = {
-		datasets: [],
-		labels: [],
-	};
-	lineChartOptions: ChartOptions = this.buildChartOptions();
-	opacity = 0;
+	private maxYValue$$ = new BehaviorSubject<number>(null);
+	private stepSize$$ = new BehaviorSubject<number>(null);
+	private showYAxis$$ = new BehaviorSubject<boolean>(true);
 
-	yourInfo: boolean;
+	private communityLabel$$ = new BehaviorSubject<string>('Community');
+	private yourLabel$$ = new BehaviorSubject<string>('You');
+	private communityValues$$ = new BehaviorSubject<readonly NumericTurnInfo[]>(null);
+	private yourValues$$ = new BehaviorSubject<readonly NumericTurnInfo[]>(null);
 
-	private _communityValues: readonly NumericTurnInfo[];
-	private _yourValues: readonly NumericTurnInfo[];
-	private _dirty = true;
-	private _maxYValue: number;
-	private _stepSize: number;
-	private _showYAxis = true;
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
+	) {
+		super(store, cdr);
+	}
 
-	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
+	ngAfterContentInit(): void {
+		this.communityLabel$ = this.communityLabel$$.pipe(this.mapData((info) => info));
+		this.yourLabel$ = this.yourLabel$$.pipe(this.mapData((info) => info));
 
-	private updateValues() {
-		// Turn 0 is before any battle, so it's not really interesting for us
-		const community = this.removeTurnZero(this._communityValues || []);
-		const your = this.removeTurnZero(this._yourValues || []);
-		this.yourInfo = your && your.length > 0;
+		this.lineChartData$ = combineLatest([
+			this.communityLabel$$.asObservable(),
+			this.yourLabel$$.asObservable(),
+			this.communityValues$$.asObservable(),
+			this.yourValues$$.asObservable(),
+		]).pipe(
+			this.mapData(([communityLabel, yourLabel, communityValues, yourValues]) => {
+				// Turn 0 is before any battle, so it's not really interesting for us
+				const community = this.removeTurnZero(communityValues || []);
+				const your = this.removeTurnZero(yourValues || []);
 
-		const maxTurnFromCommunity = this.getMaxTurn(community);
-		const maxTurnFromYour = this.getMaxTurn(your);
-		const lastTurn = Math.max(maxTurnFromCommunity, maxTurnFromYour);
+				const maxTurnFromCommunity = this.getMaxTurn(community);
+				const maxTurnFromYour = this.getMaxTurn(your);
+				const lastTurn = Math.max(maxTurnFromCommunity, maxTurnFromYour);
 
-		const filledCommunity = this.fillMissingData(community, lastTurn);
-		const filledYour = this.fillMissingData(your, lastTurn);
+				const filledCommunity = this.fillMissingData(community, lastTurn);
+				const filledYour = this.fillMissingData(your, lastTurn);
 
-		const yourData = filledYour?.map((stat) => stat.value) || [];
-		const communityData = filledCommunity?.map((stat) => stat.value) || [];
-		const newChartData: ChartData<'line'>['datasets'] = [
-			{
-				data: yourData,
-				lineTension: 0,
-				delta: yourData?.length
-					? [yourData[0], ...yourData.slice(1).map((n, i) => (yourData[i] == null ? null : n - yourData[i]))]
-					: [],
-				label: this.yourLabel,
-			} as any,
-			{
-				data: communityData,
-				lineTension: 0,
-				delta: communityData?.length
-					? [
-							communityData[0],
-							...communityData
-								.slice(1)
-								.map((n, i) => (communityData[i] == null ? null : n - communityData[i])),
-					  ]
-					: [],
-				label: this.communityLabel,
-			},
-		];
-		if (areEqualDataSets(newChartData, this.lineChartData.datasets)) {
-			return;
-		}
+				const yourData = filledYour?.map((stat) => stat.value) || [];
+				const communityData = filledCommunity?.map((stat) => stat.value) || [];
+				// TODO: missing color
+				const newChartData: ChartData<'line'>['datasets'] = [
+					{
+						data: yourData,
+						label: yourLabel,
+						backgroundColor: 'transparent',
+						borderColor: '#FFB948',
+						delta: yourData?.length
+							? [
+									yourData[0],
+									...yourData.slice(1).map((n, i) => (yourData[i] == null ? null : n - yourData[i])),
+							  ]
+							: [],
+					} as any,
+					{
+						data: communityData,
+						label: communityLabel,
+						backgroundColor: 'transparent',
+						borderColor: '#CE73B4',
+						delta: communityData?.length
+							? [
+									communityData[0],
+									...communityData
+										.slice(1)
+										.map((n, i) => (communityData[i] == null ? null : n - communityData[i])),
+							  ]
+							: [],
+					} as any,
+				];
 
-		this.lineChartData = {
-			datasets: newChartData,
-			labels: [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn),
-		};
-
-		const maxValue = Math.max(
-			...newChartData.map((data) => data.data as number[]).reduce((a, b) => a.concat(b), []),
+				const result = {
+					datasets: newChartData,
+					labels: [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn),
+				};
+				return result;
+			}),
+			share(),
+			takeUntil(this.destroyed$),
 		);
-		this._maxYValue = this._maxYValue ? Math.max(this._maxYValue, maxValue) : undefined;
-		this.updateChartOptions();
-		this.doResize();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	previousWidth: number;
-
-	@HostListener('window:resize')
-	onResize() {
-		this._dirty = true;
-		this.doResize();
+		const maxValue$ = combineLatest([this.maxYValue$$.asObservable(), this.lineChartData$]).pipe(
+			filter(([maxValue, chartData]) => !!chartData),
+			this.mapData(([maxYValue, chartData]) => {
+				const maxValue = Math.max(
+					...chartData.datasets.map((data) => data.data as number[]).reduce((a, b) => a.concat(b), []),
+				);
+				return !!maxYValue ? Math.max(maxYValue, maxValue) : undefined;
+			}),
+		);
+		this.lineChartOptions$ = combineLatest([
+			maxValue$,
+			this.stepSize$$.asObservable(),
+			this.showYAxis$$.asObservable(),
+		]).pipe(
+			this.mapData(([maxValue, stepSize, showYAxis]) => this.buildChartOptions(showYAxis, stepSize, maxValue)),
+		);
 	}
 
 	private removeTurnZero(input: readonly NumericTurnInfo[]): readonly NumericTurnInfo[] {
@@ -194,69 +208,13 @@ export class GraphWithComparisonNewComponent {
 		return result;
 	}
 
-	private doResize() {
-		if (!this._dirty) {
-			return;
-		}
-		const chartContainer = this.el.nativeElement.querySelector('.container-1');
-		const rect = chartContainer?.getBoundingClientRect();
-		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
-			setTimeout(() => {
-				this.doResize();
-			}, 500);
-			return;
-		}
-		if (rect.width === this.chartWidth && rect.height === this.chartHeight) {
-			return;
-		}
-		this.chartWidth = rect.width;
-		this.chartHeight = rect.height;
-		const gradient = this.getBackgroundColor();
-		if (this.lineChartData.datasets[0]) {
-			this.lineChartData.datasets[0].backgroundColor = 'transparent';
-			this.lineChartData.datasets[0].borderColor = '#FFB948';
-		}
-		if (this.lineChartData.datasets[1]) {
-			this.lineChartData.datasets[1].backgroundColor = 'gradient';
-			this.lineChartData.datasets[1].borderColor = '#CE73B4';
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		this.opacity = gradient && this.lineChartData && this.lineChartData.datasets.length > 0 ? 1 : 0;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		setTimeout(() => {
-			this.doResize();
-		}, 200);
-	}
-
-	private getBackgroundColor() {
-		if (!this.chart?.nativeElement) {
-			return;
-		}
-
-		const gradient = this.chart.nativeElement
-			?.getContext('2d')
-			?.createLinearGradient(0, 0, 0, Math.round(this.chartHeight));
-		gradient.addColorStop(0, 'rgba(206, 115, 180, 1)'); // #CE73B4
-		gradient.addColorStop(0.4, 'rgba(206, 115, 180, 0.4)');
-		gradient.addColorStop(1, 'rgba(206, 115, 180, 0)');
-		return gradient;
-	}
-
 	private getMaxTurn(input: readonly NumericTurnInfo[]) {
 		return input.filter((stat) => stat.value).length === 0
 			? 0
 			: Math.max(...input.filter((stat) => stat.value).map((stat) => stat.turn));
 	}
 
-	private updateChartOptions() {
-		this.lineChartOptions = this.buildChartOptions();
-	}
-
-	private buildChartOptions(): ChartOptions {
+	private buildChartOptions(showYAxis: boolean, stepSize: number, maxYValue: number): ChartOptions {
 		return {
 			responsive: true,
 			maintainAspectRatio: false,
@@ -372,7 +330,6 @@ export class GraphWithComparisonNewComponent {
 						// caret should always be positioned on the initial tooltip.caretX. However, since the
 						// position is relative to the tooltip element, we need to do some gymnastic :)
 						// 10 is because of padding
-						// const carretLeftOffset = yourDatapoint?.value != null ? 0 : -50;
 						const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
 						const carretLeft = tooltip.caretX - left - 8;
 						tooltipArrowEl.style.left = carretLeft + 'px';
@@ -381,11 +338,6 @@ export class GraphWithComparisonNewComponent {
 						tooltipEl.style.opacity = '1';
 						tooltipEl.style.left = left + 'px';
 						tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
-						// tooltipEl.style.fontFamily = tooltip.options.bodyFont.
-						// tooltipEl.style.fontFamily = tooltip._bodyFonFamily;
-						// tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
-						// tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
-						// tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
 
 						// Set caret Position
 						tooltipEl.classList.remove('above', 'below', 'no-transform');
@@ -395,7 +347,7 @@ export class GraphWithComparisonNewComponent {
 			},
 			scales: {
 				xAxes: {
-					display: this._showYAxis,
+					display: showYAxis,
 					grid: {
 						color: '#841063',
 					},
@@ -408,7 +360,7 @@ export class GraphWithComparisonNewComponent {
 					},
 				},
 				yAxes: {
-					display: this._showYAxis,
+					display: showYAxis,
 					// drawBorder: this._showYAxis,
 					// drawTicks: this._showYAxis,
 					// offsetGridLines: this._showYAxis,
@@ -422,16 +374,16 @@ export class GraphWithComparisonNewComponent {
 							family: 'Open Sans',
 							style: 'normal',
 						},
-						stepSize: this._stepSize,
+						stepSize: stepSize,
 						callback: (value, index, ticks) => {
-							if (this._showYAxis || isNaN(parseInt('' + value))) {
+							if (showYAxis || isNaN(parseInt('' + value))) {
 								return value;
 							}
-							return +value % this._stepSize === 0 ? value : null;
+							return +value % stepSize === 0 ? value : null;
 						},
 					},
 					beginAtZero: true,
-					max: this._maxYValue,
+					max: maxYValue,
 				},
 			},
 		};

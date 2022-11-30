@@ -108,27 +108,6 @@ export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionCompone
 			your: your,
 		} as Value;
 	}
-
-	private areValuesEqual(v1: Value, v2: Value): boolean {
-		return (
-			arraysEqual(
-				v1.community.map((v) => v.turn),
-				v2.community.map((v) => v.turn),
-			) &&
-			arraysEqual(
-				v1.community.map((v) => v.value),
-				v2.community.map((v) => v.value),
-			) &&
-			arraysEqual(
-				v1.your.map((v) => v.turn),
-				v2.your.map((v) => v.turn),
-			) &&
-			arraysEqual(
-				v1.your.map((v) => v.value),
-				v2.your.map((v) => v.value),
-			)
-		);
-	}
 }
 
 interface Value {

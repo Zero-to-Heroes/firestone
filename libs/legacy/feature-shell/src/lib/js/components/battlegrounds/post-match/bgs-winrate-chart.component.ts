@@ -12,20 +12,20 @@ import { deepEqual } from '../../../services/utils';
 	],
 	template: `
 		<graph-with-comparison-new
-			[id]="id"
 			[turnLabel]="'battlegrounds.post-match-stats.winrate-stats.turn-label' | owTranslate"
 			[statLabel]="'battlegrounds.post-match-stats.winrate-stats.winrate-label' | owTranslate"
+			[communityValues]="communityValues"
+			[yourValues]="yourValues"
 			[communityLabel]="'battlegrounds.post-match-stats.warband-stats.community-label' | owTranslate"
 			[yourLabel]="'battlegrounds.post-match-stats.warband-stats.your-label' | owTranslate"
-			[yourValues]="yourValues"
-			[communityValues]="communityValues"
-			[maxYValue]="80"
-			[stepSize]="50"
-			[showYAxis]="showYAxis"
 			[communityTooltip]="
 				'app.battlegrounds.personal-stats.hero-details.winrate-stats.community-tooltip' | owTranslate
 			"
 			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.your-tooltip' | owTranslate"
+			[id]="id"
+			[maxYValue]="80"
+			[stepSize]="50"
+			[showYAxis]="showYAxis"
 		>
 		</graph-with-comparison-new>
 	`,

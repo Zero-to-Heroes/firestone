@@ -38,6 +38,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 					}
 				}, 0),
 			),
+			// share(), // TODO: test this when I have time to do it properly
 			takeUntil(this.destroyed$),
 		);
 	}
