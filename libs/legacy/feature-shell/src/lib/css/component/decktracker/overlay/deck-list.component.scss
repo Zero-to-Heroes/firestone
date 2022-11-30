@@ -8,3 +8,9 @@
 .deck-list {
 	overflow: visible;
 }
+
+:host ::ng-deep decktracker-deck-list {
+	ng-scrollbar.deck-list {
+		max-height: 100%;
+	}
+}

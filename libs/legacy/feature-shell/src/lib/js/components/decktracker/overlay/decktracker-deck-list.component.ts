@@ -30,7 +30,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
 	],
 	template: `
-		<ng-scrollbar class="deck-list" [ngClass]="{ active: isScroll }" scrollable>
+		<ng-scrollbar
+			class="deck-list"
+			[ngClass]="{ active: isScroll }"
+			[autoHeightDisabled]="false"
+			[sensorDisabled]="false"
+			scrollable
+		>
 			<ng-container [ngSwitch]="displayMode">
 				<!-- <div class="list-background"></div> -->
 				<deck-list-by-zone

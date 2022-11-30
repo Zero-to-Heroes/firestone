@@ -78,6 +78,10 @@
 			}
 		}
 
+		.deck-list {
+			flex-grow: 1;
+		}
+
 		::ng-deep {
 			.deck-zone .card-list li:not(:last-child) {
 				margin-bottom: 1px;

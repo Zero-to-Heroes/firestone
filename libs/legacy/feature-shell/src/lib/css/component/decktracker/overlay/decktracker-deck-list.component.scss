@@ -1,28 +1,11 @@
 .deck-list {
 	overflow: hidden;
-	// width: 100%;
 	width: calc(100% + 20px);
 	min-width: calc(100% + 20px);
 	position: relative;
 	left: -10px;
-	// overflow-y: hidden;
-	// width: calc(100% + 20px);
-	// min-width: calc(100% + 20px);
 	position: relative;
-	// left: -10px;
 	max-height: calc(var(--decktracker-max-height) / var(--decktracker-scale) - 30px); // Take into account the top menu
-	// max-height: 30vh;
-	// height: 25vh;
-	// height: 100%;
-
-	// .list-background {
-	// 	position: absolute;
-	// 	top: 0;
-	// 	left: 10px;
-	// 	right: 10px;
-	// 	bottom: 10px;
-	// 	background: var(--color-7);
-	// }
 
 	.select-container {
 		width: 100%;
