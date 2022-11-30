@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds } from '@firestone-hs/reference-data';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { getDefaultBoosterIdForSetId } from '@legacy-import/src/lib/js/services/hs-utils';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { ApiRunner } from '../../../js/services/api-runner';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
@@ -30,11 +31,8 @@ export class PackStatsService {
 		// Ideally this would be fully reactive, but there are too many processes that depend on it,
 		// so for now I will just use a local cache
 		const localPackResult = this.localStorage.getItem<LocalPackStats>('collection-pack-stats');
-		// Cache the local results for 7 days
-		if (
-			localPackResult &&
-			Date.now() - new Date(localPackResult.lastUpdateDate).getTime() <= 7 * 24 * 60 * 60 * 1000
-		) {
+		// Cache the local results for one hour
+		if (localPackResult && Date.now() - new Date(localPackResult.lastUpdateDate).getTime() <= 60 * 60 * 1000) {
 			return localPackResult.packs;
 		}
 
@@ -44,11 +42,19 @@ export class PackStatsService {
 			userName: user.username,
 		};
 		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
-		const packs: readonly PackResult[] =
-			data.results
-				// Because of how pack logging used to work, when you received the 5 galakrond cards,
-				// the app flagged that as a new pack
-				?.filter((pack) => !this.isPackAllGalakronds(pack)) ?? [];
+		const packs: readonly PackResult[] = (data.results ?? [])
+			// Because of how pack logging used to work, when you received the 5 galakrond cards,
+			// the app flagged that as a new pack
+			?.filter((pack: PackResult) => !this.isPackAllGalakronds(pack))
+			.map((pack: PackResult) => {
+				if (!!pack.boosterId) {
+					return pack;
+				}
+				return {
+					...pack,
+					boosterId: getDefaultBoosterIdForSetId(pack.setId),
+				};
+			});
 		const newPackResults: LocalPackStats = {
 			lastUpdateDate: new Date(),
 			packs: packs,

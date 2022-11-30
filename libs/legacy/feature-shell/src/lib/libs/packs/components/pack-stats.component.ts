@@ -19,7 +19,7 @@ import { InternalPackInfo } from './pack-stat.component';
 				{{ 'app.collection.pack-stats.title' | owTranslate: { value: totalPacks$ | async } }}
 				<preference-toggle
 					class="show-buyable-packs"
-					[ngClass]="{ 'active': showOnlyBuyablePacks$ | async }"
+					[ngClass]="{ active: showOnlyBuyablePacks$ | async }"
 					field="collectionShowOnlyBuyablePacks"
 					[label]="'settings.collection.pack-stats-show-only-buyable-packs' | owTranslate"
 					[helpTooltip]="'settings.collection.pack-stats-show-only-buyable-packs-tooltip' | owTranslate"
@@ -95,15 +95,18 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						const packsForBoosterId = packStats?.filter((p) => p.boosterId === boosterId);
 						const packFromMemory = packsFromMemory?.find((p) => p.packType === boosterId);
 						const totalPacksReceived = packFromMemory?.totalObtained;
-						return {
+						const unopenedPacks = packFromMemory?.unopened ?? 0;
+						const openedPacks = totalPacksReceived - unopenedPacks;
+						const result = {
 							packType: boosterId,
 							totalObtained: totalPacksReceived ?? 0,
-							unopened: packFromMemory?.unopened ?? 0,
+							unopened: unopenedPacks,
 							name: boosterIdToBoosterName(boosterId, this.i18n),
 							setId: boosterIdToSetId(boosterId),
-							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary', boosterId),
-							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId),
+							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary', boosterId, openedPacks),
+							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId, openedPacks),
 						} as InternalPackInfo;
+						return result;
 					})
 					.filter((info) => info)
 					.reverse(),
@@ -252,12 +255,13 @@ const buildPityTimer = (
 	openedPacks: readonly PackResult[],
 	type: 'legendary' | 'epic',
 	boosterId: BoosterType,
+	totalOpenedPacks: number,
 ): number => {
 	let valueIfNoPacksOpened =
 		type === 'epic'
 			? EPIC_PITY_TIMER
 			: // Guaranteed legendary in the first 10 packs
-			openedPacks.length < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
+			totalOpenedPacks < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
 			? 10
 			: LEGENDARY_PITY_TIMER;
 	for (let i = 0; i < openedPacks.length; i++) {
