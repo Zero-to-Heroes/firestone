@@ -47,6 +47,10 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
+								type: 'content',
+								text: `Firestone is now updated for 25.0. As usual, some features will `,
+							},
+							{
 								type: 'misc',
 								text: `The app underwent a major technical migration. This should have no impact for you, but please be aware that a few bugs might arise because of it. So don't hesitate to ping me whenever you find something that doesn't work as it should :)`,
 							},
