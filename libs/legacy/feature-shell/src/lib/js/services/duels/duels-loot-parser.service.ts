@@ -76,7 +76,10 @@ export class DuelsLootParserService {
 
 		this.events
 			.on(Events.REVIEW_FINALIZED)
-			.pipe(map((event) => event.data[0].game))
+			.pipe(
+				map((event) => event.data[0].game as GameForUpload),
+				filter((game) => isDuels(game.gameMode)),
+			)
 			.subscribe((game) => this.sendBasicLootInfo(game));
 	}
 
@@ -85,8 +88,11 @@ export class DuelsLootParserService {
 		const replay = parseHsReplayString(game.uncompressedXmlReplay, this.allCards.getService());
 		console.debug('[duels-loot] replay', replay.mainPlayerHeroPowerCardId, replay.opponentPlayerHeroPowerCardId);
 		console.debug('[duels-loot] will decode deck', game.deckstring);
-		const deckCardDbfIds = decode(game.deckstring).cards.map((pair) => pair[0]);
-		const signatureTreasure: string = findSignatureTreasure(deckCardDbfIds, this.allCards);
+		let signatureTreasure: string = null;
+		if (game.deckstring) {
+			const deckCardDbfIds = decode(game.deckstring).cards.map((pair) => pair[0]);
+			signatureTreasure = findSignatureTreasure(deckCardDbfIds, this.allCards);
+		}
 
 		const input: Input = {
 			type: game.gameMode as 'duels' | 'paid-duels',
