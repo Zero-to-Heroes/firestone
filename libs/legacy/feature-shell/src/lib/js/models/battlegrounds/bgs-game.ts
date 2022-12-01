@@ -62,6 +62,13 @@ export class BgsGame {
 		faceOff: BgsFaceOffWithSimulation,
 		createIfMissing = false,
 	): BgsGame {
+		// clean empty properties in the input face-off, to avoid destructive merges (as the input is partial)
+		for (const propName in faceOff) {
+			if (faceOff[propName] === null || faceOff[propName] === undefined) {
+				delete faceOff[propName];
+			}
+		}
+
 		if (!this.faceOffs?.length && !createIfMissing) {
 			console.error(
 				'[face-off] [bgs-next-opponent] trying to update non-existing face-off',
@@ -110,6 +117,7 @@ export class BgsGame {
 				);
 				return this;
 			} else {
+				console.debug('[face-off] created a new face-off', [...this.faceOffs, faceOff]);
 				// Create a new faceOff
 				return this.update({
 					faceOffs: [...this.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
@@ -124,6 +132,7 @@ export class BgsGame {
 			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);
 		const cleanedFaceOffs = this.removeOldSimulationDetails(updatedFaceOffs);
+		console.debug('[face-off] updated face-offs', cleanedFaceOffs);
 		return this.update({
 			faceOffs: cleanedFaceOffs,
 		} as BgsGame);

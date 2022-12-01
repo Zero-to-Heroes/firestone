@@ -103,8 +103,9 @@ export class BgsPlayerBoardParser implements EventParser {
 			console.error('[bgs-player-board-parser] missing opponentCardId', event);
 		}
 
+		const opponentCardId = normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards);
 		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
-			normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
+			opponentCardId,
 			BgsFaceOffWithSimulation.create({
 				battleInfo: battleInfo,
 				battleInfoStatus: 'waiting-for-result',
