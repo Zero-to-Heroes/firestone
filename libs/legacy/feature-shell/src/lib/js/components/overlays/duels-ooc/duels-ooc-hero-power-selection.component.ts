@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsHeroPowerInfo } from '@components/overlays/duels-ooc/duels-hero-info';
 import { allDuelsHeroes, CardIds, duelsHeroConfigs, ReferenceCard } from '@firestone-hs/reference-data';
+import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -25,23 +26,14 @@ import { filter } from 'rxjs/operators';
 	template: `
 		<div class="container" *ngIf="heroPowers$ | async as heroPowers">
 			<div class="cell" *ngFor="let heroPower of heroPowers; trackBy: trackByFn">
-				<div
-					class="empty-card"
-					(mouseenter)="onMouseEnter(heroPower.id)"
-					(mouseleave)="onMouseLeave(heroPower.id, $event)"
-				></div>
+				<div class="empty-card" (mouseenter)="onMouseEnter(heroPower.id)" (mouseleave)="onMouseLeave(heroPower.id, $event)"></div>
 			</div>
 		</div>
-		<duels-hero-power-info
-			*ngIf="heroPowerInfo$ | async as heroPowerInfo"
-			[heroPowerInfo]="heroPowerInfo"
-		></duels-hero-power-info>
+		<duels-hero-power-info *ngIf="heroPowerInfo$ | async as heroPowerInfo" [heroPowerInfo]="heroPowerInfo"></duels-hero-power-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatHeroPowerSelectionComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+export class DuelsOutOfCombatHeroPowerSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	heroPowers$: Observable<readonly ReferenceCard[]>;
 	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
 
@@ -56,6 +48,8 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 	}
 
 	ngAfterContentInit() {
+		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
+
 		this.heroPowers$ = this.store
 			.listen$(([state, prefs]) => state?.duels?.heroPowerOptions)
 			.pipe(
@@ -76,11 +70,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 			),
 		).pipe(
 			this.mapData(
-				([
-					runs,
-					allHeroPowerCards,
-					[duelStats, duelsTopDecks, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
-				]) => {
+				([runs, allHeroPowerCards, [duelStats, duelsTopDecks, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch]]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)
 						.map((currentHeroPowerCardId) => {
@@ -151,8 +141,7 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 								});
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
-								(deck: DuelsHeroInfoTopDeck) =>
-									`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+								(deck: DuelsHeroInfoTopDeck) => `${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
 							)(heroPowerDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 							const card = this.allCards.getCard(currentHeroPowerCardId);
@@ -187,15 +176,11 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent
 					return result;
 				}
 
-				const heroConfig = duelsHeroConfigs.find((conf) =>
-					conf.heroPowers?.includes(currentHeroPowerCardId as CardIds),
-				);
-				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
-					(value, index) => ({
-						winNumber: index,
-						value: 0,
-					}),
-				);
+				const heroConfig = duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(currentHeroPowerCardId as CardIds));
+				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map((value, index) => ({
+					winNumber: index,
+					value: 0,
+				}));
 				return {
 					cardId: currentHeroPowerCardId,
 					heroCardId: heroConfig?.hero,

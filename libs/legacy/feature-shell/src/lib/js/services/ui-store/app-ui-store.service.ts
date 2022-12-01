@@ -52,15 +52,11 @@ export type GameStateSelector<T> = (gameState: GameState) => T;
 export type PrefsSelector<T> = (prefs: Preferences) => T;
 export type NativeGameStateSelector<T> = (state: GameNativeState) => T;
 export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
-export type MercenariesStateSelector<T> = (
-	state: [MercenariesBattleState, { name: string; preferences: Preferences }?],
-) => T;
+export type MercenariesStateSelector<T> = (state: [MercenariesBattleState, { name: string; preferences: Preferences }?]) => T;
 export type MercenariesOutOfCombatStateSelector<T> = (
 	state: [MercenariesOutOfCombatState, { name: string; preferences: Preferences }?],
 ) => T;
-export type MercenariesHighlightsSelector<T> = (
-	state: [HighlightSelector, { name: string; preferences: Preferences }?],
-) => T;
+export type MercenariesHighlightsSelector<T> = (state: [HighlightSelector, { name: string; preferences: Preferences }?]) => T;
 
 @Injectable()
 export class AppUiStoreService {
@@ -159,9 +155,7 @@ export class AppUiStoreService {
 	// perform any mapping.
 	// This is because the selectors are called every time a new state is emitted, so
 	// costly operations can still amount to a lot of overhead
-	public listen$<S extends Selector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
+	public listen$<S extends Selector<any>[]>(...selectors: S): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return combineLatest(this.mainStore.asObservable(), this.prefs.asObservable()).pipe(
 			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs?.preferences),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
@@ -295,9 +289,8 @@ export class AppUiStoreService {
 	}
 
 	private initTavernBrawl() {
-		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (
-			this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService
-		).tavernBrawl$;
+		const tavernBrawl: BehaviorSubject<TavernBrawlState> = (this.ow.getMainWindow().tavernBrawlProvider as TavernBrawlService)
+			.tavernBrawl$;
 		tavernBrawl.subscribe(this.tavernBrawl);
 	}
 
@@ -314,23 +307,19 @@ export class AppUiStoreService {
 	}
 
 	private initDuelsRuns() {
-		const duelsRuns: BehaviorSubject<readonly DuelsRun[]> = (
-			this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService
-		).duelsRuns$;
+		const duelsRuns: BehaviorSubject<readonly DuelsRun[]> = (this.ow.getMainWindow().duelsDecksProvider as DuelsDecksProviderService)
+			.duelsRuns$;
 		duelsRuns.subscribe(this.duelsRuns);
 	}
 
 	private initDecks() {
-		const decks$: BehaviorSubject<readonly DeckSummary[]> = (
-			this.ow.getMainWindow().decksProvider as DecksProviderService
-		).decks$;
+		const decks$: BehaviorSubject<readonly DeckSummary[]> = (this.ow.getMainWindow().decksProvider as DecksProviderService).decks$;
 		decks$.subscribe(this.decks);
 	}
 
 	private initGameStats() {
-		const gameStats$: BehaviorSubject<readonly GameStat[]> = (
-			this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService
-		).gameStats$;
+		const gameStats$: BehaviorSubject<readonly GameStat[]> = (this.ow.getMainWindow().gameStatsProvider as GameStatsProviderService)
+			.gameStats$;
 		gameStats$.subscribe(this.gameStats);
 	}
 
@@ -465,10 +454,8 @@ export class AppUiStoreService {
 					([gameStats, [stats, timeFilter, rankFilter, heroSort, patch]]) =>
 						[
 							stats,
-							gameStats?.filter(
-								(stat) =>
-									stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly',
-							) ?? [],
+							gameStats?.filter((stat) => stat.gameMode === 'battlegrounds' || stat.gameMode === 'battlegrounds-friendly') ??
+								[],
 							timeFilter,
 							rankFilter <= 100 ? rankFilter : 100,
 							heroSort,

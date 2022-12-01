@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { SimpleBarChartData } from '@components/common/chart/simple-bar-chart-data';
 import { DuelsHeroInfo, DuelsHeroInfoTopDeck } from '@components/overlays/duels-ooc/duels-hero-info';
+import { PatchInfo } from '@legacy-import/src/lib/js/models/patches';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({
@@ -18,10 +19,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					<div class="stat">
 						<div class="header" [owTranslate]="'duels.hero-info.winrate-label'"></div>
 						<div class="values">
-							<div
-								class="global-value"
-								[helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate"
-							>
+							<div class="global-value" [helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate">
 								{{ buildValue(globalWinrate, 1) }}%
 							</div>
 							<div class="my-value" [helpTooltip]="'duels.hero-info.your-value-tooltip' | owTranslate">
@@ -32,10 +30,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					<div class="stat">
 						<div class="header" [owTranslate]="'duels.hero-info.popularity-label'"></div>
 						<div class="values">
-							<div
-								class="global-value"
-								[helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate"
-							>
+							<div class="global-value" [helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate">
 								{{ buildValue(globalPopularity, 1) }}%
 							</div>
 							<div class="my-value" [helpTooltip]="'duels.hero-info.your-value-tooltip' | owTranslate">
@@ -45,10 +40,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					</div>
 				</div>
 			</div>
-			<div
-				class="section-header"
-				[owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"
-			></div>
+			<div class="section-header" [owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"></div>
 			<basic-bar-chart
 				*ngIf="globalWinDistribution?.data?.length > 0"
 				class="win-distribution"
@@ -65,11 +57,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				<div class="deck" *ngFor="let deck of decks">
 					<div class="icons">
 						<img [src]="getArt(deck.heroCardId)" class="hero-icon" [cardTooltip]="deck.heroCardId" />
-						<img
-							[src]="getArt(deck.heroPowerCardId)"
-							class="hero-power-icon"
-							[cardTooltip]="deck.heroPowerCardId"
-						/>
+						<img [src]="getArt(deck.heroPowerCardId)" class="hero-power-icon" [cardTooltip]="deck.heroPowerCardId" />
 						<img
 							[src]="getArt(deck.signatureTreasureCardId)"
 							class="signature-treasure-icon"
@@ -88,7 +76,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					</div>
 				</div>
 			</div>
-			<div class="footer" [owTranslate]="'duels.hero-info.footer'"></div>
+			<div class="footer">
+				<div [owTranslate]="statsPeriodText"></div>
+				<div [owTranslate]="'duels.hero-info.footer'"></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -116,6 +107,19 @@ export class DuelsHeroInfoComponent {
 		this.totalRuns = value.globalTotalMatches;
 	}
 
+	@Input() set patch(value: PatchInfo) {
+		this.statsPeriodText = !value
+			? null
+			: this.i18n.translateString('duels.hero-info.stats-period', {
+					patchNumber: value.version,
+					patchDate: new Date(value.date).toLocaleString(this.i18n.formatCurrentLocale(), {
+						year: 'numeric',
+						month: 'numeric',
+						day: 'numeric',
+					}),
+			  });
+	}
+
 	heroPortrait: string;
 	name: string;
 	globalWinrate: number;
@@ -126,6 +130,8 @@ export class DuelsHeroInfoComponent {
 	decks: readonly DuelsHeroInfoTopDeck[];
 	totalDecks: number;
 	totalRuns: number;
+
+	statsPeriodText: string;
 
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 

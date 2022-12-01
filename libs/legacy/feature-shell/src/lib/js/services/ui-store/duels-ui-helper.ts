@@ -22,22 +22,19 @@ export const filterDuelsHeroStats = (
 	heroesFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	signatureTreasureFilter: 'all' | string,
+	// timeFilter: DuelsTimeFilterType, // The stats fed in input are already filtered (we only download the ones for a specific time period)
 	statType: DuelsStatTypeFilterType,
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
 	const result = (heroStats ?? [])
 		.filter((stat) =>
-			!heroesFilter?.length
-				? false
-				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+			!heroesFilter?.length ? false : heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
 		)
 		.filter((stat) =>
 			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-			heroPowerFilter === 'all' || statType !== 'signature-treasure'
-				? true
-				: stat.heroPowerCardId === heroPowerFilter,
+			heroPowerFilter === 'all' || statType !== 'signature-treasure' ? true : stat.heroPowerCardId === heroPowerFilter,
 		)
 		.filter((stat) =>
 			// Similar
@@ -71,6 +68,7 @@ export const filterDuelsTreasureStats = (
 	heroesFilter: DuelsHeroFilterType,
 	heroPowerFilter: 'all' | string,
 	sigTreasureFilter: 'all' | string,
+	// timeFilter: DuelsTimeFilterType,
 	statType: DuelsTreasureStatTypeFilterType,
 	allCards: CardsFacadeService,
 	searchString: string = null,
@@ -84,17 +82,14 @@ export const filterDuelsTreasureStats = (
 		// Avoid generating errors when the API hasn't properly formatted the data yet
 		.filter((stat) => !(+stat.treasureCardId > 0))
 		.filter((stat) =>
-			!heroesFilter?.length
-				? false
-				: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
+			!heroesFilter?.length ? false : heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(stat.hero) === heroFilter),
 		)
 		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
 		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
 		.filter((stat) => isCorrectType(stat, statType, allCards))
 		.filter(
 			(stat) =>
-				!searchString?.length ||
-				allCards.getCard(stat.treasureCardId)?.name.toLowerCase().includes(searchString.toLowerCase()),
+				!searchString?.length || allCards.getCard(stat.treasureCardId)?.name.toLowerCase().includes(searchString.toLowerCase()),
 		);
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
@@ -132,23 +127,18 @@ export const filterDuelsRuns = (
 				(run) =>
 					!duelsDeckDeletes ||
 					!duelsDeckDeletes[run.initialDeckList]?.length ||
-					duelsDeckDeletes[run.initialDeckList][duelsDeckDeletes[run.initialDeckList].length - 1] <
-						run.creationTimestamp,
+					duelsDeckDeletes[run.initialDeckList][duelsDeckDeletes[run.initialDeckList].length - 1] < run.creationTimestamp,
 			)
 			.filter((run) => (mmrFilter as any) === 'all' || run.ratingAtStart >= mmrFilter)
 			.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 			.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
 			.filter((run) =>
-				!heroesFilter?.length
-					? false
-					: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
+				!heroesFilter?.length ? false : heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(run.heroCardId) === heroFilter),
 			)
 			.filter((stat) =>
 				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
 				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-				heroPowerFilter === 'all' || statType !== 'signature-treasure'
-					? true
-					: stat.heroPowerCardId === heroPowerFilter,
+				heroPowerFilter === 'all' || statType !== 'signature-treasure' ? true : stat.heroPowerCardId === heroPowerFilter,
 			)
 			.filter((stat) =>
 				// Similar
@@ -164,9 +154,9 @@ export const buildDuelsHeroTreasurePlayerStats = (
 	playerRuns: readonly DuelsRun[] = [],
 ): readonly DuelsHeroPlayerStat[] => {
 	const totalRuns = duelStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
-	const grouped: { [cardId: string]: readonly DuelsTreasureStat[] } = groupByFunction(
-		(stat: DuelsTreasureStat) => stat.treasureCardId,
-	)(duelStats);
+	const grouped: { [cardId: string]: readonly DuelsTreasureStat[] } = groupByFunction((stat: DuelsTreasureStat) => stat.treasureCardId)(
+		duelStats,
+	);
 
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];
@@ -204,9 +194,8 @@ export const buildDuelsHeroPlayerStats = (
 	runs: readonly DuelsRun[] = [],
 ): DuelsHeroPlayerStat[] => {
 	const totalRuns = duelStats.map((stat) => stat.totalRuns).reduce((a, b) => a + b, 0);
-	const grouped: { [cardId: string]: readonly DuelsHeroStat[] } = groupByFunction(
-		getGroupingKeyForHeroStat(statType),
-	)(duelStats);
+
+	const grouped: { [cardId: string]: readonly DuelsHeroStat[] } = groupByFunction(getGroupingKeyForHeroStat(statType))(duelStats);
 
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];
@@ -241,10 +230,7 @@ export const buildDuelsHeroPlayerStats = (
 };
 
 // Because of the neutral heroes
-export const mergeDuelsHeroPlayerStats = (
-	statsToMerge: readonly DuelsHeroPlayerStat[],
-	cardIdOverride: string,
-): DuelsHeroPlayerStat => {
+export const mergeDuelsHeroPlayerStats = (statsToMerge: readonly DuelsHeroPlayerStat[], cardIdOverride: string): DuelsHeroPlayerStat => {
 	const refStat = statsToMerge[0];
 	if (!refStat) {
 		return null;
@@ -257,15 +243,11 @@ export const mergeDuelsHeroPlayerStats = (
 		const totalWinsForNumber = statsToMerge.map((g) => g.globalWinDistribution[i].value).reduce((a, b) => a + b, 0);
 		winsDistribution.push({ winNumber: i, value: (100 * totalWinsForNumber) / totalMatchesForGroup });
 	}
-	const totalWins = statsToMerge
-		.map((stat) => stat.globalWinrate * stat.globalTotalMatches)
-		.reduce((a, b) => a + b, 0);
+	const totalWins = statsToMerge.map((stat) => stat.globalWinrate * stat.globalTotalMatches).reduce((a, b) => a + b, 0);
 
 	const playerTotalMatches = (100 * refStat.playerTotalMatches) / refStat.playerPopularity;
 	const playerTotalMatchesForGroup = sumOnArray(statsToMerge, (stat) => stat.playerTotalMatches);
-	const playerTotalWins = statsToMerge
-		.map((stat) => stat.playerWinrate * stat.playerTotalMatches)
-		.reduce((a, b) => a + b, 0);
+	const playerTotalWins = statsToMerge.map((stat) => stat.playerWinrate * stat.playerTotalMatches).reduce((a, b) => a + b, 0);
 
 	return {
 		hero: cardIdOverride,
@@ -317,19 +299,11 @@ export const getCurrentDeck = (
 	return getTopDeck(topDecks, deckDetails ?? [], deckId);
 };
 
-export const getDuelsMmrFilterNumber = (
-	mmrPercentiles: readonly MmrPercentile[],
-	mmrFilter: 100 | 50 | 25 | 10 | 1,
-) => {
-	return (mmrPercentiles.find((p) => p.percentile === mmrFilter) ?? mmrPercentiles.find((p) => p.percentile === 100))
-		?.mmr;
+export const getDuelsMmrFilterNumber = (mmrPercentiles: readonly MmrPercentile[], mmrFilter: 100 | 50 | 25 | 10 | 1) => {
+	return (mmrPercentiles.find((p) => p.percentile === mmrFilter) ?? mmrPercentiles.find((p) => p.percentile === 100))?.mmr;
 };
 
-const isCorrectType = (
-	stat: DuelsTreasureStat,
-	statType: DuelsTreasureStatTypeFilterType,
-	allCards: CardsFacadeService,
-) => {
+const isCorrectType = (stat: DuelsTreasureStat, statType: DuelsTreasureStatTypeFilterType, allCards: CardsFacadeService) => {
 	switch (statType) {
 		case 'treasure-1':
 			return !isPassive(stat.treasureCardId, allCards) && duelsTreasureRank(stat.treasureCardId) === 1;
@@ -354,8 +328,7 @@ const isCorrectRunDate = (run: DuelsRun, timeFilter: DuelsTimeFilterType, patch:
 			// See bgs-ui-helper
 			return (
 				!!patch &&
-				(run.buildNumberAtStart >= patch.number ||
-					run.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
+				(run.buildNumberAtStart >= patch.number || run.creationTimestamp > new Date(patch.date).getTime() + 24 * 60 * 60 * 1000)
 			);
 		case 'past-seven':
 			return new Date(run.creationTimestamp) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
@@ -399,11 +372,7 @@ const getGroupingKeyForHeroStat = (statType: DuelsStatTypeFilterType) => {
 	}
 };
 
-const getTopDeck = (
-	topDecks: readonly DuelsGroupedDecks[],
-	additionalDeckDetails: readonly DuelsDeckStat[],
-	deckId: number,
-): DeckInfo => {
+const getTopDeck = (topDecks: readonly DuelsGroupedDecks[], additionalDeckDetails: readonly DuelsDeckStat[], deckId: number): DeckInfo => {
 	const deckStat: DuelsDeckStat = topDecks
 		.map((grouped) => grouped.decks)
 		.reduce((a, b) => a.concat(b), [])
@@ -487,9 +456,7 @@ const topDeckMmrFilter = (deck: DuelsDeckStat, filter: number): boolean => {
 };
 
 const topDeckHeroFilter = (deck: DuelsDeckStat, heroesFilter: DuelsHeroFilterType): boolean => {
-	return !heroesFilter?.length
-		? false
-		: heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
+	return !heroesFilter?.length ? false : heroesFilter.some((heroFilter) => normalizeDuelsHeroCardId(deck.heroCardId) === heroFilter);
 };
 
 const topDeckHeroPowerFilter = (deck: DuelsDeckStat, filter: 'all' | string): boolean => {
