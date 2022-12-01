@@ -383,13 +383,15 @@ export class DeckParserService {
 		}
 
 		if (lines.length >= 4) {
-			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
-			const deckNameLogLine = (await this.isDuelsDeck(lines[lines.length - 4]))
+			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3], gameType);
+			const deckNameLogLine = (await this.isDuelsDeck(lines[lines.length - 4], gameType))
 				? lines[lines.length - 4]
 				: lines[lines.length - 3];
-			const deckstringLogLine = (await this.isDuelsDeck(lines[lines.length - 4]))
+			console.log('[deck-parser] deckName', deckNameLogLine);
+			const deckstringLogLine = (await this.isDuelsDeck(lines[lines.length - 4], gameType))
 				? lines[lines.length - 2]
 				: lines[lines.length - 1];
+			console.log('[deck-parser] deckstring', deckstringLogLine);
 			let match: RegExpExecArray;
 			const deckName = (match = this.deckNameRegex.exec(deckNameLogLine)) ? match[1] : undefined;
 			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
@@ -431,7 +433,7 @@ export class DeckParserService {
 		return lines;
 	}
 
-	private async isDuelsDeck(logLine: string): Promise<boolean> {
+	private async isDuelsDeck(logLine: string, gameType: GameType): Promise<boolean> {
 		if (!logLine?.length) {
 			return false;
 		}
@@ -442,7 +444,11 @@ export class DeckParserService {
 		}
 		// ...and that we are on the Duels screen
 		console.log('[deck-parser] current scene', this.currentNonGamePlayScene);
-		return this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN;
+		return (
+			this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ||
+			// In case we launch the app mid-game
+			(this.currentScene === SceneMode.GAMEPLAY && [GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(gameType))
+		);
 	}
 
 	private explodeDecklist(initialDecklist: readonly number[]): any[] {
