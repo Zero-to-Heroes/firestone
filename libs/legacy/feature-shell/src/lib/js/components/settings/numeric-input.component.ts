@@ -10,14 +10,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	template: `
 		<div class="numeric-input" [ngClass]="{ disabled: disabled }">
 			<div class="label" [innerHTML]="label" [helpTooltip]="labelTooltip"></div>
-			<input
-				type="number"
-				[ngModel]="value"
-				(ngModelChange)="onModelChange($event)"
-				(mousedown)="preventDrag($event)"
-			/>
+			<input type="number" [ngModel]="value" (ngModelChange)="onModelChange($event)" (mousedown)="preventDrag($event)" />
 			<!-- FIXME -->
-			(dblclick)="$event.target.select()"
+			<!-- (dblclick)="$event.target.select()" -->
 			<div class="buttons">
 				<button class="arrow up" inlineSVG="assets/svg/arrow.svg" (click)="increment()"></button>
 				<button class="arrow down" inlineSVG="assets/svg/arrow.svg" (click)="decrement()"></button>

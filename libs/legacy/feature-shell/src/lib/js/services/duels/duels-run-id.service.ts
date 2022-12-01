@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { DuelsInfo } from '../../models/memory/memory-duels';
@@ -37,12 +37,27 @@ export class DuelsRunIdService {
 				startWith(null),
 			)
 			.subscribe(this.lastDuelsGame$);
-		const currentRun$ = combineLatest(this.lastDuelsGame$, this.store.duelsRuns$()).pipe(
-			map(([lastDuelsGame, runs]) =>
-				lastDuelsGame?.reviewId
+		const currentRun$ = combineLatest([this.lastDuelsGame$, this.store.duelsRuns$()]).pipe(
+			map(([lastDuelsGame, runs]) => {
+				const info = lastDuelsGame?.reviewId
 					? runs?.find((run) => run.steps.some((s) => (s as GameStat).reviewId === lastDuelsGame?.reviewId))
-					: null,
-			),
+					: null;
+				console.log(
+					'[duels-run] currentRun',
+					lastDuelsGame?.reviewId,
+					info?.id,
+					info?.heroCardId,
+					info?.heroPowerCardId,
+					info?.wins,
+					info?.losses,
+					info,
+					lastDuelsGame,
+					runs, // Remove this from the final logs
+				);
+				return info;
+			}),
+			// After the first game, a run is always created
+			filter((run) => !!run),
 			startWith(null),
 		);
 		const duelsInfo$ = this.duelsState.duelsInfo$$.asObservable().pipe(
@@ -67,6 +82,7 @@ export class DuelsRunIdService {
 			.pipe(
 				filter(([duelsInfo, currentRun, latestDuelsMatch]) => !!duelsInfo),
 				map(([duelsInfo, currentRun, latestDuelsMatch]) => {
+					console.debug('[duels-run] defining new run id?', duelsInfo, currentRun, latestDuelsMatch);
 					if (!latestDuelsMatch) {
 						console.log('[duels-run] no last duels match, assigning new run ID');
 						return uuid();
@@ -84,6 +100,7 @@ export class DuelsRunIdService {
 				}),
 				startWith(uuid()),
 				distinctUntilChanged(),
+				tap((info) => console.debug('[duels-run] emitting runId', info)),
 			)
 			.subscribe(this.duelsRunId$);
 	}
@@ -138,8 +155,17 @@ const isNewRun = (
 		}
 	}
 
-	if (allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.StartingHeroPower) {
+	if (
+		currentRun.heroPowerCardId &&
+		allCards.getCard(currentRun.heroPowerCardId).dbfId !== duelsInfo.StartingHeroPower
+	) {
 		console.log('[duels-run] different hero power, starting new run', duelsInfo, currentRun.heroPowerCardId);
+		console.debug(
+			'[duels-run] different hero power, starting new run',
+			duelsInfo,
+			currentRun.heroPowerCardId,
+			currentRun,
+		);
 		return true;
 	}
 	if (duelsInfo.LastRatingChange > 0) {
@@ -147,7 +173,7 @@ const isNewRun = (
 		return true;
 	}
 	const signatureTreasure: string = findSignatureTreasure(duelsInfo.DeckList, allCards);
-	if (signatureTreasure !== currentRun.signatureTreasureCardId) {
+	if (currentRun.signatureTreasureCardId && signatureTreasure !== currentRun.signatureTreasureCardId) {
 		console.log(
 			'[duels-run] different signature treasure, starting new run',
 			signatureTreasure,

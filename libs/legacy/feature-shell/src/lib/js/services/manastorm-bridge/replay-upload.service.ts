@@ -17,29 +17,7 @@ export class ReplayUploadService {
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly events: Events,
-	) {
-		const fakeGame: GameForUpload = {
-			buildNumber: 139719,
-			durationTimeSeconds: 0,
-			durationTurns: 0,
-			forceOpponentName: '已腐蚀的鱼人 (5 / 9)',
-			gameFormat: 'wild',
-			gameMode: 'mercenaries-pve',
-			mercsBountyId: 168,
-			newPlayerRank: undefined,
-			opponent: undefined,
-			opponentRank: undefined,
-			player: undefined,
-			playerRank: 'normal',
-			result: 'won',
-			reviewId: 'b87af202-23a3-4d54-b655-8bd51598e761',
-			runId: '刷图-354877727-1383232357',
-			scenarioId: 3790,
-			title: '乐满满#5404 vs 乐满满#5404',
-			uncompressedXmlReplay: '',
-		} as GameForUpload;
-		// window['debugUpload'] = () => this.uploadGame(fakeGame);
-	}
+	) {}
 
 	public async uploadGame(game: GameForUpload) {
 		if (!game.reviewId) {

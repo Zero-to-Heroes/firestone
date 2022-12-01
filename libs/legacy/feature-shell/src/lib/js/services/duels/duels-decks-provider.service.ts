@@ -41,16 +41,14 @@ export class DuelsDecksProviderService {
 	private async init() {
 		await this.store.initComplete();
 
-		combineLatest(
+		combineLatest([
 			this.store.listen$(
 				([main, nav]) => main.duels.duelsRunInfos,
 				([main, nav]) => main.duels.duelsRewardsInfo,
 			),
 			this.store.gameStats$(),
-		)
+		])
 			.pipe(
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				distinctUntilChanged((a, b) => deepEqual(a, b)),
 				map(([[duelsRunInfos, duelsRewardsInfo], gameStats]) => {
 					const duelMatches =
 						gameStats?.filter((match) => isDuels(match.gameMode)).filter((match) => match.runId) ?? [];
@@ -66,6 +64,7 @@ export class DuelsDecksProviderService {
 							),
 						)
 						.filter((run) => run);
+					console.debug('[duels-runs] rebuilding runs', runs, duelsRunInfos, duelsRewardsInfo, gameStats);
 					return runs;
 				}),
 			)
@@ -128,7 +127,7 @@ export class DuelsDecksProviderService {
 				const deckDefinition = decode(firstMatch.initialDeckList);
 				const updatedDeckDefinition = sanitizeDeckstring(deckDefinition, this.allCards);
 				const sanitizedDeckstring = encode(updatedDeckDefinition);
-				return ({
+				return {
 					...mainStats,
 					initialDeckList: sanitizedDeckstring,
 					heroCardId: heroCardId,
@@ -139,7 +138,7 @@ export class DuelsDecksProviderService {
 					runs: groupedByDecklist[deckstring],
 					debug1: deckDefinition,
 					debug2: updatedDeckDefinition,
-				} as any) as DuelsDeckSummary;
+				} as any as DuelsDeckSummary;
 			});
 		for (const personalDeck of duelsPersonalAdditionalDecks) {
 			if (decks.find((deck) => deck.initialDeckList === personalDeck.initialDeckList)) {
@@ -180,9 +179,7 @@ export class DuelsDecksProviderService {
 		return duelsPersonalDeckNames[initialDeckList] ?? null;
 	}
 
-	private buildMainPersonalDecktats(
-		runs: readonly DuelsRun[],
-	): {
+	private buildMainPersonalDecktats(runs: readonly DuelsRun[]): {
 		readonly global: DuelsDeckStatInfo;
 		readonly heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[];
 		readonly signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[];
@@ -281,10 +278,9 @@ export class DuelsDecksProviderService {
 		const sortedMatches = [...matchesForRun].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
 		const firstMatch = this.getFirstMatchForRun(sortedMatches);
 		const sortedInfo = [...runInfo].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
-		const steps: readonly (GameStat | DuelsRunInfo)[] = [
-			...(sortedMatches || []),
-			...(sortedInfo || []),
-		].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
+		const steps: readonly (GameStat | DuelsRunInfo)[] = [...(sortedMatches || []), ...(sortedInfo || [])].sort(
+			(a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1),
+		);
 		const [wins, losses] = this.extractWins(sortedMatches);
 		let normalizedDeckstring = firstMatch?.playerDecklist;
 		if (!!firstMatch?.playerDecklist) {

@@ -16,15 +16,20 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[duels-loot] handling loot', event.dungeonLootInfo);
 		const dungeonLootInfo = event.dungeonLootInfo;
-		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, currentState.duels.duelsRunInfos);
+
+		const infosForCurrentRun =
+			currentState.duels.duelsRunInfos?.filter((info) => info.runId === dungeonLootInfo.runId) ?? [];
+		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, infosForCurrentRun);
+		console.debug('[duels-loot] newInfos', newInfos, event, currentState.duels);
 		console.log('[duels-loot] existing loot length', currentState.duels.duelsRewardsInfo?.length);
+		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
+		console.log('[duels-loot] new loot length', duelsRunInfos.length);
+
 		const rewards: readonly DuelsRewardsInfo[] = [
 			...(currentState.duels.duelsRewardsInfo ?? []),
 			...this.buildRewards(dungeonLootInfo.rewards),
 		];
-		console.log('[duels-loot] new loot length', rewards);
 
-		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
 		const newDuels = currentState.duels.update({
 			duelsRunInfos: duelsRunInfos,
 			duelsRewardsInfo: rewards,
