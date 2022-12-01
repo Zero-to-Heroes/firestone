@@ -48,7 +48,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 })
 export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	@Input() set tier(value: Tier) {
-		this._cards = value.cards;
+		this._cards = value.cards.filter((c) => !!c);
 		this._groupingFunction = value.groupingFunction;
 		this.updateInfos();
 	}
