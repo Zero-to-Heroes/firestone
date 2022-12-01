@@ -42,7 +42,7 @@ export class DuelsRunIdService {
 				const info = lastDuelsGame?.reviewId
 					? runs?.find((run) => run.steps.some((s) => (s as GameStat).reviewId === lastDuelsGame?.reviewId))
 					: null;
-				console.log(
+				console.debug(
 					'[duels-run] currentRun',
 					lastDuelsGame?.reviewId,
 					info?.id,
@@ -50,9 +50,6 @@ export class DuelsRunIdService {
 					info?.heroPowerCardId,
 					info?.wins,
 					info?.losses,
-					info,
-					lastDuelsGame,
-					runs, // Remove this from the final logs
 				);
 				return info;
 			}),
@@ -88,7 +85,7 @@ export class DuelsRunIdService {
 						return uuid();
 					}
 					if (isNewRun(duelsInfo, currentRun, latestDuelsMatch, this.allCards)) {
-						console.log('[duels-run] new run', duelsInfo, currentRun, latestDuelsMatch);
+						console.debug('[duels-run] new run', duelsInfo, currentRun, latestDuelsMatch);
 						return uuid();
 					}
 					if (!isMatchInRun(latestDuelsMatch.additionalResult, latestDuelsMatch.result)) {
