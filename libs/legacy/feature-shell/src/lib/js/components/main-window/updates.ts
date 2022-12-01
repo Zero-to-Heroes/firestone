@@ -32,13 +32,50 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.1',
+		version: '10.0.3',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `This release, and probably the next couple ones, will focus on bug fixes and often requested Quality of Life improvements. So nothing super exciting, but I hope you'll enjoy the updates nonetheless.`,
 			// },
+			{
+				type: 'minor',
+				header: 'New since 10.0.2',
+				updates: [
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Try to fix an issue where duels run ID was not always properly assigned, which in turn would lead to some missing / incorrect data throughout the app.`,
+							},
+							{
+								type: 'feature',
+								text: `The stats shown when selecting a hero / hero power / treasure will now always be for the last patch, independently of your own settings.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where decklists would be missing / not properly showing throughout the app.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where pity timers were not always correctly computed, especially for older packs.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
