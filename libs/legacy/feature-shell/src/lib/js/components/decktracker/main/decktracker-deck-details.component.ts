@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, tap } from 'rxjs';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -37,11 +37,23 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						class="version"
 						*ngFor="let version of value.deck.allVersions"
 						[ngClass]="{
-							'inactive': value.selectedVersion && value.selectedVersion !== version.deckstring
+							inactive: value.selectedVersion && value.selectedVersion !== version.deckstring,
+							archived: version.hidden
 						}"
 					>
 						<div class="background-image" [style.background-image]="version.backgroundImage"></div>
 						<div class="gradiant"></div>
+						<div
+							class="archived-icon"
+							[helpTooltip]="'app.decktracker.deck-details.deck-archived' | owTranslate"
+						>
+							<svg class="svg-icon-fill">
+								<use
+									xmlns:xlink="https://www.w3.org/1999/xlink"
+									xlink:href="assets/svg/sprite.svg#show"
+								></use>
+							</svg>
+						</div>
 						<div
 							class="deck-name"
 							[helpTooltip]="getVersionTooltip(version, value.selectedVersion)"
@@ -106,6 +118,7 @@ export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionCompone
 						(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
 				),
 			),
+			tap((info) => console.debug('deck info', info)),
 		);
 		this.selectedVersion$ = this.store
 			.listen$(([main, nav]) => nav.navigationDecktracker.selectedVersionDeckstring)
