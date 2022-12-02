@@ -171,6 +171,10 @@
 			height: 100%;
 		}
 
+		.cards-container {
+			height: calc(100% - 20px);
+		}
+
 		.buckets-container {
 			display: flex;
 			flex-wrap: wrap;
@@ -239,11 +243,19 @@
 					margin-top: 10px;
 					width: 100%;
 
-					deck-list,
-					duels-bucket-cards-list {
+					deck-list {
 						width: 90%;
 						max-height: 210px;
 						height: 210px;
+					}
+
+					duels-bucket-cards-list {
+						// width: 90%;
+						max-height: 210px;
+						height: 210px;
+						width: calc(100% + 10px);
+						min-width: calc(100% + 10px);
+						left: 0;
 					}
 				}
 			}
@@ -303,7 +315,6 @@
 			display: flex;
 			flex-grow: 1;
 			height: 100%;
-			height: calc(100% - 20px);
 
 			.scrollable-content {
 				width: 100%;

@@ -18,15 +18,15 @@ import { sortByProperties } from '../../../../services/utils';
 		'../../../../../css/component/duels/desktop/deckbuilder/duels-bucket-cards-list.component.scss',
 	],
 	template: `
-		<ng-scrollbar class="cards-list active" scrollable>
+		<virtual-scroller class="cards-list active" #scroll [items]="_cards" scrollable>
 			<duels-bucket-card
 				class="card"
-				*ngFor="let card of _cards; trackBy: trackByCard"
+				*ngFor="let card of scroll.viewPortItems; trackBy: trackByCard"
 				[ngClass]="{ dimmed: card.dimmed }"
 				[card]="card"
 				(click)="onBucketCardClick(card)"
 			></duels-bucket-card>
-		</ng-scrollbar>
+		</virtual-scroller>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,7 +38,7 @@ export class DuelsBucketCardsListComponent {
 
 	@Input() collection: readonly SetCard[];
 
-	_cards: readonly BucketCard[];
+	_cards: BucketCard[];
 	isScroll: boolean;
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}

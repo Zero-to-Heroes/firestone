@@ -15,8 +15,13 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
+	position: relative;
 
 	.card.dimmed {
 		opacity: 0.3;
 	}
+}
+
+:host ::ng-deep virtual-scroller .scrollable-content {
+	padding-left: 10px;
 }

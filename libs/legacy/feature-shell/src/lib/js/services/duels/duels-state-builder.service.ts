@@ -41,8 +41,10 @@ import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats-hero-class.gz.json';
-const DUELS_GLOBAL_STATS_URL_SPLIT = 'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json';
-const DUELS_GLOBAL_STATS_DECKS = 'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
+const DUELS_GLOBAL_STATS_URL_SPLIT =
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-%mmr%-%date%.gz.json';
+const DUELS_GLOBAL_STATS_DECKS =
+	'https://static.zerotoheroes.com/api/duels/duels-global-stats-hero-class-decks.gz.json';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
 const DUELS_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/duels-config.json';
@@ -73,7 +75,9 @@ export class DuelsStateBuilderService {
 	private async init() {
 		this.initDuelsInfoObservable();
 
-		this.events.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS).subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
+		this.events
+			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
+			.subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
@@ -87,7 +91,9 @@ export class DuelsStateBuilderService {
 			}
 
 			if (changes.IsDuelsDeckBuildingLobbyScreen != null) {
-				this.mainWindowStateUpdater.next(new DuelsIsOnDeckBuildingLobbyScreenEvent(changes.IsDuelsDeckBuildingLobbyScreen));
+				this.mainWindowStateUpdater.next(
+					new DuelsIsOnDeckBuildingLobbyScreenEvent(changes.IsDuelsDeckBuildingLobbyScreen),
+				);
 			}
 
 			if (changes.DuelsCurrentOptionSelection != null) {
@@ -160,7 +166,9 @@ export class DuelsStateBuilderService {
 					(bucket) =>
 						({
 							...bucket,
-							bucketClasses: bucket.bucketClasses.map((bucketClass) => CardClass[bucketClass as any as string]),
+							bucketClasses: bucket.bucketClasses.map(
+								(bucketClass) => CardClass[bucketClass as any as string],
+							),
 						} as DuelsBucketsData),
 				)
 				.filter((bucket) => bucket.bucketId !== CardIds.GroupLearningTavernBrawl) ?? []
@@ -224,7 +232,10 @@ export class DuelsStateBuilderService {
 		currentDuelsMetaPatch?: PatchInfo,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
-		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(globalStatsDecks?.decks ?? [], collectionState);
+		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
+			globalStatsDecks?.decks ?? [],
+			collectionState,
+		);
 		return DuelsState.create({
 			categories: categories,
 			globalStats: globalStats,
@@ -354,7 +365,10 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	private buildTopDeckStats(deckStats: readonly DeckStat[], collectionState: BinderState): readonly DuelsGroupedDecks[] {
+	private buildTopDeckStats(
+		deckStats: readonly DeckStat[],
+		collectionState: BinderState,
+	): readonly DuelsGroupedDecks[] {
 		const decks = deckStats
 			// This should already be filtered out by the API
 			.filter((stat) => stat.decklist)

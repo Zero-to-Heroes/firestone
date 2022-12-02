@@ -142,16 +142,20 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							<collection-empty-state [searchString]="searchString$ | async"> </collection-empty-state>
 						</ng-template>
 						<div class="buckets-container" *ngIf="value.showBuckets" scrollable>
-							<div *ngFor="let bucket of value.buckets; trackBy: trackByBucketId" class="bucket">
+							<div
+								*ngFor="let bucket of value.buckets; trackBy: trackByBucketId"
+								class="bucket"
+								[attr.data-bucket-id]="bucket.bucketId"
+							>
 								<div class="bucket-name">{{ bucket.bucketName }}</div>
-								<div class="class-images">
+								<!-- <div class="class-images">
 									<img
 										*ngFor="let bucketClass of bucket.bucketClasses"
 										[src]="bucketClass.image"
 										class="bucket-class"
 										[helpTooltip]="bucketClass.name"
 									/>
-								</div>
+								</div> -->
 								<button
 									class="filter-button"
 									inlineSVG="assets/svg/created_by.svg"
@@ -448,19 +452,22 @@ export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponen
 								: [card],
 						)
 						.map((card) => card.id) ?? [];
-				return validBuckets.filter((bucket) => {
-					const cardIdsWithDuplicates = bucket.bucketCardIds
-						.map((cardId) => this.allCards.getCard(cardId))
-						.flatMap((card) =>
-							card.deckDuplicateDbfId
-								? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
-								: [card],
-						)
-						.map((card) => card.id);
-					return cardIdsWithDuplicates.some((bucketCardId) =>
-						deckCardIdsWithDuplicates.includes(bucketCardId),
-					);
-				});
+				const result = validBuckets
+					.filter((bucket) => {
+						const cardIdsWithDuplicates = bucket.bucketCardIds
+							.map((cardId) => this.allCards.getCard(cardId))
+							.flatMap((card) =>
+								card.deckDuplicateDbfId
+									? [card, this.allCards.getCardFromDbfId(card.deckDuplicateDbfId)]
+									: [card],
+							)
+							.map((card) => card.id);
+						return cardIdsWithDuplicates.some((bucketCardId) =>
+							deckCardIdsWithDuplicates.includes(bucketCardId),
+						);
+					})
+					.sort(sortByProperties((b) => [b.bucketName]));
+				return result;
 			}),
 			// Clean up eye icon for removed buckets
 			tap((buckets: readonly BucketData[]) => {

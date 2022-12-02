@@ -59,14 +59,14 @@ export const DEFAULT_CARD_HEIGHT = 221;
 				>
 					<div *ngFor="let bucket of scroll.viewPortItems; trackBy: trackByBucketId" class="bucket">
 						<div class="bucket-name">{{ bucket.bucketName }}</div>
-						<div class="class-images">
+						<!-- <div class="class-images">
 							<img
 								*ngFor="let bucketClass of bucket.bucketClasses"
 								[src]="bucketClass.image"
 								class="bucket-class"
 								[helpTooltip]="bucketClass.name"
 							/>
-						</div>
+						</div> -->
 						<div class="bucket-cards">
 							<duels-bucket-cards-list [cards]="bucket.bucketCards"></duels-bucket-cards-list>
 						</div>
