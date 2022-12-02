@@ -1,3 +1,4 @@
+import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -21,7 +22,7 @@ export class CardChangedInDeckParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		//console.debug('changing card in deck', gameEvent, currentState);

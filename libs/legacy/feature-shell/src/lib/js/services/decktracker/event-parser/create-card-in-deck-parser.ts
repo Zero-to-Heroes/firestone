@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -22,7 +23,7 @@ export class CreateCardInDeckParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		// Don't add the cards created by C'Thun, as they are added via the subspell handling
 		// There is the risk that, if C'Thun is enchanted and that enchantment creates a card in deck, this
 		// hack will discard it. For now it's supposed to be enough of a fringe case to not matter vs

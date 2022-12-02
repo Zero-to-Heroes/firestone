@@ -106,6 +106,7 @@ export const reverseIfNeeded = (isPlayer: boolean, lastInfluencedByCardId: strin
 	switch (lastInfluencedByCardId) {
 		case CardIds.DisarmingElemental:
 		case CardIds.FindTheImposter_SpyOMaticToken:
+		case CardIds.Garrote:
 			return !isPlayer;
 		default:
 			return isPlayer;

@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -16,7 +17,7 @@ export class CardCreatorChangedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayer = controllerId === localPlayer.PlayerId;
+		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// Issue: Mask of Mimicry has an info leak where it changes teh DISPLAYED_CREATOR tag
