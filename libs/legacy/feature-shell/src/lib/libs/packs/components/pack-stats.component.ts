@@ -257,11 +257,14 @@ const buildPityTimer = (
 	boosterId: BoosterType,
 	totalOpenedPacks: number,
 ): number => {
+	const hasAlreadyOpenedLegendary = openedPacks.flatMap((p) => p.cards).some((card) => card.cardRarity === type);
 	let valueIfNoPacksOpened =
 		type === 'epic'
 			? EPIC_PITY_TIMER
 			: // Guaranteed legendary in the first 10 packs
-			totalOpenedPacks < 10 && !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId)
+			totalOpenedPacks < 10 &&
+			  !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId) &&
+			  !hasAlreadyOpenedLegendary
 			? 10
 			: LEGENDARY_PITY_TIMER;
 	for (let i = 0; i < openedPacks.length; i++) {
