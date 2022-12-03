@@ -554,6 +554,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell);
 			case CardIds.IcebloodTower:
 				return and(inDeck, spell);
+			case CardIds.IceFishing_CORE_ICC_089:
+			case CardIds.IceFishing_ICC_089:
+				return and(inDeck, murloc);
 			case CardIds.IceRevenant:
 				return and(inDeck, spell, frost);
 			case CardIds.ImpCredibleTrousersTavernBrawl:
@@ -776,6 +779,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell, shadow);
 			case CardIds.Shadowcasting101TavernBrawl:
 				return and(or(inDeck, inHand), minion);
+			case CardIds.ShadowVisions:
+				return and(inDeck, spell);
 			case CardIds.ShipsCannon:
 				return and(or(inDeck, inHand), minion, pirate);
 			case CardIds.ShroudOfConcealment:
