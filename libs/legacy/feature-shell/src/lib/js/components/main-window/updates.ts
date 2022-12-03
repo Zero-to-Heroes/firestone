@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.3',
+		version: '10.0.6',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,6 +49,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Try to fix an issue where duels run ID was not always properly assigned, which in turn would lead to some missing / incorrect data throughout the app.`,
+							},
+							{
+								type: 'bug',
+								text: `Improve perfs when navigating in the Buckets or Deckbuilder tabs`,
 							},
 							{
 								type: 'feature',
