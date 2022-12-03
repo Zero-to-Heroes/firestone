@@ -1,12 +1,12 @@
 {
 	"name": "firestone",
-	"version": "10.0.4",
+	"version": "10.0.5",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc",
-		"dev": "nx build --watch",
-		"build": "nx build --configuration=production",
+		"dev": "nx build --source-map --watch",
+		"build": "nx build --configuration=production --source-map",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
 		"create-opk": "npx ts-node ./build-tools/create-opk.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",

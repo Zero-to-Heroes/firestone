@@ -38,6 +38,11 @@
 						"output": "./.."
 					}
 				],
+				"sourceMap": {
+					"scripts": true,
+					"styles": true,
+					"vendor": true
+				},
 				"styles": ["apps/legacy/src/styles.scss"],
 				"scripts": [],
 				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json"
@@ -63,7 +68,6 @@
 					"optimization": false,
 					"vendorChunk": true,
 					"extractLicenses": false,
-					"sourceMap": true,
 					"namedChunks": true
 				}
 			},
