@@ -13,7 +13,9 @@
 	align-items: flex-start;
 	justify-content: center;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
-	height: 95vh;
+	// height: 95vh;
+	height: fit-content;
+	width: fit-content;
 
 	&.active {
 		.icon {
