@@ -901,7 +901,7 @@ export const dustToCraftForPremium = (rarity: string): number => {
 
 export const boosterIdToSetId = (boosterId: BoosterType): string => {
 	switch (boosterId) {
-		case BoosterType.LETTUCE:
+		case BoosterType.MERCENARIES:
 			return 'lettuce';
 		case BoosterType.CLASSIC:
 		case BoosterType.GOLDEN_CLASSIC_PACK:
@@ -945,10 +945,10 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'the_barrens';
 		case BoosterType.STORMWIND:
-		case BoosterType.GOLDEN_STORMWIND:
+		case BoosterType.STORMWIND_GOLDEN:
 			return 'stormwind';
 		case BoosterType.ALTERAC_VALLEY:
-		case BoosterType.GOLDEN_ALTERAC_VALLEY:
+		case BoosterType.ALTERAC_VALLEY_GOLDEN:
 			return 'alterac_valley';
 		case BoosterType.THE_SUNKEN_CITY:
 		case BoosterType.GOLDEN_THE_SUNKEN_CITY:
@@ -957,7 +957,7 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.GOLDEN_REVENDRETH:
 			return 'revendreth';
 		case BoosterType.RETURN_OF_THE_LICH_KING:
-			// case BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING:
+		case BoosterType.GOLDEN_RETURN_OF_THE_LICH_KING:
 			return 'return_of_the_lich_king';
 		default:
 			// console.warn('unsupported booster type', boosterId);
@@ -1017,6 +1017,9 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'revendreth':
 		case 'maw_and_disorder':
 			return BoosterType.REVENDRETH;
+		case 'return_of_the_lich_king':
+		case 'path_of_arthas':
+			return BoosterType.RETURN_OF_THE_LICH_KING;
 		default:
 			console.warn('no default booster type for set id', setId);
 			return null;
@@ -1033,7 +1036,7 @@ export const boosterIdToBoosterName = (boosterId: BoosterType, i18n: Localizatio
 };
 
 export const getPackDustValue = (pack: PackResult): number => {
-	return pack.boosterId === BoosterType.LETTUCE
+	return pack.boosterId === BoosterType.MERCENARIES
 		? pack.cards.map((card) => card.currencyAmount ?? 0).reduce((a, b) => a + b, 0)
 		: pack.cards
 				.map((card) =>

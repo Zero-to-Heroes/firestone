@@ -116,7 +116,7 @@ export class CardsMonitorService {
 
 	private async handleNewPack(pack: PackInfo) {
 		const boosterId = pack.BoosterId;
-		if (boosterId === BoosterType.LETTUCE) {
+		if (boosterId === BoosterType.MERCENARIES) {
 			// That's pretty ugly - probably should work with reative streams as well here
 			await this.mercenariesStateBuilder.loadReferenceData();
 			let retriesLeft = 5;
@@ -128,7 +128,7 @@ export class CardsMonitorService {
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.getCollection(true);
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
-			if (boosterId === BoosterType.LETTUCE) {
+			if (boosterId === BoosterType.MERCENARIES) {
 				const referenceData = this.mainWindowStore.value[0]?.mercenaries?.referenceData;
 				return {
 					cardId: this.getLettuceCardId(card, referenceData),
@@ -163,7 +163,7 @@ export class CardsMonitorService {
 		// Don't show notifs for Merc packs, at least for now.
 		// Would showing the total number of coins be interesting? It would feel very
 		// spammy I think
-		if (boosterId !== BoosterType.LETTUCE) {
+		if (boosterId !== BoosterType.MERCENARIES) {
 			const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
 				(card: InternalCardInfo) => card.cardId + card.cardType,
 			)(packCards);
