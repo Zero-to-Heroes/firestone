@@ -203,6 +203,7 @@ const EXCLUDED_BOOSTER_IDS = [
 	BoosterType.FIRST_PURCHASE_OLD,
 	BoosterType.MAMMOTH_BUNDLE,
 	BoosterType.WAILING_CAVERNS,
+	BoosterType.PATH_OF_ARTHAS,
 ];
 
 const GOLDEN_SET_PACKS = [
