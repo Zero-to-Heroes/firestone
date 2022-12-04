@@ -32,54 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.6',
+		version: '10.0.7',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `This release, and probably the next couple ones, will focus on bug fixes and often requested Quality of Life improvements. So nothing super exciting, but I hope you'll enjoy the updates nonetheless.`,
 			// },
-			{
-				type: 'minor',
-				header: 'New since 10.0.2',
-				updates: [
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Try to fix an issue where duels run ID was not always properly assigned, which in turn would lead to some missing / incorrect data throughout the app.`,
-							},
-							{
-								type: 'bug',
-								text: `Improve perfs when navigating in the Buckets or Deckbuilder tabs`,
-							},
-							{
-								type: 'feature',
-								text: `The stats shown when selecting a hero / hero power / treasure will now always be for the last patch, independently of your own settings.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where decklists would be missing / not properly showing throughout the app.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where pity timers were not always correctly computed, especially for older packs.`,
-							},
-						],
-					},
-				],
-			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -97,6 +56,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Try to fix an issue where duels run ID was not always properly assigned, which in turn would lead to some missing / incorrect data throughout the app.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -106,6 +74,14 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Amber Guardian could buff non-dragon minions.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue with Interrogator Whitemane.`,
+							},
 							{
 								type: 'content',
 								text: `Glowscale is now part of the Divine Shield group in the minions list.`,
@@ -162,6 +138,19 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `The stats shown when selecting a hero / hero power / treasure will now always be for the last patch, independently of your own settings.`,
+							},
+							{
+								type: 'bug',
+								text: `Improve perfs when navigating in the Buckets or Deckbuilder tabs`,
+							},
+						],
+					},
+					{
 						category: 'mercenaries',
 						details: [
 							{
@@ -171,6 +160,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Restore the task description when mousing over the task progress in the Mercenaries Progression tab.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix some procedural task titles not being showing properly.`,
 							},
 							{
 								type: 'content',
@@ -188,6 +181,24 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where the achievements history would be empty.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where pity timers were not always correctly computed, especially for older packs.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where decklists would be missing / not properly showing throughout the app.`,
 							},
 						],
 					},
