@@ -10,6 +10,7 @@ import {
 	forcedHiddenCardCreators,
 	hideInfoWhenPlayerPlaysIt,
 	publicCardCreators,
+	specialCasePublicCardCreators,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -55,7 +56,9 @@ export class ReceiveCardInHandParser implements EventParser {
 			// in their hand
 			((!isPlayer && !forcedHiddenCardCreators.includes(lastInfluencedByCardId as CardIds)) ||
 				(isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))) &&
-			(cardsRevealedWhenDrawn.includes(cardId as CardIds) || publicCardCreators.includes(lastInfluencedByCardId));
+			(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+				publicCardCreators.includes(lastInfluencedByCardId) ||
+				specialCasePublicCardCreators.includes(cardId as CardIds));
 		const isCardInfoPublic =
 			isPlayer ||
 			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged

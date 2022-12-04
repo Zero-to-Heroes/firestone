@@ -795,6 +795,9 @@ export const publicCardInfos = [...cardsConsideredPublic, ...publicCardGiftCreat
 
 export const publicCardCreators = [...cardsConsideredPublic, ...publicCardGiftCreators, ...cardTutors, ...publicTutors];
 
+// Some cards auto-generate themselves, in a way that doesn't link a creator / influenced by
+export const specialCasePublicCardCreators = [CardIds.HeadcrackLegacy, CardIds.HeadcrackVanilla];
+
 export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 	CardIds.AmuletOfUndying,
 	CardIds.BlacksmithingHammer,
