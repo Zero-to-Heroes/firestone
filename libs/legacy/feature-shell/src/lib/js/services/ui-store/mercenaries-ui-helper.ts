@@ -1,4 +1,9 @@
-import { ReferenceCard, TaskStatus, VillageVisitorType } from '@firestone-hs/reference-data';
+import {
+	MercenariesBountyDifficulty,
+	ReferenceCard,
+	TaskStatus,
+	VillageVisitorType,
+} from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
@@ -205,8 +210,8 @@ export const buildMercenariesTasksList = (
 				return null;
 			}
 
-			const title = replacePlaceholders(task.title, task, visitor, referenceData, allCards);
-			const description = replacePlaceholders(task.description, task, visitor, referenceData, allCards);
+			const title = replacePlaceholders(task.title, task, visitor, referenceData, allCards, i18n);
+			const description = replacePlaceholders(task.description, task, visitor, referenceData, allCards, i18n);
 
 			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
 			const mercenaryCardId = mercenaryCard.id;
@@ -289,6 +294,7 @@ const replacePlaceholders = (
 	visitor: MemoryVisitor,
 	referenceData: MercenariesReferenceData,
 	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
 ): string => {
 	return rawText
 		.replace(
@@ -308,8 +314,23 @@ const replacePlaceholders = (
 				?.name,
 		)
 		.replace(
+			'$bounty_n',
+			referenceData.bountySets.flatMap((set) => set.bounties).find((b) => b.id === visitor.ProceduralBountyId)
+				?.name,
+		)
+		.replace(
+			'$bounty_diff',
+			i18n.translateString(
+				`mercenaries.filters.pve-difficulty.${MercenariesBountyDifficulty[
+					referenceData.bountySets
+						.flatMap((set) => set.bounties)
+						.find((b) => b.id === visitor.ProceduralBountyId).difficultyMode ??
+						MercenariesBountyDifficulty.NORMAL
+				].toLowerCase()}`,
+			),
+		)
+		.replace(
 			'$additional_mercs',
-
 			visitor.AdditionalMercenaryIds?.map((mercId) =>
 				getShortMercHeroName(referenceData.mercenaries.find((m) => m.id === mercId)?.cardDbfId, allCards),
 			).join(', '),
