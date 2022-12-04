@@ -48,17 +48,8 @@ export class OpponentCardInfoIdComponent {
 	@Input() displayBuff: boolean;
 
 	@Input() set card(value: DeckCard) {
-		// const lastAffectedByCardId = value.creatorCardId ?? value.lastAffectedByCardId;
 		// Keep the || to handle empty card id
-		this.cardId = this.normalizeEnchantment(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
-		this._card = value.update({
-			cardId: this.cardId,
-			// We probably don't need to update the other fields, as they are not displayed
-			cardName: this.cardId === value.cardId ? value.cardName : this.i18n.getCardName(this.cardId),
-		} as DeckCard);
-		this.cardUrl = this.cardId
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
-			: undefined;
+		const realCardId = this.normalizeEnchantment(value.cardId || value.lastAffectedByCardId);
 		// const hasCreatorInfo = lastAffectedByCardId && !value.cardId;
 		this.createdBy =
 			!value.cardId && !!value.creatorCardId && publicCardCreators.includes(value.creatorCardId as CardIds);
@@ -68,6 +59,17 @@ export class OpponentCardInfoIdComponent {
 			!value.creatorCardId &&
 			publicCardCreators.includes(value.lastAffectedByCardId as CardIds);
 		this.hasBuffs = value.buffCardIds?.length > 0;
+
+		this.cardId =
+			realCardId || (this.createdBy && value.creatorCardId) || (this.drawnBy && value.lastAffectedByCardId);
+		this.cardUrl = this.cardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
+			: undefined;
+		this._card = value.update({
+			cardId: this.cardId,
+			// We probably don't need to update the other fields, as they are not displayed
+			cardName: this.cardId === value.cardId ? value.cardName : this.i18n.getCardName(this.cardId),
+		} as DeckCard);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
