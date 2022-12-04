@@ -374,6 +374,7 @@ const publicCardGiftCreators = [
 	CardIds.DragonbaneShot,
 	CardIds.DragonBreeder,
 	CardIds.DragonRoar_TRL_362,
+	CardIds.DragonsHoard,
 	CardIds.DropletOfInsanityTavernBrawlToken,
 	CardIds.DrygulchJailor,
 	CardIds.Duplicate,
