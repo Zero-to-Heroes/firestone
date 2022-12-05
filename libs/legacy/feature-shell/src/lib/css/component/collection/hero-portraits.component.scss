@@ -52,7 +52,7 @@
 		flex-direction: column;
 		// flex-wrap: wrap;
 		overflow-y: scroll;
-		align-content: start;
+		align-content: flex-start;
 
 		.portraits-for-class {
 			list-style: none;
@@ -63,7 +63,7 @@
 			justify-content: flex-start;
 			display: flex;
 			flex-direction: column;
-			align-content: start;
+			align-content: flex-start;
 			height: 100%;
 
 			.portraits-container {
@@ -74,7 +74,7 @@
 				justify-content: flex-start;
 				display: flex;
 				// flex-wrap: wrap;
-				align-content: start;
+				align-content: flex-start;
 				flex-wrap: wrap;
 			}
 

@@ -60,7 +60,7 @@
 
 		.card-container {
 			display: flex;
-			align-items: start;
+			align-items: flex-start;
 			justify-content: center;
 			position: relative;
 			top: -20px; // So that there is not a big gap at the top (which looks weird because of hte scrollbar)

@@ -47,7 +47,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		overflow-y: scroll;
-		align-content: start;
+		align-content: flex-start;
 
 		.card {
 			margin-right: 0;
