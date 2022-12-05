@@ -325,7 +325,7 @@ const replacePlaceholders = (
 					referenceData.bountySets
 						.flatMap((set) => set.bounties)
 						.find((b) => b.id === visitor.ProceduralBountyId)?.difficultyMode ?? 'unknown'
-				].toLowerCase()}`,
+				]?.toLowerCase()}`,
 			),
 		)
 		.replace(
