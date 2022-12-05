@@ -45,7 +45,18 @@
 				},
 				"styles": ["apps/legacy/src/styles.scss"],
 				"scripts": [],
-				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json"
+				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json",
+				"allowedCommonJsDependencies": [
+					"@firestone-hs/hs-replay-xml-parser/dist/public-api",
+					"@firestone-hs/reference-data",
+					"@firestone-hs/simulate-bgs-battle",
+					"@tweenjs/tween.js",
+					"bezier-easing",
+					"deep-equal",
+					"deepmerge",
+					"localforage",
+					"pako"
+				]
 			},
 			"configurations": {
 				"production": {
