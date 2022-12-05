@@ -21,7 +21,6 @@ import { areEqualDataSets } from './chart-utils';
 @Component({
 	selector: 'bgs-chart-hp',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-hp.component.scss`,
 	],

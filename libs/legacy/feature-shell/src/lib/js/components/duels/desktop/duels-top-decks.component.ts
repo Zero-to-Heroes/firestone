@@ -15,10 +15,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'duels-top-decks',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-top-decks.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-top-decks.component.scss`],
 	template: `
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allDecks?.length" class="runs-list" (scrolled)="onScroll()" scrollable>

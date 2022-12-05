@@ -3,10 +3,7 @@ import { BgsHeroStat, BgsHeroTier, BgsQuestStat } from '../../../models/battlegr
 
 @Component({
 	selector: 'bgs-hero-tier',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tier.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tier.component.scss`],
 	template: `
 		<div class="bgs-hero-tier {{ _tier?.toLowerCase() }}">
 			<div class="tier {{ _tier?.toLowerCase() }}">

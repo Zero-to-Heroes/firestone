@@ -4,7 +4,6 @@
 // @Component({
 // 	selector: 'bgs-buddies',
 // 	styleUrls: [
-// 		`../../../../css/global/reset-styles.scss`,
 // 		`../../../../css/component/battlegrounds/in-game/bgs-buddies.component.scss`,
 // 	],
 // 	template: `

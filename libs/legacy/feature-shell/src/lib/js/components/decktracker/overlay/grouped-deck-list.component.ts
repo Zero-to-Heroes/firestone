@@ -22,10 +22,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'grouped-deck-list',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/grouped-deck-list.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/grouped-deck-list.component.scss'],
 	template: `
 		<ul class="deck-list">
 			<deck-zone

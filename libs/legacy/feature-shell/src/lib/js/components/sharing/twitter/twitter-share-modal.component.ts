@@ -15,7 +15,6 @@ import { ShareInfoComponent } from '../share-info.component';
 @Component({
 	selector: 'twitter-share-modal',
 	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/sharing/twitter/twitter-share-modal.component.scss`,

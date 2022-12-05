@@ -8,10 +8,7 @@ import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'duels-ooc-treasure-selection',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-treasure-selection.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-treasure-selection.component.scss'],
 	template: `
 		<div class="container" *ngIf="treasures$ | async as treasures">
 			<div
@@ -26,7 +23,8 @@ import { Observable } from 'rxjs';
 })
 export class DuelsOutOfCombatTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	treasures$: Observable<readonly ReferenceCard[]>;
 
 	constructor(

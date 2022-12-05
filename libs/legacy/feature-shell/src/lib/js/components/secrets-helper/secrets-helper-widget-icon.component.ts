@@ -6,12 +6,11 @@ import { PreferencesService } from '../../services/preferences.service';
 @Component({
 	selector: 'secrets-helper-widget-icon',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/secrets-helper/secrets-helper-widget-icon.component.scss',
 		`../../../css/themes/decktracker-theme.scss`,
+		'../../../css/component/secrets-helper/secrets-helper-widget-icon.component.scss',
 	],
 	template: `
-		<div class="secrets-helper-widget" [ngClass]="{ 'big': big }" (mouseup)="toggleSecretsHelper($event)">
+		<div class="secrets-helper-widget" [ngClass]="{ big: big }" (mouseup)="toggleSecretsHelper($event)">
 			<div class="icon idle"></div>
 			<div class="icon active"></div>
 		</div>

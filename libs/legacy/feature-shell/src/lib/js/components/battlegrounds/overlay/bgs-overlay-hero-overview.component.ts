@@ -16,8 +16,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-overlay-hero-overview',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/global/reset-styles.scss`,
 		'../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
 	],

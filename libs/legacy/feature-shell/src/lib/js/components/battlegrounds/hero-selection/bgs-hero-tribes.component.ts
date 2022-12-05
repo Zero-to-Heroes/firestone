@@ -5,7 +5,6 @@ import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 @Component({
 	selector: 'bgs-hero-tribes',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tribes.component.scss`,
 	],

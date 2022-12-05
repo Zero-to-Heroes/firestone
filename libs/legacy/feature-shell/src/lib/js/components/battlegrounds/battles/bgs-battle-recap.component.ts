@@ -9,17 +9,11 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'bgs-battle-recap',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-battle-recap.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/battles/bgs-battle-recap.component.scss`],
 	template: `
-		<div class="bgs-battle-recap" [ngClass]="{ 'selectable': selectable }">
+		<div class="bgs-battle-recap" [ngClass]="{ selectable: selectable }">
 			<div class="turn-label" *ngIf="turnNumber">
 				<div
 					class="turn"

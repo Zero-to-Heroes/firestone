@@ -7,11 +7,7 @@ import { InternalCardBack } from './internal-card-back';
 
 @Component({
 	selector: 'full-card-back',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/collection/full-card-back.component.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/full-card-back.component.scss`],
 	template: `
 		<div class="card-back-details-container" *ngIf="_cardBack">
 			<card-back

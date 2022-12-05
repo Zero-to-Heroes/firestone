@@ -7,10 +7,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 
 @Component({
 	selector: 'bgs-hero-mini',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-mini.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-mini.component.scss`],
 	template: `
 		<div
 			class="hero-mini"

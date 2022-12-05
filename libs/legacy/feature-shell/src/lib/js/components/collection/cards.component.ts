@@ -16,7 +16,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 
 @Component({
 	selector: 'cards',
-	styleUrls: [`../../../css/component/collection/cards.component.scss`, `../../../css/global/scrollbar.scss`],
+	styleUrls: [`../../../css/component/collection/cards.component.scss`],
 	template: `
 		<div class="cards" *ngIf="{ cards: cards$ | async } as value">
 			<div class="show-filter">
@@ -46,11 +46,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 			</ng-container>
 
 			<ng-template #emptyState>
-				<collection-empty-state
-					[set]="_set"
-					[searchString]="_searchString"
-				>
-				</collection-empty-state>
+				<collection-empty-state [set]="_set" [searchString]="_searchString"> </collection-empty-state>
 			</ng-template>
 		</div>
 	`,

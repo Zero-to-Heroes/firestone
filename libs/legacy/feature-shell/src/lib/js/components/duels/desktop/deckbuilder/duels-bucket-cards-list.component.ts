@@ -13,7 +13,6 @@ import { sortByProperties } from '../../../../services/utils';
 @Component({
 	selector: 'duels-bucket-cards-list',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../../../css/component/duels/desktop/deckbuilder/duels-bucket-cards-list.component.scss',
 	],

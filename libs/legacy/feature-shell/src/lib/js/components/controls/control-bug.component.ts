@@ -5,7 +5,6 @@ import { PreferencesService } from '../../services/preferences.service';
 @Component({
 	selector: 'control-bug',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-bug.component.scss`,
 	],

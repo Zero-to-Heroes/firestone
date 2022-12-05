@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-replays',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/replays/settings-replays.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/replays/settings-replays.component.scss`],
 	template: `
 		<div class="replays">
 			<settings-replays-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

@@ -7,7 +7,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-decktracker-duels',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,

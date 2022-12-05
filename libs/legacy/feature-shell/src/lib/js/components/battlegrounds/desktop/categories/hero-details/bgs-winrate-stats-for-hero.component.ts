@@ -13,7 +13,6 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 @Component({
 	selector: 'bgs-winrate-stats-for-hero',
 	styleUrls: [
-		`../../../../../../css/global/reset-styles.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component.scss`,
 	],
 	template: `

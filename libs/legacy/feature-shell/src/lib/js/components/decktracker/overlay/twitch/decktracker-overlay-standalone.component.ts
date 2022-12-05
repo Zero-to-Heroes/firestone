@@ -21,7 +21,6 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
 		`../../../../../css/themes/decktracker-theme.scss`,
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
@@ -30,7 +29,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 		<div
 			*ngIf="gameState"
 			class="root active decktracker-theme"
-			[ngClass]="{ 'dragging': dragging }"
+			[ngClass]="{ dragging: dragging }"
 			[activeTheme]="'decktracker'"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
@@ -59,7 +58,8 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 })
 export class DeckTrackerOverlayStandaloneComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 	@Input('gameState') gameState: GameState;

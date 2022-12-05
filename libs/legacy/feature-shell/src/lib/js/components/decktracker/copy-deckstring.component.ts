@@ -10,10 +10,7 @@ declare let amplitude;
 
 @Component({
 	selector: 'copy-deckstring',
-	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/copy-deckstring.component.scss',
-	],
+	styleUrls: ['../../../css/component/decktracker/copy-deckstring.component.scss'],
 	template: `
 		<div
 			class="copy-deckstring"

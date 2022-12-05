@@ -7,11 +7,10 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 @Component({
 	selector: 'battlegrounds-stats-hero-vignette',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ 'unused': gamesPlayed === 0 }" tabindex="0">
+		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ unused: gamesPlayed === 0 }" tabindex="0">
 			<div class="wrapper-for-flip">
 				<div class="box-side">
 					<div class="hero-name">{{ heroName }}</div>
@@ -40,9 +39,9 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						<div
 							class="item mmr"
 							[ngClass]="{
-								'positive': netMmr > 0,
-								'negative': netMmr < 0,
-								'missing': buildValue(netMmr) === '-'
+								positive: netMmr > 0,
+								negative: netMmr < 0,
+								missing: buildValue(netMmr) === '-'
 							}"
 						>
 							<div

@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-general-data',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/general/settings-general-data.component.scss`,
@@ -22,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<div class="label" [owTranslate]="'settings.general.data.packs'"></div>
 				<button
 					(mousedown)="refreshPacks()"
-					[ngClass]="{ 'busy': isRefreshingPacks$ | async }"
+					[ngClass]="{ busy: isRefreshingPacks$ | async }"
 					[helpTooltip]="'settings.general.data.packs-tooltip' | owTranslate"
 				>
 					<span> {{ refreshPacksLabel$ | async }}</span>
@@ -32,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<div class="label" [owTranslate]="'settings.general.data.achievements'"></div>
 				<button
 					(mousedown)="refreshAchievements()"
-					[ngClass]="{ 'busy': isRefreshingAchievements$ | async }"
+					[ngClass]="{ busy: isRefreshingAchievements$ | async }"
 					[helpTooltip]="'settings.general.data.achievements-tooltip' | owTranslate"
 				>
 					<span> {{ refreshAchievementsLabel$ | async }}</span>

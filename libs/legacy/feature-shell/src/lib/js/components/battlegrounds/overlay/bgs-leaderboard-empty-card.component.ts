@@ -19,10 +19,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 
 @Component({
 	selector: 'bgs-leaderboard-empty-card',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/battlegrounds/overlay/bgs-leaderboard-empty-card.component.scss',
-	],
+	styleUrls: ['../../../../css/component/battlegrounds/overlay/bgs-leaderboard-empty-card.component.scss'],
 	template: `
 		<div class="card">
 			<div
@@ -43,7 +40,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 
 				<bgs-hero-short-recap
 					class="short-recap"
-					[ngClass]="{ 'active': showLiveInfo$ | async }"
+					[ngClass]="{ active: showLiveInfo$ | async }"
 					[tavernTier]="tavernTier"
 					[triples]="triples"
 					[winStreak]="winStreak"
@@ -59,7 +56,8 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 })
 export class BgsLeaderboardEmptyCardComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 	showLiveInfo$: Observable<boolean>;
 	showLiveInfo = new BehaviorSubject<boolean>(false);

@@ -21,7 +21,6 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 @Component({
 	selector: 'window-wrapper',
 	styleUrls: [
-		`../../css/global/reset-styles.scss`,
 		`../../css/global/cdk-overlay.scss`,
 		`../../css/component/window-wrapper.component.scss`,
 		`../../css/themes/collection-theme.scss`,
@@ -34,7 +33,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 		`../../css/themes/general-theme.scss`,
 	],
 	template: `
-		<div class="top" [ngClass]="{ 'maximized': maximized || !allowResize }">
+		<div class="top" [ngClass]="{ maximized: maximized || !allowResize }">
 			<div class="root">
 				<div class="background-backup"></div>
 				<div class="app-container overlay-container-parent">
@@ -67,7 +66,8 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 })
 export class WindowWrapperComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	@Input() allowResize = false;
 
 	maximized: boolean;

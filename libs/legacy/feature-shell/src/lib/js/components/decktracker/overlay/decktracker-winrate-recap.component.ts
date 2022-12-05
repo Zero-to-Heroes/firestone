@@ -13,10 +13,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'decktracker-winrate-recap',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-winrate-recap.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-winrate-recap.component.scss'],
 	template: `
 		<div class="winrate-recap" *ngIf="wins + losses > 0">
 			<div class="recap text" [helpTooltip]="tooltip">

@@ -19,7 +19,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'mercenaries-action-queue',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/mercenaries/overlay/action-queue/mercenaries-action-queue.component.scss',
 	],
 	template: `
@@ -45,7 +44,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesActionsQueueComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	actions$: Observable<readonly MercenariesAction[]>;
 
 	overlayWidthInPx = 240;

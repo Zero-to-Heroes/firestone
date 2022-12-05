@@ -13,7 +13,7 @@ import { IOption } from 'ng-select';
 
 @Component({
 	selector: 'filter-dropdown',
-	styleUrls: [`../../css/global/scrollbar.scss`, `../../css/component/filter-dropdown.component.scss`],
+	styleUrls: [`../../css/component/filter-dropdown.component.scss`],
 	template: `
 		<ng-select
 			*ngIf="_visible"
@@ -29,7 +29,7 @@ import { IOption } from 'ng-select';
 			<ng-template #optionTemplate let-option="option">
 				<span
 					[helpTooltip]="option.label"
-					[ngClass]="{ 'unselectable': option?.unselectable }"
+					[ngClass]="{ unselectable: option?.unselectable }"
 					[innerHTML]="option?.label"
 				></span>
 				<div class="tooltip" *ngIf="option?.tooltip" [helpTooltip]="option.tooltip">

@@ -21,11 +21,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 
 @Component({
 	selector: 'main-window',
-	styleUrls: [
-		`../../css/global/components-global.scss`,
-		`../../css/global/ngx-tooltips.scss`,
-		`../../css/component/main-window.component.scss`,
-	],
+	styleUrls: [`../../css/global/ngx-tooltips.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper

@@ -3,12 +3,9 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 
 @Component({
 	selector: 'achievement-category',
-	styleUrls: [
-		`../../../css/component/achievements/achievement-category.component.scss`,
-		`../../../css/global/components-global.scss`,
-	],
+	styleUrls: [`../../../css/component/achievements/achievement-category.component.scss`],
 	template: `
-		<div class="achievement-set" [ngClass]="{ 'empty': empty }">
+		<div class="achievement-set" [ngClass]="{ empty: empty }">
 			<div class="frame complete-simple" *ngIf="complete">
 				<i class="i-25 pale-gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">

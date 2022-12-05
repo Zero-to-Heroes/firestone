@@ -5,7 +5,6 @@ import { capitalizeEachWord } from '../../services/utils';
 @Component({
 	selector: 'social-share-modal',
 	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-close.component.scss`,
 		`../../../css/component/sharing/social-share-modal.component.scss`,

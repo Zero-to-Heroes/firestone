@@ -9,7 +9,7 @@ import { InternalCardBack } from './internal-card-back';
 
 @Component({
 	selector: 'card-backs',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/card-backs.component.scss`],
+	styleUrls: [`../../../css/component/collection/card-backs.component.scss`],
 	template: `
 		<div class="card-backs" *ngIf="{ shownCardBacks: shownCardBacks$ | async } as value">
 			<div class="show-filter">

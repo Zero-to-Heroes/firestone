@@ -5,10 +5,7 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
 @Component({
 	selector: 'decktracker-title-bar',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss'],
 	template: `
 		<div class="title-bar">
 			<decktracker-deck-name

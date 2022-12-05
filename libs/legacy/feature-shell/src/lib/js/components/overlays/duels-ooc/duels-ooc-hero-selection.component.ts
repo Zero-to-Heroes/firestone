@@ -21,17 +21,22 @@ import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-hero-selection',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-hero-selection.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-hero-selection.component.scss'],
 	template: `
 		<div class="container" *ngIf="heroes$ | async as heroes">
 			<div class="cell" *ngFor="let hero of heroes; trackBy: trackByFn">
-				<div class="empty-card" (mouseenter)="onMouseEnter(hero.id)" (mouseleave)="onMouseLeave(hero.id, $event)"></div>
+				<div
+					class="empty-card"
+					(mouseenter)="onMouseEnter(hero.id)"
+					(mouseleave)="onMouseLeave(hero.id, $event)"
+				></div>
 			</div>
 		</div>
-		<duels-hero-info *ngIf="heroInfo$ | async as heroInfo" [heroInfo]="heroInfo" [patch]="patch$ | async"></duels-hero-info>
+		<duels-hero-info
+			*ngIf="heroInfo$ | async as heroInfo"
+			[heroInfo]="heroInfo"
+			[patch]="patch$ | async"
+		></duels-hero-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,7 +59,9 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 		// Make sure the data for the last patch is available
 		this.store.send(new DuelsTimeFilterSelectedEvent('last-patch'));
 
-		this.patch$ = this.store.listen$(([state]) => state.duels?.currentDuelsMetaPatch).pipe(this.mapData(([info]) => info));
+		this.patch$ = this.store
+			.listen$(([state]) => state.duels?.currentDuelsMetaPatch)
+			.pipe(this.mapData(([info]) => info));
 
 		this.heroes$ = this.store
 			.listen$(([state, prefs]) => state?.duels?.heroOptionsDbfIds)
@@ -78,25 +85,49 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 				const trueMmrFilter = getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter);
 				const topDecks = duelsTopDecks
 					.map((deck) =>
-						topDeckApplyFilters(deck, trueMmrFilter, allDuelsHeroes, 'all', 'all', 'last-patch', dustFilter, null, patch),
+						topDeckApplyFilters(
+							deck,
+							trueMmrFilter,
+							allDuelsHeroes,
+							'all',
+							'all',
+							'last-patch',
+							dustFilter,
+							null,
+							patch,
+						),
 					)
 					.filter((group) => group.decks.length > 0)
 					.flatMap((group) => group.decks)
 					.filter((deck) =>
 						allHeroCards.some(
-							(heroCardId) => normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(heroCardId),
+							(heroCardId) =>
+								normalizeDuelsHeroCardId(deck.heroCardId) === normalizeDuelsHeroCardId(heroCardId),
 						),
 					);
 				return topDecks;
 			}),
 		);
 
-		const duelsHeroStats$ = combineLatest([allHeroCardIds$, this.store.listen$(([main, nav]) => main.duels.globalStats?.heroes)]).pipe(
+		const duelsHeroStats$ = combineLatest([
+			allHeroCardIds$,
+			this.store.listen$(([main, nav]) => main.duels.globalStats?.heroes),
+		]).pipe(
 			this.mapData(([allHeroCards, [duelStats]]) => {
-				const duelsHeroStats = filterDuelsHeroStats(duelStats, allHeroCards as CardIds[], null, null, 'hero', this.allCards, null);
+				const duelsHeroStats = filterDuelsHeroStats(
+					duelStats,
+					allHeroCards as CardIds[],
+					null,
+					null,
+					'hero',
+					this.allCards,
+					null,
+				);
 				console.debug('duelsHeroStats', duelsHeroStats, duelStats);
 				return duelsHeroStats.filter((stat) =>
-					allHeroCards.some((heroCardId) => normalizeDuelsHeroCardId(stat.hero) === normalizeDuelsHeroCardId(heroCardId)),
+					allHeroCards.some(
+						(heroCardId) => normalizeDuelsHeroCardId(stat.hero) === normalizeDuelsHeroCardId(heroCardId),
+					),
 				);
 			}),
 		);
@@ -107,9 +138,23 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 			this.store.listen$(([main, nav]) => main.duels.currentDuelsMetaPatch),
 		]).pipe(
 			this.mapData(([allHeroCards, runs, [patch]]) => {
-				const duelsRuns = filterDuelsRuns(runs, 'last-patch', allDuelsHeroes, 'all', null, patch, 0, 'all', 'all', 'hero');
+				const duelsRuns = filterDuelsRuns(
+					runs,
+					'last-patch',
+					allDuelsHeroes,
+					'all',
+					null,
+					patch,
+					0,
+					'all',
+					'all',
+					'hero',
+				);
 				return duelsRuns.filter((run) =>
-					allHeroCards.some((heroCardId) => normalizeDuelsHeroCardId(run.heroCardId) === normalizeDuelsHeroCardId(heroCardId)),
+					allHeroCards.some(
+						(heroCardId) =>
+							normalizeDuelsHeroCardId(run.heroCardId) === normalizeDuelsHeroCardId(heroCardId),
+					),
 				);
 			}),
 		);
@@ -132,7 +177,10 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 		this.heroInfo$ = combineLatest([this.selectedHeroCardId.asObservable(), duelsHeroFullStats$]).pipe(
 			this.mapData(
 				([currentHeroCardId, allStats]) =>
-					allStats.find((stat) => normalizeDuelsHeroCardId(stat?.cardId) === normalizeDuelsHeroCardId(currentHeroCardId))?.stat,
+					allStats.find(
+						(stat) =>
+							normalizeDuelsHeroCardId(stat?.cardId) === normalizeDuelsHeroCardId(currentHeroCardId),
+					)?.stat,
 			),
 		);
 	}
@@ -193,10 +241,12 @@ export class DuelsOutOfCombatHeroSelectionComponent extends AbstractSubscription
 
 	private buildEmptyStat(cardId: string): { cardId: string; stat: DuelsHeroInfo } {
 		console.warn('missing stat', cardId);
-		const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map((value, index) => ({
-			winNumber: index,
-			value: 0,
-		}));
+		const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
+			(value, index) => ({
+				winNumber: index,
+				value: 0,
+			}),
+		);
 		const card = this.allCards.getCard(cardId);
 		const result: DuelsHeroInfo = {
 			cardId: cardId,

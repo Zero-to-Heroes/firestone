@@ -25,11 +25,7 @@ declare let amplitude;
 
 @Component({
 	selector: 'full-card',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/collection/full-card.component.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/full-card.component.scss`],
 	template: `
 		<div
 			class="card-details-container"

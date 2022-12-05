@@ -15,7 +15,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component.scss`,
 	],
 	template: `

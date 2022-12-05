@@ -7,12 +7,11 @@ declare let amplitude;
 @Component({
 	selector: 'decktracker-widget-icon',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-widget-icon.component.scss',
 		`../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="decktracker-widget" [ngClass]="{ 'big': big }" (mouseup)="toggleDecktracker($event)">
+		<div class="decktracker-widget" [ngClass]="{ big: big }" (mouseup)="toggleDecktracker($event)">
 			<div class="icon idle"></div>
 			<div class="icon active"></div>
 		</div>

@@ -24,10 +24,7 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-composition-details',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-composition-details.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-composition-details.component.scss`],
 	template: `
 		<!-- Component is unused for now -->
 		<div class="mercenaries-composition-details" *ngIf="compositionStat$ | async as stats">

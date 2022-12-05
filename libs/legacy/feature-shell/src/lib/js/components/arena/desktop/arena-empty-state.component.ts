@@ -3,10 +3,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'arena-empty-state',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/arena/desktop/arena-empty-state.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/arena/desktop/arena-empty-state.component.scss`],
 	template: `
 		<div class="empty-state">
 			<div class="loading-icon" inlineSVG="assets/svg/ftue/arena.svg"></div>

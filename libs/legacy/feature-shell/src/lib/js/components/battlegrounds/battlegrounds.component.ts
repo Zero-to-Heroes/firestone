@@ -20,8 +20,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'battlegrounds',
 	styleUrls: [
-		`../../../css/global/reset-styles.scss`,
-		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],

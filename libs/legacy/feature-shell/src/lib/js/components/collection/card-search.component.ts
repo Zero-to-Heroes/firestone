@@ -9,7 +9,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 declare let amplitude;
 @Component({
 	selector: 'card-search',
-	styleUrls: [`../../../css/component/collection/card-search.component.scss`, `../../../css/global/scrollbar.scss`],
+	styleUrls: [`../../../css/component/collection/card-search.component.scss`],
 	template: `
 		<autocomplete-search-with-list
 			class="card-search"

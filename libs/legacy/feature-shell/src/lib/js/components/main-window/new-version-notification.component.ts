@@ -17,7 +17,6 @@ import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './
 @Component({
 	selector: 'new-version-notification',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/global/menu.scss`,
 		`../../../css/global/scrollbar-general.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,

@@ -18,7 +18,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'global-header',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/global/menu.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/main-window-navigation.component.scss`,

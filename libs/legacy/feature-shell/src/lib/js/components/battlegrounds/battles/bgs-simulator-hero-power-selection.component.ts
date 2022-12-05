@@ -22,7 +22,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-simulator-hero-power-selection',
 	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-power-selection.component.scss`,

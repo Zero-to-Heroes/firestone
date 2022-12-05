@@ -7,10 +7,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'opponent-card-info',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-info.component.scss'],
 	template: `
 		<div class="opponent-card-info scalable" [style.left.vh]="leftVwOffset" [style.top.vh]="topVwOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>

@@ -2,13 +2,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 @Component({
 	selector: 'settings-collection-menu',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/collection/settings-collection-menu.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/collection/settings-collection-menu.component.scss`],
 	template: `
 		<ul class="collection-menu">
-			<li [ngClass]="{ 'selected': selectedMenu === 'notification' }" (mousedown)="selectMenu('notification')">
+			<li [ngClass]="{ selected: selectedMenu === 'notification' }" (mousedown)="selectMenu('notification')">
 				<span [owTranslate]="'settings.collection.menu.general'"></span>
 			</li>
 		</ul>

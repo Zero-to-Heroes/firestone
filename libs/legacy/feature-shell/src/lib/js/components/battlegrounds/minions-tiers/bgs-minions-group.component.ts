@@ -21,7 +21,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 @Component({
 	selector: 'bgs-minions-group',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/battlegrounds/minions-tiers/bgs-minions-group.component.scss',
 	],

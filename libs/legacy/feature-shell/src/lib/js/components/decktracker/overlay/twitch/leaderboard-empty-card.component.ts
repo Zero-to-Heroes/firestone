@@ -10,10 +10,7 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 
 @Component({
 	selector: 'leaderboard-empty-card',
-	styleUrls: [
-		'../../../../../css/global/components-global.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/leaderboard-empty-card.component.scss',
-	],
+	styleUrls: ['../../../../../css/component/decktracker/overlay/twitch/leaderboard-empty-card.component.scss'],
 	template: `
 		<div
 			class="card"
@@ -27,7 +24,7 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 
 			<bgs-hero-short-recap
 				class="short-recap"
-				[ngClass]="{ 'active': _showLiveInfo }"
+				[ngClass]="{ active: _showLiveInfo }"
 				[tavernTier]="tavernTier"
 				[triples]="triples"
 				[winStreak]="winStreak"

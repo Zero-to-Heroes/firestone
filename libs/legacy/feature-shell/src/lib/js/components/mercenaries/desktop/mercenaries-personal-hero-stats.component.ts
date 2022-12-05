@@ -24,10 +24,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'mercenaries-personal-hero-stats',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stats.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-personal-hero-stats.component.scss`],
 	template: `
 		<div class="mercenaries-personal-hero-stats" *ngIf="stats$ | async as stats; else emptyState">
 			<div class="header" *ngIf="sortCriteria$ | async as sort">
@@ -513,10 +510,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 @Component({
 	selector: 'sortable-label',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/sortable-label.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/sortable-label.component.scss`],
 	template: `
 		<div
 			class="sortable-label"

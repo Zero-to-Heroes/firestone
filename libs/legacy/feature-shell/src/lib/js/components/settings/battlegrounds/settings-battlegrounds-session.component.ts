@@ -8,7 +8,6 @@ import { Knob } from '../preference-slider.component';
 @Component({
 	selector: 'settings-battlegrounds-session',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -32,13 +31,13 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="sessionWidgetShowGroup"
-					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
+					[ngClass]="{ disabled: !value.showCurrentSessionWidgetBgs }"
 					[label]="'settings.battlegrounds.session-widget.show-groups' | owTranslate"
 					[tooltip]="'settings.battlegrounds.session-widget.show-groups-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="hideCurrentSessionWidgetWhenFriendsListIsOpen"
-					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
+					[ngClass]="{ disabled: !value.showCurrentSessionWidgetBgs }"
 					[label]="'settings.battlegrounds.session-widget.hide-when-friends-list-open' | owTranslate"
 					[tooltip]="
 						'settings.battlegrounds.session-widget.hide-when-friends-list-open-tooltip' | owTranslate
@@ -46,7 +45,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="sessionWidgetShowMatches"
-					[ngClass]="{ 'disabled': !value.showCurrentSessionWidgetBgs }"
+					[ngClass]="{ disabled: !value.showCurrentSessionWidgetBgs }"
 					[label]="'settings.battlegrounds.session-widget.show-matches' | owTranslate"
 					[tooltip]="'settings.battlegrounds.session-widget.show-matches-tooltip' | owTranslate"
 				></preference-toggle>

@@ -2,17 +2,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
-import { CardHistory } from '../../../js/models/card-history';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'pack-history',
-	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/global/forms.scss`,
-		`../../../css/global/toggle.scss`,
-		`./pack-history.component.scss`,
-	],
+	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./pack-history.component.scss`],
 	template: `
 		<div class="pack-history">
 			<div class="history">

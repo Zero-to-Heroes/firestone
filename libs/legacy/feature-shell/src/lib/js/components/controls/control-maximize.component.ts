@@ -18,7 +18,6 @@ declare let amplitude;
 @Component({
 	selector: 'control-maximize',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-maximize.component.scss`,
 	],

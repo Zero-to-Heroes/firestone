@@ -24,7 +24,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	selector: 'battlegrounds-personal-stats-hero-details',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component.scss`,
-		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-hero-details">
@@ -36,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 					<li
 						*ngFor="let tab of tabs$ | async"
 						class="tab"
-						[ngClass]="{ 'active': tab === selectedTab }"
+						[ngClass]="{ active: tab === selectedTab }"
 						(mousedown)="selectTab(tab)"
 					>
 						{{ getLabel(tab) }}
@@ -55,7 +54,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPersonalStatsHeroDetailsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	tabs$: Observable<readonly BgsHeroStatsFilterId[]>;
 	selectedTab$: Observable<BgsHeroStatsFilterId>;
 	player$: Observable<BgsPlayer>;

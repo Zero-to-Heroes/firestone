@@ -5,10 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'duels-bucket-card',
-	styleUrls: [
-		'../../../../../css/global/components-global.scss',
-		'../../../../../css/component/duels/desktop/deckbuilder/duels-bucket-card.component.scss',
-	],
+	styleUrls: ['../../../../../css/component/duels/desktop/deckbuilder/duels-bucket-card.component.scss'],
 	template: `
 		<div
 			tabindex="0"

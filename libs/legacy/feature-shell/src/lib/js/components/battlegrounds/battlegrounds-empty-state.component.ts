@@ -3,10 +3,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 
 @Component({
 	selector: 'battlegrounds-empty-state',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/battlegrounds/battlegrounds-empty-state.component.scss`,
-	],
+	styleUrls: [`../../../css/component/battlegrounds/battlegrounds-empty-state.component.scss`],
 	template: `
 		<div class="empty-state">
 			<div class="loading-icon" [inlineSVG]="emptyStateIcon"></div>

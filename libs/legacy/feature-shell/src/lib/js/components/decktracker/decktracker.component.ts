@@ -7,7 +7,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'decktracker',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/app-section.component.scss`,
 		`../../../css/component/decktracker/decktracker.component.scss`,
 	],

@@ -6,10 +6,7 @@ import { deepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-chart-warband-stats',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-stats.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-stats.component.scss`],
 	template: `
 		<graph-with-comparison-new
 			[turnLabel]="'battlegrounds.post-match-stats.warband-stats.turn-label' | owTranslate"

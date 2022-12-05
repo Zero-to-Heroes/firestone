@@ -18,7 +18,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'bgs-banned-tribes',
 	styleUrls: [
 		`../../../css/themes/battlegrounds-theme.scss`,
-		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
 		'../../../css/component/battlegrounds/bgs-banned-tribes.component.scss',
 	],
@@ -27,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<div
 				*ngIf="tribes$ | async as tribes"
 				class="banned-tribes {{ orientation$ | async }}"
-				[ngClass]="{ 'available': showAvailable$ | async, 'single-row': singleRow$ | async }"
+				[ngClass]="{ available: showAvailable$ | async, 'single-row': singleRow$ | async }"
 				[helpTooltip]="tooltip$ | async"
 				helpTooltipPosition="bottom"
 			>

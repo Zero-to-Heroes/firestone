@@ -20,7 +20,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 @Component({
 	selector: 'bgs-chart-warband-composition',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-composition.component.scss`,
 	],

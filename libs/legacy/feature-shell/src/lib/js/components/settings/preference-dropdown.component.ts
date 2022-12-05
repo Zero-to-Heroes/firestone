@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
 	selector: 'preferences-dropdown',
 	styleUrls: [
 		`../../../css/global/filters.scss`,
-		`../../../css/global/scrollbar.scss`,
 		`../../../css/component/app-section.component.scss`,
 		`../../../css/component/filter-dropdown.component.scss`,
 		`../../../css/component/settings/preference-dropdown.component.scss`,

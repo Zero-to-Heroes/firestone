@@ -23,7 +23,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'decktracker-deck-list',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../../css/global/scrollbar-cards-list.scss',
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',

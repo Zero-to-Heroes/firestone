@@ -8,7 +8,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	selector: 'achievements',
 	styleUrls: [
 		`../../../css/component/app-section.component.scss`,
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/achievements/achievements.component.scss`,
 	],
 	template: `
@@ -16,7 +15,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<section
 				class="main"
 				*ngIf="currentView$ | async as currentView"
-				[ngClass]="{ 'divider': currentView === 'list' }"
+				[ngClass]="{ divider: currentView === 'list' }"
 			>
 				<with-loading [isLoading]="isLoading$ | async">
 					<div class="content main-content">

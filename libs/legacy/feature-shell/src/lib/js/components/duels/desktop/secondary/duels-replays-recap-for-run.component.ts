@@ -7,7 +7,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'duels-replays-recap-for-run',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/duels/desktop/secondary/duels-replays-recap.component.scss`,
 		`../../../../../css/component/duels/desktop/secondary/duels-replays-recap-for-run.component.scss`,
 	],

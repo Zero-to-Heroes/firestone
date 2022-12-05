@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 @Component({
 	selector: 'control-help',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-help.component.scss`,
 	],

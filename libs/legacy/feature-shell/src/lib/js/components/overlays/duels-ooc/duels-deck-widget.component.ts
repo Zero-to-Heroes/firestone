@@ -12,10 +12,7 @@ declare let amplitude;
 
 @Component({
 	selector: 'duels-deck-widget',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-deck-widget.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-deck-widget.component.scss'],
 	template: `
 		<div class="duels-deck-widget">
 			<div class="treasures-container">
@@ -142,7 +139,7 @@ export class DuelsDeckWidgetComponent {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
-		amplitude.getInstance().logEvent('copy-deckstring', { 'origin': 'duels-quick-deck' });
+		amplitude.getInstance().logEvent('copy-deckstring', { origin: 'duels-quick-deck' });
 	}
 
 	getImage(cardId: string) {

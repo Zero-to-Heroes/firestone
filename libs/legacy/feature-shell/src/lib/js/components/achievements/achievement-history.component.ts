@@ -6,10 +6,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'achievement-history',
-	styleUrls: [
-		`../../../css/component/achievements/achievement-history.component.scss`,
-		`../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../css/component/achievements/achievement-history.component.scss`],
 	template: `
 		<div class="achievement-history">
 			<div class="history" scrollable>

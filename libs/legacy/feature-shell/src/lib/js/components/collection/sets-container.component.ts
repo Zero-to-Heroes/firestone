@@ -3,10 +3,7 @@ import { Set } from '../../models/set';
 
 @Component({
 	selector: 'sets-container',
-	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/collection/sets-container.component.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/sets-container.component.scss`],
 	template: `
 		<div *ngIf="_sets?.length" class="sets-container" scrollable>
 			<div class="category-container">

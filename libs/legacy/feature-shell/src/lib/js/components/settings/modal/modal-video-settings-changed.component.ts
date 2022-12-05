@@ -3,10 +3,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'modal-video-settings-changed',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/modal/modal-video-settings-changed.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/modal/modal-video-settings-changed.component.scss`],
 	template: `
 		<div class="modal-video-settings-changed">
 			<button class="i-30 close-button" (mousedown)="close()">

@@ -6,7 +6,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'set-view',
-	styleUrls: [`../../../css/component/collection/set.component.scss`, `../../../css/global/components-global.scss`],
+	styleUrls: [`../../../css/component/collection/set.component.scss`],
 	template: `
 		<div *ngIf="_cardSet" class="set" [ngClass]="{ 'coming-soon': !released }" (click)="browseSet()">
 			<div class="logo-container">

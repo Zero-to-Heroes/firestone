@@ -17,10 +17,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'decktracker-rating-graph',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/decktracker-rating-graph.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/decktracker-rating-graph.component.scss`],
 	template: `
 		<div class="decktracker-rating-graph" *ngIf="value$ | async as value">
 			<ng-container *ngIf="regionSelected$ | async; else emptyState">

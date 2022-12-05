@@ -10,7 +10,6 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 @Component({
 	selector: 'deck-list',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',

@@ -20,10 +20,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'stats-xp-graph',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/stats/desktop/stats-xp-graph.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/stats/desktop/stats-xp-graph.component.scss`],
 	template: `
 		<div class="stats-xp-graph" *ngIf="value$ | async as value">
 			<graph-with-single-value

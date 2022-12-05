@@ -20,10 +20,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 
 @Component({
 	selector: 'deck-winrate-matrix',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/deck-winrate-matrix.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/deck-winrate-matrix.component.scss`],
 	template: `
 		<div class="opponents-popularity">
 			<div class="title" [owTranslate]="'app.decktracker.matchup-info.opponents-popularity-header'"></div>

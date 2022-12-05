@@ -16,7 +16,6 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 @Component({
 	selector: 'twitch-config-widget',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-config-widget.component.scss',
 	],
@@ -133,7 +132,8 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 })
 export class TwitchConfigWidgetComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	prefs$: Observable<TwitchPreferences>;
 
 	autoTrueFalseOptions: readonly DropdownOption[] = [

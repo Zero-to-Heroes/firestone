@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
 	selector: 'control-discord',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-discord.component.scss`,
 	],

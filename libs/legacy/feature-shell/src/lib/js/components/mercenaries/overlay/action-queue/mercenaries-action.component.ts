@@ -7,7 +7,6 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 @Component({
 	selector: 'mercenaries-action',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-ability.component.scss',
 		'../../../../../css/component/mercenaries/overlay/action-queue/mercenaries-action.component.scss',
 	],

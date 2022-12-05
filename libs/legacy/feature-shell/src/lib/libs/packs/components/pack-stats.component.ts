@@ -12,7 +12,7 @@ import { InternalPackInfo } from './pack-stat.component';
 
 @Component({
 	selector: 'pack-stats',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `./pack-stats.component.scss`],
+	styleUrls: [`./pack-stats.component.scss`],
 	template: `
 		<div class="pack-stats" scrollable>
 			<div class="header">

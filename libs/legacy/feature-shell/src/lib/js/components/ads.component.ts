@@ -27,7 +27,7 @@ declare let amplitude: any;
 
 @Component({
 	selector: 'ads',
-	styleUrls: [`../../css/global/reset-styles.scss`, `../../css/component/ads.component.scss`],
+	styleUrls: [`../../css/component/ads.component.scss`],
 	template: `
 		<div class="ads-container">
 			<div
@@ -135,7 +135,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements After
 	}
 
 	showSubscription() {
-		amplitude.getInstance().logEvent('subscription-click', { 'page': 'banner' });
+		amplitude.getInstance().logEvent('subscription-click', { page: 'banner' });
 		this.ow.openStore();
 	}
 

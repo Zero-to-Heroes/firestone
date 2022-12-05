@@ -17,10 +17,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
 	selector: 'duels-treasure-tier-list',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-treasure-tier-list.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-treasure-tier-list.component.scss`],
 	template: `
 		<div class="duels-treasure-tier-list" *ngIf="tiers$ | async as tiers" scrollable>
 			<div

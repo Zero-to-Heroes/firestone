@@ -5,7 +5,6 @@ import { Knob } from '../preference-slider.component';
 @Component({
 	selector: 'settings-mercenaries-general',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,

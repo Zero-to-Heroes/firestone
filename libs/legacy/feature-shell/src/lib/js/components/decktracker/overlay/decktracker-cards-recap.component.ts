@@ -3,10 +3,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 
 @Component({
 	selector: 'decktracker-cards-recap',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-cards-recap.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-cards-recap.component.scss'],
 	template: `
 		<div class="cards-recap">
 			<div

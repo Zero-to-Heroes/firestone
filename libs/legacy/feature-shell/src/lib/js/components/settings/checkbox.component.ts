@@ -12,12 +12,11 @@ import { uuid } from '../../services/utils';
 @Component({
 	selector: 'checkbox',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/checkbox.component.scss`,
 	],
 	template: `
-		<div class="checkbox" [ngClass]="{ 'disabled': disabled }">
+		<div class="checkbox" [ngClass]="{ disabled: disabled }">
 			<input type="checkbox" name="checkbox-{{ uniqueId }}" id="checkbox-{{ uniqueId }}" />
 			<label
 				for="checkbox-{{ uniqueId }}"

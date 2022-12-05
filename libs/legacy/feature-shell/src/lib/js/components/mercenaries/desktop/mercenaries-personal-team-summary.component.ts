@@ -12,7 +12,6 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 @Component({
 	selector: 'mercenaries-personal-team-summary',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/mercenaries/desktop/mercenaries-personal-team-summary.component.scss`,

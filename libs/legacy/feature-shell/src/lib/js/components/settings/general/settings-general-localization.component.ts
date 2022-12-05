@@ -7,7 +7,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-general-localization',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/general/settings-general-localization.component.scss`,

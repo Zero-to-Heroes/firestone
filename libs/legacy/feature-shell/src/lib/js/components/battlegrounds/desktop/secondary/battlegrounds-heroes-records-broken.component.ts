@@ -13,7 +13,6 @@ declare let amplitude;
 	selector: 'battlegrounds-heroes-records-broken',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component.scss`,
-		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="battlegrounds-heroes-records-broken" *ngIf="stats$ | async as stats">
@@ -32,7 +31,8 @@ declare let amplitude;
 })
 export class BattlegroundsHeroesRecordsBrokenComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	stats$: Observable<readonly HeroStat[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

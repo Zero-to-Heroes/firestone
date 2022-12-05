@@ -20,8 +20,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-battles-view',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-battles-view.component.scss`,
@@ -71,7 +69,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 							[faceOff]="faceOff"
 							(click)="selectBattle(faceOff)"
 							[ngClass]="{
-								'highlighted': selectedFaceOff?.id && faceOff.id === selectedFaceOff.id
+								highlighted: selectedFaceOff?.id && faceOff.id === selectedFaceOff.id
 							}"
 						></bgs-battle-recap>
 					</div>

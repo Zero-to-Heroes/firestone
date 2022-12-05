@@ -10,7 +10,6 @@ declare let amplitude;
 @Component({
 	selector: 'control-close',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-close.component.scss`,
 	],
@@ -49,7 +48,7 @@ export class ControlCloseComponent implements AfterViewInit {
 
 	async closeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		amplitude.getInstance().logEvent('close', { 'window': windowName });
+		amplitude.getInstance().logEvent('close', { window: windowName });
 
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());

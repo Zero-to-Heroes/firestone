@@ -17,10 +17,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 
 @Component({
 	selector: 'state-mouse-over',
-	styleUrls: [
-		'../../../../../css/global/components-global.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/state-mouse-over.component.scss',
-	],
+	styleUrls: ['../../../../../css/component/decktracker/overlay/twitch/state-mouse-over.component.scss'],
 	template: `
 		<div class="state-mouse-over" [style.left.%]="horizontalOffset">
 			<ul
@@ -34,7 +31,7 @@ import { TwitchPreferencesService } from './twitch-preferences.service';
 					[showLiveInfo]="showLiveInfo$ | async"
 				>
 				</leaderboard-empty-card>
-				<div class="players-recap-icon" [ngClass]="{ 'inversed': magnifierIconOnTop$ | async }">
+				<div class="players-recap-icon" [ngClass]="{ inversed: magnifierIconOnTop$ | async }">
 					<svg
 						class="svg-icon-fill icon"
 						(mouseenter)="toggleLiveInfo(true)"

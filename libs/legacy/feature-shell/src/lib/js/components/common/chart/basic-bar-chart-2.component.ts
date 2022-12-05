@@ -3,10 +3,7 @@ import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-char
 
 @Component({
 	selector: 'basic-bar-chart-2',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/common/chart/basic-bar-chart-2.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/common/chart/basic-bar-chart-2.component.scss`],
 	template: `
 		<div class="chart-container" *ngIf="barContainers?.length">
 			<div class="mid-line" [style.bottom.%]="midLineHeight"></div>

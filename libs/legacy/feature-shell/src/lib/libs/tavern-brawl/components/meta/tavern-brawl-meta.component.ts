@@ -11,11 +11,7 @@ import { CardsFacadeService } from '../../../../js/services/cards-facade.service
 
 @Component({
 	selector: 'tavern-brawl-meta',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/app-section.component.scss`,
-		`./tavern-brawl-meta.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-meta.component.scss`],
 	template: `
 		<div class="tavern-brawl-meta">
 			<div class="brawl-info" *ngIf="brawlInfo$ | async as brawlInfo">

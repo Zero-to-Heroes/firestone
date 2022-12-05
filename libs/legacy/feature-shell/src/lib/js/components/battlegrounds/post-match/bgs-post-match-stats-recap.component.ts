@@ -6,11 +6,7 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 
 @Component({
 	selector: 'bgs-post-match-stats-recap',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-recap.component.scss`,
-		`../../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-recap.component.scss`],
 	template: `
 		<div class="stats-recap" scrollable>
 			<div class="entry face-offs" *ngIf="wins || losses || ties">
@@ -216,7 +212,7 @@ export class BgsPostMatchStatsRecapComponent {
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
 				.filter((info) => info.value.enemyHeroCardId !== CardIds.KelthuzadBattlegrounds)
-				.map((info) => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
+				.map((info) => (info.value.value != null ? info.value.value : (info.value as any as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		}
@@ -239,10 +235,12 @@ export class BgsPostMatchStatsRecapComponent {
 			this._stats.player.cardId === CardIds.InfiniteTokiBattlegrounds ? rerolls - this.heroPowers : rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
-		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter((value) => value.value === true)
-			.length;
-		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter((value) => value.value === false)
-			.length;
+		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter(
+			(value) => value.value === true,
+		).length;
+		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter(
+			(value) => value.value === false,
+		).length;
 		this.percentageOfBattlesGoingFirst =
 			this._stats.stats.wentFirstInBattleOverTurn.length === 0
 				? 0

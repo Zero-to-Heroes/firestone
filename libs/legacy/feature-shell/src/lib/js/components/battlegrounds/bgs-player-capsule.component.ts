@@ -7,10 +7,7 @@ import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
 
 @Component({
 	selector: 'bgs-player-capsule',
-	styleUrls: [
-		`../../../css/global/reset-styles.scss`,
-		`../../../css/component/battlegrounds/bgs-player-capsule.component.scss`,
-	],
+	styleUrls: [`../../../css/component/battlegrounds/bgs-player-capsule.component.scss`],
 	template: `
 		<div class="player-overview">
 			<div class="background-additions">

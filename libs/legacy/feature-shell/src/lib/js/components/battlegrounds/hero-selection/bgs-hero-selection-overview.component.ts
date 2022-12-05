@@ -13,11 +13,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'bgs-hero-selection-overview',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`],
 	template: `
 		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="left">

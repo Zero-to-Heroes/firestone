@@ -4,10 +4,7 @@ import { SimpleBarChartData } from './simple-bar-chart-data';
 
 @Component({
 	selector: 'basic-bar-chart',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/common/chart/basic-bar-chart.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/common/chart/basic-bar-chart.component.scss`],
 	template: `
 		<div class="chart-container" [ngClass]="{ 'no-empty': _preventEmptyValues }" *ngIf="bars?.length">
 			<div class="bar" *ngFor="let bar of bars" [style.height.%]="bar.height" [helpTooltip]="bar.tooltip"></div>

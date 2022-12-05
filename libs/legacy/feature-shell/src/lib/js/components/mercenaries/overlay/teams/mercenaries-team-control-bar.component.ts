@@ -6,7 +6,6 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 @Component({
 	selector: 'mercenaries-team-control-bar',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/component/controls/controls.scss`,
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-control-bar.component.scss',
 	],

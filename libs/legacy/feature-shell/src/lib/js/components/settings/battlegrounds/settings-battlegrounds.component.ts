@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-battlegrounds',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/battlegrounds/settings-battlegrounds.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/battlegrounds/settings-battlegrounds.component.scss`],
 	template: `
 		<div class="battlegrounds">
 			<settings-battlegrounds-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

@@ -12,10 +12,7 @@ import { Events } from '../../../services/events.service';
 
 @Component({
 	selector: 'settings-modal',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/modal/settings-modal.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/modal/settings-modal.component.scss`],
 	template: `
 		<div class="settings-modal" *ngIf="currentModal">
 			<ng-container [ngSwitch]="currentModal">

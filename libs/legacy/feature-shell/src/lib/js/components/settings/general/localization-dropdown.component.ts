@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'localization-dropdown',
 	styleUrls: [
 		`../../../../css/global/filters.scss`,
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/app-section.component.scss`,
 		`../../../../css/component/filter-dropdown.component.scss`,
 	],

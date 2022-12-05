@@ -9,12 +9,9 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({
 	selector: 'duels-hero-stat-vignette',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`],
 	template: `
-		<div class="duels-hero-stat-vignette" [ngClass]="{ 'unused': playerGamesPlayed === 0 }">
+		<div class="duels-hero-stat-vignette" [ngClass]="{ unused: playerGamesPlayed === 0 }">
 			<div class="box-side">
 				<div class="name-container">
 					<div class="name" [helpTooltip]="name + ' (' + playerClassLoc + ')'">
@@ -134,10 +131,7 @@ export class DuelsHeroStatVignetteComponent {
 
 @Component({
 	selector: 'duels-global-value',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`],
 	template: `
 		<div class="global-value" helpTooltip="Average value for the community">
 			<div class="global-icon">

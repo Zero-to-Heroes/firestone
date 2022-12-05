@@ -16,7 +16,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'mercenaries-out-of-combat-treasure-selection',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component.scss',
 	],
 	template: `
@@ -34,7 +33,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class MercenariesOutOfCombatTreasureSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	treasures$: Observable<readonly ReferenceCard[]>;
 
 	private highlightService: MercenariesSynergiesHighlightService;

@@ -6,10 +6,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'duels-hero-info',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-hero-info.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-hero-info.component.scss'],
 	template: `
 		<div class="hero-info">
 			<div class="bio">
@@ -19,7 +16,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					<div class="stat">
 						<div class="header" [owTranslate]="'duels.hero-info.winrate-label'"></div>
 						<div class="values">
-							<div class="global-value" [helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate">
+							<div
+								class="global-value"
+								[helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate"
+							>
 								{{ buildValue(globalWinrate, 1) }}%
 							</div>
 							<div class="my-value" [helpTooltip]="'duels.hero-info.your-value-tooltip' | owTranslate">
@@ -30,7 +30,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					<div class="stat">
 						<div class="header" [owTranslate]="'duels.hero-info.popularity-label'"></div>
 						<div class="values">
-							<div class="global-value" [helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate">
+							<div
+								class="global-value"
+								[helpTooltip]="'duels.hero-info.community-value-tooltip' | owTranslate"
+							>
 								{{ buildValue(globalPopularity, 1) }}%
 							</div>
 							<div class="my-value" [helpTooltip]="'duels.hero-info.your-value-tooltip' | owTranslate">
@@ -40,7 +43,10 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 					</div>
 				</div>
 			</div>
-			<div class="section-header" [owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"></div>
+			<div
+				class="section-header"
+				[owTranslate]="'duels.hero-info.win-distribution-header' | owTranslate: { value: totalRuns }"
+			></div>
 			<basic-bar-chart
 				*ngIf="globalWinDistribution?.data?.length > 0"
 				class="win-distribution"
@@ -57,7 +63,11 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 				<div class="deck" *ngFor="let deck of decks">
 					<div class="icons">
 						<img [src]="getArt(deck.heroCardId)" class="hero-icon" [cardTooltip]="deck.heroCardId" />
-						<img [src]="getArt(deck.heroPowerCardId)" class="hero-power-icon" [cardTooltip]="deck.heroPowerCardId" />
+						<img
+							[src]="getArt(deck.heroPowerCardId)"
+							class="hero-power-icon"
+							[cardTooltip]="deck.heroPowerCardId"
+						/>
 						<img
 							[src]="getArt(deck.signatureTreasureCardId)"
 							class="signature-treasure-icon"

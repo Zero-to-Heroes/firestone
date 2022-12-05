@@ -5,10 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'duels-signature-treasure-info',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-signature-treasure-info.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-signature-treasure-info.component.scss'],
 	template: `
 		<div class="signature-treasure-info">
 			<div class="bio">

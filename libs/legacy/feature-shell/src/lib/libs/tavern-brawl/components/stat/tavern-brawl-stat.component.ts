@@ -6,15 +6,11 @@ import { TavernStatWithCollection } from '../meta/tavern-brawl-meta.component';
 
 @Component({
 	selector: 'tavern-brawl-stat',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/app-section.component.scss`,
-		`./tavern-brawl-stat.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-stat.component.scss`],
 	template: `
 		<div
 			class="tavern-brawl-stat"
-			[ngClass]="{ 'clickable': buildableDeck != null }"
+			[ngClass]="{ clickable: buildableDeck != null }"
 			(click)="copyBuildableDeck()"
 			[helpTooltip]="copyBuildableDeckTooltip"
 			[growOnClick]="buildableDeck != null"

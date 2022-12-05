@@ -12,7 +12,6 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 @Component({
 	selector: 'bgs-mmr-evolution-for-hero',
 	styleUrls: [
-		`../../../../../../css/global/components-global.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component.scss`,
 	],
 	template: `

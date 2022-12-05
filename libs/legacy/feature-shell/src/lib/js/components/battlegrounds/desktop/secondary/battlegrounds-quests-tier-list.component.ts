@@ -14,7 +14,6 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 @Component({
 	selector: 'battlegrounds-quests-tier-list',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-quests-tier-list.component.scss`,
 	],
 	template: `

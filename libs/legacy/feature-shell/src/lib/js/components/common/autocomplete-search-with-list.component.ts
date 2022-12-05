@@ -17,10 +17,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'autocomplete-search-with-list',
-	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/common/autocomplete-search-with-list.component.scss`,
-	],
+	styleUrls: [`../../../css/component/common/autocomplete-search-with-list.component.scss`],
 	template: `
 		<div
 			class="search"
@@ -56,7 +53,8 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 })
 export class AutocompleteSearchWithListComponent<T>
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	@Output() itemClicked = new EventEmitter<T>();
 	@Output() searchSubmitted = new EventEmitter<string>();
 

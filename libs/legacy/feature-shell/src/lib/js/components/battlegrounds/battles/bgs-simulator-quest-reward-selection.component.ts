@@ -20,7 +20,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-simulator-quest-reward-selection',
 	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-quest-reward-selection.component.scss`,

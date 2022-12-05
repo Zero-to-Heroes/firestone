@@ -24,7 +24,6 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 @Component({
 	selector: 'decktracker-overlay-container',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/themes/decktracker-theme.scss`,
 		`../../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
@@ -68,7 +67,8 @@ import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
 })
 export class DeckTrackerOverlayContainerComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterViewInit, AfterContentInit {
+	implements AfterViewInit, AfterContentInit
+{
 	showMinionsList$: Observable<boolean>;
 	showBattleSimulator$: Observable<boolean>;
 	hideSimulatorWhenEmpty$: Observable<boolean>;
@@ -248,20 +248,20 @@ export class DeckTrackerOverlayContainerComponent
 
 const mapTwitchLanguageToHsLocale = (twitchLanguage: string): string => {
 	const mapping = {
-		'de': 'deDE',
-		'en': 'enUS',
+		de: 'deDE',
+		en: 'enUS',
 		'en-gb': 'enUS',
-		'es': 'esES',
+		es: 'esES',
 		'es-mx': 'esMX',
-		'fr': 'frFR',
-		'it': 'itIT',
-		'ja': 'jaJP',
-		'ko': 'koKR',
-		'pl': 'plPL',
-		'pt': 'ptBR',
+		fr: 'frFR',
+		it: 'itIT',
+		ja: 'jaJP',
+		ko: 'koKR',
+		pl: 'plPL',
+		pt: 'ptBR',
 		'pt-br': 'ptBR',
-		'ru': 'ruRU',
-		'th': 'thTH',
+		ru: 'ruRU',
+		th: 'thTH',
 		'zh-cn': 'zhCN',
 		'zh-tw': 'zhTW',
 	};

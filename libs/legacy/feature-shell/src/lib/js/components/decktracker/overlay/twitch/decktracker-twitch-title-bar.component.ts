@@ -4,7 +4,6 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 @Component({
 	selector: 'decktracker-twitch-title-bar',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-twitch-title-bar.component.scss',
 	],
@@ -27,7 +26,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 					<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
 				</svg>
 			</i>
-			<div class="copy-text" [ngClass]="{ 'copied': copied }">{{ copyText }}</div>
+			<div class="copy-text" [ngClass]="{ copied: copied }">{{ copyText }}</div>
 			<button
 				class="i-30 close-button"
 				(mousedown)="closeWindow()"

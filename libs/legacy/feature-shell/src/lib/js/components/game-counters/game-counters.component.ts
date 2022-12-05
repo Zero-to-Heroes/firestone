@@ -43,10 +43,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 
 @Component({
 	selector: 'game-counters',
-	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/game-counters/game-counters.component.scss',
-	],
+	styleUrls: ['../../../css/component/game-counters/game-counters.component.scss'],
 	template: `
 		<div
 			class="root"

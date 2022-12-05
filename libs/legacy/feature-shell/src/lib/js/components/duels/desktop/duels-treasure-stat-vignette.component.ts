@@ -6,7 +6,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 // @Component({
 // 	selector: 'duels-treasure-stat-vignette',
 // 	styleUrls: [
-// 		`../../../../css/global/components-global.scss`,
 // 		`../../../../css/component/duels/desktop/duels-treasure-stat-vignette.component.scss`,
 // 	],
 // 	template: `

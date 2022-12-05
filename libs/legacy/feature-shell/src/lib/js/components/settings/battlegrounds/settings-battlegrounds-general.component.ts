@@ -9,7 +9,6 @@ import { Knob } from '../preference-slider.component';
 @Component({
 	selector: 'settings-battlegrounds-general',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -41,79 +40,79 @@ import { Knob } from '../preference-slider.component';
 				<div class="subgroup">
 					<preference-toggle
 						field="bgsEnableApp"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.enable-app-label' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseOverlay"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.integrated-mode-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.integrated-mode-tooltip' | owTranslate"
 						[toggleFunction]="toggleOverlay"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsEnableSimulation"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.enable-battle-sim-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.enable-battle-sim-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsHideSimResultsOnRecruit"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsShowSimResultsOnlyOnRecruit }"
+						[ngClass]="{ disabled: !value.bgsFullToggle || value.bgsShowSimResultsOnlyOnRecruit }"
 						[label]="'settings.battlegrounds.general.hide-simulation-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.hide-simulation-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowSimResultsOnlyOnRecruit"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle || value.bgsHideSimResultsOnRecruit }"
+						[ngClass]="{ disabled: !value.bgsFullToggle || value.bgsHideSimResultsOnRecruit }"
 						[label]="'settings.battlegrounds.general.show-sim-only-in-tavern-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-sim-only-in-tavern-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseLocalSimulator"
-						[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.enableSimulation || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.use-local-simulator-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.use-local-simulator-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowHeroSelectionScreen"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.popup-hero-selection-screen-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.popup-hero-selection-screen-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowNextOpponentRecapSeparately"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.show-next-opponent-recap-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-next-opponent-recap-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowHeroSelectionAchievements"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.show-achievements-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-achievements-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowHeroSelectionTooltip"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.show-hero-tooltip-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-hero-tooltip-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowHeroSelectionTiers"
-						[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.show-hero-tier-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-hero-tier-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowOverlayButton"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle || !value.bgsUseOverlay }"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle || !value.bgsUseOverlay }"
 						[label]="'settings.battlegrounds.general.show-overlay-button' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.show-overlay-button-tooltip' | owTranslate"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsForceShowPostMatchStats"
-						[ngClass]="{ 'disabled': !value.bgsEnableApp || !value.bgsFullToggle }"
+						[ngClass]="{ disabled: !value.bgsEnableApp || !value.bgsFullToggle }"
 						[label]="'settings.battlegrounds.general.popup-post-match-stats-label' | owTranslate"
 						[tooltip]="'settings.battlegrounds.general.popup-post-match-stats-tooltip' | owTranslate"
 					></preference-toggle>
@@ -125,7 +124,7 @@ import { Knob } from '../preference-slider.component';
 				<div
 					class="slider-label"
 					[ngClass]="{
-						'disabled': !value.useLocalSimulator || !value.enableSimulation || !value.bgsFullToggle
+						disabled: !value.useLocalSimulator || !value.enableSimulation || !value.bgsFullToggle
 					}"
 					[owTranslate]="'settings.battlegrounds.general.simulator-number-of-sims-label'"
 					[helpTooltip]="'settings.battlegrounds.general.simulator-number-of-sims-tooltip' | owTranslate"
@@ -149,7 +148,8 @@ import { Knob } from '../preference-slider.component';
 })
 export class SettingsBattlegroundsGeneralComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	useLocalSimulator$: Observable<boolean>;
 	enableSimulation$: Observable<boolean>;
 	bgsHideSimResultsOnRecruit$: Observable<boolean>;

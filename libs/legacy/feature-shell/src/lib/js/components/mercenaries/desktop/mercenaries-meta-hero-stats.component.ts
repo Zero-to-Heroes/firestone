@@ -14,10 +14,7 @@ const THRESHOLD = 50;
 
 @Component({
 	selector: 'mercenaries-meta-hero-stats',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stats.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-stats.component.scss`],
 	template: `
 		<div class="mercenaries-stats" *ngIf="(stats$ | async)?.length; else searchEmptyState" scrollable>
 			<mercenaries-meta-hero-stat

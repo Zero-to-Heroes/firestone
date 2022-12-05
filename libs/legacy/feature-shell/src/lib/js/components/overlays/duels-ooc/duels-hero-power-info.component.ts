@@ -5,10 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'duels-hero-power-info',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-hero-power-info.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-hero-power-info.component.scss'],
 	template: `
 		<div class="hero-power-info">
 			<div class="bio">

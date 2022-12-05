@@ -11,7 +11,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	selector: 'battlegrounds-replays-recap',
 	styleUrls: [
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component.scss`,
-		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="battlegrounds-replays-recap" *ngIf="replays$ | async as replays">

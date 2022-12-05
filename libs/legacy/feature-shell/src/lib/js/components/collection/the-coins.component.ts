@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { IOption } from 'ng-select';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
@@ -10,7 +9,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
 	selector: 'the-coins',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/the-coins.component.scss`],
+	styleUrls: [`../../../css/component/collection/the-coins.component.scss`],
 	template: `
 		<div class="the-coins">
 			<div class="show-filter">

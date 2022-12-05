@@ -11,10 +11,7 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-compositions-stats',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-compositions-stats.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-compositions-stats.component.scss`],
 	template: `
 		<!-- Unused -->
 		<div

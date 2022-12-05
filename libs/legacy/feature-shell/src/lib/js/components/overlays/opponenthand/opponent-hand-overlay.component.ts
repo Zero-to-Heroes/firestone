@@ -8,10 +8,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'opponent-hand-overlay',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/opponenthand/opponent-hand-overlay.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-hand-overlay.component.scss'],
 	template: `
 		<div class="opponent-hand-overlay">
 			<opponent-card-infos

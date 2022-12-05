@@ -8,7 +8,6 @@ import { Knob } from '../preference-slider.component';
 @Component({
 	selector: 'settings-battlegrounds-overlay',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -43,36 +42,36 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.show-banned-tribes-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.show-banned-tribes-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableMinionListOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.show-minions-list-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.show-minions-list-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableTurnNumbertOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.turn-counter-label' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowLastOpponentIconInOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.last-opponent-icon-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.last-opponent-icon-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableOpponentBoardMouseOver"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.last-opponent-board-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.last-opponent-board-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableBattleSimulationOverlay"
-					[ngClass]="{ 'disabled': !value.enableSimulation || !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.enableSimulation || !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.battle-simulation-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.battle-simulation-tooltip' | owTranslate"
 				></preference-toggle>
@@ -83,7 +82,7 @@ import { Knob } from '../preference-slider.component';
 				<preference-toggle
 					field="bgsEnableSimulationSampleInOverlay"
 					[ngClass]="{
-						'disabled':
+						disabled:
 							!value.enableSimulation || !value.bgsEnableBattleSimulationOverlay || !value.bgsFullToggle
 					}"
 					[label]="'settings.battlegrounds.overlay.battle-simulation-example-label' | owTranslate"
@@ -105,23 +104,23 @@ import { Knob } from '../preference-slider.component';
 			</div>
 
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.banned-tribes-title'"></div>
-			<div class="settings-group" [ngClass]="{ 'disabled': !value.showBannedTribes || !value.bgsFullToggle }">
+			<div class="settings-group" [ngClass]="{ disabled: !value.showBannedTribes || !value.bgsFullToggle }">
 				<preference-toggle
 					class="banned-tribes-vertical"
 					field="bgsBannedTribesShowVertically"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.showBannedTribes }"
 					[label]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.banned-tribes-show-in-column-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowAvailableTribesOverlay"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.showBannedTribes }"
 					[label]="'settings.battlegrounds.overlay.show-available-tribes-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.show-available-tribes-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsTribesOverlaySingleRow"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.showBannedTribes }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.showBannedTribes }"
 					[label]="'settings.battlegrounds.overlay.banned-tribes-single-row-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.banned-tribes-single-row-tooltip' | owTranslate"
 				></preference-toggle>
@@ -147,7 +146,7 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<preference-toggle
 					field="bgsEnableMinionListMouseOver"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-on-mouse-over-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-on-mouse-over-tooltip' | owTranslate"
 					advancedSetting
@@ -158,7 +157,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsGroupMinionsIntoTheirTribeGroup"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="
 						'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label' | owTranslate
 					"
@@ -168,7 +167,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowTribesHighlight"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-tribes-highlight-label' | owTranslate"
 					[tooltip]="
 						'settings.battlegrounds.overlay.minions-list-show-tribes-highlight-tooltip' | owTranslate
@@ -176,7 +175,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowMechanicsHighlight"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-mechanics-highlight-label' | owTranslate"
 					[tooltip]="
 						'settings.battlegrounds.overlay.minions-list-show-mechanics-highlight-tooltip' | owTranslate
@@ -184,13 +183,13 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowMechanicsTiers"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-mechanics-tiers-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsMinionListShowGoldenCard"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
+					[ngClass]="{ disabled: !value.bgsFullToggle || !value.bgsEnableMinionListOverlay }"
 					[label]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.minions-list-show-golden-cards-tooltip' | owTranslate"
 				></preference-toggle>
@@ -212,12 +211,12 @@ import { Knob } from '../preference-slider.component';
 			<div class="title" [owTranslate]="'settings.battlegrounds.overlay.opponent-board-title'"></div>
 			<div
 				class="settings-group"
-				[ngClass]="{ 'disabled': !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
+				[ngClass]="{ disabled: !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
 			>
 				<preference-toggle
 					class="opponent-board-top"
 					field="bgsOpponentOverlayAtTop"
-					[ngClass]="{ 'disabled': !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsEnableOpponentBoardMouseOver || !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.opponent-board-show-top-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.opponent-board-show-top-tooltip' | owTranslate"
 				></preference-toggle>
@@ -240,13 +239,13 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<preference-toggle
 					field="playerBgsSouthseaCounter"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-soutshsea-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.counter-soutshsea-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="playerBgsMajordomoCounter"
-					[ngClass]="{ 'disabled': !value.bgsFullToggle }"
+					[ngClass]="{ disabled: !value.bgsFullToggle }"
 					[label]="'settings.battlegrounds.overlay.counter-majordomo-label' | owTranslate"
 					[tooltip]="'settings.battlegrounds.overlay.counter-majordomo-tooltip' | owTranslate"
 				></preference-toggle>

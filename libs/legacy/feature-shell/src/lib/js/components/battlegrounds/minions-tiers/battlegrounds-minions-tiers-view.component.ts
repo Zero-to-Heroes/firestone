@@ -11,7 +11,6 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 @Component({
 	selector: 'battlegrounds-minions-tiers-view',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers-view.component.scss',
 	],
@@ -34,9 +33,9 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 								class="tier {{ currentTier.tavernTier }}"
 								*ngFor="let currentTier of tiers; trackBy: trackByFn"
 								[ngClass]="{
-									'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-									'locked': isLocked(currentTier),
-									'mechanics': currentTier.type === 'mechanics'
+									selected: displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+									locked: isLocked(currentTier),
+									mechanics: currentTier.type === 'mechanics'
 								}"
 								[helpTooltip]="currentTier.tooltip"
 								(mouseover)="onTavernMouseOver(currentTier)"
@@ -50,7 +49,7 @@ import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 							*ngFor="let tier of tiers; trackBy: trackByFn"
 							class="minions-list"
 							[ngClass]="{
-								'active':
+								active:
 									tier.tavernTier === displayedTier?.tavernTier ||
 									tier.tavernTier === lockedTier?.tavernTier
 							}"

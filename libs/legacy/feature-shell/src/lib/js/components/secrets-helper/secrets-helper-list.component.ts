@@ -20,7 +20,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'secrets-helper-list',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
 		`../../../css/global/scrollbar-decktracker-overlay.scss`,
 		'../../../css/global/scrollbar-cards-list.scss',
 		'../../../css/component/decktracker/overlay/dim-overlay.scss',

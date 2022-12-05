@@ -4,10 +4,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-quest-rewards',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-quest-rewards.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-quest-rewards.component.scss`],
 	template: `
 		<div class="rewards-container">
 			<div
@@ -20,7 +17,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					class="reward"
 					*ngFor="let reward of _rewards; trackBy: trackByFn"
 					[cardTooltip]="reward.cardId"
-					[ngClass]="{ 'completed': reward.completed }"
+					[ngClass]="{ completed: reward.completed }"
 				>
 					<img [src]="reward.icon" class="icon" />
 					<img

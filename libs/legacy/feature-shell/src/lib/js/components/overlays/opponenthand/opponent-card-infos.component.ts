@@ -5,10 +5,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'opponent-card-infos',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/opponenthand/opponent-card-infos.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-infos.component.scss'],
 	template: `
 		<ul class="opponent-card-infos">
 			<opponent-card-info

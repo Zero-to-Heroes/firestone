@@ -7,11 +7,7 @@ import { MailCategoryType } from '../mail-state';
 
 @Component({
 	selector: 'mailbox-desktop',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/app-section.component.scss`,
-		`./mailbox-desktop.component.scss`,
-	],
+	styleUrls: [`../../../css/component/app-section.component.scss`, `./mailbox-desktop.component.scss`],
 	template: `
 		<div class="app-section mailbox" *ngIf="{ category: category$ | async } as value">
 			<section class="main divider">
@@ -20,7 +16,7 @@ import { MailCategoryType } from '../mail-state';
 					<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 						<li
 							*ngFor="let cat of categories$ | async"
-							[ngClass]="{ 'selected': cat === value.category }"
+							[ngClass]="{ selected: cat === value.category }"
 							(mousedown)="selectCategory(cat)"
 						>
 							<span>{{ getName(cat) }}</span>

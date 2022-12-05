@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 @Component({
 	selector: 'control-share',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-share.component.scss`,
 	],

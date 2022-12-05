@@ -9,10 +9,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-deck-stat-vignette',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-deck-stat-vignette.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-deck-stat-vignette.component.scss`],
 	template: `
 		<div class="duels-deck-stat">
 			<div class="mode-color-code {{ gameMode }}"></div>

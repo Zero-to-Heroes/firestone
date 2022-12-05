@@ -10,10 +10,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'decktracker-deck-details',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/decktracker-deck-details.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/decktracker-deck-details.component.scss`],
 	template: `
 		<div
 			class="decktracker-deck-details"

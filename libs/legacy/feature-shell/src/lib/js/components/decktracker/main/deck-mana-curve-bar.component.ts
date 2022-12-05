@@ -5,10 +5,7 @@ import { CardsByCost } from './cards-by-cost';
 
 @Component({
 	selector: 'deck-mana-curve-bar',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/deck-mana-curve-bar.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/deck-mana-curve-bar.component.scss`],
 	template: `
 		<div class="deck-mana-curve-bar">
 			<div class="quantity">{{ _info?.quantity }}</div>

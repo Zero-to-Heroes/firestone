@@ -15,10 +15,7 @@ import { InputPieChartData, InputPieChartOptions } from './input-pie-chart-data'
 
 @Component({
 	selector: 'pie-chart',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/common/chart/pie-chart.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/common/chart/pie-chart.component.scss`],
 	template: `
 		<div class="container-1">
 			<div

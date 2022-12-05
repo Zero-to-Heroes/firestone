@@ -16,7 +16,7 @@ declare let amplitude: any;
 
 @Component({
 	selector: 'loading',
-	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/loading/loading.component.scss`],
+	styleUrls: [`../../../css/component/loading/loading.component.scss`],
 	template: `
 		<window-wrapper [activeTheme]="'general'">
 			<section class="menu-bar">
@@ -122,7 +122,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	closeWindow() {
 		if (this.loading) {
-			amplitude.getInstance().logEvent('loading', { 'timing': 'close-before-complete' });
+			amplitude.getInstance().logEvent('loading', { timing: 'close-before-complete' });
 		}
 		this.ow.closeWindow(this.thisWindowId);
 	}

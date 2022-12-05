@@ -15,12 +15,11 @@ import { PreferencesService } from '../../services/preferences.service';
 @Component({
 	selector: 'preference-slider',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/preference-slider.component.scss`,
 	],
 	template: `
-		<div class="preference-slider" [ngClass]="{ 'disabled': !enabled }">
+		<div class="preference-slider" [ngClass]="{ disabled: !enabled }">
 			<input
 				[disabled]="!enabled"
 				type="range"

@@ -22,7 +22,6 @@ import { Tier } from './battlegrounds-minions-tiers-view.component';
 @Component({
 	selector: 'battlegrounds-minions-tiers',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
 		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',

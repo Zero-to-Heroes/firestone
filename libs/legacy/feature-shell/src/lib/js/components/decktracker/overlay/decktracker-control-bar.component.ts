@@ -5,7 +5,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 @Component({
 	selector: 'decktracker-control-bar',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/component/controls/controls.scss`,
 		'../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
 	],

@@ -4,10 +4,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'collection-owned-filter',
-	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
-		`../../../../css/component/collection/filters/owned-filter.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/collection/filters/owned-filter.component.scss`],
 	template: `
 		<div>
 			<fs-filter-dropdown

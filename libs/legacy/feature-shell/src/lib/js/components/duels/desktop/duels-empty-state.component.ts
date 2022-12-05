@@ -3,10 +3,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'duels-empty-state',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-empty-state.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-empty-state.component.scss`],
 	template: `
 		<div class="empty-state">
 			<div class="loading-icon" inlineSVG="assets/svg/ftue/duels.svg"></div>

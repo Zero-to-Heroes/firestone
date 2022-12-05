@@ -1,1 +1,319 @@
-/* You can add global styles to this file, and also import other style files */
+// Reset styles
+*,
+*:before,
+*:after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-weight: normal;
+	-webkit-user-select: none;
+	cursor: default;
+}
+
+a,
+a:hover,
+a:active {
+	text-decoration: none;
+}
+
+i {
+	font-style: inherit;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+// buttons
+button {
+	border: none;
+	font-family: inherit;
+	background-color: inherit;
+}
+
+button:focus {
+	outline: none;
+}
+
+svg {
+	color: var(--icon-color);
+	background-color: var(--icon-bg);
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	width: 100%;
+	height: 100%;
+}
+
+.svg-icon-fill {
+	fill: currentcolor;
+}
+
+.svg-icon-stroke {
+	fill: none;
+	stroke: currentcolor;
+}
+
+// Common stuff
+
+a,
+a:hover,
+a:active {
+	text-decoration: none;
+}
+
+i {
+	font-style: inherit;
+}
+
+[hidden] {
+	display: none !important;
+}
+
+button {
+	border: none;
+	font-family: inherit;
+	background-color: inherit;
+	font: inherit;
+	color: inherit;
+}
+
+button:focus {
+	outline: none;
+}
+
+*:focus {
+	// outline: red solid 2px !important;
+	outline: none;
+}
+
+svg {
+	color: var(--icon-color);
+	background-color: var(--icon-bg);
+
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	width: 100%;
+	height: 100%;
+}
+
+i {
+	color: var(--icon-color);
+	background-color: var(--icon-bg);
+
+	position: relative;
+	width: var(--size, 30px);
+	height: var(--size, 30px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+}
+
+.svg-icon-fill {
+	fill: currentcolor;
+}
+
+.svg-icon-stroke {
+	fill: none;
+	stroke: currentcolor;
+}
+
+// themes
+.pale-gold-theme {
+	--icon-color: #d9c3ab;
+	--icon-color-secondary: #84725f;
+}
+
+.gold-theme {
+	--icon-color: #ffb948;
+	--icon-color-secondary: #8e5b23;
+}
+
+i.pale-theme {
+	--icon-color: #d9c3ab;
+}
+
+.error-theme {
+	--icon-color: #b5043f;
+}
+
+.pale-pink-theme {
+	--icon-color: #ad899b;
+}
+
+.brown-theme {
+	--icon-color: #84725f;
+}
+
+// sizes
+.i-13X7 {
+	width: 13px;
+	height: 7px;
+}
+
+.i-10X13 {
+	width: 10px;
+	height: 13px;
+}
+
+.i-20X10 {
+	width: 20px;
+	height: 10px;
+}
+
+.i-15 {
+	--size: 15px;
+	width: 15px;
+	height: 15px;
+}
+
+.i-25 {
+	--size: 25px;
+	width: 25px;
+	height: 25px;
+}
+
+.i-30 {
+	--size: 30px;
+	width: 30px;
+	height: 30px;
+}
+
+.i-30x20 {
+	width: 30px;
+	height: 20px;
+}
+
+.i-35 {
+	--size: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.i-22X30 {
+	width: 22px;
+	height: 30px;
+}
+
+.i-50X6 {
+	width: 50px;
+	height: 6px;
+}
+
+.i-54 {
+	--size: 54px;
+	width: 54px;
+	height: 54px;
+}
+
+.i-60x78 {
+	width: 60px;
+	height: 78px;
+}
+
+.i-84x90 {
+	width: 84px;
+	height: 90px;
+}
+
+.i-121x147 {
+	width: 121px;
+	height: 147px;
+}
+
+.i-167X143 {
+	width: 167px;
+	height: 143px;
+}
+
+.i-110X86 {
+	width: 110px;
+	height: 86px;
+}
+
+.i-117X33 {
+	width: 117px;
+	height: 33px;
+}
+
+.i-150X150 {
+	width: 150px;
+	height: 150px;
+}
+
+.i-236X165 {
+	width: 236px;
+	height: 165px;
+}
+
+// Directives
+[rippleOnClick] {
+	&:before {
+		content: '';
+		background-color: var(--color-1);
+		border-radius: 50%;
+		display: block;
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		left: calc(50% - 25px);
+		top: calc(50% - 34px);
+		transform: scale(0.001, 0.001);
+	}
+	&:active {
+		outline: 0;
+		&:before {
+			animation: effect_dylan 0.8s ease-out;
+		}
+	}
+}
+
+@keyframes effect_dylan {
+	50% {
+		transform: scale(1.5, 1.5);
+		opacity: 0;
+	}
+	99% {
+		transform: scale(0.001, 0.001);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(0.001, 0.001);
+		opacity: 1;
+	}
+}
+
+// Scrollbar
+::-webkit-scrollbar {
+	width: 5px;
+	height: 0; // Always hide horizontal scrollbars
+}
+
+::-webkit-scrollbar-track {
+	display: none;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--fs-scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--on-fs-scrollbar-thumb-color);
+}
+
+::-webkit-scrollbar-button {
+	display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+	display: none;
+}

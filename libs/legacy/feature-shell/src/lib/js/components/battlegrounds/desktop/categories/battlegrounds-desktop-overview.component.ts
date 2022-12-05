@@ -6,7 +6,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-desktop-overview',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-desktop-overview.component.scss`,
 	],
 	template: ` <section class="battlegrounds-desktop-overview" role="list"></section> `,

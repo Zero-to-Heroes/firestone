@@ -27,10 +27,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
 	selector: 'hero-portraits',
-	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/collection/hero-portraits.component.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/hero-portraits.component.scss`],
 	template: `
 		<div class="hero-portraits">
 			<div class="show-filter">

@@ -10,7 +10,6 @@ import { CounterSetting } from './model';
 @Component({
 	selector: 'settings-decktracker-opponent-deck',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,

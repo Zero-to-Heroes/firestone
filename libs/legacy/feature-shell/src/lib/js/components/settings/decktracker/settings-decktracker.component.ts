@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-decktracker',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/decktracker/settings-decktracker.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/decktracker/settings-decktracker.component.scss`],
 	template: `
 		<ul class="decktracker">
 			<settings-decktracker-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

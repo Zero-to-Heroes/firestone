@@ -5,10 +5,7 @@ import { groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-triples',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-triples.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-triples.component.scss`],
 	template: `
 		<div class="triples-section">
 			<div

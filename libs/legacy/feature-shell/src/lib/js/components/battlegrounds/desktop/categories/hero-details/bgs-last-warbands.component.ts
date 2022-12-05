@@ -15,7 +15,6 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 @Component({
 	selector: 'bgs-last-warbands',
 	styleUrls: [
-		`../../../../../../css/global/components-global.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 	],
 	template: `
@@ -132,7 +131,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent impl
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)
-				: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
+				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
 		) as readonly Entity[];
 		const review = gameStats.find((matchStat) => matchStat.reviewId === postMatch.reviewId);
 		const title =

@@ -8,7 +8,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'preference-numeric-input',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/global/toggle.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/preference-numeric-input.component.scss`,

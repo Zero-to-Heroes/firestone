@@ -10,7 +10,6 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 @Component({
 	selector: 'settings-general-bug-report',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
 		`../../../../css/component/settings/general/settings-general-bug-report.component.scss`,
@@ -57,7 +56,7 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 				<div class="status" *ngIf="status" [innerHTML]="status | safe"></div>
 				<button
 					(mousedown)="submit()"
-					[ngClass]="{ 'disabled': buttonDisabled || !body }"
+					[ngClass]="{ disabled: buttonDisabled || !body }"
 					[owTranslate]="'settings.general.bug-report.send-button'"
 				></button>
 			</div>

@@ -1,11 +1,8 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-collection',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/collection/settings-collection.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/collection/settings-collection.component.scss`],
 	template: `
 		<ul class="collection">
 			<settings-collection-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

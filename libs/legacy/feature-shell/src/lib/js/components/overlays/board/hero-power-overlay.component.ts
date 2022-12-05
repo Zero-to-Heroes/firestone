@@ -9,10 +9,7 @@ import { uuid } from '@services/utils';
 
 @Component({
 	selector: 'hero-power-overlay',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/board/hero-power-overlay.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/board/hero-power-overlay.component.scss'],
 	template: `
 		<div class="card" (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)">
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />

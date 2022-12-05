@@ -18,7 +18,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-personal-stats-heroes',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,
 	],
 	template: `
@@ -39,7 +38,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPersonalStatsHeroesComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	stats$: Observable<readonly BgsHeroStat[]>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

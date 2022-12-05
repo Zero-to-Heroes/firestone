@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-general-third-party',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -104,7 +103,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class SettingsGeneralThirdPartyComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 

@@ -11,10 +11,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-my-teams',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-my-teams.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-my-teams.component.scss`],
 	template: `
 		<div class="mercenaries-my-teams" scrollable>
 			<ng-container *ngIf="teams$ | async as teams; else emptyState">

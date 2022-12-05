@@ -5,7 +5,7 @@ import { Mail } from '../../mail-state';
 
 @Component({
 	selector: 'mailbox-message',
-	styleUrls: [`../../../../css/global/components-global.scss`, `./mailbox-message.component.scss`],
+	styleUrls: [`./mailbox-message.component.scss`],
 	template: `
 		<div class="mailbox-message" [ngClass]="{ read: read, unread: !read }">
 			<div class="unread-mails" *ngIf="!read"></div>

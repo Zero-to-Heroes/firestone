@@ -10,7 +10,6 @@ import { Ability } from './mercenaries-team-ability.component';
 @Component({
 	selector: 'mercenaries-team-mercenary',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		'../../../../../css/directive/mercenaries-highlight.directive.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],

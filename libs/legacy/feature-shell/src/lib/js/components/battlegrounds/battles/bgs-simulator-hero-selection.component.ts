@@ -21,7 +21,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-simulator-hero-selection',
 	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-selection.component.scss`,
@@ -72,7 +71,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						*ngFor="let hero of allHeroes"
 						class="hero-portrait-frame"
-						[ngClass]="{ 'selected': hero.id === currentHeroId }"
+						[ngClass]="{ selected: hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
 						[cardTooltip]="hero.heroPower.id"
 					>
@@ -93,7 +92,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsSimulatorHeroSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 

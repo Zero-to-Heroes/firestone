@@ -16,10 +16,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'secrets-helper',
-	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/secrets-helper/secrets-helper.component.scss',
-	],
+	styleUrls: ['../../../css/component/secrets-helper/secrets-helper.component.scss'],
 	template: `
 		<div
 			class="root"

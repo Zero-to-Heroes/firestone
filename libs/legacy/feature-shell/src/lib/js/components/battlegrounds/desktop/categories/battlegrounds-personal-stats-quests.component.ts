@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { BgsHeroStat, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';
@@ -10,7 +10,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-personal-stats-quests',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,
 	],
 	template: `
@@ -30,7 +29,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPersonalStatsQuestsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	stats$: Observable<readonly BgsQuestStat[]>;
 
 	constructor(

@@ -15,10 +15,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 
 @Component({
 	selector: 'mercenaries-meta-hero-details',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-details.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/mercenaries/desktop/mercenaries-meta-hero-details.component.scss`],
 	template: `
 		<div class="mercenaries-hero-details" *ngIf="heroStats$ | async as stats">
 			<div class="player-overview">

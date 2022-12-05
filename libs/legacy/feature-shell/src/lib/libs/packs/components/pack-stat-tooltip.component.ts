@@ -5,7 +5,7 @@ import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 
 @Component({
 	selector: 'pack-stat-tooltip',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `./pack-stat-tooltip.component.scss`],
+	styleUrls: [`./pack-stat-tooltip.component.scss`],
 	template: `
 		<div class="pack-stat-tooltip">
 			<div class="packs-recap">{{ packsRecapText }}</div>

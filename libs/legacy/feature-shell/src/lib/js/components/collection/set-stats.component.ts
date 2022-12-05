@@ -18,7 +18,6 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 @Component({
 	selector: 'set-stats',
 	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
 		`../../../css/component/collection/set-stats.component.scss`,

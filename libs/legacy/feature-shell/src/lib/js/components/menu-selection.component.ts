@@ -24,11 +24,7 @@ declare let amplitude;
 
 @Component({
 	selector: 'menu-selection',
-	styleUrls: [
-		`../../css/global/components-global.scss`,
-		`../../css/global/menu.scss`,
-		`../../css/component/main-menu.component.scss`,
-	],
+	styleUrls: [`../../css/global/menu.scss`, `../../css/component/main-menu.component.scss`],
 	template: `
 		<nav class="menu-selection main-menu">
 			<button

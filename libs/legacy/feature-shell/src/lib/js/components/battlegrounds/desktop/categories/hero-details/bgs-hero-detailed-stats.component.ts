@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 @Component({
 	selector: 'bgs-hero-detailed-stats',
 	styleUrls: [
-		`../../../../../../css/global/components-global.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,
 	],
 	template: `
@@ -67,8 +66,8 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 						<div
 							class="my-value"
 							[ngClass]="{
-								'positive': stats.playerAverageMmr > 0,
-								'negative': stats.playerAverageMmr < 0
+								positive: stats.playerAverageMmr > 0,
+								negative: stats.playerAverageMmr < 0
 							}"
 						>
 							{{ buildValue(stats.playerAverageMmr, 0) }}
@@ -87,8 +86,8 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 						<div
 							class="my-value"
 							[ngClass]="{
-								'positive': stats.playerAverageMmrGain > 0,
-								'negative': stats.playerAverageMmrGain < 0
+								positive: stats.playerAverageMmrGain > 0,
+								negative: stats.playerAverageMmrGain < 0
 							}"
 						>
 							{{ buildValue(stats.playerAverageMmrGain, 0) }}
@@ -107,8 +106,8 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 						<div
 							class="my-value "
 							[ngClass]="{
-								'positive': stats.playerAverageMmrLoss > 0,
-								'negative': stats.playerAverageMmrLoss < 0
+								positive: stats.playerAverageMmrLoss > 0,
+								negative: stats.playerAverageMmrLoss < 0
 							}"
 						>
 							{{ buildValue(stats.playerAverageMmrLoss, 0) }}
@@ -155,7 +154,6 @@ export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent
 @Component({
 	selector: 'bgs-global-value',
 	styleUrls: [
-		`../../../../../../css/global/components-global.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,
 	],
 	template: `

@@ -18,10 +18,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'duels-treasure-stats',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-treasure-stats.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-treasure-stats.component.scss`],
 	template: `
 		<div *ngIf="stats$ | async as stats; else emptyState" class="duels-treasure-stats" scrollable>
 			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>

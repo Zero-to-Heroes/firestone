@@ -7,10 +7,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 
 @Component({
 	selector: 'duels-replays-recap',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-replays-recap.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-replays-recap.component.scss`],
 	template: `
 		<div class="duels-replays-recap" *ngIf="replays$ | async as replays">
 			<div

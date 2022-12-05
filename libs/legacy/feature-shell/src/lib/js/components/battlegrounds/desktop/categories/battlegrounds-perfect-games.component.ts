@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-perfect-games',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-perfect-games.component.scss`,
 	],
 	template: `
@@ -23,7 +22,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPerfectGamesComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

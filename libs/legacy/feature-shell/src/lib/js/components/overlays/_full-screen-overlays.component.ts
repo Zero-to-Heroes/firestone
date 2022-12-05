@@ -24,7 +24,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'full-screen-overlays',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
 		`../../../css/themes/collection-theme.scss`,
 		`../../../css/themes/achievements-theme.scss`,

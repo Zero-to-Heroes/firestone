@@ -3,10 +3,7 @@ import { Set } from '../../models/set';
 
 @Component({
 	selector: 'collection-empty-state',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/collection/collection-empty-state.component.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/collection-empty-state.component.scss`],
 	template: `
 		<ng-container [ngSwitch]="sectionSelector">
 			<section class="empty-state no-missing-card-in-set" *ngSwitchCase="NO_MISSING_CARD_IN_SET">

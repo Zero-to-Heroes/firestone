@@ -21,10 +21,7 @@ import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-deck-select',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-deck-select.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-deck-select.component.scss'],
 	template: `
 		<div class="container" *ngIf="decks$ | async as decks">
 			<ng-container *ngIf="{ collection: collection$ | async, tempDuelsDeck: tempDuelsDeck$ | async } as value">

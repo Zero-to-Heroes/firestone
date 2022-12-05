@@ -9,11 +9,7 @@ declare let amplitude: any;
 
 @Component({
 	selector: 'stat-cell',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/post-match/stat-cell.component.scss`,
-		`../../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/post-match/stat-cell.component.scss`],
 	template: `
 		<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord }">
 			<div

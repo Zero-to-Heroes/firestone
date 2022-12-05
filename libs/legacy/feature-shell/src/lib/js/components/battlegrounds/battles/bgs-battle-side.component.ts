@@ -20,8 +20,6 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 @Component({
 	selector: 'bgs-battle-side',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-battle-side.component.scss`,

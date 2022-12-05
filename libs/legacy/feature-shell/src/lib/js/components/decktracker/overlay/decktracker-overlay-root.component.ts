@@ -26,10 +26,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'decktracker-overlay-root',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss'],
 	template: `
 		<div
 			class="root {{ player }}"

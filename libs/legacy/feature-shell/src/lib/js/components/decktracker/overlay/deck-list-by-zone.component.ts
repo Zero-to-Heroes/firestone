@@ -9,10 +9,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'deck-list-by-zone',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/deck-list-by-zone.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/deck-list-by-zone.component.scss'],
 	template: `
 		<ul class="deck-list">
 			<li *ngFor="let zone of zones; trackBy: trackZone">

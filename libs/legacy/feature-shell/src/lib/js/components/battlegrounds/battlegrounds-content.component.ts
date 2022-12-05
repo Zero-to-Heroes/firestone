@@ -19,10 +19,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'battlegrounds-content',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/battlegrounds/battlegrounds-content.component.scss`,
-	],
+	styleUrls: [`../../../css/component/battlegrounds/battlegrounds-content.component.scss`],
 	template: `
 		<div class="battlegrounds">
 			<section class="menu-bar">

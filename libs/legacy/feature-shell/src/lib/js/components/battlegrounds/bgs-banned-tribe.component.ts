@@ -5,7 +5,6 @@ import { getTribeIcon } from '../../services/battlegrounds/bgs-utils';
 @Component({
 	selector: 'bgs-banned-tribe',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
 		`../../../css/themes/battlegrounds-theme.scss`,
 		'../../../css/component/battlegrounds/bgs-banned-tribe.component.scss',

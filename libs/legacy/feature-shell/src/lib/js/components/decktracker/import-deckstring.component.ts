@@ -9,10 +9,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'import-deckstring',
-	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/import-deckstring.component.scss',
-	],
+	styleUrls: ['../../../css/component/decktracker/import-deckstring.component.scss'],
 	template: `
 		<div
 			class="import-deckstring"

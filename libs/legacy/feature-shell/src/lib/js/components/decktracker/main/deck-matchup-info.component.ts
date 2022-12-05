@@ -5,10 +5,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'deck-matchup-info',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/deck-matchup-info.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/deck-matchup-info.component.scss`],
 	template: `
 		<div class="deck-matchup-info">
 			<div class="cell class">
@@ -18,14 +15,14 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div class="cell total-games">{{ games }}</div>
 			<div
 				class="cell winrate"
-				[ngClass]="{ 'positive': winrate > 51, 'negative': winrate < 49 }"
+				[ngClass]="{ positive: winrate > 51, negative: winrate < 49 }"
 				*ngIf="_showMatchupAsPercentages"
 			>
 				{{ buildValue(winrate) }}
 			</div>
 			<div
 				class="cell winrate-first"
-				[ngClass]="{ 'positive': winrateFirst > 51, 'negative': winrateFirst < 49 }"
+				[ngClass]="{ positive: winrateFirst > 51, negative: winrateFirst < 49 }"
 				*ngIf="_showMatchupAsPercentages"
 				[helpTooltip]="winrateFirstTooltip"
 			>
@@ -33,7 +30,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			</div>
 			<div
 				class="cell winrate-coin"
-				[ngClass]="{ 'positive': winrateCoin > 51, 'negative': winrateCoin < 49 }"
+				[ngClass]="{ positive: winrateCoin > 51, negative: winrateCoin < 49 }"
 				*ngIf="_showMatchupAsPercentages"
 				[helpTooltip]="winrateCoinTooltip"
 			>

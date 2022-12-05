@@ -3,10 +3,7 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 
 @Component({
 	selector: 'bgs-hero-short-recap',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/battlegrounds/overlay/bgs-hero-short-recap.component.scss',
-	],
+	styleUrls: ['../../../../css/component/battlegrounds/overlay/bgs-hero-short-recap.component.scss'],
 	template: `
 		<div class="short-recap">
 			<tavern-level-icon [level]="tavernTier" class="element tavern" *ngIf="tavernTier"></tavern-level-icon>
@@ -22,7 +19,7 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 				<img class="icon" [src]="tribeImage" />
 				<div class="value">{{ tribeCount }}</div>
 			</div>
-			<div class="element damage" [ngClass]="{ 'debuff': damage < 0 }">
+			<div class="element damage" [ngClass]="{ debuff: damage < 0 }">
 				<img class="icon" [src]="damageImage" />
 				<div class="value">{{ damage }}</div>
 			</div>
@@ -30,7 +27,7 @@ import { QuestReward } from '../../../models/battlegrounds/bgs-player';
 				<div
 					class="quest-reward"
 					*ngFor="let reward of questRewards"
-					[ngClass]="{ 'completed': reward.completed }"
+					[ngClass]="{ completed: reward.completed }"
 				>
 					<img [src]="getIcon(reward.cardId)" class="image" />
 					<img

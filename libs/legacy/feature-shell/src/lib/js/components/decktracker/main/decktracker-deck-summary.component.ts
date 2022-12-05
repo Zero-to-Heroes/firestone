@@ -12,19 +12,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 @Component({
 	selector: 'decktracker-deck-summary',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/global/menu.scss`,
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div
-			class="decktracker-deck-summary"
-			tabindex="0"
-			[ngClass]="{ 'hidden': hidden }"
-			(click)="selectDeck($event)"
-		>
+		<div class="decktracker-deck-summary" tabindex="0" [ngClass]="{ hidden: hidden }" (click)="selectDeck($event)">
 			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
 			<div class="deck-image" aria-hidden="true">
 				<img class="skin" [src]="skin" />

@@ -6,10 +6,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-deck-name',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-deck-name.component.scss',
-	],
+	styleUrls: ['../../../../css/component/decktracker/overlay/decktracker-deck-name.component.scss'],
 	template: `
 		<div class="deck-name">
 			<span class="name" [helpTooltip]="deckName" [bindTooltipToGameWindow]="true">{{ deckName }}</span>

@@ -8,10 +8,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'bgs-opponent-overview-big',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`],
 	template: `
 		<bgs-player-capsule
 			[player]="_opponent"

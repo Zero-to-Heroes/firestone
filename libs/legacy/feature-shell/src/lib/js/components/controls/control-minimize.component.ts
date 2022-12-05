@@ -8,7 +8,6 @@ declare let amplitude;
 @Component({
 	selector: 'control-minimize',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-minimize.component.scss`,
 	],
@@ -39,7 +38,7 @@ export class ControlMinimizeComponent implements AfterViewInit {
 
 	async minimizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		amplitude.getInstance().logEvent('minimize', { 'window': windowName });
+		amplitude.getInstance().logEvent('minimize', { window: windowName });
 
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());

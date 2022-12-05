@@ -9,7 +9,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'battlegrounds-personal-stats-stats',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component.scss`,
 	],
 	template: `
@@ -153,7 +152,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsPersonalStatsStatsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	value$: Observable<Value>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

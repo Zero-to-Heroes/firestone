@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
 	selector: 'settings-decktracker-beta',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,

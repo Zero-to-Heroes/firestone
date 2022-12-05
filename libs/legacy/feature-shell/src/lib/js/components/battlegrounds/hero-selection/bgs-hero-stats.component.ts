@@ -10,7 +10,6 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 @Component({
 	selector: 'bgs-hero-stats',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-stats.component.scss`,
 	],

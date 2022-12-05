@@ -10,10 +10,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'decktracker-deck-recap',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/decktracker-deck-recap.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/decktracker-deck-recap.component.scss`],
 	template: `
 		<div class="decktracker-deck-recap" *ngIf="info$ | async as info">
 			<div class="title" [owTranslate]="'app.decktracker.deck-recap.overall-stats-header'"></div>

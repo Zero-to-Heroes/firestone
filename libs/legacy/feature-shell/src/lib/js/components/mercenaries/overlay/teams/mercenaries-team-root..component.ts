@@ -31,7 +31,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'mercenaries-team-root',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/cdk-overlay.scss`,
 		`../../../../../css/themes/decktracker-theme.scss`,
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-root.component.scss',
@@ -183,7 +182,6 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 @Component({
 	selector: 'mercs-tasks-list',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/themes/decktracker-theme.scss`,
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-root.component.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/tasks-list.scss',

@@ -14,10 +14,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'settings',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings.component.scss`,
-	],
+	styleUrls: [`../../../css/component/settings/settings.component.scss`],
 	template: `
 		<window-wrapper [activeTheme]="'general'">
 			<section class="title-bar">

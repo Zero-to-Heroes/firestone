@@ -4,12 +4,11 @@ import { IOption } from 'ng-select';
 @Component({
 	selector: 'dropdown',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
 		`../../../css/themes/battlegrounds-theme.scss`,
 		'../../../css/component/settings/dropdown.component.scss',
 	],
 	template: `
-		<div class="dropdown" [ngClass]="{ 'disabled': disabled }">
+		<div class="dropdown" [ngClass]="{ disabled: disabled }">
 			<label class="label" [helpTooltip]="labelTooltip">{{ label }}</label>
 			<filter-dropdown
 				class="hero-sort-filter"

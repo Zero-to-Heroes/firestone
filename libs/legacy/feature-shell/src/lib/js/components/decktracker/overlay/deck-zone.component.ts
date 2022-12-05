@@ -21,7 +21,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'deck-zone',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		'../../../../css/component/decktracker/overlay/deck-zone.component.scss',
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],

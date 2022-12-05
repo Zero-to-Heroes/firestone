@@ -18,10 +18,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'graph-with-single-value',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/battlegrounds/graph-with-single-value.component.scss`,
-	],
+	styleUrls: [`../../../css/component/battlegrounds/graph-with-single-value.component.scss`],
 	template: `
 		<div class="container-1">
 			<div style="display: flex; position: relative; height: 100%; width: 100%;">

@@ -4,10 +4,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
 	selector: 'duels-tier',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-tier.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-tier.component.scss`],
 	template: `
 		<div class="duels-tier">
 			<div class="header {{ label?.toLowerCase() }}" [helpTooltip]="tooltip" [helpTooltipPosition]="'top'">

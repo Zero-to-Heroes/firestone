@@ -9,11 +9,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'ftue',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/global/menu.scss`,
-		`../../../../css/component/main-window/ftue/ftue.component.scss`,
-	],
+	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/main-window/ftue/ftue.component.scss`],
 	template: `
 		<div class="ftue">
 			<div class="backdrop"></div>
@@ -42,7 +38,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div
 						class="knot"
 						*ngFor="let step of ftueSteps; let i = index"
-						[ngClass]="{ 'active': i === currentIndex }"
+						[ngClass]="{ active: i === currentIndex }"
 					></div>
 				</div>
 				<div

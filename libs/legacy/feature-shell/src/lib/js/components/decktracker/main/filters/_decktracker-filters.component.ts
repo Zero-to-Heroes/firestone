@@ -18,7 +18,6 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 @Component({
 	selector: 'decktracker-filters',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/decktracker/main/filters/_decktracker-filters.component.scss`,
 	],
@@ -58,7 +57,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class DecktrackerFiltersComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showInfo$: Observable<boolean>;

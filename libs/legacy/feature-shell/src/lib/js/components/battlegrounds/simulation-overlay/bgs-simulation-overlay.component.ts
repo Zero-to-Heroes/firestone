@@ -14,11 +14,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'bgs-simulation-overlay',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`],
 	template: `
 		<div class="app-container battlegrounds-theme simulation-overlay scalable">
 			<bgs-battle-status

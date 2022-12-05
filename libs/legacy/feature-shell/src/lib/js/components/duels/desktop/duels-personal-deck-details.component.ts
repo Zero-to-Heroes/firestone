@@ -9,10 +9,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'duels-personal-deck-details',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-personal-deck-details.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/duels/desktop/duels-personal-deck-details.component.scss`],
 	template: `
 		<div
 			class="duels-personal-deck-details"
@@ -48,7 +45,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<label
 							for="final"
 							class="final"
-							[ngClass]="{ 'disabled': value.expandedRunIds?.length !== 1 }"
+							[ngClass]="{ disabled: value.expandedRunIds?.length !== 1 }"
 							[helpTooltip]="
 								value.expandedRunIds?.length !== 1
 									? 'Please expand a single run on the right column to view its final decklist'

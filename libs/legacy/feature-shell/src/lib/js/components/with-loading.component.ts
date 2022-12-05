@@ -4,7 +4,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'with-loading',
-	styleUrls: [`../../css/global/reset-styles.scss`, `../../css/component/with-loading.component.scss`],
+	styleUrls: [`../../css/component/with-loading.component.scss`],
 	template: `
 		<ng-container class="with-loading">
 			<ng-container *ngIf="!isLoading">

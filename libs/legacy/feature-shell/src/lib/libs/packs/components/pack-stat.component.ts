@@ -5,11 +5,11 @@ import { PackStatTooltipComponent } from './pack-stat-tooltip.component';
 
 @Component({
 	selector: 'pack-stat',
-	styleUrls: [`../../../css/global/scrollbar.scss`, `./pack-stat.component.scss`],
+	styleUrls: [`./pack-stat.component.scss`],
 	template: `
 		<div
 			class="pack-stat"
-			[ngClass]="{ 'missing': !totalObtained }"
+			[ngClass]="{ missing: !totalObtained }"
 			componentTooltip
 			[componentType]="componentType"
 			[componentInput]="_pack"

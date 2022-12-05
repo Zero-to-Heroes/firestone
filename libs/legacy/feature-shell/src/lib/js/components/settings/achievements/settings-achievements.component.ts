@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-achievements',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/achievements/settings-achievements.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/achievements/settings-achievements.component.scss`],
 	template: `
 		<ul class="achievements">
 			<settings-achievements-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

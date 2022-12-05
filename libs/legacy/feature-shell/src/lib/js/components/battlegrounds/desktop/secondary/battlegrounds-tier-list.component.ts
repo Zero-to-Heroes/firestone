@@ -26,10 +26,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 
 @Component({
 	selector: 'battlegrounds-tier-list',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-tier-list.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-tier-list.component.scss`],
 	template: `
 		<div class="battlegrounds-tier-list" *ngIf="stats$ | async as stats">
 			<div class="title">
@@ -69,7 +66,8 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 })
 export class BattlegroundsTierListComponent
 	extends AbstractSubscriptionComponent
-	implements AfterViewInit, AfterContentInit {
+	implements AfterViewInit, AfterContentInit
+{
 	@Input() showFilters: boolean;
 
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;

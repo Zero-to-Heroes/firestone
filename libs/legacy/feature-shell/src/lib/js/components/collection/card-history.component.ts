@@ -10,7 +10,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'card-history',
 	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
 		`../../../css/component/collection/card-history.component.scss`,

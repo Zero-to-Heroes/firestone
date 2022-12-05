@@ -8,7 +8,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'settings-advanced-toggle',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/global/menu.scss`,
 		`../../../css/component/settings/settings-advanced-toggle.component.scss`,
 	],

@@ -6,12 +6,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 @Component({
 	selector: 'bgs-hero-selection-tooltip',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component.scss`,
 	],
 	template: `
-		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ 'hidden': !_visible }">
+		<div class="hero-selection-tooltip {{ _cssClass }}" [ngClass]="{ hidden: !_visible }">
 			<!-- <img class="buddy" [src]="buddyImage" *ngIf="buddyImage" /> -->
 			<img class="hero-power" [src]="heroPowerImage" *ngIf="heroPowerImage" />
 			<img class="hero-power" [src]="questImage" *ngIf="questImage" />

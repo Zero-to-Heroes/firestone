@@ -10,7 +10,6 @@ declare let amplitude;
 @Component({
 	selector: 'battlegrounds-overlay-button',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
 		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-overlay-button.component.scss',
@@ -19,7 +18,7 @@ declare let amplitude;
 		<div class="battlegrounds-overlay-button" [activeTheme]="'battlegrounds'">
 			<div
 				class="battlegrounds-widget"
-				[ngClass]="{ 'big': big }"
+				[ngClass]="{ big: big }"
 				(mouseup)="toggleOverlay()"
 				[helpTooltip]="'battlegrounds.overlay-button.tooltip' | owTranslate"
 			>

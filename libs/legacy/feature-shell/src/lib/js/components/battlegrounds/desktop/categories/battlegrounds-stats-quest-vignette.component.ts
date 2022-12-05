@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroStat, BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
 	selector: 'battlegrounds-stats-quest-vignette',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-stats-quest-vignette.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ 'unused': gamesPlayed === 0 }" tabindex="0">
+		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ unused: gamesPlayed === 0 }" tabindex="0">
 			<div class="hero-name">{{ name }}</div>
 			<div aria-hidden="true" class="portrait-container">
 				<img class="icon" [src]="icon" [cardTooltip]="cardId" />
@@ -26,9 +25,9 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				<div
 					class="item mmr"
 					[ngClass]="{
-						'positive': netMmr > 0,
-						'negative': netMmr < 0,
-						'missing': buildValue(netMmr) === '-'
+						positive: netMmr > 0,
+						negative: netMmr < 0,
+						missing: buildValue(netMmr) === '-'
 					}"
 				>
 					<div

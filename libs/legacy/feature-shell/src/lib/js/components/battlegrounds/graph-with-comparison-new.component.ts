@@ -15,10 +15,7 @@ import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-t
 
 @Component({
 	selector: 'graph-with-comparison-new',
-	styleUrls: [
-		`../../../css/global/reset-styles.scss`,
-		`../../../css/component/battlegrounds/graph-with-comparison.component.scss`,
-	],
+	styleUrls: [`../../../css/component/battlegrounds/graph-with-comparison.component.scss`],
 	template: `
 		<ng-container
 			*ngIf="{ lineChartData: lineChartData$ | async, lineChartOptions: lineChartOptions$ | async } as value"

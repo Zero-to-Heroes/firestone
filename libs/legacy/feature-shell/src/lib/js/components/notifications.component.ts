@@ -27,7 +27,6 @@ declare let amplitude;
 @Component({
 	selector: 'notifications',
 	styleUrls: [
-		'../../css/global/components-global.scss',
 		'../../css/component/notifications/notifications.component.scss',
 		'../../css/component/notifications/notifications-achievements.scss',
 		'../../css/component/notifications/notifications-decktracker.scss',
@@ -192,9 +191,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		// Clicked on settings, don't show the card and don't close
 		if (currentElement && currentElement.className && currentElement.className.indexOf('open-settings') !== -1) {
 			amplitude.getInstance().logEvent('notification', {
-				'event': 'show-settings',
-				'app': messageObject.app,
-				'type': messageObject.type,
+				event: 'show-settings',
+				app: messageObject.app,
+				type: messageObject.type,
 			});
 			event.preventDefault();
 			event.stopPropagation();
@@ -208,9 +207,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 		if (currentElement && currentElement.classList.contains('unclickable')) {
 			amplitude.getInstance().logEvent('notification', {
-				'event': 'unclickable',
-				'app': messageObject.app,
-				'type': messageObject.type,
+				event: 'unclickable',
+				app: messageObject.app,
+				type: messageObject.type,
 			});
 			currentElement.classList.add('shake');
 			setTimeout(() => {
@@ -223,7 +222,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		}
 		amplitude
 			.getInstance()
-			.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': messageObject.type });
+			.logEvent('notification', { event: 'click', app: messageObject.app, type: messageObject.type });
 		if (messageObject.eventToSendOnClick) {
 			console.log('event to send on click', messageObject.eventToSendOnClick);
 			const eventToSend = messageObject.eventToSendOnClick();
@@ -288,7 +287,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				) {
 					amplitude
 						.getInstance()
-						.logEvent('notification', { 'event': 'show-settings', 'app': messageObject.app, 'type': type });
+						.logEvent('notification', { event: 'show-settings', app: messageObject.app, type: type });
 					event.preventDefault();
 					event.stopPropagation();
 					this.showSettings();
@@ -307,7 +306,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				if (currentElement && currentElement.classList.contains('unclickable')) {
 					amplitude
 						.getInstance()
-						.logEvent('notification', { 'event': 'unclickable', 'app': messageObject.app, 'type': type });
+						.logEvent('notification', { event: 'unclickable', app: messageObject.app, type: type });
 					currentElement.classList.add('shake');
 					setTimeout(() => {
 						currentElement.classList.remove('shake');
@@ -319,7 +318,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				}
 				amplitude
 					.getInstance()
-					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
+					.logEvent('notification', { event: 'click', app: messageObject.app, type: type });
 				if (messageObject.eventToSendOnClick) {
 					console.log('event to send on click', messageObject.eventToSendOnClick);
 					const eventToSend = messageObject.eventToSendOnClick();
@@ -345,9 +344,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				type: type,
 			};
 			this.activeNotifications.push(activeNotif);
-			amplitude
-				.getInstance()
-				.logEvent('notification', { 'event': 'show', 'app': messageObject.app, 'type': type });
+			amplitude.getInstance().logEvent('notification', { event: 'show', app: messageObject.app, type: type });
 			console.log('added notif to active notifs', this.activeNotifications, activeNotif);
 			resolve();
 

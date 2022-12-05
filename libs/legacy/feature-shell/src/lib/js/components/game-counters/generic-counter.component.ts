@@ -13,7 +13,6 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 @Component({
 	selector: 'generic-counter',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
 		`../../../css/themes/decktracker-theme.scss`,
 		'../../../css/component/game-counters/counters-common.scss',

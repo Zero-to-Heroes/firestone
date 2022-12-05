@@ -24,7 +24,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-simulator-minion-selection',
 	styleUrls: [
-		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-simulator-minion-selection.component.scss`,
@@ -49,7 +48,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div *ngIf="!card" class="hero-portrait-frame empty">
 						<div class="empty-hero" inlineSVG="assets/svg/bg_empty_minion_full.svg"></div>
 					</div>
-					<div class="abilities" [ngClass]="{ 'disabled': !card }">
+					<div class="abilities" [ngClass]="{ disabled: !card }">
 						<div class="stats">
 							<div class="input attack">
 								<div class="label" [owTranslate]="'global.hs-terms.attack'"></div>
@@ -205,7 +204,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div
 							*ngFor="let minion of allMinions"
 							class="hero-portrait-frame"
-							[ngClass]="{ 'selected': minion.id === cardId }"
+							[ngClass]="{ selected: minion.id === cardId }"
 							(click)="selectMinion(minion)"
 							[cardTooltip]="minion.id"
 							[cardTooltipBgs]="true"
@@ -218,7 +217,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<div
 						class="button"
 						(click)="validate()"
-						[ngClass]="{ 'disabled': !card }"
+						[ngClass]="{ disabled: !card }"
 						[owTranslate]="'battlegrounds.sim.select-button'"
 					></div>
 				</div>
@@ -229,7 +228,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsSimulatorMinionSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	implements AfterContentInit, OnDestroy
+{
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;

@@ -20,14 +20,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 @Component({
 	selector: 'duels-personal-deck-vignette',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/global/menu.scss`,
 		`../../../../css/component/duels/desktop/duels-personal-deck-vignette.component.scss`,
 	],
 	template: `
-		<div class="duels-personal-deck-vignette" [ngClass]="{ 'hidden': hidden, 'has-details': deckstring != null }">
+		<div class="duels-personal-deck-vignette" [ngClass]="{ hidden: hidden, 'has-details': deckstring != null }">
 			<div class="container" (click)="viewDetails($event)">
 				<div class="deck-name-container" *ngIf="!renaming">
 					<div class="deck-name" [helpTooltip]="deckName">

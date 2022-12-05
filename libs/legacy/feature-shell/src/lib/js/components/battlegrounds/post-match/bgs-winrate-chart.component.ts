@@ -6,10 +6,7 @@ import { deepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-winrate-chart',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/post-match/bgs-winrate-chart.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-winrate-chart.component.scss`],
 	template: `
 		<graph-with-comparison-new
 			[turnLabel]="'battlegrounds.post-match-stats.winrate-stats.turn-label' | owTranslate"

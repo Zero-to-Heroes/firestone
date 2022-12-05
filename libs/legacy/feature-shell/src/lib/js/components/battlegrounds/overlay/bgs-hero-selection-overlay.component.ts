@@ -3,7 +3,6 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { TooltipPositionType } from '../../../directives/cached-component-tooltip.directive';
-import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -17,7 +16,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'bgs-hero-selection-overlay',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		'../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../css/component/battlegrounds/overlay/bgs-hero-selection-overlay.component.scss',
 	],

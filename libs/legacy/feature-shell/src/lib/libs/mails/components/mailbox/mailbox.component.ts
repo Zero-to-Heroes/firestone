@@ -7,11 +7,7 @@ import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message
 
 @Component({
 	selector: 'mailbox',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/global/scrollbar.scss`,
-		`./mailbox.component.scss`,
-	],
+	styleUrls: [`./mailbox.component.scss`],
 	template: `
 		<div class="mailbox">
 			<ul class="message-list" scrollable>

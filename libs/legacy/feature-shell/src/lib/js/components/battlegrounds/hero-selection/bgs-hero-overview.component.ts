@@ -12,7 +12,6 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 @Component({
 	selector: 'bgs-hero-overview',
 	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-overview.component.scss`,
 	],
@@ -44,7 +43,7 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 					<div
 						class="achievement"
 						*ngFor="let achievement of achievementsToDisplay; let i = index; trackBy: trackByFn"
-						[ngClass]="{ 'completed': achievement.completed }"
+						[ngClass]="{ completed: achievement.completed }"
 					>
 						<div
 							class="icon"

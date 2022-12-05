@@ -14,10 +14,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 
 @Component({
 	selector: 'battlegrounds-simulator',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-simulator.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-simulator.component.scss`],
 	template: `
 		<div class="battlegrounds-simulator">
 			<div class="info" [helpTooltip]="helpTooltip" [helpTooltipClasses]="'bgs-simulator-help-tooltip'">
@@ -44,7 +41,8 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 })
 export class BattlegroundsSimulatorComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 

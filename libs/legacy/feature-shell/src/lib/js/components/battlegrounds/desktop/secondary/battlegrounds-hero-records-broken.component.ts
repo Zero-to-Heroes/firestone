@@ -5,7 +5,6 @@ import { HeroStat } from './hero-stat';
 @Component({
 	selector: 'battlegrounds-hero-records-broken',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component.scss`,
 	],
 	template: `

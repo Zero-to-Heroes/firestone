@@ -6,7 +6,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-achievements-notifications',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -28,13 +27,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				field="achievementsEnabled2"
 				[label]="'settings.achievements.notifications.firestone-achievements-text' | owTranslate"
 				[tooltip]="'settings.achievements.notifications.firestone-achievements-tooltip' | owTranslate"
-				[ngClass]="{ 'disabled': !value.achievementsEnabled }"
+				[ngClass]="{ disabled: !value.achievementsEnabled }"
 			></preference-toggle>
 			<preference-toggle
 				field="achievementsDisplayNotifications2"
 				[label]="'settings.achievements.notifications.show-notifications-text' | owTranslate"
 				[tooltip]="'settings.achievements.notifications.show-notifications-tooltip' | owTranslate"
-				[ngClass]="{ 'disabled': !value.achievementsEnabled }"
+				[ngClass]="{ disabled: !value.achievementsEnabled }"
 			></preference-toggle>
 			<preference-toggle
 				*ngIf="isDev"
@@ -46,7 +45,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					'settings.achievements.notifications.streamer-mode-confirmation' | owTranslate
 				"
 				[valueToDisplayMessageOn]="true"
-				[ngClass]="{ 'disabled': !value.achievementsEnabled }"
+				[ngClass]="{ disabled: !value.achievementsEnabled }"
 			></preference-toggle>
 		</div>
 	`,
@@ -54,7 +53,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class SettingsAchievementsNotificationsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	achievementsEnabled$: Observable<boolean>;
 
 	isDev: boolean;

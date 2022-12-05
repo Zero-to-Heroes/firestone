@@ -6,10 +6,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'decktracker-replays-recap',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/decktracker/main/decktracker-replays-recap.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/decktracker/main/decktracker-replays-recap.component.scss`],
 	template: `
 		<div class="decktracker-replays-recap" *ngIf="replays$ | async as replays">
 			<div class="title" *ngIf="!!replays.length">

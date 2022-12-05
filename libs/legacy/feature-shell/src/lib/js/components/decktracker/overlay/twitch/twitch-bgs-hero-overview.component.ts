@@ -18,8 +18,6 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 @Component({
 	selector: 'twitch-bgs-hero-overview',
 	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/global/reset-styles.scss`,
 		'../../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../../css/component/battlegrounds/overlay/bgs-overlay-hero-overview.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/twitch-bgs-hero-overview.component.scss',
@@ -39,7 +37,7 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 			<div class="cards" *ngIf="showHeroCards$ | async">
 				<img class="card normal" [src]="heroPowerImage" />
 				<ng-container *ngIf="rewards?.length">
-					<div class="rewards" *ngFor="let reward of rewards" [ngClass]="{ 'unfinished': !reward.completed }">
+					<div class="rewards" *ngFor="let reward of rewards" [ngClass]="{ unfinished: !reward.completed }">
 						<img class="card buddy normal" [src]="reward.image" />
 					</div>
 				</ng-container>

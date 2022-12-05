@@ -5,7 +5,6 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 @Component({
 	selector: 'bgs-tavern-minion',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		'../../../../css/themes/battlegrounds-theme.scss',
 		'../../../../css/component/battlegrounds/overlay/bgs-tavern-minion.component.scss',
 	],

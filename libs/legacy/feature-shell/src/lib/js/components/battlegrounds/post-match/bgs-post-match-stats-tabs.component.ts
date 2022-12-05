@@ -23,17 +23,14 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-tabs.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-tabs.component.scss`],
 	template: `
 		<div class="stats">
 			<ul class="tabs">
 				<li
 					*ngFor="let tab of tabs"
 					class="tab"
-					[ngClass]="{ 'active': tab === selectedTab }"
+					[ngClass]="{ active: tab === selectedTab }"
 					(mousedown)="selectTab(tab)"
 				>
 					{{ getLabel(tab) }}
@@ -85,7 +82,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 export class BgsPostMatchStatsTabsComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	implements AfterContentInit, AfterViewInit
+{
 	_panel: BgsPostMatchStatsPanel;
 	tabs: readonly BgsStatsFilterId[];
 	faceOffs: readonly BgsFaceOffWithSimulation[];

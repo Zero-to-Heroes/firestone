@@ -7,7 +7,6 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 @Component({
 	selector: 'settings-general-quests',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -30,43 +29,43 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				></preference-toggle>
 				<preference-toggle
 					field="showQuestsWidgetWhenEmpty"
-					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[ngClass]="{ disabled: !value.enableQuests }"
 					[label]="'settings.general.quests.show-when-empty-label' | owTranslate"
 					[tooltip]="'settings.general.quests.show-when-empty-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="showQuestsInGame"
-					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[ngClass]="{ disabled: !value.enableQuests }"
 					[label]="'settings.general.quests.show-in-game-label' | owTranslate"
 					[tooltip]="'settings.general.quests.show-in-game-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
-					field="hsShowQuestsWidget" 
-					[ngClass]="{ 'disabled': !value.enableQuests }"
+					field="hsShowQuestsWidget"
+					[ngClass]="{ disabled: !value.enableQuests }"
 					[label]="'settings.general.quests.constructed-label' | owTranslate"
 					[tooltip]="'settings.general.quests.constructed-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="hsShowQuestsWidgetOnHub"
-					[ngClass]="{ 'disabled': !value.enableQuests || !value.hsShowQuestsWidget }"
+					[ngClass]="{ disabled: !value.enableQuests || !value.hsShowQuestsWidget }"
 					[label]="'settings.general.quests.constructed-on-hub-label' | owTranslate"
 					[tooltip]="'settings.general.quests.constructed-on-hub-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="hsShowQuestsWidgetOnBg"
-					[ngClass]="{ 'disabled': !value.enableQuests || !value.hsShowQuestsWidget }"
+					[ngClass]="{ disabled: !value.enableQuests || !value.hsShowQuestsWidget }"
 					[label]="'settings.general.quests.constructed-on-bg-label' | owTranslate"
 					[tooltip]="'settings.general.quests.constructed-on-bg-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowQuestsWidget"
-					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[ngClass]="{ disabled: !value.enableQuests }"
 					[label]="'settings.general.quests.battlegrounds-label' | owTranslate"
 					[tooltip]="'settings.general.quests.battlegrounds-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
 					field="mercsShowQuestsWidget"
-					[ngClass]="{ 'disabled': !value.enableQuests }"
+					[ngClass]="{ disabled: !value.enableQuests }"
 					[label]="'settings.general.quests.mercenaries-label' | owTranslate"
 					[tooltip]="'settings.general.quests.mercenaries-tooltip' | owTranslate"
 				></preference-toggle>

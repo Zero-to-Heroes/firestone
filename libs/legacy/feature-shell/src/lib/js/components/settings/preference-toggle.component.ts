@@ -18,7 +18,6 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 @Component({
 	selector: 'preference-toggle',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
 		`../../../css/global/toggle.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/preference-toggle.component.scss`,

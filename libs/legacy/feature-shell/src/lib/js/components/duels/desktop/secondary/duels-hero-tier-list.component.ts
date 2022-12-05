@@ -15,10 +15,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
 	selector: 'duels-hero-tier-list',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-hero-tier-list.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-hero-tier-list.component.scss`],
 	template: `
 		<div class="duels-hero-tier-list" *ngIf="tiers$ | async as tiers" scrollable>
 			<div
@@ -83,7 +80,15 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 						hideThreshold,
 					]) =>
 						[
-							filterDuelsHeroStats(duelStats, classFilter, heroPowerFilter, sigTreasureFilter, statType, this.allCards, null),
+							filterDuelsHeroStats(
+								duelStats,
+								classFilter,
+								heroPowerFilter,
+								sigTreasureFilter,
+								statType,
+								this.allCards,
+								null,
+							),
 							statType,
 							hideThreshold,
 						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType, boolean],
@@ -92,7 +97,9 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 				this.mapData(([duelsStats, statType, hideThreshold]) => {
 					const stats = buildDuelsHeroPlayerStats(duelsStats, statType)
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
-						.filter((stat) => (hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true));
+						.filter((stat) =>
+							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+						);
 					return [
 						{
 							label: 'S',
@@ -129,13 +136,18 @@ export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent im
 			);
 	}
 
-	private filterItems(stats: readonly DuelsHeroPlayerStat[], threshold: number, upper: number): readonly DuelsTierItem[] {
+	private filterItems(
+		stats: readonly DuelsHeroPlayerStat[],
+		threshold: number,
+		upper: number,
+	): readonly DuelsTierItem[] {
 		return stats
 			.filter((stat) => stat.globalWinrate)
 			.filter((stat) => stat.globalWinrate >= threshold && stat.globalWinrate < upper)
 			.map((stat) => {
 				const isNeutralHero =
-					stat.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) || stat.cardId.startsWith(CardIds.DrektharTavernBrawl);
+					stat.cardId.startsWith(CardIds.VanndarStormpikeTavernBrawl) ||
+					stat.cardId.startsWith(CardIds.DrektharTavernBrawl);
 				const card = stat.cardId ? this.allCards.getCard(stat.cardId) : null;
 				return {
 					cardId: stat.cardId,

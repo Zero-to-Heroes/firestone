@@ -15,10 +15,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 
 @Component({
 	selector: 'achievements-list',
-	styleUrls: [
-		`../../../css/component/achievements/achievements-list.component.scss`,
-		`../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../css/component/achievements/achievements-list.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div

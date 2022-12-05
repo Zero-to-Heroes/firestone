@@ -1,7 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { DuelsHeroInfoTopDeck, DuelsSignatureTreasureInfo } from '@components/overlays/duels-ooc/duels-hero-info';
-import { allDuelsHeroes, CardIds, duelsHeroConfigs, normalizeDuelsHeroCardId, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	allDuelsHeroes,
+	CardIds,
+	duelsHeroConfigs,
+	normalizeDuelsHeroCardId,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { DuelsTimeFilterSelectedEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsHeroPlayerStat } from '@models/duels/duels-player-stats';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -19,10 +25,7 @@ import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-signature-treasure-selection',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-signature-treasure-selection.component.scss'],
 	template: `
 		<div class="container" *ngIf="signatureTreasures$ | async as signatureTreasures">
 			<div class="cell" *ngFor="let signatureTreasure of signatureTreasures; trackBy: trackByFn">
@@ -40,7 +43,10 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatSignatureTreasureSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsOutOfCombatSignatureTreasureSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
+{
 	signatureTreasures$: Observable<readonly ReferenceCard[]>;
 	signatureTreasureInfo$: Observable<DuelsSignatureTreasureInfo>;
 
@@ -125,7 +131,9 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent extends Abstrac
 									'signature-treasure',
 								),
 							);
-							const stat: DuelsHeroPlayerStat = stats.find((s) => s.cardId === currentSignatureTreasureCardId);
+							const stat: DuelsHeroPlayerStat = stats.find(
+								(s) => s.cardId === currentSignatureTreasureCardId,
+							);
 							if (!stat) {
 								console.warn('missing stat', currentSignatureTreasureCardId, stats);
 								return null;
@@ -203,11 +211,14 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent extends Abstrac
 					return null;
 				}
 
-				const heroPowerConfig = duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(heroPowerCardId as CardIds));
+				const heroPowerConfig = duelsHeroConfigs.find((conf) =>
+					conf.heroPowers?.includes(heroPowerCardId as CardIds),
+				);
 				const result = allStats.find(
 					(stat) =>
 						stat?.cardId === currentSignatureTreasureCardId &&
-						normalizeDuelsHeroCardId(stat?.stat?.heroCardId) === normalizeDuelsHeroCardId(heroPowerConfig?.hero),
+						normalizeDuelsHeroCardId(stat?.stat?.heroCardId) ===
+							normalizeDuelsHeroCardId(heroPowerConfig?.hero),
 				)?.stat;
 				// console.log('result', currentSignatureTreasureCardId, result, allStats);
 				if (!!result) {
@@ -216,12 +227,15 @@ export class DuelsOutOfCombatSignatureTreasureSelectionComponent extends Abstrac
 
 				const heroConfig = duelsHeroConfigs.find(
 					(conf) =>
-						conf.signatureTreasures?.includes(currentSignatureTreasureCardId as CardIds) && conf.hero === heroPowerConfig?.hero,
+						conf.signatureTreasures?.includes(currentSignatureTreasureCardId as CardIds) &&
+						conf.hero === heroPowerConfig?.hero,
 				);
-				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map((value, index) => ({
-					winNumber: index,
-					value: 0,
-				}));
+				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
+					(value, index) => ({
+						winNumber: index,
+						value: 0,
+					}),
+				);
 				return {
 					cardId: currentSignatureTreasureCardId,
 					heroCardId: heroConfig?.hero,

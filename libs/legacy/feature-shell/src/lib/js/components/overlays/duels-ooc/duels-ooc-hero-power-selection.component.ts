@@ -19,21 +19,28 @@ import { filter } from 'rxjs/operators';
 
 @Component({
 	selector: 'duels-ooc-hero-power-selection',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/duels-ooc/duels-ooc-hero-power-selection.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/duels-ooc/duels-ooc-hero-power-selection.component.scss'],
 	template: `
 		<div class="container" *ngIf="heroPowers$ | async as heroPowers">
 			<div class="cell" *ngFor="let heroPower of heroPowers; trackBy: trackByFn">
-				<div class="empty-card" (mouseenter)="onMouseEnter(heroPower.id)" (mouseleave)="onMouseLeave(heroPower.id, $event)"></div>
+				<div
+					class="empty-card"
+					(mouseenter)="onMouseEnter(heroPower.id)"
+					(mouseleave)="onMouseLeave(heroPower.id, $event)"
+				></div>
 			</div>
 		</div>
-		<duels-hero-power-info *ngIf="heroPowerInfo$ | async as heroPowerInfo" [heroPowerInfo]="heroPowerInfo"></duels-hero-power-info>
+		<duels-hero-power-info
+			*ngIf="heroPowerInfo$ | async as heroPowerInfo"
+			[heroPowerInfo]="heroPowerInfo"
+		></duels-hero-power-info>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatHeroPowerSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsOutOfCombatHeroPowerSelectionComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
+{
 	heroPowers$: Observable<readonly ReferenceCard[]>;
 	heroPowerInfo$: Observable<DuelsHeroPowerInfo>;
 
@@ -70,7 +77,11 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent extends AbstractSubscri
 			),
 		).pipe(
 			this.mapData(
-				([runs, allHeroPowerCards, [duelStats, duelsTopDecks, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch]]) => {
+				([
+					runs,
+					allHeroPowerCards,
+					[duelStats, duelsTopDecks, mmrPercentiles, adventuresInfo, mmrFilter, dustFilter, patch],
+				]) => {
 					return allHeroPowerCards
 						.map((card) => card.id)
 						.map((currentHeroPowerCardId) => {
@@ -141,7 +152,8 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent extends AbstractSubscri
 								});
 							// Remove duplicate decklists
 							const groupedDecks = groupByFunction(
-								(deck: DuelsHeroInfoTopDeck) => `${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
+								(deck: DuelsHeroInfoTopDeck) =>
+									`${deck.decklist}-${deck.heroPowerCardId}-${deck.signatureTreasureCardId}`,
 							)(heroPowerDecks);
 							const uniqueDecks = Object.values(groupedDecks).map((decks) => decks[0]);
 							const card = this.allCards.getCard(currentHeroPowerCardId);
@@ -176,11 +188,15 @@ export class DuelsOutOfCombatHeroPowerSelectionComponent extends AbstractSubscri
 					return result;
 				}
 
-				const heroConfig = duelsHeroConfigs.find((conf) => conf.heroPowers?.includes(currentHeroPowerCardId as CardIds));
-				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map((value, index) => ({
-					winNumber: index,
-					value: 0,
-				}));
+				const heroConfig = duelsHeroConfigs.find((conf) =>
+					conf.heroPowers?.includes(currentHeroPowerCardId as CardIds),
+				);
+				const emptyWinDistribution: readonly { winNumber: number; value: number }[] = [...Array(13).keys()].map(
+					(value, index) => ({
+						winNumber: index,
+						value: 0,
+					}),
+				);
 				return {
 					cardId: currentHeroPowerCardId,
 					heroCardId: heroConfig?.hero,

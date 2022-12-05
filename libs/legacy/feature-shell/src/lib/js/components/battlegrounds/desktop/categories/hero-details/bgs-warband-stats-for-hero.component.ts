@@ -12,7 +12,6 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 @Component({
 	selector: 'bgs-warband-stats-for-hero',
 	styleUrls: [
-		`../../../../../../css/global/reset-styles.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-warband-stats-for-hero.component.scss`,
 	],
 	template: `

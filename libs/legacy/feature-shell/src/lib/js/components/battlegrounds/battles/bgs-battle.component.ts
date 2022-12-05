@@ -42,11 +42,7 @@ import { BgsSimulatorQuestRewardSelectionComponent } from './bgs-simulator-quest
 declare let amplitude;
 @Component({
 	selector: 'bgs-battle',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-battle.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/battles/bgs-battle.component.scss`],
 	template: `
 		<div class="bgs-battle {{ additionalClass }}" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
 			<div class="turn-label" *ngIf="turnNumber">

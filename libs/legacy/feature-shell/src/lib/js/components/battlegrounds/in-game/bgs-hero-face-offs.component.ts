@@ -10,11 +10,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'bgs-hero-face-offs',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-hero-face-offs.component.scss`,
-		`../../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-hero-face-offs.component.scss`],
 	template: `
 		<div class="face-offs" scrollable>
 			<div class="header entry">

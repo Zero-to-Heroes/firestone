@@ -152,7 +152,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 @Component({
 	selector: 'hs-quests-list',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		`../../../../css/themes/decktracker-theme.scss`,
 		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/overlays/quests/quests-widget-view.component.scss',

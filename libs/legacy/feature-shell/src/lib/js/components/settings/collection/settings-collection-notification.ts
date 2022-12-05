@@ -8,7 +8,6 @@ import { Knob } from '../preference-slider.component';
 @Component({
 	selector: 'settings-collection-notification',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
 		`../../../../css/global/forms.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
@@ -53,7 +52,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</section>
 			<!-- For now we group them all together to avoid needless clutter of the tabs -->
-			<section class="settings-group toggle-label" [ngClass]="{ 'disabled': !(enableNotifications$ | async) }">
+			<section class="settings-group toggle-label" [ngClass]="{ disabled: !(enableNotifications$ | async) }">
 				<h2 class="modes" [owTranslate]="'settings.collection.general.selective-notifications-label'"></h2>
 				<preference-toggle
 					field="showDust"

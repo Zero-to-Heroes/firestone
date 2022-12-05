@@ -7,10 +7,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 
 @Component({
 	selector: 'opponent-card-info-id',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/opponenthand/opponent-card-info-id.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/opponenthand/opponent-card-info-id.component.scss'],
 	template: `
 		<div
 			class="opponent-card-info-id"

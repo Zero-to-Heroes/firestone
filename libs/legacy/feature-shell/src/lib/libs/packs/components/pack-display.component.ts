@@ -4,12 +4,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 
 @Component({
 	selector: 'pack-display',
-	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/global/forms.scss`,
-		`../../../css/global/toggle.scss`,
-		`./pack-display.component.scss`,
-	],
+	styleUrls: [`../../../css/global/forms.scss`, `../../../css/global/toggle.scss`, `./pack-display.component.scss`],
 	template: `
 		<div class="pack-display" *ngIf="cards?.length">
 			<div

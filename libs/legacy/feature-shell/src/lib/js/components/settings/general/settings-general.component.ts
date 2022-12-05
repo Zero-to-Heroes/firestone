@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-general',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/general/settings-general.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/general/settings-general.component.scss`],
 	template: `
 		<ul class="general">
 			<settings-general-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

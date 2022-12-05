@@ -9,10 +9,7 @@ declare let amplitude: any;
 
 @Component({
 	selector: 'bgs-battle-status',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-battle-status.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-battle-status.component.scss`],
 	template: `
 		<div class="battle-simulation">
 			<div
@@ -123,7 +120,7 @@ declare let amplitude: any;
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
-						[ngClass]="{ 'active': wonLethalChance && battleSimulationWonLethalChance > 0 }"
+						[ngClass]="{ active: wonLethalChance && battleSimulationWonLethalChance > 0 }"
 					>
 						{{ wonLethalChance || '--' }}
 					</div>
@@ -135,7 +132,7 @@ declare let amplitude: any;
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
 					<div
 						class="damage-value"
-						[ngClass]="{ 'active': lostLethalChance && battleSimulationLostLethalChance > 0 }"
+						[ngClass]="{ active: lostLethalChance && battleSimulationLostLethalChance > 0 }"
 					>
 						{{ lostLethalChance || '--' }}
 					</div>
@@ -313,7 +310,7 @@ export class BgsBattleStatusComponent {
 			try {
 				if (amplitude) {
 					amplitude.getInstance().logEvent('bgsSimulation', {
-						'bgsSimulationId': id,
+						bgsSimulationId: id,
 					});
 				}
 			} catch (e) {}

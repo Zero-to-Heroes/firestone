@@ -9,10 +9,7 @@ declare let amplitude;
 
 @Component({
 	selector: 'achievements-categories',
-	styleUrls: [
-		`../../../css/component/achievements/achievements-categories.component.scss`,
-		`../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../css/component/achievements/achievements-categories.component.scss`],
 	template: `
 		<div class="achievements-categories" scrollable>
 			<ul class="categories">
@@ -50,7 +47,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionCompone
 	}
 
 	selectCategory(category: VisualAchievementCategory) {
-		amplitude.getInstance().logEvent('achievement-category', { 'categoryId': category.id });
+		amplitude.getInstance().logEvent('achievement-category', { categoryId: category.id });
 		this.store.send(new SelectAchievementCategoryEvent(category.id));
 	}
 

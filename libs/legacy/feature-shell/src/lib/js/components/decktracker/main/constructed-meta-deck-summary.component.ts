@@ -9,7 +9,6 @@ import { sortByProperties } from '../../../services/utils';
 @Component({
 	selector: 'constructed-meta-deck-summary',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/global/menu.scss`,

@@ -4,10 +4,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'secrets-helper-control-bar',
-	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/secrets-helper/secrets-helper-control-bar.component.scss',
-	],
+	styleUrls: ['../../../css/component/secrets-helper/secrets-helper-control-bar.component.scss'],
 	template: `
 		<div class="control-bar">
 			<div class="title" [owTranslate]="'decktracker.secrets-helper.title'"></div>

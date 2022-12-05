@@ -13,11 +13,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 
 @Component({
 	selector: 'bgs-next-opponent-overview',
-	styleUrls: [
-		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/global/scrollbar.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`],
 	template: `
 		<div
 			class="container"

@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'minion-on-board-overlay',
-	styleUrls: [
-		'../../../../css/global/components-global.scss',
-		'../../../../css/component/overlays/board/minion-on-board-overlay.component.scss',
-	],
+	styleUrls: ['../../../../css/component/overlays/board/minion-on-board-overlay.component.scss'],
 	template: `
 		<div class=" card">
 			<div class="turn-number-container">

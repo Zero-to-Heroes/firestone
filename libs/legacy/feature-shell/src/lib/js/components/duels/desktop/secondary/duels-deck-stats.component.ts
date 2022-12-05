@@ -7,10 +7,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 
 @Component({
 	selector: 'duels-deck-stats',
-	styleUrls: [
-		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-deck-stats.component.scss`,
-	],
+	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-deck-stats.component.scss`],
 	template: `
 		<div class="duels-deck-stats" *ngIf="deckInfo$ | async as deckInfo">
 			<div class="title" [owTranslate]="'app.duels.deck-stat.title'"></div>

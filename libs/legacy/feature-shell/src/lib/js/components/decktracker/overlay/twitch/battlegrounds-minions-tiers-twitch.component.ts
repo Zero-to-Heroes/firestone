@@ -22,7 +22,6 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 @Component({
 	selector: 'battlegrounds-minions-tiers-twitch',
 	styleUrls: [
-		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component.scss',
@@ -45,7 +44,8 @@ import { AbstractSubscriptionTwitchResizableComponent } from './abstract-subscri
 })
 export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	extends AbstractSubscriptionTwitchResizableComponent
-	implements AfterContentInit, OnDestroy, AfterViewInit {
+	implements AfterContentInit, OnDestroy, AfterViewInit
+{
 	tiers$: Observable<readonly Tier[]>;
 	currentTurn$: Observable<number>;
 	showGoldenCards$: Observable<boolean>;

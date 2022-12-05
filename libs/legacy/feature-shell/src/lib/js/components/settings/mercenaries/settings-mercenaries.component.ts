@@ -2,10 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-mercenaries',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/mercenaries/settings-mercenaries.component.scss`,
-	],
+	styleUrls: [`../../../../css/component/settings/mercenaries/settings-mercenaries.component.scss`],
 	template: `
 		<div class="mercenaries">
 			<settings-mercenaries-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">

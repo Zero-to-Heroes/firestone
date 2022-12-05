@@ -23,7 +23,6 @@ import { uuid } from '../../../services/utils';
 @Component({
 	selector: 'deck-card',
 	styleUrls: [
-		'../../../../css/global/components-global.scss',
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 		'../../../../css/component/decktracker/overlay/deck-card.component.scss',
 	],
