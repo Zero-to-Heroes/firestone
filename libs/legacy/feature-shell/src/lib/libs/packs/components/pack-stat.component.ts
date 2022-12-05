@@ -13,6 +13,7 @@ import { PackStatTooltipComponent } from './pack-stat-tooltip.component';
 			componentTooltip
 			[componentType]="componentType"
 			[componentInput]="_pack"
+			[componentTooltipAllowMouseOver]="true"
 		>
 			<div class="icon-container">
 				<img class="icon" [src]="icon" />

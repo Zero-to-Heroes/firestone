@@ -81,13 +81,14 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 
 	async ngAfterContentInit() {
 		this.showOnlyBuyablePacks$ = this.listenForBasicPref$((prefs) => prefs.collectionShowOnlyBuyablePacks);
-		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest(
+		const packs$: Observable<readonly InternalPackInfo[]> = combineLatest([
 			this.store.listen$(
 				([main, nav]) => main.binder.packsFromMemory,
 				([main, nav]) => main.binder.packStats,
 			),
-		).pipe(
-			this.mapData(([[packsFromMemory, packStats]]) =>
+			this.store.listenPrefs$((prefs) => prefs.collectionPityTimerResets),
+		]).pipe(
+			this.mapData(([[packsFromMemory, packStats], [collectionPityTimerResets]]) =>
 				Object.values(BoosterType)
 					.filter((boosterId: BoosterType) => !isNaN(boosterId))
 					.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
@@ -97,14 +98,21 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 						const totalPacksReceived = packFromMemory?.totalObtained;
 						const unopenedPacks = packFromMemory?.unopened ?? 0;
 						const openedPacks = totalPacksReceived - unopenedPacks;
+						const pityTimerReset = collectionPityTimerResets[boosterId];
 						const result = {
 							packType: boosterId,
 							totalObtained: totalPacksReceived ?? 0,
 							unopened: unopenedPacks,
 							name: boosterIdToBoosterName(boosterId, this.i18n),
 							setId: boosterIdToSetId(boosterId),
-							nextLegendary: buildPityTimer(packsForBoosterId, 'legendary', boosterId, openedPacks),
-							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId, openedPacks),
+							nextLegendary: buildPityTimer(
+								packsForBoosterId,
+								'legendary',
+								boosterId,
+								openedPacks,
+								pityTimerReset,
+							),
+							nextEpic: buildPityTimer(packsForBoosterId, 'epic', boosterId, openedPacks, pityTimerReset),
 						} as InternalPackInfo;
 						return result;
 					})
@@ -258,6 +266,7 @@ const buildPityTimer = (
 	type: 'legendary' | 'epic',
 	boosterId: BoosterType,
 	totalOpenedPacks: number,
+	pityTimerReset: number | null,
 ): number => {
 	const hasAlreadyOpenedLegendary = openedPacks.flatMap((p) => p.cards).some((card) => card.cardRarity === type);
 	let valueIfNoPacksOpened =
@@ -270,6 +279,9 @@ const buildPityTimer = (
 			? 10
 			: LEGENDARY_PITY_TIMER;
 	for (let i = 0; i < openedPacks.length; i++) {
+		if (pityTimerReset != null && new Date(openedPacks[i].creationDate).getTime() < pityTimerReset) {
+			break;
+		}
 		if (openedPacks[i].cards.some((card) => card.cardRarity === type)) {
 			break;
 		}

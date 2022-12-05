@@ -14,7 +14,7 @@ export class GenericPreferencesUpdateProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const prefs = await this.prefs.getPreferences();
-		const newPrefs = event.patcher(prefs);
+		const newPrefs = await event.patcher(prefs);
 		await this.prefs.savePreferences(newPrefs);
 		return [null, null];
 	}

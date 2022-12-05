@@ -137,6 +137,8 @@ export class Preferences {
 	readonly collectionCardOwnedFilter: CollectionCardOwnedFilterType = 'all';
 	readonly collectionShowRelatedCards: boolean = true;
 
+	readonly collectionPityTimerResets: { [packId: string]: number } = {};
+
 	readonly desktopDeckFilters: DeckFilters;
 	readonly desktopDeckShowHiddenDecks: boolean = false;
 	readonly desktopDeckHiddenDeckCodes: readonly string[] = [];

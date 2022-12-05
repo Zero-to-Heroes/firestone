@@ -5,11 +5,13 @@ import {
 	ChangeDetectorRef,
 	Directive,
 	ElementRef,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Directive({
 	selector: '[componentTooltip]',
@@ -54,6 +56,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		this.updatePositionStrategy();
 	}
 
+	@Input() componentTooltipAllowMouseOver = false;
+
 	private _position:
 		| 'bottom'
 		| 'right'
@@ -66,6 +70,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
+
+	private tooltipLeaveSub: Subscription;
 
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
@@ -117,14 +123,19 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.onMouseLeave(true);
+		this.onMouseLeave(null, true);
+		this.tooltipLeaveSub?.unsubscribe();
 	}
 
 	private hideTimeout;
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.log('mouseenter', this._componentInput);
+		// Typically the case when mousing over the tooltip
+		if (this.overlayRef.hasAttached()) {
+			return;
+		}
+
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout);
 		}
@@ -136,6 +147,11 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Pass content to tooltip component instance
 		tooltipRef.instance.config = this._componentInput;
+		if (tooltipRef.instance.mouseLeave) {
+			this.tooltipLeaveSub = (tooltipRef.instance.mouseLeave as EventEmitter<MouseEvent>).subscribe((leave) =>
+				this.onMouseLeave(leave),
+			);
+		}
 
 		this.positionStrategy.apply();
 
@@ -147,14 +163,22 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		// on screen.
 		// So we add a timeout to hide the card automatically after a while
 		this.hideTimeout = setTimeout(() => {
-			this.onMouseLeave();
+			this.onMouseLeave(null);
 		}, 15_000);
 	}
 
-	@HostListener('mouseleave')
-	onMouseLeave(willBeDestroyed = false) {
-		// console.log('mouseleave', this._componentInput, new Error().stack);
+	@HostListener('mouseleave', ['$event'])
+	onMouseLeave(event: MouseEvent, willBeDestroyed = false) {
+		if (
+			this.componentTooltipAllowMouseOver &&
+			(event?.relatedTarget as HTMLDivElement)?.classList?.contains('pack-stat-tooltip')
+		) {
+			return;
+		}
+
 		if (this.hideTimeout) {
+			// return;
+			// console.log('mouseleave', this._componentInput, new Error().stack);
 			clearTimeout(this.hideTimeout);
 		}
 

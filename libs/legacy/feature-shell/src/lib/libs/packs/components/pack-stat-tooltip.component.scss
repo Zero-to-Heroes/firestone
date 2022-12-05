@@ -1,6 +1,10 @@
 @import '../../../css/global/variables';
 @import '../../../css/global/fonts';
 
+:host {
+	pointer-events: all;
+}
+
 .pack-stat-tooltip {
 	display: flex;
 	flex-direction: column;
@@ -89,6 +93,32 @@
 	.legendary {
 		.progress-bar-filled {
 			background-color: #ff8f3b;
+		}
+	}
+}
+
+.pity-timers-reset-container {
+	font-size: 13px;
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+
+	button {
+		background: var(--color-2);
+		color: var(--color-5);
+		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: 'Open Sans', sans-serif;
+		padding: 10px;
+		flex-basis: 50%;
+		height: 100%;
+		width: fit-content;
+		align-self: center;
+
+		&:hover {
+			background: var(--color-1);
 		}
 	}
 }
