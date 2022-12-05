@@ -51,7 +51,12 @@ export class BgsBattleSimulationService {
 		}
 	}
 
-	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[], currentTurn: number) {
+	public async startBgsBattleSimulation(
+		battleId: string,
+		battleInfo: BgsBattleInfo,
+		races: readonly Race[],
+		currentTurn: number,
+	) {
 		const prefs = await this.prefs?.getPreferences();
 		if (!prefs.bgsEnableSimulation || !prefs.bgsFullToggle) {
 			console.log('[bgs-simulation] simulation turned off');
@@ -81,6 +86,7 @@ export class BgsBattleSimulationService {
 		console.log('[bgs-simulation] battle simulation result', result);
 		this.stateUpdater.next(
 			new BattlegroundsBattleSimulationEvent(
+				battleId,
 				result,
 				normalizeHeroCardId(battleInfoInput.opponentBoard.player.nonGhostCardId, this.cards),
 			),

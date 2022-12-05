@@ -1,5 +1,6 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
+import { NonFunctionProperties } from '@legacy-import/src/lib/js/services/utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
@@ -23,11 +24,11 @@ export class BgsGame {
 	readonly liveStats: RealTimeStatsState;
 	readonly gameEnded: boolean;
 
-	public static create(base: BgsGame): BgsGame {
+	public static create(base: Partial<NonFunctionProperties<BgsGame>>): BgsGame {
 		return Object.assign(new BgsGame(), base);
 	}
 
-	public update(base: BgsGame) {
+	public update(base: Partial<NonFunctionProperties<BgsGame>>) {
 		return Object.assign(new BgsGame(), this, base);
 	}
 
@@ -57,114 +58,118 @@ export class BgsGame {
 		return mainPlayer;
 	}
 
-	public updateLastFaceOff(
-		opponentHeroCardId: string,
-		faceOff: BgsFaceOffWithSimulation,
-		createIfMissing = false,
-	): BgsGame {
-		// clean empty properties in the input face-off, to avoid destructive merges (as the input is partial)
-		for (const propName in faceOff) {
-			if (faceOff[propName] === null || faceOff[propName] === undefined) {
-				delete faceOff[propName];
-			}
-		}
-
-		if (!this.faceOffs?.length && !createIfMissing) {
-			console.error(
-				'[face-off] [bgs-next-opponent] trying to update non-existing face-off',
-				this.faceOffs,
-				faceOff,
-			);
-			return this;
-		}
-
-		console.log(
-			'[face-off] trying to update face-off',
-			opponentHeroCardId,
-			createIfMissing,
-			faceOff,
-			this.faceOffs,
-		);
-		const matchingFaceOffs = this.faceOffs
-			.filter((f) => f.opponentCardId === opponentHeroCardId)
-			.filter((f) => (!!faceOff.turn ? f.turn === faceOff.turn || !f.turn : true))
-			.filter((f) => {
-				if (faceOff.battleInfo) {
-					return !f.battleInfo;
-				}
-				if (faceOff.battleResult) {
-					return !f.battleResult;
-				}
-				if (faceOff.result) {
-					return !f.result;
-				}
-				return true;
-			})
-			.reverse();
-		if (!matchingFaceOffs.length) {
-			if (!createIfMissing) {
-				// Stop logging these as errors, as they happen pretty often during reconnects
-				console.warn(
-					'[face-off] [bgs-next-opponent] no matching face-off',
-					opponentHeroCardId,
-					this.faceOffs.map(
-						(f) =>
-							`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${
-								f.battleInfo != null
-							}, ${f.battleResult != null}`,
-					),
-					new Error().stack,
-				);
-				return this;
-			} else {
-				console.debug('[face-off] created a new face-off', [...this.faceOffs, faceOff]);
-				// Create a new faceOff
-				return this.update({
-					faceOffs: [...this.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
-				} as BgsGame);
-			}
-		}
-
-		const lastFaceOff = matchingFaceOffs[0];
-		const updatedFaceOff = lastFaceOff.update(faceOff);
-		updatedFaceOff.checkIntegrity(this);
-		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = this.faceOffs.map((f) =>
-			f.id === updatedFaceOff.id ? updatedFaceOff : f,
-		);
-		const cleanedFaceOffs = this.removeOldSimulationDetails(updatedFaceOffs);
-		console.debug('[face-off] updated face-offs', cleanedFaceOffs);
-		return this.update({
-			faceOffs: cleanedFaceOffs,
-		} as BgsGame);
+	public printFaceOffs(): string {
+		return this.faceOffs.map((f) => `${f.playerCardId} vs ${f.opponentCardId}`).join(', \n');
 	}
+
+	// public updateLastFaceOff(
+	// 	opponentHeroCardId: string,
+	// 	faceOff: BgsFaceOffWithSimulation,
+	// 	createIfMissing = false,
+	// ): BgsGame {
+	// 	// clean empty properties in the input face-off, to avoid destructive merges (as the input is partial)
+	// 	for (const propName in faceOff) {
+	// 		if (faceOff[propName] === null || faceOff[propName] === undefined) {
+	// 			delete faceOff[propName];
+	// 		}
+	// 	}
+
+	// 	if (!this.faceOffs?.length && !createIfMissing) {
+	// 		console.error(
+	// 			'[face-off] [bgs-next-opponent] trying to update non-existing face-off',
+	// 			this.faceOffs,
+	// 			faceOff,
+	// 		);
+	// 		return this;
+	// 	}
+
+	// 	console.log(
+	// 		'[face-off] trying to update face-off',
+	// 		opponentHeroCardId,
+	// 		createIfMissing,
+	// 		faceOff,
+	// 		this.faceOffs,
+	// 	);
+	// 	const matchingFaceOffs = this.faceOffs
+	// 		.filter((f) => f.opponentCardId === opponentHeroCardId)
+	// 		.filter((f) => (!!faceOff.turn ? f.turn === faceOff.turn || !f.turn : true))
+	// 		.filter((f) => {
+	// 			if (faceOff.battleInfo) {
+	// 				return !f.battleInfo;
+	// 			}
+	// 			if (faceOff.battleResult) {
+	// 				return !f.battleResult;
+	// 			}
+	// 			if (faceOff.result) {
+	// 				return !f.result;
+	// 			}
+	// 			return true;
+	// 		})
+	// 		.reverse();
+	// 	if (!matchingFaceOffs.length) {
+	// 		if (!createIfMissing) {
+	// 			// Stop logging these as errors, as they happen pretty often during reconnects
+	// 			console.warn(
+	// 				'[face-off] [bgs-next-opponent] no matching face-off',
+	// 				opponentHeroCardId,
+	// 				this.faceOffs.map(
+	// 					(f) =>
+	// 						`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${
+	// 							f.battleInfo != null
+	// 						}, ${f.battleResult != null}`,
+	// 				),
+	// 				new Error().stack,
+	// 			);
+	// 			return this;
+	// 		} else {
+	// 			console.debug('[face-off] created a new face-off', [...this.faceOffs, faceOff]);
+	// 			// Create a new faceOff
+	// 			return this.update({
+	// 				faceOffs: [...this.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
+	// 			} as BgsGame);
+	// 		}
+	// 	}
+
+	// 	const lastFaceOff = matchingFaceOffs[0];
+	// 	const updatedFaceOff = lastFaceOff.update(faceOff);
+	// 	updatedFaceOff.checkIntegrity(this);
+	// 	const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = this.faceOffs.map((f) =>
+	// 		f.id === updatedFaceOff.id ? updatedFaceOff : f,
+	// 	);
+	// 	const cleanedFaceOffs = this.removeOldSimulationDetails(updatedFaceOffs);
+	// 	console.debug('[face-off] updated face-offs', cleanedFaceOffs);
+	// 	return this.update({
+	// 		faceOffs: cleanedFaceOffs,
+	// 	} as BgsGame);
+	// }
 
 	// Only include sim samples for the last game to reduce the memory footprint
-	private removeOldSimulationDetails(
-		faceOffs: readonly BgsFaceOffWithSimulation[],
-	): readonly BgsFaceOffWithSimulation[] {
-		if (!faceOffs?.length) {
-			return [];
-		}
-		let hasSamples = false;
-		const reversed = [...faceOffs].reverse();
-		const result = [];
-		for (const faceOff of reversed) {
-			result.push(
-				!hasSamples
-					? faceOff
-					: faceOff.update({ battleResult: { ...faceOff.battleResult, outcomeSamples: undefined } }),
-			);
+	// private removeOldSimulationDetails(
+	// 	faceOffs: readonly BgsFaceOffWithSimulation[],
+	// ): readonly BgsFaceOffWithSimulation[] {
+	// 	if (!faceOffs?.length) {
+	// 		return [];
+	// 	}
+	// 	let hasSamples = false;
+	// 	const reversed = [...faceOffs].reverse();
+	// 	const result = [];
+	// 	for (const faceOff of reversed) {
+	// 		result.push(
+	// 			!hasSamples
+	// 				? faceOff
+	// 				: faceOff.update({ battleResult: { ...faceOff.battleResult, outcomeSamples: undefined } }),
+	// 		);
 
-			if (
-				!!faceOff.battleResult?.outcomeSamples?.lost?.length ||
-				!!faceOff.battleResult?.outcomeSamples?.won?.length ||
-				!!faceOff.battleResult?.outcomeSamples?.tied?.length
-			) {
-				hasSamples = true;
-			}
-		}
-		return result.reverse();
-	}
+	// 		if (
+	// 			!!faceOff.battleResult?.outcomeSamples?.lost?.length ||
+	// 			!!faceOff.battleResult?.outcomeSamples?.won?.length ||
+	// 			!!faceOff.battleResult?.outcomeSamples?.tied?.length
+	// 		) {
+	// 			hasSamples = true;
+	// 		}
+	// 	}
+	// 	return result.reverse();
+	// }
 
 	// Not all players finish their battles at the same time. So you might still be in battle, but
 	// another player might have already gone back to the tavern and levelled up for instance

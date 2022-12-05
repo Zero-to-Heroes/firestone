@@ -1,6 +1,5 @@
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
@@ -35,14 +34,25 @@ export class BgsBattleResultParser implements EventParser {
 			console.error('[bgs-battle-result] missing opponentCardId', event);
 		}
 
-		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
-			// If we're facing the ghost, the plugin returns the original hero card id here
-			normalizeHeroCardId(event.opponentCardId, this.allCards),
-			BgsFaceOffWithSimulation.create({
-				result: event.result,
-				damage: event.damage,
-			}),
-		);
+		const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
+		if (!lastFaceOff) {
+			console.error(
+				'[missing face-off to assign result to',
+				event.opponentCardId,
+				currentState.currentGame.printFaceOffs(),
+			);
+			return currentState;
+		}
+
+		const newFaceOff = lastFaceOff.update({
+			result: event.result,
+			damage: event.damage,
+		});
+		const newFaceOffs = currentState.currentGame.faceOffs.map((f) => (f.id === newFaceOff.id ? newFaceOff : f));
+
+		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.update({
+			faceOffs: newFaceOffs,
+		});
 		const newGame = gameAfterFirstFaceOff.update({
 			lastOpponentCardId: event.opponentCardId,
 		} as BgsGame);

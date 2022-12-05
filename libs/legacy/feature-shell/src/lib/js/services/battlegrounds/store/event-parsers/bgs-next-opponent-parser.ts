@@ -67,7 +67,11 @@ export class BgsNextOpponentParser implements EventParser {
 			.updatePanel(newBattlesPanel)
 			.updatePanel(newNextOpponentPanel)
 			.update({
-				currentGame: currentState.currentGame.updateLastFaceOff(faceOff.opponentCardId, faceOff, true),
+				currentGame: currentState.currentGame.update({
+					// There shouldn't be a case where the next opponent is revelead before the board for the last fight are revealed
+					// The only case that could bug this out is if a "next opponent" event is sent multiple times for the same player
+					faceOffs: [...currentState.currentGame.faceOffs, faceOff],
+				}),
 			} as BattlegroundsState);
 		return result;
 	}

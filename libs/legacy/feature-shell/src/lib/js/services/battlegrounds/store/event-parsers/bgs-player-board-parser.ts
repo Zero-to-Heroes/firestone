@@ -7,7 +7,6 @@ import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
@@ -56,14 +55,20 @@ export class BgsPlayerBoardParser implements EventParser {
 					event.opponentBoard?.board?.map((entity) => entity.CardId),
 				);
 			});
+			// There shouldn't be any case where the board is assigned to a face-off that is not the last, since logs
+			// are procesed in order
+			const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
+			const updatedFaceOff = lastFaceOff.update({
+				battleInfoStatus: 'empty',
+				battleInfoMesage: undefined,
+			});
+			const newFaceOffs = currentState.currentGame.faceOffs.map((f) =>
+				f.id === updatedFaceOff.id ? updatedFaceOff : f,
+			);
 			return currentState.update({
-				currentGame: currentState.currentGame.updateLastFaceOff(
-					normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards),
-					BgsFaceOffWithSimulation.create({
-						battleInfoStatus: 'empty',
-						battleInfoMesage: undefined,
-					}),
-				),
+				currentGame: currentState.currentGame.update({
+					faceOffs: newFaceOffs,
+				}),
 			} as BattlegroundsState);
 		}
 
@@ -104,14 +109,29 @@ export class BgsPlayerBoardParser implements EventParser {
 		}
 
 		const opponentCardId = normalizeHeroCardId(event.opponentBoard.heroCardId, this.allCards);
-		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
-			opponentCardId,
-			BgsFaceOffWithSimulation.create({
-				battleInfo: battleInfo,
-				battleInfoStatus: 'waiting-for-result',
-				battleInfoMesage: isSupported.reason,
-			}),
+		// There shouldn't be any case where the board is assigned to a face-off that is not the last, since logs
+		// are procesed in order
+		const lastFaceOff = currentState.currentGame.faceOffs[currentState.currentGame.faceOffs.length - 1];
+		if (lastFaceOff?.opponentCardId !== opponentCardId) {
+			console.error(
+				'[bgs-player-board-parser] got incorrect matching face-off',
+				lastFaceOff?.opponentCardId,
+				opponentCardId,
+				lastFaceOff,
+			);
+			return currentState;
+		}
+		const updatedFaceOff = lastFaceOff.update({
+			battleInfo: battleInfo,
+			battleInfoStatus: 'waiting-for-result',
+			battleInfoMesage: isSupported.reason,
+		});
+		const newFaceOffs = currentState.currentGame.faceOffs.map((f) =>
+			f.id === updatedFaceOff.id ? updatedFaceOff : f,
 		);
+		const stateAfterFaceOff = currentState.currentGame.update({
+			faceOffs: newFaceOffs,
+		});
 		const newGame = stateAfterFaceOff.update({
 			players: newPlayers,
 		} as BgsGame);
@@ -120,6 +140,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		} as BattlegroundsState);
 
 		this.simulation.startBgsBattleSimulation(
+			updatedFaceOff.id,
 			battleInfo,
 			result?.currentGame?.availableRaces ?? [],
 			result.currentGame?.currentTurn ?? 0,
