@@ -17,6 +17,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"stream": ["./node_modules/stream-browserify"],
 			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
 			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
