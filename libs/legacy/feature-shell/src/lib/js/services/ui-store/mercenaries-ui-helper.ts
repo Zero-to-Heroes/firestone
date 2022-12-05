@@ -324,8 +324,7 @@ const replacePlaceholders = (
 				`mercenaries.filters.pve-difficulty.${MercenariesBountyDifficulty[
 					referenceData.bountySets
 						.flatMap((set) => set.bounties)
-						.find((b) => b.id === visitor.ProceduralBountyId).difficultyMode ??
-						MercenariesBountyDifficulty.NORMAL
+						.find((b) => b.id === visitor.ProceduralBountyId)?.difficultyMode ?? 'unknown'
 				].toLowerCase()}`,
 			),
 		)
