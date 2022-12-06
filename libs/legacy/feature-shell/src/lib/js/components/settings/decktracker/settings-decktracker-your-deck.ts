@@ -270,6 +270,12 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.vanessa-tooltip'),
 		},
 		{
+			id: 'asvedon',
+			field: 'playerAsvedonCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.asvedon-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.asvedon-tooltip'),
+		},
+		{
 			id: 'murozond',
 			field: 'playerMurozondTheInfiniteCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-label'),

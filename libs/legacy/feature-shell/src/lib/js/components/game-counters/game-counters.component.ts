@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { AbyssalCurseCounterDefinition } from '@components/game-counters/definitions/abyssal-curse-counter';
+import { AsvedonCounterDefinition } from '@components/game-counters/definitions/asvedon-counter';
 import { BgsMajordomoCounterDefinition } from '@components/game-counters/definitions/bgs-majordomo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
 import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
@@ -148,6 +149,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MonstrousParrotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'vanessaVanCleef':
 				return VanessaVanCleefCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'asvedon':
+				return AsvedonCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'murozondTheInfinite':
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'parrotMascot':

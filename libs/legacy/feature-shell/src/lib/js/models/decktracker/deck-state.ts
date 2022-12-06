@@ -325,6 +325,12 @@ export class DeckState {
 			.some((card) => card.cardId === CardIds.VanessaVancleefCore);
 	}
 
+	public hasAsvedon() {
+		return [...this.hand, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.AsvedonTheGrandshield);
+	}
+
 	public hasMurozondTheInfinite() {
 		return [...this.hand, ...this.currentOptions]
 			.filter((card) => card.cardId)
