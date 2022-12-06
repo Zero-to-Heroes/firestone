@@ -47,13 +47,16 @@
 				"scripts": [],
 				"webWorkerTsConfig": "apps/legacy/tsconfig.worker.json",
 				"allowedCommonJsDependencies": [
+					"@firestone-hs/build-global-stats/dist/stats-builder",
 					"@firestone-hs/hs-replay-xml-parser/dist/public-api",
+					"@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off",
 					"@firestone-hs/reference-data",
 					"@firestone-hs/simulate-bgs-battle",
 					"@tweenjs/tween.js",
 					"bezier-easing",
 					"deep-equal",
 					"deepmerge",
+					"jszip",
 					"localforage",
 					"pako"
 				]
