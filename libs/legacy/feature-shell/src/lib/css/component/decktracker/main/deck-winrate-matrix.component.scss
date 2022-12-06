@@ -5,7 +5,8 @@
 }
 
 .opponents-popularity {
-	width: calc(100% - var(--winrate-matrix-min-width));
+	width: 100%;
+	min-width: 100px;
 	max-width: 350px;
 	margin-right: 5%;
 	margin-left: 5%;
@@ -34,6 +35,8 @@
 	font-size: 13px;
 	max-width: 500px;
 	min-width: var(--winrate-matrix-min-width);
+	flex-grow: 1;
+	flex-shrink: 0;
 
 	.header {
 		display: flex;
