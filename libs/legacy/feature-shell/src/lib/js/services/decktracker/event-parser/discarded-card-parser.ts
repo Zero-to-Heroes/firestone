@@ -38,6 +38,17 @@ export class DiscardedCardParser implements EventParser {
 			}
 		}
 
+		let board = deck.board;
+		if (!!gameEvent.additionalData.originEntityId) {
+			const originCard = board.find((e) => e.entityId === gameEvent.additionalData.originEntityId);
+			const newOriginCard: DeckCard = !originCard
+				? null
+				: originCard.update({
+						relatedCardIds: [cardId, ...(originCard.relatedCardIds ?? [])],
+				  });
+			board = this.helper.replaceCardInZone(board, newOriginCard);
+		}
+
 		const cardWithZone = card.update({
 			zone: 'DISCARD',
 		} as DeckCard);
@@ -46,6 +57,7 @@ export class DiscardedCardParser implements EventParser {
 			hand: newHand,
 			otherZone: newOther,
 			deck: newDeck,
+			board: board,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

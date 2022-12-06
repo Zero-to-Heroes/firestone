@@ -338,7 +338,11 @@ export class GameEvents {
 				);
 				break;
 			case 'DISCARD_CARD':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.DISCARD_CARD, gameEvent, {
+						originEntityId: gameEvent.Value.AdditionalProps?.OriginEntityId,
+					}),
+				);
 				break;
 			case 'MINIONS_DIED':
 				this.gameEventsEmitter.allEvents.next(
