@@ -43,6 +43,35 @@
 		flex-direction: column;
 		flex-shrink: 0;
 
+		.dk-runes {
+			margin-top: 10px;
+			display: flex;
+			align-items: center;
+
+			.runes-label {
+				color: var(--color-1);
+				font-family: Open Sans;
+				font-size: 14px;
+				margin-right: 10px;
+			}
+
+			.runes-container {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				.rune {
+					width: 28px;
+					position: relative;
+					margin-right: 5px;
+
+					img {
+						width: 100%;
+					}
+				}
+			}
+		}
+
 		.deck-list {
 			margin-top: 15px;
 			padding-right: 20px;

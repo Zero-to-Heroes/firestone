@@ -1,14 +1,22 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
-import { CardClass, CardIds, CardType, GameFormat, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	CardClass,
+	CardIds,
+	CardType,
+	DkruneTypes,
+	GameFormat,
+	Race,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { startWith } from 'rxjs/operators';
+import { share, startWith } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -50,6 +58,16 @@ export const DEFAULT_CARD_HEIGHT = 221;
 								[autofocus]="true"
 							/>
 						</label>
+					</div>
+					<div class="dk-runes" *ngIf="dkRunes$ | async as runes">
+						<div
+							class="runes-label"
+							[owTranslate]="'app.duels.deckbuilder.dk-runes-text'"
+							[helpTooltip]="'app.duels.deckbuilder.dk-runes-tooltip' | owTranslate"
+						></div>
+						<div class="runes-container">
+							<div class="rune" *ngFor="let rune of runes"><img [src]="rune.image" /></div>
+						</div>
 					</div>
 					<deck-list
 						class="deck-list"
@@ -132,7 +150,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentDeckCards$: Observable<readonly string[]>;
 	activeCards$: Observable<DeckBuilderCard[]>;
-	highRes$: Observable<boolean>;
+	// highRes$: Observable<boolean>;
 	showRelatedCards$: Observable<boolean>;
 	maxCardsInDeck$: Observable<number>;
 	deckValid$: Observable<boolean>;
@@ -142,6 +160,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	allowedCards$: Observable<ReferenceCard[]>;
 	collection$: Observable<readonly SetCard[]>;
 	missingDust$: Observable<number>;
+	dkRunes$: Observable<readonly DkRune[]>;
 
 	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
@@ -164,7 +183,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	}
 
 	ngAfterContentInit() {
-		this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
+		// this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
 		this.store
 			.listenPrefs$((prefs) => prefs.collectionCardScale)
@@ -233,6 +252,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				});
 				return result;
 			}),
+			share(),
 		);
 		this.collection$ = this.store
 			.listen$(([main, nav]) => main.binder.allSets)
@@ -241,24 +261,61 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 					([allSets]) =>
 						allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 				),
+				share(),
 			);
 
 		this.searchString$ = this.searchForm.valueChanges.pipe(
 			startWith(null),
 			this.mapData((data: string) => data?.toLowerCase(), null, 50),
+			share(),
 		);
-		this.currentDeckCards$ = this.currentDeckCards.asObservable();
-		this.activeCards$ = combineLatest(
-			this.allowedCards$,
-			this.collection$,
-			this.searchString$,
-			this.currentDeckCards$,
-		).pipe(
+		this.currentDeckCards$ = this.currentDeckCards.asObservable().pipe(
+			this.mapData((info) => info),
+			share(),
+		);
+
+		this.dkRunes$ = this.currentDeckCards$.pipe(
+			this.mapData((cardIds) => {
+				const costs = (cardIds ?? [])
+					.map((cardId) => this.allCards.getCard(cardId))
+					.filter((c) => !!c.additionalCosts)
+					.map((c) => c.additionalCosts);
+
+				const allRuneEntries = costs.flatMap((c) =>
+					Object.entries(c).map((entry) => ({
+						rune: entry[0],
+						quantity: entry[1],
+					})),
+				);
+				const groupedByRune = groupByFunction((rune: any) => rune.rune)(allRuneEntries);
+				const maxRunesByType = Object.keys(groupedByRune).map((rune) => ({
+					rune: rune,
+					max: Math.max(...groupedByRune[rune].map((e) => e.quantity)),
+				}));
+				const result = maxRunesByType
+					.flatMap((info) => Array(info.max).fill(info.rune))
+					.map((rune: string) => ({
+						type: DkruneTypes[rune],
+						image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/runes/${rune.toLowerCase()}.png`,
+					}));
+				return !result?.length ? null : result;
+			}),
+			share(),
+		);
+
+		const allowedCardsAfterDeck$ = combineLatest([this.allowedCards$, this.currentDeckCards$, this.dkRunes$]).pipe(
+			this.mapData(([allCards, deckCards, dkRunes]) => {
+				return allCards
+					.filter((card) => !this.hasMaximumCopies(card.id, deckCards))
+					.filter((card) => this.isCardCompatibleWithRunes(card, dkRunes ?? []));
+			}),
+		);
+
+		this.activeCards$ = combineLatest([allowedCardsAfterDeck$, this.searchString$]).pipe(
 			this.mapData(
-				([allCards, collection, searchString, deckCards]) => {
+				([allowedCards, searchString]) => {
 					const searchFilters = this.extractSearchFilters(searchString);
-					const searchResult = allCards
-						.filter((card) => !this.hasMaximumCopies(card.id, deckCards))
+					const searchResult = allowedCards
 						.filter((card) => this.doesCardMatchSearchFilters(card, searchFilters))
 						.sort(
 							sortByProperties((card: ReferenceCard) => [
@@ -324,6 +381,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				const deckstring = encode(deckDefinition);
 				return deckstring;
 			}),
+			share(),
 		);
 		this.ongoingText$ = combineLatest(this.currentDeckCards$, this.maxCardsInDeck$).pipe(
 			this.mapData(([cards, maxCards]) =>
@@ -360,6 +418,22 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				</ul>
 			</div>
 		`;
+	}
+
+	private isCardCompatibleWithRunes(card: ReferenceCard, dkRunes: readonly DkRune[]): boolean {
+		if (!card.additionalCosts) {
+			return true;
+		}
+		const freeRunes = 3 - dkRunes.length;
+		const runesMissing = Object.entries(card.additionalCosts)
+			.map((entry) => {
+				const rune: DkruneTypes = DkruneTypes[entry[0]];
+				const quantity = entry[1];
+				const missingQuantity = Math.max(0, quantity - dkRunes.filter((r) => r.type === rune).length);
+				return missingQuantity;
+			})
+			.reduce((a, b) => a + b, 0);
+		return runesMissing <= freeRunes;
 	}
 
 	trackByCardId(index: number, item: DeckBuilderCard) {
@@ -539,4 +613,9 @@ interface DeckBuilderCard {
 interface SearchFilters {
 	readonly class: string;
 	readonly text: string;
+}
+
+interface DkRune {
+	readonly type: DkruneTypes;
+	readonly image: string;
 }
