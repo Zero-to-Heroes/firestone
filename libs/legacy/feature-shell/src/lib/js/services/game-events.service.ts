@@ -312,6 +312,7 @@ export class GameEvents {
 									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
 									immune: gameEvent.Value.AdditionalProps.Immune,
+									dormant: gameEvent.Value.AdditionalProps.Dormant,
 							  }
 							: {},
 					),

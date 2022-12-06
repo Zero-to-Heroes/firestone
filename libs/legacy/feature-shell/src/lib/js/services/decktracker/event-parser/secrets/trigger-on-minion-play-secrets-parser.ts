@@ -1,4 +1,4 @@
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
@@ -108,7 +108,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Duplicate);
 		}
 
-		const isDormant = dbCard.mechanics?.includes(GameTag[GameTag.DORMANT]);
+		const isDormant = gameEvent.additionalData.dormant;
 		if (isDormant) {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunes);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveRunesCore);
