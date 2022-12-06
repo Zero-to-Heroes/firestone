@@ -3,7 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { globalEffectTriggersEffects } from '../../hs-utils';
+import { globalEffectTriggers, globalEffectTriggersEffects } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDeckForSpecialCardEffects } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -28,6 +28,11 @@ export class GlobalMinionEffectParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const effectTrigger = globalEffectTriggers.find((e) => e.cardId === cardId);
+		if (effectTrigger?.cardId !== cardId) {
+			console.warn('trying to apply global effect trigger to wrong card', cardId, effectTrigger);
+			return currentState;
+		}
 
 		const refCard = this.allCards.getCard(cardId);
 		const card = DeckCard.create({

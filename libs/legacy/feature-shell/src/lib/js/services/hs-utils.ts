@@ -181,6 +181,10 @@ export const globalEffectTriggers = [
 		effectPrefab: 'AVFX_VannderSpike_Trigger_DeckAE_Super',
 		cardId: CardIds.VanndarStormpike_AV_223,
 	},
+	{
+		effectPrefab: 'ReuseFX_Holy_BuffImpact_Heal_Small_Super',
+		cardId: CardIds.HopeOfQuelthalas,
+	},
 ];
 
 export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
