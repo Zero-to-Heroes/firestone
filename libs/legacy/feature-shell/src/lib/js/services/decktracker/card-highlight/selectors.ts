@@ -99,6 +99,20 @@ export const cardsPlayedThisMatch = (handler: Handler, deckState: DeckState, opt
 			.includes(-(handler.deckCardProvider()?.entityId ?? 0));
 	return result;
 };
+export const minionsDeadSinceLastTurn = (
+	handler: Handler,
+	deckState: DeckState,
+	options?: SelectorOptions,
+): boolean => {
+	const result =
+		deckState?.minionsDeadSinceLastTurn
+			.map((card) => card.entityId)
+			.includes(handler.deckCardProvider()?.entityId) ||
+		deckState?.minionsDeadSinceLastTurn
+			.map((card) => card.entityId)
+			.includes(-(handler.deckCardProvider()?.entityId ?? 0));
+	return result;
+};
 
 const hasMechanic =
 	(mechanic: GameTag) =>

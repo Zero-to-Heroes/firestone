@@ -50,6 +50,7 @@ export class NewTurnParser implements EventParser {
 				? currentState.playerDeck.elementalsPlayedLastTurn
 				: currentState.playerDeck.elementalsPlayedThisTurn,
 			elementalsPlayedThisTurn: 0,
+			minionsDeadSinceLastTurn: !isPlayerActive ? [] : currentState.playerDeck.minionsDeadSinceLastTurn,
 			turnTimings: playerTurnTimings,
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
@@ -61,6 +62,7 @@ export class NewTurnParser implements EventParser {
 				? currentState.opponentDeck.elementalsPlayedLastTurn
 				: currentState.opponentDeck.elementalsPlayedThisTurn,
 			elementalsPlayedThisTurn: 0,
+			minionsDeadSinceLastTurn: isPlayerActive ? [] : currentState.opponentDeck.minionsDeadSinceLastTurn,
 			turnTimings: opponentTurnTimings,
 		} as DeckState);
 

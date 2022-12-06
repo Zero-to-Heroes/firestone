@@ -54,6 +54,7 @@ import {
 	magnetic,
 	mech,
 	minion,
+	minionsDeadSinceLastTurn,
 	murloc,
 	naga,
 	nature,
@@ -548,6 +549,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, shadow);
 			case CardIds.HighAbbessAlura:
 				return and(inDeck, spell);
+			case CardIds.HighCultistBasaleph:
+				return and(minionsDeadSinceLastTurn);
 			case CardIds.HoldTheLineTavernBrawl:
 				return and(taunt);
 			case CardIds.Hullbreaker:

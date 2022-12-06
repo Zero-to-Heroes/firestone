@@ -94,5 +94,5 @@ export class GameState {
 export interface ShortCard {
 	readonly entityId: number;
 	readonly cardId: string;
-	readonly side: 'player' | 'opponent';
+	readonly side?: 'player' | 'opponent';
 }

@@ -84,6 +84,7 @@ export class DeckState {
 	readonly relicsPlayedThisMatch: number = 0;
 	readonly heroPowerDamageThisMatch: number = 0;
 	readonly heroAttacksThisMatch: number = 0;
+	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

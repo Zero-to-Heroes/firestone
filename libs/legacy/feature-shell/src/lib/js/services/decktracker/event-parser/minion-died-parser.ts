@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { GameState } from '../../../models/decktracker/game-state';
+import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { MinionsDiedEvent } from '../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -40,6 +40,10 @@ export class MinionDiedParser implements EventParser {
 				elwynnBoarsDeadThisMatch: deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.ElwynnBoar ? 1 : 0),
 				volatileSkeletonsDeadThisMatch:
 					deck.volatileSkeletonsDeadThisMatch + (cardId === CardIds.VolatileSkeleton ? 1 : 0),
+				minionsDeadSinceLastTurn: [
+					...deck.minionsDeadSinceLastTurn,
+					{ cardId: cardId, entityId: entityId },
+				] as readonly ShortCard[],
 			} as DeckState);
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
