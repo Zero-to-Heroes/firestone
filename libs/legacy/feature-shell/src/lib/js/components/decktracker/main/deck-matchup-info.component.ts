@@ -103,7 +103,9 @@ export class DeckMatchupInfoComponent {
 		}
 
 		const isTotalRow = this._matchup.opponentClass.toLowerCase() === 'total';
-		this.icon = isTotalRow ? null : `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
+		this.icon = isTotalRow
+			? null
+			: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
 		this.className =
 			this._matchup.opponentClass?.toLowerCase() === 'total'
 				? this.i18n.translateString('app.decktracker.matchup-info.total-header')

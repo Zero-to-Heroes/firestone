@@ -11,7 +11,7 @@ export type CollectionCardOwnedFilterType =
 	| 'notcompleted';
 export type CollectionCardClassFilterType =
 	| 'all'
-	// | 'deathknight'
+	| 'deathknight'
 	| 'demonhunter'
 	| 'druid'
 	| 'hunter'

@@ -1,5 +1,6 @@
 export type ArenaClassFilterType =
 	| 'all'
+	| 'deathknight'
 	| 'demonhunter'
 	| 'druid'
 	| 'hunter'

@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 export const CARDS_VERSION = '';
 
 export const classes = [
-	// 'deathknight',
+	'deathknight',
 	'demonhunter',
 	'druid',
 	'hunter',
@@ -33,7 +33,7 @@ export const classes = [
 	'warrior',
 ];
 export const classesForPieChart = [
-	// 'deathknight',
+	'deathknight',
 	'rogue',
 	'druid',
 	'hunter',
@@ -1066,8 +1066,8 @@ export const COUNTERSPELLS = [
 
 export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 	switch (playerClass?.toLowerCase()) {
-		// case 'deathknight':
-		// 	return 93448;
+		case 'deathknight':
+			return 78065;
 		case 'demonhunter':
 			return 56550;
 		case 'druid':
@@ -1153,6 +1153,8 @@ export const normalizeDeckHeroDbfId = (
 
 	// Used for all the skins
 	switch (playerClass) {
+		case CardClass.DEATHKNIGHT:
+			return 78065;
 		case CardClass.DEMONHUNTER:
 			return 56550;
 		case CardClass.DRUID:
