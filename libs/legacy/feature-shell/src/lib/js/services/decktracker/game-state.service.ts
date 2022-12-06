@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
+import { AttackParser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/attack-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { EntityChosenParser } from '@services/decktracker/event-parser/entity-chosen-parser';
@@ -581,6 +582,7 @@ export class GameStateService {
 			new DataScriptChangedParser(this.helper, this.allCards),
 			new ChoosingOptionsParser(),
 			new DeathrattleTriggeredParser(),
+			new AttackParser(this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
 			new CardDredgedParser(this.helper, this.allCards, this.i18n),

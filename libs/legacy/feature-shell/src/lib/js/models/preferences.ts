@@ -385,6 +385,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerShockspitterCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerParrotMascotCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerParrotMascotCounterWidgetPosition: { left: number; top: number };

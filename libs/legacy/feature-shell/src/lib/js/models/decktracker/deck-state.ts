@@ -83,6 +83,7 @@ export class DeckState {
 	readonly volatileSkeletonsDeadThisMatch: number = 0;
 	readonly relicsPlayedThisMatch: number = 0;
 	readonly heroPowerDamageThisMatch: number = 0;
+	readonly heroAttacksThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -330,6 +331,12 @@ export class DeckState {
 				(card) =>
 					card.cardId === CardIds.MurozondTheInfinite || card.cardId === CardIds.MurozondTheInfiniteCore,
 			);
+	}
+
+	public hasShockspitter() {
+		return [...this.hand, ...this.deck, ...this.currentOptions]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.Shockspitter);
 	}
 
 	public hasParrotMascot() {

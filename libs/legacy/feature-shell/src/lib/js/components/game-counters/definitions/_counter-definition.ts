@@ -33,6 +33,7 @@ export type CounterType =
 	| 'ladyDarkvein'
 	| 'greySageParrot'
 	| 'heroPowerDamage'
+	| 'shockspitter'
 	| 'multicaster'
 	| 'si7Counter'
 	| 'elwynnBoar'

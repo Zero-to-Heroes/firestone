@@ -456,6 +456,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
@@ -1497,6 +1498,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerMonstrousParrotWidgetWrapperComponent,
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
+		PlayerShockspitterWidgetWrapperComponent,
 		PlayerParrotMascotWidgetWrapperComponent,
 		PlayerQueensguardWidgetWrapperComponent,
 		PlayerSpectralPillagerWidgetWrapperComponent,

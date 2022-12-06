@@ -90,6 +90,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-monstrous-parrot-widget-wrapper></player-monstrous-parrot-widget-wrapper>
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
+			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>
 			<player-parrot-mascot-widget-wrapper></player-parrot-mascot-widget-wrapper>
 			<player-queensguard-widget-wrapper></player-queensguard-widget-wrapper>
 			<player-spectral-pillager-widget-wrapper></player-spectral-pillager-widget-wrapper>

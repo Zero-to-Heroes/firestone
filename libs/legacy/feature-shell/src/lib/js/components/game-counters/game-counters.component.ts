@@ -4,6 +4,7 @@ import { BgsMajordomoCounterDefinition } from '@components/game-counters/definit
 import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
 import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
 import { GreySageParrotCounterDefinition } from '@components/game-counters/definitions/grey-sage-parrot-counter';
+import { ShockspitterCounterDefinition } from '@components/game-counters/definitions/shockspitter-counter';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
@@ -165,6 +166,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return CoralKeeperCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'heroPowerDamage':
 				return HeroPowerDamageCounterDefinition.create(gameState, side, this.i18n);
+			case 'shockspitter':
+				return ShockspitterCounterDefinition.create(gameState, side, this.i18n);
 			case 'si7Counter':
 				return Si7CounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			default:
