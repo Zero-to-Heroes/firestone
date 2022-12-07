@@ -399,6 +399,14 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAnachronosCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerBonelordFrostwhisperCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBonelordFrostwhisperCounterWidgetPosition: { left: number; top: number };
+
+	readonly opponentBonelordFrostwhisperCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentBonelordFrostwhisperCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerShockspitterCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };

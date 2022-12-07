@@ -340,6 +340,12 @@ export class SettingsDecktrackerOpponentDeckComponent
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
 		},
+		{
+			id: 'bonelord-frostwhisper',
+			field: 'opponentBonelordFrostwhisperCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(

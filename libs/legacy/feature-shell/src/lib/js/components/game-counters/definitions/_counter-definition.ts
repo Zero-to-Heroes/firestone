@@ -29,6 +29,7 @@ export type CounterType =
 	| 'asvedon'
 	| 'murozondTheInfinite'
 	| 'anachronos'
+	| 'bonelordFrostwhisper'
 	| 'parrotMascot'
 	| 'queensguard'
 	| 'spectralPillager'

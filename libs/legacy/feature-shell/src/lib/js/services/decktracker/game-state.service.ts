@@ -581,7 +581,7 @@ export class GameStateService {
 			new CostChangedParser(this.helper),
 			new DataScriptChangedParser(this.helper, this.allCards),
 			new ChoosingOptionsParser(),
-			new DeathrattleTriggeredParser(),
+			new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper),
 			new AttackParser(this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),

@@ -86,6 +86,7 @@ export class DeckState {
 	readonly heroAttacksThisMatch: number = 0;
 	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
 	readonly anachronosTurnsPlayed: readonly number[] = [];
+	readonly bonelordFrostwhisperFirstTurnTrigger: number = null;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

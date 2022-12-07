@@ -340,6 +340,12 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.coral-keeper-tooltip'),
 		},
+		{
+			id: 'bonelord-frostwhisper',
+			field: 'playerBonelordFrostwhisperCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.bonelord-frostwhisper-tooltip'),
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(

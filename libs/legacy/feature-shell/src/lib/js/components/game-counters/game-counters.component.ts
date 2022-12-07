@@ -4,6 +4,7 @@ import { AnachronosCounterDefinition } from '@components/game-counters/definitio
 import { AsvedonCounterDefinition } from '@components/game-counters/definitions/asvedon-counter';
 import { BgsMajordomoCounterDefinition } from '@components/game-counters/definitions/bgs-majordomo-counter';
 import { BgsSouthseaStrongarmCounterDefinition } from '@components/game-counters/definitions/bgs-southsea-strongarm-counter';
+import { BonelordFrostwhisperCounterDefinition } from '@components/game-counters/definitions/bonelord-frostwhisper-counter';
 import { CoralKeeperCounterDefinition } from '@components/game-counters/definitions/coral-keeper-counter';
 import { GreySageParrotCounterDefinition } from '@components/game-counters/definitions/grey-sage-parrot-counter';
 import { ShockspitterCounterDefinition } from '@components/game-counters/definitions/shockspitter-counter';
@@ -156,6 +157,8 @@ export class GameCountersComponent extends AbstractSubscriptionComponent impleme
 				return MurozondTheInfiniteCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'anachronos':
 				return AnachronosCounterDefinition.create(gameState, side, this.allCards, this.i18n);
+			case 'bonelordFrostwhisper':
+				return BonelordFrostwhisperCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'parrotMascot':
 				return ParrotMascotCounterDefinition.create(gameState, side, this.allCards, this.i18n);
 			case 'queensguard':

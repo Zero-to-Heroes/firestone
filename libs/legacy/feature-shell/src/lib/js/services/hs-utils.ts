@@ -84,7 +84,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.ArchbishopBenedictus_CORE_ICC_215,
 	CardIds.ArchbishopBenedictus_ICC_215,
 	CardIds.BladeOfTheBurningSun,
-	CardIds.BonelordFrostwhisper,
 	CardIds.CommandTheElements_StormcallerBrukanToken,
 	CardIds.DarkInquisitorXanesh,
 	CardIds.DarkPharaohTekahn,
