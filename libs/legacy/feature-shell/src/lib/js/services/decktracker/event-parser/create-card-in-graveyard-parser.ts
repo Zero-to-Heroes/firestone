@@ -1,4 +1,3 @@
-import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -40,14 +39,15 @@ export class CreateCardInGraveyardParser implements EventParser {
 			manaCost: cardData && cardData.cost,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 			creatorCardId: creatorCardId,
+			lastAffectedByEntityId: gameEvent.additionalData.lastAffectedByEntityId,
 		} as DeckCard);
 		const newOther = this.helper.addSingleCardToZone(deck.otherZone, cardWithDefault);
 
 		let newDeck = deck.deck;
 		// The Scythe words in a weird way, and creates the cards directly in the graveyard, instead of
 		// first creating them in deck, then moving them
-		const lastAffectedByCardId = gameEvent.additionalData.lastAffectedByCardId;
-		if (lastAffectedByCardId === CardIds.SouleatersScythe) {
+		const shouldRemoveFromInitialDeck = gameEvent.additionalData.shouldRemoveFromInitialDeck;
+		if (shouldRemoveFromInitialDeck) {
 			newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId)[0];
 		}
 

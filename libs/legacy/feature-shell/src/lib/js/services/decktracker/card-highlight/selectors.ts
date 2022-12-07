@@ -67,6 +67,24 @@ export const notInInitialDeck = (handler: Handler): boolean => {
 	return handler.deckCardProvider().creatorCardId != null || handler.deckCardProvider().creatorCardIds?.length > 0;
 };
 
+export const lastAffectedByCardId =
+	(cardId: CardIds) =>
+	(handler: Handler, deckState: DeckState): boolean => {
+		const affectedCardIds = [
+			handler.deckCardProvider().lastAffectedByCardId,
+			...handler.deckCardProvider().lastAffectedByCardIds,
+		].filter((id) => !!id);
+		const affectedEntityIds = [handler.deckCardProvider().lastAffectedByEntityId].filter((id) => !!id);
+		const entityToCardIds = affectedEntityIds
+			.map((entityId) =>
+				deckState.getAllCardsInDeck().find((c) => c.entityId === entityId || c.entityId === -entityId),
+			)
+			.map((c) => c?.cardId)
+			.filter((id) => !!id);
+		const allCardIds = [...affectedCardIds, ...entityToCardIds];
+		return allCardIds.includes(cardId);
+	};
+
 export const healthBiggerThanAttack = (handler: Handler): boolean => {
 	return handler.referenceCardProvider().health > handler.referenceCardProvider().attack;
 };

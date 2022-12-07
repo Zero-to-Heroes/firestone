@@ -49,6 +49,7 @@ import {
 	inGraveyard,
 	inHand,
 	inOther,
+	lastAffectedByCardId,
 	legendary,
 	lifesteal,
 	magnetic,
@@ -802,6 +803,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, deathrattle);
 			case CardIds.Snapdragon:
 				return and(inDeck, minion, battlecry);
+			case CardIds.SouleatersScythe_BoundSoulToken:
+				return and(inOther, minion, lastAffectedByCardId(CardIds.SouleatersScythe));
 			case CardIds.SowTheSeedsTavernBrawl:
 				return and(inDeck, minion);
 			case CardIds.SpecialDeliveryTavernBrawl:
