@@ -82,6 +82,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
 								[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 								[showTotalCardsInZone]="showTotalCardsInZone$ | async"
+								[showDkRunes]="showDkRunes$ | async"
 								[side]="player"
 							>
 							</decktracker-deck-list>
@@ -112,6 +113,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
+	@Input() showDkRunesExtractor: (prefs: Preferences) => boolean;
 	@Input() showTotalCardsInZoneExtractor: (computedValue: boolean) => boolean = (computedValue) => computedValue;
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
@@ -139,6 +141,7 @@ export class DeckTrackerOverlayRootComponent
 	sortCardsByManaCostInOtherZone$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
 	showTopCardsSeparately$: Observable<boolean>;
+	showDkRunes$: Observable<boolean>;
 	showTotalCardsInZone$: Observable<boolean>;
 
 	active = true;
@@ -287,6 +290,7 @@ export class DeckTrackerOverlayRootComponent
 		this.showTopCardsSeparately$ = this.listenForBasicPref$((preferences) =>
 			this.showTopCardsSeparatelyExtractor(preferences),
 		);
+		this.showDkRunes$ = this.listenForBasicPref$((preferences) => this.showDkRunesExtractor(preferences));
 		this.store
 			.listenPrefs$((prefs) => prefs.overlayShowTooltipsOnHover)
 			.pipe(this.mapData(([pref]) => pref))

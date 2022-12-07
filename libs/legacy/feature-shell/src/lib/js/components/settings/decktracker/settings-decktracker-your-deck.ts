@@ -69,6 +69,11 @@ import { CounterSetting } from './model';
 					[tooltip]="'settings.decktracker.opponent-deck.show-bottom-cards-separately-tooltip' | owTranslate"
 				></preference-toggle>
 				<preference-toggle
+					field="overlayShowDkRunes"
+					[label]="'settings.decktracker.opponent-deck.show-dk-runes-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.show-dk-runes-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
 					class="indented"
 					field="overlayHideGeneratedCardsInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"

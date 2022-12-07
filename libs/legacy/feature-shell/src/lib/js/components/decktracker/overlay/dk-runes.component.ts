@@ -11,7 +11,7 @@ import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
-import { BehaviorSubject, combineLatest, Observable, share } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, share, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -19,15 +19,15 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	selector: 'dk-runes',
 	styleUrls: ['../../../../css/component/decktracker/overlay/dk-runes.component.scss'],
 	template: `
-		<ng-container *ngIf="showRunes$ | async">
-			<div class="dk-runes" *ngIf="dkRunes$ | async as runes">
+		<ng-container *ngIf="{ showRunes: showRunes$ | async, runes: dkRunes$ | async } as value">
+			<div class="dk-runes" *ngIf="value.showRunes">
 				<div
 					class="runes-label"
 					[owTranslate]="'app.duels.deckbuilder.dk-runes-text'"
 					[helpTooltip]="'app.duels.deckbuilder.dk-runes-tooltip' | owTranslate"
 				></div>
 				<div class="runes-container">
-					<div class="rune" *ngFor="let rune of runes"><img [src]="rune.image" /></div>
+					<div class="rune" *ngFor="let rune of value.runes"><img [src]="rune.image" /></div>
 				</div>
 			</div>
 		</ng-container>
@@ -75,12 +75,12 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 					return false;
 				}
 
-				return (
+				const result =
 					showRunes &&
 					deckDefinition.heroes.some(
 						(h) => this.allCards.getCard(h).cardClass === CardClass[CardClass.DEATHKNIGHT],
-					)
-				);
+					);
+				return result;
 			}),
 		);
 		const runesInDeck$ = deckDefinition$.pipe(

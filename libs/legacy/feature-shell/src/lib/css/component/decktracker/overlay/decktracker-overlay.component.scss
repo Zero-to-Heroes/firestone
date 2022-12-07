@@ -163,3 +163,12 @@
 		}
 	}
 }
+
+:host ::ng-deep dk-runes {
+	.dk-runes {
+		background: var(--color-7);
+		margin-top: 0;
+		padding: 5px;
+		justify-content: center;
+	}
+}

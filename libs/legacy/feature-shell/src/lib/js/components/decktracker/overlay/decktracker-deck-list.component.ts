@@ -12,8 +12,13 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
+import { GameFormat } from '@firestone-hs/reference-data';
+import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
+import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
+import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
@@ -29,6 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
 	],
 	template: `
+		<dk-runes [deckstring]="deckstring$ | async" [showRunes]="showDkRunes"></dk-runes>
 		<ng-scrollbar
 			class="deck-list"
 			[ngClass]="{ active: isScroll }"
@@ -84,6 +90,8 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	deckstring$: Observable<string>;
+
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	@Input() displayMode: string;
@@ -100,6 +108,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() showBottomCardsSeparately: boolean;
 	@Input() showTopCardsSeparately: boolean;
+	@Input() showDkRunes: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
 	@Input() collection: readonly SetCard[];
@@ -108,6 +117,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	}
 	@Input() set deckState(deckState: DeckState) {
 		this._deckState = deckState;
+		this.deckState$$.next(deckState);
 		this.refreshScroll();
 	}
 
@@ -116,11 +126,13 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	isScroll: boolean;
 
 	private sub$$: Subscription;
+	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
-		private el: ElementRef,
 		@Optional() protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private el: ElementRef,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -130,6 +142,34 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 			?.listenPrefs$((prefs) => prefs.decktrackerScale)
 			.pipe(this.mapData(([pref]) => pref))
 			.subscribe((scale) => this.refreshScroll());
+		this.deckstring$ = this.deckState$$.asObservable().pipe(
+			this.mapData((deckState) => {
+				if (deckState.deckstring) {
+					return deckState.deckstring;
+				}
+
+				// Extract all cards that were initially present in the deck
+				const cardsFromInitialDeck = [
+					...deckState.deck,
+					...deckState.deckList,
+					...deckState.hand,
+					...deckState.board,
+					...deckState.otherZone,
+				]
+					.filter((c) => !!c.cardId)
+					.filter((c) => !c.creatorCardId);
+				const groupedCards = groupByFunction((c: DeckCard) => c.cardId)(cardsFromInitialDeck);
+				const deckDefinition: DeckDefinition = {
+					cards: Object.values(groupedCards).map((cards) => [
+						this.allCards.getCard(cards[0].cardId).dbfId,
+						cards.length,
+					]),
+					heroes: [this.allCards.getCard(deckState.hero?.cardId).dbfId],
+					format: GameFormat.FT_WILD,
+				};
+				return encode(deckDefinition);
+			}),
+		);
 	}
 
 	@HostListener('window:beforeunload')

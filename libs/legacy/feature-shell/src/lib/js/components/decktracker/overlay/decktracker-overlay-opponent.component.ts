@@ -19,6 +19,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[sortCardsByManaCostInOtherZoneExtractor]="sortCardsByManaCostInOtherZoneExtractor"
 			[showBottomCardsSeparatelyExtractor]="showBottomCardsSeparatelyExtractor"
 			[showTopCardsSeparatelyExtractor]="showTopCardsSeparatelyExtractor"
+			[showDkRunesExtractor]="showDkRunesExtractor"
 			[deckExtractor]="deckExtractor"
 			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
 			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
@@ -42,6 +43,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlaySortByManaInOtherZone;
 	showBottomCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowBottomCardsSeparately;
 	showTopCardsSeparatelyExtractor = (prefs: Preferences) => prefs.opponentOverlayShowTopCardsSeparately;
+	showDkRunesExtractor = (prefs: Preferences) => prefs.opponentOverlayShowDkRunes;
 	deckExtractor = (state: GameState) => state.opponentDeck;
 	// trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
 	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;

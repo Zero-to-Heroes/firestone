@@ -1,3 +1,8 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
 .deck-list {
 	overflow: hidden;
 	width: calc(100% + 20px);

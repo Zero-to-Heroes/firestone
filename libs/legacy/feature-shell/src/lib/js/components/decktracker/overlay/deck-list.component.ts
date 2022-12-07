@@ -38,6 +38,7 @@ export class DeckListComponent {
 		this.deckState = DeckState.create({
 			deckList: decklist,
 			deck: decklist,
+			deckstring: value,
 		} as DeckState);
 	}
 

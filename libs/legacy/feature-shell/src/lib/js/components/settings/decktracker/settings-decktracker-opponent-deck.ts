@@ -91,6 +91,12 @@ import { CounterSetting } from './model';
 				></preference-toggle>
 				<preference-toggle
 					[ngClass]="{ disabled: !value.opponentTracker }"
+					field="opponentOverlayShowDkRunes"
+					[label]="'settings.decktracker.opponent-deck.show-dk-runes-label' | owTranslate"
+					[tooltip]="'settings.decktracker.opponent-deck.show-dk-runes-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ disabled: !value.opponentTracker }"
 					class="indented"
 					field="opponentOverlayHideGeneratedCardsInOtherZone"
 					[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"

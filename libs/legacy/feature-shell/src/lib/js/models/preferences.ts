@@ -205,6 +205,7 @@ export class Preferences {
 	readonly overlayShowStatsChange: boolean = true;
 	readonly overlayShowDeckWinrate: boolean = true;
 	readonly overlayShowMatchupWinrate: boolean = true;
+	readonly overlayShowDkRunes: boolean = true;
 
 	readonly overlayGroupByZone: boolean = true;
 	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
@@ -230,6 +231,7 @@ export class Preferences {
 	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayShowBottomCardsSeparately: boolean = true;
 	readonly opponentOverlayShowTopCardsSeparately: boolean = true;
+	readonly opponentOverlayShowDkRunes: boolean = true;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
 	readonly hideOpponentDecktrackerWhenFriendsListIsOpen: boolean = true;
 	readonly opponentTracker: boolean = true;
