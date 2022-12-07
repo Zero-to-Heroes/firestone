@@ -32,6 +32,7 @@
 		min-height: 1px;
 		flex-grow: 1;
 		position: relative;
+		padding-right: calc(var(--decklist-width) + 40px); // margins
 	}
 
 	.deck-versions {
@@ -178,11 +179,11 @@
 	}
 
 	deck-winrate-matrix {
-		max-width: calc(100% - var(--decklist-width) - 50px);
+		// max-width: calc(100% - var(--decklist-width) - 50px);
 		width: 100%;
 
 		&.with-versions {
-			max-width: calc(100% - var(--decklist-width) - 50px - 180px);
+			// max-width: calc(100% - var(--decklist-width) - 50px - 180px);
 		}
 	}
 }
