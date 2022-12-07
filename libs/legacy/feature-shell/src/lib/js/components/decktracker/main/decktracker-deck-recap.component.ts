@@ -136,7 +136,7 @@ export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent
 						.map(
 							(matchUp) =>
 								({
-									icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
+									icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
 									playerClass: formatClass(matchUp.opponentClass, this.i18n),
 								} as BestAgainst),
 						),

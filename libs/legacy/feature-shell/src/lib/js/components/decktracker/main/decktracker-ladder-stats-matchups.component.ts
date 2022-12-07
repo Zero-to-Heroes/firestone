@@ -51,7 +51,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<ng-container *ngFor="let matchup of row.matchups">
 						<div
 							class="cell winrate number"
-							[ngClass]="{ 'empty': matchup.wins === 0 && matchup.losses === 0 }"
+							[ngClass]="{ empty: matchup.wins === 0 && matchup.losses === 0 }"
 							*ngIf="!value.showPercentages"
 						>
 							<span class="wins" *ngIf="matchup.wins > 0 || matchup.losses > 0">{{ matchup.wins }}</span>
@@ -63,9 +63,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<div
 							class="cell winrate"
 							[ngClass]="{
-								'empty': matchup.wins === 0 && matchup.losses === 0,
-								'positive': matchup.wins > 0 && matchup.winrate > 51,
-								'negative': matchup.losses > 0 && matchup.winrate < 49
+								empty: matchup.wins === 0 && matchup.losses === 0,
+								positive: matchup.wins > 0 && matchup.winrate > 51,
+								negative: matchup.losses > 0 && matchup.winrate < 49
 							}"
 							*ngIf="value.showPercentages"
 						>
@@ -100,7 +100,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			tooltip: this.i18n.translateString('app.decktracker.ladder-stats.opponent-class-tooltip', {
 				className: formatClass(oppClass, this.i18n),
 			}),
-			icon: `assets/images/deck/classes/${oppClass}.png`,
+			icon: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${oppClass}.png`,
 		}));
 
 		this.showPercentages$ = this.listenForBasicPref$((prefs) => prefs.desktopDeckShowMatchupAsPercentages);
@@ -181,7 +181,10 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			tooltip: this.i18n.translateString('app.decktracker.ladder-stats.player-class-tooltip', {
 				className: formatClass(playerClass, this.i18n),
 			}),
-			icon: playerClass === 'total' ? null : `assets/images/deck/classes/${playerClass}.png`,
+			icon:
+				playerClass === 'total'
+					? null
+					: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
 			matchups: matchups,
 		};
 	}
