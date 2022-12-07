@@ -1,6 +1,6 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -43,9 +43,18 @@ export class CreateCardInGraveyardParser implements EventParser {
 		} as DeckCard);
 		const newOther = this.helper.addSingleCardToZone(deck.otherZone, cardWithDefault);
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		let newDeck = deck.deck;
+		// The Scythe words in a weird way, and creates the cards directly in the graveyard, instead of
+		// first creating them in deck, then moving them
+		const lastAffectedByCardId = gameEvent.additionalData.lastAffectedByCardId;
+		if (lastAffectedByCardId === CardIds.SouleatersScythe) {
+			newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId)[0];
+		}
+
+		const newPlayerDeck = deck.update({
 			otherZone: newOther,
-		} as DeckState);
+			deck: newDeck,
+		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

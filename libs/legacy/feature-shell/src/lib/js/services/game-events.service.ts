@@ -526,6 +526,7 @@ export class GameEvents {
 						// Not always present?
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
+						lastAffectedByCardId: gameEvent.Value.AdditionalProps?.LastAffectedByCardId,
 					}),
 				);
 				break;
