@@ -220,7 +220,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 			return null;
 		}
 
-		return zone.sections.map((section) => {
+		const result = zone.sections.map((section) => {
 			const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(section.cards, collection);
 			const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
 				this.buildGroupingKey(
@@ -263,6 +263,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 				sortingFunction: section.sortingFunction,
 			} as DeckZoneSection;
 		});
+		return result;
 	}
 
 	private buildQuantitiesLeftForCard(cards: readonly VisualDeckCard[], collection: readonly SetCard[]) {

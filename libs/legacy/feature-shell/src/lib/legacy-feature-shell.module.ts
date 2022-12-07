@@ -456,6 +456,7 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
+import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -895,6 +896,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		DeckZoneComponent,
 		CopyDesckstringComponent,
 		DeckListComponent,
+		DkRunesComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,

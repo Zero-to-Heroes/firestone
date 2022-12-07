@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DkRune } from '@components/decktracker/overlay/dk-runes.component';
 import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import {
 	CardClass,
@@ -16,7 +17,7 @@ import { dustToCraftFor, getDefaultHeroDbfIdForClass } from '@services/hs-utils'
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
-import { share, startWith } from 'rxjs/operators';
+import { share, startWith, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -59,16 +60,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							/>
 						</label>
 					</div>
-					<div class="dk-runes" *ngIf="dkRunes$ | async as runes">
-						<div
-							class="runes-label"
-							[owTranslate]="'app.duels.deckbuilder.dk-runes-text'"
-							[helpTooltip]="'app.duels.deckbuilder.dk-runes-tooltip' | owTranslate"
-						></div>
-						<div class="runes-container">
-							<div class="rune" *ngFor="let rune of runes"><img [src]="rune.image" /></div>
-						</div>
-					</div>
+					<dk-runes [deckstring]="deckstring$ | async" (dkRunes)="onDkRunesChanged($event)"></dk-runes>
 					<deck-list
 						class="deck-list"
 						[cards]="currentDeckCards$ | async"
@@ -160,7 +152,6 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	allowedCards$: Observable<ReferenceCard[]>;
 	collection$: Observable<readonly SetCard[]>;
 	missingDust$: Observable<number>;
-	dkRunes$: Observable<readonly DkRune[]>;
 
 	saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 
@@ -172,6 +163,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	deckName: string = this.i18n.translateString('decktracker.deck-name.unnamed-deck');
 
 	private currentDeckCards = new BehaviorSubject<readonly string[]>([]);
+	private dkRunes$$ = new BehaviorSubject<readonly DkRune[]>(null);
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -197,14 +189,14 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				}
 			});
 
-		this.allowedCards$ = combineLatest(
+		this.allowedCards$ = combineLatest([
 			this.store.listen$(
 				([main, nav]) => main.decktracker.config,
 				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
 				([main, nav]) => main.decktracker.deckbuilder.currentClass,
 			),
 			from([this.allCards.getCards()]),
-		).pipe(
+		]).pipe(
 			this.mapData(([[config, currentFormat, currentClass], cards]) => {
 				currentClass = currentClass ?? CardClass[CardClass.NEUTRAL];
 				const validSets =
@@ -274,36 +266,10 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			share(),
 		);
 
-		this.dkRunes$ = this.currentDeckCards$.pipe(
-			this.mapData((cardIds) => {
-				const costs = (cardIds ?? [])
-					.map((cardId) => this.allCards.getCard(cardId))
-					.filter((c) => !!c.additionalCosts)
-					.map((c) => c.additionalCosts);
-
-				const allRuneEntries = costs.flatMap((c) =>
-					Object.entries(c).map((entry) => ({
-						rune: entry[0],
-						quantity: entry[1],
-					})),
-				);
-				const groupedByRune = groupByFunction((rune: any) => rune.rune)(allRuneEntries);
-				const maxRunesByType = Object.keys(groupedByRune).map((rune) => ({
-					rune: rune,
-					max: Math.max(...groupedByRune[rune].map((e) => e.quantity)),
-				}));
-				const result = maxRunesByType
-					.flatMap((info) => Array(info.max).fill(info.rune))
-					.map((rune: string) => ({
-						type: DkruneTypes[rune],
-						image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/runes/${rune.toLowerCase()}.png`,
-					}));
-				return !result?.length ? null : result;
-			}),
-			share(),
+		const cleanedRunes$ = this.dkRunes$$.asObservable().pipe(
+			this.mapData((runes) => (runes ?? []).filter((r) => !!r.type)),
 		);
-
-		const allowedCardsAfterDeck$ = combineLatest([this.allowedCards$, this.currentDeckCards$, this.dkRunes$]).pipe(
+		const allowedCardsAfterDeck$ = combineLatest([this.allowedCards$, this.currentDeckCards$, cleanedRunes$]).pipe(
 			this.mapData(([allCards, deckCards, dkRunes]) => {
 				return allCards
 					.filter((card) => !this.hasMaximumCopies(card.id, deckCards))
@@ -344,7 +310,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			this.mapData((cards) => (cards?.includes(CardIds.PrinceRenathal) ? 40 : 30)),
 		);
 
-		this.deckValid$ = combineLatest(this.currentDeckCards$, this.maxCardsInDeck$).pipe(
+		this.deckValid$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$]).pipe(
 			this.mapData(([cards, maxCards]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
 				return cards?.length === maxCards && Object.values(groupedCards).every((cards) => cards.length <= 2);
@@ -355,13 +321,13 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentCards)
 			.pipe(this.mapData(([cards]) => cards))
 			.subscribe((cards) => this.currentDeckCards.next(cards));
-		this.deckstring$ = combineLatest(
+		this.deckstring$ = combineLatest([
 			this.currentDeckCards$,
 			this.store.listen$(
 				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
 				([main, nav]) => main.decktracker.deckbuilder.currentClass,
 			),
-		).pipe(
+		]).pipe(
 			this.mapData(([cards, [currentFormat, currentClass]]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
 				const cardDbfIds = Object.values(groupedCards).map(
@@ -383,7 +349,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 			}),
 			share(),
 		);
-		this.ongoingText$ = combineLatest(this.currentDeckCards$, this.maxCardsInDeck$).pipe(
+		this.ongoingText$ = combineLatest([this.currentDeckCards$, this.maxCardsInDeck$]).pipe(
 			this.mapData(([cards, maxCards]) =>
 				this.i18n.translateString('app.duels.deckbuilder.ongoing-deck-building', {
 					currentCards: cards?.length ?? 0,
@@ -391,7 +357,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				}),
 			),
 		);
-		this.missingDust$ = combineLatest(this.currentDeckCards$, this.collection$).pipe(
+		this.missingDust$ = combineLatest([this.currentDeckCards$, this.collection$]).pipe(
 			this.mapData(([cards, collection]) => {
 				const groupedByCardId = groupByFunction((cardId: string) => cardId)(cards);
 				return Object.keys(groupedByCardId)
@@ -418,6 +384,10 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 				</ul>
 			</div>
 		`;
+	}
+
+	onDkRunesChanged(runes: readonly DkRune[]) {
+		this.dkRunes$$.next(runes);
 	}
 
 	private isCardCompatibleWithRunes(card: ReferenceCard, dkRunes: readonly DkRune[]): boolean {
@@ -613,9 +583,4 @@ interface DeckBuilderCard {
 interface SearchFilters {
 	readonly class: string;
 	readonly text: string;
-}
-
-interface DkRune {
-	readonly type: DkruneTypes;
-	readonly image: string;
 }
