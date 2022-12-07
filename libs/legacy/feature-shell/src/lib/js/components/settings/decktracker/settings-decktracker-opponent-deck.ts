@@ -334,6 +334,12 @@ export class SettingsDecktrackerOpponentDeckComponent
 			label: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-label'),
 			tooltip: this.i18n.translateString('settings.decktracker.opponent-deck.counters.hero-power-damage-tooltip'),
 		},
+		{
+			id: 'anachronos',
+			field: 'opponentAnachronosCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
+		},
 	].sort(sortByProperties((t) => [t.label]));
 
 	constructor(

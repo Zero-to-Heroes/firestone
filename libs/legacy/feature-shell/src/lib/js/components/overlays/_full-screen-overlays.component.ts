@@ -91,6 +91,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<player-vanessa-widget-wrapper></player-vanessa-widget-wrapper>
 			<player-asvedon-widget-wrapper></player-asvedon-widget-wrapper>
 			<player-murozond-widget-wrapper></player-murozond-widget-wrapper>
+			<player-anachronos-widget-wrapper></player-anachronos-widget-wrapper>
 			<player-shockspitter-widget-wrapper></player-shockspitter-widget-wrapper>
 			<player-parrot-mascot-widget-wrapper></player-parrot-mascot-widget-wrapper>
 			<player-queensguard-widget-wrapper></player-queensguard-widget-wrapper>
@@ -116,6 +117,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<opponent-hero-power-damage-widget-wrapper></opponent-hero-power-damage-widget-wrapper>
 			<opponent-volatile-skeleton-widget-wrapper></opponent-volatile-skeleton-widget-wrapper>
 			<opponent-relic-widget-wrapper></opponent-relic-widget-wrapper>
+			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

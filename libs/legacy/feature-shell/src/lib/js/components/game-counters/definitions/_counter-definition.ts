@@ -28,6 +28,7 @@ export type CounterType =
 	| 'vanessaVanCleef'
 	| 'asvedon'
 	| 'murozondTheInfinite'
+	| 'anachronos'
 	| 'parrotMascot'
 	| 'queensguard'
 	| 'spectralPillager'

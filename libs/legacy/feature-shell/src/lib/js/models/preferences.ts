@@ -391,6 +391,14 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerMurozondTheInfiniteCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerAnachronosCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerAnachronosCounterWidgetPosition: { left: number; top: number };
+
+	readonly opponentAnachronosCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentAnachronosCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerShockspitterCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };

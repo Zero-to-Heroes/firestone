@@ -21,6 +21,7 @@ export class GameState {
 	readonly mulliganOver: boolean = false;
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
+	readonly gameTagTurnNumber: number = 0;
 	readonly gameStarted: boolean;
 	readonly matchStartTimestamp: number;
 	readonly gameEnded: boolean;

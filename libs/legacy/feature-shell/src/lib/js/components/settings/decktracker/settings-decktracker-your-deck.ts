@@ -287,6 +287,12 @@ export class SettingsDecktrackerYourDeckComponent extends AbstractSubscriptionCo
 			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.murozond-tooltip'),
 		},
 		{
+			id: 'anachronos',
+			field: 'playerAnachronosCounter',
+			label: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-label'),
+			tooltip: this.i18n.translateString('settings.decktracker.your-deck.counters.anachronos-tooltip'),
+		},
+		{
 			id: 'shockspitter',
 			field: 'playerShockspitterCounter',
 			label: this.i18n.translateString('settings.decktracker.your-deck.counters.shockspitter-label'),

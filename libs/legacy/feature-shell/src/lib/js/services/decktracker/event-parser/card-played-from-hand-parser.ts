@@ -173,6 +173,10 @@ export class CardPlayedFromHandParser implements EventParser {
 				...newPlayerDeck.cardsPlayedThisMatch,
 				newCardPlayedThisMatch,
 			] as readonly ShortCard[],
+			anachronosTurnsPlayed:
+				cardId === CardIds.Anachronos
+					? [...playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed, currentState.gameTagTurnNumber]
+					: playerDeckAfterSpecialCaseUpdate.anachronosTurnsPlayed,
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 

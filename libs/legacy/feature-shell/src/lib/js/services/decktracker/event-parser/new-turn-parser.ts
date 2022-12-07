@@ -68,6 +68,7 @@ export class NewTurnParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
+			gameTagTurnNumber: gameEvent.additionalData.turnNumber,
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,
 			mulliganOver: currentState.mulliganOver || numericTurn >= 2,

@@ -457,6 +457,8 @@ import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
+import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
+import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -1502,6 +1504,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		PlayerVanessaVanCleefWidgetWrapperComponent,
 		PlayerAsvedonWidgetWrapperComponent,
 		PlayerMurozondTheInfiniteWidgetWrapperComponent,
+		PlayerAnachronosWidgetWrapperComponent,
 		PlayerShockspitterWidgetWrapperComponent,
 		PlayerParrotMascotWidgetWrapperComponent,
 		PlayerQueensguardWidgetWrapperComponent,
@@ -1526,6 +1529,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentRelicWidgetWrapperComponent,
 		OpponentCthunWidgetWrapperComponent,
 		OpponentLibramWidgetWrapperComponent,
+		OpponentAnachronosWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,
