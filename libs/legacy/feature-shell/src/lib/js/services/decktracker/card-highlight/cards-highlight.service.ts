@@ -682,6 +682,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), or(discover, and(spell, effectiveCostMore(2))));
 			case CardIds.OverlordSaurfang_BAR_334:
 				return and(minion, inGraveyard, frenzy);
+			case CardIds.OverseerFrigidaraCore_RLK_224:
+			case CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224:
+				return and(inDeck, spell);
 			case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
 				return and(or(inDeck, inHand), spell);
 			case CardIds.PetCollector:
