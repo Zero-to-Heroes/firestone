@@ -459,6 +459,7 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
+import { OpponentShockspitterWidgetWrapperComponent } from '@components/overlays/counters/opponent-shockspitter-widget-wrapper.component';
 import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/counters/player-anachronos-widget-wrapper.component';
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
@@ -1534,6 +1535,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		OpponentLibramWidgetWrapperComponent,
 		OpponentAnachronosWidgetWrapperComponent,
 		OpponentBonelordFrostwhisperWidgetWrapperComponent,
+		OpponentShockspitterWidgetWrapperComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

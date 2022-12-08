@@ -411,6 +411,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerShockspitterCounterWidgetPosition: { left: number; top: number };
 
+	readonly opponentShockspitterCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentShockspitterCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerParrotMascotCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerParrotMascotCounterWidgetPosition: { left: number; top: number };

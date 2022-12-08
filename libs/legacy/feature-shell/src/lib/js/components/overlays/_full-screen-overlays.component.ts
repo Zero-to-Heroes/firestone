@@ -120,6 +120,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 			<opponent-relic-widget-wrapper></opponent-relic-widget-wrapper>
 			<opponent-anachronos-widget-wrapper></opponent-anachronos-widget-wrapper>
 			<opponent-bonelord-frostwhisper-widget-wrapper></opponent-bonelord-frostwhisper-widget-wrapper>
+			<opponent-shockspitter-widget-wrapper></opponent-shockspitter-widget-wrapper>
 
 			<!-- BG Counters -->
 			<player-bgs-southsea-widget-wrapper></player-bgs-southsea-widget-wrapper>

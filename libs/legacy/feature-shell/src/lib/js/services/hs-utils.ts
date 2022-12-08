@@ -436,6 +436,7 @@ const publicCardGiftCreators = [
 	CardIds.Guidance_YOP_024,
 	CardIds.HalazziTheLynx,
 	CardIds.Hallucination,
+	CardIds.HarbingerOfWinterCore_RLK_511,
 	CardIds.Harpoon,
 	CardIds.HeadcrackLegacy,
 	CardIds.HeadcrackVanilla,
