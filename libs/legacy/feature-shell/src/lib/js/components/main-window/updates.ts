@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.7',
+		version: '10.0.12',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -44,24 +44,24 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'decktracker',
 						details: [
 							{
-								type: 'content',
-								text: `Firestone is now updated for 25.0. As usual, some features will `,
+								type: 'feature',
+								text: `The deckbuilder now supports the new Death Knight runes system.`,
 							},
 							{
-								type: 'misc',
-								text: `The app underwent a major technical migration. This should have no impact for you, but please be aware that a few bugs might arise because of it. So don't hesitate to ping me whenever you find something that doesn't work as it should :)`,
+								type: 'bug',
+								text: `Fix an info leak where Souleater's Scythe would reveal mininos consumed eaten at the start of the game.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'collection',
 						details: [
 							{
-								type: 'bug',
-								text: `Try to fix an issue where duels run ID was not always properly assigned, which in turn would lead to some missing / incorrect data throughout the app.`,
+								type: 'feature',
+								text: `Add a button to reset the pity timers for a given pack type.`,
 							},
 						],
 					},
@@ -72,81 +72,72 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Amber Guardian could buff non-dragon minions.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue with Interrogator Whitemane.`,
-							},
-							{
-								type: 'content',
-								text: `Glowscale is now part of the Divine Shield group in the minions list.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add a "Parrot Macot" counter (a treasure you can find in some solo adventures).`,
+								text: `When playing with / facing a Death Knight, the tracker will now recap the runes composition of that deck at the top of the tracker.`,
+							},
+							{
+								type: 'feature',
+								text: `Mousing over a Bound Soul (the token created by Souleater's Scythe) now shows you which minions you can discover.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a widget for Bonelord Frostwhisper telling you how many turns you have left until you die.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a widget for Anachronos counting down the number of turns until the minions come back.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a widget for Asvedon to help you remember the last spell your opponent played.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a counter for Shockspitter telling you how much damage it will do, when it is in your deck (or being offered as a Discover choice). I understand this could also be useful for the opponent, but I'm not sure yet about the rules to use to show it or now. Let me know if you have any idea :)`,
+							},
+							{
+								type: 'feature',
+								text: `Add card highlights, global effects and oracles for some of the new cards.`,
+							},
+							{
+								type: 'feature',
+								text: `When looking at a deck's stats, add an icon next to versions of that deck that are archived.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where deck merge was laggy, and sometimes not working at all.`,
+								text: `Fix an issue where cards consumed by Souleater's Scythe would not be removed from the deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where dynamic related cards (like the cards Tess would replay) would not appear right away when mousing over the card in the tracker.`,
+								text: `Fix an issue where cards destroyed by Patchwerk would not always be removed from the deck / hand.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Frozen Clone would not be greyed out in the secrets helper.`,
+								text: `Fix some Deathknight icons not being rendered correctly.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some discovered cards would not appear in the Other zone.`,
+								text: `Fix a visual issue where the layout of the deck details for decks with Versions was broken.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some some generated cards would not appear properly in the "legacy" display view (the one where you don't have a split of cards by zone).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where related cards for Tess / Contraband Stash / Sivara were not working in the "legacy" display view.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue with the "used cards go to the bottom" settings in the "legacy" display view.`,
-							},
-							{
-								type: 'bug',
-								text: `Remove the option to NOT darken used cards in the "legacy" display view (so used cards will always be darkened). This setting was never intended to be used in this mode, and could cause some confusion.`,
-							},
-							{
-								type: 'ui',
-								text: `Related cards are now bigger and should be easier to read.`,
-							},
-							{
-								type: 'ui',
-								text: `Some counters now also show you the image of the card (e.g. the Vanessa VanCleef counter also shows you what the card is, instead of simply telling you its name).`,
+								text: `Fix an issue where some secrets (like Explosive Runes) would be ruled out when the opponent plays a Dormant minion.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `The stats shown when selecting a hero / hero power / treasure will now always be for the last patch, independently of your own settings.`,
+								type: 'bug',
+								text: `Fix a sim issue where Amber Dragon could buff non-dragon minions.`,
 							},
 							{
 								type: 'bug',
-								text: `Improve perfs when navigating in the Buckets or Deckbuilder tabs`,
+								text: `Fix a sim issue where Interrogator Whitemane double damage would work in reverse.`,
 							},
 						],
 					},
@@ -154,33 +145,12 @@ export const updates: readonly Update[] = [
 						category: 'mercenaries',
 						details: [
 							{
-								type: 'feature',
-								text: `When creating a Task team, team will position the mercs configured in the Settings first, then followed by the mercs linked to the task. The reason is that these task-specific mercs rarely have any synergy with the task itself, and so having your pre-configured team first is more efficient.`,
+								type: 'bug',
+								text: `Fix an issue where the Tasks widget would not show up anymore.`,
 							},
 							{
 								type: 'bug',
-								text: `Restore the task description when mousing over the task progress in the Mercenaries Progression tab.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix some procedural task titles not being showing properly.`,
-							},
-							{
-								type: 'content',
-								text: `The "tasks list" button has been removed from the team widgets. Please use the "Quests" widget from now on (acccessible from the Settings > General > Quests).`,
-							},
-							{
-								type: 'content',
-								text: `The "roles chart" button has been removed.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the achievements history would be empty.`,
+								text: `Fix an issue where the text of some of the new Procedural quests would still contain placeholders.`,
 							},
 						],
 					},
@@ -189,16 +159,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where pity timers were not always correctly computed, especially for older packs.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where decklists would be missing / not properly showing throughout the app.`,
+								text: `Fix pity timers being incorrectly reported if you opened a Legendary in the first 10 packs and you had not yet opened 10 packs in total.`,
 							},
 						],
 					},
