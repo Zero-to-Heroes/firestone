@@ -420,6 +420,8 @@ const publicCardGiftCreators = [
 	CardIds.FreshScent_YOD_005,
 	CardIds.FrightenedFlunky,
 	CardIds.FrostShardsTavernBrawl,
+	CardIds.FrostStrike,
+	CardIds.FrostStrikeCore,
 	CardIds.FrozenTouch,
 	CardIds.FrozenTouch_FrozenTouchToken,
 	CardIds.FullBlownEvil,
