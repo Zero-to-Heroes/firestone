@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.12',
+		version: '10.0.13',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -96,7 +96,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Add a counter for Shockspitter telling you how much damage it will do, when it is in your deck (or being offered as a Discover choice). I understand this could also be useful for the opponent, but I'm not sure yet about the rules to use to show it or now. Let me know if you have any idea :)`,
+								text: `Add a counter for Shockspitter telling you how much damage it will do, when it is in your deck (or being offered as a Discover choice). When enabling this for the opponent, it will show if they are playing Hunter and have attacked at least once.`,
 							},
 							{
 								type: 'feature',
