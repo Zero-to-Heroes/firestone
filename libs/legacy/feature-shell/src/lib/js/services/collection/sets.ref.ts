@@ -12,11 +12,17 @@ export const standardSets: readonly string[] = [
 	'throne_of_tides',
 	'revendreth',
 	'maw_and_disorder',
-	'return_of_the_lich_king',
 	'icecrown',
+	'return_of_the_lich_king',
+	'path_of_arthas',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'path_of_arthas',
+		name: `Path of Arthas`,
+		launchDate: new Date('2022-11-01'),
+	},
 	{
 		id: 'return_of_the_lich_king',
 		name: `March of the Lich King`,
