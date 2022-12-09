@@ -201,6 +201,7 @@ export class DeckParserService {
 			}
 		});
 		this.duelsService.duelsInfo$$.subscribe((deck) => {
+			console.debug('[duels] got deck', deck);
 			this.duelsDeck = deck;
 		});
 
@@ -358,6 +359,8 @@ export class DeckParserService {
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY,
 			ScenarioId.WIZARD_DUELS___ALTERAC_VALLEY_HEROES,
 			ScenarioId.WIZARD_DUELS___REVENDRETH,
+			ScenarioId.WIZARD_DUELS___THE_SUNKEN_CITY,
+			ScenarioId.WIZARD_DUELS___DEATH_KNIGHT,
 			ScenarioId.TAVERN_BRAWL_BRAWLISEUM,
 			ScenarioId.TAVERN_BRAWL_WILD_BRAWLISEUM,
 		];
