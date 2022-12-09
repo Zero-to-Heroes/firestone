@@ -758,6 +758,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, deathrattle);
 			case CardIds.RoyalGreatswordTavernBrawlToken:
 				return and(inDeck, minion, legendary);
+			case CardIds.RuneforgingCore:
+				return and(inDeck, weapon);
 			case CardIds.RunningWild:
 			case CardIds.RunningWild_RunningWild:
 				return and(inDeck, minion);
