@@ -667,6 +667,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand), spell);
 			case CardIds.NaturalForceTavernBrawl:
 				return and(spell, nature, dealsDamage);
+			case CardIds.NerubianVizier:
+				return and(or(inDeck, inHand), minion, undead);
 			case CardIds.NzothGodOfTheDeep:
 				return and(inGraveyard, minion, (handler) => !!handler.referenceCardProvider()?.races?.length);
 			case CardIds.NzothTheCorruptor:
