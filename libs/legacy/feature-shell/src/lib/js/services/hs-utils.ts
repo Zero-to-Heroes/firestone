@@ -233,6 +233,7 @@ export const cardsRevealedWhenDrawn = [
 // These are used to prevent info leaks in hand because we might know too much information
 // Mostly useful when the opponent plays it
 export const forcedHiddenCardCreators = [
+	CardIds.Bibliomite,
 	CardIds.Chameleos,
 	// CardIds.CoilfangConstrictor,
 	// // Prevent the player from knowing too much about the opponent's hand when we play IT
@@ -251,8 +252,8 @@ export const forcedHiddenCardCreators = [
 	CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken,
 	// CardIds.PsychicConjurerCore,
 	// CardIds.PsychicConjurerLegacy,
+	CardIds.SpymastersGambitTavernBrawlToken,
 	// CardIds.TheotarTheMadDuke,
-	CardIds.Bibliomite,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information
