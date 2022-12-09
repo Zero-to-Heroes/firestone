@@ -63,15 +63,17 @@ export class CardPlayedByEffectParser implements EventParser {
 			playTiming: isOnBoard ? GameState.playTiming++ : null,
 			countered: isCardCountered,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
-			putIntoPlay: true
+			putIntoPlay: true,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
+		// In the case of cards played by effect, the card is first revealed, then played. So we need to replace the 
+		// existing card to take the new info into account
 		const newBoard: readonly DeckCard[] = isOnBoard
-			? this.helper.addSingleCardToZone(deck.board, cardWithZone)
+			? this.helper.empiricReplaceCardInZone(deck.board, cardWithZone, false)
 			: deck.board;
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
+			: this.helper.empiricReplaceCardInZone(deck.otherZone, cardWithZone, false);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (

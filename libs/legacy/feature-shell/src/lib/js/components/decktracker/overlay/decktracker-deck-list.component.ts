@@ -157,7 +157,8 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 					...deckState.otherZone,
 				]
 					.filter((c) => !!c.cardId)
-					.filter((c) => !c.creatorCardId);
+					.filter((c) => !c.creatorCardId)
+					.filter((c) => !c.temporaryCard);
 				const groupedCards = groupByFunction((c: DeckCard) => c.cardId)(cardsFromInitialDeck);
 				const deckDefinition: DeckDefinition = {
 					cards: Object.values(groupedCards).map((cards) => [
