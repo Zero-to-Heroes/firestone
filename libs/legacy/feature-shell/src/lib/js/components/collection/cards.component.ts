@@ -134,20 +134,20 @@ export class CardsComponent extends AbstractSubscriptionComponent implements Aft
 			case 'all':
 				return true;
 			case 'own':
-				return card.ownedNonPremium + card.ownedPremium + card.ownedDiamond > 0;
+				return card.ownedNonPremium + card.ownedPremium + card.ownedDiamond + card.ownedSignature > 0;
 			case 'missingplayablecopies':
-				return card.ownedNonPremium + card.ownedPremium + card.ownedDiamond < card.getMaxCollectible();
+				return (
+					card.ownedNonPremium + card.ownedPremium + card.ownedDiamond + card.ownedSignature <
+					card.getMaxCollectible()
+				);
 			case 'goldenown':
-				return card.ownedPremium + card.ownedDiamond > 0;
+				return card.ownedPremium + card.ownedDiamond + card.ownedSignature > 0;
 			case 'notpremiumnotcompleted':
 				return card.ownedNonPremium < card.getMaxCollectible();
 			case 'notcompleted':
-				return (
-					card.ownedPremium + card.ownedDiamond < card.getMaxCollectible() ||
-					card.ownedNonPremium < card.getMaxCollectible()
-				);
+				return card.ownedPremium < card.getMaxCollectible() || card.ownedNonPremium < card.getMaxCollectible();
 			case 'dontown':
-				return card.ownedNonPremium + card.ownedPremium + card.ownedDiamond === 0;
+				return card.ownedNonPremium + card.ownedPremium + card.ownedDiamond + card.ownedSignature === 0;
 			default:
 				console.warn('unknown filter', filter);
 		}

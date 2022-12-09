@@ -1,1 +1,1 @@
-export type CollectionCardType = 'NORMAL' | 'GOLDEN' | 'DIAMOND';
+export type CollectionCardType = 'NORMAL' | 'GOLDEN' | 'DIAMOND' | 'SIGNATURE';

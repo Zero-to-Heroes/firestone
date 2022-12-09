@@ -133,6 +133,7 @@ export class CardsMonitorService {
 				return {
 					cardId: this.getLettuceCardId(card, referenceData),
 					// No diamond card in pack, so we can leave it like this for now
+					// TODO: proper support for diamond / signature cards
 					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
 					currencyAmount: card.CurrencyAmount,
 					mercenaryCardId: this.getMercenaryCardId(card.MercenaryId, referenceData),

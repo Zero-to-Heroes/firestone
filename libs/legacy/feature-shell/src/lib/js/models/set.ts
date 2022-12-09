@@ -71,6 +71,7 @@ export class SetCard {
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
 	readonly ownedDiamond: number = 0;
+	readonly ownedSignature: number = 0;
 	readonly displayed: boolean = true;
 	readonly collectible: boolean = true;
 
@@ -87,6 +88,7 @@ export class SetCard {
 		ownedNonPremium?: number,
 		ownedPremium?: number,
 		ownedDiamond?: number,
+		ownedSignature?: number,
 	) {
 		this.id = id;
 		this.name = name;
@@ -96,6 +98,7 @@ export class SetCard {
 		this.ownedNonPremium = ownedNonPremium || 0;
 		this.ownedPremium = ownedPremium || 0;
 		this.ownedDiamond = ownedDiamond || 0;
+		this.ownedSignature = ownedSignature || 0;
 	}
 
 	getRegularDustCost(): any {
@@ -114,15 +117,15 @@ export class SetCard {
 	}
 
 	getTotalOwned(): number {
-		return this.ownedPremium + this.ownedNonPremium + this.ownedDiamond;
+		return this.ownedPremium + this.ownedNonPremium + this.ownedDiamond + this.ownedSignature;
 	}
 
 	getNumberCollected(): number {
-		return ~~Math.min(this.ownedPremium + this.ownedNonPremium + this.ownedDiamond, this.getMaxCollectible());
+		return ~~Math.min(this.getTotalOwned(), this.getMaxCollectible());
 	}
 
 	getNumberCollectedPremium(): number {
-		return ~~Math.min(this.ownedPremium + this.ownedDiamond, this.getMaxCollectible());
+		return ~~Math.min(this.ownedPremium + this.ownedDiamond + this.ownedSignature, this.getMaxCollectible());
 	}
 
 	getMaxCollectible(): number {
@@ -133,6 +136,6 @@ export class SetCard {
 	}
 
 	isOwned(): boolean {
-		return this.ownedPremium + this.ownedNonPremium + this.ownedDiamond > 0;
+		return this.getTotalOwned() > 0;
 	}
 }

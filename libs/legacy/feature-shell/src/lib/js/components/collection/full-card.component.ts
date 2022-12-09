@@ -160,15 +160,25 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 					cost: card.cost,
 					name: card.name,
 					ownedDiamond: (selectedCard as SetCard).ownedDiamond,
+					ownedSignature: (selectedCard as SetCard).ownedSignature,
 					ownedNonPremium: (selectedCard as SetCard).ownedNonPremium,
 					ownedPremium: (selectedCard as SetCard).ownedPremium,
 				});
-				if (this.card.ownedNonPremium || this.card.ownedPremium || this.card.ownedDiamond) {
+				if (
+					this.card.ownedNonPremium ||
+					this.card.ownedPremium ||
+					this.card.ownedDiamond ||
+					this.card.ownedSignature
+				) {
 					this.showCount = true;
 				} else {
 					this.showCount = false;
 				}
-				this.card.owned = !!this.card.ownedPremium || !!this.card.ownedNonPremium || !!this.card.ownedDiamond;
+				this.card.owned =
+					!!this.card.ownedPremium ||
+					!!this.card.ownedNonPremium ||
+					!!this.card.ownedDiamond ||
+					!!this.card.ownedSignature;
 				this.class = card.classes?.length
 					? card.classes.map((playerClass) => formatClass(playerClass, this.i18n)).join(', ')
 					: card.playerClass != null

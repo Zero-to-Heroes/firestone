@@ -51,12 +51,6 @@ export class CollectionManager {
 			Date.now() - this.lastCollectionRetrieveTimestamp < this.DEBOUNCE_COLLECTION_RETRIEVE_MS;
 		console.log('[collection-manager] skipMemoryReading', skipMemoryReading);
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
-		// For debug purposes, can be removed later on
-		console.log(
-			'[collection-manager] golem in collection',
-			collection?.find((c) => c.id === 'SW_097'),
-			collection?.find((c) => c.id === 'Story_11_RemoteControlPuzzle'),
-		);
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
@@ -212,6 +206,7 @@ export class CollectionManager {
 			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
 			const ownedDiamond = collectionCard ? collectionCard.diamondCount : 0;
+			const ownedSignature = collectionCard ? collectionCard.signatureCount : 0;
 			return new SetCard(
 				card.id,
 				card.name,
@@ -221,6 +216,7 @@ export class CollectionManager {
 				ownedNonPremium,
 				ownedPremium,
 				ownedDiamond,
+				ownedSignature,
 			);
 		});
 	}

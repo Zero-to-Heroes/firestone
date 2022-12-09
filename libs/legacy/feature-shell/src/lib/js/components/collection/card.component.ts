@@ -25,7 +25,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	template: `
 		<div
 			class="card-container {{ secondaryClass }}"
-			[ngClass]="{ 'missing': missing, 'showing-placeholder': showPlaceholder }"
+			[ngClass]="{ missing: missing, 'showing-placeholder': showPlaceholder }"
 		>
 			<div
 				class="perspective-wrapper"
@@ -58,7 +58,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
-						<span>{{ ownedDiamond }}</span>
+						<span>{{ ownedDiamond + ownedSignature }}</span>
 						<i class="gold-theme right">
 							<svg class="svg-icon-fill">
 								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
@@ -87,7 +87,8 @@ export class CardComponent extends AbstractSubscriptionComponent implements Afte
 		this.showPremiumCount = this.ownedPremium > 0;
 
 		this.ownedDiamond = (this._card as SetCard).ownedDiamond ?? 0;
-		this.showDiamondCount = this.ownedDiamond > 0;
+		this.ownedSignature = (this._card as SetCard).ownedSignature ?? 0;
+		this.showDiamondCount = this.ownedDiamond > 0 || this.ownedSignature > 0;
 
 		this.missing = this.ownedNonPremium + this.ownedPremium + this.ownedDiamond === 0;
 		this.updateImage();
@@ -136,6 +137,7 @@ export class CardComponent extends AbstractSubscriptionComponent implements Afte
 	_card: SetCard | CollectionReferenceCard;
 	ownedPremium: number;
 	ownedDiamond: number;
+	ownedSignature: number;
 	ownedNonPremium: number;
 
 	// private _loadImage = true;

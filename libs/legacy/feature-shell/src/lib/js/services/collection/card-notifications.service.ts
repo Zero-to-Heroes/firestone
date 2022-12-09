@@ -32,7 +32,7 @@ export class CardNotificationsService {
 		}
 
 		const cardName: string = dbCard.name;
-		const goldenClass = type === 'GOLDEN' || type === 'DIAMOND' ? 'premium' : '';
+		const goldenClass = type === 'GOLDEN' || type === 'DIAMOND' || type === 'SIGNATURE' ? 'premium' : '';
 		const newLabel = isSecondCopy
 			? this.i18n.translateString('app.collection.card-history.second-copy-long', {
 					version: goldenClass

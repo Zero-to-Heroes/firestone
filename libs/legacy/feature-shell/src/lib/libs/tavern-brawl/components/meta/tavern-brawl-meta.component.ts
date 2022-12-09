@@ -101,7 +101,13 @@ export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent impl
 				const maxUsed = flatDeckCardIds.filter((c) => c === card.id).length;
 				const max = Math.min(maxTheoretical, maxUsed);
 				return new Array(
-					Math.min(max, (card.count ?? 0) + (card.premiumCount ?? 0) + (card.diamondCount ?? 0)),
+					Math.min(
+						max,
+						(card.count ?? 0) +
+							(card.premiumCount ?? 0) +
+							(card.diamondCount ?? 0) +
+							(card.signatureCount ?? 0),
+					),
 				).fill(card.id);
 			})
 			.sort();

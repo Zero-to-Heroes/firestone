@@ -121,6 +121,7 @@ export class SetsService {
 					return (
 						(collectionCard.count ?? 0) +
 							(collectionCard.premiumCount ?? 0) +
+							(collectionCard.signatureCount ?? 0) +
 							(collectionCard.diamondCount ?? 0) >
 						maxCollectible
 					);

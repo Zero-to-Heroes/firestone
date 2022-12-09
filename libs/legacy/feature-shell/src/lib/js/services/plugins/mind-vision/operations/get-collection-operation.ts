@@ -23,6 +23,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 							count: memoryCard.Count,
 							premiumCount: memoryCard.PremiumCount,
 							diamondCount: memoryCard.DiamondCount,
+							signatureCount: memoryCard.SignatureCount,
 						} as Card),
 				),
 			20,
