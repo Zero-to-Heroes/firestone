@@ -193,7 +193,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 								`app.collection.card-details.rarities.${card.rarity?.toLowerCase()}`,
 						  )
 						: null;
-				this.race = !card.races?.length
+				this.race = !!card.races?.length
 					? card.races
 							.map((race) => this.i18n.translateString(`global.tribe.${race.toLowerCase()}`))
 							.join(', ')
