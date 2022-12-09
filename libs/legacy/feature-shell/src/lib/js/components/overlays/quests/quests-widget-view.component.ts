@@ -58,7 +58,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 
 	@Input() rewardsTrackMatcher: (type: RewardTrackType) => boolean;
 	@Input() showPrefsExtractor: (prefs: Preferences) => boolean;
-	@Input() xpBonusExtractor: (state: MainWindowState) => number;
+	@Input() xpBonusExtractor: (state: MainWindowState, type: RewardTrackType) => number;
 
 	quests$: Observable<readonly Quest[]>;
 	showQuests$: Observable<boolean>;
@@ -84,10 +84,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 			this.store.listen$(
 				([main, nav]) => main.quests.getReferenceQuests(),
 				([main, nav]) => main.quests.activeQuests,
-				([main, nav]) => (this.xpBonusExtractor ? this.xpBonusExtractor(main) : null),
+				([main, nav]) => main,
 			),
 		).pipe(
-			this.mapData(([[referenceQuests, activeQuests, xpBonus]]) => {
+			this.mapData(([[referenceQuests, activeQuests, state]]) => {
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
@@ -98,6 +98,10 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 						if (!this.rewardsTrackMatcher(refQuest.rewardTrackType)) {
 							return null;
 						}
+
+						const xpBonus = this.xpBonusExtractor
+							? this.xpBonusExtractor(state, refQuest.rewardTrackType)
+							: 0;
 						const result: Quest = {
 							name: refQuest?.name ?? 'Unknown quest',
 							description:

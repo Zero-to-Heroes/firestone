@@ -30,5 +30,6 @@ export class HsQuestsWidgetComponent {
 	rewardsTrackMatcher: (type: RewardTrackType) => boolean = (type: RewardTrackType) =>
 		type !== RewardTrackType.NONE && type !== RewardTrackType.BATTLEGROUNDS;
 	showPrefsExtractor: (prefs: Preferences) => boolean = (prefs) => prefs.hsShowQuestsWidget;
-	xpBonusExtractor: (state: MainWindowState) => number = (state) => state.quests.xpBonus;
+	xpBonusExtractor: (state: MainWindowState, type: RewardTrackType) => number = (state, type) =>
+		type === RewardTrackType.GLOBAL ? state.quests.xpBonus : 0;
 }
