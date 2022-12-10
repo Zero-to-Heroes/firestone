@@ -16,6 +16,7 @@ import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { DeckCard } from '@legacy-import/src/lib/js/models/decktracker/deck-card';
 import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
+import { getDefaultHeroDbfIdForClass } from '@legacy-import/src/lib/js/services/hs-utils';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -148,6 +149,10 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 					return deckState.deckstring;
 				}
 
+				if (!deckState?.hero?.cardId) {
+					console.warn('no hero id', deckState?.hero);
+				}
+
 				// Extract all cards that were initially present in the deck
 				const cardsFromInitialDeck = [
 					...deckState.deck,
@@ -159,13 +164,20 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 					.filter((c) => !!c.cardId)
 					.filter((c) => !c.creatorCardId)
 					.filter((c) => !c.temporaryCard);
+				let heroCardId = !!deckState?.hero?.cardId ? this.allCards.getCard(deckState?.hero?.cardId).dbfId : 7;
+				if (!heroCardId) {
+					const classCards = cardsFromInitialDeck
+						.map((c) => this.allCards.getCard(c.cardId).cardClass)
+						.filter((c) => !!c);
+					heroCardId = getDefaultHeroDbfIdForClass(classCards[0]);
+				}
 				const groupedCards = groupByFunction((c: DeckCard) => c.cardId)(cardsFromInitialDeck);
 				const deckDefinition: DeckDefinition = {
 					cards: Object.values(groupedCards).map((cards) => [
 						this.allCards.getCard(cards[0].cardId).dbfId,
 						cards.length,
 					]),
-					heroes: [this.allCards.getCard(deckState.hero?.cardId).dbfId],
+					heroes: [heroCardId],
 					format: GameFormat.FT_WILD,
 				};
 				return encode(deckDefinition);
