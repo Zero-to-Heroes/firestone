@@ -90,7 +90,7 @@ export class CardComponent extends AbstractSubscriptionComponent implements Afte
 		this.ownedSignature = (this._card as SetCard).ownedSignature ?? 0;
 		this.showDiamondCount = this.ownedDiamond > 0 || this.ownedSignature > 0;
 
-		this.missing = this.ownedNonPremium + this.ownedPremium + this.ownedDiamond === 0;
+		this.missing = this.ownedNonPremium + this.ownedPremium + this.ownedDiamond + this.ownedSignature === 0;
 		this.updateImage();
 	}
 
