@@ -324,11 +324,12 @@ export class DuelsDecksProviderService {
 	}
 
 	private extractRatingAtStart(sortedMatches: readonly GameStat[]): number {
-		if (sortedMatches.length === 0) {
+		const validMatches = sortedMatches.filter((m) => m.playerRank != null);
+		if (validMatches.length === 0) {
 			return null;
 		}
-		const lastMatch = sortedMatches[sortedMatches.length - 1];
-		return lastMatch.playerRank ? parseInt(lastMatch.playerRank) : null;
+		const lastMatch = validMatches[validMatches.length - 1];
+		return lastMatch.playerRank != null ? parseInt(lastMatch.playerRank) : null;
 	}
 
 	private extractWins(sortedMatches: readonly GameStat[]): [number, number] {
