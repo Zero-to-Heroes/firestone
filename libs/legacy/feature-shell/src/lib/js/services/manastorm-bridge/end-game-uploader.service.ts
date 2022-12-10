@@ -273,7 +273,14 @@ export class EndGameUploaderService {
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
 		game.newPlayerRank = newPlayerRank;
-		console.log('[manastorm-bridge]', currentReviewId, 'extracted player rank');
+		console.log(
+			'[manastorm-bridge]',
+			currentReviewId,
+			'extracted player rank',
+			playerRank,
+			'and new',
+			newPlayerRank,
+		);
 
 		game.reviewId = currentReviewId;
 		game.buildNumber = info.metadata.BuildNumber;
