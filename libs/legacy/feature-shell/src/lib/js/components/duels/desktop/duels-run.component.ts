@@ -28,7 +28,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="left-info">
 				<div class="group mode">
 					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
-					<div class="rating" *ngIf="rating">{{ rating }}</div>
+					<div class="rating" *ngIf="rating != null">{{ rating }}</div>
 				</div>
 
 				<div class="group result" *ngIf="wins != null">
@@ -66,7 +66,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 				<div
 					class="group delta-rating"
-					[ngClass]="{ 'positive': deltaRating > 0, 'negative': deltaRating < 0 }"
+					[ngClass]="{ positive: deltaRating > 0, negative: deltaRating < 0 }"
 					*ngIf="deltaRating != null"
 				>
 					<div class="value">{{ deltaRating }}</div>
@@ -78,7 +78,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div class="text" [owTranslate]="'app.duels.run.view-deck-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
 				</div>
-				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
+				<div class="group show-more" [ngClass]="{ expanded: _isExpanded }" (click)="toggleShowMore()">
 					<div class="text" *ngIf="_isExpanded" [owTranslate]="'app.duels.run.minimize-run-button'"></div>
 					<div class="text" *ngIf="!_isExpanded" [owTranslate]="'app.duels.run.view-run-button'"></div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
@@ -216,9 +216,7 @@ export class DuelsRunComponent implements AfterViewInit {
 		this.losses = this._run.losses;
 		this.rating = this._run.ratingAtStart;
 		this.deltaRating =
-			this._run.ratingAtEnd && !isNaN(this._run.ratingAtEnd)
-				? this._run.ratingAtEnd - this._run.ratingAtStart
-				: null;
+			this._run.ratingAtEnd && !isNaN(this._run.ratingAtEnd) ? this._run.ratingAtEnd - this.rating : null;
 		this.steps = this.buildSteps(this._run.steps);
 		this.rewards = this._run.rewards;
 
