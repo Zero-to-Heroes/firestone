@@ -6,8 +6,9 @@ import {
 	Component,
 	EventEmitter,
 } from '@angular/core';
+import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
@@ -31,7 +32,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				</svg>
 			</i>
 			<img class="image" *ngIf="image$ | async as image" [src]="image" />
-			<div class="text" [owTranslate]="text"></div>
+			<div class="text">{{ text }}</div>
 			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrow$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
@@ -50,9 +51,10 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly i18n: LocalizationFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -61,8 +63,10 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 		this.text$ = this.store
 			.listen$(([main, nav]) => nav.text)
 			.pipe(
+				tap((info) => console.debug('updating text key for global', info)),
 				filter(([text]) => !!text),
-				this.mapData(([text]) => text),
+				this.mapData(([text]) => this.i18n.translateString(text)),
+				tap((info) => console.debug('after updating text key for global', info)),
 			);
 		this.image$ = this.store
 			.listen$(([main, nav]) => nav.image)
