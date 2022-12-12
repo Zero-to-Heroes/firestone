@@ -486,6 +486,7 @@ const publicCardGiftCreators = [
 	CardIds.LyraTheSunshardCore,
 	CardIds.MadameLazul,
 	CardIds.MailboxDancer,
+	CardIds.MalygosAspectOfMagic,
 	CardIds.Mankrik,
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
