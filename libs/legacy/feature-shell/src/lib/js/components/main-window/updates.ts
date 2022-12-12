@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.13',
+		version: '10.0.17',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -47,21 +47,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `The deckbuilder now supports the new Death Knight runes system.`,
+								type: 'bug',
+								text: `Add a fix for the "legacy" display mode (the one where you don't have the deck/hand/other zones), which was sometimes doing weird things (especially when discarding cards).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an info leak where Souleater's Scythe would reveal mininos consumed eaten at the start of the game.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a button to reset the pity timers for a given pack type.`,
+								text: `Fix an issue where cards discarded from the opponent's hand would not be properly removed from their hand tracker.`,
 							},
 						],
 					},
@@ -72,85 +63,24 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `When playing with / facing a Death Knight, the tracker will now recap the runes composition of that deck at the top of the tracker.`,
-							},
-							{
-								type: 'feature',
-								text: `Mousing over a Bound Soul (the token created by Souleater's Scythe) now shows you which minions you can discover.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a widget for Bonelord Frostwhisper telling you how many turns you have left until you die.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a widget for Anachronos counting down the number of turns until the minions come back.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a widget for Asvedon to help you remember the last spell your opponent played.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a counter for Shockspitter telling you how much damage it will do, when it is in your deck (or being offered as a Discover choice). When enabling this for the opponent, it will show if they are playing Hunter and have attacked at least once.`,
-							},
-							{
-								type: 'feature',
-								text: `Add card highlights, global effects and oracles for some of the new cards.`,
-							},
-							{
-								type: 'feature',
-								text: `When looking at a deck's stats, add an icon next to versions of that deck that are archived.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards consumed by Souleater's Scythe would not be removed from the deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards destroyed by Patchwerk would not always be removed from the deck / hand.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix some Deathknight icons not being rendered correctly.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a visual issue where the layout of the deck details for decks with Versions was broken.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some secrets (like Explosive Runes) would be ruled out when the opponent plays a Dormant minion.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a sim issue where Amber Dragon could buff non-dragon minions.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a sim issue where Interrogator Whitemane double damage would work in reverse.`,
+								text: `Fix the winrate / warband charts sometimes not being displayed properly, as well as their tooltips sometimes missing information.`,
 							},
 						],
 					},
 					{
-						category: 'mercenaries',
+						category: 'duels',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the Tasks widget would not show up anymore.`,
+								text: `Fix stat tooltips when choosing your hero, now that there are 6 heroes to choose from.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the text of some of the new Procedural quests would still contain placeholders.`,
+								text: `Fix an issue where a rating of 0 would not be displayed at all in the Runs recap. Also tries to improve rank detection when aggregating matches into runs.`,
 							},
 						],
 					},
@@ -159,7 +89,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix pity timers being incorrectly reported if you opened a Legendary in the first 10 packs and you had not yet opened 10 packs in total.`,
+								text: `Fix an issue where hitting the "back" arrow while navigating the app would sometimes not properly update the screen's main title.`,
 							},
 						],
 					},
