@@ -349,9 +349,10 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 						tableRoot.innerHTML = innerHtml;
 
 						const tooltipWidth = tooltipEl.getBoundingClientRect().width;
+						const tooltipHeight = tooltipEl.getBoundingClientRect().height;
 
 						const leftOffset = yourDatapoint?.parsed != null ? 0 : 50;
-						const left = Math.max(
+						const tooltipLeft = Math.max(
 							0,
 							Math.min(
 								tooltip.caretX - tooltipWidth / 2 + leftOffset,
@@ -362,13 +363,14 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 						// position is relative to the tooltip element, we need to do some gymnastic :)
 						// 10 is because of padding
 						const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
-						const carretLeft = tooltip.caretX - left - 8;
+						const carretLeft = tooltip.caretX - tooltipLeft - 8;
 						tooltipArrowEl.style.left = carretLeft + 'px';
 
 						// Display, position, and set styles for font
+						const tooltipTop = tooltip.y - tooltip.height;
 						tooltipEl.style.opacity = '1';
-						tooltipEl.style.left = left + 'px';
-						tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
+						tooltipEl.style.left = tooltipLeft + 'px';
+						tooltipEl.style.top = tooltipTop + 'px';
 
 						// Set caret Position
 						tooltipEl.classList.remove('above', 'below', 'no-transform');
