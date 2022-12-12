@@ -46,7 +46,7 @@ export class DiscardedCardParser implements EventParser {
 				: originCard.update({
 						relatedCardIds: [cardId, ...(originCard.relatedCardIds ?? [])],
 				  });
-			board = this.helper.replaceCardInZone(board, newOriginCard);
+			board = !newOriginCard ? board : this.helper.replaceCardInZone(board, newOriginCard);
 		}
 
 		const cardWithZone = card.update({
