@@ -128,12 +128,15 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 
 				const filledCommunity = this.fillMissingData(community, lastTurn);
 				const filledYour = this.fillMissingData(your, lastTurn);
+				// console.debug('chart data', filledCommunity, filledYour, lastTurn, community, your);
 
 				const yourData = filledYour?.map((stat) => stat.value) || [];
 				const communityData = filledCommunity?.map((stat) => stat.value) || [];
+
 				// TODO: missing color
 				const newChartData: ChartData<'line'>['datasets'] = [
 					{
+						id: 'your',
 						data: yourData,
 						label: yourLabel,
 						backgroundColor: 'transparent',
@@ -146,6 +149,7 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 							: [],
 					} as any,
 					{
+						id: 'community',
 						data: communityData,
 						label: communityLabel,
 						backgroundColor: 'transparent',
@@ -165,6 +169,7 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 					datasets: newChartData,
 					labels: [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn),
 				};
+				// console.debug('chart input', result);
 				return result;
 			}),
 			share(),
@@ -247,8 +252,16 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 					cornerRadius: 0,
 					displayColors: false,
 					callbacks: {
-						beforeBody: function (items: TooltipItem<'line'>[]): string | string[] {
-							return items?.map((item) => (item?.dataset?.label ?? []) + '|||' + item?.raw);
+						beforeBody: (items: TooltipItem<'line'>[]): string | string[] => {
+							// console.debug('beforeBody', items);
+							return items?.map(
+								(item) =>
+									((item?.dataset as any)?.id ?? '') +
+									'|||' +
+									(item?.dataset?.label ?? '') +
+									'|||' +
+									item?.raw,
+							);
 						},
 					},
 					external: (context) => {
@@ -280,8 +293,29 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 						const yourDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 0);
 						const communityDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 1);
 
-						const [yourLabel, yourDelta] = tooltip.beforeBody[0].split('|||');
-						const [communityLabel, communityDelta] = tooltip.beforeBody[1]?.split('|||') ?? [];
+						let yourLabel: string = null;
+						let yourDelta: string = null;
+						let communityLabel: string = null;
+						let communityDelta: string = null;
+						for (const bBody of tooltip.beforeBody) {
+							const [id, label, delta] = bBody.split('|||');
+							if (id === 'your') {
+								yourLabel = label;
+								yourDelta = delta;
+							} else {
+								communityLabel = label;
+								communityDelta = delta;
+							}
+						}
+
+						// console.debug(
+						// 	'labels',
+						// 	yourLabel,
+						// 	communityLabel,
+						// 	tooltip.beforeBody,
+						// 	yourDatapoint,
+						// 	communityDatapoint,
+						// );
 						const playerSection = yourDatapoint?.formattedValue
 							? this.buildSection(
 									'player',
