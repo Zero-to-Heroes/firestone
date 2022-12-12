@@ -215,7 +215,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			...deckState.hand
 				.filter((c) => !c.creatorCardId)
 				// Remove "unknown cards"
-				.filter((c) => !!c.cardId || !!c.creatorCardId),
+				.filter((c) => !!c.cardId),
 			...deckState.board.filter((c) => !c.creatorCardId),
 			...deckState.otherZone
 				.filter((c) => !!c.cardId)
@@ -223,18 +223,31 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				// Cards that get discovered as sometimes marked as "temporary cards". Sometimes the game creates copies, sometimes
 				// not. There might be a way to make sure we know what is what (based on the linkedEntityId), but I need to investigate
 				// that
+				// How to handle discarded cards? They should probably be handled in the same way as cards played in the "other" zone
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
-		]
-			.filter((card) => !COIN_IDS.includes(card.cardId as CardIds))
+		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
+		// These include all the cards that were at some point part of the initial deck
+		const uniqueCardIds = [...new Set(cardsToShow.map((c) => c.cardId))];
+		console.debug('uniqueCardIds', uniqueCardIds);
+		const result = uniqueCardIds
+			.flatMap((cardId) => {
+				const quantityToShow = deckState.deck.filter((c) => c.cardId === cardId).length;
+				const displayMode = !quantityToShow ? 'dim' : null;
+				const refCard = cardsToShow.find((c) => c.cardId === cardId);
+				return Array(Math.max(1, quantityToShow)).fill(
+					VisualDeckCard.create({
+						...refCard,
+						creatorCardIds: (refCard.creatorCardId ? [refCard.creatorCardId] : []) as readonly string[],
+						highlight: displayMode,
+					}),
+				);
+			})
 			.sort((a, b) => a.manaCost - b.manaCost);
-
-		return cardsToShow.flatMap((card) => {
-			return VisualDeckCard.create({
-				...card,
-				creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-				highlight: !deckState.deck.filter((c) => c.cardId === card.cardId).length ? 'dim' : null,
-			});
-		});
+		console.debug(
+			'showing cards',
+			result.map((c) => ({ name: c.cardName, ...c })),
+		);
+		return result;
 	}
 
 	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean): number {
