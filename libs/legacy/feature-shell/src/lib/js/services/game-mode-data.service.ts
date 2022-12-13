@@ -58,6 +58,16 @@ export class GameModeDataService {
 			case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
 				this.triggerBattlegroundsInfoRetrieve(spectating);
 				return;
+			case GameType.GT_CASUAL:
+			case GameType.GT_FSG_BRAWL:
+			case GameType.GT_FSG_BRAWL_1P_VS_AI:
+			case GameType.GT_FSG_BRAWL_2P_COOP:
+			case GameType.GT_FSG_BRAWL_VS_FRIEND:
+			case GameType.GT_TAVERNBRAWL:
+			case GameType.GT_TB_1P_VS_AI:
+			case GameType.GT_TB_2P_COOP:
+				this.triggerRankMatchInfoRetrieve();
+				return;
 			case GameType.GT_RANKED:
 				this.triggerRankMatchInfoRetrieve();
 				this.triggerPlayerDeckInfoRetrieve(spectating);
