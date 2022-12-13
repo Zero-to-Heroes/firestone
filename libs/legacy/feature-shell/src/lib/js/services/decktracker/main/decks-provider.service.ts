@@ -107,7 +107,10 @@ export class DecksProviderService {
 		if (!stats || !stats?.length) {
 			return personalDecks;
 		}
-		const rankedStats = stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => !!stat.playerDecklist);
+		const rankedStats = stats
+			.filter((stat) => stat.result === 'won' || stat.result === 'lost')
+			.filter((stat) => stat.gameMode === 'ranked')
+			.filter((stat) => !!stat.playerDecklist);
 		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
