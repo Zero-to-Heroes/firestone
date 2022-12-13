@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
+import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
@@ -95,6 +95,13 @@ export class CollectionManager {
 			return packsFromDb;
 		} else {
 			const saved = await this.db.savePackInfos(packInfo);
+			// Checking for non-implemented booster IDs
+			packInfo.forEach((p) => {
+				const existingType = BoosterType[p.packType];
+				if (!existingType) {
+					console.warn('[collection-manager] missing pack type in enum', p.packType, p.totalObtained);
+				}
+			});
 			return saved;
 		}
 	}
