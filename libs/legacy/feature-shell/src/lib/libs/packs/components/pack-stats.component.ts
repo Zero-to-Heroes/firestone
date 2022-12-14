@@ -226,6 +226,7 @@ const GOLDEN_SET_PACKS = [
 ];
 
 const CLASS_PACKS = [
+	BoosterType.STANDARD_DEATHKNIGHT,
 	BoosterType.STANDARD_DEMONHUNTER,
 	BoosterType.STANDARD_DRUID,
 	BoosterType.STANDARD_HUNTER,
@@ -246,6 +247,7 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	...YEAR_PACKS,
 	BoosterType.GOLDEN_CLASSIC_PACK,
 	BoosterType.GOLDEN_STANDARD_PACK,
+	BoosterType.GOLDEN_WILD_PACK,
 ];
 
 interface InternalPackGroup {
