@@ -96,6 +96,16 @@ export class DeckParserService {
 			return null;
 		}
 
+		if (this.selectedDeckId < 0) {
+			console.log(
+				'[deck-parser] retrieving template deck',
+				this.selectedDeckId,
+				metadata.scenarioId,
+				metadata.gameType,
+			);
+			return this.getTemplateDeck(this.selectedDeckId, metadata.scenarioId, metadata.gameType);
+		}
+
 		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
 		// need to regenerate the deck
 		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
@@ -160,13 +170,15 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	public async getWhizbangDeck(deckId: number, scenarioId: number, gameType: GameType): Promise<DeckInfo> {
+	public async getTemplateDeck(deckId: number, scenarioId: number, gameType: GameType): Promise<DeckInfo> {
 		if (this.spectating) {
 			console.log('[deck-parser] spectating, not returning Whizbang deck');
 			return;
 		}
 
-		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId);
+		// Templates are negative
+		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId || deck.Id === -deckId);
+		console.debug('[deck-parser] deckTemplate', deckId, deck);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
 			this.currentDeck = this.updateDeckFromMemory(deck, scenarioId, gameType);
