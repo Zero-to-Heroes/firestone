@@ -214,7 +214,8 @@ export const rememberCardsInHand = (
 	if (refCard?.type === 'Spell' && !!commanderSivaraCards.length) {
 		const newSivaraCards = commanderSivaraCards.map((c) =>
 			c.update({
-				relatedCardIds: [...c.relatedCardIds, cardId],
+				// Only keep the first 3
+				relatedCardIds: [...c.relatedCardIds, cardId].slice(0, 3),
 			}),
 		);
 		for (const newCard of newSivaraCards) {
