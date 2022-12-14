@@ -40,7 +40,7 @@ export class AnachronosCounterDefinition implements CounterDefinition {
 			value: value,
 			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Anachronos}.jpg`,
 			cssClass: 'anachronos-counter',
-			tooltip: i18n.translateString(`counters.anachronos.${side}`, { value: value }),
+			tooltip: i18n.translateString(`counters.anachronos.player`, { value: value }),
 			cardTooltips: null,
 			standardCounter: true,
 		};
