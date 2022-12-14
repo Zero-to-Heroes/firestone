@@ -116,8 +116,8 @@ export class WindowWrapperComponent
 				}
 				if (!this.originalHeight || !this.originalWidth) {
 					const currentWindow = await this.ow.getCurrentWindow();
-					this.originalWidth = currentWindow.width / Math.max(1, this.zoom);
-					this.originalHeight = currentWindow.height / Math.max(1, this.zoom);
+					this.originalWidth = currentWindow.width / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
+					this.originalHeight = currentWindow.height / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
 					console.log('setting originalWidth', this.originalWidth, 'originalHeight', this.originalHeight);
 				}
 				// 0 is the unzoomed value

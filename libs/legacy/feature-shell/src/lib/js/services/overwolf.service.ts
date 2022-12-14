@@ -516,11 +516,11 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentWindow(): Promise<overwolf.windows.WindowInfo> {
-		return new Promise<overwolf.windows.WindowInfo>((resolve) => {
+	public async getCurrentWindow(): Promise<ExtendedWindowInfo> {
+		return new Promise<ExtendedWindowInfo>((resolve) => {
 			try {
 				overwolf.windows.getCurrentWindow((res: overwolf.windows.WindowResult) => {
-					resolve(res.window);
+					resolve(res.window as ExtendedWindowInfo);
 				});
 			} catch (e) {
 				console.warn('Exception while getting current window window');
@@ -957,16 +957,6 @@ interface UpdateExtensionResult {
 	readonly version: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Manifest {
-	data: {
-		windows: {
-			[windowName: string]: {
-				min_size: {
-					width: number;
-					height: number;
-				};
-			};
-		};
-	};
+export interface ExtendedWindowInfo extends overwolf.windows.WindowInfo {
+	dpiScale: number;
 }
