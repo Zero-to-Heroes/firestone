@@ -54,10 +54,11 @@ export class ReplayUploadService {
 			today.getMonth() + 1
 		}/${today.getDate()}/${uuid()}.xml.zip`;
 		const prefs = await this.prefs.getPreferences();
+		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const metadata = {
 			'review-id': reviewId,
 			'replay-key': replayKey,
-			'application-key': 'firestone',
+			'application-key': `firestone-${version}`,
 			'user-key': userId,
 			username: userName,
 			'file-type': 'hszip',
