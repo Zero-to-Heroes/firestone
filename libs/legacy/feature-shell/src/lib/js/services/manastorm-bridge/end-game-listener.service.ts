@@ -58,7 +58,7 @@ export class EndGameListenerService {
 			filter((event) => event.type === GameEvent.PLAYER_DECK_INFO),
 			map((event) => event.additionalData.playerDeck as DeckInfo),
 			startWith(null),
-			// tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
+			tap((info) => console.debug('[manastorm-bridge] playerDeck', info)),
 		);
 		const duelsInfo$ = this.duelsState.duelsInfo$$
 			.asObservable()
@@ -187,7 +187,9 @@ export class EndGameListenerService {
 					console.log('[manastorm-bridge] end game, uploading? spectating=', info.gameEnded.spectating),
 				),
 				filter((info) => !info.gameEnded.spectating),
-				tap((info) => console.log('[manastorm-bridge] not a spectate game, continuing', info.metadata)),
+				tap((info) =>
+					console.log('[manastorm-bridge] not a spectate game, continuing', info.metadata, info.playerDeck),
+				),
 				// tap((info) => console.debug('[manastorm-bridge] will prepare for upload', info)),
 				// map(info => )
 			)

@@ -67,6 +67,7 @@ export class GameModeDataService {
 			case GameType.GT_TB_1P_VS_AI:
 			case GameType.GT_TB_2P_COOP:
 				this.triggerRankMatchInfoRetrieve();
+				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_RANKED:
 				this.triggerRankMatchInfoRetrieve();
