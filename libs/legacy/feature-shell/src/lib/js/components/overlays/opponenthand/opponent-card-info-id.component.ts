@@ -53,7 +53,11 @@ export class OpponentCardInfoIdComponent {
 		this.drawnBy =
 			!value.cardId &&
 			!!value.lastAffectedByCardId &&
-			!value.creatorCardId &&
+			// Issue: if a card is "created by" something in deck, then drawn by a tutor, it won't show any information,
+			// which will in itself give a hint
+			// !value.creatorCardId &&
+			// This might reduce the risk of this issue appearing
+			!this.createdBy &&
 			publicCardCreators.includes(value.lastAffectedByCardId as CardIds);
 		this.hasBuffs = value.buffCardIds?.length > 0;
 
