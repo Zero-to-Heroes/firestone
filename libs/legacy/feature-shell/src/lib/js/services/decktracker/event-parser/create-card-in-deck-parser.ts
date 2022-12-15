@@ -60,14 +60,15 @@ export class CreateCardInDeckParser implements EventParser {
 		let { card } = deck.findCard(entityId) ?? { zone: null, card: null };
 		// console.debug('[create-card-in-deck]', 'card added', card);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
+		const newCardId = cardId ?? card?.cardId;
 		card = (card ?? DeckCard.create()).update({
-			cardId: cardId ?? card?.cardId,
+			cardId: newCardId,
 			entityId: entityId,
 			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
-			mainAttributeChange: creatorEntity ? buildAttributeChange(creatorEntity) : null,
+			mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
 			positionFromBottom: positionFromBottom,
 			createdByJoust: createdByJoust,
 		} as DeckCard);
@@ -127,16 +128,18 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 	return undefined;
 };
 
-const buildAttributeChange = (card: DeckCard): number => {
+const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number => {
 	// console.debug('building attribute change', card);
-	if (card?.cardId === CardIds.Ignite) {
-		return 1 + (card.mainAttributeChange ?? 0);
+	// If the card is played by an effect (eg Manaling), it's possible that the creatorCard
+	// doesn't have the correct id
+	if (creatorCard?.cardId === CardIds.Ignite || newCardId === CardIds.Ignite) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (card?.cardId === CardIds.Bottomfeeder) {
-		return 1 + (card.mainAttributeChange ?? 0);
+	if (creatorCard?.cardId === CardIds.Bottomfeeder || newCardId === CardIds.Bottomfeeder) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (card?.cardId === CardIds.SunscaleRaptor) {
-		return 1 + (card.mainAttributeChange ?? 0);
+	if (creatorCard?.cardId === CardIds.SunscaleRaptor || newCardId === CardIds.SunscaleRaptor) {
+		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
 	return null;
 };
