@@ -1,5 +1,6 @@
 .short-recap {
 	display: flex;
+	align-items: center;
 	height: 100%;
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
@@ -15,8 +16,8 @@
 
 	& > * {
 		margin-right: -15px;
-		height: 70px;
-		width: 70px;
+		height: 100%;
+		aspect-ratio: 1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -34,7 +35,7 @@
 			font-family: Passion One;
 			font-style: normal;
 			font-weight: normal;
-			font-size: 28px;
+			font-size: 3vh;
 			text-align: center;
 			color: white;
 			text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000,
