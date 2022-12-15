@@ -169,7 +169,6 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 					datasets: newChartData,
 					labels: [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn),
 				};
-				// console.debug('chart input', result);
 				return result;
 			}),
 			share(),
@@ -211,9 +210,9 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 	}
 
 	private getMaxTurn(input: readonly NumericTurnInfo[]) {
-		return input.filter((stat) => stat.value).length === 0
+		return input.filter((stat) => stat.value != null).length === 0
 			? 0
-			: Math.max(...input.filter((stat) => stat.value).map((stat) => stat.turn));
+			: Math.max(...input.filter((stat) => stat.value != null).map((stat) => stat.turn));
 	}
 
 	private buildChartOptions(showYAxis: boolean, stepSize: number, maxYValue: number): ChartOptions {
