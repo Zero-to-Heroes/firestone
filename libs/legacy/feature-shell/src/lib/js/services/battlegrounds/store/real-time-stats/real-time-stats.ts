@@ -1,12 +1,12 @@
-import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
-import { BooleanTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/boolean-turn-info';
-import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
-import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
-import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import {
 	BattleResultHistory,
 	BgsComposition,
+	BgsFaceOff,
 	BgsPostMatchStats as IBgsPostMatchStats,
+	BooleanTurnInfo,
+	ComplexTurnInfo,
+	NumericTurnInfo,
+	ValueHeroInfo,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';

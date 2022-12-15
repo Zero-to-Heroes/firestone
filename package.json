@@ -32,7 +32,7 @@
 		"@firestone-hs/deckstrings": "^2.2.4",
 		"@firestone-hs/duels-global-stats": "^1.0.8",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.108",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.110",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/reference-data": "^1.0.48",
 		"@firestone-hs/replay-parser": "^1.2.3",
@@ -124,7 +124,7 @@
 	},
 	"overrides": {
 		"@firestone-hs/reference-data": "^1.0.48",
-		"@firestone-hs/hs-replay-xml-parser": "^0.0.108",
+		"@firestone-hs/hs-replay-xml-parser": "^0.0.110",
 		"@angular/common": "^15.0.0",
 		"@angular/core": "^15.0.0",
 		"rxjs": "^7.5.0",

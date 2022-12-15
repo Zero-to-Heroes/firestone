@@ -302,6 +302,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.IniStormcoil_Mechgyver;
 		case CardIds.QueenAzshara_BG22_HERO_007:
 			return CardIds.QueenAzshara_AzsharasAmbition;
+		case CardIds.QueenAzshara_NagaQueenAzsharaToken:
+			return CardIds.QueenAzshara_NagaConquest;
 		case CardIds.Ozumat_BG23_HERO_201:
 			return CardIds.Ozumat_Tentacular;
 		case CardIds.LadyVashj_BG23_HERO_304:
