@@ -163,6 +163,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 				]
 					.filter((c) => !!c.cardId)
 					.filter((c) => !c.creatorCardId)
+					.filter((c) => !c.stolenFromOpponent)
 					.filter((c) => !c.temporaryCard);
 				let heroCardId = !!deckState?.hero?.cardId ? this.allCards.getCard(deckState?.hero?.cardId).dbfId : 7;
 				if (!heroCardId) {

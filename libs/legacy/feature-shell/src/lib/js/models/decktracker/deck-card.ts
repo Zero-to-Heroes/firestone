@@ -39,6 +39,7 @@ export class DeckCard {
 		| 'TRANSFORMED_INTO_OTHER';
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
 	readonly inInitialDeck: boolean;
+	readonly stolenFromOpponent?: boolean;
 	readonly temporaryCard?: boolean;
 	// Not sure exactly what the best way is to show the milled cards. As far as HS is concerned, the
 	// "milled" status doesn't exist, so we need a special flag
