@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.17',
+		version: '10.0.20',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -47,12 +47,8 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Add a fix for the "legacy" display mode (the one where you don't have the deck/hand/other zones), which was sometimes doing weird things (especially when discarding cards).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards discarded from the opponent's hand would not be properly removed from their hand tracker.`,
+								type: 'feature',
+								text: `Loaner decks are now properly supported.`,
 							},
 						],
 					},
@@ -67,20 +63,40 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix the winrate / warband charts sometimes not being displayed properly, as well as their tooltips sometimes missing information.`,
+								text: `Fix an issue where the turn-by-turn winrates in the Battles tab would not update until you got a non-0 winrate chance.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some games were incorrectly flagged as "perfect".`,
+							},
+							{
+								type: 'ui',
+								text: `Improve how the "quick opponent recap" (brought up by pressing Tab while in lobby) looks on high resolution screens.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'decktracker',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix stat tooltips when choosing your hero, now that there are 6 heroes to choose from.`,
+								text: `Fix an info leak where "created by" cards don't show an icon in the opponent's hand, when drawn by a tutor. This would give some info about the card being drawn.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where a rating of 0 would not be displayed at all in the Runs recap. Also tries to improve rank detection when aggregating matches into runs.`,
+								text: `Fix an issue where stolen cards (e.g. by Theotar) are taken into account when building the DK runes widget.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where some cards that upgrade when played (like Ignite) have their buff not properly tracked in deck when played by an effect (e.g. Nagaling).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Sivara would show ALL the spells played (instead of the first 3) when mousing over it in the decklist.`,
+							},
+							{
+								type: 'bug',
+								text: `Ignore ties when building deck stats.`,
 							},
 						],
 					},
@@ -89,7 +105,16 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where hitting the "back" arrow while navigating the app would sometimes not properly update the screen's main title.`,
+								text: `Add missing Deathknight and Golden Wild packs.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Tutorial quests are now tracked by the quest widget.`,
 							},
 						],
 					},
