@@ -742,32 +742,32 @@ import { translationFileVersion } from './translation-file-version';
 
 console.log('environment is ' + process.env['NODE_ENV']);
 
-overwolf.extensions.current.getManifest((result) => {
-	process.env['APP_VERSION'] = result.meta.version;
+overwolf.extensions.current.getManifest((manifestResult) => {
+	process.env['APP_VERSION'] = manifestResult.meta.version;
 	console.log('version is ' + process.env['APP_VERSION']);
-});
 
-overwolf.settings.getExtensionSettings((result) => {
-	const sampleRate = result?.settings?.channel === 'beta' ? 1 : 0.1;
-	process.env['APP_CHANNEL'] = result?.settings?.channel;
-	console.log('init Sentry with sampleRate', sampleRate, result?.settings?.channel, result);
-	init({
-		dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
-		enabled: process.env['NODE_ENV'] === 'production',
-		release: process.env['APP_VERSION'],
-		attachStacktrace: true,
-		sampleRate: sampleRate,
-		normalizeDepth: 6,
-		integrations: [
-			new Integrations.GlobalHandlers({
-				onerror: true,
-				onunhandledrejection: true,
-			}),
-			new ExtraErrorData(),
-			new CaptureConsole({
-				levels: ['error'],
-			}),
-		],
+	overwolf.settings.getExtensionSettings((settingsResult) => {
+		const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
+		process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
+		console.log('init Sentry with sampleRate', sampleRate, settingsResult?.settings?.channel, settingsResult);
+		init({
+			dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
+			enabled: process.env['NODE_ENV'] === 'production',
+			release: `firestone@${manifestResult.meta.version}`,
+			attachStacktrace: true,
+			sampleRate: sampleRate,
+			normalizeDepth: 6,
+			integrations: [
+				new Integrations.GlobalHandlers({
+					onerror: true,
+					onunhandledrejection: true,
+				}),
+				new ExtraErrorData(),
+				new CaptureConsole({
+					levels: ['error'],
+				}),
+			],
+		});
 	});
 });
 
