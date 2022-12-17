@@ -1,3 +1,4 @@
+## Contributing
 -   first you need to install Firestone from the official Overwolf store (see https://www.firestoneapp.com for the download link), as it won't let you load a dev version if the official version hasn't been installed first
 -   run `npm install`.
 -   build with `npm run dev`
