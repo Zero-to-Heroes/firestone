@@ -4,7 +4,7 @@ import {
 	CardClass,
 	CardIds,
 	COIN_IDS,
-	GameType,
+	GameType
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -501,6 +501,7 @@ const publicCardGiftCreators = [
 	CardIds.MarkedShot,
 	CardIds.MarkedShotCore,
 	CardIds.MarvelousMyceliumTavernBrawlToken,
+	CardIds.UniteTheMurlocs_MegafinToken,
 	CardIds.MenacingNimbus,
 	CardIds.MenacingNimbusCore,
 	CardIds.MindEater,
@@ -607,6 +608,7 @@ const publicCardGiftCreators = [
 	CardIds.Swashburglar,
 	CardIds.SwashburglarCore,
 	CardIds.TamsinRoame_BAR_918,
+	CardIds.TanglefurMystic,
 	CardIds.TheCandlesquestion,
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714a,
 	CardIds.TheCandlesquestion_TheCandlesquestion_DALA_714b,
@@ -706,6 +708,7 @@ export const cardTutors = [
 	CardIds.ElvenMinstrel,
 	CardIds.ExcavationSpecialist_TSC_911,
 	CardIds.ExcavationSpecialist_Story_11_ExcavationPuzzle,
+	CardIds.FarSightCore,
 	CardIds.FarSightLegacy,
 	CardIds.FarSightVanilla,
 	CardIds.Felgorger_SW_043,
