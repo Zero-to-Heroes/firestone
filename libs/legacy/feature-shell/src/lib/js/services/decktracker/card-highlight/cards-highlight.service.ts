@@ -77,7 +77,7 @@ import {
 	taunt,
 	undead,
 	weapon,
-	whelp,
+	whelp
 } from './selectors';
 
 @Injectable()
@@ -576,6 +576,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, overload);
 			case CardIds.InvigoratingLightTavernBrawl:
 				return and(spell, holy);
+			case CardIds.InvigoratingSermon:
+				return and(or(inDeck, inHand), minion);
 			case CardIds.IronRootsTavernBrawl:
 				return and(or(inDeck, inHand), spell, nature);
 			case CardIds.ItsRainingFin:
@@ -726,6 +728,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(or(inDeck, inHand, inGraveyard), minion, imp);
 			case CardIds.RaidBossOnyxia_ONY_004:
 				return and(or(inDeck, inHand), minion, whelp);
+			case CardIds.RaidTheDocks:
+				return and(inDeck, weapon);
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.RallyTheTroopsTavernBrawl:
@@ -794,6 +798,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.Shadowcasting101TavernBrawl:
 				return and(or(inDeck, inHand), minion);
 			case CardIds.ShadowVisions:
+				return and(inDeck, spell);
+			case CardIds.SheldrasMoontree:
 				return and(inDeck, spell);
 			case CardIds.ShipsCannon:
 				return and(or(inDeck, inHand), minion, pirate);
