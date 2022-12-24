@@ -9,7 +9,7 @@
 	font-size: 14px;
 	font-family: Open Sans;
 	pointer-events: all;
-	width: 710px;
+	width: 50vw;
 	min-height: 580px;
 	max-height: calc(100% - 100px);
 	height: 100%;
@@ -290,8 +290,10 @@
 			flex-wrap: wrap;
 
 			.hero-portrait-frame {
-				width: 119px;
-				height: 164px;
+				width: 17vh;
+				margin-right: 10px;
+				aspect-ratio: 3/4;
+				height: auto;
 				margin-right: 10px;
 			}
 
