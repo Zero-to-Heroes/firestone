@@ -627,6 +627,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LadyAshvane_TSC_943:
 			case CardIds.LadyAshvane_Story_11_LadyAshvane:
 				return and(inDeck, weapon);
+			case CardIds.LadyDeathwhisper_RLK_713:
+				return and(or(inHand, inDeck), spell, frost);
 			case CardIds.LadyInWhite:
 				return and(inDeck, minion);
 			case CardIds.LadyVashj_VashjPrimeToken:
