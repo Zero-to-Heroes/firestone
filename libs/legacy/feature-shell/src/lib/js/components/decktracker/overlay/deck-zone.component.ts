@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 	Optional,
-	Output,
+	Output
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -252,8 +252,7 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 					} as VisualDeckCard);
 					return result;
 				})
-				.sort((a, b) => this.compare(a, b, showUpdatedCost))
-				.sort((a, b) => this.sortByIcon(a, b));
+				.sort((a, b) => this.compare(a, b, showUpdatedCost));
 			if (section.sortingFunction) {
 				cards = [...cards].sort(section.sortingFunction);
 			}
@@ -339,33 +338,5 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 
 	private getCost(card: VisualDeckCard, showUpdatedCost: boolean): number {
 		return showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
-	}
-
-	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {
-		if (a.zone === 'PLAY' && b.zone !== 'PLAY') {
-			return -1;
-		}
-		if (a.zone !== 'PLAY' && b.zone === 'PLAY') {
-			return 1;
-		}
-		if (a.zone === 'GRAVEYARD' && b.zone !== 'GRAVEYARD') {
-			return -1;
-		}
-		if (a.zone !== 'GRAVEYARD' && b.zone === 'GRAVEYARD') {
-			return 1;
-		}
-		if (a.zone === 'DISCARD' && b.zone !== 'DISCARD') {
-			return -1;
-		}
-		if (a.zone !== 'DISCARD' && b.zone === 'DISCARD') {
-			return 1;
-		}
-		if (a.countered && !b.countered) {
-			return -1;
-		}
-		if (!a.countered && b.countered) {
-			return 1;
-		}
-		return 0;
 	}
 }

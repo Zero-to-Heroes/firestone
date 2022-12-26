@@ -198,14 +198,26 @@ export class DeckListByZoneComponent implements OnDestroy {
 		);
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (this._deckState.dynamicZones.length === 0) {
-			const otherZone = [...this._deckState.otherZone, ...this._deckState.board];
+			const otherZone = [
+				...this._deckState.otherZone
+					// Frizz creates PLAY entities that don't have any information
+					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] CardID=
+					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ZONE value=SETASIDE
+					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=CONTROLLER value=1
+					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ENTITY_ID value=91
+					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] tag=ZONE value=PLAY
+					.filter((c) => c.zone !== 'PLAY' || !!c.cardId?.length),
+				...this._deckState.board,
+			];
 			zones.push(
 				this.buildZone(
 					otherZone,
 					null,
 					'other',
 					this.i18n.translateString('decktracker.zones.other'),
-					this._sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : null,
+					this._sortCardsByManaCostInOtherZone
+						? (a, b) => a.manaCost - b.manaCost
+						: (a, b) => this.sortByIcon(a, b),
 					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 					// not show them in the zones
@@ -304,6 +316,34 @@ export class DeckListByZoneComponent implements OnDestroy {
 			numberOfCards: numberOfCards != null ? numberOfCards : sections.flatMap((section) => section.cards).length,
 			sections: sections,
 		} as DeckZone;
+	}
+
+	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {
+		if (a.zone === 'PLAY' && b.zone !== 'PLAY') {
+			return -1;
+		}
+		if (a.zone !== 'PLAY' && b.zone === 'PLAY') {
+			return 1;
+		}
+		if (a.zone === 'GRAVEYARD' && b.zone !== 'GRAVEYARD') {
+			return -1;
+		}
+		if (a.zone !== 'GRAVEYARD' && b.zone === 'GRAVEYARD') {
+			return 1;
+		}
+		if (a.zone === 'DISCARD' && b.zone !== 'DISCARD') {
+			return -1;
+		}
+		if (a.zone !== 'DISCARD' && b.zone === 'DISCARD') {
+			return 1;
+		}
+		if (a.countered && !b.countered) {
+			return -1;
+		}
+		if (!a.countered && b.countered) {
+			return 1;
+		}
+		return 0;
 	}
 }
 

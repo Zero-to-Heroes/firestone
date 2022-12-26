@@ -158,7 +158,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		}
 
 		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
-			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom) || a.manaCost - b.manaCost;
+			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom);
 
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
@@ -181,11 +181,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
 		}
 
-		const base = this.buildBaseCards(
-			cardsInDeckZone,
-			deckState,
-			hideGeneratedCardsInOtherZone,
-		);
+		const base = this.buildBaseCards(cardsInDeckZone, deckState, hideGeneratedCardsInOtherZone);
 		// console.debug('base cards', base);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
@@ -264,7 +260,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 
 	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean): number {
 		// Generated cards always go to the bottom
-		if (!!card.creatorCardId?.length || !!card.creatorCardIds?.length) {
+		if (cardsGoToBottom && (!!card.creatorCardId?.length || !!card.creatorCardIds?.length)) {
 			return 3;
 		}
 
@@ -272,8 +268,8 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			switch (card.highlight) {
 				case 'normal':
 					return 0;
-				case 'in-hand':
-					return 1;
+				// case 'in-hand':
+				// 	return 1;
 				case 'dim':
 					return 2;
 				default:
