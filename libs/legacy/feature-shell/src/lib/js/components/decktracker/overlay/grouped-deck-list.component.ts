@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	Output,
+	Output
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
@@ -157,6 +157,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		}
 
 		const base = this.buildBaseCards(deckState, hideGeneratedCardsInOtherZone);
+		console.debug('base cards', this.buildBaseCards);
 
 		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
 			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom) || a.manaCost - b.manaCost;
@@ -227,13 +228,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
 		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
 		// These include all the cards that were at some point part of the initial deck
+		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
 		const uniqueCardIds = [...new Set(cardsToShow.map((c) => c.cardId))];
-		console.debug('uniqueCardIds', uniqueCardIds);
-		const result = uniqueCardIds
-			.flatMap((cardId) => {
-				const quantityToShow = deckState.deck.filter((c) => c.cardId === cardId).length;
+		console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
+		const result = uniqueCardNames
+			.flatMap((cardName) => {
+				const quantityToShow = deckState.deck.filter((c) => c.cardName === cardName).length;
+				// const quantityToShow = deckState.deck.filter((c) => c.cardId === cardId).length;
 				const displayMode = !quantityToShow ? 'dim' : null;
-				const refCard = cardsToShow.find((c) => c.cardId === cardId);
+				const refCard = cardsToShow.find((c) => c.cardName === cardName);
 				return Array(Math.max(1, quantityToShow)).fill(
 					VisualDeckCard.create({
 						...refCard,
