@@ -443,6 +443,9 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inGraveyard, minion);
 			case CardIds.ExpeditedBurialTavernBrawl:
 				return and(minion, deathrattle);
+			case CardIds.FandralStaghelm:
+			case CardIds.FandralStaghelmCore:
+				return and(inDeck, chooseOne);
 			case CardIds.FeldoreiWarband:
 				return and(inDeck, minion);
 			case CardIds.FelfireInTheHole:
@@ -708,6 +711,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, weapon);
 			case CardIds.PotionOfSparkingTavernBrawl:
 				return and(minion, rush);
+			case CardIds.PredatoryInstincts:
+				return and(inDeck, minion, beast);
 			case CardIds.Prescience:
 				return and(inDeck, minion);
 			case CardIds.PrimordialProtector_BAR_042:
