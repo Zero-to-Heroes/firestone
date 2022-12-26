@@ -408,6 +408,7 @@ const publicCardGiftCreators = [
 	CardIds.EvilMiscreant,
 	CardIds.EvilQuartermaster,
 	CardIds.EvilTotem,
+	CardIds.Evocation,
 	CardIds.ExpiredMerchant,
 	CardIds.ExplorersHat,
 	CardIds.FelerinTheForgotten,
