@@ -76,7 +76,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						[value]="value.stat.maxBoardStats.value"
 						[heroIcon]="value.stat.maxBoardStats.hero"
 						[reviewId]="value.stat.maxBoardStats.reviewId"
-						tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
+						[tooltipText]="'app.battlegrounds.personal-stats.records.rows.total-stats-tooltip' | owTranslate"
 					></stat-cell>
 					<stat-cell
 						[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-chart-data';
 
 @Component({
@@ -47,10 +48,8 @@ export class BasicBarChart2Component {
 	private chartData: readonly SimpleBarChartData[];
 	private _tooltipTitle;
 	private _midLineValue: number;
-	private _rawValueUnit = ' matches';
-	private _valueUnit = '%';
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
 
 	udpateStats() {
 		if (!this.chartData) {
@@ -88,6 +87,12 @@ export class BasicBarChart2Component {
 		return {
 			bars: elements.map((data, i) => {
 				const tooltipTitle = this._tooltipTitle ? `<div class="title">${this._tooltipTitle}</div>` : '';
+				const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
+					value: data.rawValue,
+				});
+				const matchesLabel = this.i18n.translateString('battleground.hero-selection.total-matches', {
+					value: data.rawValue,
+				});
 				return {
 					// Ensure a min height to make the graph look better
 					height: Math.max((100 * data.value) / maxValues[i], 2),
@@ -95,25 +100,14 @@ export class BasicBarChart2Component {
 					tooltip: `
 					<div class="body">
 						${tooltipTitle}
-						<div class="label">${data.label}${this.getLabelUnit(data.label)}</div>
-						<div class="raw-value">${data.rawValue}${this._rawValueUnit}</div>
-						<div class="value">${(+data.value).toFixed(1)}${this._valueUnit}</div>
+						<div class="label">${placeLabel}</div>
+						<div class="raw-value">${matchesLabel}</div>
+						<div class="value">${(+data.value).toFixed(1)}%</div>
 					</div>`,
 				};
 			}),
 			label: '' + (xValue + 1),
 		} as BarContainer;
-	}
-
-	private getLabelUnit(label: string) {
-		if (label === '1') {
-			return 'st place';
-		} else if (label === '2') {
-			return 'nd place';
-		} else if (label === '3') {
-			return 'rd place';
-		}
-		return 'th place';
 	}
 }
 

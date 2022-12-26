@@ -61,7 +61,7 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 				[label]="'app.battlegrounds.personal-stats.records.rows.board-stats' | owTranslate"
 				[value]="maxBoardStats"
 				[isNewRecord]="isNewRecord('maxBoardStats')"
-				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
+				[tooltipText]="'app.battlegrounds.personal-stats.records.rows.total-stats-tooltip' | owTranslate"
 			></stat-cell>
 			<stat-cell
 				[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
