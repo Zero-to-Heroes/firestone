@@ -479,6 +479,7 @@ const publicCardGiftCreators = [
 	CardIds.KingMuklaVanilla,
 	CardIds.Kingsbane_LOOT_542,
 	CardIds.KoboldTaskmaster,
+	CardIds.LadyDeathwhisper_RLK_713,
 	CardIds.TheCountess_LegendaryInvitationToken,
 	CardIds.LesserRubySpellstone,
 	CardIds.LicensedAdventurer,
