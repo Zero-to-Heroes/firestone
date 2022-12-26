@@ -12,6 +12,7 @@ import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -156,35 +157,39 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			return null;
 		}
 
-		const base = this.buildBaseCards(deckState, hideGeneratedCardsInOtherZone);
-		console.debug('base cards', this.buildBaseCards);
-
 		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
 			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom) || a.manaCost - b.manaCost;
 
 		const deckSections: InternalDeckZoneSection[] = [];
-		let cardsInDeckZone = base;
-		if (showTopCardsSeparately && base.filter((c) => c.positionFromTop != undefined).length) {
+		let cardsInDeckZone = deckState.deck;
+		if (showTopCardsSeparately && cardsInDeckZone.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
 				sortingFunction: (a, b) => a.positionFromTop - b.positionFromTop,
-				cards: base.filter((c) => c.positionFromTop != undefined),
+				cards: cardsInDeckZone.filter((c) => c.positionFromTop != undefined),
 				order: -1,
 			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromTop == undefined);
 		}
-		if (showBottomCardsSeparately && base.filter((c) => c.positionFromBottom != undefined).length) {
+		if (showBottomCardsSeparately && cardsInDeckZone.filter((c) => c.positionFromBottom != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.bottom-of-deck'),
 				sortingFunction: (a, b) => a.positionFromBottom - b.positionFromBottom,
-				cards: base.filter((c) => c.positionFromBottom != undefined),
+				cards: cardsInDeckZone.filter((c) => c.positionFromBottom != undefined),
 				order: 1,
 			});
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
 		}
+
+		const base = this.buildBaseCards(
+			cardsInDeckZone,
+			deckState,
+			hideGeneratedCardsInOtherZone,
+		);
+		// console.debug('base cards', base);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
-			cards: cardsInDeckZone,
+			cards: base,
 			sortingFunction: sortingFunction,
 			order: 0,
 		});
@@ -207,10 +212,14 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		};
 	}
 
-	private buildBaseCards(deckState: DeckState, hideGeneratedCardsInOtherZone: boolean): readonly VisualDeckCard[] {
+	private buildBaseCards(
+		deck: readonly DeckCard[],
+		deckState: DeckState,
+		hideGeneratedCardsInOtherZone: boolean,
+	): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
 		const cardsToShow = [
-			...deckState.deck
+			...deck
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId || !!c.creatorCardId),
 			...deckState.hand
@@ -229,12 +238,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
 		// These include all the cards that were at some point part of the initial deck
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
-		const uniqueCardIds = [...new Set(cardsToShow.map((c) => c.cardId))];
-		console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
+		// const uniqueCardIds = [...new Set(cardsToShow.map((c) => c.cardId))];
+		// console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
-				const quantityToShow = deckState.deck.filter((c) => c.cardName === cardName).length;
-				// const quantityToShow = deckState.deck.filter((c) => c.cardId === cardId).length;
+				const quantityToShow = deck.filter((c) => c.cardName === cardName).length;
+				// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
 				const displayMode = !quantityToShow ? 'dim' : null;
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
 				return Array(Math.max(1, quantityToShow)).fill(
@@ -246,10 +255,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				);
 			})
 			.sort((a, b) => a.manaCost - b.manaCost);
-		console.debug(
-			'showing cards',
-			result.map((c) => ({ name: c.cardName, ...c })),
-		);
+		// console.debug(
+		// 	'showing cards',
+		// 	result.map((c) => ({ name: c.cardName, ...c })),
+		// );
 		return result;
 	}
 
