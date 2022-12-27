@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "10.0.21",
+	"version": "10.0.22",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
@@ -8,9 +8,8 @@
 		"dev": "nx build --source-map --watch",
 		"build": "nx build --configuration=production --source-map",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
-		"create-opk": "npx ts-node ./build-tools/create-opk.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
-		"postbuild": "npm run replace-version && npm run create-opk",
+		"postbuild": "npm run replace-version && npm run opk-pipeline",
 		"test": "nx test"
 	},
 	"private": true,
@@ -93,7 +92,7 @@
 		"@nrwl/linter": "15.2.1",
 		"@nrwl/nx-cloud": "latest",
 		"@nrwl/workspace": "15.2.1",
-		"@overwolf/ow-cli": "^0.0.4-5",
+		"@overwolf/ow-cli": "0.0.5-0",
 		"@overwolf/types": "^3.22.0",
 		"@swc-node/register": "^1.4.2",
 		"@swc/cli": "~0.1.55",
