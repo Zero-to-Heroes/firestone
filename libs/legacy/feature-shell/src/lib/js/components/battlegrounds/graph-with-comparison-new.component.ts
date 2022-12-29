@@ -5,7 +5,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
-	ViewChild,
+	ViewChild
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
@@ -252,14 +252,13 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 					displayColors: false,
 					callbacks: {
 						beforeBody: (items: TooltipItem<'line'>[]): string | string[] => {
-							// console.debug('beforeBody', items);
 							return items?.map(
-								(item) =>
+								(item: any) =>
 									((item?.dataset as any)?.id ?? '') +
 									'|||' +
 									(item?.dataset?.label ?? '') +
 									'|||' +
-									item?.raw,
+									item?.dataset?.delta[item.dataIndex],
 							);
 						},
 					},
@@ -366,7 +365,15 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 						tooltipArrowEl.style.left = carretLeft + 'px';
 
 						// Display, position, and set styles for font
-						const tooltipTop = tooltip.y - tooltip.height;
+						// Make sure the bottom doesn't go outside of the graph
+						let tooltipTop = tooltip.y - tooltipHeight;
+						const chartHeight = tooltip.chart.canvas.offsetHeight;
+						if (tooltipTop + tooltipHeight > chartHeight) {
+							tooltipTop = chartHeight - tooltipHeight - 25;
+						}
+						if (tooltipTop < 0) {
+							tooltipTop = 0;
+						}
 						tooltipEl.style.opacity = '1';
 						tooltipEl.style.left = tooltipLeft + 'px';
 						tooltipEl.style.top = tooltipTop + 'px';
