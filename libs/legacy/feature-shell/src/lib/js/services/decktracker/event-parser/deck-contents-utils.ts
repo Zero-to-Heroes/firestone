@@ -24,6 +24,8 @@ export const modifyDecksForSpecialCards = (
 			return [handleFiresOfZinAzshari(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.IncantersFlow:
 			return [handleIncantersFlow(deckState, allCards, i18n), opponentDeckState];
+		case CardIds.LorthemarTheron_RLK_593:
+			return [handleLorthemarTheron(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.LunasPocketGalaxy:
 			return [handleLunasPocketGalaxy(deckState, allCards, i18n), opponentDeckState];
 		case CardIds.PrinceLiam:
@@ -136,6 +138,16 @@ const handleIncantersFlow = (
 		deckState,
 		allCards,
 	);
+};
+
+const handleLorthemarTheron = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return deckState.update({
+		cthunSize: !deckState.cthunSize ? deckState.cthunSize : 2 * deckState.cthunSize,
+	});
 };
 
 const handleVanndarStormpike = (
