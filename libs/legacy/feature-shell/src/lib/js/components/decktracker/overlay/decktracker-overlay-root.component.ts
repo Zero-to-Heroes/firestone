@@ -9,11 +9,11 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, share, takeUntil } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
@@ -230,6 +230,7 @@ export class DeckTrackerOverlayRootComponent
 						deckstring,
 						gameStats,
 						gameFormatToStatGameFormatType(formatType),
+						// 'standard',
 						'ranked',
 						timeFilter,
 						rankFilter,
@@ -243,6 +244,7 @@ export class DeckTrackerOverlayRootComponent
 					return result;
 				},
 			),
+			share()
 		);
 
 		this.matchupStatsRecap$ = combineLatest(
