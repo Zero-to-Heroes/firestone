@@ -4,7 +4,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState, ShortCard } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { COUNTERSPELLS, globalEffectCards, startOfGameGlobalEffectCards } from '../../hs-utils';
+import {
+	battlecryGlobalEffectCards,
+	COUNTERSPELLS,
+	globalEffectCards,
+	startOfGameGlobalEffectCards
+} from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -125,13 +130,31 @@ export class CardPlayedFromHandParser implements EventParser {
 			globalEffectCards.includes(card?.cardId as CardIds) &&
 			!startOfGameGlobalEffectCards.includes(card?.cardId as CardIds)
 		) {
-			newGlobalEffects = this.helper.addSingleCardToZone(
-				deck.globalEffects,
-				cardWithZone?.update({
-					// So that if the card is sent back to hand, we can track multiple plays of it
-					entityId: null,
-				} as DeckCard),
+			let numberOfGlobalEffectsToAdd = 1;
+			if (
+				battlecryGlobalEffectCards.includes(card?.cardId as CardIds) &&
+				deck.board.some((c) =>
+					[CardIds.BrannBronzebeardCore, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
+				)
+			) {
+				numberOfGlobalEffectsToAdd = 2;
+			}
+			console.debug(
+				'numberOfGlobalEffects',
+				numberOfGlobalEffectsToAdd,
+				deck.board.map((c) => c.cardId),
 			);
+
+			for (let i = 0; i < numberOfGlobalEffectsToAdd; i++) {
+				newGlobalEffects = this.helper.addSingleCardToZone(
+					newGlobalEffects,
+					cardWithZone?.update({
+						// So that if the card is sent back to hand, we can track multiple plays of it
+						entityId: null,
+					} as DeckCard),
+				);
+				console.debug('added global effect', newGlobalEffects);
+			}
 		}
 
 		const handAfterCardsRemembered = isCardCountered
