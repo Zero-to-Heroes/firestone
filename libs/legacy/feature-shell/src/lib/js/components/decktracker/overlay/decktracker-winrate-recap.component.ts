@@ -5,7 +5,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { formatClass } from '../../../services/hs-utils';
@@ -67,23 +67,21 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 	}
 
 	private updateInfo() {
-		if (!this._stats || !this._type) {
-			return;
-		}
-
-		this.winrate = this._stats.winratePercent;
-		this.wins = this._stats.totalWins || 0;
-		this.losses = this._stats.totalLosses || 0;
-		const dateFrom = new Intl.DateTimeFormat(this.i18n.formatCurrentLocale(), {
-			year: 'numeric',
-			month: 'short',
-			day: '2-digit',
-		}).format(this._stats.dateFrom);
+		this.winrate = this._stats?.winratePercent ?? 0;
+		this.wins = this._stats?.totalWins ?? 0;
+		this.losses = this._stats?.totalLosses ?? 0;
+		const dateFrom = !!this._stats
+			? new Intl.DateTimeFormat(this.i18n.formatCurrentLocale(), {
+					year: 'numeric',
+					month: 'short',
+					day: '2-digit',
+			  }).format(this._stats.dateFrom)
+			: null;
 		if (this._type === 'deck') {
 			this.text = this.i18n.translateString('decktracker.stats.deck-winrate');
 			this.tooltip = this.i18n.translateString('decktracker.stats.deck-winrate-tooltip', { value: dateFrom });
 		} else {
-			const readableClass = formatClass(this._stats.opponentClass, this.i18n);
+			const readableClass = formatClass(this._stats?.opponentClass, this.i18n);
 			this.text = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class', { value: readableClass });
 			this.tooltip = this.i18n.translateString('decktracker.stats.deck-winrate-vs-class-tooltip', {
 				opponent: readableClass,
