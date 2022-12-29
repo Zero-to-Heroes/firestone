@@ -795,7 +795,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, minion, demon);
 			case CardIds.SesselieOfTheFaeCourt_REV_319:
 			case CardIds.SesselieOfTheFaeCourt_REV_782:
-				return and(inDeck, minion, deathrattle);
+				return and(inDeck, minion);
 			case CardIds.SecretStudiesTavernBrawl:
 				return and(inDeck, secret);
 			case CardIds.SelectiveBreederCore:
