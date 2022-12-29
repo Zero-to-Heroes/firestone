@@ -1,7 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { Observable } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -14,7 +17,7 @@ import { Knob } from '../preference-slider.component';
 	],
 	template: `
 		<div class="settings-group general-launch" scrollable>
-			<section class="toggle-label">
+			<section class="toggle-label" *ngIf="{ enableMailbox: enableMailbox$ | async } as value">
 				<preference-toggle
 					field="launchAppOnGameStart"
 					[label]="'settings.general.launch.launch-on-game-start-label' | owTranslate"
@@ -57,6 +60,17 @@ import { Knob } from '../preference-slider.component';
 						'settings.general.launch.display-notifications-confirmation' | owTranslate
 					"
 					[valueToDisplayMessageOn]="false"
+				></preference-toggle>
+				<preference-toggle
+					field="enableMailbox"
+					[label]="'settings.general.launch.enable-mailbox-label' | owTranslate"
+					[tooltip]="'settings.general.launch.enable-mailbox-tooltip' | owTranslate"
+				></preference-toggle>
+				<preference-toggle
+					[ngClass]="{ disabled: !value.enableMailbox }"
+					field="enableMailboxUnread"
+					[label]="'settings.general.launch.enable-mailbox-unread-label' | owTranslate"
+					[tooltip]="'settings.general.launch.enable-mailbox-unread-tooltip' | owTranslate"
 				></preference-toggle>
 			</section>
 		</div>
@@ -108,7 +122,12 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralLaunchComponent implements AfterViewInit {
+export class SettingsGeneralLaunchComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit
+{
+	enableMailbox$: Observable<boolean>;
+
 	resetText = this.i18n.translateString('settings.general.launch.reset-prefs-button-default');
 	confirmationShown = false;
 	showResetConfirmationText = false;
@@ -130,10 +149,18 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 	private reloadWindows;
 
 	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) {
+		super(store, cdr);
+	}
+
+	ngAfterContentInit() {
+		this.enableMailbox$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
+	}
 
 	ngAfterViewInit() {
 		this.reloadWindows = this.ow.getMainWindow().reloadWindows;

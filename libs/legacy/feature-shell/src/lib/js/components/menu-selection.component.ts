@@ -7,12 +7,11 @@ import {
 	EventEmitter,
 	Input,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { AdService } from '../services/ad.service';
-import { FeatureFlags } from '../services/feature-flags';
 import { LocalizationFacadeService } from '../services/localization-facade.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -158,7 +157,7 @@ declare let amplitude;
 			</button>
 			<li class="main-menu-separator"></li>
 			<button
-				*ngIf="enableMailboxTab"
+				*ngIf="enableMailboxTab$ | async"
 				[attr.tabindex]="tabIndex$ | async"
 				type="button"
 				class="menu-item mailbox"
@@ -252,8 +251,7 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
-	enableMailboxTab = FeatureFlags.ENABLE_MAILBOX_TAB;
-
+	enableMailboxTab$: Observable<boolean>;
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
 	tabIndex$: Observable<number>;
@@ -286,9 +284,11 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 		this.tabIndex$ = this.store
 			.listen$(([main, nav]) => main.showFtue)
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
-		this.hasNewMail$ = this.store
-			.mails$()
-			.pipe(this.mapData((mailState) => mailState.mails.some((mail) => !mail.read)));
+		this.enableMailboxTab$ = this.listenForBasicPref$((prefs) => prefs.enableMailbox);
+		const enableMailboxUnread$ = this.listenForBasicPref$((prefs) => prefs.enableMailboxUnread);
+		this.hasNewMail$ = combineLatest([this.store.mails$(), enableMailboxUnread$]).pipe(
+			this.mapData(([mailState, showUnread]) => showUnread && mailState.mails.some((mail) => !mail.read)),
+		);
 		this.mailboxTextDetails$ = this.store.mails$().pipe(
 			this.mapData((mailState) =>
 				this.i18n.translateString('app.menu.mailbox-text-details', {
