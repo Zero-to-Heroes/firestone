@@ -7,6 +7,7 @@
 
 .deck-list {
 	overflow: visible;
+	max-height: 100%;
 }
 
 :host ::ng-deep decktracker-deck-list {
