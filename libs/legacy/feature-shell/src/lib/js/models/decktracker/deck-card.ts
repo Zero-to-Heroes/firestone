@@ -85,6 +85,7 @@ export class DeckCard {
 	}
 
 	public getEffectiveManaCost(): number {
-		return this.actualManaCost ?? this.manaCost;
+		// Because it's used in grouping keys, and we don't want to differentiate null and undefined in that case
+		return this.actualManaCost ?? this.manaCost ?? null;
 	}
 }
