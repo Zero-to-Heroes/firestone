@@ -1,7 +1,7 @@
-import 'reflect-metadata';
-import { OwCliContainer, SignOpkCommand, UploadOpkCommand } from '@overwolf/ow-cli/bin';
+import { OwCliContainer, ReleaseOpkCommand, SignOpkCommand, UploadOpkCommand } from '@overwolf/ow-cli/bin';
 import { PackOpkCommand } from '@overwolf/ow-cli/bin/commands/opk/pack-opk.command';
 import { readFile } from 'fs/promises';
+import 'reflect-metadata';
 
 const pipeline = async () => {
 	OwCliContainer.init();
@@ -29,14 +29,30 @@ const pipeline = async () => {
 		outputPath: `./${signedFileName}`,
 	});
 
-	console.log('[opk] uploading opk');
+	console.log('[opk] uploading opk to test');
 	const uploadOpkCmd = OwCliContainer.resolve(UploadOpkCommand);
-	const newVersionId = await uploadOpkCmd.handler({
+	const newTestVersionId = await uploadOpkCmd.handler({
 		filePath: `./${signedFileName}`,
 		channelId: 24, // beta
 		wait: true,
 	});
-	console.log('[opk] new version id', newVersionId);
+	console.log('[opk] new test version id', newTestVersionId);
+	console.log('[opk] performing full rollout in test');
+	const releaseOpkCommand = OwCliContainer.resolve(ReleaseOpkCommand);
+	await releaseOpkCommand.handler({
+		versionId: newTestVersionId,
+		percent: 100,
+	});
+	console.log('[opk] full test rollout completed');
+	
+	// Uploading the version to prod, so that it's easy to just manually go to 
+	// the console, and perform the rollout once everything is ok
+	console.log('[opk] uploading opk to prod');
+	const newProdVersionId = await uploadOpkCmd.handler({
+		filePath: `./${signedFileName}`,
+		wait: true,
+	});
+	console.log('[opk] new prod version id', newProdVersionId);
 };
 
 pipeline();
