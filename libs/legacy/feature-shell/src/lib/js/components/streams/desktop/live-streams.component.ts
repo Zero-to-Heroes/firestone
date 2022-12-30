@@ -86,7 +86,7 @@ export class LiveStreamsComponent extends AbstractSubscriptionComponent implemen
 	}
 
 	trackByFn(index: number, item: PresenceInfo) {
-		return item.user_name;
+		return item.user_id;
 	}
 
 	private refreshStreamsData() {

@@ -28,7 +28,14 @@ export class LiveStreamsService {
 	}
 
 	public async loadLiveStreams(locale?: string) {
-		const result = await this.api.callGetApi<PresenceResult>(LIVE_STREAMS_URL);
-		this.store.send(new LiveStreamsDataLoadedEvent(result));
+		const result: PresenceResult = await this.api.callGetApi<PresenceResult>(LIVE_STREAMS_URL);
+		// Remove duplicates
+		const uniqueIds = result.streams.map((s) => s.user_id);
+		const finalResult: PresenceResult = {
+			...result,
+			streams: uniqueIds.map((id) => result.streams.find((r) => r.user_id === id)),
+		};
+		// this.store.send(new LiveStreamsDataLoadedEvent(result));
+		this.store.send(new LiveStreamsDataLoadedEvent(finalResult));
 	}
 }
