@@ -4,8 +4,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
+import { GameFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -39,7 +40,9 @@ export class OpponentShockspitterWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentShockspitterCounter;
 		this.deckStateExtractor = (state) =>
-			state?.opponentDeck?.heroAttacksThisMatch > 0 && state.opponentDeck.hero?.playerClass === 'hunter';
+			state?.metadata?.formatType !== GameFormat.FT_CLASSIC &&
+			state?.opponentDeck?.heroAttacksThisMatch > 0 &&
+			state.opponentDeck.hero?.playerClass === 'hunter';
 		super.ngAfterContentInit();
 	}
 }

@@ -4,8 +4,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	Renderer2,
+	Renderer2
 } from '@angular/core';
+import { GameFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -20,7 +21,8 @@ import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-
 })
 export class OpponentHeroPowerDamageWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,
@@ -38,7 +40,9 @@ export class OpponentHeroPowerDamageWidgetWrapperComponent
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentHeroPowerDamageCounter;
 		this.deckStateExtractor = (state) =>
-			state?.opponentDeck?.heroPowerDamageThisMatch > 0 && state.opponentDeck.hero?.playerClass === 'mage';
+			state?.metadata?.formatType !== GameFormat.FT_CLASSIC &&
+			state?.opponentDeck?.heroPowerDamageThisMatch > 0 &&
+			state.opponentDeck.hero?.playerClass === 'mage';
 		super.ngAfterContentInit();
 	}
 }
