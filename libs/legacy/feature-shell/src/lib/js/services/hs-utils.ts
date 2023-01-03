@@ -4,7 +4,7 @@ import {
 	CardClass,
 	CardIds,
 	COIN_IDS,
-	GameType
+	GameType,
 } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -724,6 +724,7 @@ export const cardTutors = [
 	CardIds.FarSightCore,
 	CardIds.FarSightLegacy,
 	CardIds.FarSightVanilla,
+	CardIds.FelfireInTheHole,
 	CardIds.Felgorger_SW_043,
 	CardIds.ForgeOfSouls_CORE_ICC_281,
 	CardIds.ForgeOfSouls_ICC_281,
