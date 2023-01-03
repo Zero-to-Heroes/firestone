@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	Output
+	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
@@ -238,10 +238,15 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		// console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
-				const quantityToShow = deck.filter((c) => c.cardName === cardName).length;
-				// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
-				const displayMode = !quantityToShow ? 'dim' : null;
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
+				// - if there is a known decklist, we only show what is left in the deck (the current behavior for your own deck)
+				// - otherwise, we show the number of cards played that were part of their starting deck (so don't show generated cards).
+				// In both cases the goal is to have an idea of what is left in the deck.
+				const zoneToSearch = !!deckState.deckList?.length ? deck : cardsToShow;
+				const quantityToShow = zoneToSearch.filter((c) => c.cardName === cardName).length;
+				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+				// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
+				const displayMode = !quantityInDeck ? 'dim' : null;
 				return Array(Math.max(1, quantityToShow)).fill(
 					VisualDeckCard.create({
 						...refCard,
