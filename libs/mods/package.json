@@ -1,5 +1,5 @@
 {
-	"name": "legacy/feature-shell",
+	"name": "mods",
 	"version": "0.0.1",
 	"peerDependencies": {
 		"@angular/common": "^15.0.0",

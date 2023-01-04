@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
-	displayName: 'legacy/feature-shell',
-	preset: '../../../jest.preset.js',
+	displayName: 'mods',
+	preset: '../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
 		'ts-jest': {
@@ -9,7 +9,7 @@ export default {
 			stringifyContentPathRegex: '\\.(html|svg)$',
 		},
 	},
-	coverageDirectory: '../../../coverage/libs/legacy/feature-shell',
+	coverageDirectory: '../../coverage/libs/mods',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
 	},

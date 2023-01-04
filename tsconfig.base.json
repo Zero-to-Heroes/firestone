@@ -17,17 +17,18 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"stream": ["./node_modules/stream-browserify"],
 			"@components/*": ["libs/legacy/feature-shell/src/lib/js/components/*"],
 			"@directives/*": ["libs/legacy/feature-shell/src/lib/js/directives/*"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
+			"@firestone/mods": ["libs/mods/src/index.ts"],
 			"@legacy-import/*": ["libs/legacy/feature-shell/*"],
 			"@mails/*": ["libs/legacy/feature-shell/src/lib/libs/mails/*"],
 			"@models/*": ["libs/legacy/feature-shell/src/lib/js/models/*"],
 			"@packs/*": ["libs/legacy/feature-shell/src/lib/libs/packs/*"],
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
-			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"]
+			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
+			"stream": ["./node_modules/stream-browserify"]
 		},
 		"strict": false,
 		"noImplicitAny": false,
