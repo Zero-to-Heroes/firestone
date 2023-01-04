@@ -85,11 +85,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copiedCard?.update({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId, copiedCard.cardName),
+				manaCost: newCopy?.manaCost ?? copiedCard.manaCost,
 			} as DeckCard) ??
 			DeckCard.create({
 				cardId: obfuscatedCardId,
 				cardName: this.i18n.getCardName(obfuscatedCardId),
 				entityId: isPlayer ? copiedCardEntityId : null,
+				// This was introduced so that discovering cards from deck would update the info of the card in deck
+				// with the updated info from the Discover (initially for Lady Prestor)
+				manaCost: isPlayer ? newCopy?.manaCost : null,
 				zone: undefined,
 			} as DeckCard);
 		// console.debug('[copied-from-entity] updatedCopiedCard', updatedCopiedCard);
