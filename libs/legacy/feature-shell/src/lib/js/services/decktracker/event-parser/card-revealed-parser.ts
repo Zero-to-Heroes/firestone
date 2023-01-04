@@ -58,7 +58,7 @@ export class CardRevealedParser implements EventParser {
 			// However, that's exactly the behavior we want to have for dredge.
 			// So for now, let's keep this hack and only replace in case of Dredge
 			gameEvent.additionalData.revealedFromBlock === 'DREDGE'
-				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false, true)
+				? this.helper.empiricReplaceCardInZone(deck.otherZone, card, false)
 				: this.helper.addSingleCardToZone(deck.otherZone, card);
 		// console.debug('[debug]', 'newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

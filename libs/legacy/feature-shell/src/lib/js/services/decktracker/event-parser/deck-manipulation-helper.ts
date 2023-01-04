@@ -142,7 +142,8 @@ export class DeckManipulationHelper {
 				}
 				return [result, removedCard];
 			}
-			console.warn('could not find card to remove');
+			console.debug('could not find card to remove', cardId, entityId, cardInfos, zone);
+			console.warn('could not find card to remove', cardId, entityId, cardInfos);
 		}
 		return [result, removedCard];
 	}
@@ -352,16 +353,16 @@ export class DeckManipulationHelper {
 		zone: readonly DeckCard[],
 		newCard: DeckCard,
 		removeFillerCard: boolean,
-		debug = false,
+		cardInfos: { cost?: number } = null,
 	): readonly DeckCard[] {
-		// If the
-		// Why not force a remove by entityId here?
+		// removeFillerCard here doesn't always work - we need to consider the UnknownXXX as filler cards
 		const [newZone, removedCard] = this.removeSingleCardFromZone(
 			zone,
 			newCard.cardId,
 			newCard.entityId,
 			removeFillerCard,
 			false,
+			cardInfos,
 		);
 		const updatedZone = this.addSingleCardToZone(newZone, newCard);
 		return updatedZone;
