@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				[showRelatedCards]="showRelatedCards"
 				[showUnknownCards]="showUnknownCards"
 				[showUpdatedCost]="showUpdatedCost"
-				[showGiftsSeparately]="showGiftsSeparately"
+				[showGiftsSeparately]="showGiftsSeparately$ | async"
 				[showStatsChange]="showStatsChange"
 				[showTopCardsSeparately]="showTopCardsSeparately$ | async"
 				[showBottomCardsSeparately]="showBottomCardsSeparately$ | async"
@@ -53,12 +53,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	zone$: Observable<DeckZone>;
 	showTopCardsSeparately$: Observable<boolean>;
 	showBottomCardsSeparately$: Observable<boolean>;
+	showGiftsSeparately$: Observable<boolean>;
 
 	@Input() colorManaCost: boolean;
 	@Input() showRelatedCards: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() showUpdatedCost: boolean;
-	@Input() showGiftsSeparately: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showTotalCardsInZone: boolean;
 	@Input() side: 'player' | 'opponent' | 'duels';
@@ -85,6 +85,10 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.showTopCardsSeparately$$.next(value);
 	}
 
+	@Input() set showGiftsSeparately(value: boolean) {
+		this.showGiftsSeparately$$.next(value);
+	}
+
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
@@ -96,6 +100,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private cardsGoToBottom$$ = new BehaviorSubject<boolean>(false);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
+	private showGiftsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
@@ -112,14 +117,16 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		this.showBottomCardsSeparately$ = this.showBottomCardsSeparately$$
 			.asObservable()
 			.pipe(this.mapData((info) => info));
-		this.zone$ = combineLatest(
+		this.showGiftsSeparately$ = this.showGiftsSeparately$$.asObservable().pipe(this.mapData((info) => info));
+		this.zone$ = combineLatest([
 			this.deckState$$.asObservable(),
 			this.showWarning$$.asObservable(),
 			this.cardsGoToBottom$$.asObservable(),
 			this.hideGeneratedCardsInOtherZone$$.asObservable(),
 			this.showTopCardsSeparately$,
 			this.showBottomCardsSeparately$,
-		).pipe(
+			this.showGiftsSeparately$,
+		]).pipe(
 			this.mapData(
 				([
 					deckState,
@@ -128,6 +135,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 					hideGeneratedCardsInOtherZone,
 					showTopCardsSeparately,
 					showBottomCardsSeparately,
+					showGiftsSeparately,
 				]) =>
 					this.buildGroupedList(
 						deckState,
@@ -136,6 +144,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						hideGeneratedCardsInOtherZone,
 						showTopCardsSeparately,
 						showBottomCardsSeparately,
+						showGiftsSeparately,
 					),
 			),
 		);
@@ -152,6 +161,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		hideGeneratedCardsInOtherZone: boolean,
 		showTopCardsSeparately: boolean,
 		showBottomCardsSeparately: boolean,
+		showGiftsSeparately: boolean,
 	) {
 		if (!deckState) {
 			return null;
@@ -181,7 +191,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			cardsInDeckZone = cardsInDeckZone.filter((c) => c.positionFromBottom == undefined);
 		}
 
-		const base = this.buildBaseCards(cardsInDeckZone, deckState, hideGeneratedCardsInOtherZone);
+		const base = this.buildBaseCards(
+			cardsInDeckZone,
+			deckState,
+			hideGeneratedCardsInOtherZone,
+			showGiftsSeparately,
+		);
 		// console.debug('base cards', base);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
@@ -212,6 +227,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deck: readonly DeckCard[],
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
+		showGiftsSeparately: boolean,
 	): readonly VisualDeckCard[] {
 		// Here we should get all the cards that were part of the initial deck
 		const cardsToShow = [
@@ -234,26 +250,59 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
 		// These include all the cards that were at some point part of the initial deck
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
-		// const uniqueCardIds = [...new Set(cardsToShow.map((c) => c.cardId))];
 		// console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
 				// - if there is a known decklist, we only show what is left in the deck (the current behavior for your own deck)
-				// - otherwise, we show the number of cards played that were part of their starting deck (so don't show generated cards).
+				// - otherwise, we show the number of cards played that were part of their starting deck.
 				// In both cases the goal is to have an idea of what is left in the deck.
 				const zoneToSearch = !!deckState.deckList?.length ? deck : cardsToShow;
-				const quantityToShow = zoneToSearch.filter((c) => c.cardName === cardName).length;
-				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
-				// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
-				const displayMode = !quantityInDeck ? 'dim' : null;
-				return Array(Math.max(1, quantityToShow)).fill(
-					VisualDeckCard.create({
-						...refCard,
-						creatorCardIds: (refCard.creatorCardId ? [refCard.creatorCardId] : []) as readonly string[],
-						highlight: displayMode,
-					}),
-				);
+				if (!showGiftsSeparately) {
+					const quantityToShow = zoneToSearch.filter((c) => c.cardName === cardName).length;
+					const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+					// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
+					const displayMode = !quantityInDeck ? 'dim' : null;
+					const creatorCardIds = cardsToShow
+						.filter((c) => c.cardName === cardName)
+						.map((c) => c.creatorCardId)
+						.filter((id) => !!id);
+					return Array(Math.max(1, quantityToShow)).fill(
+						VisualDeckCard.create({
+							...refCard,
+							creatorCardIds: creatorCardIds,
+							highlight: displayMode,
+						}),
+					);
+				} else {
+					const quantityToShowForGifts = zoneToSearch
+						.filter((c) => !!c.creatorCardId?.length)
+						.filter((c) => c.cardName === cardName).length;
+					const quantityToShowForNonGifts = zoneToSearch
+						.filter((c) => !c.creatorCardId?.length)
+						.filter((c) => c.cardName === cardName).length;
+					const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+					const displayMode = !quantityInDeck ? 'dim' : null;
+					const creatorCardIds = cardsToShow
+						.filter((c) => c.cardName === cardName)
+						.map((c) => c.creatorCardId)
+						.filter((id) => !!id);
+					return [
+						...Array(Math.max(1, quantityToShowForNonGifts)).fill(
+							VisualDeckCard.create({
+								...refCard,
+								highlight: displayMode,
+							}),
+						),
+						...Array(quantityToShowForGifts).fill(
+							VisualDeckCard.create({
+								...refCard,
+								creatorCardIds: creatorCardIds,
+								highlight: displayMode,
+							}),
+						),
+					];
+				}
 			})
 			.sort((a, b) => a.manaCost - b.manaCost);
 		// console.debug(
