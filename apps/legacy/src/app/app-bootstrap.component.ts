@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ModsBootstrapService } from 'libs/mods/src/lib/services/mods-bootstrap.service';
+import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { from, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/overwolf.service';
