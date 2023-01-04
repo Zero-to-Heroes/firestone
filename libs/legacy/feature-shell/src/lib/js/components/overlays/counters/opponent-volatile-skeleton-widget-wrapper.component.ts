@@ -20,7 +20,8 @@ import { AbstractCounterWidgetWrapperComponent, templateBase } from './abstract-
 })
 export class OpponentVolatileSkeletonWidgetWrapperComponent
 	extends AbstractCounterWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		protected readonly ow: OverwolfService,
@@ -37,7 +38,9 @@ export class OpponentVolatileSkeletonWidgetWrapperComponent
 
 	ngAfterContentInit(): void {
 		this.prefExtractor = (prefs) => prefs.opponentVolatileSkeletonCounter;
-		this.deckStateExtractor = (state) => !!state.opponentDeck?.containsVolatileSkeletonCards();
+		this.deckStateExtractor = (state) =>
+			state.opponentDeck?.volatileSkeletonsDeadThisMatch > 0 ||
+			!!state.opponentDeck?.containsVolatileSkeletonCards();
 		super.ngAfterContentInit();
 	}
 }

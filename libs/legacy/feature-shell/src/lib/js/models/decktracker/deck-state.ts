@@ -266,23 +266,12 @@ export class DeckState {
 	}
 
 	public containsVolatileSkeletonCards(): boolean {
-		if (this.volatileSkeletonsDeadThisMatch > 0) {
-			return true;
-		}
-
 		return this.getAllCardsInDeck()
 			.filter((card) => card.cardId)
 			.some((card) =>
-				[
-					CardIds.VolatileSkeleton,
-					CardIds.KelthuzadTheInevitable_REV_514,
-					CardIds.KelthuzadTheInevitable_REV_786,
-					CardIds.ColdCase,
-					CardIds.Deathborne,
-					CardIds.NightcloakSanctum_REV_602,
-					CardIds.NightcloakSanctum_REV_796,
-					CardIds.BrittleBonesTavernBrawl,
-				].includes(card.cardId as CardIds),
+				[CardIds.KelthuzadTheInevitable_REV_514, CardIds.KelthuzadTheInevitable_REV_786].includes(
+					card.cardId as CardIds,
+				),
 			);
 	}
 
