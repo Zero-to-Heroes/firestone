@@ -197,7 +197,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			hideGeneratedCardsInOtherZone,
 			showGiftsSeparately,
 		);
-		// console.debug('base cards', base);
+		console.debug('base cards', base);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
 			cards: base,
@@ -229,11 +229,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		hideGeneratedCardsInOtherZone: boolean,
 		showGiftsSeparately: boolean,
 	): readonly VisualDeckCard[] {
-		// Here we should get all the cards that were part of the initial deck
-		const cardsToShow = [
-			...deck
-				// Remove "unknown cards"
-				.filter((c) => !!c.cardId || !!c.creatorCardId),
+		// Here we should get all the cards that were part of the initial deck (+ the generated cards,
+		// if the option is enabled)
+		const cardsToShowNotInDeck = [
 			...deckState.hand
 				.filter((c) => !c.creatorCardId)
 				// Remove "unknown cards"
@@ -248,61 +246,124 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				// How to handle discarded cards? They should probably be handled in the same way as cards played in the "other" zone
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
 		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
-		// These include all the cards that were at some point part of the initial deck
+		const cardsToShow = [
+			...deck
+				// Remove "unknown cards"
+				.filter((c) => !!c.cardId || !!c.creatorCardId),
+			...cardsToShowNotInDeck,
+		];
 		const uniqueCardNames = [...new Set(cardsToShow.map((c) => c.cardName))];
-		// console.debug('uniqueCardIds', uniqueCardIds, uniqueCardNames);
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
+				const isInInitialDecklist =
+					!!deckState.deckList?.length && !!deckState.deckList.find((c) => c.cardName === cardName);
+				console.debug(
+					'isInInitialDecklist',
+					cardName,
+					isInInitialDecklist,
+					deckState.deckList,
+					refCard,
+					this.allCards.getCard(refCard.cardId),
+				);
+				const mode = !!deckState.deckList?.length ? 'focus-decklist' : 'show-played';
+				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+				const shouldShowDeckLine = mode === 'show-played' || isInInitialDecklist || quantityInDeck > 0;
+				const creatorCardIds = cardsToShow
+					.filter((c) => c.cardName === cardName)
+					.map((c) => c.creatorCardId)
+					.filter((id) => !!id);
+				const shouldShowGiftLine = !hideGeneratedCardsInOtherZone && !!creatorCardIds.length;
+				const result: VisualDeckCard[] = [];
+				if (shouldShowDeckLine) {
+					const displayMode = !quantityInDeck ? 'dim' : null;
+					const deckCreatorCardIds = deck
+						.filter((c) => c.cardName === cardName)
+						.map((c) => c.creatorCardId)
+						.filter((id) => !!id);
+					result.push(
+						...Array(Math.max(1, quantityInDeck)).fill(
+							VisualDeckCard.create({
+								...refCard,
+								// Always show the base cost in this display mode
+								manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+								creatorCardIds: deckCreatorCardIds,
+								highlight: displayMode,
+							}),
+						),
+					);
+				}
+				if (shouldShowGiftLine) {
+					const otherCreatorCardIds = cardsToShowNotInDeck
+						.filter((c) => c.cardName === cardName)
+						.map((c) => c.creatorCardId)
+						.filter((id) => !!id);
+					const quantityNotInDeck = cardsToShowNotInDeck.filter((c) => c.cardName === cardName).length;
+					result.push(
+						...Array(quantityNotInDeck).fill(
+							VisualDeckCard.create({
+								...refCard,
+								manaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.manaCost,
+								actualManaCost: this.allCards.getCard(refCard.cardId)?.cost ?? refCard.actualManaCost,
+								creatorCardIds: otherCreatorCardIds,
+								highlight: 'dim',
+							}),
+						),
+					);
+				}
+				return result;
+
 				// - if there is a known decklist, we only show what is left in the deck (the current behavior for your own deck)
 				// - otherwise, we show the number of cards played that were part of their starting deck.
 				// In both cases the goal is to have an idea of what is left in the deck.
-				const zoneToSearch = !!deckState.deckList?.length ? deck : cardsToShow;
-				if (!showGiftsSeparately) {
-					const quantityToShow = zoneToSearch.filter((c) => c.cardName === cardName).length;
-					const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
-					// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
-					const displayMode = !quantityInDeck ? 'dim' : null;
-					const creatorCardIds = cardsToShow
-						.filter((c) => c.cardName === cardName)
-						.map((c) => c.creatorCardId)
-						.filter((id) => !!id);
-					return Array(Math.max(1, quantityToShow)).fill(
-						VisualDeckCard.create({
-							...refCard,
-							creatorCardIds: creatorCardIds,
-							highlight: displayMode,
-						}),
-					);
-				} else {
-					const quantityToShowForGifts = zoneToSearch
-						.filter((c) => !!c.creatorCardId?.length)
-						.filter((c) => c.cardName === cardName).length;
-					const quantityToShowForNonGifts = zoneToSearch
-						.filter((c) => !c.creatorCardId?.length)
-						.filter((c) => c.cardName === cardName).length;
-					const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
-					const displayMode = !quantityInDeck ? 'dim' : null;
-					const creatorCardIds = cardsToShow
-						.filter((c) => c.cardName === cardName)
-						.map((c) => c.creatorCardId)
-						.filter((id) => !!id);
-					return [
-						...Array(Math.max(1, quantityToShowForNonGifts)).fill(
-							VisualDeckCard.create({
-								...refCard,
-								highlight: displayMode,
-							}),
-						),
-						...Array(quantityToShowForGifts).fill(
-							VisualDeckCard.create({
-								...refCard,
-								creatorCardIds: creatorCardIds,
-								highlight: displayMode,
-							}),
-						),
-					];
-				}
+				// const zoneToSearch = !!deckState.deckList?.length ? deck : cardsToShow;
+				// if (!showGiftsSeparately) {
+				// 	const quantityToShow = zoneToSearch.filter((c) => c.cardName === cardName).length;
+				// 	const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+				// 	// const quantityToShow = deck.filter((c) => c.cardId === cardId).length;
+				// 	const displayMode = !quantityInDeck ? 'dim' : null;
+				// 	const creatorCardIds = cardsToShow
+				// 		.filter((c) => c.cardName === cardName)
+				// 		.map((c) => c.creatorCardId)
+				// 		.filter((id) => !!id);
+				// 	return Array(Math.max(1, quantityToShow)).fill(
+				// 		VisualDeckCard.create({
+				// 			...refCard,
+				// 			creatorCardIds: creatorCardIds,
+				// 			highlight: displayMode,
+				// 		}),
+				// 	);
+				// } else {
+				// 	const quantityToShowForGifts = zoneToSearch
+				// 		.filter((c) => !!c.creatorCardId?.length)
+				// 		.filter((c) => c.cardName === cardName).length;
+				// 	const quantityToShowForNonGifts = zoneToSearch
+				// 		.filter((c) => !c.creatorCardId?.length)
+				// 		.filter((c) => c.cardName === cardName).length;
+				// 	const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
+				// 	const displayMode = !quantityInDeck ? 'dim' : null;
+				// 	const creatorCardIds = cardsToShow
+				// 		.filter((c) => c.cardName === cardName)
+				// 		.map((c) => c.creatorCardId)
+				// 		.filter((id) => !!id);
+				// 	console.debug('showing cards', refCard.cardName, quantityToShowForGifts, quantityToShowForNonGifts);
+				// 	return [
+				// 		...Array(Math.max(isInInitialDecklist ? 1 : 0, quantityToShowForNonGifts)).fill(
+				// 			VisualDeckCard.create({
+				// 				...refCard,
+				// 				highlight: displayMode,
+				// 			}),
+				// 		),
+				// 		...Array(quantityToShowForGifts).fill(
+				// 			VisualDeckCard.create({
+				// 				...refCard,
+				// 				creatorCardIds: creatorCardIds,
+				// 				highlight: displayMode,
+				// 			}),
+				// 		),
+				// 	];
+				// }
 			})
 			.sort((a, b) => a.manaCost - b.manaCost);
 		// console.debug(
