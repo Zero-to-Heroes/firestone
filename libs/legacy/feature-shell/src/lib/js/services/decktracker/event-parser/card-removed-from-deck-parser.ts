@@ -27,6 +27,9 @@ export class CardRemovedFromDeckParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0,
 			true,
+			{
+				cost: gameEvent.additionalData.cost,
+			},
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',

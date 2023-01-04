@@ -698,7 +698,11 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent, {
+						cost: gameEvent.Value.AdditionalProps.Cost,
+					}),
+				);
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
