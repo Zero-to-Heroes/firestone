@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -107,7 +108,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 	private _sortCardsByManaCostInOtherZone: boolean;
 	private _deckState: DeckState;
 
-	constructor(private readonly i18n: LocalizationFacadeService) {}
+	constructor(private readonly i18n: LocalizationFacadeService, private readonly allCards: CardsFacadeService) {}
 
 	trackZone(index, zone: DeckZone) {
 		return zone.id;
@@ -206,7 +207,11 @@ export class DeckListByZoneComponent implements OnDestroy {
 					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=CONTROLLER value=1
 					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -         tag=ENTITY_ID value=91
 					// D 17:41:27.4774901 PowerTaskList.DebugPrintPower() -     TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=91 zone=SETASIDE zonePos=0 cardId= player=1] tag=ZONE value=PLAY
-					.filter((c) => c.zone !== 'PLAY' || !!c.cardId?.length),
+					// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
+					.filter((c) => !!c.cardId?.length)
+					.filter(
+						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
+					),
 				...this._deckState.board,
 			];
 			zones.push(
