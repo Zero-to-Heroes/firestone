@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewRef,
+} from '@angular/core';
 
 @Component({
 	selector: 'settings-general-menu',
@@ -23,8 +32,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ selected: selectedMenu === 'broadcast' }" (mousedown)="selectMenu('broadcast')">
 				<span [owTranslate]="'settings.general.menu.broadcast'"></span>
 			</li>
-			<li class="separator"></li>
-			<li [ngClass]="{ selected: selectedMenu === 'mods' }" (mousedown)="selectMenu('mods')">
+			<li class="separator" *ngIf="enableMods"></li>
+			<li *ngIf="enableMods" [ngClass]="{ selected: selectedMenu === 'mods' }" (mousedown)="selectMenu('mods')">
 				<span [owTranslate]="'settings.general.menu.mods'"></span>
 			</li>
 			<li class="separator"></li>
@@ -35,9 +44,22 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralMenuComponent {
+export class SettingsGeneralMenuComponent implements AfterContentInit {
 	@Output() onMenuSelected = new EventEmitter<string>();
 	@Input() selectedMenu: string;
+
+	enableMods: boolean;
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	ngAfterContentInit() {
+		overwolf.settings.getExtensionSettings((settingsResult) => {
+			this.enableMods = settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production';
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+	}
 
 	selectMenu(menu: string) {
 		this.onMenuSelected.next(menu);

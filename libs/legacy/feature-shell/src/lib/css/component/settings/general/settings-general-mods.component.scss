@@ -8,6 +8,66 @@
 	height: 100%;
 	min-height: 0;
 	overflow: auto;
+	padding-bottom: 40px;
+
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	font-size: 13px;
+	color: #d9c3ab;
+
+	h2.title {
+		margin-bottom: 10px;
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	h3.section-title {
+		margin-bottom: 10px;
+		font-size: 14px;
+		font-weight: bold;
+	}
+
+	p {
+		margin-bottom: 15px;
+		font-size: 13px;
+	}
+
+	.game-running-error {
+		margin-bottom: 15px;
+	}
+
+	::ng-deep a {
+		display: inline;
+		font-size: 14px;
+		color: var(--inactive-link-color);
+
+		&:hover {
+			color: var(--default-title-color);
+		}
+	}
+
+	.section {
+		display: flex;
+		flex-direction: column;
+
+		&.disabled {
+			opacity: 0.7;
+			pointer-events: none;
+		}
+	}
+
+	.installed-mods {
+		display: flex;
+		flex-direction: column;
+
+		.mod {
+			height: 30px;
+			display: flex;
+			align-items: center;
+		}
+	}
 
 	input,
 	input:focus,
@@ -16,7 +76,7 @@
 		background: transparent;
 		border: 1px solid #a89782;
 		outline: none;
-		width: 100%;
+		width: 300px;
 		cursor: text;
 		font-family: Open Sans;
 		font-style: normal;
@@ -44,7 +104,7 @@
 	}
 
 	button {
-		width: 80px;
+		width: 120px;
 		height: 30px;
 		background: #a89782;
 		font-family: Open Sans;
@@ -53,12 +113,12 @@
 		line-height: normal;
 		font-size: 13px;
 		color: #2f0d0d;
-		margin-left: auto;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
 		flex-shrink: 0;
+		margin-right: 20px;
 
 		&:hover:not(.disabled) {
 			background: #d9c3ab;

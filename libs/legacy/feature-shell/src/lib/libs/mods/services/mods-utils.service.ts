@@ -16,11 +16,11 @@ export class ModsUtilsService {
 		private readonly prefs: PreferencesService,
 	) {}
 
-	public async checkMods(installPath: string): Promise<boolean> {
+	public async checkMods(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
 		const files = await this.ow.listFilesInDirectory(installPath);
 		if (!files.data?.some((f) => f.type === 'file' && f.name === 'Hearthstone.exe')) {
 			console.warn('Not a Hearthstone directory, missing Hearthstone.exe', installPath);
-			return false;
+			return 'wrong-path';
 		}
 		await this.updateInstallPath(installPath);
 		console.debug('files in HS dir', files);
@@ -28,42 +28,82 @@ export class ModsUtilsService {
 			files.data?.some((f) => f.type === 'dir' && f.name === 'MelonLoader') ||
 			files.data?.some((f) => f.type === 'file' && f.name === 'version.dll');
 		console.debug('mods enabled?', modsEnabled);
-		return modsEnabled;
+		return modsEnabled ? 'installed' : 'not-installed';
 	}
 
-	public async enableMods(installPath: string) {
+	public async installedMods(installPath: string): Promise<readonly string[]> {
+		const files = await this.ow.listFilesInDirectory(`${installPath}\\Mods`);
+		console.debug('looking for installed mods', files);
+		return files.data
+			?.filter((f) => f.type === 'file')
+			.map((f) => f.name.split('.dll')[0])
+			.filter((name) => name !== 'GameEventsConnector');
+	}
+
+	public async enableMods(
+		installPath: string,
+	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
 		const isGameRunning = await this.gameStatus.inGame();
 		if (isGameRunning) {
 			console.warn('Please close the game before disabling mods');
-			return;
+			return 'game-running';
 		}
 		if (!installPath?.includes('Hearthstone')) {
 			console.warn('Trying to install a path that does not contain Hearthstone, too risky', installPath);
-			return;
+			return 'wrong-path';
 		}
 		const modsEnabled = await this.checkMods(installPath);
-		if (modsEnabled) {
+		if (modsEnabled === 'installed') {
 			console.warn('Trying to enable mods but they are already enabled', installPath);
-			return;
+			return 'installed';
 		}
 		await this.io.downloadAndUnzipFile(MELON_LOADER_LATESTT_ZIP, installPath);
 		await this.createMelonConfig(installPath);
+		// await this.installBaseMods(installPath);
+
+		// Copy the Managed libs
+		return await this.refreshEngine(installPath);
 	}
 
-	public async disableMods(installPath: string, keepData: boolean = true) {
+	// Copy the managed libs
+	public async refreshEngine(
+		installPath: string,
+	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
 		const isGameRunning = await this.gameStatus.inGame();
 		if (isGameRunning) {
 			console.warn('Please close the game before disabling mods');
-			return;
+			return 'game-running';
+		}
+		if (!installPath?.includes('Hearthstone')) {
+			console.warn('Trying to install a path that does not contain Hearthstone, too risky', installPath);
+			return 'wrong-path';
+		}
+		const modsEnabled = await this.checkMods(installPath);
+		if (modsEnabled !== 'installed') {
+			console.warn('Cannot refresh if mods are not enabled', installPath);
+			return 'not-installed';
+		}
+		await this.io.copyFiles(`${installPath}\\MelonLoader\\Managed`, `${installPath}\\Hearthstone_Data\\Managed`);
+		return 'installed';
+	}
+
+	public async disableMods(
+		installPath: string,
+		keepData: boolean = true,
+	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
+		const isGameRunning = await this.gameStatus.inGame();
+		if (isGameRunning) {
+			console.warn('Please close the game before disabling mods');
+			return 'game-running';
 		}
 		if (!installPath?.includes('Hearthstone')) {
 			console.warn('Trying to delete inside a path that does not contain Hearthstone, too risky', installPath);
-			return;
+			return 'wrong-path';
 		}
 		const modsEnabled = await this.checkMods(installPath);
 		if (!modsEnabled) {
 			console.warn('Trying to disable mods but they are not enabled', installPath);
-			return;
+			return 'not-installed';
 		}
 		await this.io.deleteFileOrFolder(`${installPath}\\version.dll`);
 		await this.io.deleteFileOrFolder(`${installPath}\\MelonLoader`);
@@ -72,6 +112,7 @@ export class ModsUtilsService {
 			await this.io.deleteFileOrFolder(`${installPath}\\Mods`);
 			await this.io.deleteFileOrFolder(`${installPath}\\UserData`);
 		}
+		return 'not-installed';
 	}
 
 	private async updateInstallPath(installPath: string) {

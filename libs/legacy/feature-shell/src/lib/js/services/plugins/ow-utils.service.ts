@@ -80,6 +80,22 @@ export class OwUtilsService {
 		});
 	}
 
+	public async copyFiles(sourceDirectory: string, destinationDirectory: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] copyFiles', sourceDirectory, destinationDirectory);
+			const plugin = await this.get();
+			try {
+				plugin.copyFiles(sourceDirectory, destinationDirectory, () => {
+					console.log('[ow-utils] copyFilesed', sourceDirectory, destinationDirectory);
+					resolve();
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not copyFiles', sourceDirectory, destinationDirectory, e);
+				resolve();
+			}
+		});
+	}
+
 	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			console.log('[ow-utils] downloadAndUnzipFile-ing', path);

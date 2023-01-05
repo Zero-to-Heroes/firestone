@@ -3,14 +3,19 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class GameStatusService {
-	private listeners = [];
+	private startListeners = [];
+	private exitListeners = [];
 
 	constructor(private readonly ow: OverwolfService) {
 		this.init();
 	}
 
+	public onGameStart(callback) {
+		this.startListeners.push(callback);
+	}
+
 	public onGameExit(callback) {
-		this.listeners.push(callback);
+		this.exitListeners.push(callback);
 	}
 
 	public async inGame(): Promise<boolean> {
@@ -20,7 +25,10 @@ export class GameStatusService {
 	private async init() {
 		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
-				this.listeners.forEach((cb) => cb());
+				this.exitListeners.forEach((cb) => cb());
+			} else if ((await this.ow.inGame()) && res.gameChanged) {
+				console.debug('[game-status] game launched');
+				this.startListeners.forEach((cb) => cb());
 			}
 		});
 	}
