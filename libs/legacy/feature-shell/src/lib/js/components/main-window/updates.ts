@@ -32,28 +32,28 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.24',
+		version: '10.0.25',
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `Thank you all for using Firestone. It means a lot to me that so many of you use something that I made. I wish you a very happy new year.`,
 			},
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Loaner decks are now properly supported.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Firestone now support mods (only on the beta build for now)! Head over to the <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">wiki</a> for more details, and in the Settings > General > Mods tab. Only one mod exist so far, but an often-asked-for one: AutoSquelch :)`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -76,6 +76,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Some widgets (like Shockspitter) won't appear anymore when playing Classic.`,
+							},
+							{
+								type: 'content',
+								text: `The Volatile Skeleton counter will now only appear for you when Kel'Thuzad is in your deck.`,
 							},
 							{
 								type: 'bug',
