@@ -11,13 +11,14 @@ export class SimpleIOService {
 		const path = dirListingResult.path;
 		// It should be a flat structure for us
 		const files = dirListingResult.data.filter((d) => d.type === 'file').map((file) => file.name);
-		const fileContents: { fileName: string; contents: string }[] = await Promise.all(
-			files.map((file) => ({
+		const fileContents: { fileName: string; contents: string }[] = [];
+		for (const file of files) {
+			const contents = await this.ow.readTextFile(path + '/' + file);
+			fileContents.push({
 				fileName: file,
-				contents: this.ow.readTextFile(path + '/' + file),
-			})),
-		);
-
+				contents: contents,
+			});
+		}
 		const jszip = new JSZip();
 		fileContents.forEach((file) => jszip.file(file.fileName, file.contents));
 		const content: Blob = await jszip.generateAsync({

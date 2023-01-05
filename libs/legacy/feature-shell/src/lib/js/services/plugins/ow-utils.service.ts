@@ -64,6 +64,43 @@ export class OwUtilsService {
 		});
 	}
 
+	public async deleteFileOrFolder(path: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] deleting', path);
+			const plugin = await this.get();
+			try {
+				plugin.deleteFileOrFolder(path, () => {
+					console.log('[ow-utils] deleted', path);
+					resolve();
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not delete file or folder', path, e);
+				resolve();
+			}
+		});
+	}
+
+	public async downloadAndUnzipFile(fileUrl: string, path: string): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] downloadAndUnzipFile-ing', path);
+			const plugin = await this.get();
+			try {
+				plugin.downloadAndUnzipFile(fileUrl, path, (status, message) => {
+					console.log('hop', message);
+					if (status) {
+						console.log('[ow-utils] downloadAndUnzipFiled', path);
+						resolve();
+					} else {
+						console.log('[ow-utils] downloadAndUnzipFile message', message);
+					}
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not downloadAndUnzipFile', fileUrl, path, e);
+				resolve();
+			}
+		});
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.plugin.get();

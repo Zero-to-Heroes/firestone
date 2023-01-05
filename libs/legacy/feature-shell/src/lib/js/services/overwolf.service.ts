@@ -83,7 +83,9 @@ export class OverwolfService {
 		overwolf.extensions.onAppLaunchTriggered.addListener(callback);
 	}
 
-	public addGameInfoUpdatedListener(callback: (message: any) => void): (message: any) => void {
+	public addGameInfoUpdatedListener(
+		callback: (message: overwolf.games.GameInfoUpdatedEvent) => void,
+	): (message: overwolf.games.GameInfoUpdatedEvent) => void {
 		overwolf.games.onGameInfoUpdated.addListener(callback);
 		return callback;
 	}
@@ -762,9 +764,13 @@ export class OverwolfService {
 		});
 	}
 
-	public async listFilesInAppDirectory(appName: string): Promise<any> {
-		return new Promise<any>((resolve) => {
-			overwolf.io.dir(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`, (res) => {
+	public async listFilesInAppDirectory(appName: string): Promise<overwolf.io.DirResult & { path?: string }> {
+		return this.listFilesInDirectory(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`);
+	}
+
+	public async listFilesInDirectory(directory: string): Promise<overwolf.io.DirResult & { path?: string }> {
+		return new Promise<overwolf.io.DirResult & { path?: string }>((resolve) => {
+			overwolf.io.dir(directory, (res) => {
 				resolve(res);
 			});
 		});
@@ -795,14 +801,6 @@ export class OverwolfService {
 					resolve(res.success ? res.content : null);
 				},
 			);
-		});
-	}
-
-	public async deleteFile(filePathOnDisk: string): Promise<boolean> {
-		return new Promise<boolean>((resolve) => {
-			overwolf.io.writeFileContents(filePathOnDisk, '', overwolf.io.enums.eEncoding.UTF8, false, (res) => {
-				resolve(res.success);
-			});
 		});
 	}
 

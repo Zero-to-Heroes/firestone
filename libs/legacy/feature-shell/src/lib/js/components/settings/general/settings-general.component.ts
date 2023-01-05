@@ -16,6 +16,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 				<settings-general-data *ngSwitchCase="'data'"></settings-general-data>
 				<settings-general-quests *ngSwitchCase="'quests'"></settings-general-quests>
+				<settings-general-mods *ngSwitchCase="'mods'"></settings-general-mods>
 			</ng-container>
 		</ul>
 	`,
@@ -23,6 +24,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class SettingsGeneralComponent {
 	_selectedMenu: string;
+
 	@Input() set selectedMenu(value: string) {
 		this._selectedMenu = value || 'launch';
 	}

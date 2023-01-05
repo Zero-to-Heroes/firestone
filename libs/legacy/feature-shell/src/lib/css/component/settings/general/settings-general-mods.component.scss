@@ -1,0 +1,81 @@
+:host {
+	flex-grow: 1;
+}
+
+.general-mods {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	min-height: 0;
+	overflow: auto;
+
+	input,
+	input:focus,
+	input:active {
+		display: block;
+		background: transparent;
+		border: 1px solid #a89782;
+		outline: none;
+		width: 100%;
+		cursor: text;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 12px;
+		color: #d9c3ab;
+	}
+
+	input::placeholder {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 12px;
+		color: #d9c3ab;
+		opacity: 0.5;
+	}
+
+	input,
+	input:focus,
+	input:active {
+		padding-left: 15px;
+		height: 30px;
+	}
+
+	button {
+		width: 80px;
+		height: 30px;
+		background: #a89782;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 13px;
+		color: #2f0d0d;
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		flex-shrink: 0;
+
+		&:hover:not(.disabled) {
+			background: #d9c3ab;
+		}
+
+		&.disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+	}
+
+	.button-group {
+		display: flex;
+		margin-bottom: 30px;
+
+		input {
+			margin-right: 50px;
+		}
+	}
+}

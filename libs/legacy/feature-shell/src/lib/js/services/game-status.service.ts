@@ -13,8 +13,12 @@ export class GameStatusService {
 		this.listeners.push(callback);
 	}
 
+	public async inGame(): Promise<boolean> {
+		return this.ow.inGame();
+	}
+
 	private async init() {
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+		this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (this.ow.exitGame(res)) {
 				this.listeners.forEach((cb) => cb());
 			}

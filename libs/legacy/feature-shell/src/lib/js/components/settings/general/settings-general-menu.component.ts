@@ -24,6 +24,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 				<span [owTranslate]="'settings.general.menu.broadcast'"></span>
 			</li>
 			<li class="separator"></li>
+			<li [ngClass]="{ selected: selectedMenu === 'mods' }" (mousedown)="selectMenu('mods')">
+				<span [owTranslate]="'settings.general.menu.mods'"></span>
+			</li>
+			<li class="separator"></li>
 			<li [ngClass]="{ selected: selectedMenu === 'quests' }" (mousedown)="selectMenu('quests')">
 				<span [owTranslate]="'settings.general.menu.quests'"></span>
 			</li>

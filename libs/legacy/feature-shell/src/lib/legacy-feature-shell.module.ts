@@ -464,8 +464,10 @@ import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/cou
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
+import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
+import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
 import { MailboxComponent } from '@mails/components/mailbox/mailbox.component';
@@ -1560,6 +1562,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SettingsGeneralThirdPartyComponent,
 		SettingsGeneralDataComponent,
 		SettingsGeneralQuestsComponent,
+		SettingsGeneralModsComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,
@@ -1623,6 +1626,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SimpleIOService,
 
 		ModsBootstrapService,
+		ModsUtilsService,
 
 		AchievementHistoryStorageService,
 		AchievementsRepository,
