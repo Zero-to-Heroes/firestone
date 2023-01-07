@@ -42,8 +42,6 @@ import { Preferences } from '../../../models/preferences';
 				}"
 				[quests]="quests$ | async"
 				[theme]="theme"
-				[xpIcon]="xpIcon"
-				[xpBonusIcon]="xpBonusIcon"
 			>
 			</hs-quests-list>
 		</div>
@@ -54,7 +52,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	@Input() theme: string;
 	@Input() widgetIcon: string;
 	@Input() xpIcon: string;
-	@Input() xpBonusIcon: string;
 
 	@Input() rewardsTrackMatcher: (type: RewardTrackType) => boolean;
 	@Input() showPrefsExtractor: (prefs: Preferences) => boolean;
@@ -111,6 +108,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 							progressPercentage: !!refQuest?.quota ? (100 * (quest.Progress ?? 0)) / refQuest.quota : 0,
 							xp: Math.round(refQuest?.rewardTrackXp * (1 + (xpBonus ?? 0) / 100)),
 							xpBonus: xpBonus,
+							xpIcon: this.getQuestIcon(refQuest.rewardTrackType, !!xpBonus),
 						};
 						return result;
 					})
@@ -151,6 +149,27 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 		event.preventDefault();
 		this.showWidget$$.next(false);
 	}
+
+	private getQuestIcon(type: RewardTrackType, hasXpBonus: boolean): string {
+		console.debug('getting quest icon for', type, hasXpBonus);
+		switch (type) {
+			case RewardTrackType.BATTLEGROUNDS:
+				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_bg.png';
+			case RewardTrackType.GLOBAL:
+			case RewardTrackType.NONE:
+				if (hasXpBonus) {
+					return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_boost.webp';
+				} else {
+					return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp.webp';
+				}
+			case RewardTrackType.EVENT_DK_LAUNCH:
+			case RewardTrackType.EVENT_HALLOWS_END:
+			case RewardTrackType.EVENT_LUNAR_NEW_YEAR:
+			case RewardTrackType.EVENT_WINTER_VEIL:
+			default:
+				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_event.webp';
+		}
+	}
 }
 
 @Component({
@@ -167,8 +186,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 					<!-- TODO: different images for BG -->
 					<div class="quest-portrait">
 						<div class="xp" *ngIf="quest.xp">
-							<img *ngIf="!quest.xpBonus" class="xp-icon" [src]="xpIcon" />
-							<img *ngIf="quest.xpBonus" class="xp-icon" [src]="xpBonusIcon" />
+							<img class="xp-icon" [src]="quest.xpIcon" />
 							<div class="xp-value" [ngClass]="{ bonus: !!quest.xpBonus }">{{ quest.xp }}</div>
 						</div>
 					</div>
@@ -193,8 +211,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 export class HsQuestsListWidgetComponent {
 	@Input() theme: string;
 	@Input() quests: readonly Quest[];
-	@Input() xpIcon: string;
-	@Input() xpBonusIcon: string;
 
 	trackByQuestFn(index: number, item: Quest) {
 		return item.name;
@@ -209,4 +225,5 @@ interface Quest {
 	readonly progressPercentage: number;
 	readonly xp: number;
 	readonly xpBonus: number;
+	readonly xpIcon: string;
 }

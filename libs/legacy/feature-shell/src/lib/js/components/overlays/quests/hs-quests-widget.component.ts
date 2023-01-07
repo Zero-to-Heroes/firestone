@@ -14,10 +14,6 @@ import { Preferences } from '../../../models/preferences';
 			class="widget"
 			[theme]="'decktracker-theme'"
 			[widgetIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/quest_log_2.png'"
-			[xpIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp.webp'"
-			[xpBonusIcon]="
-				'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_boost.webp'
-			"
 			[rewardsTrackMatcher]="rewardsTrackMatcher"
 			[showPrefsExtractor]="showPrefsExtractor"
 			[xpBonusExtractor]="xpBonusExtractor"

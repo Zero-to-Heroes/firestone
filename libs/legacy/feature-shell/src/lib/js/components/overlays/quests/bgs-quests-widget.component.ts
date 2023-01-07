@@ -14,7 +14,6 @@ import { Preferences } from '../../../models/preferences';
 			class="widget"
 			[theme]="'battlegrounds-theme'"
 			[widgetIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/quest_log_bg.png'"
-			[xpIcon]="'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_bg.png'"
 			[rewardsTrackMatcher]="rewardsTrackMatcher"
 			[showPrefsExtractor]="showPrefsExtractor"
 		>
