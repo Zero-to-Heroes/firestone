@@ -77,7 +77,7 @@ import {
 	taunt,
 	undead,
 	weapon,
-	whelp
+	whelp,
 } from './selectors';
 
 @Injectable()
@@ -285,6 +285,8 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(freeze);
 			case CardIds.ArmsDealer:
 				return and(or(inDeck, inHand), undead);
+			case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
+				return and(inDeck, minion);
 			case CardIds.Assembly:
 			case CardIds.Assembly_Assembly:
 				return and(inDeck, minion);
