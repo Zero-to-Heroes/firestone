@@ -151,7 +151,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	}
 
 	private getQuestIcon(type: RewardTrackType, hasXpBonus: boolean): string {
-		console.debug('getting quest icon for', type, hasXpBonus);
 		switch (type) {
 			case RewardTrackType.BATTLEGROUNDS:
 				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/reward_track_xp_bg.png';
