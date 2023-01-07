@@ -256,6 +256,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		const result = uniqueCardNames
 			.flatMap((cardName) => {
 				const refCard = cardsToShow.find((c) => c.cardName === cardName);
+				const cardsToShowWithName = cardsToShow.filter((c) => c.cardName === cardName);
 				const isInInitialDecklist =
 					!!deckState.deckList?.length && !!deckState.deckList.find((c) => c.cardName === cardName);
 				console.debug(
@@ -268,13 +269,24 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				);
 				const mode = !!deckState.deckList?.length ? 'focus-decklist' : 'show-played';
 				const quantityInDeck = deck.filter((c) => c.cardName === cardName).length;
-				const shouldShowDeckLine = mode === 'show-played' || isInInitialDecklist || quantityInDeck > 0;
-				const creatorCardIds = cardsToShow
-					.filter((c) => c.cardName === cardName)
-					.map((c) => c.creatorCardId)
-					.filter((id) => !!id);
+				const creatorCardIds = cardsToShowWithName.map((c) => c.creatorCardId).filter((id) => !!id);
 				const shouldShowGiftLine = !hideGeneratedCardsInOtherZone && !!creatorCardIds.length;
+				const shouldShowDeckLine =
+					// If we show a gift line, don't default to showing another entry, as it would cause duplicates
+					// The case where we have a gift in the deck is covered by the "quantityInDeck > 0" condition
+					(mode === 'show-played' && cardsToShowWithName.filter((c) => !c?.creatorCardId).length) ||
+					isInInitialDecklist ||
+					quantityInDeck > 0;
 				const result: VisualDeckCard[] = [];
+				console.debug(
+					'lines to show',
+					shouldShowDeckLine,
+					shouldShowGiftLine,
+					mode,
+					isInInitialDecklist,
+					quantityInDeck,
+					cardsToShowWithName.filter((c) => !c?.creatorCardId),
+				);
 				if (shouldShowDeckLine) {
 					const displayMode = !quantityInDeck ? 'dim' : null;
 					const deckCreatorCardIds = deck
@@ -293,6 +305,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 							}),
 						),
 					);
+					console.debug('after shouldShowDeckLine', result);
 				}
 				if (shouldShowGiftLine) {
 					const otherCreatorCardIds = cardsToShowNotInDeck
@@ -311,6 +324,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 							}),
 						),
 					);
+					console.debug('after shouldShowGiftLine', result);
 				}
 				return result;
 
