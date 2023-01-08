@@ -30,7 +30,7 @@ export class ModsBootstrapService {
 		this.store
 			.listenDeckState$((state) => state)
 			.pipe(
-				filter(() => this.ws?.readyState === this.ws.OPEN),
+				filter(() => this.ws?.readyState === this.ws?.OPEN),
 				tap((state) => console.debug('[mods] received new state', state)),
 				debounceTime(1000),
 				distinctUntilChanged(),
@@ -46,7 +46,7 @@ export class ModsBootstrapService {
 	}
 
 	private async connectModWebSocket() {
-		if (!!this.ws && this.ws.readyState === this.ws.OPEN) {
+		if (!!this.ws && this.ws.readyState === this.ws?.OPEN) {
 			console.debug('[mods] websocket already open');
 			return;
 		}
