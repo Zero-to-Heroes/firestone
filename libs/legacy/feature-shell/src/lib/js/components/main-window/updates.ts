@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.0.25',
+		version: '10.0.26',
 		sections: [
 			{
 				type: 'intro',
@@ -80,6 +80,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'content',
 								text: `The Volatile Skeleton counter will now only appear for you when Kel'Thuzad is in your deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an info leak where Albatrosses created by Bad Luck Albatross would be revealed in the opponent's hand.`,
 							},
 							{
 								type: 'bug',
@@ -131,6 +135,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add an option (under Settings > General) to disable the Mailbox, or hide the Mailbox' unread messages red dot.`,
+							},
+							{
+								type: 'feature',
+								text: `Event quests now use the event icon in the quest tracker.`,
 							},
 						],
 					},
