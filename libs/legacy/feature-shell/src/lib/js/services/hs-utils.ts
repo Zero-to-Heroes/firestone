@@ -291,7 +291,9 @@ export const forceHideInfoWhenDrawnInfluencers = [
 
 export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
 
-// Shouldn't be used anymore
+// Only use it for cards that create cards in hand. If used for cards that create cards in deck,
+// this will lead to an info leak, as we use this array to decide whether a created card should
+// be considered "known", meaning we can safely show the info in the opponent's hand
 const publicCardGiftCreators = [
 	// For some reason the coin is flagged as created by the coin...
 	...COIN_IDS,
@@ -686,7 +688,6 @@ export const cardTutors = [
 	CardIds.Arcanologist,
 	CardIds.ArcanologistCore,
 	CardIds.AxeBerserker,
-	CardIds.BadLuckAlbatross,
 	CardIds.BalindaStonehearth,
 	CardIds.BarakKodobane_BAR_551,
 	CardIds.Bogshaper,
