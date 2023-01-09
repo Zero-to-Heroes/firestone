@@ -65,7 +65,7 @@ export class ModsBootstrapService {
 	}
 
 	private async disconnectModWebSocket() {
-		this.ws.close();
+		this.ws?.close();
 		this.ws = null;
 	}
 }
