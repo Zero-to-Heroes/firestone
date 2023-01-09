@@ -55,6 +55,9 @@ export class DeckCard {
 	readonly createdByJoust?: boolean;
 	readonly linkedEntityIds?: readonly number[] = [];
 	readonly relatedCardIds?: readonly string[] = [];
+	// When an entity is "copied from" another entity, the game logs store the link only one way.
+	// This can be used to store the link in both ways, when we know about it
+	readonly cardCopyLink?: number;
 	readonly cardMatchCondition?: (card: ReferenceCard, cardInfos?: { cost?: number }) => boolean;
 
 	public static create(base: Partial<NonFunctionProperties<DeckCard>> = {} as DeckCard) {

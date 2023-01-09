@@ -160,10 +160,30 @@ export class ReceiveCardInHandParser implements EventParser {
 			// here
 			true,
 		);
-		// console.debug('[receive-card-in-hand] new hand', newHand);
+		// It's important to insert the card at the right position, because links use positioning
+		// TODO: integrate that directly into the "addSingleCardToZone" method
+		let handAfterReposition: DeckCard[] = [];
+		if (gameEvent.additionalData?.position != null && !!cardWithAdditionalAttributes.entityId) {
+			for (let i = 0; i < newHand.length; i++) {
+				if (newHand[i].entityId === cardWithAdditionalAttributes.entityId) {
+					handAfterReposition.splice(gameEvent.additionalData?.position, 0, cardWithAdditionalAttributes);
+				} else {
+					handAfterReposition.push(newHand[i]);
+				}
+			}
+		} else {
+			handAfterReposition = [...newHand];
+		}
+		// For cards that duplicate cards in hand, like Elementary Reaction or Lady Deathwhisper
+		const handAfterCardInference: readonly DeckCard[] = this.addCardLinks(
+			handAfterReposition,
+			entityId,
+			creatorCardId,
+		);
+		console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			hand: newHand,
+			hand: handAfterCardInference,
 			board: newBoard,
 			otherZone: newOther,
 			abyssalCurseHighestValue:
@@ -182,6 +202,29 @@ export class ReceiveCardInHandParser implements EventParser {
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+	}
+
+	private addCardLinks(hand: readonly DeckCard[], entityId: number, creatorCardId: string): readonly DeckCard[] {
+		switch (creatorCardId) {
+			case CardIds.ElementaryReaction:
+			case CardIds.LadyDeathwhisper_RLK_713:
+				const positionIndex = hand.map((c) => c.entityId).indexOf(entityId);
+				console.debug('positionIndex', positionIndex, hand, entityId, creatorCardId);
+				const card = hand[positionIndex];
+				const linkedCard = hand[positionIndex - 1];
+				const newCard = card.update({
+					cardCopyLink: linkedCard?.entityId,
+				});
+				const newLinkedCard = linkedCard.update({
+					cardCopyLink: card?.entityId,
+				});
+				const afterNewCard1 = this.helper.replaceCardInZone(hand, newCard);
+				const afterNewCard2 = this.helper.replaceCardInZone(afterNewCard1, newLinkedCard);
+				console.debug('after replacing copies', afterNewCard2, afterNewCard1, newCard, linkedCard, card);
+				return afterNewCard2;
+			default:
+				return hand;
+		}
 	}
 
 	event(): string {

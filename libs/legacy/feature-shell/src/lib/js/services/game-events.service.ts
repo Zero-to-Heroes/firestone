@@ -527,6 +527,11 @@ export class GameEvents {
 						additionalPlayInfo: gameEvent.Value.AdditionalProps.AdditionalPlayInfo,
 						dataNum1: gameEvent.Value.AdditionalProps?.DataNum1,
 						dataNum2: gameEvent.Value.AdditionalProps?.DataNum2,
+						position:
+							// Tag index is 1-based, but it's more convenient for us to have 0-based index
+							gameEvent.Value.AdditionalProps?.Position != null
+								? gameEvent.Value.AdditionalProps?.Position - 1
+								: null,
 					}),
 				);
 				break;

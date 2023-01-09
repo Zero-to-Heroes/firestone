@@ -8,7 +8,7 @@ import {
 	battlecryGlobalEffectCards,
 	COUNTERSPELLS,
 	globalEffectCards,
-	startOfGameGlobalEffectCards
+	startOfGameGlobalEffectCards,
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
@@ -107,21 +107,20 @@ export class CardPlayedFromHandParser implements EventParser {
 				countered: isCardCountered,
 			} as DeckCard);
 		// console.debug('cardWithZone', cardWithZone, isCardCountered, additionalInfo);
+		const cardToAdd =
+			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
+				? // Since Yogg transforms the card
+				  cardWithZone.update({
+						entityId: undefined,
+				  } as DeckCard)
+				: cardWithZone;
 
 		const newBoard: readonly DeckCard[] =
-			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardWithZone) : deck.board;
+			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardToAdd) : deck.board;
 
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.addSingleCardToZone(
-					deck.otherZone,
-					isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
-						? // Since Yogg transforms the card
-						  cardWithZone.update({
-								entityId: undefined,
-						  } as DeckCard)
-						: cardWithZone,
-			  );
+			: this.helper.addSingleCardToZone(deck.otherZone, cardToAdd);
 		// console.debug('newOtherZone', newOtherZone);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
@@ -148,7 +147,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			for (let i = 0; i < numberOfGlobalEffectsToAdd; i++) {
 				newGlobalEffects = this.helper.addSingleCardToZone(
 					newGlobalEffects,
-					cardWithZone?.update({
+					cardToAdd?.update({
 						// So that if the card is sent back to hand, we can track multiple plays of it
 						entityId: null,
 					} as DeckCard),
@@ -160,21 +159,24 @@ export class CardPlayedFromHandParser implements EventParser {
 		const handAfterCardsRemembered = isCardCountered
 			? newHand
 			: rememberCardsInHand(cardId, newHand, this.helper, this.allCards);
+		const handAfterCardsLinks = isCardCountered
+			? handAfterCardsRemembered
+			: processCardLinks(cardToAdd, handAfterCardsRemembered, this.helper, this.allCards);
 
 		const isElemental = refCard?.type === 'Minion' && refCard?.races?.includes(Race[Race.ELEMENTAL]);
 
 		const newPlayerDeck = deck.update({
-			hand: handAfterCardsRemembered,
+			hand: handAfterCardsLinks,
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
 			cardsPlayedThisTurn: isCardCountered
 				? deck.cardsPlayedThisTurn
-				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+				: ([...deck.cardsPlayedThisTurn, cardToAdd] as readonly DeckCard[]),
 			globalEffects: newGlobalEffects,
 			spellsPlayedThisMatch:
 				!isCardCountered && refCard?.type === 'Spell'
-					? [...deck.spellsPlayedThisMatch, cardWithZone]
+					? [...deck.spellsPlayedThisMatch, cardToAdd]
 					: deck.spellsPlayedThisMatch,
 			watchpostsPlayedThisMatch:
 				deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
@@ -184,8 +186,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		// console.debug('newPlayerDeck', newPlayerDeck);
 
 		const newCardPlayedThisMatch: ShortCard = {
-			entityId: cardWithZone.entityId,
-			cardId: cardWithZone.cardId,
+			entityId: cardToAdd.entityId,
+			cardId: cardToAdd.cardId,
 			side: isPlayer ? 'player' : 'opponent',
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = isCardCountered
@@ -246,4 +248,30 @@ export const rememberCardsInHand = (
 		}
 	}
 	return handAfterCardsRemembered;
+};
+
+export const processCardLinks = (
+	card: DeckCard,
+	hand: readonly DeckCard[],
+	helper: DeckManipulationHelper,
+	allCards: CardsFacadeService,
+): readonly DeckCard[] => {
+	const linkedCardInHand = hand.find((c) => c.cardCopyLink === card.entityId);
+	console.debug('processCardLinks', linkedCardInHand, card, hand);
+	if (!linkedCardInHand) {
+		return hand;
+	}
+
+	const updatedLinkedCardInHand = linkedCardInHand.update({
+		cardId: card.cardId,
+		cardName: card.cardName,
+	});
+	console.debug('processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
+	return helper.updateCardInZone(
+		hand,
+		updatedLinkedCardInHand.entityId,
+		updatedLinkedCardInHand.cardId,
+		updatedLinkedCardInHand,
+		false,
+	);
 };
