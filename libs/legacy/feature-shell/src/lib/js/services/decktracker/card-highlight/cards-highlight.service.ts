@@ -326,7 +326,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.BloodreaverGuldan_ICC_831:
 				return and(inGraveyard, minion, demon);
 			case CardIds.Bonecaller:
-				return and(deathrattle, minion, undead);
+				return and(inGraveyard, minion, undead);
 			case CardIds.BookOfSpecters:
 				return and(inDeck, spell);
 			case CardIds.BronzeSignetTavernBrawl:
