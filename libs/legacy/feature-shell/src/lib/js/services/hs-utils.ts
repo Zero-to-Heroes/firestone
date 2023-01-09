@@ -442,6 +442,7 @@ const publicCardGiftCreators = [
 	CardIds.FullBlownEvil,
 	CardIds.GalakrondsGuile,
 	CardIds.GalakrondsWit,
+	CardIds.GetawayKodo,
 	CardIds.GildedGargoyle,
 	CardIds.GoldenKobold,
 	CardIds.GoldenScarab,
