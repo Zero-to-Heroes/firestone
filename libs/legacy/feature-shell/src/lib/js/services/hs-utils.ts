@@ -235,6 +235,7 @@ export const cardsRevealedWhenDrawn = [
 export const forcedHiddenCardCreators = [
 	CardIds.Bibliomite,
 	CardIds.Chameleos,
+	CardIds.FromDeOtherSide,
 	// CardIds.CoilfangConstrictor,
 	// // Prevent the player from knowing too much about the opponent's hand when we play IT
 	// // However, it has the side-effect of hiding the cards drawn by the opponent
