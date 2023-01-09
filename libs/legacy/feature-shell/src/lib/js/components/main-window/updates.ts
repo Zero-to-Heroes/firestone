@@ -48,7 +48,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Firestone now support mods (only on the beta build for now)! Head over to the <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">wiki</a> for more details, and in the Settings > General > Mods tab. Only one mod exist so far, but an often-asked-for one: AutoSquelch :)`,
+								text: `Firestone now support mods (only on the beta build for now)! Head over to the <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">wiki</a> for more details (or ping me on Discord), and in the Settings > General > Mods tab. Only one mod exist so far, but an often-asked-for one: AutoSquelch :)`,
 							},
 						],
 					},
