@@ -260,6 +260,16 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'SUB_SPELL_END':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SUB_SPELL_END, gameEvent, {
+						prefabId: gameEvent.Value.PrefabId,
+						sourceEntityId: gameEvent.Value.SourceEntityId,
+						sourceCardId: gameEvent.Value.SourceCardId,
+						targetEntityIds: gameEvent.Value.TargetEntityIds,
+					}),
+				);
+				break;
 			case 'SHUFFLE_DECK':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.SHUFFLE_DECK, gameEvent, {

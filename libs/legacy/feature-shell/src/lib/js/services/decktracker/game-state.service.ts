@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { AttackParser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/attack-parser';
+import { CustomEffects2Parser } from '@legacy-import/src/lib/js/services/decktracker/event-parser/custom-effects-2-parser';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { AttackOnBoardService, hasTag } from '@services/decktracker/attack-on-board.service';
 import { EntityChosenParser } from '@services/decktracker/event-parser/entity-chosen-parser';
@@ -564,6 +565,7 @@ export class GameStateService {
 			new CthunParser(),
 			new CardBuffedInHandParser(this.helper),
 			new CustomEffectsParser(this.helper),
+			new CustomEffects2Parser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
 			new EntityUpdateParser(this.helper, this.i18n, this.allCards),
