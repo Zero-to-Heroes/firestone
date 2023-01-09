@@ -379,6 +379,7 @@ const publicCardGiftCreators = [
 	CardIds.CrystallineOracle,
 	CardIds.Cutpurse,
 	CardIds.DarkPeddler,
+	CardIds.DeathbringerSaurfangCore_RLK_082,
 	CardIds.DeeprunEngineer,
 	CardIds.DefendTheDwarvenDistrict_KnockEmDownToken, // For Tavish
 	CardIds.DesperateMeasures_DAL_141,
