@@ -168,7 +168,8 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		}
 
 		const sortingFunction = (a: VisualDeckCard, b: VisualDeckCard) =>
-			this.sortOrder(a, cardsGoToBottom) - this.sortOrder(b, cardsGoToBottom);
+			this.sortOrder(a, cardsGoToBottom, showGiftsSeparately) -
+			this.sortOrder(b, cardsGoToBottom, showGiftsSeparately);
 
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
@@ -236,7 +237,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				.filter((c) => !c.creatorCardId)
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId),
-			...deckState.board.filter((c) => !c.creatorCardId),
+			...deckState.board.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId),
 			...deckState.otherZone
 				.filter((c) => !!c.cardId)
 				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId)
@@ -387,11 +388,16 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		return result;
 	}
 
-	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean): number {
-		// Generated cards always go to the bottom
-		if (cardsGoToBottom && (!!card.creatorCardId?.length || !!card.creatorCardIds?.length)) {
-			return 3;
+	private sortOrder(card: VisualDeckCard, cardsGoToBottom: boolean, showGiftsSeparately: boolean): number {
+		const isGift = !!card.creatorCardId?.length || !!card.creatorCardIds?.length;
+		if (showGiftsSeparately && isGift) {
+			return 4;
 		}
+
+		// Generated cards always go to the bottom
+		// if (cardsGoToBottom && isGift) {
+		// 	return 3;
+		// }
 
 		if (cardsGoToBottom) {
 			switch (card.highlight) {
@@ -404,6 +410,12 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				default:
 					return 0;
 			}
+		}
+
+		// Gifts (that are not in the deck) always appear at the bottom of the deck, so as not to be confused
+		// with cards actually in the deck, or part of the initial decklist
+		if (isGift && card.highlight === 'dim') {
+			return 3;
 		}
 		return 0;
 	}
