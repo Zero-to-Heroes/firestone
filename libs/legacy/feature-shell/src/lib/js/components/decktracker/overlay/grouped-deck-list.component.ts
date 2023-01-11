@@ -8,7 +8,6 @@ import {
 	Output,
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
-import { CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -246,7 +245,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				// that
 				// How to handle discarded cards? They should probably be handled in the same way as cards played in the "other" zone
 				.filter((c) => c.zone !== 'SETASIDE' || !c.temporaryCard),
-		].filter((card) => !COIN_IDS.includes(card.cardId as CardIds));
+		];
 		const cardsToShow = [
 			...deck
 				// Remove "unknown cards"
