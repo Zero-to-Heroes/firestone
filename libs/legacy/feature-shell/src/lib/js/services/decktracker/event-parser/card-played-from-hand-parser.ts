@@ -257,7 +257,7 @@ export const processCardLinks = (
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
 	const linkedCardInHand = hand.find((c) => c.cardCopyLink === card.entityId);
-	console.debug('processCardLinks', linkedCardInHand, card, hand);
+	// console.debug('processCardLinks', linkedCardInHand, card, hand);
 	if (!linkedCardInHand) {
 		return hand;
 	}
@@ -266,7 +266,7 @@ export const processCardLinks = (
 		cardId: card.cardId,
 		cardName: card.cardName,
 	});
-	console.debug('processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
+	// console.debug('processCardLinks updatedLinkedCardInHand', updatedLinkedCardInHand);
 	return helper.updateCardInZone(
 		hand,
 		updatedLinkedCardInHand.entityId,

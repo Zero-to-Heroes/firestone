@@ -180,7 +180,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			entityId,
 			creatorCardId,
 		);
-		console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
+		// console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: handAfterCardInference,

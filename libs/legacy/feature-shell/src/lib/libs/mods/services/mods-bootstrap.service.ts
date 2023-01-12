@@ -3,7 +3,7 @@ import { GameStatusService } from '@legacy-import/src/lib/js/services/game-statu
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 import { sleep } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class ModsBootstrapService {
@@ -31,23 +31,23 @@ export class ModsBootstrapService {
 			.listenDeckState$((state) => state)
 			.pipe(
 				filter(() => this.ws?.readyState === this.ws?.OPEN),
-				tap((state) => console.debug('[mods] received new state', state)),
+				// tap((state) => console.debug('[mods] received new state', state)),
 				debounceTime(1000),
 				distinctUntilChanged(),
-				tap((state) => console.debug('[mods] updated state in mods service', state)),
+				// tap((state) => console.debug('[mods] updated state in mods service', state)),
 				map(([state]) => JSON.stringify(state)),
 				distinctUntilChanged(),
-				tap((state) => console.debug('[mods] will send stringified state')),
+				// tap((state) => console.debug('[mods] will send stringified state')),
 			)
 			.subscribe((state) => {
 				this.ws?.send(state);
-				console.debug('[mods] sent state to websocket');
+				// console.debug('[mods] sent state to websocket');
 			});
 	}
 
 	private async connectModWebSocket() {
 		if (!!this.ws && this.ws.readyState === this.ws?.OPEN) {
-			console.debug('[mods] websocket already open');
+			// console.debug('[mods] websocket already open');
 			return;
 		}
 		let retriesLeft = 30;
@@ -57,7 +57,7 @@ export class ModsBootstrapService {
 				console.log('[mods] WS client created');
 				return;
 			} catch (e) {
-				console.debug('[mods] could not connect to websocket, retrying', e);
+				// console.debug('[mods] could not connect to websocket, retrying', e);
 				retriesLeft--;
 			}
 			await sleep(2000);
