@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '10.1.0',
+		version: '10.1.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -70,6 +70,10 @@ export const updates: readonly Update[] = [
 								text: `Flag the card transformed in the opponent's hand by Plaguespreader's effect.`,
 							},
 							{
+								type: 'feature',
+								text: `The "show gifts separately" option now puts gifts at the very bottom of the deck when using the Legacy display mode .`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where Patchwerk would not delete the card in the deck.`,
 							},
@@ -80,6 +84,28 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an info leak when playing From De Other Side.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Games that end before any hero is selected will not count towards stats anymore. When you concede a game this early, HS chooses a hero for you to get 8th place with, which distorts statistics. If this change bothers you (and you'd like an option to revert it), please ping me on Discord.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a sim issue where Fish of N"Zoth would not remember other Fish deathrattles.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `The "Flash HS window when it's your turn" will now also flash the window when the game is over.`,
 							},
 						],
 					},
