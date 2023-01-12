@@ -1,14 +1,13 @@
+import { OwUtilsService } from '@legacy-import/src/lib/js/services/plugins/ow-utils.service';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../preferences.service';
-import { DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
 
 export class GameEndParser implements EventParser {
-	constructor(private readonly prefs: PreferencesService, private readonly deckParser: DeckParserService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly owUtils: OwUtilsService) {}
 
-	applies(gameEvent: GameEvent, state: GameState, prefs?: Preferences): boolean {
+	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
 			(gameEvent.type === GameEvent.GAME_END ||
@@ -19,11 +18,9 @@ export class GameEndParser implements EventParser {
 
 	async parse(currentState: GameState): Promise<GameState> {
 		const prefs = await this.prefs.getPreferences();
-
-		// 	'[deck-parser] [game-end] resetting deck, shouldStorePreviousDeck?',
-		// 	currentState.metadata.gameType === GameType.GT_VS_AI,
-		// );
-		// this.deckParser.reset(currentState.metadata.gameType === GameType.GT_VS_AI);
+		if (prefs.flashWindowOnYourTurn) {
+			this.owUtils.flashWindow();
+		}
 		if (prefs && prefs.decktrackerCloseOnGameEnd) {
 			return GameState.create({
 				gameEnded: true,

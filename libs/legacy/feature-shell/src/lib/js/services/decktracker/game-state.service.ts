@@ -511,7 +511,7 @@ export class GameStateService {
 			new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig, this.allCards),
 			new EndOfEchoInHandParser(this.helper),
-			new GameEndParser(this.prefs, this.deckParser),
+			new GameEndParser(this.prefs, this.owUtils),
 			new DiscardedCardParser(this.helper),
 			new BgsHeroSelectedCardParser(this.helper),
 			new CardRecruitedParser(this.helper, this.allCards, this.i18n),
