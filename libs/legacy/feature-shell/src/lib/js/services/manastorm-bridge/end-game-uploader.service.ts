@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
+import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { toFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
@@ -55,15 +56,18 @@ export class EndGameUploaderService {
 		private mainWindowStore: MainWindowStoreService,
 		private readonly bgsStore: BattlegroundsStoreService,
 		private readonly allCards: CardsFacadeService,
+		private readonly prefs: PreferencesService,
 	) {}
 
 	public async upload2(info: UploadInfo): Promise<void> {
 		console.log('[manastorm-bridge]', info.reviewId, 'Uploading game info');
-		const game: GameForUpload = this.initializeGame(info);
-		await this.replayUploadService.uploadGame(game);
+		const game: GameForUpload = await this.initializeGame(info);
+		if (!!game) {
+			await this.replayUploadService.uploadGame(game);
+		}
 	}
 
-	private initializeGame(info: UploadInfo): GameForUpload {
+	private async initializeGame(info: UploadInfo): Promise<GameForUpload> {
 		const currentReviewId = info.reviewId;
 		const gameResult = info.gameEnded.game;
 		const replayXml = info.gameEnded.replayXml;
@@ -88,7 +92,24 @@ export class EndGameUploaderService {
 		const opponentInfo = info.matchInfo?.opponent;
 
 		const replay = parseHsReplayString(replayXml, this.allCards.getService());
+		const prefs = await this.prefs.getPreferences();
 		if (isBattlegrounds(game.gameMode)) {
+			// If you concede a game before hero selection, the game automatically assigns a hero to you
+			// which tends to skew the stats a little bit.
+			// For now this pref can't be set anywhere (it's always true). I can't think of a scenario where
+			// you would WANT these games to be recorded though, except that it will mess up with the next
+			// game's "next MMR" in some cases
+			if (prefs.bgsIgnoreGamesEndingBeforeHeroSelection) {
+				const durationInTurns = extractTotalTurns(replay);
+				console.debug(
+					'[manastorm-bridge] bgsIgnoreGamesEndingBeforeHeroSelection is true, duration is',
+					durationInTurns,
+				);
+				if (!durationInTurns) {
+					console.debug('[manastorm-bridge] ignoring game ended before hero selection', durationInTurns);
+					return null;
+				}
+			}
 			console.log(
 				'[manastorm-bridge]',
 				currentReviewId,

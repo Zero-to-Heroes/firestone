@@ -484,6 +484,8 @@ export class Preferences {
 	readonly bgsShowSimResultsOnlyOnRecruit: boolean = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 5000;
+	// No way to change it for now
+	readonly bgsIgnoreGamesEndingBeforeHeroSelection = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
