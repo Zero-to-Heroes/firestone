@@ -90,7 +90,7 @@ export class BasicBarChart2Component {
 				const placeLabel = this.i18n.translateString('battlegrounds.hero-stats.place', {
 					value: data.rawValue,
 				});
-				const matchesLabel = this.i18n.translateString('battleground.hero-selection.total-matches', {
+				const matchesLabel = this.i18n.translateString('battlegrounds.hero-selection.total-matches', {
 					value: data.rawValue,
 				});
 				return {
