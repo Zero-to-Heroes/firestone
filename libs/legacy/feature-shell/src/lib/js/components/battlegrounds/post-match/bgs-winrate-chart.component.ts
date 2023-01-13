@@ -20,7 +20,7 @@ import { deepEqual } from '../../../services/utils';
 			"
 			[yourTooltip]="'app.battlegrounds.personal-stats.hero-details.winrate-stats.your-tooltip' | owTranslate"
 			[id]="id"
-			[maxYValue]="80"
+			[maxYValue]="100"
 			[stepSize]="50"
 			[showYAxis]="showYAxis"
 		>

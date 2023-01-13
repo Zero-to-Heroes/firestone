@@ -5,7 +5,7 @@ import {
 	Component,
 	ElementRef,
 	Input,
-	ViewChild
+	ViewChild,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
@@ -216,7 +216,7 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 	}
 
 	private buildChartOptions(showYAxis: boolean, stepSize: number, maxYValue: number): ChartOptions {
-		return {
+		const result: ChartOptions = {
 			responsive: true,
 			maintainAspectRatio: false,
 			layout: {
@@ -400,9 +400,6 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 				},
 				yAxes: {
 					display: showYAxis,
-					// drawBorder: this._showYAxis,
-					// drawTicks: this._showYAxis,
-					// offsetGridLines: this._showYAxis,
 					position: 'left',
 					grid: {
 						color: '#40032E',
@@ -426,6 +423,7 @@ export class GraphWithComparisonNewComponent extends AbstractSubscriptionCompone
 				},
 			},
 		};
+		return result;
 	}
 
 	private buildSection(

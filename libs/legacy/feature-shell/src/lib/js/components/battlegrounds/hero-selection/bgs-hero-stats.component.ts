@@ -62,7 +62,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 					[helpTooltip]="'battlegrounds.hero-stats.turn-winrate-tooltip' | owTranslate"
 					[owTranslate]="'battlegrounds.hero-stats.turn-winrate'"
 				></div>
-				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="false"></bgs-winrate-chart>
+				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="true"></bgs-winrate-chart>
 			</div>
 		</div>
 	`,
