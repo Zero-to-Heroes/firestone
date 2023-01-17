@@ -415,9 +415,9 @@ export class OverwolfService {
 	}
 
 	public async getRunningGameInfo() {
-		return new Promise<any>((resolve) => {
+		return new Promise<overwolf.games.GetRunningGameInfoResult>((resolve) => {
 			try {
-				overwolf.games.getRunningGameInfo((res: any) => {
+				overwolf.games.getRunningGameInfo((res: overwolf.games.GetRunningGameInfoResult) => {
 					resolve(res);
 				});
 			} catch (e) {

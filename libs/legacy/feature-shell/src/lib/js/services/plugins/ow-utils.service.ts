@@ -102,7 +102,6 @@ export class OwUtilsService {
 			const plugin = await this.get();
 			try {
 				plugin.downloadAndUnzipFile(fileUrl, path, (status, message) => {
-					console.log('hop', message);
 					if (status) {
 						console.log('[ow-utils] downloadAndUnzipFiled', path);
 						resolve();
@@ -112,6 +111,26 @@ export class OwUtilsService {
 				});
 			} catch (e) {
 				console.log('[ow-utils] could not downloadAndUnzipFile', fileUrl, path, e);
+				resolve();
+			}
+		});
+	}
+
+	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			console.log('[ow-utils] downloadFileTo-ing', path);
+			const plugin = await this.get();
+			try {
+				plugin.downloadFileTo(fileUrl, path, targetFileName, (status, message) => {
+					if (status) {
+						console.log('[ow-utils] downloadFileTod', path);
+						resolve();
+					} else {
+						console.log('[ow-utils] downloadFileTo message', message);
+					}
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not downloadFileTo', fileUrl, path, e);
 				resolve();
 			}
 		});

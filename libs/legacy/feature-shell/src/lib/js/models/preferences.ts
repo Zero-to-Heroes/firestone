@@ -80,6 +80,8 @@ export class Preferences {
 	readonly useStreamerMode: boolean = false;
 	readonly regionFilter: BnetRegion | 'all' = 'all';
 
+	readonly mods: { [modName: string]: boolean } = {};
+
 	readonly enableMailbox: boolean = true;
 	readonly enableMailboxUnread: boolean = true;
 

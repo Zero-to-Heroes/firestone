@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { FORCE_LOCAL_PROP, Preferences } from '../../js/models/preferences';
 import { AchievementsLoaderService } from '../../js/services/achievement/data/achievements-loader.service';
 import { AdService } from '../../js/services/ad.service';
@@ -29,6 +30,7 @@ export class AppStartupService {
 	constructor(
 		private readonly store: MainWindowStoreService,
 		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 		private readonly achievementsLoader: AchievementsLoaderService,
 		private readonly prefs: PreferencesService,
 		private readonly twitchAuth: TwitchAuthService,
@@ -67,31 +69,29 @@ export class AppStartupService {
 				this.onHotkeyPress();
 			});
 		}
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.exitGame(res)) {
-				this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
-				this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW);
-				// This can happen when we're in another game, so we exit the app for good
 
-				if (this.ow.inAnotherGame(res)) {
-					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
-					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
-					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
-					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
-				} else if (res.runningChanged) {
-					this.loadingWindowShown = false;
-					this.closeLoadingScreen();
-					// Because Firestone can stay open between two game sessions, and if
-					// the game was forced-closed, some achievements didn't have the opportunity
-					// to reset, so we're forcing it here
-					(await this.achievementsLoader.getChallengeModules()).forEach((challenge) =>
-						challenge.resetState(),
-					);
-					this.handleExitGame();
-				}
-			} else if (await this.ow.inGame()) {
-				this.showFullScreenOverlaysWindow();
-				this.showLoadingScreen();
+		this.gameStatus.onGameStart(() => {
+			this.showFullScreenOverlaysWindow();
+			this.showLoadingScreen();
+		});
+		this.gameStatus.onGameExit(async (res) => {
+			this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_WINDOW);
+			this.ow.closeWindow(OverwolfService.FULL_SCREEN_OVERLAYS_CLICKTHROUGH_WINDOW);
+			// This can happen when we're in another game, so we exit the app for good
+
+			if (this.ow.inAnotherGame(res)) {
+				this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
+				this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
+				this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
+				this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
+			} else if (res.runningChanged) {
+				this.loadingWindowShown = false;
+				this.closeLoadingScreen();
+				// Because Firestone can stay open between two game sessions, and if
+				// the game was forced-closed, some achievements didn't have the opportunity
+				// to reset, so we're forcing it here
+				(await this.achievementsLoader.getChallengeModules()).forEach((challenge) => challenge.resetState());
+				this.handleExitGame();
 			}
 		});
 

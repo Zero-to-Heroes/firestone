@@ -34,7 +34,8 @@
 		font-size: 13px;
 	}
 
-	.game-running-error {
+	.game-running-error,
+	.mods-install-status {
 		margin-bottom: 15px;
 	}
 
@@ -63,9 +64,15 @@
 		flex-direction: column;
 
 		.mod {
-			height: 30px;
+			background: rgba(255, 255, 255, 0.08);
+			padding: 10px;
 			display: flex;
 			align-items: center;
+			margin-bottom: 10px;
+
+			.toggle-button {
+				margin-left: auto;
+			}
 		}
 	}
 
@@ -133,6 +140,11 @@
 	.button-group {
 		display: flex;
 		margin-bottom: 30px;
+
+		&.pending {
+			opacity: 0.5;
+			pointer-events: none;
+		}
 
 		input {
 			margin-right: 50px;

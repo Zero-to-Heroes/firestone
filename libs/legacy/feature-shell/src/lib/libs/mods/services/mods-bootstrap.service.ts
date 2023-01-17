@@ -14,16 +14,16 @@ export class ModsBootstrapService {
 	constructor(private readonly store: AppUiStoreFacadeService, private readonly gameStatus: GameStatusService) {}
 
 	public async init() {
-		console.log('[mods] Initializing mods services');
+		console.log('[mods-boostrap] Initializing mods services');
 		await this.store.initComplete();
 
 		this.gameStatus.onGameExit(() => this.inGame$$.next(false));
 		this.gameStatus.onGameStart(() => this.inGame$$.next(true));
 		this.inGame$$.pipe(distinctUntilChanged()).subscribe((inGame) => {
 			if (inGame) {
-				this.connectModWebSocket();
+				this.connectWebSocket();
 			} else {
-				this.disconnectModWebSocket();
+				this.disconnectWebSocket();
 			}
 		});
 
@@ -31,40 +31,40 @@ export class ModsBootstrapService {
 			.listenDeckState$((state) => state)
 			.pipe(
 				filter(() => this.ws?.readyState === this.ws?.OPEN),
-				// tap((state) => console.debug('[mods] received new state', state)),
+				// tap((state) => console.debug('[mods-boostrap] received new state', state)),
 				debounceTime(1000),
 				distinctUntilChanged(),
-				// tap((state) => console.debug('[mods] updated state in mods service', state)),
+				// tap((state) => console.debug('[mods-boostrap] updated state in mods service', state)),
 				map(([state]) => JSON.stringify(state)),
 				distinctUntilChanged(),
-				// tap((state) => console.debug('[mods] will send stringified state')),
+				// tap((state) => console.debug('[mods-boostrap] will send stringified state')),
 			)
 			.subscribe((state) => {
 				this.ws?.send(state);
-				// console.debug('[mods] sent state to websocket');
+				// console.debug('[mods-boostrap] sent state to websocket');
 			});
 	}
 
-	private async connectModWebSocket() {
+	private async connectWebSocket() {
 		if (!!this.ws && this.ws.readyState === this.ws?.OPEN) {
-			// console.debug('[mods] websocket already open');
+			// console.debug('[mods-boostrap] websocket already open');
 			return;
 		}
 		let retriesLeft = 30;
 		while (retriesLeft >= 0) {
 			try {
 				this.ws = new WebSocket('ws://127.0.0.1:9977/firestone-mods');
-				console.log('[mods] WS client created');
+				console.log('[mods-boostrap] WS client created');
 				return;
 			} catch (e) {
-				// console.debug('[mods] could not connect to websocket, retrying', e);
+				// console.debug('[mods-boostrap] could not connect to websocket, retrying', e);
 				retriesLeft--;
 			}
 			await sleep(2000);
 		}
 	}
 
-	private async disconnectModWebSocket() {
+	private async disconnectWebSocket() {
 		this.ws?.close();
 		this.ws = null;
 	}

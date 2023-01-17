@@ -464,9 +464,13 @@ import { PlayerAnachronosWidgetWrapperComponent } from '@components/overlays/cou
 import { PlayerAsvedonWidgetWrapperComponent } from '@components/overlays/counters/player-asvedon-widget-wrapper.component';
 import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/player-bonelord-frostwhisper-widget-wrapper.component';
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
-import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
+import {
+	SettingsGeneralModsComponent,
+	ToggleViewComponent,
+} from '@components/settings/general/settings-general-mods.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
+import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
@@ -880,6 +884,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
+		ToggleViewComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		DropdownComponent,
@@ -1020,6 +1025,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
+		ToggleViewComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		DropdownComponent,
@@ -1626,6 +1632,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		SimpleIOService,
 
 		ModsBootstrapService,
+		ModsManagerService,
 		ModsUtilsService,
 
 		AchievementHistoryStorageService,

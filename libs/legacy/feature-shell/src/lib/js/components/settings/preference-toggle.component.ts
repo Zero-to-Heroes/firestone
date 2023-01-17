@@ -99,7 +99,9 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 	async toggleValue() {
 		this.toggled = true;
 		const oldPrefs = await this.prefs.getPreferences();
-		const newPrefs = await this.prefs.setValue(this.field, !this.value);
+		if (this.field) {
+			const newPrefs = await this.prefs.setValue(this.field, !this.value);
+		}
 		if (this.toggleFunction) {
 			this.toggleFunction(!this.value);
 		}

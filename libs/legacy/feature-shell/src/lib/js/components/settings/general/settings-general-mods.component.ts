@@ -1,7 +1,21 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
+import { OverwolfService } from '@legacy-import/src/lib/js/services/overwolf.service';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
+import { uuid } from '@legacy-import/src/lib/js/services/utils';
+import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
 
@@ -50,8 +64,12 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[owTranslate]="'settings.general.mods.game-running-error'"
 					*ngIf="showGameRunningError"
 				></div>
-				<div class="button-group">
-					<!-- <div class="status" *ngIf="status" [innerHTML]="status | safe"></div> -->
+				<div
+					class="mods-install-status"
+					*ngIf="modsInstallStatus$ | async as status"
+					[owTranslate]="status"
+				></div>
+				<div class="button-group" [ngClass]="{ pending: installOngoing }">
 					<button
 						*ngIf="!areModsInstalled"
 						(mousedown)="enableMods()"
@@ -76,8 +94,13 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
 				<p class="description" [owTranslate]="'settings.general.mods.installed-mods-description'"></p>
 				<div class="installed-mods">
-					<div class="mod" *ngFor="let mod of installedMods">
-						<div class="mod-name">{{ mod }}</div>
+					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
+						<div class="mod-name">{{ mod.Name }}</div>
+						<toggle-view
+							class="toggle-button"
+							[value]="mod.Registered"
+							[toggleFunction]="toggleMod(mod.AssemblyName)"
+						></toggle-view>
 					</div>
 				</div>
 			</div>
@@ -86,14 +109,20 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: add more feedback on what is happening
-export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsGeneralModsComponent
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit, AfterViewInit
+{
+	modsInstallStatus$: Observable<string>;
+
 	gameLocation: string;
 	status: string;
 	showGameRunningError: boolean;
 
+	installOngoing: boolean;
 	modsChecked: boolean;
 	areModsInstalled: boolean;
-	installedMods: readonly string[] = [];
+	installedMods: readonly ModData[] = [];
 
 	linkTitle = this.i18n.translateString('settings.general.mods.instructions-link');
 	instructions = this.i18n.translateString('settings.general.mods.instructions', {
@@ -103,19 +132,43 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		link: `<a href="https://github.com/Zero-to-Heroes/firestone/wiki/Mods" target="_blank">${this.linkTitle}</a>`,
 	});
 
+	private modsManager: ModsManagerService;
+
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly mods: ModsUtilsService,
+		private readonly modUtils: ModsUtilsService,
 		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
+		this.modsManager = this.ow.getMainWindow().modsManager;
+		combineLatest([this.listenForBasicPref$((prefs) => prefs.mods), this.modsManager.modsData$$.asObservable()])
+			.pipe(
+				filter(([modsPrefs, modsData]) => !!modsData?.length),
+				this.mapData(([modsPrefs, modsData]) => ({ modsPrefs, modsData })),
+			)
+			.subscribe(async ({ modsPrefs, modsData }) => {
+				this.installedMods = modsData;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		this.modsInstallStatus$ = this.modUtils.currentModsStatus$$
+			.asObservable()
+			.pipe(this.mapData((status) => status));
+	}
+
+	async ngAfterViewInit() {
 		const prefs = await this.prefs.getPreferences();
 		this.gameLocation = prefs.gameInstallPath;
+		if (this.gameLocation) {
+			await this.checkMods();
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -123,13 +176,14 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 
 	async checkMods() {
 		console.debug('checking mods', this.gameLocation);
-		const checkStatus = await this.mods.checkMods(this.gameLocation);
+		const checkStatus = await this.modUtils.checkMods(this.gameLocation);
 		if (checkStatus !== 'wrong-path') {
 			this.modsChecked = true;
 		}
 		this.areModsInstalled = checkStatus === 'installed';
 		if (this.areModsInstalled) {
-			this.installedMods = await this.mods.installedMods(this.gameLocation);
+			this.installedMods = await this.modUtils.installedMods(this.gameLocation);
+			console.debug('installedMods', this.installedMods);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -137,8 +191,9 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 	}
 
 	async enableMods() {
+		this.installOngoing = true;
 		console.debug('enabling mods');
-		const status = await this.mods.enableMods(this.gameLocation);
+		const status = await this.modUtils.enableMods(this.gameLocation);
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -147,7 +202,9 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 			return;
 		}
 		this.areModsInstalled = status === 'installed';
-		this.installedMods = await this.mods.installedMods(this.gameLocation);
+		this.installOngoing = false;
+		this.installedMods = await this.modUtils.installedMods(this.gameLocation);
+		console.debug('installedMods 2', this.installedMods);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -155,7 +212,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 
 	async refreshEngine() {
 		console.debug('refreshing engine');
-		const status = await this.mods.refreshEngine(this.gameLocation);
+		const status = await this.modUtils.refreshEngine(this.gameLocation);
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -169,9 +226,27 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		}
 	}
 
+	toggleMod(modName) {
+		return async (_: boolean) => {
+			const prefs = await this.prefs.getPreferences();
+			// const modNameForPrefs = modName.replace(/ /g, '');
+			const existingToggle = prefs.mods[modName] ?? true;
+			const newToggle = !existingToggle;
+			const newPrefs: Preferences = { ...prefs, mods: { ...prefs.mods, [modName]: newToggle } };
+			// Make sure the prefs are saved first, so that we can use the pref value in the callback
+			await this.prefs.savePreferences(newPrefs);
+			await this.modsManager.toggleMods([modName]);
+		};
+	}
+
+	trackByMod(index: number, item: ModData): string {
+		// console.debug('tracking mod', index, item);
+		return item.Name;
+	}
+
 	async disableMods() {
 		console.debug('disabling mods');
-		const status = await this.mods.disableMods(this.gameLocation);
+		const status = await this.modUtils.disableMods(this.gameLocation);
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -187,5 +262,61 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+}
+
+@Component({
+	selector: 'toggle-view',
+	styleUrls: [
+		`../../../../css/global/toggle.scss`,
+		`../../../../css/component/settings/settings-common.component.scss`,
+		`../../../../css/component/settings/preference-toggle.component.scss`,
+		`../../../../css/component/settings/toggle-view.component.scss`,
+	],
+	template: `
+		<div
+			class="preference-toggle"
+			*ngIf="{ value: value$ | async } as value"
+			[ngClass]="{ 'toggled-on': value.value }"
+		>
+			<input
+				hidden
+				type="checkbox"
+				[checked]="value.value"
+				name=""
+				id="a-01-{{ uniqueId }}"
+				(change)="toggleValue()"
+			/>
+			<label class="toggle" for="a-01-{{ uniqueId }}" [ngClass]="{ enabled: value.value }">
+				<b></b>
+			</label>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ToggleViewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+	value$: Observable<boolean>;
+
+	uniqueId: string;
+
+	@Input() set value(v: boolean) {
+		this.value$$.next(v);
+	}
+	@Input() toggleFunction: (v: boolean) => void | Promise<void>;
+
+	private value$$ = new BehaviorSubject<boolean>(false);
+
+	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+		super(store, cdr);
+		this.uniqueId = uuid();
+	}
+
+	ngAfterContentInit() {
+		this.value$ = this.value$$.asObservable().pipe(this.mapData((v) => v));
+	}
+
+	async toggleValue() {
+		this.value$$.next(!this.value$$.value);
+		this.toggleFunction(!this.value);
 	}
 }

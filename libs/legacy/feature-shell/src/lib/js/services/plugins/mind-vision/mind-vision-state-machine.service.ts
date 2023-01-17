@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { MemoryUpdate } from '@models/memory/memory-update';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { OwNotificationsService } from '@services/notifications.service';
@@ -82,6 +83,7 @@ export class MindVisionStateMachineService {
 	constructor(
 		private readonly mindVisionFacade: MindVisionFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 		private readonly events: Events,
 		private readonly notifs: OwNotificationsService,
 		private readonly i18n: LocalizationFacadeService,
@@ -146,17 +148,24 @@ export class MindVisionStateMachineService {
 		this.currentState = this.states.get(CurrentState.IDLE);
 		await this.performAction(Action.STARTUP);
 
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (this.ow.exitGame(res)) {
-				console.log('[mind-vision] game left', res);
-				this.performTransition(Action.GAME_LEFT);
-			} else if (res.gameChanged) {
-				const inGame = this.ow.gameRunning(res.gameInfo) || (await this.ow.inGame());
-				if (inGame) {
-					this.performAction(Action.GAME_START);
-				}
-			}
+		this.gameStatus.onGameStart(() => {
+			this.performAction(Action.GAME_START);
 		});
+		this.gameStatus.onGameExit(() => {
+			this.performTransition(Action.GAME_LEFT);
+		});
+
+		// this.ow.addGameInfoUpdatedListener(async (res: any) => {
+		// 	if (this.ow.exitGame(res)) {
+		// 		console.log('[mind-vision] game left', res);
+		// 		this.performTransition(Action.GAME_LEFT);
+		// 	} else if (res.gameChanged) {
+		// 		const inGame = this.ow.gameRunning(res.gameInfo) || (await this.ow.inGame());
+		// 		if (inGame) {
+		// 			this.performAction(Action.GAME_START);
+		// 		}
+		// 	}
+		// });
 	}
 
 	private async performAction(action: Action, payload: any = null) {

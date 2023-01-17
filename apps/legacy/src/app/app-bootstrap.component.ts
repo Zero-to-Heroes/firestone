@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
+import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { from, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { OverwolfService } from '../../../../libs/legacy/feature-shell/src/lib/js/services/overwolf.service';
@@ -44,6 +45,7 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
+		private readonly modsManager: ModsManagerService,
 	) {}
 
 	@HostListener('window:beforeunload')
@@ -71,6 +73,7 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 		this.currentWindowName$.subscribe((name) => {
 			if (name === 'MainWindow') {
 				this.modsBootstrap.init();
+				this.modsManager.init();
 			}
 		});
 	}
