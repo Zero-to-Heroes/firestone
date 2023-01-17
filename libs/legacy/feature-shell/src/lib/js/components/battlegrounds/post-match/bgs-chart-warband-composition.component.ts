@@ -314,13 +314,30 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	private getTribe(tribe: string, board: readonly Entity[]): number {
-		// Don't use === because tribe can be null / undefined
-		return (
-			board?.filter((entity) => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe)?.length ?? 0
-		);
+		let result = 0;
+		for (const entity of board) {
+			const card = this.allCards.getCard(entity.cardID);
+			if (!card.races?.length && tribe == null) {
+				result++;
+				continue;
+			}
+			if (!card.races?.length || !card.races.some((r) => r === Race[tribe?.toUpperCase()])) {
+				continue;
+			}
+			// So that the total is always equal to the number of minions
+			result += 1 / card.races.length;
+		}
+		return result;
 	}
 
 	private getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
+		const hasRace = (cardId: string, targetRace: string): boolean => {
+			const card = this.allCards.getCard(cardId);
+			if (targetRace == null && !card.races?.length) {
+				return true;
+			}
+			return !!card?.races?.length && card.races.some((r) => r === Race[targetRace?.toUpperCase()]);
+		};
 		return (
 			this._stats?.boardHistory
 				?.find((history) => history.turn === turn)
@@ -329,7 +346,7 @@ export class BgsChartWarbandCompositionComponent {
 						? ParserEntity.create(entity as ParserEntity)
 						: ParserEntity.fromJS(entity as any),
 				)
-				?.filter((entity) => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
+				?.filter((entity) => hasRace(entity.cardID, tribe)) || []
 		);
 	}
 }

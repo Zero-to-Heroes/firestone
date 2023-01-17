@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds, COIN_IDS } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { GameStatusService } from '@legacy-import/src/lib/js/services/game-status.service';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
 import { Card } from '../../models/card';
@@ -10,7 +11,6 @@ import { PackInfo } from '../../models/collection/pack-info';
 import { CoinInfo } from '../../models/memory/coin-info';
 import { Set, SetCard } from '../../models/set';
 import { ApiRunner } from '../api-runner';
-import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { CollectionStorageService } from './collection-storage.service';
 import { SetsService } from './sets-service.service';
@@ -27,7 +27,7 @@ export class CollectionManager {
 	constructor(
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
-		private readonly ow: OverwolfService,
+		private readonly gameStatus: GameStatusService,
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
 		private readonly setsService: SetsService,
@@ -229,10 +229,8 @@ export class CollectionManager {
 	}
 
 	private init() {
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
-			}
+		this.gameStatus.onGameStart(async () => {
+			await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
 		});
 	}
 }

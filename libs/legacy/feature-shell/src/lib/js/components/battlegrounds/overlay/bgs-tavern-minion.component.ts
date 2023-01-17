@@ -83,10 +83,12 @@ export class BgsTavernMinionComponent {
 
 		const card = this.allCards.getCard(this._minionCardId);
 		const highlightedFromMechanics = card?.mechanics?.some((m) => this._highlightedMechanics.includes(GameTag[m]));
-		const tribe: Race = card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
+		const tribes: readonly Race[] = card.races?.length
+			? card.races.map((race) => Race[race.toUpperCase()])
+			: [Race.BLANK];
 		this.highlightedFromTribe =
-			this._highlightedTribes.includes(tribe) ||
-			(this._highlightedTribes.length > 0 && tribe === Race.ALL) ||
+			tribes.some((tribe) => this._highlightedTribes.includes(tribe)) ||
+			(this._highlightedTribes.length > 0 && tribes.some((tribe) => tribe === Race.ALL)) ||
 			highlightedFromMechanics;
 		this.highlightedFromMinion = this._highlightedMinions.includes(card.id);
 
