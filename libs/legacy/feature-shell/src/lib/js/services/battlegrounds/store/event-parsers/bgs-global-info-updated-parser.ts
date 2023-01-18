@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MemoryBgGame, MemoryBgPlayer } from '../../../../models/battlegrounds-info';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
@@ -8,7 +8,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBattleHistory } from '../../../../models/battlegrounds/in-game/bgs-battle-history';
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { allBgsRaces, normalizeHeroCardId } from '../../bgs-utils';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -116,9 +116,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		currentState: BattlegroundsState,
 		availableTribes: readonly Race[],
 	): BgsPostMatchStatsPanel {
-		const panelToRebuild: BgsPostMatchStatsPanel = (currentState.panels.find(
-			(panel) => panel.id === 'bgs-post-match-stats',
-		) as BgsPostMatchStatsPanel).update({
+		const panelToRebuild: BgsPostMatchStatsPanel = (
+			currentState.panels.find((panel) => panel.id === 'bgs-post-match-stats') as BgsPostMatchStatsPanel
+		).update({
 			availableTribes: availableTribes,
 		} as BgsPostMatchStatsPanel);
 		return panelToRebuild;
@@ -130,8 +130,8 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			return [null, null];
 		}
 		return [
-			allBgsRaces.filter((race) => availableRaces.includes(race)),
-			allBgsRaces.filter((race) => !availableRaces.includes(race)),
+			ALL_BG_RACES.filter((race) => availableRaces.includes(race)),
+			ALL_BG_RACES.filter((race) => !availableRaces.includes(race)),
 		];
 	}
 }

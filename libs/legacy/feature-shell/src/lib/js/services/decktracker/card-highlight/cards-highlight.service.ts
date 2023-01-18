@@ -283,7 +283,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 				return and(inDeck, spell, secret);
 			case CardIds.ArcticArmorTavernBrawl:
 				return and(freeze);
-			case CardIds.ArmsDealer:
+			case CardIds.ArmsDealer_RLK_824:
 				return and(or(inDeck, inHand), undead);
 			case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
 				return and(inDeck, minion);
@@ -646,7 +646,7 @@ export class CardsHighlightService extends AbstractSubscriptionService {
 			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
 			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
 				return and(inDeck, beast);
-			case CardIds.MagisterDawngrasp:
+			case CardIds.MagisterDawngrasp_AV_200:
 				return and(inOther, spell, hasSpellSchool, spellPlayedThisMatch);
 			case CardIds.MagisterUnchainedTavernBrawlToken:
 				return and(inDeck, spell);

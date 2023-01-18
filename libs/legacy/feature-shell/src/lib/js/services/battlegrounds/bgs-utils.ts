@@ -9,18 +9,6 @@ import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.t
 import { VisualAchievement } from '../../models/visual-achievement';
 import { LocalizationFacadeService } from '../localization-facade.service';
 
-export const allBgsRaces = [
-	Race.BEAST,
-	Race.DEMON,
-	Race.DRAGON,
-	Race.MECH,
-	Race.MURLOC,
-	Race.PIRATE,
-	Race.ELEMENTAL,
-	Race.QUILBOAR,
-	Race.NAGA,
-];
-
 export const NON_BUYABLE_MINION_IDS = [
 	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A,
 	CardIds.CuddlgamBattlegrounds_TB_BaconShop_HP_033t_SKIN_A_G,
@@ -51,7 +39,7 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt4,
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt5,
 	CardIds.Tentacular_OzumatsTentacleToken_BG23_HERO_201pt6,
-	// 26.0, same
+	// 24.0, same
 	CardIds.EmperorCobraLegacy_BG_EX1_170,
 	CardIds.EmperorCobraLegacy_BG_EX1_170_G,
 	CardIds.EmperorCobraLegacy_EX1_170,
@@ -60,6 +48,9 @@ export const NON_BUYABLE_MINION_IDS = [
 	CardIds.StoneElemental,
 	CardIds.BolvarFireblood_CORE_ICC_858,
 	CardIds.BolvarFireblood_ICC_858,
+	// 25.2
+	CardIds.HandlessForsaken_HelpingHandToken,
+	CardIds.HandlessForsaken_HelpingHandTokenBattlegrounds,
 ];
 
 export const getTribeName = (tribe: Race, i18n: LocalizationFacadeService): string =>
@@ -76,7 +67,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	switch (tribe) {
 		case 'mech':
 		case Race.MECH:
-			referenceCardId = CardIds.MicroMummy_BG_ULD_217;
+			referenceCardId = CardIds.Pupbot;
 			break;
 		case 'beast':
 		case Race.BEAST:
@@ -109,6 +100,10 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 		case 'quilboar':
 		case Race.QUILBOAR:
 			referenceCardId = CardIds.SunBaconRelaxer;
+			break;
+		case 'undead':
+		case Race.UNDEAD:
+			referenceCardId = CardIds.EternalKnight;
 			break;
 		case 'all':
 		case Race.ALL:
@@ -320,6 +315,8 @@ export const getHeroPower = (heroCardId: string, allCards: CardsFacadeService): 
 			return CardIds.RunicEmpowermentBattlegrounds;
 		case CardIds.EnhanceOMechano_BG24_HERO_204:
 			return CardIds.EnhanceOMechano_Enhancification;
+		case CardIds.ProfessorPutricide_BG25_HERO_100:
+			return CardIds.ProfessorPutricide_BuildAnUndead;
 
 		case '':
 			return null; // new heroes
@@ -404,8 +401,8 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.WrathWeaver:
 		case CardIds.WrathWeaverBattlegrounds:
 			return Race.DEMON;
-		case CardIds.SeafoodSlinger_BG21_011:
-		case CardIds.SeafoodSlinger_BG21_011_G:
+		case CardIds.SeafoodSlinger:
+		case CardIds.SeafoodSlingerBattlegrounds:
 			return Race.MURLOC;
 		case CardIds.NadinaTheRed:
 		case CardIds.NadinaTheRedBattlegrounds:
@@ -471,10 +468,12 @@ export const tribeValueForSort = (tribe: string): number => {
 			return 8;
 		case Race[Race.NAGA]:
 			return 9;
-		case Race[Race.ALL]:
+		case Race[Race.UNDEAD]:
 			return 10;
+		case Race[Race.ALL]:
+			return 100;
 		case Race[Race.BLANK]:
-			return 11;
+			return 101;
 	}
 };
 
@@ -686,6 +685,8 @@ const getAchievementSectionIdFromHeroCardId = (heroCardId: string, heroName: str
 			return 459;
 		case CardIds.EnhanceOMechano_BG24_HERO_204:
 			return 462;
+		case CardIds.ProfessorPutricide_BG25_HERO_100:
+			return 463;
 		default:
 			if (heroCardId !== CardIds.Diablo) {
 				console.error('missing achievements section for ', heroCardId);

@@ -1103,6 +1103,7 @@ export class GameEvents {
 								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
 								heroPowerInfo: gameEvent.Value.PlayerBoard.HeroPowerInfo,
 								questRewards: gameEvent.Value.PlayerBoard.QuestRewards,
+								globalInfo: gameEvent.Value.PlayerBoard.GlobalInfo,
 							},
 							opponentBoard: {
 								cardId: gameEvent.Value.OpponentBoard.CardId,
@@ -1113,6 +1114,7 @@ export class GameEvents {
 								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
 								heroPowerInfo: gameEvent.Value.OpponentBoard.HeroPowerInfo,
 								questRewards: gameEvent.Value.OpponentBoard.QuestRewards,
+								globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
 							},
 						},
 					} as GameEvent),

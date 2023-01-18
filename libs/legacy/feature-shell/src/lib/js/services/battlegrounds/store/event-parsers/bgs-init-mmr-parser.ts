@@ -1,4 +1,5 @@
 import { EventEmitter } from '@angular/core';
+import { ALL_BG_RACES } from '@firestone-hs/reference-data';
 import { BgsRankFilterSelectedEvent } from '@services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTribesFilterSelectedEvent } from '@services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
@@ -8,7 +9,6 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
-import { allBgsRaces } from '../../bgs-utils';
 import { BgsInitMmrEvent } from '../events/bgs-init-mmr-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -50,8 +50,8 @@ export class BgsInitMmrParser implements EventParser {
 		const races = prefs.bgsUseTribeFilterInHeroSelection
 			? !!currentState.currentGame.availableRaces?.length
 				? currentState.currentGame.availableRaces
-				: allBgsRaces
-			: allBgsRaces;
+				: ALL_BG_RACES
+			: ALL_BG_RACES;
 		stateUpdater.next(new BgsTribesFilterSelectedEvent(races));
 
 		const percentile = prefs.bgsUseMmrFilterInHeroSelection

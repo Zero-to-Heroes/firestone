@@ -132,6 +132,8 @@ export class BgsBannedTribesComponent extends AbstractSubscriptionComponent impl
 				return [];
 			case Race.NAGA:
 				return [];
+			case Race.UNDEAD:
+				return [];
 		}
 		return [];
 	}

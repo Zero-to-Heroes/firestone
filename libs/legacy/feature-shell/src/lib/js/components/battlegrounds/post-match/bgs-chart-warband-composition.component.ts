@@ -57,6 +57,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="node"></div>
 				{{ 'global.tribe.quilboar' | owTranslate }}
 			</div>
+			<div class="item undead" *ngIf="isTribe('undead')">
+				<div class="node"></div>
+				{{ 'global.tribe.undead' | owTranslate }}
+			</div>
 			<div class="item naga" *ngIf="isTribe('naga')">
 				<div class="node"></div>
 				{{ 'global.tribe.naga' | owTranslate }}
@@ -297,6 +301,7 @@ export class BgsChartWarbandCompositionComponent {
 					this.buildSeries(this.i18n.translateString('global.tribe.pirate'), 'pirate', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.elemental'), 'elemental', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.quilboar'), 'quilboar', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.undead'), 'undead', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.naga'), 'naga', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.all'), 'all', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.blank'), null, history),

@@ -180,6 +180,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerUsed: playerBoard.heroPowerUsed,
 				heroPowerInfo: playerBoard.heroPowerInfo,
 				questRewards: playerBoard.questRewards,
+				globalInfo: playerBoard.globalInfo,
 				debugArmor: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value,
 				debugHealth: playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
 			} as BgsPlayerEntity & { debugArmor: number; debugHealth: number },
