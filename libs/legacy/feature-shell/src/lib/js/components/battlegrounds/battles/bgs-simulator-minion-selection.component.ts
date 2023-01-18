@@ -14,7 +14,7 @@ import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
+import { getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -301,7 +301,7 @@ export class BgsSimulatorMinionSelectionComponent
 							(card) =>
 								!tribeFilter ||
 								tribeFilter === 'all' ||
-								getEffectiveTribe(card, true).toLowerCase() === tribeFilter,
+								getEffectiveTribes(card, true).some((r) => r.toLowerCase() === tribeFilter),
 						)
 						.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
 						.filter(

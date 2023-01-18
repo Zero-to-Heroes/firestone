@@ -365,7 +365,11 @@ export const getAllCardsInGame = (
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
-		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
+		.filter(
+			(card) =>
+				!availableTribes?.length ||
+				getTribesForInclusion(card).some((r) => isValidTribe(availableTribes, Race[r])),
+		)
 		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
 };
 
@@ -380,7 +384,7 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 	);
 };
 
-export const getTribeForInclusion = (card: ReferenceCard): Race => {
+export const getTribesForInclusion = (card: ReferenceCard): readonly Race[] => {
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
 		case CardIds.BirdBuddy:
@@ -393,59 +397,64 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.HoundmasterVanilla:
 		case CardIds.HoundmasterBattlegrounds:
 		case CardIds.Houndmaster:
-			return Race.BEAST;
+			return [Race.BEAST, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.ImpatientDoomsayer:
 		case CardIds.ImpatientDoomsayerBattlegrounds:
 		case CardIds.SoulJuggler:
 		case CardIds.SoulJugglerBattlegrounds:
 		case CardIds.WrathWeaver:
 		case CardIds.WrathWeaverBattlegrounds:
-			return Race.DEMON;
+			return [Race.DEMON, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.SeafoodSlinger:
 		case CardIds.SeafoodSlingerBattlegrounds:
-			return Race.MURLOC;
+			return [Race.MURLOC, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.NadinaTheRed:
 		case CardIds.NadinaTheRedBattlegrounds:
 		case CardIds.WaxriderTogwaggle_BGS_035:
 		case CardIds.WaxriderTogwaggleBattlegrounds:
 		case CardIds.WhelpSmuggler:
 		case CardIds.WhelpSmugglerBattlegrounds:
-			return Race.DRAGON;
+			return [Race.DRAGON, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.MajordomoExecutus_BGS_105:
 		case CardIds.MajordomoExecutusBattlegrounds:
 		case CardIds.MasterOfRealities_BG21_036:
 		case CardIds.MasterOfRealitiesBattlegrounds:
 		case CardIds.NomiKitchenNightmare:
 		case CardIds.NomiKitchenNightmareBattlegrounds:
-			return Race.ELEMENTAL;
+			return [Race.ELEMENTAL, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.KangorsApprentice:
 		case CardIds.KangorsApprenticeBattlegrounds:
-			return Race.MECH;
+			return [Race.MECH, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.DefiantShipwright_BG21_018:
 		case CardIds.DefiantShipwright_BG21_018_G:
 		case CardIds.TheTideRazor:
 		case CardIds.TheTideRazorBattlegrounds:
-			return Race.PIRATE;
+			return [Race.PIRATE, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.AgamagganTheGreatBoar:
 		case CardIds.AgamagganTheGreatBoarBattlegrounds:
 		case CardIds.ProphetOfTheBoar:
 		case CardIds.ProphetOfTheBoarBattlegrounds:
-			return Race.QUILBOAR;
+			return [Race.QUILBOAR, ...(card.races ?? []).map((r) => Race[r])];
 		case CardIds.OrgozoaTheTender:
 		case CardIds.OrgozoaTheTenderBattlegrounds:
-			return Race.NAGA;
+			return [Race.NAGA, ...(card.races ?? []).map((r) => Race[r])];
 		default:
-			return getEffectiveTribeEnum(card);
+			return getEffectiveTribesEnum(card);
 	}
 };
 
-export const getEffectiveTribe = (card: ReferenceCard, groupMinionsIntoTheirTribeGroup: boolean): string => {
-	const tribe: Race = groupMinionsIntoTheirTribeGroup ? getTribeForInclusion(card) : getEffectiveTribeEnum(card);
-	return Race[tribe];
+export const getEffectiveTribes = (
+	card: ReferenceCard,
+	groupMinionsIntoTheirTribeGroup: boolean,
+): readonly string[] => {
+	const tribes: readonly Race[] = groupMinionsIntoTheirTribeGroup
+		? getTribesForInclusion(card)
+		: getEffectiveTribesEnum(card);
+	return tribes.map((tribe) => Race[tribe]);
 };
 
-export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
-	return !!card.races?.length ? Race[card.races[0].toUpperCase()] : Race.BLANK;
+export const getEffectiveTribesEnum = (card: ReferenceCard): readonly Race[] => {
+	return !!card.races?.length ? card.races.map((r) => Race[r]) : [Race.BLANK];
 };
 
 export const tribeValueForSort = (tribe: string): number => {

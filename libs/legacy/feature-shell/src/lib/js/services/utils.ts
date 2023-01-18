@@ -4,17 +4,32 @@ import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 import { LocalizationFacadeService } from './localization-facade.service';
 
-export const groupByFunction = <T>(keyExtractor: (obj: T) => string | number) => (
-	array: readonly T[],
-): { [key: string]: readonly T[] } => {
-	return (array ?? []).reduce((objectsByKeyValue, obj) => {
-		const value = keyExtractor(obj);
-		objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
-		// Using push instead of concat is thousands of times faster on big arrays
-		objectsByKeyValue[value].push(obj);
-		return objectsByKeyValue;
-	}, {});
-};
+export const groupByFunction =
+	<T>(keyExtractor: (obj: T) => string | number) =>
+	(array: readonly T[]): { [key: string]: readonly T[] } => {
+		return (array ?? []).reduce((objectsByKeyValue, obj) => {
+			const value = keyExtractor(obj);
+			objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
+			// Using push instead of concat is thousands of times faster on big arrays
+			objectsByKeyValue[value].push(obj);
+			return objectsByKeyValue;
+		}, {});
+	};
+
+export const multiGroupByFunction =
+	<T>(keyExtractor: (obj: T) => string | number | readonly string[] | readonly number[]) =>
+	(array: readonly T[]): { [key: string]: readonly T[] } => {
+		return (array ?? []).reduce((objectsByKeyValue, obj) => {
+			const valueRaw = keyExtractor(obj);
+			const valueArr: readonly string[] | readonly number[] = Array.isArray(valueRaw) ? valueRaw : [valueRaw];
+			for (const value of valueArr) {
+				objectsByKeyValue[value] = objectsByKeyValue[value] ?? [];
+				// Using push instead of concat is thousands of times faster on big arrays
+				objectsByKeyValue[value].push(obj);
+			}
+			return objectsByKeyValue;
+		}, {});
+	};
 
 export const uuid = () => {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

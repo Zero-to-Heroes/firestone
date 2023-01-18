@@ -13,7 +13,7 @@ import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/e
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { groupByFunction } from '../../../services/utils';
+import { multiGroupByFunction } from '../../../services/utils';
 import { Tier } from './battlegrounds-minions-tiers-view.component';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -52,7 +52,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
-	@Input() set groupingFunction(value: (card: ReferenceCard) => string) {
+	@Input() set groupingFunction(value: (card: ReferenceCard) => readonly string[]) {
 		this._groupingFunction = value;
 		this.updateInfos();
 	}
@@ -94,7 +94,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	}
 
 	_cards: readonly ReferenceCard[];
-	_groupingFunction: (card: ReferenceCard) => string;
+	_groupingFunction: (card: ReferenceCard) => readonly string[];
 	_highlightedMinions: readonly string[];
 	_highlightedTribes: readonly Race[];
 	_highlightedMechanics: readonly GameTag[];
@@ -124,7 +124,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 			return;
 		}
 
-		const groupedByTribe = groupByFunction(this._groupingFunction)(this._cards);
+		const groupedByTribe = multiGroupByFunction(this._groupingFunction)(this._cards);
 		this.groups = Object.keys(groupedByTribe)
 			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
 			.map((tribeString) => {

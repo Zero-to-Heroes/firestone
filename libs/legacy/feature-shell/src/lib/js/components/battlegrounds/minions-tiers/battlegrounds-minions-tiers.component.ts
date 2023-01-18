@@ -11,7 +11,7 @@ import {
 import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { getAllCardsInGame, getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
+import { getAllCardsInGame, getEffectiveTribes } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -88,7 +88,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		).pipe(
 			this.mapData(([[showMechanicsTiers, bgsGroupMinionsIntoTheirTribeGroup], [races]]) => {
 				const cardsInGame = getAllCardsInGame(races, this.allCards);
-				const result = this.buildTiers(cardsInGame, bgsGroupMinionsIntoTheirTribeGroup, showMechanicsTiers);
+				const result = this.buildTiers(
+					cardsInGame,
+					bgsGroupMinionsIntoTheirTribeGroup,
+					showMechanicsTiers,
+					races,
+				);
 				return result;
 			}),
 		);
@@ -124,6 +129,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		cardsInGame: readonly ReferenceCard[],
 		groupMinionsIntoTheirTribeGroup: boolean,
 		showMechanicsTiers: boolean,
+		availableTribes: readonly Race[],
 	): readonly Tier[] {
 		if (!cardsInGame?.length) {
 			return [];
@@ -135,7 +141,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const standardTiers: readonly Tier[] = Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
-			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, groupMinionsIntoTheirTribeGroup),
+			groupingFunction: (card: ReferenceCard) =>
+				getEffectiveTribes(card, groupMinionsIntoTheirTribeGroup).filter(
+					(t) => !availableTribes?.length || availableTribes.includes(Race[t]),
+				),
 			type: 'standard',
 		}));
 		const mechanicsTiers = showMechanicsTiers ? this.buildMechanicsTiers(cardsInGame) : [];
@@ -147,7 +156,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			{
 				tavernTier: 'B',
 				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BATTLECRY])),
-				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.BATTLECRY].toLowerCase()}`),
 				}),
@@ -156,7 +165,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			{
 				tavernTier: 'D',
 				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE])),
-				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.DEATHRATTLE].toLowerCase()}`),
 				}),
@@ -168,7 +177,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					...cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD])),
 					cardsInGame.find((c) => c.id === CardIds.Glowscale),
 				],
-				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(
 						`global.mechanics.${GameTag[GameTag.DIVINE_SHIELD].toLowerCase()}`,
@@ -179,7 +188,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			{
 				tavernTier: 'T',
 				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.TAUNT])),
-				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.TAUNT].toLowerCase()}`),
 				}),
@@ -188,7 +197,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			{
 				tavernTier: 'E',
 				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.END_OF_TURN])),
-				groupingFunction: (card: ReferenceCard) => '' + card.techLevel,
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
 				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
 					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.END_OF_TURN].toLowerCase()}`),
 				}),

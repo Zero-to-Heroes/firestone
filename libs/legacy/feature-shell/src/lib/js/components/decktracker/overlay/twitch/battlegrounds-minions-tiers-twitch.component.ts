@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { TwitchPreferencesService } from '@components/decktracker/overlay/twitch/twitch-preferences.service';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { getAllCardsInGame, getEffectiveTribe } from '@services/battlegrounds/bgs-utils';
+import { getAllCardsInGame, getEffectiveTribes } from '@services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { groupByFunction } from '@services/utils';
 import { BehaviorSubject, from, Observable } from 'rxjs';
@@ -111,7 +111,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		return Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
-			groupingFunction: (card: ReferenceCard) => getEffectiveTribe(card, false),
+			groupingFunction: (card: ReferenceCard) => getEffectiveTribes(card, false),
 			type: 'standard',
 		}));
 	}
