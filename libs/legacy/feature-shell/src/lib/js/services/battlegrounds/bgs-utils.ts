@@ -385,6 +385,7 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 };
 
 export const getTribesForInclusion = (card: ReferenceCard): readonly Race[] => {
+	const cardRaces = card.races?.map((r) => Race[r]) ?? [Race.BLANK];
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
 		case CardIds.BirdBuddy:
@@ -397,47 +398,47 @@ export const getTribesForInclusion = (card: ReferenceCard): readonly Race[] => {
 		case CardIds.HoundmasterVanilla:
 		case CardIds.HoundmasterBattlegrounds:
 		case CardIds.Houndmaster:
-			return [Race.BEAST, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.BEAST, ...cardRaces];
 		case CardIds.ImpatientDoomsayer:
 		case CardIds.ImpatientDoomsayerBattlegrounds:
 		case CardIds.SoulJuggler:
 		case CardIds.SoulJugglerBattlegrounds:
 		case CardIds.WrathWeaver:
 		case CardIds.WrathWeaverBattlegrounds:
-			return [Race.DEMON, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.DEMON, ...cardRaces];
 		case CardIds.SeafoodSlinger:
 		case CardIds.SeafoodSlingerBattlegrounds:
-			return [Race.MURLOC, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.MURLOC, ...cardRaces];
 		case CardIds.NadinaTheRed:
 		case CardIds.NadinaTheRedBattlegrounds:
 		case CardIds.WaxriderTogwaggle_BGS_035:
 		case CardIds.WaxriderTogwaggleBattlegrounds:
 		case CardIds.WhelpSmuggler:
 		case CardIds.WhelpSmugglerBattlegrounds:
-			return [Race.DRAGON, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.DRAGON, ...cardRaces];
 		case CardIds.MajordomoExecutus_BGS_105:
 		case CardIds.MajordomoExecutusBattlegrounds:
 		case CardIds.MasterOfRealities_BG21_036:
 		case CardIds.MasterOfRealitiesBattlegrounds:
 		case CardIds.NomiKitchenNightmare:
 		case CardIds.NomiKitchenNightmareBattlegrounds:
-			return [Race.ELEMENTAL, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.ELEMENTAL, ...cardRaces];
 		case CardIds.KangorsApprentice:
 		case CardIds.KangorsApprenticeBattlegrounds:
-			return [Race.MECH, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.MECH, ...cardRaces];
 		case CardIds.DefiantShipwright_BG21_018:
 		case CardIds.DefiantShipwright_BG21_018_G:
 		case CardIds.TheTideRazor:
 		case CardIds.TheTideRazorBattlegrounds:
-			return [Race.PIRATE, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.PIRATE, ...cardRaces];
 		case CardIds.AgamagganTheGreatBoar:
 		case CardIds.AgamagganTheGreatBoarBattlegrounds:
 		case CardIds.ProphetOfTheBoar:
 		case CardIds.ProphetOfTheBoarBattlegrounds:
-			return [Race.QUILBOAR, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.QUILBOAR, ...cardRaces];
 		case CardIds.OrgozoaTheTender:
 		case CardIds.OrgozoaTheTenderBattlegrounds:
-			return [Race.NAGA, ...(card.races ?? []).map((r) => Race[r])];
+			return [Race.NAGA, ...cardRaces];
 		default:
 			return getEffectiveTribesEnum(card);
 	}
