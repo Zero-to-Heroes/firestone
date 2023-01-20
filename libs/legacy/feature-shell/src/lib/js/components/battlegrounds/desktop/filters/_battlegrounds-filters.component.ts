@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-filters',
@@ -25,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
 
 	constructor(

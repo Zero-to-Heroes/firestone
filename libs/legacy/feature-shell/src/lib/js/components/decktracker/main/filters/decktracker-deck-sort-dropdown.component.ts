@@ -15,7 +15,7 @@ import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sor
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckSortEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-deck-sort-dropdown',
@@ -37,8 +37,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDeckSortDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

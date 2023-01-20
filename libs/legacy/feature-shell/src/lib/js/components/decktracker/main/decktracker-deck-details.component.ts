@@ -6,7 +6,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { ConstructedEjectDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-eject-deck-version-event';
 import { ConstructedToggleDeckVersionStatsEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-toggle-deck-version-stats-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-deck-details',
@@ -88,7 +88,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerDeckDetailsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 	deck$: Observable<DeckSummary>;
 	selectedVersion$: Observable<string>;

@@ -15,7 +15,7 @@ import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-battles-view',
@@ -85,7 +85,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattlesViewComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 

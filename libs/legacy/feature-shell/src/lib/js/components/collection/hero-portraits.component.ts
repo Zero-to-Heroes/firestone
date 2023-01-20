@@ -22,7 +22,7 @@ import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenari
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sortByProperties } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -79,7 +79,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 206;
 
 	total$: Observable<number>;

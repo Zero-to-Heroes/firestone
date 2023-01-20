@@ -5,7 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { DuelsDeckbuilderHeroPowerSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-power-selected-decks-event';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-deckbuilder-hero-power',
@@ -25,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckbuilderHeroPowerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckbuilderHeroPowerComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	heroPowerOptions$: Observable<readonly HeroPowerOption[]>;
 
 	constructor(

@@ -14,7 +14,7 @@ import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -55,7 +55,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardEmptyCardComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;

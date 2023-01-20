@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { MercenariesHeroSearchEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-search-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-hero-search',
@@ -36,8 +36,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesHeroSearchComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	searchString: string;
 	searchForm = new FormControl();
 

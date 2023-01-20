@@ -4,7 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -21,7 +21,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class OpponentHandOverlayComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	hand$: Observable<readonly DeckCard[]>;
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;

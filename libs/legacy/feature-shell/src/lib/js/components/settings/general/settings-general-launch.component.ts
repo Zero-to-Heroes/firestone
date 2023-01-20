@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -123,7 +123,7 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralLaunchComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	enableMailbox$: Observable<boolean>;

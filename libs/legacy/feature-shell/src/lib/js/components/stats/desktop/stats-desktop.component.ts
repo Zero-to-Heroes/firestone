@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
 import { StatsCategoryType } from '../../../models/mainwindow/stats/stats-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'stats-desktop',
@@ -21,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
 								*ngFor="let cat of categories$ | async"
-								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								[ngClass]="{ selected: cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StatsCategory>;

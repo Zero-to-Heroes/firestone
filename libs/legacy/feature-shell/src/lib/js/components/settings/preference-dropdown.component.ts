@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { PreferencesService } from '@services/preferences.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { IOption } from 'ng-select';
@@ -29,7 +29,7 @@ import { Observable } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class PreferenceDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	@Input() options: IOption[];

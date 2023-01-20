@@ -4,20 +4,17 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	Input,
-	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { Preferences } from '@legacy-import/src/lib/js/models/preferences';
 import { OverwolfService } from '@legacy-import/src/lib/js/services/overwolf.service';
 import { PreferencesService } from '@legacy-import/src/lib/js/services/preferences.service';
-import { uuid } from '@legacy-import/src/lib/js/services/utils';
 import { ModData, ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
+import { combineLatest, filter, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-general-mods',
@@ -110,7 +107,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 })
 // TODO: add more feedback on what is happening
 export class SettingsGeneralModsComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	modsInstallStatus$: Observable<string>;
@@ -262,61 +259,5 @@ export class SettingsGeneralModsComponent
 
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
-	}
-}
-
-@Component({
-	selector: 'toggle-view',
-	styleUrls: [
-		`../../../../css/global/toggle.scss`,
-		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/preference-toggle.component.scss`,
-		`../../../../css/component/settings/toggle-view.component.scss`,
-	],
-	template: `
-		<div
-			class="preference-toggle"
-			*ngIf="{ value: value$ | async } as value"
-			[ngClass]="{ 'toggled-on': value.value }"
-		>
-			<input
-				hidden
-				type="checkbox"
-				[checked]="value.value"
-				name=""
-				id="a-01-{{ uniqueId }}"
-				(change)="toggleValue()"
-			/>
-			<label class="toggle" for="a-01-{{ uniqueId }}" [ngClass]="{ enabled: value.value }">
-				<b></b>
-			</label>
-		</div>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class ToggleViewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	value$: Observable<boolean>;
-
-	uniqueId: string;
-
-	@Input() set value(v: boolean) {
-		this.value$$.next(v);
-	}
-	@Input() toggleFunction: (v: boolean) => void | Promise<void>;
-
-	private value$$ = new BehaviorSubject<boolean>(false);
-
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
-		this.uniqueId = uuid();
-	}
-
-	ngAfterContentInit() {
-		this.value$ = this.value$$.asObservable().pipe(this.mapData((v) => v));
-	}
-
-	async toggleValue() {
-		this.value$$.next(!this.value$$.value);
-		this.toggleFunction(!this.value);
 	}
 }

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'preference-numeric-input',
@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceNumericInputComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class PreferenceNumericInputComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	value$: Observable<number>;
 
 	@Input() field: string;

@@ -13,7 +13,7 @@ import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/eve
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-desktop',
@@ -31,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
 								*ngFor="let cat of categories$ | async"
-								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								[ngClass]="{ selected: cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
@@ -79,7 +79,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class DuelsDesktopComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly DuelsCategory[]>;

@@ -9,7 +9,7 @@ import { MinionStat } from '../../../../../models/battlegrounds/post-match/minio
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
 @Component({
@@ -94,7 +94,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	boards$: Observable<readonly KnownBoard[]>;
 
 	loading = true;

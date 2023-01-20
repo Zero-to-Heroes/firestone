@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-stats',
@@ -76,7 +76,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 						[value]="value.stat.maxBoardStats.value"
 						[heroIcon]="value.stat.maxBoardStats.hero"
 						[reviewId]="value.stat.maxBoardStats.reviewId"
-						[tooltipText]="'app.battlegrounds.personal-stats.records.rows.total-stats-tooltip' | owTranslate"
+						[tooltipText]="
+							'app.battlegrounds.personal-stats.records.rows.total-stats-tooltip' | owTranslate
+						"
 					></stat-cell>
 					<stat-cell
 						[label]="'app.battlegrounds.personal-stats.records.rows.coins-wasted' | owTranslate"
@@ -151,7 +153,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPersonalStatsStatsComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
 	value$: Observable<Value>;

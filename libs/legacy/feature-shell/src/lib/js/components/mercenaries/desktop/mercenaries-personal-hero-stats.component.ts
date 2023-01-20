@@ -20,7 +20,7 @@ import { getHeroRole, isPassiveMercsTreasure } from '../../../services/mercenari
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-personal-hero-stats',
@@ -121,7 +121,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesPersonalHeroStatsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	stats$: Observable<readonly PersonalHeroStat[]>;
 	sortCriteria$: Observable<MercenariesPersonalHeroesSortCriteria>;
 

@@ -12,7 +12,7 @@ import { filter } from 'rxjs/operators';
 import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-banned-tribes',
@@ -41,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBannedTribesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsBannedTribesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	tribes$: Observable<readonly Race[]>;
 	tooltip$: Observable<string>;
 	orientation$: Observable<'row' | 'column'>;

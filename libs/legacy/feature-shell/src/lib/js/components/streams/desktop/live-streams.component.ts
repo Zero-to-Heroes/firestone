@@ -5,7 +5,7 @@ import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LiveStreamsForceReloadEvent } from '../../../services/mainwindow/store/events/streams/live-streams-force-reload-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'live-streams',
@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LiveStreamsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class LiveStreamsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	streams$: Observable<readonly PresenceInfo[]>;
 	loading$: Observable<boolean>;
 

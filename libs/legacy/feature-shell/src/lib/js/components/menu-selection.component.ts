@@ -7,7 +7,7 @@ import {
 	EventEmitter,
 	Input,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
@@ -17,7 +17,7 @@ import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from './abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 declare let amplitude;
 
@@ -250,7 +250,10 @@ declare let amplitude;
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class MenuSelectionComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	enableMailboxTab$: Observable<boolean>;
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;

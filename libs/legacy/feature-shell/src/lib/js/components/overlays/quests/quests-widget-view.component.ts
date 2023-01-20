@@ -6,7 +6,7 @@ import {
 	ElementRef,
 	Input,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
@@ -48,7 +48,7 @@ import { Preferences } from '../../../models/preferences';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class QuestsWidgetViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() theme: string;
 	@Input() widgetIcon: string;
 	@Input() xpIcon: string;

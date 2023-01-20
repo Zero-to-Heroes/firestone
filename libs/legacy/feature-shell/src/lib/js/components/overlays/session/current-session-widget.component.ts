@@ -7,7 +7,7 @@ import {
 	ElementRef,
 	Renderer2,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import { GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
@@ -78,8 +78,8 @@ import { combineLatest, from, Observable } from 'rxjs';
 									class="delta"
 									*ngIf="deltaRank != null"
 									[ngClass]="{
-										'positive': deltaRank > 0,
-										'negative': deltaRank < 0
+										positive: deltaRank > 0,
+										negative: deltaRank < 0
 									}"
 									[helpTooltip]="'session.summary.delta-mmr-tooltip' | owTranslate"
 								>
@@ -129,7 +129,7 @@ import { combineLatest, from, Observable } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CurrentSessionWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	componentType: ComponentType<any> = CurrentSessionBgsBoardTooltipComponent;
 
 	showWidget$: Observable<boolean>;

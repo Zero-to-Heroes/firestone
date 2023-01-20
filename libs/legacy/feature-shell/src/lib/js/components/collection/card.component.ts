@@ -9,7 +9,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { SetCard } from '../../models/set';
@@ -71,7 +71,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class CardComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, AfterViewInit {
 	showRelatedCards$: Observable<boolean>;
 
 	@Input() set card(card: SetCard | CollectionReferenceCard) {

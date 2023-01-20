@@ -6,7 +6,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -38,7 +38,10 @@ import { MercenaryCompositionInfo, MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesCompositionsStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesCompositionsStatsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	stats$: Observable<readonly MercenaryCompositionInfo[]>;
 	showMercNames$: Observable<boolean>;
 

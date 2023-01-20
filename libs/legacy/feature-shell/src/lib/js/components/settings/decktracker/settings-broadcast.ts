@@ -4,7 +4,7 @@ import { TwitchAuthService, TWITCH_LOGIN_URL } from '../../../services/mainwindo
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-broadcast',
@@ -111,7 +111,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBroadcastComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsBroadcastComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	twitchUserName$: Observable<string>;
 
 	twitchedLoggedIn: boolean;

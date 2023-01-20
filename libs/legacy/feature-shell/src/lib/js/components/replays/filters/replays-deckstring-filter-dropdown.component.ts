@@ -6,7 +6,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MultiselectOption } from '../../filter-dropdown-multiselect.component';
 
 @Component({
@@ -29,8 +29,9 @@ import { MultiselectOption } from '../../filter-dropdown-multiselect.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysDeckstringFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	filter$: Observable<{
 		selected: readonly string[];
 		placeholder: string;

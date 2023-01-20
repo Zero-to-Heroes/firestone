@@ -6,7 +6,7 @@ import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facad
 import { arraysEqual } from '../services/utils';
 
 @Injectable()
-export abstract class AbstractSubscriptionComponent implements OnDestroy {
+export abstract class AbstractSubscriptionStoreComponent implements OnDestroy {
 	protected destroyed$ = new Subject<void>();
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {}

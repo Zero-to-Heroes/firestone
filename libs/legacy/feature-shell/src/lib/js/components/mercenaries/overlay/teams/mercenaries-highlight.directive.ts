@@ -19,15 +19,16 @@ import {
 } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Directive({
 	selector: '[mercenariesHighlight]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class MercenariesHighlightDirective
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	@Input('mercenariesHighlight') cardId = undefined;
 
 	private highlightElement;

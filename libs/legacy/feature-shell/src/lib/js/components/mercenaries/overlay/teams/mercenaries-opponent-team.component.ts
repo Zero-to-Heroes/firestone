@@ -5,7 +5,7 @@ import { CardTooltipPositionType } from '../../../../directives/card-tooltip-pos
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-opponent-team',
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOpponentTeamComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesOpponentTeamComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
 
 	teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;

@@ -10,7 +10,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-simulation-overlay',
@@ -25,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsSimulationOverlayComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	nextBattle$: Observable<BgsFaceOffWithSimulation>;
 	showSimulationSample$: Observable<boolean>;
 

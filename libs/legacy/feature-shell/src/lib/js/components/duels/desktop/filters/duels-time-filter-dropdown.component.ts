@@ -16,7 +16,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-time-filter-dropdown',
@@ -39,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsTimeFilterDropdownComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{ filter: string; options: IOption[]; placeholder: string; visible: boolean }>;

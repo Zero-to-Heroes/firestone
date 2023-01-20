@@ -14,7 +14,7 @@ import {
 	filterDuelsTreasureStats,
 } from '../../../services/ui-store/duels-ui-helper';
 import { arraysEqual } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-treasure-stats',
@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsTreasureStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
 
 	constructor(

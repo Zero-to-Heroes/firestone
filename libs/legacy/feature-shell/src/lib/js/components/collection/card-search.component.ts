@@ -4,7 +4,7 @@ import { SetCard } from '../../models/set';
 import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 declare let amplitude;
 @Component({
@@ -23,7 +23,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardSearchComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class CardSearchComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	cards$: Observable<readonly SetCard[]>;
 
 	valueMatcher: (element: SetCard) => string = (card) => card.name;

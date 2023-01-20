@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
@@ -56,7 +56,7 @@ import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class PackHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	packHistory$: Observable<readonly PackResult[]>;
 	totalHistoryLength$: Observable<number>;
 

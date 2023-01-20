@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AchievementsFullRefreshEvent } from '../../../services/mainwindow/store/events/achievements/achievements-full-refresh-event';
 import { CollectionRefreshPacksEvent } from '../../../services/mainwindow/store/events/collection/colection-refresh-packs-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-general-data',
@@ -41,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralDataComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsGeneralDataComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	refreshPacksLabel$: Observable<string>;
 	isRefreshingPacks$: Observable<boolean>;
 	refreshAchievementsLabel$: Observable<string>;

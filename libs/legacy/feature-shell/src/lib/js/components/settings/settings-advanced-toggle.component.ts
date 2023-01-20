@@ -3,7 +3,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { Observable } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-advanced-toggle',
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAdvancedToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsAdvancedToggleComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	buttonText$: Observable<string>;
 
 	constructor(

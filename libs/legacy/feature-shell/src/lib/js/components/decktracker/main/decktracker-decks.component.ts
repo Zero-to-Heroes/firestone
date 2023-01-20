@@ -7,7 +7,7 @@ import { FeatureFlags } from '../../../services/feature-flags';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-decks',
@@ -70,7 +70,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	enableVersioning = FeatureFlags.ENABLE_DECK_VERSIONS;
 
 	decks$: Observable<readonly InternalDeckSummary[]>;

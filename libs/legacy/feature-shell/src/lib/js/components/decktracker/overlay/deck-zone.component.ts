@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 	Optional,
-	Output
+	Output,
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -16,7 +16,7 @@ import { SetCard } from '../../../models/set';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'deck-zone',
@@ -67,7 +67,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckZoneComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DeckZoneComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	cardSections$: Observable<readonly DeckZoneSection[]>;

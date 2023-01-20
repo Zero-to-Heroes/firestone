@@ -1,5 +1,5 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { OverwolfService } from '@services/overwolf.service';
@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsOutOfCombatTreasureSelectionComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	treasures$: Observable<readonly ReferenceCard[]>;

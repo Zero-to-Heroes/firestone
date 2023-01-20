@@ -4,7 +4,7 @@ import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat, BgsQuestStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({
@@ -68,7 +68,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	placementChartData$: Observable<SimpleBarChartData[]>;
 	averagePosition: number;
 	playerAveragePosition: number;

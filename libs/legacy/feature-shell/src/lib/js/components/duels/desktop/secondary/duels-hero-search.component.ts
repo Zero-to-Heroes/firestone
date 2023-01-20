@@ -15,7 +15,7 @@ import { DuelsHeroSearchEvent } from '../../../../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-hero-search',
@@ -40,8 +40,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsHeroSearchComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit, OnDestroy
+{
 	searchString: string;
 	searchForm = new FormControl();
 

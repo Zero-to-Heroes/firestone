@@ -9,7 +9,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 @Component({
 	selector: 'duels-classes-recap',
 	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-classes-recap.component.scss`],
@@ -83,7 +83,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsClassesRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsClassesRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stat$: Observable<Stat>;
 
 	constructor(

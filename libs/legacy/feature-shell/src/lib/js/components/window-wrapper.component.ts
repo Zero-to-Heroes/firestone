@@ -16,7 +16,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { Events } from '../services/events.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from './abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	selector: 'window-wrapper',
@@ -65,7 +65,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	encapsulation: ViewEncapsulation.None,
 })
 export class WindowWrapperComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@Input() allowResize = false;

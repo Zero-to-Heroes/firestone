@@ -15,7 +15,7 @@ import { CardsFacadeService } from '../../services/cards-facade.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'card-tooltip',
@@ -67,7 +67,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTooltipComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterViewInit, OnDestroy, AfterContentInit
 {
 	public viewRef: ComponentRef<CardTooltipComponent>;

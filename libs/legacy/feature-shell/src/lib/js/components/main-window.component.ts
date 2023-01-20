@@ -17,7 +17,7 @@ import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from './abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	selector: 'main-window',
@@ -114,7 +114,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	adRefershToken$: Observable<boolean>;

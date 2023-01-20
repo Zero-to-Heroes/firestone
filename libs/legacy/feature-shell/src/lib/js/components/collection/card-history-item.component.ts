@@ -14,7 +14,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 declare let amplitude;
 
@@ -24,7 +24,7 @@ declare let amplitude;
 	template: `
 		<div
 			class="card-history-item"
-			[ngClass]="{ 'active': active }"
+			[ngClass]="{ active: active }"
 			[cardTooltip]="cardId"
 			[cardTooltipType]="cardType"
 			cardTooltipPosition="left"
@@ -50,7 +50,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() active: boolean;
 
 	@Input('historyItem') set historyItem(history: CardHistory) {
@@ -120,7 +120,7 @@ export class CardHistoryItemComponent extends AbstractSubscriptionComponent impl
 
 	@HostListener('mousedown') onClick() {
 		amplitude.getInstance().logEvent('history', {
-			'page': 'collection',
+			page: 'collection',
 		});
 		this.store.send(new ShowCardDetailsEvent(this.cardId));
 	}

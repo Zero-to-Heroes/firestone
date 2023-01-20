@@ -11,7 +11,7 @@ import {
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'confirmation',
@@ -38,7 +38,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ConfirmationComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() onCancel: EventEmitter<boolean> = new EventEmitter<boolean>();
 

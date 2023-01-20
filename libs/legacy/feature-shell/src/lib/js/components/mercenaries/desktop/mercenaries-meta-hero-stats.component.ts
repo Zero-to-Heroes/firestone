@@ -7,7 +7,7 @@ import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesHeroStats } from '../../../services/ui-store/mercenaries-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryInfo } from './mercenary-info';
 
 const THRESHOLD = 50;
@@ -31,7 +31,7 @@ const THRESHOLD = 50;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesMetaHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stats$: Observable<readonly MercenaryInfo[]>;
 
 	constructor(

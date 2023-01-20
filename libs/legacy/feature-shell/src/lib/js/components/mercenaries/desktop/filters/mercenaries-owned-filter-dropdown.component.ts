@@ -1,16 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
-import {
-	MercenariesFullyUpgradedFilterType,
-	MercenariesOwnedFilterType,
-} from '../../../../models/mercenaries/mercenaries-filter-types';
+import { filter } from 'rxjs/operators';
+import { MercenariesOwnedFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
 import { Preferences } from '../../../../models/preferences';
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-owned-filter-dropdown',
@@ -32,7 +29,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOwnedFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesOwnedFilterDropdownComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	options: FilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

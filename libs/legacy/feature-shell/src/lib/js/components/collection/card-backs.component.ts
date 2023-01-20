@@ -4,7 +4,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -41,7 +41,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CardBacksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
 	animated$: Observable<boolean>;

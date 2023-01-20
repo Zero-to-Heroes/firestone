@@ -5,7 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { DuelsDeckbuilderSignatureTreasureSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-signature-treasure-selected-decks-event';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-deckbuilder-signature-treasure',
@@ -32,8 +32,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsDeckbuilderSignatureTreasureComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	signatureTreasureOptions$: Observable<readonly SignatureTreasureOption[]>;
 
 	constructor(

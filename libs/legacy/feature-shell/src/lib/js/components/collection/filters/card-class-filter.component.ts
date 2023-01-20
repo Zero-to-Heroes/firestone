@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'card-class-filter',
@@ -29,8 +29,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionCardClassFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	options: IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

@@ -18,7 +18,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -46,7 +46,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupedDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class GroupedDeckListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
 
 	zone$: Observable<DeckZone>;

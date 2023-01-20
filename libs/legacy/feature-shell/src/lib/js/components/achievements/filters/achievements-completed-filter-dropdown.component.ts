@@ -8,13 +8,12 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { FilterOption } from '../../../models/filter-option';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'achievements-completed-filter-dropdown',
@@ -37,8 +36,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsCompletedFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	filters: readonly FilterOption[];
 
 	options$: Observable<IOption[]>;

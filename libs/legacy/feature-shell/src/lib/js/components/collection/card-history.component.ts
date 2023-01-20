@@ -5,7 +5,7 @@ import { CardHistory } from '../../models/card-history';
 import { SetCard } from '../../models/set';
 import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'card-history',
@@ -70,7 +70,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CardHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
 	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {

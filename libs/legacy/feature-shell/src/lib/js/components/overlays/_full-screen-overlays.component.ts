@@ -19,7 +19,7 @@ import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'full-screen-overlays',
@@ -131,7 +131,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class FullScreenOverlaysComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@ViewChild('container', { static: false }) container: ElementRef;

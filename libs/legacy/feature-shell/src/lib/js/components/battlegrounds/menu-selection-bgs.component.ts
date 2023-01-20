@@ -12,7 +12,7 @@ import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/b
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'menu-selection-bgs',
@@ -23,19 +23,19 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	template: `
 		<ul class="menu-selection" *ngIf="selectedPanel$ | async as selectedPanel">
 			<li
-				[ngClass]="{ 'selected': selectedPanel === 'bgs-hero-selection-overview' }"
+				[ngClass]="{ selected: selectedPanel === 'bgs-hero-selection-overview' }"
 				(mousedown)="selectStage('bgs-hero-selection-overview')"
 			>
 				<span [owTranslate]="'battlegrounds.menu.hero-selection'"></span>
 			</li>
 			<li
-				[ngClass]="{ 'selected': selectedPanel === 'bgs-next-opponent-overview' }"
+				[ngClass]="{ selected: selectedPanel === 'bgs-next-opponent-overview' }"
 				(mousedown)="selectStage('bgs-next-opponent-overview')"
 			>
 				<span [owTranslate]="'battlegrounds.menu.opponent'"></span>
 			</li>
 			<li
-				[ngClass]="{ 'selected': selectedPanel === 'bgs-post-match-stats' }"
+				[ngClass]="{ selected: selectedPanel === 'bgs-post-match-stats' }"
 				(mousedown)="selectStage('bgs-post-match-stats')"
 			>
 				<span>{{
@@ -44,7 +44,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 						: ('battlegrounds.menu.post-match-stats' | owTranslate)
 				}}</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
+			<li [ngClass]="{ selected: selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
 				<span [owTranslate]="'battlegrounds.menu.simulator'"></span>
 			</li>
 		</ul>
@@ -52,8 +52,9 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionBgsComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	selectedPanel$: Observable<BgsPanelId>;
 	matchOver$: Observable<boolean>;
 

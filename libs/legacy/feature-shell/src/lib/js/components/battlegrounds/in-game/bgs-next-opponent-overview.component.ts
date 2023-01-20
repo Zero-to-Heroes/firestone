@@ -9,7 +9,7 @@ import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-next-opponent-overview',
@@ -75,7 +75,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	enableSimulation$: Observable<boolean>;
 	showNextOpponentRecapSeparately$: Observable<boolean>;
 	showAds$: Observable<boolean>;

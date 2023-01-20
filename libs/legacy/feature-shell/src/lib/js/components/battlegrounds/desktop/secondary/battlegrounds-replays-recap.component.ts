@@ -5,7 +5,7 @@ import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../model
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { isBattlegrounds, normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-replays-recap',
@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsReplaysRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	replays$: Observable<readonly GameStat[]>;
 
 	constructor(

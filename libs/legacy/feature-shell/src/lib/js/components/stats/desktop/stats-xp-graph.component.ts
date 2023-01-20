@@ -16,7 +16,7 @@ import {
 	xpSeason6,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'stats-xp-graph',
@@ -31,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsXpGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

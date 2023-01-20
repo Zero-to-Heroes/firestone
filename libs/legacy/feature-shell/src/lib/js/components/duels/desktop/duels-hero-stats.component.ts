@@ -5,7 +5,7 @@ import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-hero-stats',
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
 
 	constructor(

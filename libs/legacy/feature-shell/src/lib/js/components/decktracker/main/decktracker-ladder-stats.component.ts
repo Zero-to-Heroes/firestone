@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ConstructedStatsTab } from '../../../models/mainwindow/decktracker/decktracker-view.type';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-ladder-stats',
@@ -21,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[attr.aria-label]="'app.decktracker.ladder-stats.tab-selection.overview' | owTranslate"
 					[helpTooltip]="'app.decktracker.ladder-stats.tab-selection.overview' | owTranslate"
 					inlineSVG="assets/svg/created_by.svg"
-					[ngClass]="{ 'selected': selectedTab === 'overview' }"
+					[ngClass]="{ selected: selectedTab === 'overview' }"
 					(click)="selectTab('overview')"
 				></button>
 				<button
@@ -31,7 +31,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					[attr.aria-label]="'app.decktracker.ladder-stats.tab-selection.matchups' | owTranslate"
 					[helpTooltip]="'app.decktracker.ladder-stats.tab-selection.matchups' | owTranslate"
 					inlineSVG="assets/svg/sword.svg"
-					[ngClass]="{ 'selected': selectedTab === 'matchups' }"
+					[ngClass]="{ selected: selectedTab === 'matchups' }"
 					(click)="selectTab('matchups')"
 				></button>
 			</nav>
@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerLadderStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerLadderStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	selectedTab$: Observable<ConstructedStatsTab>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

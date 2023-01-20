@@ -14,7 +14,7 @@ import { NavigationBackEvent } from '../../services/mainwindow/store/events/navi
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'global-header',
@@ -42,7 +42,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class GlobalHeaderComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	text$: Observable<string>;
 	image$: Observable<string>;
 	backArrow$: Observable<boolean>;

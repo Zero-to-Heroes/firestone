@@ -4,7 +4,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays-game-mode-filter-dropdown',
@@ -25,7 +25,10 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysGameModeFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ReplaysGameModeFilterDropdownComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	options: IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

@@ -10,7 +10,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
@@ -61,7 +61,7 @@ import { extractTime } from './replay-info-ranked.component';
 
 				<div
 					class="group mmr"
-					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
+					[ngClass]="{ positive: deltaMmr > 0, negative: deltaMmr < 0 }"
 					*ngIf="deltaMmr != null"
 				>
 					<div class="value">{{ deltaMmr }}</div>
@@ -76,7 +76,7 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showMercDetails$: Observable<boolean>;
 
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');

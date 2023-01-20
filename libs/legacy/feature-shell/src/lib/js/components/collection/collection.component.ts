@@ -6,7 +6,7 @@ import { CardBack } from '../../models/card-back';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'collection',
@@ -25,7 +25,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 				searchString: searchString$ | async
 			} as value"
 		>
-			<section class="main" [ngClass]="{ 'divider': value.currentView === 'cards' }">
+			<section class="main" [ngClass]="{ divider: value.currentView === 'cards' }">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="menuDisplayType$ | async as menuDisplayType">
 						<global-header *ngIf="menuDisplayType === 'breadcrumbs'"> </global-header>
@@ -87,7 +87,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CollectionComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	currentView$: Observable<CurrentView>;
 	menuDisplayType$: Observable<string>;

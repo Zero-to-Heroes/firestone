@@ -6,7 +6,7 @@ import { MercenariesReferenceData } from '../../../services/mercenaries/mercenar
 import { isMercenariesPvP, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
 @Component({
@@ -28,7 +28,7 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesMyTeamsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	teams$: Observable<readonly MercenaryPersonalTeamInfo[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

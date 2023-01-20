@@ -6,7 +6,7 @@ import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwind
 import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { parseClipboardContent } from '../../import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
@@ -53,8 +53,9 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedDeckbuilderBreadcrumbsComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	currentStep$: Observable<string>;
 	currentFormat$: Observable<SelectionStep>;
 	currentClass$: Observable<SelectionStep>;

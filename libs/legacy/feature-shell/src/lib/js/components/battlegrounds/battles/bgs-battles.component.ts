@@ -19,7 +19,7 @@ import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battl
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-battles',
@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBattlesComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class BgsBattlesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, AfterViewInit {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	simulationReset: (faceOffId: string) => void;
 

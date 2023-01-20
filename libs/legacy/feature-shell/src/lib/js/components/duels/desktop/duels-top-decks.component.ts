@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -30,7 +30,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTopDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class DuelsTopDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	isLoading: boolean;
 	allDecks: readonly DuelsGroupedDecks[];
 	displayedGroupedDecks: readonly DuelsGroupedDecks[];

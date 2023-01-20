@@ -7,7 +7,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays-list',
@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ReplaysListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	replaysIconToggleAbsolutePosition$: Observable<boolean>;
 	showUseClassIconsToggle$: Observable<boolean>;
 	showMercDetailsToggle$: Observable<boolean>;

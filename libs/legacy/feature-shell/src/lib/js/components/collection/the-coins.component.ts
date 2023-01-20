@@ -4,7 +4,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { Coin } from '../../models/coin';
 import { CardsFacadeService } from '../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -41,7 +41,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TheCoinsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class TheCoinsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 185;
 	readonly DEFAULT_CARD_HEIGHT = 240;
 

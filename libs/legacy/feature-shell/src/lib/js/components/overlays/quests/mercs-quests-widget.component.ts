@@ -15,7 +15,7 @@ import { MercenariesReferenceData } from '../../../services/mercenaries/mercenar
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..component';
 
 @Component({
@@ -42,9 +42,9 @@ import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..com
 			<mercs-tasks-list
 				class="task-list"
 				[ngClass]="{
-					'visible': showTaskList$ | async,
-					'right': showRight$ | async,
-					'bottom': showBottom$ | async
+					visible: showTaskList$ | async,
+					right: showRight$ | async,
+					bottom: showBottom$ | async
 				}"
 				[tasks]="tasks$ | async"
 			></mercs-tasks-list>
@@ -52,7 +52,7 @@ import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	tasks$: Observable<readonly Task[]>;
 	showQuests$: Observable<boolean>;
 	showRight$: Observable<boolean>;

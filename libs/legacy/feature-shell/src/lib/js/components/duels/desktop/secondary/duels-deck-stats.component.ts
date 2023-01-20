@@ -3,7 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-deck-stats',
@@ -53,7 +53,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	deckInfo$: Observable<DeckInfo>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

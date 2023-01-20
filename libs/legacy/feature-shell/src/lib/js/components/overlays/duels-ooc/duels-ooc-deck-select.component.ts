@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { DuelsDeckWidgetDeck } from '@components/overlays/duels-ooc/duels-deck-widget-deck';
 import { allDuelsSignatureTreasures, CardIds } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -60,7 +60,10 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsOutOfCombatDeckSelectComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsOutOfCombatDeckSelectComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	decks$: Observable<readonly DuelsDeckWidgetDeck[]>;
 	collection$: Observable<readonly SetCard[]>;
 	tempDuelsDeck$: Observable<DuelsDeck>;

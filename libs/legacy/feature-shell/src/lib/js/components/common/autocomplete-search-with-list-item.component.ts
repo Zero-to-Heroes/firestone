@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'autocomplete-search-with-list-item',
@@ -16,7 +16,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchAutocompleteItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SearchAutocompleteItemComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
 	@Input() set fullString(value: string) {

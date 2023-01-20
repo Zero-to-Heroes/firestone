@@ -20,7 +20,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
@@ -65,7 +65,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsTierListComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterViewInit, AfterContentInit
 {
 	@Input() showFilters: boolean;

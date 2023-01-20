@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Knob } from '../preference-slider.component';
 
 @Component({
@@ -73,7 +73,10 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsCollectionNotificationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsCollectionNotificationComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	enableNotifications$: Observable<boolean>;
 
 	cardSizeKnobs: readonly Knob[] = [

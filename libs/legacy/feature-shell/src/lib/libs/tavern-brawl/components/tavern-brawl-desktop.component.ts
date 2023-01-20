@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
@@ -30,7 +30,10 @@ import { TavernBrawlCategoryType } from '../tavern-brawl-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class TavernBrawlDesktopComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	menuDisplayType$: Observable<string>;
 	category$: Observable<TavernBrawlCategoryType>;
 	categories$: Observable<readonly TavernBrawlCategoryType[]>;

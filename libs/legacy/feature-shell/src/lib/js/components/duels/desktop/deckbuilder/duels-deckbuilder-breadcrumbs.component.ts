@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { DuelsDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/duels/duels-deckbuilder-import-deck-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { parseClipboardContent } from '../../../decktracker/import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
@@ -58,7 +58,10 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckbuilderBreadcrumbsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckbuilderBreadcrumbsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	currentStep$: Observable<string>;
 	currentHero$: Observable<SelectionStep>;
 	currentHeroPower$: Observable<SelectionStep>;

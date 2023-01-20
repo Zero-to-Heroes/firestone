@@ -16,7 +16,7 @@ import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event
 import { OverwolfService } from '../services/overwolf.service';
 import { TipService } from '../services/tip.service';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from './abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 declare let adsReady: any;
 declare let OwAd: any;
@@ -50,7 +50,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdsComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
+export class AdsComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit, OnDestroy {
 	tip$: Observable<string>;
 
 	@Input() parentComponent: string;

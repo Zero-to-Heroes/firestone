@@ -16,7 +16,7 @@ import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/st
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-tribes-filter-dropdown',
@@ -41,8 +41,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsTribesFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<readonly MultiselectOption[]>;
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 

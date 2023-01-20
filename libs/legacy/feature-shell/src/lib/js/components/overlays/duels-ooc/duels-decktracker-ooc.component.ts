@@ -6,7 +6,7 @@ import {
 	HostListener,
 	OnDestroy,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
@@ -37,7 +37,10 @@ import { filter } from 'rxjs/operators';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDecktrackerOocComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class DuelsDecktrackerOocComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	// deck$: Observable<DeckState>;
 	cards$: Observable<readonly string[]>;
 

@@ -6,7 +6,7 @@ import { MercenariesAddMercToBackupTeamEvent } from '../../../services/mainwindo
 import { MercenariesRemoveMercToBackupTeamEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
 import { getHeroRole, getShortMercHeroName } from '../../../services/mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-hero-stat.component';
 
 @Component({
@@ -49,7 +49,7 @@ import { buildHeroFrame } from '../../mercenaries/desktop/mercenaries-personal-h
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SettingsMercenariesQuestsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	mercs$: Observable<readonly Merc[]>;
 	backupTeam$: Observable<readonly BackupTeamMerc[]>;
 

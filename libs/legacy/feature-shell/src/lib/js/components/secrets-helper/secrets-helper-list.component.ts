@@ -15,7 +15,7 @@ import { SecretOption } from '../../models/decktracker/secret-option';
 import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'secrets-helper-list',
@@ -36,7 +36,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SecretsHelperListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() colorManaCost: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() set secrets(value: readonly BoardSecret[]) {

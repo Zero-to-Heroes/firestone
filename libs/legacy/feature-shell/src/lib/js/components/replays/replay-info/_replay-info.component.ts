@@ -6,7 +6,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replay-info',
@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent extends AbstractSubscriptionComponent {
+export class ReplayInfoComponent extends AbstractSubscriptionStoreComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;

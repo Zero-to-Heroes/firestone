@@ -5,7 +5,7 @@ import { BgsQuestStat } from '../../../../models/battlegrounds/stats/bgs-hero-st
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-quests',
@@ -28,7 +28,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPersonalStatsQuestsComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit
 {
 	stats$: Observable<readonly BgsQuestStat[]>;

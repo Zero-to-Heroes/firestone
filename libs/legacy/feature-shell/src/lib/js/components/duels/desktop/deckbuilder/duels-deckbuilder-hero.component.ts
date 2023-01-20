@@ -4,7 +4,7 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { DuelsDeckbuilderHeroSelectedEvent } from '@services/mainwindow/store/events/duels/duels-deckbuilder-hero-selected-decks-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-deckbuilder-hero',
@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckbuilderHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	heroOptions: readonly HeroOption[];
 
 	constructor(

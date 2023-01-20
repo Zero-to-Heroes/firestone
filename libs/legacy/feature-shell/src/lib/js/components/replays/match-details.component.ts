@@ -5,7 +5,7 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
 import { SelectMatchStatsTabEvent } from '../../services/mainwindow/store/events/replays/select-match-stats-tab-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'match-details',
@@ -41,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MatchDetailsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	selectedView$: Observable<string>;
 	selectedReplay$: Observable<MatchDetail>;
 	selectedTabs$: Observable<readonly BgsStatsFilterId[]>;

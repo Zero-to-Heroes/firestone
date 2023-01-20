@@ -15,7 +15,7 @@ import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/sto
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-format-filter-dropdown',
@@ -37,8 +37,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerFormatFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

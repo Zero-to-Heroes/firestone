@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-general-third-party',
@@ -102,7 +102,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralThirdPartyComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
 	oocLoggedIn$: Observable<boolean>;

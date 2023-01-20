@@ -3,7 +3,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { classes } from '../../../../services/hs-utils';
 import { ConstructedDeckbuilderClassSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-class-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-deckbuilder-class',
@@ -31,7 +31,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderClassComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ConstructedDeckbuilderClassComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	rows = [
 		{
 			id: 'top',

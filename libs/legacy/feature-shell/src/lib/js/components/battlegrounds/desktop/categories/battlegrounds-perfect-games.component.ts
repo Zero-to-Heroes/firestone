@@ -4,7 +4,7 @@ import { filter } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-perfect-games',
@@ -21,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPerfectGamesComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
 	replays$: Observable<readonly GameStat[]>;

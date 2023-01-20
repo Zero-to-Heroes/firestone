@@ -13,7 +13,7 @@ import { DecksProviderService } from '../../../services/decktracker/main/decks-p
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-rating-graph',
@@ -41,7 +41,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerRatingGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerRatingGraphComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	value$: Observable<Value>;
 	regionSelected$: Observable<boolean>;
 

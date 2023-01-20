@@ -90,6 +90,7 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
+			<div class="global-effects"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

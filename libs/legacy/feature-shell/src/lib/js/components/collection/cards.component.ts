@@ -9,7 +9,7 @@ import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 240;
@@ -52,7 +52,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CardsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	highRes$: Observable<boolean>;
 	cards$: Observable<SetCard[]>;
 

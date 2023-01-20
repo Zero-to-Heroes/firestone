@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesToggleShowHiddenTeamsEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-filters',
@@ -44,7 +44,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showHiddenTeamsLink$: Observable<boolean>;
 	showMercNamesInTeamsLink$: Observable<boolean>;
 	showRegionFilter$: Observable<boolean>;

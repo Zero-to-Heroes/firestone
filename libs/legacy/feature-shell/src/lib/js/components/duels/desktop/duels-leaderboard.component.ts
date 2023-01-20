@@ -5,7 +5,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-leaderboard',
@@ -22,7 +22,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 				<ul class="entries" scrollable>
 					<li
 						class="duels-leaderboard-entry"
-						[ngClass]="{ 'your': value.isPlayer, 'top-3': value.rank <= 3, 'top-10': value.rank <= 10 }"
+						[ngClass]="{ your: value.isPlayer, 'top-3': value.rank <= 3, 'top-10': value.rank <= 10 }"
 						*ngFor="let value of values$ | async; trackBy: trackValue"
 					>
 						<div class="rank">{{ value.rank }}</div>
@@ -36,7 +36,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsLeaderboardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsLeaderboardComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
 	constructor(

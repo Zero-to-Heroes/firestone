@@ -3,7 +3,7 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { LocalizationUpdateEvent } from '../../../services/mainwindow/store/events/localization-update-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'localization-dropdown',
@@ -24,7 +24,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LocalizationDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class LocalizationDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	options: IOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

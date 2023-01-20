@@ -13,7 +13,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { uuid } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'preference-toggle',
@@ -53,7 +53,10 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class PreferenceToggleComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;

@@ -9,7 +9,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'sets',
@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SetsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	activeFilter$: Observable<string>;
 	sets$: Observable<readonly Set[]>;
 

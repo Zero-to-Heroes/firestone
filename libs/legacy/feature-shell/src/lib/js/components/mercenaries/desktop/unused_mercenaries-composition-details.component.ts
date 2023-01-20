@@ -19,7 +19,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -82,7 +82,10 @@ import { MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesComposiionDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesComposiionDetailsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	compositionStat$: Observable<CompositionStat>;
 
 	constructor(

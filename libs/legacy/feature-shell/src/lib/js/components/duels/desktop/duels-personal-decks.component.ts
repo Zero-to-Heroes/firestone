@@ -7,7 +7,7 @@ import { DuelsDeckSortFilterType } from '../../../models/duels/duels-hero-sort-f
 import { DuelsDeckSummary, getLatestTimestampForDuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-personal-decks',
@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsPersonalDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsPersonalDecksComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	decks$: Observable<readonly DuelsDeckSummary[]>;
 
 	constructor(

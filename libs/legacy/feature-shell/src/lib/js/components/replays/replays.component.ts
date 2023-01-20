@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'replays',
@@ -49,7 +49,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ReplaysComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	showGlobalHeader$: Observable<boolean>;
 	currentView$: Observable<CurrentViewType>;

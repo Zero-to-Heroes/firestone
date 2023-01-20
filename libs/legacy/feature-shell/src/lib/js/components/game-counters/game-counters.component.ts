@@ -16,7 +16,7 @@ import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
@@ -70,7 +70,7 @@ import { CounterDefinition, CounterType } from './definitions/_counter-definitio
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameCountersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class GameCountersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() activeCounter: CounterType;
 	@Input() side: 'player' | 'opponent';
 

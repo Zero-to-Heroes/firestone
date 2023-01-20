@@ -4,7 +4,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
@@ -39,8 +39,9 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerLadderStatsOverviewComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	replays$: Observable<readonly GameStat[]>;
 	playerPieChartData$: Observable<readonly InputPieChartData[]>;
 	opponentPieChartData$: Observable<readonly InputPieChartData[]>;

@@ -13,7 +13,7 @@ import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'menu-selection-decktracker',
@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<button
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ 'selected': selectedTab === 'decks' }"
+				[ngClass]="{ selected: selectedTab === 'decks' }"
 				(mousedown)="selectStage('decks')"
 			>
 				<span [owTranslate]="'app.decktracker.menu.decks-header'"></span>
@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<button
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ 'selected': selectedTab === 'ladder-stats' }"
+				[ngClass]="{ selected: selectedTab === 'ladder-stats' }"
 				(mousedown)="selectStage('ladder-stats')"
 			>
 				<span [owTranslate]="'app.decktracker.menu.stats-header'"></span>
@@ -42,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<button
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ 'selected': selectedTab === 'ladder-ranking' }"
+				[ngClass]="{ selected: selectedTab === 'ladder-ranking' }"
 				(mousedown)="selectStage('ladder-ranking')"
 			>
 				<span [owTranslate]="'app.decktracker.menu.ranking-header'"></span>
@@ -50,7 +50,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<button
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ 'selected': selectedTab === 'constructed-deckbuilder' }"
+				[ngClass]="{ selected: selectedTab === 'constructed-deckbuilder' }"
 				(mousedown)="selectStage('constructed-deckbuilder')"
 			>
 				<span [owTranslate]="'app.decktracker.menu.deckbuilder-header'"></span>
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 			<button
 				class="menu-item"
 				tabindex="0"
-				[ngClass]="{ 'selected': selectedTab === 'constructed-meta-decks' }"
+				[ngClass]="{ selected: selectedTab === 'constructed-meta-decks' }"
 				(mousedown)="selectStage('constructed-meta-decks')"
 				*ngIf="enableMetaDecks"
 			>
@@ -69,8 +69,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionDecktrackerComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	enableMetaDecks = FeatureFlags.ENABLE_CONSTRUCTED_META_DECKS;
 
 	selectedTab$: Observable<string>;

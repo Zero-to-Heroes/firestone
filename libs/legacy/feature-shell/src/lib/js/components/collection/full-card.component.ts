@@ -19,7 +19,7 @@ import { formatClass } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 declare let amplitude;
 
@@ -93,7 +93,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class FullCardComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	// eslint-disable-next-line @angular-eslint/no-output-native
 	@Output() close = new EventEmitter();
 

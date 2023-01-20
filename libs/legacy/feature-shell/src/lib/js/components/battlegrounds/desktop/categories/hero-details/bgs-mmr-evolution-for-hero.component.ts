@@ -7,7 +7,7 @@ import { isBattlegrounds } from '../../../../../services/battlegrounds/bgs-utils
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
-import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-mmr-evolution-for-hero',
@@ -26,7 +26,7 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	value$: Observable<ChartData<'line'>>;
 
 	constructor(

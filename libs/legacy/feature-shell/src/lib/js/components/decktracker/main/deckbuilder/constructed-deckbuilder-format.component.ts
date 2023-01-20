@@ -3,7 +3,7 @@ import { GameFormatString } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ConstructedDeckbuilderFormatSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-format-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'constructed-deckbuilder-format',
@@ -26,7 +26,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderFormatComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ConstructedDeckbuilderFormatComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	formatOptions: readonly FormatOption[];
 
 	constructor(

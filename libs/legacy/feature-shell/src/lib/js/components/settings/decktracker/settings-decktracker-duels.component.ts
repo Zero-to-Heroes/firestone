@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'settings-decktracker-duels',
@@ -42,7 +42,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerDuelsComponent extends AbstractSubscriptionComponent {
+export class SettingsDecktrackerDuelsComponent extends AbstractSubscriptionStoreComponent {
 	maxHealthOptions: IOption[] = ['off', 'mouseover', 'blink'].map((value) => ({
 		value: value,
 		label: this.i18n.translateString(`settings.decktracker.duels.max-health-option-${value}`) ?? '',

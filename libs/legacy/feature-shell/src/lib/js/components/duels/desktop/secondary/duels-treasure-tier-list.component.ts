@@ -12,7 +12,7 @@ import {
 	buildDuelsHeroTreasurePlayerStats,
 	filterDuelsTreasureStats,
 } from '../../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
@@ -30,7 +30,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsTreasureTierListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(

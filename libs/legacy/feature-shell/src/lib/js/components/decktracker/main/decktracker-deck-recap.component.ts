@@ -6,7 +6,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-deck-recap',
@@ -78,7 +78,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerDeckRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
 
 	info$: Observable<Info>;

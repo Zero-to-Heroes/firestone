@@ -9,7 +9,7 @@ import {
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
@@ -17,7 +17,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-rank-filter-dropdown',
@@ -40,8 +40,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsRankFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	options$: Observable<RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 

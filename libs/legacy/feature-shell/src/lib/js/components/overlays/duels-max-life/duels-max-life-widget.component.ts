@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
@@ -18,7 +18,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsMaxLifeWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsMaxLifeWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	maxHealth$: Observable<number>;
 	cssClass$: Observable<string>;
 

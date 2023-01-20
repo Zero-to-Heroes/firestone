@@ -11,7 +11,7 @@ import { PatchInfo } from '../../../models/patches';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'arena-runs-list',
@@ -40,7 +40,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class ArenaRunsListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	runs$: Observable<(ArenaRun | HeaderInfo)[]>;
 
 	constructor(

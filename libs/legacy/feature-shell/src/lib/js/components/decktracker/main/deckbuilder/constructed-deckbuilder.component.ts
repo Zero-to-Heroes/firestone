@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
@@ -26,7 +26,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ConstructedDeckbuilderComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentStep$: Observable<CurrentStep>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

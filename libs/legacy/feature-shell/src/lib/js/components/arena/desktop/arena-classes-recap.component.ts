@@ -10,7 +10,7 @@ import { formatClass } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'arena-classes-recap',
@@ -104,7 +104,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaClassesRecapComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stats$: Observable<StatInfo>;
 
 	constructor(

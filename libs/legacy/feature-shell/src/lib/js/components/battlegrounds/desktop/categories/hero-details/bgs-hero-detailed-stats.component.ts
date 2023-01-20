@@ -4,7 +4,7 @@ import { filter, map } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
-import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-hero-detailed-stats',
@@ -119,7 +119,7 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsHeroDetailedStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	bgHeroStats$: Observable<BgsHeroStat>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

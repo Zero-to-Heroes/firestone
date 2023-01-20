@@ -3,7 +3,7 @@ import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DebugService } from '../../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'opponent-card-info',
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 		</div>
 	`,
 })
-export class OpponentCardInfoComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class OpponentCardInfoComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;

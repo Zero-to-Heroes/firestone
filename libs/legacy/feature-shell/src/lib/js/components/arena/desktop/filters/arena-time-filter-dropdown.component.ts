@@ -16,7 +16,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 /** This approach seems to be the cleanest way to properly narrow down the values needed from
  * the state. The other approaches are cool and data-driven, but as of now they seem more
@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaTimeFilterDropdownComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;

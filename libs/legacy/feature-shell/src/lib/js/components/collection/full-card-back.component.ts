@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -28,7 +28,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardBackComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class FullCardBackComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	animated$: Observable<boolean>;
 	_cardBack: InternalCardBack;
 

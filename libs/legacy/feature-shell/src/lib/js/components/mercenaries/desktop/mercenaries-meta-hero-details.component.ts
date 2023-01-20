@@ -10,7 +10,7 @@ import { getHeroRole, normalizeMercenariesCardId } from '../../../services/merce
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
 @Component({
@@ -159,7 +159,10 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesMetaHeroDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesMetaHeroDetailsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	heroStats$: Observable<MercenaryInfo>;
 
 	constructor(

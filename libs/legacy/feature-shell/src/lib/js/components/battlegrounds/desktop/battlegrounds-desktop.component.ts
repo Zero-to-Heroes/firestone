@@ -13,7 +13,7 @@ import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/s
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-desktop',
@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 								class="menu-item"
 								tabindex="0"
 								*ngFor="let cat of categories$ | async"
-								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								[ngClass]="{ selected: cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
@@ -44,7 +44,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<battlegrounds-category-details
 							*ngIf="(currentView$ | async) === 'list'"
 							[ngClass]="{
-								'top':
+								top:
 									category.value?.id !== 'bgs-category-personal-heroes' &&
 									category.value?.id !== 'bgs-category-personal-quests' &&
 									category.value?.id !== 'bgs-category-simulator'
@@ -77,8 +77,9 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsDesktopComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	currentView$: Observable<string>;

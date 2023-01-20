@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildQuestStats } from '../../../../services/ui-store/bgs-ui-helper';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
 
@@ -53,7 +53,10 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsQuestsTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BattlegroundsQuestsTierListComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	@Input() showFilters: boolean;
 
 	stats$: Observable<{ tiers: readonly HeroTier[]; tooltip: string; totalMatches: number }>;

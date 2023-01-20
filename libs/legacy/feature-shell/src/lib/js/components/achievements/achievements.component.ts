@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { CurrentView } from '../../models/mainwindow/achievement/current-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'achievements',
@@ -33,7 +33,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AchievementsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentView$: Observable<CurrentView>;
 	isLoading$: Observable<boolean>;
 

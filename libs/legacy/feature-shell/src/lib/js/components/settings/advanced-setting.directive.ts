@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Renderer2 } from '@angular/core';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Directive({
 	selector: '[advancedSetting]',
 })
-export class AdvancedSettingDirective extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AdvancedSettingDirective extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	constructor(
 		private readonly renderer: Renderer2,
 		private readonly el: ElementRef,

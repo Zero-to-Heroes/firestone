@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'achievement-history',
@@ -35,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AchievementHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	achievementHistory$: Observable<readonly AchievementHistory[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

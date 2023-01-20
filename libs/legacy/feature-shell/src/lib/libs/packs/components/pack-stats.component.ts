@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { combineLatest, Observable } from 'rxjs';
-import { AbstractSubscriptionComponent } from '../../../js/components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
 import { sets } from '../../../js/services/collection/sets.ref';
 import { boosterIdToBoosterName, boosterIdToSetId, getPackDustValue } from '../../../js/services/hs-utils';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
@@ -59,7 +59,7 @@ import { InternalPackInfo } from './pack-stat.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionPackStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class CollectionPackStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 

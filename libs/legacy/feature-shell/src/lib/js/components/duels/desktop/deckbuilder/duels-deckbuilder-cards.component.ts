@@ -15,7 +15,7 @@ import { BehaviorSubject, combineLatest, from, Observable } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { SetCard } from '../../../../models/set';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
@@ -178,7 +178,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckbuilderCardsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	enableDuelsBuckets = FeatureFlags.ENABLE_DUELS_DECK_BUILDER_BUCKETS;
 
 	showBuckets$: Observable<boolean>;

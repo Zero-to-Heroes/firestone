@@ -11,7 +11,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { findAchievements } from '../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'achievements-list',
@@ -51,7 +51,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AchievementsListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	activeAchievements$: Observable<VisualAchievement[]>;
 	totalAchievements$: Observable<number>;
 	achieved$: Observable<number>;

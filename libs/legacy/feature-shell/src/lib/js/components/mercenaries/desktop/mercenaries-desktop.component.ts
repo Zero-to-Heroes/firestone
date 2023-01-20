@@ -14,7 +14,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 declare let amplitude;
 
@@ -35,7 +35,7 @@ declare let amplitude;
 							<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 								<li
 									*ngFor="let cat of categories$ | async"
-									[ngClass]="{ 'selected': cat === selectedCategoryId }"
+									[ngClass]="{ selected: cat === selectedCategoryId }"
 									(mousedown)="selectCategory(cat)"
 								>
 									<span>{{ getCatName(cat) }} </span>
@@ -84,8 +84,9 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesDesktopComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly MercenariesCategoryId[]>;
@@ -113,7 +114,7 @@ export class MercenariesDesktopComponent
 			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
 			.pipe(
 				tap(([info]) => {
-					amplitude.getInstance().logEvent('mercs-navigation', { 'page': info });
+					amplitude.getInstance().logEvent('mercs-navigation', { page: info });
 				}),
 				this.mapData(([selectedCategoryId]) => selectedCategoryId),
 			);

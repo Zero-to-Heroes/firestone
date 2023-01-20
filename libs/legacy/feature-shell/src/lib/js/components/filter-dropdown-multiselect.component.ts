@@ -16,13 +16,13 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, removeFromReadonlyArray } from '../services/utils';
-import { AbstractSubscriptionComponent } from './abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	selector: 'filter-dropdown-multiselect',
 	styleUrls: [`../../css/component/filter-dropdown-multiselect.component.scss`],
 	template: `
-		<div class="filter-dropdown-multiselect" [ngClass]="{ 'showing': showing }" *ngIf="_visible">
+		<div class="filter-dropdown-multiselect" [ngClass]="{ showing: showing }" *ngIf="_visible">
 			<div class="value" (click)="toggle()">
 				<div class="text" [innerHTML]="valueText$ | async"></div>
 				<div class="caret i-30">
@@ -64,7 +64,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 					></div>
 					<div
 						class="button apply"
-						[ngClass]="{ 'disabled': !value.validSelection }"
+						[ngClass]="{ disabled: !value.validSelection }"
 						[helpTooltip]="buttonTooltip(value.validSelection)"
 						(click)="confirmSelection(value.validSelection)"
 						[owTranslate]="'app.global.controls.multiselect-validation-button'"
@@ -75,7 +75,7 @@ import { AbstractSubscriptionComponent } from './abstract-subscription.component
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComponent implements OnDestroy {
+export class FilterDropdownMultiselectComponent extends AbstractSubscriptionStoreComponent implements OnDestroy {
 	@Output() onOptionSelected: EventEmitter<readonly string[]> = new EventEmitter<readonly string[]>();
 
 	@Input() placeholder: string;

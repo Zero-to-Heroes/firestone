@@ -15,7 +15,7 @@ import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../../services/utils';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'battlegrounds-content',
@@ -79,7 +79,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsContentComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	showTitle$: Observable<boolean>;

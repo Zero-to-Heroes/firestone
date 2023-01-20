@@ -15,7 +15,7 @@ import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindo
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-game-mode-filter-dropdown',
@@ -38,8 +38,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsGameModeFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, AfterViewInit
+{
 	options: GameModeFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -71,7 +72,7 @@ export class DuelsGameModeFilterDropdownComponent
 				value: 'paid-duels',
 				label: this.i18n.translateString('app.duels.filters.game-mode.heroic'),
 			} as GameModeFilterOption,
-		] ;
+		];
 		this.filter$ = this.store
 			.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,

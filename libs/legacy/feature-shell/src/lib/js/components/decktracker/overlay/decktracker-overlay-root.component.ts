@@ -9,7 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -22,7 +22,7 @@ import { Preferences } from '../../../models/preferences';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-overlay-root',
@@ -96,7 +96,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayRootComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
@@ -244,7 +244,7 @@ export class DeckTrackerOverlayRootComponent
 					return result;
 				},
 			),
-			share()
+			share(),
 		);
 
 		this.matchupStatsRecap$ = combineLatest(

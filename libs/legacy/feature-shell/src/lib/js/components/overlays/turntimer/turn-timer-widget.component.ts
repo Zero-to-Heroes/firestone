@@ -7,7 +7,7 @@ import {
 	Input,
 	Renderer2,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -46,7 +46,7 @@ import { sumOnArray } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class TurnTimerWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	showTurnTimerMatchLength$: Observable<boolean>;
 	currentTurn$: Observable<string>;
 	totalMatchLength$: Observable<Date>;
@@ -169,7 +169,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 	selector: 'turn-timer-player',
 	styleUrls: ['../../../../css/component/overlays/turntimer/turn-timer-widget.component.scss'],
 	template: `
-		<div class="player-timer" [ngClass]="{ 'active': active }">
+		<div class="player-timer" [ngClass]="{ active: active }">
 			<div class="player-name" [helpTooltip]="playerName">{{ playerName }}</div>
 			<div class="turn-length current">
 				<div

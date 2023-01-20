@@ -16,7 +16,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-runs-list',
@@ -53,7 +53,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsRunsListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class DuelsRunsListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	@ViewChild('scroll', { static: false })
 	private scroll: VirtualScrollerComponent;
 

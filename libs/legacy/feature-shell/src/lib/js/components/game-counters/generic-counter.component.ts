@@ -7,7 +7,7 @@ import {
 	Input,
 	Renderer2,
 } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 
 @Component({
@@ -46,7 +46,7 @@ import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GenericCountersComponent extends AbstractSubscriptionComponent implements AfterViewInit {
+export class GenericCountersComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
 	@Input() value: number | string;
 	@Input() valueImg: string;
 	@Input() image: string;

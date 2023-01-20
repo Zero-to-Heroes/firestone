@@ -8,7 +8,7 @@ import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-
 import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-winrate-stats-for-hero',
@@ -35,7 +35,7 @@ import { AbstractSubscriptionComponent } from '../../../../abstract-subscription
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	values$: Observable<Value>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

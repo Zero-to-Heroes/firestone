@@ -1,13 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MercenariesPvpMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
 import { MmrPercentile } from '../../../../services/mercenaries/mercenaries-state-builder.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-pvp-mmr-filter-dropdown',
@@ -30,8 +29,9 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesPvpMmrFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit {
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	options$: Observable<FilterOption[]>;
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

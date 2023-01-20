@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker',
@@ -58,7 +58,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	currentView$: Observable<DecktrackerViewType>;
 	menuDisplayType$: Observable<string>;
 	loading$: Observable<boolean>;

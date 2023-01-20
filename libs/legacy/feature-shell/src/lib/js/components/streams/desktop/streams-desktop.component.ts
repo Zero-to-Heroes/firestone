@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'streams-desktop',
@@ -20,7 +20,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 					<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 						<li
 							*ngFor="let cat of categories$ | async"
-							[ngClass]="{ 'selected': cat === value.category }"
+							[ngClass]="{ selected: cat === value.category }"
 							(mousedown)="selectCategory(cat)"
 						>
 							<span>{{ getName(cat) }}</span>
@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StreamsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class StreamsDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StreamsCategoryType>;
 	categories$: Observable<readonly StreamsCategoryType[]>;

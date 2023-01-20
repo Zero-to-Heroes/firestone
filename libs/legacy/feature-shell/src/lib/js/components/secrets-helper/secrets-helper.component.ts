@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DebugService } from '../../services/debug.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'secrets-helper',
@@ -47,7 +47,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecretsHelperComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class SecretsHelperComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	opacity$: Observable<number>;
 	colorManaCost$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;

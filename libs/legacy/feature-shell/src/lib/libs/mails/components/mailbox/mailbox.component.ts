@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { Mail } from '../../mail-state';
@@ -22,7 +22,7 @@ import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailboxComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class MailboxComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	messages$: Observable<readonly Mail[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

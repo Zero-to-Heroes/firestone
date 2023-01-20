@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 declare let amplitude;
 
@@ -24,7 +24,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsCategoriesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AchievementsCategoriesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	categories$: Observable<readonly VisualAchievementCategory[]>;
 
 	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {

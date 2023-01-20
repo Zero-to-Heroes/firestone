@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
@@ -24,7 +24,10 @@ import { CardsFacadeService } from '../../../../js/services/cards-facade.service
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TavernBrawlMetaComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class TavernBrawlMetaComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	brawlInfo$: Observable<ExtendedBrawlInfo>;
 	stats$: Observable<readonly TavernStatWithCollection[]>;
 

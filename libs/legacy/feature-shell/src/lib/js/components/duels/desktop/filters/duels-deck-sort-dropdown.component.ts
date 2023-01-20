@@ -7,7 +7,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'duels-deck-sort-dropdown',
@@ -29,7 +29,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsDeckSortDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsDeckSortDropdownComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	options: DeckSortFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -71,7 +71,10 @@ export class DuelsDeckSortDropdownComponent extends AbstractSubscriptionComponen
 
 	onSelected(option: IOption) {
 		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, duelsActiveDeckSortFilter: (option as DeckSortFilterOption).value })),
+			new GenericPreferencesUpdateEvent((prefs) => ({
+				...prefs,
+				duelsActiveDeckSortFilter: (option as DeckSortFilterOption).value,
+			})),
 		);
 	}
 }

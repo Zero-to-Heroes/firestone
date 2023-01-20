@@ -16,7 +16,7 @@ import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Tier } from './battlegrounds-minions-tiers-view.component';
 
 @Component({
@@ -48,7 +48,7 @@ import { Tier } from './battlegrounds-minions-tiers-view.component';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersOverlayComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
 	private static readonly WINDOW_WIDTH = 1300;

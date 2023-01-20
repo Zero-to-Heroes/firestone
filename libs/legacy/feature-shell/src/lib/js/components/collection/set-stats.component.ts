@@ -12,7 +12,7 @@ import {
 } from '../../services/hs-utils';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
@@ -63,7 +63,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class SetStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	stats$: Observable<readonly Stat[]>;
 	pieChartData$: Observable<readonly InputPieChartData[]>;
 	packsReceived$: Observable<number>;

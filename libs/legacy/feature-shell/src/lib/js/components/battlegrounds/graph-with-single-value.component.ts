@@ -14,7 +14,7 @@ import {
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { fromEvent, Subscription } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'graph-with-single-value',
@@ -43,7 +43,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GraphWithSingleValueComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterViewInit, AfterContentInit, OnDestroy
 {
 	@ViewChild('chart', { static: false }) chart: ElementRef;

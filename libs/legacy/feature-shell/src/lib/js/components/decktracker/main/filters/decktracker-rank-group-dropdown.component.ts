@@ -15,7 +15,7 @@ import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankGroupEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-group-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'decktracker-rank-group-dropdown',
@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerRankGroupDropdownComponent
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, AfterViewInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;

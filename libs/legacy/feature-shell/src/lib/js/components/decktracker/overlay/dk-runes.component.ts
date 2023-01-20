@@ -11,9 +11,9 @@ import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@legacy-import/src/lib/js/services/cards-facade.service';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
-import { BehaviorSubject, combineLatest, Observable, share, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, share } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'dk-runes',
@@ -34,7 +34,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DkRunesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DkRunesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	dkRunes$: Observable<readonly DkRune[]>;
 	showRunes$: Observable<boolean>;
 

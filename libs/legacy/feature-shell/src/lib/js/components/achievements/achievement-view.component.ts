@@ -6,7 +6,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'achievement-view',
@@ -36,7 +36,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class AchievementViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	achievement$: Observable<VisualAchievement>;
 	achievementStatus$: Observable<AchievementStatus>;
 	achievementText$: Observable<string>;

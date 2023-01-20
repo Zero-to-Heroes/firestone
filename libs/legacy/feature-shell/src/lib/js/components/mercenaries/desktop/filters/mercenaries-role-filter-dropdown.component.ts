@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 import { MercenariesRoleFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
 import { MercenariesRoleFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-role-filter-selected-event';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-role-filter-dropdown',
@@ -28,7 +28,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesRoleFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercenariesRoleFilterDropdownComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit
+{
 	options: RoleFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;

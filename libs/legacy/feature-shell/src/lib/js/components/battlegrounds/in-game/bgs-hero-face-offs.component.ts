@@ -6,7 +6,7 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { deepEqual, groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'bgs-hero-face-offs',
@@ -37,7 +37,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroFaceOffsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class BgsHeroFaceOffsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	nextOpponentCardId$: Observable<string>;
 	opponents$: Observable<readonly BgsPlayer[]>;
 	faceOffsByOpponent$: Observable<{ [opponentHeroCardId: string]: readonly BgsFaceOff[] }>;

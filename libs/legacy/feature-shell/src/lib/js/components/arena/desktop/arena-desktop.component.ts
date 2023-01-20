@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'arena-desktop',
@@ -21,7 +21,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
 								*ngFor="let cat of categories$ | async; trackBy: trackByFn"
-								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								[ngClass]="{ selected: cat.id === category.value?.id }"
 								(mousedown)="selectCategory(cat.id)"
 							>
 								<span>{{ cat.name }} </span>
@@ -39,7 +39,7 @@ import { AbstractSubscriptionComponent } from '../../abstract-subscription.compo
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ArenaDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	category$: Observable<ArenaCategory>;

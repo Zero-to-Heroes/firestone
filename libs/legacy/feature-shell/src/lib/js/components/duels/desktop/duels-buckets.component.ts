@@ -8,7 +8,7 @@ import { classes } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { sumOnArray } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { BucketCard } from './deckbuilder/duels-bucket-cards-list.component';
 import { BucketData } from './deckbuilder/duels-deckbuilder-cards.component';
 
@@ -80,7 +80,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsBucketsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsBucketsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	buckets$: Observable<BucketData[]>;
 	searchString$: Observable<string>;
 	classOptions: readonly ClassOption[];

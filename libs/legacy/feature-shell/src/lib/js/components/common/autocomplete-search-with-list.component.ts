@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	selector: 'autocomplete-search-with-list',
@@ -52,7 +52,7 @@ import { AbstractSubscriptionComponent } from '../abstract-subscription.componen
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteSearchWithListComponent<T>
-	extends AbstractSubscriptionComponent
+	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Output() itemClicked = new EventEmitter<T>();

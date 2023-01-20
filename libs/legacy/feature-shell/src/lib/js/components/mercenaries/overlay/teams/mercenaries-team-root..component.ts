@@ -26,7 +26,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 import { getShortMercHeroName, isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	selector: 'mercenaries-team-root',
@@ -81,7 +81,10 @@ import { AbstractSubscriptionComponent } from '../../../abstract-subscription.co
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class MercenariesTeamRootComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 
@@ -222,7 +225,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercsTasksListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	@Output() tasksListUpdated = new EventEmitter<void>();
 
 	tasks$: Observable<readonly Task[]>;

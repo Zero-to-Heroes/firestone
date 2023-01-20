@@ -12,7 +12,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
 
@@ -67,7 +67,7 @@ declare let amplitude;
 
 				<div
 					class="group mmr"
-					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
+					[ngClass]="{ positive: deltaMmr > 0, negative: deltaMmr < 0 }"
 					*ngIf="deltaMmr != null"
 				>
 					<div class="value">{{ deltaMmr }}</div>
@@ -114,7 +114,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionComponent {
+export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionStoreComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
@@ -246,7 +246,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)
-				: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
+				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
 		) as readonly Entity[];
 		const normalizedIds = [
 			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),

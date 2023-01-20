@@ -10,7 +10,7 @@ import { DuelsStateBuilderService } from '../../../../services/duels/duels-state
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
-import { AbstractSubscriptionComponent } from '../../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
@@ -28,7 +28,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroTierListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DuelsHeroTierListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(

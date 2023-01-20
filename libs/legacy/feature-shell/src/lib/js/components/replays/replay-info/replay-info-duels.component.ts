@@ -19,7 +19,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionComponent } from '../../abstract-subscription.component';
+import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
@@ -119,7 +119,10 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoDuelsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
+export class ReplayInfoDuelsComponent
+	extends AbstractSubscriptionStoreComponent
+	implements AfterContentInit, OnDestroy
+{
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
