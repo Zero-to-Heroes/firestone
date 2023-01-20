@@ -118,7 +118,13 @@ export class WindowWrapperComponent
 					const currentWindow = await this.ow.getCurrentWindow();
 					this.originalWidth = currentWindow.width / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
 					this.originalHeight = currentWindow.height / Math.max(1, this.zoom) / (currentWindow.dpiScale ?? 1);
-					console.log('setting originalWidth', this.originalWidth, 'originalHeight', this.originalHeight);
+					console.log(
+						'setting originalWidth',
+						this.originalWidth,
+						'originalHeight',
+						this.originalHeight,
+						currentWindow,
+					);
 				}
 				// 0 is the unzoomed value
 				// It behaves a bit strangely. When values are > 1, the zoom behaves as expected
@@ -183,6 +189,7 @@ export class WindowWrapperComponent
 			console.error('missing dimension info', this.originalWidth, this.originalHeight);
 			return;
 		}
+		console.debug('changing window size', this.originalWidth, this.originalHeight, this.zoom);
 		await this.ow.changeWindowSize(
 			this.windowId.value,
 			Math.max(this.originalWidth, this.zoom * this.originalWidth),

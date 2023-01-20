@@ -83,22 +83,22 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async init() {
-		console.log('init starting');
+		// console.log('init starting');
 		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		console.log('got window id');
+		// console.log('got window id');
 		await this.ow.restoreWindow(this.windowId);
 		await this.ow.bringToFront(this.windowId);
-		console.log('brought window to front');
+		// console.log('brought window to front');
 
 		this.notifications$
 			.pipe(
 				filter((message) => !!message),
 				map((message) => {
 					// Don't await them because we don't want to block the main thread
-					console.log('after window restore');
+					// console.log('after window restore');
 					const toast = this.getToastNotification(message);
-					console.log('got toast notification', toast);
+					// console.log('got toast notification', toast);
 					toast.theClass = message.theClass;
 					return { message, toast };
 				}),
@@ -168,7 +168,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private handleToastClick(event: MouseEvent, messageObject: Message, toastId: string): void {
-		console.log('registered click on toast', messageObject);
+		// console.log('registered click on toast', messageObject);
 		let currentElement: any = event.srcElement;
 		while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 			currentElement = currentElement.parentElement;
@@ -217,14 +217,14 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			}, 500);
 			event.preventDefault();
 			event.stopPropagation();
-			console.log('unclickable');
+			// console.log('unclickable');
 			return;
 		}
 		amplitude
 			.getInstance()
 			.logEvent('notification', { event: 'click', app: messageObject.app, type: messageObject.type });
 		if (messageObject.eventToSendOnClick) {
-			console.log('event to send on click', messageObject.eventToSendOnClick);
+			// console.log('event to send on click', messageObject.eventToSendOnClick);
 			const eventToSend = messageObject.eventToSendOnClick();
 			this.stateUpdater.next(eventToSend);
 		}
@@ -260,7 +260,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			}
 
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
-				console.log('registered click on toast', messageObject);
+				// console.log('registered click on toast', messageObject);
 				let currentElement: any = event.srcElement;
 				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 					currentElement = currentElement.parentElement;
@@ -275,7 +275,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					if (override.clickToClose === false) {
 						this.notificationService.remove(toast.id);
 					}
-					console.log('closing notif');
+					// console.log('closing notif');
 					// this.notificationService.remove(toast.id);
 					return;
 				}
@@ -313,14 +313,14 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					}, 500);
 					event.preventDefault();
 					event.stopPropagation();
-					console.log('unclickable');
+					// console.log('unclickable');
 					return;
 				}
 				amplitude
 					.getInstance()
 					.logEvent('notification', { event: 'click', app: messageObject.app, type: type });
 				if (messageObject.eventToSendOnClick) {
-					console.log('event to send on click', messageObject.eventToSendOnClick);
+					// console.log('event to send on click', messageObject.eventToSendOnClick);
 					const eventToSend = messageObject.eventToSendOnClick();
 					this.stateUpdater.next(eventToSend);
 				}
@@ -345,7 +345,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			};
 			this.activeNotifications.push(activeNotif);
 			amplitude.getInstance().logEvent('notification', { event: 'show', app: messageObject.app, type: type });
-			console.log('added notif to active notifs', this.activeNotifications, activeNotif);
+			// console.log('added notif to active notifs', this.activeNotifications, activeNotif);
 			resolve();
 
 			setTimeout(() => {
@@ -363,16 +363,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private fadeNotificationOut(notificationId: string) {
 		const activeNotif = this.activeNotifications.find((notif) => notif.notificationId === notificationId);
 		if (!activeNotif) {
-			console.log('activeNotif already removed', notificationId, this.activeNotifications);
+			// console.log('activeNotif already removed', notificationId, this.activeNotifications);
 			return;
 		}
 		const notification = this.elRef.nativeElement.querySelector('.' + notificationId);
 		if (!notification) {
-			console.log('notif already removed', notificationId, this.activeNotifications);
+			// console.log('notif already removed', notificationId, this.activeNotifications);
 			return;
 		}
 		notification.classList.add('fade-out');
-		console.log('manually fading out notification', notificationId);
+		// console.log('manually fading out notification', notificationId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -387,7 +387,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
 
-			console.log('game info', gameInfo, this.activeNotifications.length);
+			// console.log('game info', gameInfo, this.activeNotifications.length);
 			if (!gameInfo) {
 				return;
 			}
@@ -395,11 +395,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			// const gameHeight = gameInfo.logicalHeight;
 			const dpi = gameWidth / gameInfo.width;
 			await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
-			console.log('changing notifs window size', width, gameInfo.height - 20, dpi);
+			// console.log('changing notifs window size', width, gameInfo.height - 20, dpi);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 			const newLeft = gameWidth - width * dpi;
 			const newTop = 1;
-			console.log('changing notifs window position', newLeft, newTop);
+			// console.log('changing notifs window position', newLeft, newTop);
 			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		});
 	}

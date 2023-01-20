@@ -305,6 +305,6 @@ export class AppStartupService {
 		delete prefsToSend.desktopDeckDeletes;
 		delete prefsToSend.desktopDeckStatsReset;
 		amplitude.getInstance().logEvent('preferences', prefsToSend);
-		console.log('no-format', 'pref status', prefsToSend);
+		// console.log('no-format', 'pref status', prefsToSend);
 	}
 }

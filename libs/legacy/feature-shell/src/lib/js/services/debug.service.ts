@@ -24,6 +24,10 @@ export class DebugService {
 				const shouldFormat = arguments.length > 0 && arguments[0] !== 'no-format';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
+					const arg = arguments[i];
+					if (!!arg?.includes && arg?.includes('ResizeObserver loop limit exceeded')) {
+						continue;
+					}
 					const argAsString =
 						JSON.stringify(arguments[i], function (key, value) {
 							if (typeof value === 'object' && value !== null) {

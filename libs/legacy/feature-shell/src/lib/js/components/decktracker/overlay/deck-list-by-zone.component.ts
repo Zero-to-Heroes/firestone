@@ -316,12 +316,12 @@ export class DeckListByZoneComponent implements OnDestroy {
 			}));
 		}
 		if (numberOfCards !== null && numberOfCards !== sections.flatMap((section) => section.cards).length) {
-			console.warn(
-				'incorrect number of cards in zone',
-				name,
-				numberOfCards,
-				sections.flatMap((section) => section.cards).length,
-			);
+			// console.warn(
+			// 	'incorrect number of cards in zone',
+			// 	name,
+			// 	numberOfCards,
+			// 	sections.flatMap((section) => section.cards).length,
+			// );
 		}
 		return {
 			id: id,
