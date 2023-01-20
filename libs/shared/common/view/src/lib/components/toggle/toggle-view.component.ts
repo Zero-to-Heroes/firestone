@@ -12,9 +12,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Component({
 	selector: 'fs-toggle-view',
 	styleUrls: [
+		`../label.scss`,
 		`./toggle.scss`,
 		// `../../../../css/component/settings/settings-common.component.scss`,
-		`./label.scss`,
 		`./toggle-view.component.scss`,
 	],
 	template: `
