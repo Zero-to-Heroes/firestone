@@ -456,7 +456,6 @@ import { OutOfCardsCallbackComponent } from './js/components/third-party/out-of-
 import { AutofocusDirective } from './js/directives/autofocus.directive';
 import { DaemonComponent } from './libs/boostrap/daemon.component';
 
-import { ToggleViewComponent } from '@components/common/controls/toggle-view.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { OpponentAnachronosWidgetWrapperComponent } from '@components/overlays/counters/opponent-anachronos-widget-wrapper.component';
 import { OpponentBonelordFrostwhisperWidgetWrapperComponent } from '@components/overlays/counters/opponent-bonelord-frostwhisper-widget-wrapper.component';
@@ -467,6 +466,7 @@ import { PlayerBonelordFrostwhisperWidgetWrapperComponent } from '@components/ov
 import { PlayerShockspitterWidgetWrapperComponent } from '@components/overlays/counters/player-shockspitter-widget-wrapper.component';
 import { SettingsGeneralModsComponent } from '@components/settings/general/settings-general-mods.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { ModsBootstrapService } from '@legacy-import/src/lib/libs/mods/services/mods-bootstrap.service';
 import { ModsManagerService } from '@legacy-import/src/lib/libs/mods/services/mods-manager.service';
 import { ModsUtilsService } from '@legacy-import/src/lib/libs/mods/services/mods-utils.service';
@@ -821,6 +821,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 		FormsModule,
 		ReactiveFormsModule,
 
+		SharedCommonViewModule,
+
 		ColiseumComponentsModule,
 		NgxChartsModule,
 		NgChartsModule,
@@ -882,7 +884,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
-		ToggleViewComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		DropdownComponent,
@@ -1023,7 +1024,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
-		ToggleViewComponent,
 		PreferenceNumericInputComponent,
 		CheckboxComponent,
 		DropdownComponent,

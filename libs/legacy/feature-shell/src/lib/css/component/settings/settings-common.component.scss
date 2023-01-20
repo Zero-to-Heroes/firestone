@@ -199,8 +199,7 @@ input[type='range'] {
 	}
 }
 
-::ng-deep preference-toggle,
-::ng-deep toggle-view {
+::ng-deep preference-toggle {
 	&:first-child {
 		font-style: normal;
 		.preference-toggle {
@@ -213,7 +212,6 @@ input[type='range'] {
 }
 
 ::ng-deep preference-toggle.disabled .preference-toggle,
-::ng-deep toggle-view.disabled .preference-toggle,
 ::ng-deep preference-slider.disabled .preference-slider {
 	opacity: 0.4;
 	pointer-events: none;

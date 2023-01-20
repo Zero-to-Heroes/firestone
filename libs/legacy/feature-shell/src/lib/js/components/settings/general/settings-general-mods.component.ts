@@ -93,11 +93,11 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 				<div class="installed-mods">
 					<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
 						<div class="mod-name">{{ mod.Name }}</div>
-						<toggle-view
+						<fs-toggle-view
 							class="toggle-button"
 							[value]="mod.Registered"
 							[toggleFunction]="toggleMod(mod.AssemblyName)"
-						></toggle-view>
+						></fs-toggle-view>
 					</div>
 				</div>
 			</div>

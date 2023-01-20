@@ -15,6 +15,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { uuid } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
+// TODO: refactor this to extend from toggle-view
 @Component({
 	selector: 'preference-toggle',
 	styleUrls: [

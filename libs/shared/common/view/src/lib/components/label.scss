@@ -1,0 +1,36 @@
+label {
+	display: flex;
+	margin-bottom: 15px;
+
+	i {
+		--icon-color: #a89782;
+		--icon-color-secondary: #ffb948;
+		width: 15px;
+		height: 15px;
+		margin-right: 15px;
+
+		svg {
+			fill: transparent;
+		}
+	}
+
+	p,
+	input {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 14px;
+		color: #a89782;
+	}
+
+	&:hover:not([disabled]) {
+		i {
+			--icon-color: #d9c3ab;
+		}
+	}
+
+	&[disabled] > *:not(.info) {
+		opacity: 0.5;
+	}
+}

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Injectable } from '@angular/core';
-import { AbstractSubscriptionComponent } from '@components/abstract-subscription.component';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Preferences } from '../models/preferences';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 

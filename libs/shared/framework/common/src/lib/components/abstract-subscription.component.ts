@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
 import { Observable, pipe, Subject, UnaryFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
-import { arraysEqual } from '../services/utils';
+import { arraysEqual } from '../libs/utils';
 
 @Injectable()
 export abstract class AbstractSubscriptionComponent implements OnDestroy {
@@ -17,7 +17,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 
 	protected mapData<T, R>(
 		extractor: (arg: T) => R,
-		equality = null,
+		equality: ((a: any, b: any) => boolean) | null = null,
 		debounceTimeMs = 100,
 	): UnaryFunction<Observable<T>, Observable<R>> {
 		return pipe(

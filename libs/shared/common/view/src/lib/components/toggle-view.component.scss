@@ -1,0 +1,63 @@
+:host {
+	display: flex;
+
+	&.disabled .toggle-view {
+		opacity: 0.4;
+		pointer-events: none;
+	}
+}
+
+.toggle-view {
+	margin-top: 0;
+
+	label {
+		margin-bottom: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	p {
+		color: #d9c3ab;
+		width: 180px;
+		align-items: center;
+	}
+
+	.info-message {
+		color: #d9c3ab;
+		font-size: 10px;
+		margin-top: 5px;
+		text-indent: 10px;
+		display: flex;
+		align-items: center;
+		margin-left: 10px;
+
+		.attention-icon {
+			fill: transparent;
+			width: 15px;
+			height: 15px;
+			margin-right: 5px;
+		}
+	}
+
+	.info {
+		margin-left: 5px;
+		margin-top: 2px;
+
+		.zth-tooltip {
+			position: absolute;
+			max-width: 200px;
+
+			p {
+				width: 200px;
+				color: #2f0d0d;
+			}
+
+			&.right {
+				top: 50%;
+				transform: translateY(-50%);
+				left: 35px;
+				right: auto;
+			}
+		}
+	}
+}
