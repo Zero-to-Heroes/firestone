@@ -1,15 +1,15 @@
 {
 	"name": "firestone",
-	"version": "10.1.4",
+	"version": "10.1.5",
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
 		"postinstall": "node ./decorate-angular-cli.js && ngcc",
 		"dev": "nx build --source-map --watch",
-		"build": "nx build --configuration=production --source-map",
 		"replace-version": "npx ts-node ./build-tools/replace-version.ts",
 		"opk-pipeline": "npx ts-node ./build-tools/opk-pipeline.ts",
-		"postbuild": "npm run replace-version && npm run opk-pipeline",
+		"build": "nx build --configuration=production --source-map && npm run replace-version && npm run opk-pipeline",
+		"build-local": "nx build --configuration=production --source-map && npm run replace-version && npx ts-node ./build-tools/opk-pipeline-no-upload.ts",
 		"test": "nx test"
 	},
 	"private": true,
