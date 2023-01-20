@@ -150,8 +150,8 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
-		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board);
-		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets);
+		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board, this.allCards);
+		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets, this.allCards);
 		let tavernTier =
 			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
 			player.getCurrentTavernTier();
@@ -174,7 +174,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				tavernTier: tavernTier,
 				hpLeft: health - damage,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
-				entityId: playerBoard.hero.EntityId,
+				entityId: playerBoard.hero.Entity,
 				nonGhostCardId: player.getNormalizedHeroCardId(this.allCards),
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,

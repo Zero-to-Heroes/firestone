@@ -1,7 +1,8 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { PlayerBoardEntity } from '@legacy-import/src/lib/js/services/battlegrounds/store/events/bgs-player-board-event';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { NonFunctionProperties } from '@services/utils';
 import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
@@ -105,15 +106,15 @@ export class BgsPlayer implements IBgsPlayer {
 		return !this.boardHistory?.length ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
 	}
 
-	public buildBgsEntities(logEntities: readonly any[]): BoardEntity[] {
+	public buildBgsEntities(logEntities: readonly PlayerBoardEntity[], allCards: CardsFacadeService): BoardEntity[] {
 		if (!logEntities?.length) {
 			return [];
 		}
 
-		return logEntities.map((entity) => this.buildBgsEntity(entity));
+		return logEntities.map((entity) => this.buildBgsEntity(entity, allCards));
 	}
 
-	private buildBgsEntity(logEntity): BoardEntity {
+	private buildBgsEntity(logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity {
 		if (!logEntity) {
 			return null;
 		}
@@ -138,11 +139,30 @@ export class BgsPlayer implements IBgsPlayer {
 			frenzyApplied: false,
 			definitelyDead: false,
 			immuneWhenAttackCharges: 0,
+			additionalCards: this.buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
 		};
 	}
 
+	private buildAdditionalCards(
+		cardId: string,
+		Tags: readonly { Name: number; Value: number }[],
+		allCards: CardsFacadeService,
+	): readonly string[] {
+		const modularTags = Tags?.filter(
+			(t) => t.Name === GameTag.MODULAR_ENTITY_PART_1 || t.Name === GameTag.MODULAR_ENTITY_PART_2,
+		);
+		if (!modularTags?.length) {
+			return null;
+		}
+
+		return modularTags
+			.map((t) => t.Value)
+			.map((dbfId) => allCards.getCard(dbfId).id)
+			.filter((id) => id !== cardId);
+	}
+
 	private buildEnchantments(
-		enchantments: { EntityId: number; CardId: string }[],
+		enchantments: readonly { EntityId: number; CardId: string }[],
 	): { cardId: string; originEntityId: number; timing: number }[] {
 		if (!enchantments?.length) {
 			return [];
