@@ -77,7 +77,7 @@ export class NumericInputWithArrowsComponent
 
 	onValueChanged(event: number) {
 		console.debug('value changed', event);
-		this.value$$.next(event);
+		this.value$$.next(Math.max(this.minValue, event));
 	}
 
 	preventDrag(event: MouseEvent) {
