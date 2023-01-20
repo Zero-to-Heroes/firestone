@@ -9,7 +9,7 @@ import {
 	Output,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, debounceTime, Observable } from 'rxjs';
 
 @Component({
 	selector: 'fs-numeric-input-with-arrows',
@@ -55,6 +55,7 @@ export class NumericInputWithArrowsComponent
 	}
 	@Input() label: string;
 	@Input() minValue = -9999;
+	@Input() debounceTime = 0;
 
 	private value$$ = new BehaviorSubject<number>(0);
 
@@ -64,7 +65,12 @@ export class NumericInputWithArrowsComponent
 
 	ngAfterContentInit() {
 		this.value$ = this.value$$.asObservable().pipe(this.mapData((v) => v));
-		this.value$.pipe(this.mapData((v) => v)).subscribe((v) => this.fsModelUpdate.next(v));
+		this.value$
+			.pipe(
+				debounceTime(this.debounceTime),
+				this.mapData((v) => v),
+			)
+			.subscribe((v) => this.fsModelUpdate.next(v));
 	}
 
 	incrementValue() {
@@ -76,7 +82,6 @@ export class NumericInputWithArrowsComponent
 	}
 
 	onValueChanged(event: number) {
-		console.debug('value changed', event);
 		this.value$$.next(Math.max(this.minValue, event));
 	}
 
