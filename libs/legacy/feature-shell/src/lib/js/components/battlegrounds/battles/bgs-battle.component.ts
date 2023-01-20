@@ -67,6 +67,8 @@ declare let amplitude;
 						(portraitChangeRequested)="onPortraitChangeRequested('opponent')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('opponent')"
 						(questRewardChangeRequested)="onQuestRewardChangeRequested('opponent')"
+						(undeadArmyChanged)="onUndeadArmyChanged('opponent', $event)"
+						(eternalLegionChanged)="onEternalLegionChanged('opponent', $event)"
 						(addMinionRequested)="onMinionAddRequested('opponent')"
 						(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
@@ -112,6 +114,8 @@ declare let amplitude;
 						(portraitChangeRequested)="onPortraitChangeRequested('player')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('player')"
 						(questRewardChangeRequested)="onQuestRewardChangeRequested('player')"
+						(undeadArmyChanged)="onUndeadArmyChanged('player', $event)"
+						(eternalLegionChanged)="onEternalLegionChanged('player', $event)"
 						(addMinionRequested)="onMinionAddRequested('player')"
 						(updateMinionRequested)="onMinionUpdateRequested('player', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
@@ -213,6 +217,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
 							questRewards: null,
+							globalInfo: {
+								EternalKnightsDeadThisGame:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo
+										?.EternalKnightsDeadThisGame,
+								UndeadAttackBonus:
+									this._faceOff.battleInfo?.playerBoard?.player?.globalInfo?.UndeadAttackBonus,
+							},
 						},
 					},
 					opponentBoard: {
@@ -225,6 +236,13 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 							heroPowerUsed: true,
 							heroPowerInfo: 0,
 							questRewards: null,
+							globalInfo: {
+								EternalKnightsDeadThisGame:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo
+										?.EternalKnightsDeadThisGame,
+								UndeadAttackBonus:
+									this._faceOff.battleInfo?.opponentBoard?.player?.globalInfo?.UndeadAttackBonus,
+							},
 						},
 					},
 					options: {
@@ -355,6 +373,66 @@ export class BgsBattleComponent implements AfterViewInit, OnDestroy {
 						} as BgsBoardInfo,
 					},
 			  } as BgsFaceOffWithSimulation);
+	}
+
+	onUndeadArmyChanged(side: 'player' | 'opponent', newValue: number) {
+		const request =
+			side === 'player'
+				? ({
+						battleInfo: {
+							playerBoard: {
+								player: {
+									globalInfo: {
+										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
+										UndeadAttackBonus: newValue,
+									},
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation)
+				: ({
+						battleInfo: {
+							opponentBoard: {
+								player: {
+									globalInfo: {
+										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
+										UndeadAttackBonus: newValue,
+									},
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation);
+		this.simulationUpdater(this._faceOff, request);
+	}
+
+	onEternalLegionChanged(side: 'player' | 'opponent', newValue: number) {
+		const request =
+			side === 'player'
+				? ({
+						battleInfo: {
+							playerBoard: {
+								player: {
+									globalInfo: {
+										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
+										EternalKnightsDeadThisGame: newValue,
+									},
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation)
+				: ({
+						battleInfo: {
+							opponentBoard: {
+								player: {
+									globalInfo: {
+										...this._faceOff.battleInfo.playerBoard.player.globalInfo,
+										EternalKnightsDeadThisGame: newValue,
+									},
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation);
+		this.simulationUpdater(this._faceOff, request);
 	}
 
 	onPortraitChangeRequested(side: 'player' | 'opponent') {

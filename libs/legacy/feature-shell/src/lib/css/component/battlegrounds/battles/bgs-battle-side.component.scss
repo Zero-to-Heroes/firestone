@@ -1,5 +1,6 @@
 .bgs-battle-side {
 	display: flex;
+	position: relative;
 
 	.hero {
 		flex-grow: 0;
@@ -85,6 +86,23 @@
 		}
 	}
 
+	.global-effects {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			align-items: center;
+			margin-bottom: 5px;
+			color: var(--color-2);
+		}
+
+		.input {
+			margin-bottom: 5px;
+			width: 200px;
+		}
+	}
+
 	.cdk-drag-preview {
 		box-sizing: border-box;
 		border-radius: 4px;
@@ -125,5 +143,11 @@
 			align-items: center;
 			justify-content: center;
 		}
+	}
+}
+
+:host.opponent {
+	.global-effects {
+		bottom: 0;
 	}
 }

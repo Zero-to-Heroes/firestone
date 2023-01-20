@@ -8,7 +8,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -90,7 +90,28 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
-			<div class="global-effects"></div>
+			<div class="global-effects">
+				<div class="header" [owTranslate]="'battlegrounds.sim.global-effects-header'"></div>
+				<fs-numeric-input-with-arrows
+					class="input undead-army"
+					[label]="undeadArmyLabel"
+					[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | owTranslate"
+					[value]="undeadArmy"
+					[debounceTime]="200"
+					(fsModelUpdate)="onUndeadArmyChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input eternal-legion"
+					[label]="eternalLegionLabel"
+					[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | owTranslate"
+					[value]="eternalLegion"
+					[minValue]="0"
+					[debounceTime]="200"
+					(fsModelUpdate)="onEternalLegionChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,6 +126,8 @@ export class BgsBattleSideComponent {
 	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+	@Output() eternalLegionChanged = new EventEmitter<number>();
+	@Output() undeadArmyChanged = new EventEmitter<number>();
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
@@ -126,9 +149,14 @@ export class BgsBattleSideComponent {
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
+	undeadArmy: number;
+	eternalLegion: number;
 	forceTooltipHidden = false;
 
 	entities: readonly Entity[];
+
+	undeadArmyLabel = this.allCards.getCard(CardIds.NerubianDeathswarmer_UndeadArmyEnchantment).name;
+	eternalLegionLabel = this.allCards.getCard(CardIds.EternalLegionEnchantment).name;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
 
@@ -170,6 +198,14 @@ export class BgsBattleSideComponent {
 		this.questRewardChangeRequested.next();
 	}
 
+	onUndeadArmyChanged(value: number) {
+		this.undeadArmyChanged.next(value);
+	}
+
+	onEternalLegionChanged(value: number) {
+		this.eternalLegionChanged.next(value);
+	}
+
 	addMinion() {
 		this.addMinionRequested.next(null);
 	}
@@ -199,6 +235,8 @@ export class BgsBattleSideComponent {
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
+		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 		if (!(this.cdr as ViewRef)?.destroyed) {
