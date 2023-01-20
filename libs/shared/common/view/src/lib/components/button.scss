@@ -1,0 +1,26 @@
+button {
+	position: relative;
+	width: var(--size, 30px);
+	height: var(--size, 30px);
+	--icon-color: var(--control-button-color);
+	color: var(--control-button-color);
+	background-color: trasnparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	transition: 0.15s;
+
+	svg {
+		width: 100%;
+		height: 100%;
+		flex: 0 0 auto;
+		pointer-events: none;
+		user-select: none;
+	}
+}
+
+button:hover {
+	background: var(--on-control-button-background-color);
+}

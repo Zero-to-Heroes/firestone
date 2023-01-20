@@ -50,54 +50,21 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 					<div class="abilities" [ngClass]="{ disabled: !card }">
 						<div class="stats">
-							<div class="input attack">
-								<div class="label" [owTranslate]="'global.hs-terms.attack'"></div>
-								<input
-									type="number"
-									tabindex="0"
-									[ngModel]="attack"
-									(ngModelChange)="onAttackChanged($event)"
-									(mousedown)="preventDrag($event)"
-								/>
-								<div class="buttons">
-									<button
-										class="arrow up"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="incrementAttack()"
-									></button>
-									<button
-										class="arrow down"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="decrementAttack()"
-									></button>
-								</div>
-							</div>
-							<div class="input health">
-								<div class="label" [owTranslate]="'global.hs-terms.health'"></div>
-								<input
-									type="number"
-									tabindex="0"
-									[ngModel]="health"
-									(ngModelChange)="onHealthChanged($event)"
-									(mousedown)="preventDrag($event)"
-								/>
-								<div class="buttons">
-									<button
-										class="arrow up"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="incrementHealth()"
-									></button>
-									<button
-										class="arrow down"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="decrementHealth()"
-									></button>
-								</div>
-							</div>
+							<fs-numeric-input-with-arrows
+								class="input attack"
+								[label]="'global.hs-terms.attack' | owTranslate"
+								[value]="attack"
+								(fsModelUpdate)="onAttackChanged($event)"
+							>
+							</fs-numeric-input-with-arrows>
+							<fs-numeric-input-with-arrows
+								class="input health"
+								[label]="'global.hs-terms.health' | owTranslate"
+								[value]="health"
+								[minValue]="1"
+								(fsModelUpdate)="onHealthChanged($event)"
+							>
+							</fs-numeric-input-with-arrows>
 						</div>
 						<div class="attributes">
 							<checkbox
@@ -152,34 +119,15 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 								(valueChanged)="onSummonPlantsChanged($event)"
 								[helpTooltip]="'battlegrounds.sim.summon-plants-tooltip' | owTranslate"
 							></checkbox>
-							<div class="input health">
-								<div
-									class="label"
-									[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
-									[owTranslate]="'battlegrounds.sim.sneed-deathrattle'"
-								></div>
-								<input
-									type="number"
-									tabindex="0"
-									[ngModel]="sneeds"
-									(ngModelChange)="onSneedChanged($event)"
-									(mousedown)="preventDrag($event)"
-								/>
-								<div class="buttons">
-									<button
-										class="arrow up"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="incrementSneed()"
-									></button>
-									<button
-										class="arrow down"
-										tabindex="-1"
-										inlineSVG="assets/svg/arrow.svg"
-										(click)="decrementSneed()"
-									></button>
-								</div>
-							</div>
+							<fs-numeric-input-with-arrows
+								class="input sneed"
+								[label]="'battlegrounds.sim.sneed-deathrattle' | owTranslate"
+								[helpTooltip]="'battlegrounds.sim.sneed-deathrattle-tooltip' | owTranslate"
+								[value]="sneeds"
+								[minValue]="0"
+								(fsModelUpdate)="onSneedChanged($event)"
+							>
+							</fs-numeric-input-with-arrows>
 						</div>
 					</div>
 				</div>
@@ -451,45 +399,6 @@ export class BgsSimulatorMinionSelectionComponent
 		}
 	}
 
-	incrementAttack() {
-		this.attack++;
-		this.updateCard();
-	}
-
-	decrementAttack() {
-		if (this.attack <= 0) {
-			return;
-		}
-		this.attack--;
-		this.updateCard();
-	}
-
-	incrementHealth() {
-		this.health++;
-		this.updateCard();
-	}
-
-	decrementHealth() {
-		if (this.health <= 1) {
-			return;
-		}
-		this.health--;
-		this.updateCard();
-	}
-
-	incrementSneed() {
-		this.sneeds++;
-		this.updateCard();
-	}
-
-	decrementSneed() {
-		if (this.sneeds <= 0) {
-			return;
-		}
-		this.sneeds--;
-		this.updateCard();
-	}
-
 	onAttackChanged(value: number) {
 		this.attack = value;
 		this.updateCard();
@@ -590,14 +499,16 @@ export class BgsSimulatorMinionSelectionComponent
 	}
 
 	private updateCard() {
-		this.card = Entity.fromJS({
-			cardID: this.cardId,
-			tags: {
-				[GameTag[GameTag.ATK]]: this.attack ?? 0,
-				[GameTag[GameTag.HEALTH]]: this.health ?? 0,
-				[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
-			},
-		} as EntityAsJS);
+		this.card = !this.cardId?.length
+			? null
+			: Entity.fromJS({
+					cardID: this.cardId,
+					tags: {
+						[GameTag[GameTag.ATK]]: this.attack ?? 0,
+						[GameTag[GameTag.HEALTH]]: this.health ?? 0,
+						[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
+					},
+			  } as EntityAsJS);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

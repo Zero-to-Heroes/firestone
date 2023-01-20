@@ -101,68 +101,7 @@
 			}
 
 			.input {
-				display: flex;
-				align-items: center;
 				margin-right: 15px;
-
-				.label {
-					margin-right: 6px;
-				}
-
-				input {
-					background: var(--color-7);
-					width: 60px;
-					height: 25px;
-					border: 1px solid var(--color-3);
-					color: var(--color-3);
-					padding-left: 6px;
-					appearance: textfield;
-					cursor: text;
-
-					&:focus {
-						outline: none;
-						border-color: var(--color-2);
-						color: var(--color-2);
-					}
-
-					&:hover {
-						border-color: var(--color-2);
-						cursor: text;
-					}
-				}
-
-				// Use custom buttons instead
-				input[type='number']::-webkit-inner-spin-button,
-				input[type='number']::-webkit-outer-spin-button {
-					-webkit-appearance: none;
-				}
-
-				.buttons {
-					left: -20px;
-					position: relative;
-					display: flex;
-					flex-direction: column;
-
-					.arrow {
-						--icon-color: var(--color-3);
-						background: transparent;
-						width: 8px;
-						height: 5px;
-						margin-bottom: 2px;
-
-						&.up {
-						}
-
-						&.down {
-							transform: scale(-1);
-						}
-
-						&:hover {
-							background: transparent;
-							--icon-color: var(--color-2);
-						}
-					}
-				}
 			}
 
 			&.disabled {
@@ -259,7 +198,7 @@
 					cursor: text;
 					flex-grow: 1;
 
-					&::placeholder{
+					&::placeholder {
 						color: var(--color-2);
 						opacity: 0.5;
 					}

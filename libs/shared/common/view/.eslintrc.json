@@ -21,7 +21,8 @@
 						"prefix": "fs",
 						"style": "kebab-case"
 					}
-				]
+				],
+				"no-restricted-syntax": ["off"]
 			}
 		},
 		{
