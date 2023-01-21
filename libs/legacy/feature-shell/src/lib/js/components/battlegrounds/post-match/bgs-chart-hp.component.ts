@@ -16,7 +16,6 @@ import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { areEqualDataSets } from './chart-utils';
 
 @Component({
 	selector: 'bgs-chart-hp',
@@ -92,6 +91,25 @@ import { areEqualDataSets } from './chart-utils';
 })
 export class BgsChartHpComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
+
+	@Input() set stats(value: BgsPostMatchStats) {
+		this._stats = value;
+		this.setStats();
+	}
+	@Input() set mainPlayerCardId(value: string) {
+		this._mainPlayerCardId = value;
+		this.setStats();
+	}
+	@Input() set visible(value: boolean) {
+		if (value === this._visible) {
+			return;
+		}
+		this._visible = value;
+		if (this._visible) {
+			this.doResize();
+		}
+	}
+	@Input() tooltipSuffix: string | number = '';
 
 	playerColors = ['#FFB948', '#FF8A48', '#42D8A2', '#55D6FF', '#4376D8', '#B346E7', '#F44CCF', '#F44C60'];
 	legend: readonly LegendItem[];
@@ -273,30 +291,10 @@ export class BgsChartHpComponent {
 
 	private _stats: BgsPostMatchStats;
 	private _mainPlayerCardId: string;
+	private playerHiddenStatus: { [playerCardId: string]: boolean } = {};
+
 	private _visible: boolean;
 	private _dirty = true;
-
-	@Input() set stats(value: BgsPostMatchStats) {
-		this._stats = value;
-		this.setStats();
-	}
-
-	@Input() set mainPlayerCardId(value: string) {
-		this._mainPlayerCardId = value;
-		this.setStats();
-	}
-
-	@Input() set visible(value: boolean) {
-		if (value === this._visible) {
-			return;
-		}
-		this._visible = value;
-		if (this._visible) {
-			this.doResize();
-		}
-	}
-
-	@Input() tooltipSuffix: string | number = '';
 
 	constructor(
 		private readonly el: ElementRef,
@@ -306,15 +304,8 @@ export class BgsChartHpComponent {
 	) {}
 
 	togglePlayer(playerCardId: string) {
-		this.legend = this.legend.map((playerInfo) =>
-			playerInfo.cardId === playerCardId ? { ...playerInfo, shown: !playerInfo.shown } : playerInfo,
-		);
-		this.lineChartData.datasets = this.lineChartData.datasets.map((data) =>
-			(data as any).cardId === playerCardId ? { ...data, hidden: !data.hidden } : data,
-		);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.playerHiddenStatus[playerCardId] = !this.playerHiddenStatus[playerCardId];
+		this.setStats();
 	}
 
 	previousWidth: number;
@@ -398,7 +389,7 @@ export class BgsChartHpComponent {
 			icon: this.i18n.getCardImage(player.cardId, { isBgs: true }),
 			position: player.position,
 			isPlayer: player.isPlayer,
-			shown: true,
+			shown: !this.playerHiddenStatus[player.cardId],
 			color: player.color,
 		}));
 		const newChartData: ChartData<'line'>['datasets'] = players.map((player) => ({
@@ -409,13 +400,14 @@ export class BgsChartHpComponent {
 			borderJoinStyle: 'miter',
 			lineTension: 0,
 			borderWidth: 2,
-			hidden: false,
+			hidden: !!this.playerHiddenStatus[player.cardId],
 			backgroundColor: 'transparent',
 			borderColor: player.color,
 		}));
-		if (areEqualDataSets(newChartData, this.lineChartData.datasets)) {
-			return;
-		}
+		console.debug('newChartData', newChartData);
+		// if (areEqualDataSets(newChartData, this.lineChartData.datasets)) {
+		// 	return;
+		// }
 
 		this.lineChartData = {
 			datasets: newChartData,
