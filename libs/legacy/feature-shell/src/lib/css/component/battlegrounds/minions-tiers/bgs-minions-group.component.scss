@@ -103,7 +103,8 @@
 				&.deathrattle,
 				&.taunt,
 				&.divine-shield,
-				&.end-of-turn {
+				&.end-of-turn,
+				&.reborn {
 					display: flex;
 					background: var(--icon-secondary-color);
 					padding: 5px;
@@ -145,6 +146,10 @@
 
 				&.end-of-turn {
 					--icon-color: #b346e7;
+				}
+
+				&.reborn {
+					--icon-color: #6aaeb9;
 				}
 			}
 

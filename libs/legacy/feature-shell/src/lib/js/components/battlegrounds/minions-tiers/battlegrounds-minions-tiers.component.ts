@@ -203,6 +203,15 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				}),
 				type: 'mechanics',
 			},
+			{
+				tavernTier: 'R',
+				cards: cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.REBORN])),
+				groupingFunction: (card: ReferenceCard) => ['' + card.techLevel],
+				tooltip: this.i18n.translateString('battlegrounds.in-game.minions-list.mechanics-tier-tooltip', {
+					value: this.i18n.translateString(`global.mechanics.${GameTag[GameTag.REBORN].toLowerCase()}`),
+				}),
+				type: 'mechanics',
+			},
 		];
 	}
 }

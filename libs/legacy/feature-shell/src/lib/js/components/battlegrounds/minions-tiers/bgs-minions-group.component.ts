@@ -138,12 +138,23 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 							}"
 							(click)="highlightEndOfTurn()"
 							[helpTooltip]="
-								!minion.divineShieldHighlight
-									? highlightDivineShieldOnTooltip
-									: highlightDivineShieldOffTooltip
+								!minion.endOfTurnHighlight ? highlightEndOfTurnOnTooltip : highlightEndOfTurnOffTooltip
 							"
 						>
 							<span class="label">E</span>
+						</div>
+						<div
+							class="highlight-minion-button reborn"
+							*ngIf="minion.hasReborn && _showBattlecryHighlight"
+							[ngClass]="{
+								highlighted: minion.rebornHighlight
+							}"
+							(click)="highlightReborn()"
+							[helpTooltip]="
+								!minion.rebornHighlight ? highlightRebornOnTooltip : highlightRebornOffTooltip
+							"
+						>
+							<span class="label">R</span>
 						</div>
 					</div>
 				</li>
@@ -239,6 +250,12 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			value: this.i18n.translateString('global.mechanics.end_of_turn'),
 		},
 	);
+	highlightRebornOnTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.reborn'),
+	});
+	highlightRebornOffTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.unhighlight-mechanics', {
+		value: this.i18n.translateString('global.mechanics.reborn'),
+	});
 
 	private _showGoldenCards = true;
 
@@ -308,6 +325,13 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.DIVINE_SHIELD));
 	}
 
+	highlightReborn() {
+		if (!this._showBattlecryHighlight) {
+			return;
+		}
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMechanicsOnBoardEvent(GameTag.REBORN));
+	}
+
 	trackByFn(index: number, minion: Minion) {
 		return minion.cardId;
 	}
@@ -350,6 +374,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const hasTaunt = card.mechanics?.includes(GameTag[GameTag.TAUNT]);
 				const hasDivineShield = card.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 				const hasEndOfTurn = card.mechanics?.includes(GameTag[GameTag.END_OF_TURN]);
+				const hasReborn = card.mechanics?.includes(GameTag[GameTag.REBORN]);
 				const result = {
 					cardId: minion.id,
 					displayedCardIds: this.buildAllCardIds(minion.id, this._showGoldenCards),
@@ -363,12 +388,14 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					divineShieldHighlight:
 						hasDivineShield && this._group.highlightedMechanics.includes(GameTag.DIVINE_SHIELD),
 					endOfTurnHighlight: hasEndOfTurn && this._group.highlightedMechanics.includes(GameTag.END_OF_TURN),
+					rebornHighlight: hasReborn && this._group.highlightedMechanics.includes(GameTag.REBORN),
 					techLevel: card.techLevel,
 					hasBattlecry: hasBattlecry,
 					hasDeathrattle: hasDeathrattle,
 					hasTaunt: hasTaunt,
 					hasDivineShield: hasDivineShield,
 					hasEndOfTurn: hasEndOfTurn,
+					hasReborn: hasReborn,
 				};
 				return result;
 			})
@@ -429,11 +456,13 @@ interface Minion {
 	readonly hasTaunt?: boolean;
 	readonly hasEndOfTurn?: boolean;
 	readonly hasBattlecry?: boolean;
+	readonly hasReborn?: boolean;
 	readonly battlecryHighlight?: boolean;
 	readonly deathrattleHighlight?: boolean;
 	readonly tauntHighlight?: boolean;
 	readonly divineShieldHighlight?: boolean;
 	readonly endOfTurnHighlight?: boolean;
+	readonly rebornHighlight?: boolean;
 	readonly hasDeathrattle?: boolean;
 	readonly hasDivineShield?: boolean;
 }
