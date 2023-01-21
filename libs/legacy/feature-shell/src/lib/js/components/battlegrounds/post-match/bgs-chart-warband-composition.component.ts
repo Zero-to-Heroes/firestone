@@ -57,13 +57,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="node"></div>
 				{{ 'global.tribe.quilboar' | owTranslate }}
 			</div>
-			<div class="item undead" *ngIf="isTribe('undead')">
-				<div class="node"></div>
-				{{ 'global.tribe.undead' | owTranslate }}
-			</div>
 			<div class="item naga" *ngIf="isTribe('naga')">
 				<div class="node"></div>
 				{{ 'global.tribe.naga' | owTranslate }}
+			</div>
+			<div class="item undead" *ngIf="isTribe('undead')">
+				<div class="node"></div>
+				{{ 'global.tribe.undead' | owTranslate }}
 			</div>
 			<div class="item blank">
 				<div class="node"></div>
@@ -130,6 +130,7 @@ export class BgsChartWarbandCompositionComponent {
 			'#DE5959',
 			'#c56700',
 			'#13928c',
+			'#6aaeb9',
 			'#D9C3AB',
 			'#D9C3AB',
 		],
@@ -301,8 +302,8 @@ export class BgsChartWarbandCompositionComponent {
 					this.buildSeries(this.i18n.translateString('global.tribe.pirate'), 'pirate', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.elemental'), 'elemental', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.quilboar'), 'quilboar', history),
-					this.buildSeries(this.i18n.translateString('global.tribe.undead'), 'undead', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.naga'), 'naga', history),
+					this.buildSeries(this.i18n.translateString('global.tribe.undead'), 'undead', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.all'), 'all', history),
 					this.buildSeries(this.i18n.translateString('global.tribe.blank'), null, history),
 				],
@@ -310,12 +311,13 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	private buildSeries(tribeName: string, tribeCode: string, history: BgsBoard) {
-		return {
+		const result = {
 			name: tribeName,
 			tribeCode: tribeCode,
 			value: this.getTribe(tribeCode, history.board),
 			minions: this.getMinions(tribeCode, history.turn),
 		};
+		return result;
 	}
 
 	private getTribe(tribe: string, board: readonly Entity[]): number {
@@ -326,11 +328,11 @@ export class BgsChartWarbandCompositionComponent {
 				result++;
 				continue;
 			}
-			if (!card.races?.length || !card.races.some((r) => r === Race[tribe?.toUpperCase()])) {
+			if (!card.races?.length || !card.races.some((r) => r === tribe?.toUpperCase())) {
 				continue;
 			}
 			// So that the total is always equal to the number of minions
-			result += 1 / card.races.length;
+			result += 1 / (card.races?.length ?? 1);
 		}
 		return result;
 	}
