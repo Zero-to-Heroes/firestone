@@ -359,18 +359,25 @@ export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
 	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
-	return allCards
+	const result = allCards
 		.getCards()
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
-		.filter(
-			(card) =>
-				!availableTribes?.length ||
-				getTribesForInclusion(card).some((r) => isValidTribe(availableTribes, Race[r])),
-		)
+		.filter((card) => {
+			if (!availableTribes?.length) {
+				return true;
+			}
+			const tribesForCard = getTribesForInclusion(card, false);
+			card.name.includes('Boar') && console.debug('tribesForCard', tribesForCard, card);
+			if (!tribesForCard.filter((t) => t !== Race.BLANK).length) {
+				return true;
+			}
+			return tribesForCard.some((r) => isValidTribe(availableTribes, Race[r]));
+		})
 		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
+	return result;
 };
 
 const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
@@ -384,8 +391,12 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 	);
 };
 
-export const getTribesForInclusion = (card: ReferenceCard): readonly Race[] => {
-	const cardRaces = card.races?.map((r) => Race[r]) ?? [Race.BLANK];
+export const getTribesForInclusion = (card: ReferenceCard, includeOwnTribe: boolean): readonly Race[] => {
+	if (!card) {
+		return [];
+	}
+	const nativeRaces = card.races?.map((r) => Race[r]) ?? [];
+	const cardRaces = includeOwnTribe ? nativeRaces : [];
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
 		case CardIds.BirdBuddy:
@@ -449,7 +460,7 @@ export const getEffectiveTribes = (
 	groupMinionsIntoTheirTribeGroup: boolean,
 ): readonly string[] => {
 	const tribes: readonly Race[] = groupMinionsIntoTheirTribeGroup
-		? getTribesForInclusion(card)
+		? getTribesForInclusion(card, true)
 		: getEffectiveTribesEnum(card);
 	return tribes.map((tribe) => Race[tribe]);
 };
