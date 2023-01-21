@@ -82,7 +82,7 @@ export class BgsBattleRecapComponent {
 		if (!value) {
 			return;
 		}
-
+		console.debug('setting faceOff', value);
 		this.turnNumber = value.turn;
 		this.result = value.result;
 		this.i18nResult = value.result
@@ -90,16 +90,16 @@ export class BgsBattleRecapComponent {
 			: undefined;
 
 		this.playerHeroCardId = value.playerCardId;
-		this.playerHealth = value.playerHpLeft;
 		this.playerMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.playerHeroCardId);
-		this.playerTavernTier = value.playerTavern;
+		this.playerHealth = value.playerHpLeft ?? value.battleInfo?.playerBoard?.player?.hpLeft;
+		this.playerTavernTier = value.playerTavern ?? value.battleInfo?.playerBoard?.player?.tavernTier;
 
 		this.battle = value;
 
 		this.opponentHeroCardId = value.opponentCardId;
-		this.opponentHealth = value.opponentHpLeft;
 		this.opponentMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.opponentHeroCardId);
-		this.opponentTavernTier = value.opponentTavern;
+		this.opponentHealth = value.opponentHpLeft ?? value.battleInfo?.opponentBoard?.player?.hpLeft;
+		this.opponentTavernTier = value.opponentTavern ?? value.battleInfo?.opponentBoard?.player?.tavernTier;
 
 		this.selectable = true; // !!value.battleInfo;
 		if (value.battleInfo) {
