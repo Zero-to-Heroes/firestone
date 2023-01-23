@@ -18,6 +18,8 @@ import { BehaviorSubject } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { Events } from '../../events.service';
 
+export const DEACTIVATE_MIND_VISION = false;
+
 @Injectable()
 export class MindVisionStateMachineService {
 	private states: Map<CurrentState, MindVisionState> = new Map();
@@ -93,6 +95,9 @@ export class MindVisionStateMachineService {
 	}
 
 	public async callMindVision<T>(apiCall: () => Promise<T>): Promise<T> {
+		if (DEACTIVATE_MIND_VISION) {
+			return null;
+		}
 		// We are on desktop
 		if (this.currentState.stateId() === CurrentState.IDLE) {
 			return null;
